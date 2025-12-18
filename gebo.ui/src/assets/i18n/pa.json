@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ਇੰਟੀਗ੍ਰੇਸ਼ਨ",
         "description" : "Gebo.ai ਨੂੰ ਤੁਹਾਡੀ Google cloud Drive/Workspaces ਟੀਮ ਡਾਟਾ ਤੱਕ ਪਹੁੰਚਣ ਲਈ ਕਨਫ਼ਿਗਰ ਕਰੋ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ਸੰਰਚਿਤ ਕਰੋ",
+        "description" : "AI ਵੈੱਬ ਖੋਜਾਂ ਲਈ Google search api ਪ੍ਰਮਾਣ ਪੱਤਰ ਸੰਰਚਿਤ ਕਰੋ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ਸੰਰਚਿਤ ਕਰੋ",
+        "description" : "Deep search ਪੈਰਾਮੀਟਰ ਸੰਰਚਿਤ ਕਰੋ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "ਵੇਰਵਾ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ਪ੍ਰਮਾਣ ਪੱਤਰ ਬਣਾਓ"
+      },
+      "CreateBtn" : {
+        "label" : "ਬਣਾਓ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Google search api credentials ਰਜਿਸਟਰੇਸ਼ਨ ਵਿੱਚ ਪ੍ਰਾਪਤ ਕੀਤਾ search engine id ਦਰਜ ਕਰੋ।"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Google search api credentials ਰਜਿਸਟਰੇਸ਼ਨ ਵਿੱਚੋਂ ਪ੍ਰਾਪਤ ਕੀਤਾ api key ਦਰਜ ਕਰੋ।"
+      },
+      "MainPanel" : {
+        "label" : "Google search api ਸੈੱਟਅੱਪ ਕਰੋ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ਹਟਾਓ",
+        "help" : "Google search api ਪ੍ਰਮਾਣ ਪੱਤਰ ਹਟਾਓ"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search config",
+        "help" : "ਇੱਕ deep search configuration ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ਸੰਰਚਨਾ ਸੋਧੋ"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ਕੀ ਤੁਸੀਂ ਇਹ ਗੱਲਬਾਤ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
         "header" : "ਚੈਟ ਮਿਟਾਉਣ ਦੀ ਕਾਰਵਾਈ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ामਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ਤੁਸੀਂ ਇਹਨੂੰ ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ",
         "detail" : "ਇਹ ਆਬਜੈਕਟ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਹੋਰ ਹਿੱਸਿਆਂ ਤੋਂ ਦਰਸਾਇਆ ਗਿਆ ਹੈ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ: url ਨਾਲ ਕੰਮ ਕਰਨ ਵਿੱਚ ਖ਼ਤਾ: http://localhost:11434/v1/models",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: url ਨਾਲ ਕੰਮ ਕਰਨ ਵਿੱਚ ਖ਼ਤਾ: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ: apiKey ਸੈਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: apiKey ਸੈਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ਚੈਟ ਪ੍ਰਵਾਹ ਦੌਰਾਨ ਖ਼ਤਾ",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "ਵਰਤੀ ਗਈ ਪਛਾਣ",
         "help" : "google drive ਸਿਸਟਮ ਤੱਕ ਪਹੁੰਚ ਲਈ ਪਛਾਣ ਚੁਣੋ ਜਾਂ ਬਣਾਓ"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ਚੈਟ"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ਸੰਬੰਧਤ ਜਾਣਕਾਰੀਆਂ ਦੀ ਖੋਜ ਚੱਲ ਰਹੀ ਹੈ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ਅੰਤਿਮ ਰਿਪੋਰਟ ਇਕਠੀ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "DeleteBtn" : {
+        "label" : "ਹਟਾਓ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ਖੋਜ ਸੈਟਿੰਗ"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ਡੌਕਯੂਮੈਂਟਾਂ ਵਿੱਚੋਂ ਸੰਬੰਧਿਤ ਜਾਣਕਾਰੀ ਕੱਢਣ ਲਈ ਪ੍ਰਚੋਦਨਾ ਲਿਖੋ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ਨਿਕලੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇਕੱਠਾ ਕਰਨ ਲਈ ਪ੍ਰਚੋਦਨਾ ਲਿਖੋ"
+      },
+      "MainPanel" : {
+        "label" : "Deep search configuration ਸੋਧੀ ਜਾ ਰਹੀ ਹੈ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਸੈਟਿੰਗ"
+      },
+      "description" : {
+        "label" : "ਵੇਰਵਾ",
+        "help" : "Deep search configuration ਦਾ ਵੇਰਵਾ ਦਰਜ ਕਰੋ"
+      },
+      "code" : {
+        "label" : "ਵੱਖਰਾ ਕੋਡ",
+        "help" : "Deep search configuration ਲਈ ਆਪਣੇ ਆਪ ਬਣਿਆ ਵਿਲੱਖਣ ਕੋਡ"
+      },
+      "searchType" : {
+        "label" : "ਖੋਜ ਕਿਸਮ",
+        "help" : "Single hop semantic search ਜਾਂ multi hop ਵਿੱਚੋਂ ਚੁਣੋ"
+      },
+      "topK" : {
+        "label" : "ਪ੍ਰਾਪਤ ਹੋਣ ਵਾਲੀਆਂ ਟੈਕਸਟ ਖੰਡਾਂ ਦੀ ਗਿਣਤੀ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ਵਰਤੇ ਗਏ llm",
+        "help" : "Deep search ਲਈ ਵਰਤਾ ਗਿਆ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਦੱਸੋ, ਜੇ ਕੋਈ ਚੁਣਿਆ ਨਾ ਗਿਆ ਤਾਂ ਮੌਲਭੂਤ ਵਰਤਿਆ ਜਾਏਗਾ।"
+      },
+      "analisysPrompt" : {
+        "label" : "ਡੌਕਯੂਮੈਂਟਾਂ ਅਨਾਲਿਸਿਸ ਪ੍ਰਚੋਦਨਾ",
+        "help" : "ਉਹ ਪ੍ਰਚੋਦਨਾ ਸੋਧੋ ਜੋ ਡੌਕਯੂਮੈਂਟ ਟੁਕੜਿਆਂ ਵਿੱਚੋਂ ਸੰਬੰਧਤ ਜਾਣਕਾਰੀ ਕੱਢਣ ਲਈ ਵਰਤੀ ਜਾਵੇਗੀ।"
+      },
+      "consolidationPrompt" : {
+        "label" : "ਨਿਕਲੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇਕੱਠਾ ਕਰਨ ਦੀ ਪ੍ਰਚੋਦਨਾ",
+        "help" : "ਨਿਕਲੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇੱਕ ਹੀ ਰਿਪੋਰਟ ਵਿੱਚ ਇਕੱਠਾ ਕਰਨ ਲਈ ਵਰਤੀ ਜਾਣ ਵਾਲੀ ਪ੍ਰਚੋਦਨਾ ਸੋਧੋ।"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ਖੋਜ ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "ਪਹਿਲਾ hop semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ਦੂਜਾ hop ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "ਦੂਜਾ hop semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
+      },
+      "defaultModel" : {
+        "label" : "ਮੂਲ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ",
+        "help" : "Deep search ਪ੍ਰੋਸੈਸਿੰਗ ਲਈ ਮੂਲ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "similarityThreashold" : {
+        "label" : "ਖੋਜ ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "Semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
       }
     }
   }

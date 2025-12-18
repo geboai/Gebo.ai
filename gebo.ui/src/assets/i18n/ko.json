@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces 연동",
         "description" : "Gebo.ai에서 Google 클라우드 Drive/Workspaces 팀 데이터를 사용할 수 있도록 설정하세요"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google 검색 api 구성",
+        "description" : "AI 웹 검색을 위한 Google 검색 api 자격 증명 구성"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search 구성",
+        "description" : "Deep search 매개변수 구성"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "설명"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "취소"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google 검색 api 키"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google 검색 자격 증명 만들기"
+      },
+      "CreateBtn" : {
+        "label" : "만들기"
+      },
+      "customSearchEngineId" : {
+        "label" : "검색 엔진 ID",
+        "help" : "Google 검색 api 자격 증명 등록에서 받은 검색 엔진 ID를 입력하세요."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "구성 코드"
+      },
+      "DescriptionHeader" : {
+        "label" : "설명"
+      },
+      "apiKey" : {
+        "label" : "Api 키",
+        "help" : "Google 검색 api 자격 증명 등록에서 받은 api 키를 입력하세요."
+      },
+      "MainPanel" : {
+        "label" : "Google 검색 api 설정"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "삭제",
+        "help" : "Google 검색 api 자격 증명 삭제"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search 구성",
+        "help" : "Deep search 구성을 추가하세요"
+      },
+      "EditSystemBtn" : {
+        "label" : "구성 수정"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "이 채팅을 삭제하시겠습니까?",
         "header" : "채팅 삭제 작업"
+      },
+      "PlusContextualMenu" : {
+        "help" : "콘텐츠 추가 또는 검색 동작 수정"
+      },
+      "[object HTMLElement]" : {
+        "help" : "콘텐츠 추가 또는 검색 동작 수정"
+      },
+      "ContextMenuBtn" : {
+        "help" : "콘텐츠 추가 또는 검색 동작 수정"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "이 항목을 삭제할 수 없습니다",
         "detail" : "이 객체는 애플리케이션의 다른 부분에서 참조되고 있습니다"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "작업 중 예외 발생: url 작업 오류:http://localhost:11434/v1/models",
+        "detail" : "서버 오류: url 작업 오류:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "작업 중 예외 발생: apiKey가 설정되어야 합니다",
+        "detail" : "서버 오류: apiKey가 설정되어야 합니다"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "채팅 응답 스트리밍 중 오류 발생",
+        "detail" : "서버 오류: POST http://localhost:8000/v1/chat/completions에서 400 잘못된 요청"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "사용된 신원 정보",
         "help" : "google drive 시스템에 접근할 신원 정보를 선택하거나 생성하세요"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "채팅"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "관련 정보 검색 중"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "최종 보고서 통합 중"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "삽입"
+      },
+      "CancelBtn" : {
+        "label" : "취소"
+      },
+      "DeleteBtn" : {
+        "label" : "삭제"
+      },
+      "SearchSettingTab" : {
+        "label" : "검색 설정"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "문서 관련 정보 추출 프롬프트 입력"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "추출된 관련 정보 통합 프롬프트 입력"
+      },
+      "MainPanel" : {
+        "label" : "Deep search 구성 편집"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "대형 언어 모델 설정"
+      },
+      "description" : {
+        "label" : "설명",
+        "help" : "Deep search 구성의 설명을 입력하세요"
+      },
+      "code" : {
+        "label" : "고유 코드",
+        "help" : "Deep search 구성의 자동 생성된 고유 코드"
+      },
+      "searchType" : {
+        "label" : "검색 유형",
+        "help" : "단일 홉 의미론적 검색 또는 다중 홉 중 선택하세요"
+      },
+      "topK" : {
+        "label" : "가져올 텍스트 조각 수 (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "사용할 llm",
+        "help" : "Deep search에 사용할 대형 언어 모델을 지정하세요. 선택하지 않으면 기본값이 사용됩니다."
+      },
+      "analisysPrompt" : {
+        "label" : "문서 분석 프롬프트",
+        "help" : "문서 조각 관련 정보 추출에 사용할 프롬프트를 편집하세요."
+      },
+      "consolidationPrompt" : {
+        "label" : "추출 정보 통합 프롬프트",
+        "help" : "가져온 문서에서 추출한 관련 정보를 하나의 보고서로 통합하는 프롬프트를 편집하세요."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "검색 유사도 임계값",
+        "help" : "1차 홉 의미론적 유사도 임계값 (0.5~1.0 사이)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "2차 홉 유사도 임계값",
+        "help" : "2차 홉 의미론적 유사도 임계값 (0.5~1.0 사이)"
+      },
+      "defaultModel" : {
+        "label" : "기본 대형 언어 모델",
+        "help" : "Deep search 처리에 기본 대형 언어 모델이 사용됩니다"
+      },
+      "similarityThreashold" : {
+        "label" : "검색 유사도 임계값",
+        "help" : "의미론적 유사도 임계값 (0.5~1.0 사이)"
       }
     }
   }

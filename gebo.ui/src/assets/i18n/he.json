@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "אינטגרציה עם Google Drive/Workspaces",
         "description" : "הגדר את Gebo.ai לגשת לנתוני הצוות שלך ב-Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "הגדרת Google search api",
+        "description" : "הגדר את פרטי הגישה של Google search api לחיפושי אינטרנט ב-AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "הגדרת Deep search",
+        "description" : "הגדר את פרמטרי Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "תיאור"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "מפתח Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "צור פרטי גישה ל-google search"
+      },
+      "CreateBtn" : {
+        "label" : "צור"
+      },
+      "customSearchEngineId" : {
+        "label" : "מזהה מנוע חיפוש",
+        "help" : "הזן את מזהה מנוע החיפוש שהתקבל בהרשמת פרטי הגישה של google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "apiKey" : {
+        "label" : "מפתח api",
+        "help" : "הזן את מפתח ה-api שהתקבל בהרשמת פרטי הגישה של google search api."
+      },
+      "MainPanel" : {
+        "label" : "הגדרת google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "מחיקה",
+        "help" : "מחק את פרטי הגישה של Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "הגדרת Deep search",
+        "help" : "הוסף הגדרת deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "ערוך הגדרה"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "האם אתה בטוח שברצונך למחוק את הצ'אט הזה?",
         "header" : "מחיקת צ'אט"
+      },
+      "PlusContextualMenu" : {
+        "help" : "הוסף תוכן או שנה את התנהגות החיפוש"
+      },
+      "[object HTMLElement]" : {
+        "help" : "הוסף תוכן או שנה את התנהגות החיפוש"
+      },
+      "ContextMenuBtn" : {
+        "help" : "הוסף תוכן או שנה את התנהגות החיפוש"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "לא ניתן למחוק את זה",
         "detail" : "אובייקט זה מקושר מחלק אחר באפליקציה"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "חריגה במהלך הפעולה: שגיאה בעבודה עם url:http://localhost:11434/v1/models",
+        "detail" : "שגיאת שרת: שגיאה בעבודה עם url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "חריגה במהלך הפעולה: יש להגדיר apiKey",
+        "detail" : "שגיאת שרת: יש להגדיר apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "שגיאה בעת הזרמת תגובת הצ'אט",
+        "detail" : "שגיאת שרת: 400 בקשה שגויה מ-POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "זהות בשימוש",
         "help" : "בחר או צור זהות עבור גישה למערכת ה-google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "צ'אט"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "מחפש מידע רלוונטי"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "מאחד את הדוח הסופי"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "הוסף"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SearchSettingTab" : {
+        "label" : "הגדרת חיפוש"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "הזן פרומפט לחילוץ מידע רלוונטי ממסמכים"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "הזן פרומפט לאיחוד מידע רלוונטי שחולץ"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "הגדרת מודל שפה גדול"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של תצורת deep search"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת deep search"
+      },
+      "searchType" : {
+        "label" : "סוג חיפוש",
+        "help" : "בחר בין חיפוש סמנטי hop אחד ל-multi hop"
+      },
+      "topK" : {
+        "label" : "מספר מקטעי טקסט לחילוץ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM בשימוש",
+        "help" : "הגדר איזה מודל שפה גדול ישמש ב-Deep search, ברירת המחדל תשמש\n                                    אם לא נבחר מודל."
+      },
+      "analisysPrompt" : {
+        "label" : "פרומפט ניתוח מסמכים",
+        "help" : "ערוך את הפרומפט שישמש לחילוץ מידע רלוונטי ממקטעים במסמכים."
+      },
+      "consolidationPrompt" : {
+        "label" : "פרומפט לאיחוד מידע שחולץ",
+        "help" : "ערוך את הפרומפט שישמש לאיחוד כל המידע הרלוונטי שחולץ מהמסמכים שאותרו לדוח אחד."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "סף דמיון בחיפוש",
+        "help" : "סף דמיון סמנטי hop ראשון (בין 0.5 ל-1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "סף דמיון hop שני",
+        "help" : "סף דמיון סמנטי hop שני (בין 0.5 ל-1.0)"
+      },
+      "defaultModel" : {
+        "label" : "מודל שפה גדול ברירת מחדל",
+        "help" : "מודל השפה הגדול ברירת המחדל ישמש לעיבוד deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "סף דמיון בחיפוש",
+        "help" : "סף דמיון סמנטי (בין 0.5 ל-1.0)"
       }
     }
   }

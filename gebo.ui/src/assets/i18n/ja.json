@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces 連携",
         "description" : "Gebo.ai を設定して Google クラウド Drive/Workspaces チームデータへアクセスします"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google 検索 API の設定",
+        "description" : "AI ウェブ検索用の Google 検索 API 認証情報を設定してください"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search を設定",
+        "description" : "Deep search パラメーターを設定してください"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "説明"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google 検索 API キー"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google 検索認証情報を作成"
+      },
+      "CreateBtn" : {
+        "label" : "作成"
+      },
+      "customSearchEngineId" : {
+        "label" : "検索エンジン ID",
+        "help" : "Google 検索 API 認証情報の登録で取得した検索エンジン ID を入力してください。"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "構成コード"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "apiKey" : {
+        "label" : "API キー",
+        "help" : "Google 検索 API 認証情報の登録で取得した API キーを入力してください。"
+      },
+      "MainPanel" : {
+        "label" : "Google 検索 API をセットアップ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "削除",
+        "help" : "Google 検索 API 認証情報を削除します"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search 設定",
+        "help" : "Deep search の設定を追加"
+      },
+      "EditSystemBtn" : {
+        "label" : "設定を編集"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "このチャットを削除してもよろしいですか？",
         "header" : "チャット削除アクション"
+      },
+      "PlusContextualMenu" : {
+        "help" : "コンテンツを追加または検索動作を変更"
+      },
+      "[object HTMLElement]" : {
+        "help" : "コンテンツを追加または検索動作を変更"
+      },
+      "ContextMenuBtn" : {
+        "help" : "コンテンツを追加または検索動作を変更"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "これは削除できません",
         "detail" : "このオブジェクトはアプリケーションの他の部分から参照されています"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "操作中に例外が発生しました: URL 作業中にエラー:http://localhost:11434/v1/models",
+        "detail" : "サーバーエラー: URL 作業中にエラー:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "操作中に例外が発生しました:apiKey を設定してください",
+        "detail" : "サーバーエラー: apiKey を設定してください"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "チャット応答のストリーミング中にエラー",
+        "detail" : "サーバーエラー: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "使用するID",
         "help" : "google drive システムへアクセスする ID を選択または作成してください"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "チャット"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "関連情報を検索中"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "最終レポートを統合中"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "挿入"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SearchSettingTab" : {
+        "label" : "検索設定"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ドキュメントの関連情報抽出用プロンプトを入力"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "抽出した関連情報の統合用プロンプトを入力"
+      },
+      "MainPanel" : {
+        "label" : "Deep search 設定を編集"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "大規模言語モデルの設定"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "Deep search 設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "Deep search 設定の自動生成されたユニークコード"
+      },
+      "searchType" : {
+        "label" : "検索タイプ",
+        "help" : "シングルホップセマンティック検索とマルチホップのいずれかを選択"
+      },
+      "topK" : {
+        "label" : "取得するテキスト断片の数 (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "使用する llm",
+        "help" : "Deep search で使用する大規模言語モデルを指定してください。未選択の場合はデフォルトを使用します。"
+      },
+      "analisysPrompt" : {
+        "label" : "ドキュメント分析プロンプト",
+        "help" : "ドキュメント断片から関連情報を抽出するために使用するプロンプトを編集してください。"
+      },
+      "consolidationPrompt" : {
+        "label" : "抽出情報の統合プロンプト",
+        "help" : "取得したドキュメントから抽出された関連情報を 1 件のレポートに統合するためのプロンプトを編集してください。"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "検索類似度しきい値",
+        "help" : "最初のホップのセマンティック類似度しきい値 (0.5 ～ 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "2 ホップ目の類似度しきい値",
+        "help" : "2 ホップ目のセマンティック類似度しきい値 (0.5 ～ 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "デフォルト大規模言語モデル",
+        "help" : "Deep search の処理で使用されるデフォルトの大規模言語モデル"
+      },
+      "similarityThreashold" : {
+        "label" : "検索類似度しきい値",
+        "help" : "セマンティック類似度しきい値 (0.5 ～ 1.0)"
       }
     }
   }

@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ಏಕೀಕರಣ",
         "description" : "ನಿಮ್ಮ Google cloud Drive/Workspaces ತಂಡ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು Gebo.ai ಅನ್ನು ಸಂರಚಿಸಿ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ಅನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ",
+        "description" : "AI ವೆಬ್ ಹುಡುಕಾಟಗಳಿಗಾಗಿ Google search api ರುಜುವಾತುಗಳನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ಅನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ",
+        "description" : "Deep search ಪರಿಮಿತಿಗಳನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "ವಿವರಣೆ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ರುಜುವಾತುಗಳನ್ನು ರಚಿಸಿ"
+      },
+      "CreateBtn" : {
+        "label" : "ರಚಿಸಿ"
+      },
+      "customSearchEngineId" : {
+        "label" : "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಐಡಿ",
+        "help" : "Google search api ರುಜುವಾತುಗಳ ನೋಂದಣಿಯಲ್ಲಿ ಪಡೆದಿರುವ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Google search api ರುಜುವಾತುಗಳ ನೋಂದಣಿಯಲ್ಲಿ ಪಡೆದಿರುವ api key ಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "MainPanel" : {
+        "label" : "Google search api ಅನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ಅಳಿಸಿ",
+        "help" : "Google search api ರುಜುವಾತುಗಳನ್ನು ಅಳಿಸಿ"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search ಸಂರಚನೆ",
+        "help" : "Deep search ಸಂರಚನೆಯನ್ನು ಸೇರಿಸಿ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಸಂಪಾದಿಸಿ"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ನೀವು ಈ ಚಾಟ್ ಅನ್ನು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುತ್ತೀರಾ?",
         "header" : "ಚಾಟ್ ಅಳಿಸುವ ಕ್ರಿಯೆ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ನೀವು ಇದನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ",
         "detail" : "ಈ ವಸ್ತುವನ್ನು ಅನ್ವಯಿಕೆಯ ಇತರ ಭಾಗಗಳಿಂದ ಉಲ್ಲೇಖಿಸಲಾಗಿದೆ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ಅಭಿಯಾನ ಸಮಯದಲ್ಲಿ ಹೊರತಾದ ವಿಶೇಷ ಸ್ಥಿತಿ: URL ನಲ್ಲಿ ಸಮಸ್ಯೆ: http://localhost:11434/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: URL ನಲ್ಲಿ ಸಮಸ್ಯೆ: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ಅಭಿಯಾನ ಸಮಯದಲ್ಲಿ ಹೊರತಾದ ವಿಶೇಷ ಸ್ಥಿತಿ: apiKey ಸೆಟ್ ಮಾಡಬೇಕು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: apiKey ಸೆಟ್ ಮಾಡಬೇಕು"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ಚಾಟ್ ಸ್ಟ್ರೀಮಿಂಗ್ ಉತ್ತರದಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "ಬಳಸಲಾದ ಗುರುತು",
         "help" : "google drive ವ್ಯವಸ್ಥೆಗೆ ಪ್ರವೇಶಿಸಲು ಗುರುತನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ನಿರ್ಮಿಸಿ"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ಚಾಟ್"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ಸಂಬಂಧಿತ ಮಾಹಿತಿಗಳನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ಹೊಂದಾಣಿಕೆಯ ಅಂತಿಮ ವರದಿ ತಯಾರಿಸಲಾಗುತ್ತಿದೆ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ಸೇರಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ಹುಡುಕಾಟ ಸೆಟಿಂಗ್"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ಪತ್ರಿಕೆಗಳು ಸಂಬಂಧಿತ ಮಾಹಿತಿಗಾಗಿ ಪ್ರಾಂಪ್ಟ್ ನಮೂದಿಸಿ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಸಂಬಂಧಿತ ಮಾಹಿತಿಯ ಹೊಂದಾಣಿಕೆಗಾಗಿ ಪ್ರಾಂಪ್ಟ್ ನಮೂದಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "Deep search ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಸೆಟಿಂಗ್"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Deep search ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "Deep search ಸಂರಚನೆಯ ಸ್ವಯಚಾಲಿತವಾಗ生成ಗೊಳ್ಳುವ ವಿಶಿಷ್ಟ ಕೋಡ್"
+      },
+      "searchType" : {
+        "label" : "ಹುಡುಕಾಟ ಪ್ರಕಾರ",
+        "help" : "ಒಂದು ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟ ಅಥವಾ ಬಹು ಹಂತಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "topK" : {
+        "label" : "ಮೀಳಿಸಿಕೊಂಡ ಪಠ್ಯ ವಿಭಾಗಗಳ ಸಂಖ್ಯೆ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ಬಳಸುತ್ತಿರುವ llm",
+        "help" : "Deep search ಗೆ ಬಳಸುವ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಯನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಿ, ಯಾವುದೇ ಆಯ್ಕೆಮಾಡದಿದ್ದರೆ ಪೂರ್ವನಿಯೋಜಿತ ಮाडೆಲ್ ಬಳಸಲಾಗುತ್ತದೆ."
+      },
+      "analisysPrompt" : {
+        "label" : "ದಾಖಲೆಗಳು ವಿಶ್ಲೇಷಣೆ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ದಾಖಲೆಗಳು ಭಾಗದಲ್ಲಿ ಸಂಬಂಧಿತ ಮಾಹಿತಿಯನ್ನು ತೆಗೆಯಲು ಬಳಸುವ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      },
+      "consolidationPrompt" : {
+        "label" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಮಾಹಿತಿಗಳ ಹೊಂದಾಣಿಕೆ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಮೀಳಿಸಿಕೊಂಡ ದಾಖಲೆಯ ಭಾಗಗಳಿಂದ ಹೊರತೆಗೆದ ಮಾಹಿತಿಯನ್ನು ಒಂದು ವರದಿಗೋಸ್ಕರ ಹೊಂದಿಸಲು ಬಳಸುವ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಮೊದಲ ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ಎರಡನೇ ಹಂತದ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಎರಡನೇ ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "defaultModel" : {
+        "label" : "ಪೂರ್ವನಿಯೋಜಿತ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ",
+        "help" : "Deep search ಪ್ರಕ್ರಿಯೆಗೆ ಪೂರ್ವನಿಯೋಜಿತ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "similarityThreashold" : {
+        "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
       }
     }
   }

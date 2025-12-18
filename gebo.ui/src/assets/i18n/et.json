@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces'i integratsioon",
         "description" : "Seadista Gebo.ai ligipääsuks oma Google Drive/Workspaces meeskonna andmetele"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Seadista Google'i otsingu API",
+        "description" : "Seadista Google'i otsingu API mandaadid AI-veebiotsingute jaoks"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Seadista Deep search",
+        "description" : "Määra Deep search parameetrid"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Kirjeldus"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google'i otsingu API võti"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Loo Google'i otsingu mandaadid"
+      },
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "customSearchEngineId" : {
+        "label" : "Otsingumootori ID",
+        "help" : "Sisesta Google'i otsingu API mandaatide registreerimisel saadud otsingumootori ID."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Seadistuse kood"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "apiKey" : {
+        "label" : "API võti",
+        "help" : "Sisesta Google'i otsingu API mandaatide registreerimisel saadud API võti."
+      },
+      "MainPanel" : {
+        "label" : "Seadista Google'i otsingu API"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Kustuta",
+        "help" : "Kustuta Google'i otsingu API mandaadid"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search seaded",
+        "help" : "Lisa deep search konfiguratsioon"
+      },
+      "EditSystemBtn" : {
+        "label" : "Muuda seadeid"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Kas olete kindel, et soovite selle vestluse kustutada?",
         "header" : "Vestluse kustutamise tegevus"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Seda ei saa kustutada",
         "detail" : "Seda objekti kasutatakse rakenduse teistes osades"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Erand toimingu käigus: Tõrge töö url-iga: http://localhost:11434/v1/models",
+        "detail" : "Serveri tõrge: Tõrge töö url-iga: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Erand toimingu käigus: apiKey peab olema määratud",
+        "detail" : "Serveri tõrge: apiKey peab olema määratud"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Viga vestluse voogedastamisel",
+        "detail" : "Serveri tõrge: 400 Bad Request POST-i korral http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Kasutatav identiteet",
         "help" : "Vali või loo identiteet Google Drive'i süsteemile juurdepääsuks"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Vestlus"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Otsin asjakohast infot"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Koostan lõplikku raportit"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Lisa"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SearchSettingTab" : {
+        "label" : "Otsingu seadistus"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Sisesta ülesanne dokumentide asjakohase info leidmiseks"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Sisesta ülesanne leitud asjakohase info koondamiseks"
+      },
+      "MainPanel" : {
+        "label" : "Deep search seadete muutmine"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Suure keelemudeli seadistus"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta deep search konfiguratsiooni kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Deep search seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "searchType" : {
+        "label" : "Otsingu tüüp",
+        "help" : "Vali ühehüppe semantiline otsing või mitmehüppega otsing"
+      },
+      "topK" : {
+        "label" : "Leitud tekstilõikude arv (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Kasutatav llm",
+        "help" : "Määra Deep search jaoks kasutatav suur keelemudel, vaikimisi kasutatakse\n                                    standardmudelit, kui midagi pole valitud."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentide analüüsi ülesanne",
+        "help" : "Redigeeri ülesannet, mida kasutatakse dokumentidest asjakohase info leidmisel."
+      },
+      "consolidationPrompt" : {
+        "label" : "Leitud info konsolideerimise ülesanne",
+        "help" : "Redigeeri ülesannet, mida kasutatakse leitud info koondamiseks ühte raportisse."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Otsingu sarnasuse lävi",
+        "help" : "Esimese hüppe semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Teise hüppe sarnasuse lävi",
+        "help" : "Teise hüppe semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Vaikimisi suur keelemudel",
+        "help" : "Vaikimisi suur keelemudel kasutatakse Deep search töötlemiseks"
+      },
+      "similarityThreashold" : {
+        "label" : "Otsingu sarnasuse lävi",
+        "help" : "Semantilise sarnasuse lävi (0.5 kuni 1.0)"
       }
     }
   }

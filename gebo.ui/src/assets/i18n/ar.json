@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "تكامل Google Drive/Workspaces",
         "description" : "قم بإعداد Gebo.ai للوصول إلى بيانات فريقك في Google Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "إعداد Google search api",
+        "description" : "إعداد بيانات اعتماد Google search api لعمليات البحث الذكية في الويب"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "إعداد Deep search",
+        "description" : "إعداد معلمات Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "الوصف"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "مفتاح Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "إنشاء بيانات اعتماد google search"
+      },
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "customSearchEngineId" : {
+        "label" : "معرّف محرك البحث",
+        "help" : "أدخل معرّف محرك البحث الذي تم الحصول عليه عند تسجيل بيانات اعتماد google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "كود الإعداد"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "apiKey" : {
+        "label" : "مفتاح api",
+        "help" : "أدخل مفتاح api الذي تم الحصول عليه عند تسجيل بيانات اعتماد google search api."
+      },
+      "MainPanel" : {
+        "label" : "إعداد google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "حذف",
+        "help" : "حذف بيانات اعتماد Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "إعداد Deep search",
+        "help" : "إضافة إعداد Deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "تعديل الإعداد"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "هل أنت متأكد أنك تريد حذف هذه المحادثة؟",
         "header" : "إجراء حذف المحادثة"
+      },
+      "PlusContextualMenu" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "[object HTMLElement]" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "ContextMenuBtn" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "لا يمكنك حذف هذا",
         "detail" : "هذا العنصر مرتبط بجزء آخر من التطبيق"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "استثناء أثناء العملية: خطأ في التعامل مع الرابط: http://localhost:11434/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في التعامل مع الرابط: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "استثناء أثناء العملية: يجب تعيين apiKey",
+        "detail" : "خطأ في الخادم: يجب تعيين apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "حدث خطأ أثناء بث استجابة الدردشة",
+        "detail" : "خطأ في الخادم: 400 طلب غير صالح من POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "الهوية المستخدمة",
         "help" : "اختر أو أنشئ هوية للوصول إلى نظام Google Drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "دردشة"
+      },
+      "deep-search" : {
+        "label" : "بحث عميق"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "بحث عميق"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "جارٍ البحث عن المعلومات ذات الصلة"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "جاري تجميع التقرير النهائي"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "إدراج"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SearchSettingTab" : {
+        "label" : "إعداد البحث"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "أدخل التعليمات لاستخلاص المعلومات ذات الصلة من المستندات"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "أدخل التعليمات لتجميع المعلومات المستخرجة ذات الصلة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعداد البحث العميق"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "إعداد نموذج اللغة الكبير"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعداد بحث عميق"
+      },
+      "code" : {
+        "label" : "كود فريد",
+        "help" : "كود فريد يتم إنشاؤه تلقائيًا لإعداد البحث العميق"
+      },
+      "searchType" : {
+        "label" : "نوع البحث",
+        "help" : "اختر بين بحث دلالي بخطوة واحدة أو عدة خطوات"
+      },
+      "topK" : {
+        "label" : "عدد المقاطع النصية المسترجعة (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "النموذج المستخدم",
+        "help" : "حدد نموذج اللغة الكبير المستخدم في Deep search. سيتم استخدام الافتراضي في حال عدم تحديد أي نموذج."
+      },
+      "analisysPrompt" : {
+        "label" : "تعليمات تحليل المستندات",
+        "help" : "عدل التعليمات التي ستستخدم لاستخلاص المعلومات ذات الصلة من أجزاء المستندات."
+      },
+      "consolidationPrompt" : {
+        "label" : "تعليمات تجميع المعلومات المستخرجة",
+        "help" : "عدل التعليمات التي ستستخدم لتجميع المعلومات ذات الصلة المستخرجة من المستندات المسترجعة في تقرير واحد."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "حد تشابه البحث",
+        "help" : "حد تشابه الدلالة في الخطوة الأولى (بين 0.5 إلى 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "حد تشابه الخطوة الثانية",
+        "help" : "حد تشابه الدلالة في الخطوة الثانية (بين 0.5 إلى 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "النموذج الافتراضي للغة الكبيرة",
+        "help" : "سيتم استخدام نموذج اللغة الافتراضي لمعالجة Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "حد تشابه البحث",
+        "help" : "حد تشابه الدلالة (بين 0.5 إلى 1.0)"
       }
     }
   }

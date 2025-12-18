@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integráció",
         "description" : "Állítsa be a Gebo.ai-t, hogy hozzáférjen a Google cloud Drive/Workspaces csapatadataihoz"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google keresési api beállítása",
+        "description" : "Add meg a Google keresési api hitelesítő adatokat AI webes keresésekhez"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search beállítása",
+        "description" : "Állítsd be a Deep search paramétereit"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Leírás"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google keresési api kulcs"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google keresési hitelesítő adatok létrehozása"
+      },
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "customSearchEngineId" : {
+        "label" : "Keresőmotor azonosító",
+        "help" : "Add meg a keresőmotor azonosítót, amelyet a Google keresési api hitelesítő adatok regisztrációjánál kaptál."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "apiKey" : {
+        "label" : "Api kulcs",
+        "help" : "Add meg az api kulcsot, amelyet a Google keresési api hitelesítő adatok regisztrációjánál kaptál."
+      },
+      "MainPanel" : {
+        "label" : "Google keresési api beállítása"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Törlés",
+        "help" : "Google keresési api hitelesítő adatok törlése"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfiguráció",
+        "help" : "Adj hozzá deep search konfigurációt"
+      },
+      "EditSystemBtn" : {
+        "label" : "Konfiguráció szerkesztése"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Biztos törli ezt a csevegést?",
         "header" : "Csevegés törlése"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ez nem törölhető",
         "detail" : "Erre az objektumra az alkalmazás más része(i) hivatkoznak"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Kivétel a művelet közben: Hiba az url feldolgozása során: http://localhost:11434/v1/models",
+        "detail" : "Szerverhiba: Hiba az url feldolgozása során: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Kivétel a művelet közben: apiKey beállítása szükséges",
+        "detail" : "Szerverhiba: apiKey beállítása szükséges"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Hiba a chat válasz streamelésekor",
+        "detail" : "Szerverhiba: 400 Hibás kérés a POST http://localhost:8000/v1/chat/completions címről"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Használt identitás",
         "help" : "Válassza ki vagy hozzon létre egy identitást a google drive rendszer eléréséhez"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Releváns információk keresése"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Végső jelentés összeállítása"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Beillesztés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SearchSettingTab" : {
+        "label" : "Keresési beállítás"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Adj meg promptot a dokumentumok releváns információinak kinyeréséhez"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Adj meg promptot a kinyert információk összevonásához"
+      },
+      "MainPanel" : {
+        "label" : "Deep search konfiguráció szerkesztése"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Nagy nyelvi modell beállítás"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a deep search konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A deep search konfiguráció automatikusan generált egyedi kódja"
+      },
+      "searchType" : {
+        "label" : "Keresés típusa",
+        "help" : "Válassz egyszerű szemantikus keresés vagy többlépcsős között"
+      },
+      "topK" : {
+        "label" : "Lekért szöveg szegmensek száma (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Használt llm",
+        "help" : "Állítsd be, hogy melyik nagy nyelvi modell legyen használva a Deep search-hoz, ha nincs kiválasztva, az alapértelmezett lesz\n                                    használva."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentumok elemzési promptja",
+        "help" : "Szerkeszd azt a promptot, amelyet a dokumentumrészletek releváns információinak kinyerésére használsz."
+      },
+      "consolidationPrompt" : {
+        "label" : "Kinyert információk összevonási promptja",
+        "help" : "Szerkeszd azt a promptot, amelyet a lekért dokumentumokból kinyert információk egy jelentésbe való összevonására használsz."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Keresési hasonlósági küszöb",
+        "help" : "Első lépcsős szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Második lépcsős hasonlósági küszöb",
+        "help" : "Második lépcsős szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "defaultModel" : {
+        "label" : "Alapértelmezett nagy nyelvi modell",
+        "help" : "A Deep search feldolgozáshoz az alapértelmezett nagy nyelvi modell kerül használatra"
+      },
+      "similarityThreashold" : {
+        "label" : "Keresési hasonlósági küszöb",
+        "help" : "Szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
       }
     }
   }

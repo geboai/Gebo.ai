@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "ການເຊື່ອມຕໍ່ Google Drive/Workspaces",
         "description" : "ຕັ້ງຄ່າ Gebo.ai ເພື່ອເຂົ້າເຖິງຂໍ້ມູນທີມ Google cloud Drive/Workspaces ຂອງທ່ານ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "ຕັ້ງຄ່າ Google search api",
+        "description" : "ຕັ້ງຄ່າຊື່ຜູ້ໃຊ້ Google search api ສໍາລັບການຄົ້ນຫາ AI ຜ່ານເວັບ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "ຕັ້ງຄ່າ Deep search",
+        "description" : "ຕັ້ງຄ່າພາຣາມິເຕີ Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "ຄໍາອະທິບາຍ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "ສ້າງຊື່ຜູ້ໃຊ້ google search"
+      },
+      "CreateBtn" : {
+        "label" : "ສ້າງ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "ໃສ່ search engine id ທີ່ຮັບມາຈາກການລົງທະບຽນ google search api credentials."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄໍາອະທິບາຍ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "ໃສ່ api key ທີ່ຮັບມາຈາກການລົງທະບຽນ google search api credentials."
+      },
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າ google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ລຶບ",
+        "help" : "ລຶບ Google search api credentials"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "ໂປຣໄຟລ໌ Deep search",
+        "help" : "ເພີ່ມການຕັ້ງຄ່າ deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ທ່ານແນ່ໃຈຕ້ອງການລຶບການສົນທະນານີ້ບໍ?",
         "header" : "ດໍາເນີນການລຶບສົນທະນາ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ເພີ່ມເນື້ອຫາ ຫຼື ປັບປຸງພຶດຕິກຳການຄົ້ນຫາ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ເພີ່ມເນື້ອຫາ ຫຼື ປັບປຸງພຶດຕິກຳການຄົ້ນຫາ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ເພີ່ມເນື້ອຫາ ຫຼື ປັບປຸງພຶດຕິກຳການຄົ້ນຫາ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ທ່ານບໍ່ສາມາດລຶບນີ້ໄດ້",
         "detail" : "ວັດຖຸນີ້ຖືກອ້າງອີງຈາກສ່ວນອື່ນຂອງແອັບພິເຄຊັນ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ມີຂໍ້ຜິດພາດໃນການດໍາເນີນງານ: ຜິດພາດໃນການເຮັດວຽກກັບ url: http://localhost:11434/v1/models",
+        "detail" : "Server error: ຜິດພາດໃນການເຮັດວຽກກັບ url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ມີຂໍ້ຜິດພາດໃນການດໍາເນີນງານ: ຕ້ອງການກໍານົດ apiKey",
+        "detail" : "Server error: ຕ້ອງການກໍານົດ apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ຜິດພາດໃນເວລາກຳລັງສົ່ງພາບ chat",
+        "detail" : "Server error: 400 Bad Request ຈາກ POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Identity ທີ່ໃຊ້",
         "help" : "ເລືອກ ຫຼື ສ້າງ identity ເພື່ອໃຊ້ເຂົ້າເຖິງ google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ສົນທະນາ"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ກຳລັງຄົ້ນຫາຂໍ້ມູນທີ່ກ່ຽວຂ້ອງ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ກຳລັງສະຫຼຸບລາຍງານສຸດທ້າຍ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ເພີ່ມ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ຕັ້ງຄ່າການຄົ້ນຫາ"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ໃສ່ prompt ສໍາລັບການດຶງຂໍ້ມູນທີ່ສຳຄັນຈາກເອກະສານ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ໃສ່ prompt ສໍາລັບການລວບຮວມຂໍ້ມູນທີ່ດຶງອອກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າ large language model"
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ໃສ່ຄໍາອະທິບາຍຂອງການຕັ້ງຄ່າ deep search"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງອັດຕາໂນມັດສໍາລັບ deep search"
+      },
+      "searchType" : {
+        "label" : "ປະເພດການຄົ້ນຫາ",
+        "help" : "ເລືອກລະຫວ່າງ single hop semantic search ຫຼື multi hop"
+      },
+      "topK" : {
+        "label" : "ຈໍານວນກົດຂໍ້ຄວາມທີ່ໄດ້ຮັບ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ເລືອກ llm ທີ່ໃຊ້",
+        "help" : "ລະບຸ large language model ທີ່ໃຊ້ສໍາລັບ Deep search, ຖ້າບໍ່ເລືອກຈະໃຊ້ຄ່າຕັ້ງຕົ້ນ."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt ວິເຄາະເອກະສານ",
+        "help" : "ແກ້ໄຂ prompt ທີ່ຈະໃຊ້ສໍາລັບການດຶງຂໍ້ມູນສ່ວນທີ່ສໍາຄັນຈາກເອກະສານ."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt ລວບຮວມຂໍ້ມູນທີ່ດຶງ",
+        "help" : "ແກ້ໄຂ prompt ທີ່ໃຊ້ລວບຮວມຂໍ້ມູນທີ່ດຶງມາໃຫ້ເປັນລາຍງານອັນດຽວ."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ຄ່າ similarity ການຄົ້ນຫາຮອບທຳອິດ",
+        "help" : "ຄ່າ hop semantic similarity ຮອບທຳອິດ (ລະຫວ່າງ 0.5 ຫາ 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ຄ່າ similarity ການຄົ້ນຫາຮອບທີສອງ",
+        "help" : "ຄ່າ hop semantic similarity ຮອບທີສອງ (ລະຫວ່າງ 0.5 ຫາ 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "large language model ພື້ນຖານ",
+        "help" : "large language model ພື້ນຖານຈະໃຊ້ສໍາລັບການ Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "ຄ່າ similarity ການຄົ້ນຫາ",
+        "help" : "semantic similarity threashold (ລະຫວ່າງ 0.5 ຫາ 1.0)"
       }
     }
   }

@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ஒருங்கிணைப்பு",
         "description" : "உங்கள் Google cloud Drive/Workspaces குழு தரவுகளுக்கு அணுக Gebo.ai ஐ அமைக்கவும்"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ஐ உள்ளமைக்கவும்",
+        "description" : "AI இணைய தேடல்களுக்கு Google search api அனுமதி தகவல்களை உள்ளமைக்கவும்"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ஐ உள்ளமைக்கவும்",
+        "description" : "Deep search விருப்பங்களை அமைக்கவும்"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "விளக்கம்"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api விசை"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search அனுமதி தகவல்களை உருவாக்கவும்"
+      },
+      "CreateBtn" : {
+        "label" : "உருவாக்கவும்"
+      },
+      "customSearchEngineId" : {
+        "label" : "தேடல் இயந்திர ஐடி",
+        "help" : "Google search api அனுமதி பதிவில் பெற்ற தேடல் இயந்திர ஐடியை உள்ளிடவும்."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "உள்ளமைப்பு குறியீடு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "apiKey" : {
+        "label" : "Api விசை",
+        "help" : "Google search api அனுமதி பதிவில் பெற்ற விசையைக் உள்ளிடவும்."
+      },
+      "MainPanel" : {
+        "label" : "Google search api ஐ அமைக்கவும்"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "நீக்கு",
+        "help" : "Google search api அனுமதி தகவல்களை நீக்கு"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search உள்ளமைப்பு",
+        "help" : "ஒரு deep search உள்ளமைப்பை சேர்க்கவும்"
+      },
+      "EditSystemBtn" : {
+        "label" : "உள்ளமைப்பை திருத்து"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "இந்த உரையாடலை நீக்க விரும்புகிறீர்களா?",
         "header" : "உரையாடல் நீக்கம்"
+      },
+      "PlusContextualMenu" : {
+        "help" : "உள்ளடக்கம் சேர்க்கவும் அல்லது தேடல் செயல்பாட்டை மாற்றவும்"
+      },
+      "[object HTMLElement]" : {
+        "help" : "உள்ளடக்கம் சேர்க்கவும் அல்லது தேடல் செயல்பாட்டை மாற்றவும்"
+      },
+      "ContextMenuBtn" : {
+        "help" : "உள்ளடக்கம் சேர்க்கவும் அல்லது தேடல் செயல்பாட்டை மாற்றவும்"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "நீங்கள் இதை நீக்க முடியாது",
         "detail" : "இந்த பொருள் பயன்பாட்டில் மற்ற பகுதிகளிலிருந்து verwijzing உள்ளது"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "செயல்படுத்தும் போது விதிவிலக்கு: url செயல்பாட்டில் பிழை:http://localhost:11434/v1/models",
+        "detail" : "சர்வர் பிழை: url செயல்பாட்டில் பிழை:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "செயல்படுத்தும் போது விதிவிலக்கு:apiKey அமைக்கப்பட வேண்டும்",
+        "detail" : "சர்வர் பிழை: apiKey அமைக்கப்பட வேண்டும்"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "நடப்பச்சாட்டை ஒலி செய்யும் போது பிழை",
+        "detail" : "சர்வர் பிழை: 400 தவறான கோரிக்கை POST http://localhost:8000/v1/chat/completions இலிருந்து"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "பயன்படுத்தும் அடையாளம்",
         "help" : "Google drive சிஸ்டத்திற்கு அணுகும் அடையாளத்தைத் தேர்ந்தெடுக்கவும் அல்லது உருவாக்கவும்"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "அரட்டை"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "பொருத்தமான தகவல்களை தேடும்中"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "இறுதி அறிக்கையை ஒருங்கிணைக்கிறது"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "சேர்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "DeleteBtn" : {
+        "label" : "நீக்கு"
+      },
+      "SearchSettingTab" : {
+        "label" : "தேடல் அமைப்பு"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ஆவணங்களிலிருந்து பொருத்தமான தகவலை பிரித்தெடுக்க prompt ஐ உள்ளிடவும்"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "பிரித்தெடுக்கப்பட்ட தகவலை ஒருங்கிணைக்க prompt ஐ உள்ளிடவும்"
+      },
+      "MainPanel" : {
+        "label" : "Deep search உள்ளமைப்பை திருத்துகிறது"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "பெரிய மொழி மாதிரி அமைப்பு"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Deep search உள்ளமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "சிறப்பு குறியீடு",
+        "help" : "Deep search உள்ளமைப்புக்கான தானாக உருவாக்கப்பட்ட அலகு குறியீடு"
+      },
+      "searchType" : {
+        "label" : "தேடல் வகை",
+        "help" : "Single hop semantic search அல்லது multi hop ஐத் தேர்ந்தெடுக்கவும்"
+      },
+      "topK" : {
+        "label" : "பெறப்பட்ட உரை தொகுதிகள் எண்ணிக்கை (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "பயன்படுத்தப்படும் llm",
+        "help" : "Deep search க்கு பயன்படுத்தப்படும் பெரிய மொழி மாதிரியை குறிப்பிடவும், ஒன்றும் தேர்ந்தெடுக்கவில்லை என்றால் இயல்புநிலையானது பயன்படுத்தப்படும்."
+      },
+      "analisysPrompt" : {
+        "label" : "ஆவணங்களுக்கான பகுப்பு prompt",
+        "help" : "ஆவணங்களிலிருந்து பொருத்தமான தகவலை பிரித்தெடுக்க பயன்படுத்தப்படும் prompt ஐத் திருத்தவும்."
+      },
+      "consolidationPrompt" : {
+        "label" : "பிரித்தெடுக்கப்பட்ட தகவலை ஒருங்கிணைக்கும் prompt",
+        "help" : "பெறப்பட்ட ஆவணங்களில் இருந்து பிரித்தெடுக்கப்பட்ட முக்கியமான தகவல்களை ஒரே அறிக்கையாக ஒருங்கிணைக்க பயன்படுத்தப்படும் prompt ஐத் திருத்தவும்."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "தேடல் ஒற்றுமை வரம்பு",
+        "help" : "முதல் hop semantic ஒற்றுமை வரம்பு (0.5 முதல் 1.0 வரை)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "இரண்டாவது hop ஒற்றுமை வரம்பு",
+        "help" : "இரண்டாவது hop semantic ஒற்றுமை வரம்பு (0.5 முதல் 1.0 வரை)"
+      },
+      "defaultModel" : {
+        "label" : "இயல்புநிலை பெரிய மொழி மாதிரி",
+        "help" : "Deep search செயல்பாட்டில் இயல்புநிலையான பெரிய மொழி மாதிரி பயன்படுத்தப்படும்"
+      },
+      "similarityThreashold" : {
+        "label" : "தேடல் ஒற்றுமை வரம்பு",
+        "help" : "Semantic ஒற்றுமை வரம்பு (0.5 முதல் 1.0 வரை)"
       }
     }
   }

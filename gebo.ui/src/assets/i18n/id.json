@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrasi Google Drive/Workspaces",
         "description" : "Konfigurasikan Gebo.ai untuk mengakses data tim Google cloud Drive/Workspaces Anda"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfigurasi Google search api",
+        "description" : "Konfigurasikan kredensial Google search api untuk pencarian web AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfigurasi Deep search",
+        "description" : "Konfigurasikan parameter Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Deskripsi"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Kunci api Google search"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Buat kredensial Google search"
+      },
+      "CreateBtn" : {
+        "label" : "Buat"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID mesin pencari",
+        "help" : "Masukkan ID mesin pencari yang didapatkan dari pendaftaran kredensial Google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kode konfigurasi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
+      },
+      "apiKey" : {
+        "label" : "Kunci api",
+        "help" : "Masukkan kunci api yang didapatkan dari pendaftaran kredensial Google search api."
+      },
+      "MainPanel" : {
+        "label" : "Pengaturan Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Hapus",
+        "help" : "Hapus kredensial Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfigurasi Deep search",
+        "help" : "Tambah konfigurasi deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edit konfigurasi"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Apakah Anda yakin ingin menghapus chat ini?",
         "header" : "Hapus chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Anda tidak dapat menghapus ini",
         "detail" : "Objek ini dirujuk dari bagian lain aplikasi"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Kesalahan selama operasi: Error saat bekerja dengan url:http://localhost:11434/v1/models",
+        "detail" : "Kesalahan server: Error saat bekerja dengan url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Kesalahan selama operasi: apiKey harus diatur",
+        "detail" : "Kesalahan server: apiKey harus diatur"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Terjadi kesalahan saat streaming respons chat",
+        "detail" : "Kesalahan server: 400 Permintaan Tidak Valid dari POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Identitas yang digunakan",
         "help" : "Pilih atau buat identitas untuk mengakses sistem google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Mencari informasi yang relevan"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Mengonsolidasi laporan akhir"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Simpan"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "SearchSettingTab" : {
+        "label" : "Pengaturan pencarian"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Masukkan prompt untuk ekstraksi informasi relevan dari dokumen"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Masukkan prompt untuk konsolidasi informasi relevan yang diekstrak"
+      },
+      "MainPanel" : {
+        "label" : "Mengedit konfigurasi deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Pengaturan large language model"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi konfigurasi deep search"
+      },
+      "code" : {
+        "label" : "Kode unik",
+        "help" : "Kode unik yang dibuat secara otomatis untuk konfigurasi deep search"
+      },
+      "searchType" : {
+        "label" : "Tipe pencarian",
+        "help" : "Pilih antara single hop semantic search atau multi hop"
+      },
+      "topK" : {
+        "label" : "Jumlah segmen teks yang diambil (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM yang digunakan",
+        "help" : "Tentukan large language model yang digunakan untuk Deep search, yang standar akan digunakan jika tidak dipilih."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt analisis dokumen",
+        "help" : "Edit prompt yang akan digunakan untuk ekstraksi informasi relevan dari potongan dokumen."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt konsolidasi informasi yang diekstrak",
+        "help" : "Edit prompt yang akan digunakan untuk konsolidasi informasi relevan yang diekstrak dari dokumen yang diambil dalam satu laporan."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Ambang kesamaan pencarian",
+        "help" : "Ambang kesamaan semantik hop pertama (antara 0.5 hingga 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Ambang kesamaan hop kedua",
+        "help" : "Ambang kesamaan semantik hop kedua (antara 0.5 hingga 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model default",
+        "help" : "Large language model default akan digunakan untuk pemrosesan Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Ambang kesamaan pencarian",
+        "help" : "Ambang kesamaan semantik (antara 0.5 hingga 1.0)"
       }
     }
   }
