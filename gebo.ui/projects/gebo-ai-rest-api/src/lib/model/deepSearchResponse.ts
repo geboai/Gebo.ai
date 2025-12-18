@@ -19,4 +19,5 @@ export interface DeepSearchResponse {
     dateCreated?: Date;
     deepsearchCode?: string;
     response?: string;
+    searchResultsEmpty?: boolean;
 }

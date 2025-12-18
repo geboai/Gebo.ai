@@ -6,12 +6,10 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.googlesearch.handler.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,33 +22,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.googlesearch.handler.model.GGoogleSearchApiCredentials;
+import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.repository.GGoogleSearchApiCredentialsRepository;
+import ai.gebo.secrets.model.GeboTokenContent;
+import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
 /**
- * Controller responsible for managing Google Search API credentials configuration.
- * This controller provides endpoints for CRUD operations on Google Search API credentials.
- * All endpoints are restricted to users with ADMIN role.
+ * Controller responsible for managing Google Search API credentials
+ * configuration. This controller provides endpoints for CRUD operations on
+ * Google Search API credentials. All endpoints are restricted to users with
+ * ADMIN role.
  * 
  * AI generated comments
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping(value = "api/admin/GoogleSearchConfigurationController")
+@AllArgsConstructor
 public class GoogleSearchConfigurationController {
 	/**
 	 * Repository for Google Search API credentials data access
 	 */
-	@Autowired
-	GGoogleSearchApiCredentialsRepository repository;
 
-	/**
-	 * Default constructor for GoogleSearchConfigurationController
-	 */
-	public GoogleSearchConfigurationController() {
-
-	}
+	private final GGoogleSearchApiCredentialsRepository repository;
+	private final IGPersistentObjectManager persistentObjectManager;
+	private final IGeboSecretsAccessService secretAccessService;
 
 	/**
 	 * Retrieves Google Search API credentials by their unique code identifier
@@ -101,4 +105,31 @@ public class GoogleSearchConfigurationController {
 		repository.delete(value);
 	}
 
+	@GetMapping(value = "getGoogleSearchStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ComponentSetupStatus getGoogleSearchStatus() {
+		ComponentSetupStatus status = new ComponentSetupStatus();
+		status.isSetup = repository.count() > 0l;
+		return status;
+
+	}
+
+	@GetMapping(value = "getGoogleSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GGoogleSearchApiCredentials> getGoogleSearchApiCredentials() {
+		return repository.findAll();
+	}
+
+	@PostMapping(value = "fastInsertGoogleSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GGoogleSearchApiCredentials fastInsertGoogleSearchApiCredentials(
+			@RequestBody @Valid @NotNull GoogleSearchConfig config)
+			throws GeboCryptSecretException, GeboPersistenceException {
+		GeboTokenContent tokenContent = new GeboTokenContent();
+		tokenContent.setToken(config.getApiKey());
+		tokenContent.setUser("nouser@info.com");
+		String secret = secretAccessService.storeSecret(tokenContent, "Google search credentials", "google-search");
+		GGoogleSearchApiCredentials credentials = new GGoogleSearchApiCredentials();
+		credentials.setSecretCode(secret);
+		credentials.setCustomSearchEngineId(config.getCustomSearchEngineId());
+		credentials.setDescription("Google search credentials");
+		return persistentObjectManager.insert(credentials);
+	}
 }
