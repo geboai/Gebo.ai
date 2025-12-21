@@ -12,22 +12,19 @@ import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
 @Data
-public class DeepSearchResponse extends GBaseObject implements IDeepSearchResult{
-	private static final String DEEP_SEARCH_AGGREGATOR = "Deep search aggregator";
+public class DeepSearchDataSourceResponse extends GBaseObject implements IDeepSearchResult {
+
 	@NotNull
 	@HashIndexed
 	String deepsearchCode = null;
 	@NotNull
 	String response = null;
 	Boolean searchResultsEmpty = null;
+	String dataSourceDescription = null;
+	List<DeepSearchDataSourceReference> dataSourceReferences = new ArrayList<DeepSearchDataSourceReference>();
 
-	public DeepSearchResponse() {
+	public DeepSearchDataSourceResponse() {
 		this.setCode(UUID.randomUUID().toString());
 	}
 
-	@Override
-	public String getDataSourceDescription() {
-		
-		return DEEP_SEARCH_AGGREGATOR;
-	}
 }
