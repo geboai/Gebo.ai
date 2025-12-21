@@ -32,11 +32,11 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
 import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
 import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
-import ai.gebo.llms.deepsearch.model.DeepSearchState.DeepSearchPhase;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
@@ -71,7 +71,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 	private AbstractDeepSearchEvent dataSourcesNextStep(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
-			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel) {
+			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
+			DeepSearchConfig deepSearchConfig) throws LLMConfigException {
 
 		AbstractDeepSearchEvent nextStepValue = null;
 		// if already CurrentDataSourceHandlerRunning is initialized continue processing
@@ -82,18 +83,19 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 			if (handler.isPresent()) {
 				IGDeepSearchDataSourceService businessLogic = handler.get();
-				nextStepValue = businessLogic.nextStep(chatModel, request, dataSourcesResults,
-						state.getDataSourcesStatus().get(businessLogic.getHandlerId()));
+				nextStepValue = businessLogic.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
+						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state.getConsolidatedResult());
 			}
 		} else {
 			// find next data source to evaluate end execute
 			for (IGDeepSearchDataSourceService handler : handlers) {
 				if (!state.getDataSourcesStatus().containsKey(handler.getHandlerId())
-						&& handler.isEnabled(chatModel, request)) {
+						&& handler.isEnabled(chatModel, deepSearchConfig, request)) {
 					state.setCurrentDataSourceHandlerRunning(handler.getHandlerId());
-					Object initialState = handler.createInitialState(chatModel, request);
+					Object initialState = handler.createInitialState(chatModel, deepSearchConfig, request);
 					state.getDataSourcesStatus().put(handler.getHandlerId(), initialState);
-					nextStepValue = handler.nextStep(chatModel, request, dataSourcesResults, initialState);
+					nextStepValue = handler.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
+							initialState, state.getConsolidatedResult());
 				}
 			}
 		}
@@ -168,16 +170,15 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
-			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel) {
+			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel) throws LLMConfigException {
 
 		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
 				|| request.getKnowledgeBases().isEmpty()) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
 		}
+
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		if (chatModel != null && request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
-			int tokensBudget = chatModel.getContextLength();
-
 			switch (state.getPhase()) {
 			case BEFORE_KNOWLEDGE_BASE_SEARCH: {
 				// Streaming search steps from handlers before knowledge base search
@@ -185,12 +186,17 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						.findByExecutionTime(DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH);
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults,
-							state, handlers, chatModel);
+							state, handlers, chatModel, configuration);
 					if (nextStepValue != null) {
 						if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent processedDataSource) {
 							if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
 									|| !processedDataSource.getOutputData().getSearchResultsEmpty())
 								dataSourcesResults.add(processedDataSource.getOutputData());
+							String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
+									configuration.getConsolidationPrompt(),
+									processedDataSource.getOutputData().getResponse(), request.getQuery(),
+									state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
+							state.setConsolidatedResult(_consolidatedResult);
 						}
 						return nextStepValue;
 					}
@@ -213,6 +219,11 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						history, state, configuration, userInfos, chatModel);
 				if (nextStepValue != null)
 					return nextStepValue;
+				else {
+					String consolidatedResult = this.consolidateResult(chatModel, history, request, state,
+							configuration);
+					state.setConsolidatedResult(consolidatedResult);
+				}
 
 			}
 
@@ -223,12 +234,17 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						.findByExecutionTime(DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH);
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults,
-							state, handlers, chatModel);
+							state, handlers, chatModel, configuration);
 					if (nextStepValue != null) {
 						if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent processedDataSource) {
 							if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
 									|| !processedDataSource.getOutputData().getSearchResultsEmpty())
 								dataSourcesResults.add(processedDataSource.getOutputData());
+							String consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
+									configuration.getConsolidationPrompt(),
+									processedDataSource.getOutputData().getResponse(), request.getQuery(),
+									state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
+							state.setConsolidatedResult(consolidatedResult);
 						}
 						return nextStepValue;
 					}
@@ -238,8 +254,15 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			}
 
 		}
-		DeepSearchProcessedEvent consolidatedResult = this.consolidateResult(chatModel, dataSourcesResults, history,
-				request, state, configuration);
+		DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
+		consolidatedResult.setInputData(request);
+		consolidatedResult.setOutputData(new DeepSearchResponse());
+		consolidatedResult.getOutputData().setResponse(state.getConsolidatedResult());
+		boolean knowledgeBaseSearchesHaveResults = state.getDocumentSearchResults() != null
+				&& state.getDocumentSearchResults().getDocumentItems().size() > 0;
+		boolean otherDataSourceHaveResults = dataSourcesResults.size() > 0;
+		consolidatedResult.getOutputData()
+				.setSearchResultsEmpty(!(knowledgeBaseSearchesHaveResults || otherDataSourceHaveResults));
 		return consolidatedResult;
 
 	}
@@ -287,42 +310,12 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return consolidatedDaoResult;
 	}
 
-	private DeepSearchProcessedEvent consolidateResult(IGConfigurableChatModel chatModel,
-			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history,
+	private String consolidateResult(IGConfigurableChatModel chatModel, List<AbstractDeepSearchEvent> history,
 			DeepSearchRequest request, DeepSearchState state, DeepSearchConfig configuration) {
 		final int tokensBudget = chatModel.getContextLength();
 		int tokens = 0;
-		String consolidated = "";
+		String consolidated = state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "";
 
-		
-		if (!dataSourcesResults.isEmpty()) {
-			StringBuffer fragments = new StringBuffer();
-			for ( IDeepSearchResult dataSourceResult : dataSourcesResults) {
-				String actualFragment = dataSourceResult.getResponse();
-				int length = tokenEstimator.estimate(actualFragment);
-				if (tokens + length >= tokensBudget) {
-
-					consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
-							configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
-							consolidated);
-					fragments = new StringBuffer();
-					tokens = 0;
-
-				}
-
-				fragments.append(BEGIN_DEEP_SEARCH_MODULE_RESULT);
-				fragments.append(SEARCH_MODULE_NAME);
-				fragments.append( dataSourceResult.getDataSourceDescription());
-				fragments.append(NEWLINE);
-				fragments.append(actualFragment);
-				fragments.append(END_DEEP_SEARCH_MODULE_RESULT);
-				tokens += length;
-			}
-			if (!fragments.isEmpty()) {
-				consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
-						fragments.toString(), request.getQuery(), consolidated);
-			}
-		}
 		if (!history.isEmpty()) {
 			StringBuffer fragments = new StringBuffer();
 			List<DeepSearchDocumentAnalisysResultStep> steps = new ArrayList<DeepSearchDocumentAnalisysResultStep>();
@@ -354,15 +347,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						fragments.toString(), request.getQuery(), consolidated);
 			}
 		}
-		DeepSearchProcessedEvent outValue = new DeepSearchProcessedEvent();
-		outValue.setInputData(request);
-		DeepSearchResponse response = new DeepSearchResponse();
-		response.setDeepsearchCode(request.getCode());
-		response.setResponse(consolidated);
-		response.setSearchResultsEmpty(history.isEmpty());
-		outValue.setOutputData(response);
-		outValue.setProcessPercentage(100.0);
-		return outValue;
+
+		return consolidated;
 	}
 
 }

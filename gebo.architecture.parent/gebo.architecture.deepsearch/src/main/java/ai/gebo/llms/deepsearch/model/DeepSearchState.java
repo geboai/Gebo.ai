@@ -7,18 +7,16 @@ import lombok.Data;
 
 @Data
 public class DeepSearchState {
-	public static enum DeepSearchPhase {
-		BEFORE_KNOWLEDGE_BASE_SEARCH, KNOWLEDGE_BASE_SEARCH, AFTER_KNOWLEDGE_BASE_SEARCH
-	}
-
-	DeepSearchPhase phase = DeepSearchPhase.BEFORE_KNOWLEDGE_BASE_SEARCH;
-	RagDocumentsCachedDaoResult documentSearchResults = null;
-	String currentDataSourceHandlerRunning = null;
-	int ragDocumentsPointer = 0;
-	int ragDocumentFragmentPointer = 0;
-	int fragmentsCount = 0;
-	int elaboratedFragmentsCount = 0;
-	HashMap<String, Object> dataSourcesStatus = new HashMap<String, Object>();
+	private DeepSearchPhase phase = DeepSearchPhase.BEFORE_KNOWLEDGE_BASE_SEARCH;
+	private RagDocumentsCachedDaoResult documentSearchResults = null;
+	private String currentDataSourceHandlerRunning = null;
+	private int ragDocumentsPointer = 0;
+	private int ragDocumentFragmentPointer = 0;
+	private int fragmentsCount = 0;
+	private int elaboratedFragmentsCount = 0;
+	private HashMap<String, Object> dataSourcesStatus = new HashMap<String, Object>();
+	private String consolidatedResult = null;
+	private int dataSourceAlreadyConsolidatedIndex = 0;
 
 	public double calculateProcessedPercent() {
 		double total = fragmentsCount;

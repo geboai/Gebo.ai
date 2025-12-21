@@ -10,8 +10,9 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
+
 /*******************************************************************************************************************
- * General base class for services using large language models 
+ * General base class for services using large language models
  */
 @AllArgsConstructor
 public class BaseLlmsInvokingService {
@@ -90,4 +91,31 @@ public class BaseLlmsInvokingService {
 		return result;
 	}
 
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, Object consolidated, Class<T> type) throws LLMConfigException {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			String prompt, Object documents, String question, Object consolidated, Class<T> type)
+			throws LLMConfigException {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
+
+	protected <T> T callLLMWithDocumentsStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, Class<T> type) throws LLMConfigException {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
 }
