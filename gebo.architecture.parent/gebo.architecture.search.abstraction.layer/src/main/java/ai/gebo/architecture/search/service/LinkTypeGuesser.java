@@ -38,8 +38,7 @@ public class LinkTypeGuesser {
 			Map.entry("mkv", "video/x-matroska"),
 
 			Map.entry("java", "text/x-java-source"), Map.entry("py", "text/x-python"),
-			Map.entry("js", "text/javascript"), Map.entry("ts", "text/typescript"), Map.entry("css", "text/css"),
-			Map.entry("yaml", "application/yaml"));
+			Map.entry("js", "text/javascript"), Map.entry("ts", "text/typescript"), Map.entry("css", "text/css"));
 
 	public static String tryArgueContentType(String link) {
 		if (link == null || link.isBlank())

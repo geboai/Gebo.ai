@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class RemoteSystemDeepSearchDataSourceStandardState {
-	private ExtractedSearchQueries extractedSearchQueries = new ExtractedSearchQueries();
+	private ExtractedSearchQueries extractedSearchQueries = null;
 	private List<SearchResults> queryResults = new ArrayList<SearchResults>();
 	private int queryResultsIndex = 0;
 	private int queryResultsReferenceIndex = 0;

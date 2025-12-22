@@ -2,7 +2,9 @@ package ai.gebo.llms.deepsearch.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -32,6 +34,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		IGDeepSearchDataSourceService<RemoteSystemDeepSearchDataSourceStandardState, SearchResult, AnalyzedSearchResult, RemoteReferenceAnalyzedDeepSearchEvent> {
 
 	final Class<CustomContentExtractionType> customContentExtractionType;
+	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
 	private static final int MAX_NESTING_LEVEL = 2;
 	private static final int MAX_DOCUMENT_TOKENS_SIZE_CONTEXT_MOLTIPLICATOR = 10;
 
@@ -201,9 +204,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel, String consolidatedText) throws LLMConfigException {
 		String prompt = createExtractSearchQueriesPrompt(request, pastSystemsResponses, deepSearchConfig, chatModel);
-
+		Map<String, Object> additionalVariables=new HashMap<String, Object>();
+		additionalVariables.put(DATA_SOURCE_DESCRIPTION,getDescription(chatModel, deepSearchConfig, request));
 		return super.callLLMWithConsolidationStructuredReturn(chatModel, prompt, request.getQuery(),
-				consolidatedText != null ? consolidatedText : "", ExtractedSearchQueries.class);
+				consolidatedText != null ? consolidatedText : "",additionalVariables, ExtractedSearchQueries.class);
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,

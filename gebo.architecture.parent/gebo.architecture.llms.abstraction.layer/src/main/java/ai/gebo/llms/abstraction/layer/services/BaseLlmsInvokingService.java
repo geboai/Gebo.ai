@@ -1,14 +1,13 @@
 package ai.gebo.llms.abstraction.layer.services;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -17,7 +16,6 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -130,6 +128,22 @@ public class BaseLlmsInvokingService {
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
 
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, Object consolidated, Map<String, Object> additionalVariables, Class<T> type)
+			throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
+
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			String prompt, Object documents, String question, Object consolidated, Class<T> type)
 			throws LLMConfigException {
@@ -184,9 +198,9 @@ public class BaseLlmsInvokingService {
 				.round((contextWindowD - (consolidationLength + promptLengthD)) * ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 	}
 
-	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt, String question,
-			String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator, Supplier<ConsolidationInput> input)
-			throws LLMConfigException, IOException {
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			Supplier<ConsolidationInput> input) throws LLMConfigException, IOException {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLlmsInvokingService.ConsolidationInputBatch>();
 		ConsolidationInput currentInput = null;
@@ -413,14 +427,16 @@ public class BaseLlmsInvokingService {
 		});
 	}
 
-	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt, String question,
-			String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator, List<ConsolidationInput> input)
-			throws LLMConfigException, IOException {
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			List<ConsolidationInput> input) throws LLMConfigException, IOException {
 		Iterator<ConsolidationInput> iterator = input.iterator();
-		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator, () -> {
-			if (iterator.hasNext())
-				return iterator.next();
-			return null;
-		});
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
+				() -> {
+					if (iterator.hasNext())
+						return iterator.next();
+					return null;
+				});
 	}
+
 }

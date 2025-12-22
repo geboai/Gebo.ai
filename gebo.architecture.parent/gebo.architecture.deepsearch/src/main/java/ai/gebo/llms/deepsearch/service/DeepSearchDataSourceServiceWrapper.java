@@ -178,11 +178,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
 		String originalPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
-		if (originalPrompt.toLowerCase().contains("{dataSourceDescription}")) {
-			String dataSourceName = searchService.getDescription();
-			originalPrompt = originalPrompt.replace("{dataSourceDescription}", dataSourceName);
-		}
-		return originalPrompt;
+
+		return deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
 	}
 
 }

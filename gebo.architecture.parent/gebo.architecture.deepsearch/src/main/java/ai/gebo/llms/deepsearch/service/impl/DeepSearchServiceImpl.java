@@ -175,12 +175,12 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		}, OverflowStrategy.BUFFER);
 
 		return flux.map(x -> {
-			if (x instanceof DeepSearchDocumentEvent docEvent) {
+			/*if (x instanceof DeepSearchDocumentEvent docEvent) {
 				stepsRepository.save(docEvent.getOutputData());
 			}
 			if (x instanceof DeepSearchProcessedEvent processed) {
 				responseRepository.save(processed.getOutputData());
-			}
+			}*/
 			return x;
 		});
 	}

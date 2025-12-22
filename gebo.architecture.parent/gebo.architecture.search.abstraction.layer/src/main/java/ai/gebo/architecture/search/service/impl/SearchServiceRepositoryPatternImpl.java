@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 
 @Component
 @Scope("singleton")
 public class SearchServiceRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<ISearchService>
-		implements IGImplementationsRepositoryPattern<ISearchService> {
+		implements ISearchServiceRepositoryPattern {
 
 	public SearchServiceRepositoryPatternImpl(@Autowired(required = false) List<ISearchService> implementations) {
 		super(implementations);
