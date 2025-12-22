@@ -102,7 +102,6 @@ public class SimpleBingSearchApi {
 					// Extract all valid links from the search results
 					for (int i = 0; i < anchors.size(); i++) {
 						Element anchor = anchors.get(i);
-
 						String url = anchor.absUrl("href");
 						try {
 							URL _url = new URL(url);

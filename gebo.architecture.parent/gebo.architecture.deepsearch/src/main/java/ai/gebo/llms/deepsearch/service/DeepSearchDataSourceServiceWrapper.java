@@ -15,6 +15,8 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.service.TypedInputStream;
+import ai.gebo.architecture.utils.MimeTypes;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -112,12 +114,19 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 					&& ingestionHandler
 							.isHandledContentType(actualSearchResultToLoad.getResultReference().getExtension());
 			if (handledExtension || handledContentType) {
-				try (InputStream is = searchService.loadSearchResult(actualSearchResultToLoad)) {
+				InputStream is = null;
+				try {
+					TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
+					is = tInputStream.getInputStream();
+					String contentType = tInputStream.getContentType();
+					if (contentType == null) {
+						contentType = actualSearchResultToLoad.getResultReference().getContentType();
+					}
+					String extension = contentType != null ? MimeTypes.getDefaultExt(contentType)
+							: actualSearchResultToLoad.getResultReference().getExtension();
 					GDocumentReference documentReference = documentReferenceFactory.createReference(
 							actualSearchResultToLoad.getResultReference().getUri(),
-							actualSearchResultToLoad.getResultReference().getName(),
-							actualSearchResultToLoad.getResultReference().getContentType(),
-							actualSearchResultToLoad.getResultReference().getExtension(),
+							actualSearchResultToLoad.getResultReference().getName(), contentType, extension,
 							actualSearchResultToLoad.getResultReference().getSize());
 					IngestionHandlerData ingested = ingestionHandler.handleContent(documentReference, is);
 					if (ingested.isUnmanagedContent())
@@ -133,6 +142,13 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 							return data;
 						}).toList();
 					}
+				} finally {
+					if (is != null) {
+						try {
+							is.close();
+						} catch (Throwable th) {
+						}
+					}
 				}
 			} else
 				return List.of();
@@ -142,7 +158,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	}
 
 	@Override
-	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) {
+	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {

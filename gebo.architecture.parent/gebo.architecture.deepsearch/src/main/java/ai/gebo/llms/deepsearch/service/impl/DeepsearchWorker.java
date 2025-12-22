@@ -41,6 +41,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.model.GUserMessage;
@@ -66,6 +67,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private DocumentReferenceRepository documentRepo;
 	@Autowired
 	private IGDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern;
+	@Autowired
+	private IDynamicDataSourceServicesProvider dataSourcesProvider;
 
 	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
@@ -77,7 +80,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private AbstractDeepSearchEvent dataSourcesNextStep(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
 			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
-			DeepSearchConfig deepSearchConfig) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException {
+			DeepSearchConfig deepSearchConfig)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException {
 
 		AbstractDeepSearchEvent nextStepValue = null;
 		// if already CurrentDataSourceHandlerRunning is initialized continue processing
@@ -182,7 +186,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				|| request.getKnowledgeBases().isEmpty()) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
 		}
-
+		List<IGDeepSearchDataSourceService> providedDeepSearchSourceService = this.dataSourcesProvider
+				.getDynamicDeepSearchServices();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		if (chatModel != null && request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
 			switch (state.getPhase()) {
@@ -190,6 +195,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				// Streaming search steps from handlers before knowledge base search
 				List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 						.findByExecutionTime(DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH);
+				handlers = new ArrayList<IGDeepSearchDataSourceService>(handlers);
+				handlers.addAll(providedDeepSearchSourceService.stream()
+						.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH)
+						.toList());
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = null;
 					try {
@@ -253,6 +262,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
 				List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 						.findByExecutionTime(DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH);
+				handlers = new ArrayList<IGDeepSearchDataSourceService>(handlers);
+				handlers.addAll(providedDeepSearchSourceService.stream()
+						.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH)
+						.toList());
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = null;
 					try {

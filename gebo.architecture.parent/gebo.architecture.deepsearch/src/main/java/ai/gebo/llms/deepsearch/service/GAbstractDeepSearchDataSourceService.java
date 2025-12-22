@@ -195,7 +195,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected abstract List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
 			DeepSearchRequest request, int maxTokens) throws IOException, GeboIngestionException, GeboContentHandlerSystemException;
 
-	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request);
+	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException;
 
 	protected ExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,

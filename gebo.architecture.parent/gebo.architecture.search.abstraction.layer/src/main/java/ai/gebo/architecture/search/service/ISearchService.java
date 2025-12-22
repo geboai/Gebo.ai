@@ -1,7 +1,6 @@
 package ai.gebo.architecture.search.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
@@ -22,7 +21,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public List<SearchableSystemMetaData> getSearchableSystems();
 
-	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit);
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
+			throws IOException;
 
 	public default List<SearchResult> search(SearchQuery query, String systemId, int nEntryLimit) throws IOException {
 		SearchableSystemMetaData system = findSystemById(systemId);
@@ -32,11 +32,11 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 			return null;
 	}
 
-	public InputStream loadSearchResult(SearchResult result) throws IOException;
+	public TypedInputStream loadSearchResult(SearchResult result) throws IOException;
 
 	public Class<CustomSearchResultExtractionDataType> getCustomResultsAggregationDataType();
-
-	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType d,
-			CustomSearchResultExtractionDataType cumulated);
+	
+	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
+			CustomSearchResultExtractionDataType consolidated);
 
 }
