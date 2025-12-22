@@ -93,6 +93,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			SearchResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
 			if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
 				actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
+				int index = state.getQueryResultsReferenceIndex() + 1;
+				state.setQueryResultsReferenceIndex(index);
+
 			} else {
 				int nextIndex = state.getQueryResultsIndex() + 1;
 				state.setQueryResultsIndex(nextIndex);
@@ -101,6 +104,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
 					if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
 						actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
+						int index = state.getQueryResultsReferenceIndex() + 1;
+						state.setQueryResultsReferenceIndex(index);
 					}
 				}
 			}
@@ -117,7 +122,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				CustomContentExtractionType returned = super.callLLMConsolidateStructuredReturn(chatModel, prompt,
 						request.getQuery(), previusConsolidatedResult, this.customContentExtractionType, aggregator,
 						inputs);
-				analyzed.add(returned);
+				if (returned != null) {
+					analyzed.add(returned);
+				}
 				if (actualSearchResultToLoad.getNestingLevel() < MAX_NESTING_LEVEL) {
 					List<SearchResult> additionalResults = this.extractAdditionalReferencesToScan(returned, state);
 					// Enqueue other references to visit after the actual visit
@@ -196,18 +203,20 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			RemoteSystemDeepSearchDataSourceStandardState state);
 
 	protected abstract List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
-			DeepSearchRequest request, int maxTokens) throws IOException, GeboIngestionException, GeboContentHandlerSystemException;
+			DeepSearchRequest request, int maxTokens)
+			throws IOException, GeboIngestionException, GeboContentHandlerSystemException;
 
-	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException;
+	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
+			throws IOException;
 
 	protected ExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel, String consolidatedText) throws LLMConfigException {
 		String prompt = createExtractSearchQueriesPrompt(request, pastSystemsResponses, deepSearchConfig, chatModel);
-		Map<String, Object> additionalVariables=new HashMap<String, Object>();
-		additionalVariables.put(DATA_SOURCE_DESCRIPTION,getDescription(chatModel, deepSearchConfig, request));
+		Map<String, Object> additionalVariables = new HashMap<String, Object>();
+		additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel, deepSearchConfig, request));
 		return super.callLLMWithConsolidationStructuredReturn(chatModel, prompt, request.getQuery(),
-				consolidatedText != null ? consolidatedText : "",additionalVariables, ExtractedSearchQueries.class);
+				consolidatedText != null ? consolidatedText : "", additionalVariables, ExtractedSearchQueries.class);
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,

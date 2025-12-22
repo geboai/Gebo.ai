@@ -192,7 +192,7 @@ public class BaseLlmsInvokingService {
 
 	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
 		double consolidationLength = tokensEstimation.estimate(consolidated);
-		double contextWindowD = consolidationLength;
+		double contextWindowD = contextWindowLength;
 		double promptLengthD = promptLength;
 		return (int) Math
 				.round((contextWindowD - (consolidationLength + promptLengthD)) * ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
@@ -283,6 +283,7 @@ public class BaseLlmsInvokingService {
 						ConsolidationInputBatch newBatch = new ConsolidationInputBatch();
 						newBatch.inputs.add(batchItem);
 						newBatch.totaltokens += batchItem.tokensCount;
+						currentBatchesQueue.add(newBatch);
 					}
 				}
 			}

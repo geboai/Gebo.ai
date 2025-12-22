@@ -162,6 +162,8 @@ public class GoogleSearchServiceImpl implements ISearchService<WebSearchResultsE
 		String extension = LinkTypeGuesser.tryArgueExtension(link);
 		if (extension == null)
 			extension = ".html";
+		else
+			extension = "." + extension;
 		return extension;
 	}
 

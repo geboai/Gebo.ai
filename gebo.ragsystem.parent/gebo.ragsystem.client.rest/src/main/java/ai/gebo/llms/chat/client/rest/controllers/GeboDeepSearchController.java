@@ -124,8 +124,10 @@ public class GeboDeepSearchController {
 			} else if (entry instanceof DeepSearchChatResponseEvent chatResponseEvent) {
 				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(chatResponseEvent.getOutputData());
 				_envelope = envelop;
-			} else
-				throw new RuntimeException("The received type:" + entry.getClass().getName() + " is not supported yet");
+			} else {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(entry.getOutputData());
+				_envelope = envelop;
+			}
 			_envelope.setLastMessage(trailingType.isAssignableFrom(entry.getClass()));
 			return _envelope;
 		}).onErrorResume(exc -> {

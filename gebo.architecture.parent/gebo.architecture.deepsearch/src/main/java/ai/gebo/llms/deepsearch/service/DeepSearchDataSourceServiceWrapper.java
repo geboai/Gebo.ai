@@ -122,7 +122,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 					if (contentType == null) {
 						contentType = actualSearchResultToLoad.getResultReference().getContentType();
 					}
-					String extension = contentType != null ? MimeTypes.getDefaultExt(contentType)
+					String extension = contentType != null ? "." + MimeTypes.getDefaultExt(contentType)
 							: actualSearchResultToLoad.getResultReference().getExtension();
 					GDocumentReference documentReference = documentReferenceFactory.createReference(
 							actualSearchResultToLoad.getResultReference().getUri(),
