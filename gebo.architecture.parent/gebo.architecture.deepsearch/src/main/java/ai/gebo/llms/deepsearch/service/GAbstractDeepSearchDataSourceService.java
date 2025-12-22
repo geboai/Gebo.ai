@@ -4,23 +4,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
-import org.springframework.ai.document.Document;
-
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService.ConsolidationInput;
 import ai.gebo.llms.deepsearch.datasources.model.AnalyzedSearchResult;
-import ai.gebo.llms.deepsearch.datasources.model.BaseDataSourceExtractionDataType;
 import ai.gebo.llms.deepsearch.datasources.model.ExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.RemoteReferenceAnalyzedDeepSearchEvent;
 import ai.gebo.llms.deepsearch.datasources.model.RemoteSystemDeepSearchDataSourceStandardState;
-import ai.gebo.llms.deepsearch.datasources.model.SearchQuery;
-import ai.gebo.llms.deepsearch.datasources.model.SearchResult;
 import ai.gebo.llms.deepsearch.datasources.model.SearchResults;
 import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -28,8 +25,9 @@ import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.system.ingestion.GeboIngestionException;
 
-public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseDataSourceExtractionDataType>
+public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
 		IGDeepSearchDataSourceService<RemoteSystemDeepSearchDataSourceStandardState, SearchResult, AnalyzedSearchResult, RemoteReferenceAnalyzedDeepSearchEvent> {
 
@@ -55,7 +53,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
 			RemoteSystemDeepSearchDataSourceStandardState state, String previusConsolidatedResult)
-			throws LLMConfigException, IOException {
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException {
 		if (state.getExtractedSearchQueries() == null) {
 			ExtractedSearchQueries searchQueries = this.extractSearchQueries(request, pastSystemsResponses,
 					deepSearchConfig, chatModel, previusConsolidatedResult);
@@ -153,7 +151,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		return returned;
 	}
 
-	protected abstract <T> T customStructureConsolidation(CustomContentExtractionType actualData,
+	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
 
 	private DeepSearchDataSourceProcessedEvent consolidate(List<AnalyzedSearchResult> cumulatedAnalisys,
@@ -187,14 +185,15 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				}).toList();
 		if (inputs.isEmpty())
 			return "";
-		return callLLMConsolidateText(chatModel, deepSearchConfig.getAnalisysPrompt(), request.getQuery(), null, inputs);
+		return callLLMConsolidateText(chatModel, deepSearchConfig.getAnalisysPrompt(), request.getQuery(), null,
+				inputs);
 	}
 
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned,
 			RemoteSystemDeepSearchDataSourceStandardState state);
 
 	protected abstract List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
-			DeepSearchRequest request, int maxTokens);
+			DeepSearchRequest request, int maxTokens) throws IOException, GeboIngestionException, GeboContentHandlerSystemException;
 
 	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request);
 

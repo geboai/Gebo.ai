@@ -1,4 +1,4 @@
-package ai.gebo.llms.deepsearch.datasources.model;
+package ai.gebo.architecture.search.model;
 
 import lombok.Data;
 

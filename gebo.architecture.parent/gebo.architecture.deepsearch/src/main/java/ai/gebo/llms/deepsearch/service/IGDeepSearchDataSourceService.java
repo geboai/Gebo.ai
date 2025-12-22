@@ -3,6 +3,7 @@ package ai.gebo.llms.deepsearch.service;
 import java.io.IOException;
 import java.util.List;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
@@ -10,6 +11,7 @@ import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.system.ingestion.GeboIngestionException;
 
 public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
 	public DataSourceExecutionTime getExecutionTime();
@@ -55,8 +57,10 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @return
 	 * @throws LLMConfigException 
 	 * @throws IOException 
+	 * @throws GeboContentHandlerSystemException 
+	 * @throws GeboIngestionException 
 	 */
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException;
+			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException;
 
 }

@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 
 import com.drew.lang.annotations.NotNull;
 
+import ai.gebo.architecture.search.model.SearchResultReference;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
@@ -21,7 +23,8 @@ public class DeepSearchDataSourceResponse extends GBaseObject implements IDeepSe
 	String response = null;
 	Boolean searchResultsEmpty = null;
 	String dataSourceDescription = null;
-	List<DeepSearchDataSourceReference> dataSourceReferences = new ArrayList<DeepSearchDataSourceReference>();
+	List<SearchResultReference> dataSourceReferences = new ArrayList<SearchResultReference>();
+	GUserMessage errorMessage = null;
 
 	public DeepSearchDataSourceResponse() {
 		this.setCode(UUID.randomUUID().toString());

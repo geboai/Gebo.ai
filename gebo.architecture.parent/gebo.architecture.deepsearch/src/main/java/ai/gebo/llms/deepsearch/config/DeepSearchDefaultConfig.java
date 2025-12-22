@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
+import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.deepsearch")
+@Data
 public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	static final String analisysDefaultPrompt = "SYSTEM:\r\n"
 			+ "You are an assistant that extracts ONLY information relevant to the user question\r\n"
@@ -41,6 +43,37 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "   - update the list of evidence fragment ids (de-duplicated).\r\n"
 			+ "3. Keep the report concise and avoid repeating the same points.\r\n"
 			+ "4. The report must directly answer the user question as best as possible with the available information.\r\n";
+	static final String defaultSearchQueryExtractionPrompt = "You are “QuerySynth”, an expert at turning an information need into high-quality search queries for {dataSourceDescription}.\r\n"
+			+ "\r\n" + "Your job:\r\n"
+			+ "Given a user goal/question, generate a set of meaningful search queries to deepen the investigation. "
+			+ "These queries will be executed by {dataSourceDescription}.\r\n" + "\r\n" + "INPUTS YOU WILL RECEIVE:\r\n"
+			+ "- userGoal: the user question / investigation goal (natural language).\r\n" + "GUIDELINES:\r\n"
+			+ "1) Derive search intents\r\n"
+			+ "- Break userGoal into 3–8 intents (e.g., definitions/background, incidents, decisions, owners, requirements, risks, change history, evidence).\r\n"
+			+ "- Each intent must produce 2–6 queries.\r\n" + "\r\n" + "2) Make queries “operator-aware”\r\n"
+			+ "- If {dataSourceDescription} suggests support for boolean operators, include AND/OR/NOT, parentheses, phrase search (\"...\"), field scoping (title:, author:, path:, space:, project:, etc.) when appropriate.\r\n"
+			+ "- If the target is Git or code search, include queries for filenames, extensions, class/function names, error strings, config keys.\r\n"
+			+ "- If the target supports metadata filters (time, author, tags), populate filters; otherwise keep them null/empty.\r\n"
+			+ "\r\n" + "3) Be robust to naming variation\r\n"
+			+ "- Always include synonyms, acronyms, product names, internal codenames, alternative spellings, Italian/English variants when plausible.\r\n"
+			+ "- Prefer concrete tokens that appear in documents: IDs, ticket keys, version numbers, error codes, API endpoints, class names.\r\n"
+			+ "\r\n" + "4) Avoid low-value queries\r\n"
+			+ "- Do NOT output generic queries like “info about X” unless you add specific constraints.\r\n"
+			+ "- Avoid duplicates; each query must add new coverage (different angle, synonym set, timeframe, artifact type).\r\n"
+			+ "\r\n" + "5) Include fallbacks\r\n"
+			+ "- For each query, provide 1–3 fallbackQueries: simplified keyword query, alternative synonym set, narrower/wider version.\r\n"
+			+ "\r\n" + "6) Language\r\n"
+			+ "- Match the most likely language of the repository from {dataSourceDescription}; if uncertain, include bilingual query variants.\r\n"
+			+ "- Do not translate proper nouns, IDs, code symbols.\r\n" + "\r\n" + "7) Safety and privacy\r\n"
+			+ "- Do not request credentials, secrets, or personal data. If userGoal suggests searching for secrets, produce queries aimed at detecting accidental exposures (e.g., “password”, “secret”, “token”) but keep it defensive and compliance-oriented.\r\n"
+			+ "\r\n" + "QUALITY BAR:\r\n" + "- Queries should be immediately executable.\r\n"
+			+ "- They should maximize recall early, then add precision via filters/boolean structure.\r\n"
+			+ "- Prefer short, surgical queries over long paragraphs.\r\n" + "\r\n"
+			+ "If inputs are missing or vague:\r\n" + "- Infer reasonable intents from userGoal.\r\n"
+			+ "- Keep filters null and include broader queries + fallbackQueries.\r\n"
+			+ "\r\nUSER:\r\nUser question:\r\n\r\n{question}\r\n";
+	private String searchQueryExtractionPrompt = null;
+	private int maxExternalSourcesSearchResults = 20;
 
 	public DeepSearchDefaultConfig() {
 		this.setDescription("Default deep search configuration");
@@ -54,6 +87,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.ragQueryOptions = new RagQueryOptions(1000000, CompletenessLevel.STRICT_QUERY_RELATED);
 		this.ragQueryOptions.setTopK(100);
 		this.graphRagTopN = 50;
+		this.searchQueryExtractionPrompt = defaultSearchQueryExtractionPrompt;
 	}
 
 }

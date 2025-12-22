@@ -1,6 +1,5 @@
-package ai.gebo.llms.deepsearch.datasources.model;
+package ai.gebo.architecture.search.model;
 
-import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceReference;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -8,10 +7,14 @@ import lombok.Data;
 @Data
 public class SearchResult {
 	@NotNull
-	private DeepSearchDataSourceReference resultReference = null;
+	private SearchResultReference resultReference = null;
 	@NotNull
 	private VFilesystemReference navigationReference = null;
 	@NotNull
 	private String descriptiveText = null;
 	private int nestingLevel = 0;
+	@NotNull
+	private String systemHandlerId = null;
+	@NotNull
+	private String systemConfigurationCode = null;
 }

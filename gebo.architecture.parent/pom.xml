@@ -45,5 +45,6 @@
   	<module>gebo.architecture.setup</module>
   	<module>gebo.architecture.deepsearch</module>
   	<module>gebo.architecture.hazelcast</module>
+  	<module>gebo.architecture.search.abstraction.layer</module>
   </modules>
 </project>
