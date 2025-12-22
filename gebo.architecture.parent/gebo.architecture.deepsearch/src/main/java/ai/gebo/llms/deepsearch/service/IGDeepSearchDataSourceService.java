@@ -1,5 +1,6 @@
 package ai.gebo.llms.deepsearch.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -53,8 +54,9 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * 
 	 * @return
 	 * @throws LLMConfigException 
+	 * @throws IOException 
 	 */
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException;
+			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException;
 
 }
