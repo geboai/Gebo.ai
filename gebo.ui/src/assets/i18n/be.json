@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Фарміраванне фінальнага справаздачы"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Аналізаваны вынік пошуку"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Аналізаваны вынік сістэмнага пошуку для"
       }
     }
   },

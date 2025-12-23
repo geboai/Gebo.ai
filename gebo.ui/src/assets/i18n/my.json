@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "အသေးစိတ် အစီရင်ခံစာစုစည်းနေသည်"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "မှန်ကန်မှုစစ်ဆေးပြီးသော ရှာဖွေမှုရလဒ်"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "စနစ်မှ မှန်ကန်မှုစစ်ဆေးပြီးသော ရှာဖွေမှုရလဒ်"
       }
     }
   },

@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Inaunganisha ripoti ya mwisho"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Matokeo ya utafutaji yaliyotathminiwa"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Matokeo ya utafutaji wa mfumo yaliyotathminiwa kwa"
       }
     }
   },

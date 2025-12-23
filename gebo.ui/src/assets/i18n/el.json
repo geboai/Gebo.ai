@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Συγκέντρωση της τελικής αναφοράς"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Αναλυμένο αποτέλεσμα συστήματος αναζήτησης για"
       }
     }
   },

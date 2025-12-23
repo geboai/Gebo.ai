@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Վերջնական հաշվետվության ամփոփում"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Վերլուծված որոնման արդյունք"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Համակարգի որոնման վերլուծված արդյունք՝"
       }
     }
   },

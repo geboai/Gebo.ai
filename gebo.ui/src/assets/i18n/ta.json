@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "இறுதி அறிக்கையை ஒருங்கிணைக்கிறது"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "பரிசோதிக்கப்பட்ட தேடல் முடிவு"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "முறைப்படுத்தப்பட்ட அமைப்பு தேடல் முடிவு"
       }
     }
   },

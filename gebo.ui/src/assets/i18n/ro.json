@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Se consolidează raportul final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultat de căutare analizat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultat analizat al căutării în sistem pentru"
       }
     }
   },

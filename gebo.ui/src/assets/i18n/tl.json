@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Pinagsasama-sama ang huling ulat"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Na-analisa na resulta ng paghahanap"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Na-analisa na resulta ng paghahanap mula sa sistema para sa"
       }
     }
   },

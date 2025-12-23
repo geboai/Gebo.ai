@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Konsolidiranje končnega poročila"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiziran rezultat iskanja"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analiziran rezultat iskanja sistema za"
       }
     }
   },

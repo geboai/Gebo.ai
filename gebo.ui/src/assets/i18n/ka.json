@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "საბოლოო ანგარიშის გამთლიანება"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "გაცხრილული საძიებო შედეგი"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ანალიზირებული სისტემის საძიებო შედეგი მისთვის"
       }
     }
   },

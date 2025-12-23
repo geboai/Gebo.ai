@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Son hesabat formalaşdırılır"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Təhlil edilmiş axtarış nəticəsi"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Sistem üçün təhlil edilmiş axtarış nəticəsi"
       }
     }
   },

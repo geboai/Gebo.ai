@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Eindrapport wordt geconsolideerd"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Geanalyseerd zoekresultaat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Geanalyseerd systeemzoekresultaat voor"
       }
     }
   },

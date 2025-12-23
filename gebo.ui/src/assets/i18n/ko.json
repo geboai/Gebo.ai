@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "최종 보고서 통합 중"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "분석된 검색 결과"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "시스템에 대해 분석된 검색 결과"
       }
     }
   },

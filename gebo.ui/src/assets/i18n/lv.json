@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Konsolidē gala ziņojumu"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizētais meklēšanas rezultāts"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizētā sistēmas meklēšanas rezultāts priekš"
       }
     }
   },

@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "מאחד את הדוח הסופי"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "תוצאת חיפוש מנותחת"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "תוצאת חיפוש מערכת מנותחת עבור"
       }
     }
   },

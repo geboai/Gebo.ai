@@ -2049,7 +2049,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 4096 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 1047576 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -3107,18 +3107,12 @@
                 "summary": "You cannot delete this",
                 "detail": "This object is referred from other part(s) of the application"
             },
-            "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e": {
-                "summary": "Exception during operation:Error working with url:http://localhost:11434/v1/models",
-                "detail": "Server error: Error working with url:http://localhost:11434/v1/models"
-            },
+            
             "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc": {
                 "summary": "Exception during operation:apiKey must be set",
                 "detail": "Server error: apiKey must be set"
-            },
-            "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2": {
-                "summary": "Error while streaming chat respose",
-                "detail": "Server error: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
             }
+            
         }
     },
     "GeboAIUploadChatDocumentModule": {
@@ -3294,6 +3288,12 @@
             },
             "DeepSearchingConsolidating": {
                 "label": "Consolidating the final report"
+            },
+            "DeepSearchDataSourceProcessingDocument": {
+                "label": "Analyzed search result"
+            },
+            "DeepSearchDataSourceProcessing": {
+                "label": "Analyzed system search result for"
             }
         }
     },

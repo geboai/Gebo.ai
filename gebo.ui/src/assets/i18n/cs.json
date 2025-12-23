@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Zpracovává se finální zpráva"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analyzovaný výsledek vyhledávání"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analyzovaný výsledek vyhledávání v systému pro"
       }
     }
   },

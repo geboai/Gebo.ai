@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "የመጨረሻውን ሪፖርት በማኅተም ላይ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ተተንትኗ የፍለጋ ውጤት"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ለስርዓት የተተነተነ የፍለጋ ውጤት"
       }
     }
   },

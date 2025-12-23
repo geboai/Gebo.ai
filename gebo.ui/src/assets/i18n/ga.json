@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Á comhdhlúthú an tuarascáil deiridh"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Toradh cuardaigh anailísithe"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Toradh cuardaigh córas anailísithe do"
       }
     }
   },

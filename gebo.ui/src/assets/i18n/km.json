@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "កំពុងបង្រួមរបាយការណ៍ចុងក្រោយ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "លទ្ធផលស្វែងរកដែលបានវិភាគ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "លទ្ធផលស្វែងរកប្រព័ន្ធដែលបានវិភាគ សម្រាប់"
       }
     }
   },

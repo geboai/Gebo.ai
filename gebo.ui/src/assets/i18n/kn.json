@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "ಹೊಂದಾಣಿಕೆಯ ಅಂತಿಮ ವರದಿ ತಯಾರಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಲಾದ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ಗುರಿಗೆ ವಿಶ್ಲೇಷಿಸಲಾದ ಸಿಸ್ಟಮ್ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
       }
     }
   },

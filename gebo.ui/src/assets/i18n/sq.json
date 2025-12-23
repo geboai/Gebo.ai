@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Po përpilohet raporti final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultati i analizuar i kërkimit"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultati i analizuar i kërkimit në sistem për"
       }
     }
   },

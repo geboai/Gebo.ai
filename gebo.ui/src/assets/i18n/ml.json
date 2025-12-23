@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "ഫൈനൽ റിപ്പോര്ട് ഏകീകരിക്കുന്നു"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "പരിശോധിച്ച തിരയൽ ഫലങ്ങൾ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "സിസ്റ്റത്തിൽ നിന്ന് പരിശോധിച്ച തിരയൽ ഫലങ്ങൾ"
       }
     }
   },

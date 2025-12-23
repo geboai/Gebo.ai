@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "حتمی رپورٹ مجتمع کی جا رہی ہے"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "تجزیہ شدہ تلاش کا نتیجہ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "کے لئے تجزیہ شدہ سسٹم تلاش کا نتیجہ"
       }
     }
   },

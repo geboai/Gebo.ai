@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Consolidant l'informe final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Resultat de cerca analitzat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Resultat de cerca al sistema analitzat per a"
       }
     }
   },

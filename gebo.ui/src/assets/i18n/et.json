@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Koostan lõplikku raportit"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analüüsitud otsingutulemus"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Süsteemi analüüsitud otsingutulemus:"
       }
     }
   },

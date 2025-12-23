@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "ກຳລັງສະຫຼຸບລາຍງານສຸດທ້າຍ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ຜົນການຄົ້ນຫາທີ່ຖືກວິເຄາະ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ຜົນການຄົ້ນຫາລະບົບທີ່ຖືກວິເຄາະ ສໍາລັບ"
       }
     }
   },

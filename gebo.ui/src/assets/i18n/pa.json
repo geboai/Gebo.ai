@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "ਅੰਤਿਮ ਰਿਪੋਰਟ ਇਕਠੀ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਖੋਜ ਨਤੀਜਾ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ਸਿਸਟਮ ਖੋਜ ਨਤੀਜਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਗਿਆ"
       }
     }
   },

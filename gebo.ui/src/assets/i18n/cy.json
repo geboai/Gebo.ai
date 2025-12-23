@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Yn cadarnhau'r adroddiad terfynol"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Canlyniad chwilio a ddadansoddwyd"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Canlyniad chwilio system a ddadansoddwyd ar gyfer"
       }
     }
   },

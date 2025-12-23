@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Oppsummerer sluttrapporten"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysert søkeresultat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysert systemsøkeresultat for"
       }
     }
   },

@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Формируем итоговый отчет"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Анализированный результат поиска"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Анализированный результат системного поиска для"
       }
     }
   },

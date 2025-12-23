@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Galutinės ataskaitos apjungimas"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizuotas paieškos rezultatas"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizuotas sistemos paieškos rezultatas dėl"
       }
     }
   },

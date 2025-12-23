@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Taka saman lokaskýrslu"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Greind niðurstaða leitar"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Greind niðurstaða kerfisleitar fyrir"
       }
     }
   },

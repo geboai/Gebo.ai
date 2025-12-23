@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "正在整合最终报告"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "已分析的搜索结果"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "已分析的系统搜索结果"
       }
     }
   },

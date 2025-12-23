@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Nihai rapor birleştiriliyor"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiz edilen arama sonucu"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "için analiz edilen sistem arama sonucu"
       }
     }
   },

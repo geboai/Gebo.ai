@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "最終レポートを統合中"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "分析された検索結果"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "のための分析済みシステム検索結果"
       }
     }
   },

@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Yhdistetään lopullinen raportti"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysoitu hakutulos"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Järjestelmän analysoitu hakutulos kohteelle"
       }
     }
   },

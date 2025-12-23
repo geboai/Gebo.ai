@@ -3302,6 +3302,12 @@
       },
       "DeepSearchingConsolidating" : {
         "label" : "Végső jelentés összeállítása"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Elemzett keresési eredmény"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Elemzett rendszer keresési eredménye ehhez:"
       }
     }
   },
