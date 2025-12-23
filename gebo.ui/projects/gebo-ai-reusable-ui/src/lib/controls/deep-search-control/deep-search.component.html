@@ -40,3 +40,10 @@
         -->
 
 </p-panel>
+<p-dialog  [maximizable]="true" [visible]="showChooseDataSourceDialog" [modal]="true" [style]="{width:'30%',height:'30%'}" [closable]="true"
+  [showHeader]="true" (onHide)="skipDeepSearchOnDataSourceChoice()" (visibleChange)="skipDeepSearchOnDataSourceChoice()"
+  header="Choose Deep search sources">
+  <div class="grid" [formGroup]="chooseDeepSearchDataSourcesFormGroup">
+    
+  </div>
+</p-dialog>

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GBaseObject, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { MessageService, ToastMessageOptions } from "primeng/api";
@@ -23,6 +23,8 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     @Output() deepSearchChatResponseReceived: EventEmitter<GeboChatResponse> = new EventEmitter();
     @Output() errorOccurredEvent: EventEmitter<any> = new EventEmitter();
     protected streamingResponse: boolean = false;
+    protected loadingRelatedBackend: boolean = false;
+    protected choosableDataSources: GBaseObject[] = [];
 
     protected get loading(): boolean {
         return this.streamingResponse === true;
@@ -31,9 +33,13 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         code: new FormControl(),
         description: new FormControl(),
         query: new FormControl(),
-        knowledgeBases: new FormControl()
-
+        knowledgeBases: new FormControl(),
+        deepSearchDataSources: new FormControl()
     });
+    protected chooseDeepSearchDataSourcesFormGroup: FormGroup = new FormGroup({
+        deepSearchDataSources: new FormControl()
+    });
+
     protected deepSearchResponse?: DeepSearchResponse;
     protected chatResponse?: GeboChatResponse;
     protected analisysStep?: {
@@ -44,7 +50,10 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected completionPercent: number = 0;
-    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService, private messageService: MessageService) {
+    protected showChooseDataSourceDialog: boolean = false;
+    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
+        private deepSearchControllerService: GeboDeepSearchControllerService,
+        private messageService: MessageService) {
 
     }
     ngOnInit(): void {
@@ -57,10 +66,10 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.analisysStep = undefined;
         this.deepSearchResponse = undefined;
     }
-    protected get inEventsLoop():boolean {
+    protected get inEventsLoop(): boolean {
         return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
     }
-    protected get isDieplayingDeepSearchProcess():boolean {
+    protected get isDieplayingDeepSearchProcess(): boolean {
         return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
     }
     private onMessage(msg: IGeboChatMessage | string) {
@@ -85,11 +94,11 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                     } break;
                     case "DeepSearchDataSourceDocumentResult": {
                         this.clearEventsDisplay();
-                        this.deepSearchDataSourceDocumentResult=msg.content;
+                        this.deepSearchDataSourceDocumentResult = msg.content;
                     } break;
                     case "DeepSearchDataSourceResponse": {
                         this.clearEventsDisplay();
-                        this.deepSearchDataSourceResponse=msg.content;
+                        this.deepSearchDataSourceResponse = msg.content;
                     } break;
                     case "GUserMessage": {
                         this.clearEventsDisplay();
@@ -123,12 +132,65 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             this.formGroup.patchValue(this.currentDeepSearchRequest);
             this.deepSearchProcessType = "standalone";
             if (this.mode === "progress-only") {
-                this.doStreamDeepSearch();
+                this.chooseDataSourcesForStreamDeepSearch();
             }
         }
         if (changes["currentChatRequest"] && this.currentChatRequest) {
-            this.doStreamDeepSearchInChat();
+            this.chooseDataSourcesForChat();
         }
+    }
+    protected chooseDataSourcesForStreamDeepSearch(): void {
+        this.chooseDeepSearchDataSourcesFormGroup.reset();
+        this.loadingRelatedBackend = true;
+        this.deepSearchControllerService.getDeepSearchDataSources().subscribe({
+            next: (dsList) => {
+                this.choosableDataSources = dsList;
+                this.loadingRelatedBackend = false;
+                if (!this.choosableDataSources || this.choosableDataSources.length === 0) {
+                    this.doStreamDeepSearch();
+                } else {
+                    this.showChooseDataSourceDialog = true;
+                }
+            },
+            complete: () => {
+                this.loadingRelatedBackend = false;
+            }
+        });
+    }
+    protected chooseDataSourcesForChat(): void {
+        this.chooseDeepSearchDataSourcesFormGroup.reset();
+        this.loadingRelatedBackend = true;
+        this.deepSearchControllerService.getDeepSearchDataSources().subscribe({
+            next: (dsList) => {
+                this.choosableDataSources = dsList;
+                this.loadingRelatedBackend = false;
+                if (!this.choosableDataSources || this.choosableDataSources.length === 0) {
+                    this.doStreamDeepSearchInChat();
+                } else {
+                    this.showChooseDataSourceDialog = true;
+                }
+            },
+            complete: () => {
+                this.loadingRelatedBackend = false;
+            }
+        });
+
+    }
+    protected doChoosedSources():void {
+        this.showChooseDataSourceDialog = false;
+        const choosedDataSourcesObject=this.chooseDeepSearchDataSourcesFormGroup.value;
+        const deepSearchDataSources=choosedDataSourcesObject?.deepSearchDataSources;
+        if (this.currentChatRequest) {
+            
+            this.currentChatRequest.deepSearchDataSources=deepSearchDataSources;
+            this.doStreamDeepSearchInChat();
+        }else {
+            this.formGroup.controls["deepSearchDataSources"].setValue(deepSearchDataSources);
+            this.doStreamDeepSearch();
+        }
+    }
+    protected skipDeepSearchOnDataSourceChoice():void {
+        this.showChooseDataSourceDialog=false;
     }
     protected doStreamDeepSearch(): void {
         const data: DeepSearchRequest = this.formGroup.value;

@@ -255,7 +255,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         chatModelCode: new FormControl(),
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
-        userUploadedContents: new FormControl()
+        userUploadedContents: new FormControl(),
+        deepSearchDataSources: new FormControl()
     });
 
     /**
