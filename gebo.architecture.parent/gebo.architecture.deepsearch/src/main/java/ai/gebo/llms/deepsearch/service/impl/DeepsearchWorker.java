@@ -1,5 +1,7 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
@@ -94,7 +97,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				IGDeepSearchDataSourceService businessLogic = handler.get();
 				nextStepValue = businessLogic.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
 						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state.getConsolidatedResult());
-				
+
 			}
 		} else {
 			// find next data source to evaluate end execute
@@ -178,6 +181,15 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return null;
 	}
 
+	private List<IGDeepSearchDataSourceService> filterChoosed(List<IGDeepSearchDataSourceService> handlers,
+			DeepSearchRequest request) {
+		if (request.getDeepSearchDataSources() == null)
+			return handlers;
+		if (request.getDeepSearchDataSources().isEmpty())
+			return List.of();
+		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
+	}
+
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
 			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel)
@@ -200,6 +212,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				handlers.addAll(providedDeepSearchSourceService.stream()
 						.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH)
 						.toList());
+				handlers = filterChoosed(handlers, request);
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = null;
 					try {
@@ -267,6 +280,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				handlers.addAll(providedDeepSearchSourceService.stream()
 						.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH)
 						.toList());
+				handlers = filterChoosed(handlers, request);
 				if (!handlers.isEmpty()) {
 					AbstractDeepSearchEvent nextStepValue = null;
 					try {
@@ -398,6 +412,32 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		}
 
 		return consolidated;
+	}
+
+	public List<GBaseObject> getDeepSearchActiveHandlers(DeepSearchConfig configuration) {
+		IGConfigurableChatModel chatModel = null;
+		if (configuration.getChatModelConfiguration() != null) {
+			chatModel = chatModelsConfigDao.findByModelReference(configuration.getChatModelConfiguration());
+		}
+		if (chatModel == null) {
+			chatModel = chatModelsConfigDao.defaultHandler();
+		}
+		if (chatModel == null)
+			return List.of();
+		final IGConfigurableChatModel fChatModel = chatModel;
+		List<IGDeepSearchDataSourceService> handlersFullList = new ArrayList<IGDeepSearchDataSourceService>();
+		List<IGDeepSearchDataSourceService> handlers = this.deepSearchDataSourcesRepositoryPattern
+				.findImplementations(x -> x.isEnabled(fChatModel, configuration, null));
+		List<IGDeepSearchDataSourceService> dynamicHandlers = this.dataSourcesProvider.getDynamicDeepSearchServices()
+				.stream().filter(x -> x.isEnabled(fChatModel, configuration, null)).toList();
+		handlersFullList.addAll(handlers);
+		handlersFullList.addAll(dynamicHandlers);
+		return handlersFullList.stream().map(x -> {
+			GBaseObject ds = new GBaseObject();
+			ds.setCode(x.getHandlerId());
+			ds.setDescription(x.getDescription(fChatModel, configuration, null));
+			return ds;
+		}).toList();
 	}
 
 }

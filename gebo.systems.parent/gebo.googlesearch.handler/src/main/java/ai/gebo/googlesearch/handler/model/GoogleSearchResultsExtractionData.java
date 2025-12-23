@@ -7,7 +7,7 @@ import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import lombok.Data;
 
 @Data
-public class WebSearchResultsExtractionData extends BaseSearchResultsExtractionDataType {
+public class GoogleSearchResultsExtractionData extends BaseSearchResultsExtractionDataType {
 	@Data
 	public static class RelevantLink {
 		String url = null;

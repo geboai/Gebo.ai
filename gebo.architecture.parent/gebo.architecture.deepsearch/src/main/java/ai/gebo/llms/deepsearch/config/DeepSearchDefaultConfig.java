@@ -73,7 +73,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "- Keep filters null and include broader queries + fallbackQueries.\r\n"
 			+ "\r\nUSER:\r\nUser question:\r\n\r\n{question}\r\n";
 	private String searchQueryExtractionPrompt = null;
-	private int maxExternalSourcesSearchResults = 20;
+	private int maxExternalSourcesSearchResults = 8;
 
 	public DeepSearchDefaultConfig() {
 		this.setDescription("Default deep search configuration");

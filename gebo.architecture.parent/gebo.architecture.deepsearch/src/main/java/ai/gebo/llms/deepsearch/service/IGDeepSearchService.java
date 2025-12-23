@@ -14,6 +14,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
+import ai.gebo.model.base.GBaseObject;
 import reactor.core.publisher.Flux;
 
 public interface IGDeepSearchService {
@@ -44,6 +45,8 @@ public interface IGDeepSearchService {
 	public DeepSearchResponse findDeepSearchResponse(String deepSearchCode);
 
 	public DeepSearchRequest findDeepSearchRequest(String deepSearchCode);
+	
+	public List<GBaseObject> getDeepSearchActiveHandlers();
 
 	public void deleteDeepSearch(String deepSearchCode);
 

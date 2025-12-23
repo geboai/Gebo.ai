@@ -66,6 +66,7 @@ import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -361,9 +362,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				}
 			}
 		}
-		if (chatContext.getChoosedKnowledgeBases() != null && !chatContext.getChoosedKnowledgeBases().isEmpty()) {
-
-		}
+		
 		if (isRag) {
 			cleanResponse = this.ragChatService.createUnprocessedResponse(request);
 			cleanResponse.setQueryResponse("");
@@ -378,6 +377,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchRequest.setKnowledgeBases(knowledgeBasesCodesList);
 		deepSearchRequest.setQuery(request.getQuery());
 		deepSearchRequest.setUserChatContextCode(userChatContextCode);
+		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
 		final GeboChatResponse response = cleanResponse;
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 		response.setDocumentsRef(documents);
@@ -433,6 +433,14 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		for (DeepSearchRequest deepSearchRequest : data) {
 			deleteDeepSearch(deepSearchRequest.getCode());
 		}
+	}
+
+	@Override
+	public List<GBaseObject> getDeepSearchActiveHandlers() {
+		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
+		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
+		final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+		return worker.getDeepSearchActiveHandlers(configuration);
 	}
 
 }

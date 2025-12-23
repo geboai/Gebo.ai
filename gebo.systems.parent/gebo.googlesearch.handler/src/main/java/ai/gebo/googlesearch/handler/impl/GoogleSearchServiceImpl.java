@@ -37,7 +37,7 @@ import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultItem;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
-import ai.gebo.googlesearch.handler.model.WebSearchResultsExtractionData;
+import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
@@ -45,7 +45,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class GoogleSearchServiceImpl implements ISearchService<WebSearchResultsExtractionData> {
+public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResultsExtractionData> {
 	private static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
@@ -254,21 +254,21 @@ public class GoogleSearchServiceImpl implements ISearchService<WebSearchResultsE
 	}
 
 	@Override
-	public Class<WebSearchResultsExtractionData> getCustomResultsAggregationDataType() {
+	public Class<GoogleSearchResultsExtractionData> getCustomResultsAggregationDataType() {
 
-		return WebSearchResultsExtractionData.class;
+		return GoogleSearchResultsExtractionData.class;
 	}
 
 	@Override
-	public WebSearchResultsExtractionData aggregate(WebSearchResultsExtractionData oldConsolidated,
-			WebSearchResultsExtractionData cumulated) {
+	public GoogleSearchResultsExtractionData aggregate(GoogleSearchResultsExtractionData oldConsolidated,
+			GoogleSearchResultsExtractionData cumulated) {
 		if (oldConsolidated == null && cumulated == null)
-			return new WebSearchResultsExtractionData();
+			return new GoogleSearchResultsExtractionData();
 		if (cumulated == null)
 			return oldConsolidated;
 		if (oldConsolidated == null)
 			return cumulated;
-		WebSearchResultsExtractionData newResult = new WebSearchResultsExtractionData();
+		GoogleSearchResultsExtractionData newResult = new GoogleSearchResultsExtractionData();
 		newResult.setExtractedRelevantContent(cumulated.getExtractedRelevantContent());
 		newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
 		newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
