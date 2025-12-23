@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces એકીકરણ",
         "description" : "તમારા Google cloud Drive/Workspaces ટીમ ડેટા ઍક્સેસ કરવા માટે Gebo.aiનું સમાયોજન કરો"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api કૉન્ફિગર કરો",
+        "description" : "AI વેબ શોધ માટે Google search api ઓળખપત્રો કૉન્ફિગર કરો"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search કૉન્ફિગર કરો",
+        "description" : "Deep search પરિમાણો કૉન્ફિગર કરો"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "વિવરણ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api કી"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ઓળખપત્રો બનાવો"
+      },
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Google search api ઓળખપત્રી નોંધણીમાં મેળવેલ search engine id દાખલ કરો."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કૉન્ફિગ કોડ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "apiKey" : {
+        "label" : "Api કી",
+        "help" : "Google search api ઓળખપત્રી નોંધણીમાં મેળવેલ api કી દાખલ કરો."
+      },
+      "MainPanel" : {
+        "label" : "Google search api સેટઅપ કરો"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "કાઢી નાંખો",
+        "help" : "Google search api ઓળખપત્રો કાઢી નાંખો"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search કૉન્ફિગ",
+        "help" : "Deep search કૉન્ફિગરેશન ઉમેરો"
+      },
+      "EditSystemBtn" : {
+        "label" : "કૉન્ફિગ સંપાદિત કરો"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "શું તમે ખરેખર આ ચેટ કાઢવા માંગો છો?",
         "header" : "ચેટ કાઢવાની ક્રિયા"
+      },
+      "PlusContextualMenu" : {
+        "help" : "સામગ્રી ઉમેરો અથવા શોધ વર્તન બદલો"
+      },
+      "[object HTMLElement]" : {
+        "help" : "સામગ્રી ઉમેરો અથવા શોધ વર્તન બદલો"
+      },
+      "ContextMenuBtn" : {
+        "help" : "સામગ્રી ઉમેરો અથવા શોધ વર્તન બદલો"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "તમે આને ડિલીટ કરી શકતા નથી",
         "detail" : "આ ઓબ્જેક્ટ એપ્લિકેશનના અન્ય ભાગ(ઓ)થી સંબદ્ધ છે"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "અભિગમ દરમિયાન અપવાદ: url સાથે કાર્ય કરવામાં ભૂલ:http://localhost:11434/v1/models",
+        "detail" : "સર્વર ભૂલ: url સાથે કાર્ય કરવામાં ભૂલ:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "અભિગમ દરમિયાન અપવાદ:apiKey સેટ કરવું જરૂરી છે",
+        "detail" : "સર્વર ભૂલ: apiKey સેટ કરવું જરૂરી છે"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ચેટ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "ઉપયોગ કરેલી ઓળખ",
         "help" : "google drive સિસ્ટમ ઍક્સેસ કરવા માટે ઓળખ પસંદ કરો અથવા બનાવો"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ચેટ"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "લાયકાતભર્યું માહિતી શોધી રહ્યા છીએ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "અંતિમ રિપોર્ટ સંકલિત કરી રહ્યા છીએ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ઉમેરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "SearchSettingTab" : {
+        "label" : "શોધ સેટિંગ"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "દસ્તાવેજો સંબંધિત માહિતી કાઢવા માટે પ્રોમ્પ્ટ ઉમેરો"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ઉત્તરીત માહિતી સંકલન માટે પ્રોમ્પ્ટ ઉમેરો"
+      },
+      "MainPanel" : {
+        "label" : "Deep search કૉન્ફિગરેશન સંપાદિત કરી રહ્યા છીએ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "મોટી ભાષા મોડલ સેટિંગ"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "Deep search કૉન્ફિગરેશનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "Deep search કૉન્ફિગરેશન માટે આપમેળે જનરેટ થયેલ અનન્ય કોડ"
+      },
+      "searchType" : {
+        "label" : "શોધ પ્રકાર",
+        "help" : "Single hop અર્થ શોધ અથવા multi hop માંથી પસંદ કરો"
+      },
+      "topK" : {
+        "label" : "મળેલી લખાણ વિભાગોની સંખ્યા (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ઉપયોગમાં આવેલ llm",
+        "help" : "Deep search માટે વપરાતા મોટી ભાષા મોડલ દર્શાવો, મૂળભૂત તરીકે પસંદ કરી ન હોય તો તે વપરાશે."
+      },
+      "analisysPrompt" : {
+        "label" : "દસ્તાવેજો વિશ્લેષણ પ્રોમ્પ્ટ",
+        "help" : "દસ્તાવેજના વિભાગમાંથી સંબંધિત માહિતી કાઢવા માટેના પ્રોમ્પ્ટને એડિટ કરો."
+      },
+      "consolidationPrompt" : {
+        "label" : "કાઢેલી માહિતી સંકલન પ્રોમ્પ્ટ",
+        "help" : "મળેલા દસ્તાવેજોમાંથી કઢાયેલા સંબંધિત માહિતીને એક રિપોર્ટમાં સંકલિત કરવા માટે પ્રોમ્પ્ટને એડિટ કરો."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "શોધ સામાંતરતા થ્રેશોલ્ડ",
+        "help" : "પ્રથમ હોપ અર્થ સમાંતરતા થ્રેશોલ્ડ (0.5 થી 1.0 વચ્ચે)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "બીજા હોપ સમાંતરતા થ્રેશોલ્ડ",
+        "help" : "બીજા હોપ અર્થ સમાંતરતા થ્રેશોલ્ડ (0.5 થી 1.0 વચ્ચે)"
+      },
+      "defaultModel" : {
+        "label" : "મૂળભૂત મોટી ભાષા મોડલ",
+        "help" : "Deep search પ્રક્રિયા માટે મૂળભૂત મોટી ભાષા મોડલ વપરાશે"
+      },
+      "similarityThreashold" : {
+        "label" : "શોધ સમાંતરતા થ્રેશોલ્ડ",
+        "help" : "અર્થ સમાંતરતા થ્રેશોલ્ડ (0.5 થી 1.0 વચ્ચે)"
       }
     }
   }

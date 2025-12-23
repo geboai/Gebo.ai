@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ഇന്റഗ്രേഷൻ",
         "description" : "നിങ്ങളുടെ Google ക്ലൗഡ് Drive/Workspaces ടീം ഡാറ്റ ആക്സസ് ചെയ്യാൻ Gebo.ai ക്രമീകരിക്കുക"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ക്രമീകരിക്കുക",
+        "description" : "AI വെബ് തിരച്ചിലുകൾക്കായി Google search api ക്രെഡൻഷ്യൽസ് ക്രമീകരിക്കുക"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ക്രമീകരിക്കുക",
+        "description" : "Deep search ഓപ്ഷനുകൾ ക്രമീകരിക്കുക"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "വിവരണം"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "റദ്ദാക്കുക"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api കീ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ക്രെഡൻഷ്യൽസ് സൃഷ്ടിക്കുക"
+      },
+      "CreateBtn" : {
+        "label" : "സൃഷ്ടിക്കുക"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Google search api ക്രെഡൻഷ്യൽസ് രജിസ്‌ട്രേഷനിൽ ലഭിച്ച search engine id നൽകുക."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "വിവരണം"
+      },
+      "apiKey" : {
+        "label" : "Api കീ",
+        "help" : "Google search api ക്രെഡൻഷ്യൽസ് രജിസ്‌ട്രേഷനിൽ ലഭിച്ച api കീ നൽകുക."
+      },
+      "MainPanel" : {
+        "label" : "Google search api ക്രമീകരിക്കുക"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "നീക്കം ചെയ്യുക",
+        "help" : "Google search api ക്രെഡൻഷ്യൽസ് നീക്കം ചെയ്യുക"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search config",
+        "help" : "Deep search ക്രമീകരണം ചേർക്കുക"
+      },
+      "EditSystemBtn" : {
+        "label" : "ക്രമീകരണം എഡിറ്റ് ചെയ്യുക"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ഈ ചാറ്റ് മായ്ച്ചു കളയണോ എന്നു ഉറപ്പാണോ?",
         "header" : "ചാറ്റ് actions മായ്ക്കുക"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ഉള്ളടക്കം ചേർക്കുക അല്ലെങ്കിൽ തിരച്ചിലിന്റെ സ്വഭാവം മാറ്റുക"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ഉള്ളടക്കം ചേർക്കുക അല്ലെങ്കിൽ തിരച്ചിലിന്റെ സ്വഭാവം മാറ്റുക"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ഉള്ളടക്കം ചേർക്കുക അല്ലെങ്കിൽ തിരച്ചിലിന്റെ സ്വഭാവം മാറ്റുക"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ഇത് മായ്ക്കാൻ കഴിയില്ല",
         "detail" : "അപ്ലിക്കേഷനിലെ മറ്റ് ഭാഗങ്ങളിൽ നിന്ന് ഈ ഒബ്ജക്ട് കാണുന്നു"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "പ്രവർത്തനത്തിൽ അപവാദം: url പ്രവർത്തനത്തിൽ പിശക്: http://localhost:11434/v1/models",
+        "detail" : "സെർവർ പിശക്: url പ്രവർത്തനത്തിൽ പിശക്: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "പ്രവർത്തനത്തിൽ അപവാദം: apiKey നൽകേണ്ടതാണ്",
+        "detail" : "സെർവർ പിശക്: apiKey നൽകേണ്ടതാണ്"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ചാറ്റ് സ്റ്റ്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "ഉപയോഗിക്കുന്ന ഐഡന്റിറ്റി",
         "help" : "Google drive സിസ്റ്റം ആക്‌സസ് ചെയ്യാൻ ഐഡന്റിറ്റി തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ സൃഷ്ടിക്കുക"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ചാറ്റ്"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "സംബന്ധപ്പെട്ട വിവരങ്ങൾ തിരയുന്നു"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ഫൈനൽ റിപ്പോര്ട് ഏകീകരിക്കുന്നു"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ചേർക്കുക"
+      },
+      "CancelBtn" : {
+        "label" : "റद्दാക്കുക"
+      },
+      "DeleteBtn" : {
+        "label" : "നീക്കം ചെയ്യുക"
+      },
+      "SearchSettingTab" : {
+        "label" : "തിരച്ചിൽ ക്രമീകരണം"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ഡോക്യുമെന്റിലെ പ്രധാന വിവരങ്ങൾ കണ്ടെത്തുന്നതിനുള്ള പ്രോംപ്റ്റ് നൽകുക"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "പ്രധാന വിവരങ്ങളുടെ ഏകീകരണത്തിനുള്ള പ്രോംപ്റ്റ് നൽകുക"
+      },
+      "MainPanel" : {
+        "label" : "Deep search ക്രമീകരണം എഡിറ്റ് ചെയ്യുന്നു"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "വലിയ ഭാഷാ മോഡൽ ക്രമീകരണം"
+      },
+      "description" : {
+        "label" : "വിവരണം",
+        "help" : "Deep search ക്രമീകരണത്തിന്റെ വിശദീകരണം നൽകുക"
+      },
+      "code" : {
+        "label" : "യൂണിക്ക് കോഡ്",
+        "help" : "Deep search ക്രമീകരണത്തിന് സ്വയമേവ സൃഷ്ടിച്ച കോഡ്"
+      },
+      "searchType" : {
+        "label" : "തിരച്ചിൽ തരം",
+        "help" : "Single hop സെമാൻറ്റിക് search അല്ലെങ്കിൽ multi hop തിരഞ്ഞെടുക്കുക"
+      },
+      "topK" : {
+        "label" : "നേടിയ ടെക്സ്റ്റ് സെഗ്മെന്റുകളുടെ എണ്ണം (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ഉപയോഗിക്കുന്ന llm",
+        "help" : "Deep search ന് ഉപയോഗിക്കുന്ന വലിയ ഭാഷാ മോഡൽ നൽകുക, ഒന്നും തിരഞ്ഞെടുക്കാത്ത പക്ഷം ഡീഫോൾട്ട് ഉപയോഗിക്കും."
+      },
+      "analisysPrompt" : {
+        "label" : "ഡോക്യുമെന്റുകൾ അനാലിസിസ് പ്രോംപ്റ്റ്",
+        "help" : "ഡോക്യുമെന്റുകളുടെ പ്രധാന വിവരങ്ങൾ കണ്ടെത്തുന്നതിനുള്ള പ്രോംപ്റ്റ് എഡിറ്റ് ചെയ്യുക."
+      },
+      "consolidationPrompt" : {
+        "label" : "കൈവരുന്ന വിവരങ്ങളുടെ ഏകീകരണ പ്രോംപ്റ്റ്",
+        "help" : "നേടിയ ഡോക്കുമെന്റുകളിൽ നിന്ന് പ്രധാന വിവരങ്ങൾ ഏകീകരിക്കാൻ ഉപയോഗിക്കുന്ന പ്രോംപ്റ്റ് എഡിറ്റ് ചെയ്യുക."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "തിരച്ചിൽ സാമാന്യത ത്രെഷോൾഡ്",
+        "help" : "First hop സെമാൻറ്റിക് സാമാന്യത ത്രെഷോൾഡ് (0.5 മുതൽ 1.0 വരെ)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "രണ്ടാം hop സാമാന്യത ത്രെഷോൾഡ്",
+        "help" : "Second hop സെമാന്റിക് സാമാന്യത ത്രെഷോൾഡ് (0.5 മുതൽ 1.0 വരെ)"
+      },
+      "defaultModel" : {
+        "label" : "ഡീഫോൾട്ട് വലിയ ഭാഷാ മോഡൽ",
+        "help" : "Deep search പ്രൊസസ്സിംഗിന് ഡീഫോൾട്ട് വലിയ ഭാഷാ മോഡൽ ഉപയോഗിക്കും"
+      },
+      "similarityThreashold" : {
+        "label" : "തിരച്ചിൽ സാമാന്യത ത്രെഷോൾഡ്",
+        "help" : "സെമാൻറ്റിക് സാമാന്യത ത്രെഷോൾഡ് (0.5 മുതൽ 1.0 വരെ)"
       }
     }
   }

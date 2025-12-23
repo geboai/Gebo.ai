@@ -7,11 +7,14 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
-import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
+import ai.gebo.model.base.GBaseObject;
 import reactor.core.publisher.Flux;
 
 public interface IGDeepSearchService {
@@ -35,9 +38,17 @@ public interface IGDeepSearchService {
 
 	public List<DeepSearchDocumentAnalisysResultStep> analisysDetails(String deepSearchCode);
 
+	public List<DeepSearchDataSourceDocumentResult> findDataSourceDocumentResults(String deepSearchCode);
+
+	public List<DeepSearchDataSourceResponse> findDataSourceResponses(String deepSearchCode);
+
 	public DeepSearchResponse findDeepSearchResponse(String deepSearchCode);
 
 	public DeepSearchRequest findDeepSearchRequest(String deepSearchCode);
+	
+	public List<GBaseObject> getDeepSearchActiveHandlers();
 
 	public void deleteDeepSearch(String deepSearchCode);
+
+	public void deleteDeepSearchByUserContextCode(String userContextCode);
 }

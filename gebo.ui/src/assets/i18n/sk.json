@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrácia Google Drive/Workspaces",
         "description" : "Nakonfigurujte Gebo.ai na prístup k tímovým dátam v Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Nastavenie Google search api",
+        "description" : "Nakonfigurujte poverenia Google search api pre AI webové vyhľadávania"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Nastavenie Deep search",
+        "description" : "Nakonfigurujte parametre Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Popis"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api kľúč"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Vytvoriť poverenia pre google search"
+      },
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID vyhľadávača",
+        "help" : "Zadajte ID vyhľadávača získané pri registrácii poverení google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "apiKey" : {
+        "label" : "Api kľúč",
+        "help" : "Zadajte api kľúč získaný pri registrácii poverení google search api."
+      },
+      "MainPanel" : {
+        "label" : "Nastavenie google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Odstrániť",
+        "help" : "Odstrániť poverenia Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfigurácia Deep search",
+        "help" : "Pridať konfiguráciu deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Upraviť konfiguráciu"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ste si istí, že chcete odstrániť tento chat?",
         "header" : "Akcia odstránenia chatu"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Toto nemôžete odstrániť",
         "detail" : "Na tento objekt sa odkazuje z inej časti aplikácie"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url: http://localhost:11434/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Výnimka počas operácie: apiKey musí byť nastavený",
+        "detail" : "Chyba servera: apiKey musí byť nastavený"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Chyba počas streamovania odpovede chatu",
+        "detail" : "Chyba servera: 400 Zlá požiadavka z POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Použitá identita",
         "help" : "Vyberte alebo vytvorte identitu na prístup do systému google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Vyhľadávajú sa relevantné informácie"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliduje sa finálna správa"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Vložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SearchSettingTab" : {
+        "label" : "Nastavenia vyhľadávania"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Vložte prompt pre extrakciu relevantných informácií z dokumentov"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Vložte prompt na konsolidáciu extrahovaných relevantných informácií"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Nastavenie veľkého jazykového modelu"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie deep search"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód pre konfiguráciu deep search"
+      },
+      "searchType" : {
+        "label" : "Typ vyhľadávania",
+        "help" : "Vyberte medzi jednohopovým semantickým vyhľadávaním alebo multi hop"
+      },
+      "topK" : {
+        "label" : "Počet získaných textových segmentov (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Použitý llm",
+        "help" : "Uveďte veľký jazykový model použitý pre Deep search, ak nevyberiete žiadny, použije sa predvolený."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt na analýzu dokumentov",
+        "help" : "Upravte prompt, ktorý sa použije na extrakciu relevantných informácií z fragmentov dokumentov."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt na konsolidáciu extrahovaných informácií",
+        "help" : "Upravte prompt, ktorý sa použije na konsolidáciu dôležitých informácií získaných z dokumentov do jednej správy."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Prah podobnosti vyhľadávania",
+        "help" : "Prvý prah semantickej podobnosti (medzi 0.5 a 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Druhý prah podobnosti",
+        "help" : "Druhý prah semantickej podobnosti (medzi 0.5 a 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Predvolený veľký jazykový model",
+        "help" : "Predvolený veľký jazykový model bude použitý na spracovanie Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Prah podobnosti vyhľadávania",
+        "help" : "Semantický prah podobnosti (medzi 0.5 a 1.0)"
       }
     }
   }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { MessageService, ToastMessageOptions } from "primeng/api";
@@ -21,7 +21,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchProcessType?: "standalone" | "chat-context";
     @Output() deepSearchResponseReceived: EventEmitter<DeepSearchResponse> = new EventEmitter();
     @Output() deepSearchChatResponseReceived: EventEmitter<GeboChatResponse> = new EventEmitter();
-    @Output() errorOccurredEvent:EventEmitter<any>=new EventEmitter();
+    @Output() errorOccurredEvent: EventEmitter<any> = new EventEmitter();
     protected streamingResponse: boolean = false;
 
     protected get loading(): boolean {
@@ -41,12 +41,27 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         analisysPortion?: string,
         completionPercent?: number
     };
+    protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
+    protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected completionPercent: number = 0;
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService, private messageService: MessageService) {
 
     }
     ngOnInit(): void {
 
+    }
+    private clearEventsDisplay(): void {
+        this.deepSearchResponse = undefined;
+        this.deepSearchDataSourceDocumentResult = undefined;
+        this.deepSearchDataSourceResponse = undefined;
+        this.analisysStep = undefined;
+        this.deepSearchResponse = undefined;
+    }
+    protected get inEventsLoop():boolean {
+        return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
+    }
+    protected get isDieplayingDeepSearchProcess():boolean {
+        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
     }
     private onMessage(msg: IGeboChatMessage | string) {
         if (typeof msg === "string") {
@@ -55,7 +70,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             if (msg.contentObjectType) {
                 switch (msg.contentObjectType) {
                     case "DeepSearchStep": {
-                        this.deepSearchResponse = undefined;
+                        this.clearEventsDisplay();
                         this.analisysStep = msg.content;
                         if (msg.content?.completionPercent) {
 
@@ -63,13 +78,21 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                         }
                     } break;
                     case "DeepSearchResponse": {
-                        this.analisysStep = undefined;
+                        this.clearEventsDisplay();
                         this.deepSearchResponse = msg.content;
                         this.completionPercent = 100;
                         this.deepSearchResponseReceived.emit(this.deepSearchResponse);
                     } break;
+                    case "DeepSearchDataSourceDocumentResult": {
+                        this.clearEventsDisplay();
+                        this.deepSearchDataSourceDocumentResult=msg.content;
+                    } break;
+                    case "DeepSearchDataSourceResponse": {
+                        this.clearEventsDisplay();
+                        this.deepSearchDataSourceResponse=msg.content;
+                    } break;
                     case "GUserMessage": {
-                        this.analisysStep = undefined;
+                        this.clearEventsDisplay();
                         const message: ToastMessageOptions = {
                             summary: msg.content?.summary,
                             detail: msg.content?.detail,
@@ -79,7 +102,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                         this.errorOccurredEvent.emit(msg.content);
                     } break;
                     case "GeboChatResponse": {
-                        this.analisysStep = undefined;
+                        this.clearEventsDisplay();
                         this.chatResponse = msg.content;
                         this.deepSearchChatResponseReceived.emit(msg.content);
                     } break;

@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Ενσωμάτωση Google Drive/Workspaces",
         "description" : "Ρυθμίστε το Gebo.ai για να έχει πρόσβαση στα δεδομένα της ομάδας σας στο Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Ρύθμιση Google search api",
+        "description" : "Ρυθμίστε τα διαπιστευτήρια Google search api για αναζητήσεις AI στον ιστό"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Ρύθμιση Deep search",
+        "description" : "Ρυθμίστε τις παραμέτρους Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Περιγραφή"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Κλειδί Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Δημιουργία διαπιστευτηρίων google search"
+      },
+      "CreateBtn" : {
+        "label" : "Δημιουργία"
+      },
+      "customSearchEngineId" : {
+        "label" : "ταυτότητα μηχανής αναζήτησης",
+        "help" : "Εισάγετε την ταυτότητα μηχανής αναζήτησης που λήφθηκε κατά την εγγραφή διαπιστευτηρίων google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Κωδικός ρυθμίσεων"
+      },
+      "DescriptionHeader" : {
+        "label" : "Περιγραφή"
+      },
+      "apiKey" : {
+        "label" : "Κλειδί api",
+        "help" : "Εισάγετε το api key που λήφθηκε κατά την εγγραφή διαπιστευτηρίων google search api."
+      },
+      "MainPanel" : {
+        "label" : "Ρύθμιση google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Διαγραφή",
+        "help" : "Διαγραφή διαπιστευτηρίων Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Ρυθμίσεις Deep search",
+        "help" : "Προσθήκη ρύθμισης deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Επεξεργασία ρυθμίσεων"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή τη συνομιλία;",
         "header" : "Ενέργεια διαγραφής συνομιλίας"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Δεν μπορείτε να το διαγράψετε",
         "detail" : "Αυτό το αντικείμενο αναφέρεται από άλλο σημείο της εφαρμογής"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: Σφάλμα κατά την εργασία με το url:http://localhost:11434/v1/models",
+        "detail" : "Σφάλμα διακομιστή: Σφάλμα κατά την εργασία με το url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: πρέπει να οριστεί apiKey",
+        "detail" : "Σφάλμα διακομιστή: πρέπει να οριστεί apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Σφάλμα κατά το streaming απάντησης συνομιλίας",
+        "detail" : "Σφάλμα διακομιστή: 400 Bad Request από POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Χρησιμοποιούμενη ταυτότητα",
         "help" : "Επιλέξτε ή δημιουργήστε την ταυτότητα για πρόσβαση στο σύστημα google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Συνομιλία"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Αναζήτηση σχετικών πληροφοριών"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Συγκέντρωση της τελικής αναφοράς"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Εισαγωγή"
+      },
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "DeleteBtn" : {
+        "label" : "Διαγραφή"
+      },
+      "SearchSettingTab" : {
+        "label" : "Ρυθμίσεις αναζήτησης"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Εισαγωγή prompt για εξαγωγή σχετικών πληροφοριών από έγγραφα"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Εισαγωγή prompt για συγκέντρωση εξαγόμενων σχετικών πληροφοριών"
+      },
+      "MainPanel" : {
+        "label" : "Επεξεργασία ρύθμισης deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Ρύθμιση μεγάλου γλωσσικού μοντέλου"
+      },
+      "description" : {
+        "label" : "Περιγραφή",
+        "help" : "Εισάγετε την περιγραφή της ρύθμισης deep search"
+      },
+      "code" : {
+        "label" : "Μοναδικός κωδικός",
+        "help" : "Αυτόματα παραγόμενος μοναδικός κωδικός για τη ρύθμιση deep search"
+      },
+      "searchType" : {
+        "label" : "Τύπος αναζήτησης",
+        "help" : "Επιλέξτε ανάμεσα σε single hop semantic search ή multi hop"
+      },
+      "topK" : {
+        "label" : "Αριθμός τμημάτων κειμένου που ανακτώνται (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Χρησιμοποιούμενο llm",
+        "help" : "Καθορίστε το μεγάλο γλωσσικό μοντέλο που θα χρησιμοποιηθεί για Deep search, θα χρησιμοποιηθεί το προεπιλεγμένο αν δεν επιλεγεί άλλο."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt ανάλυσης εγγράφων",
+        "help" : "Επεξεργαστείτε το prompt που θα χρησιμοποιείται για την εξαγωγή σχετικών πληροφοριών από αποσπάσματα εγγράφων."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt συγκέντρωσης πληροφοριών",
+        "help" : "Επεξεργαστείτε το prompt που θα χρησιμοποιείται για τη συγκέντρωση όλων των σχετικών πληροφοριών που εξάγονται από τα ανακτηθέντα έγγραφα σε μία αναφορά."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Όριο ομοιότητας αναζήτησης",
+        "help" : "Semantic όριο ομοιότητας πρώτου βήματος (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Όριο ομοιότητας δεύτερου βήματος",
+        "help" : "Semantic όριο ομοιότητας δεύτερου βήματος (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Προεπιλεγμένο μεγάλο γλωσσικό μοντέλο",
+        "help" : "Το προεπιλεγμένο μεγάλο γλωσσικό μοντέλο θα χρησιμοποιηθεί για την επεξεργασία Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Όριο ομοιότητας αναζήτησης",
+        "help" : "Semantic όριο ομοιότητας (ανάμεσα σε 0.5 και 1.0)"
       }
     }
   }

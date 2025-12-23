@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces መያዣ ዘዴ",
         "description" : "Gebo.ai ወደ Google cloud Drive/Workspaces የቡድን መረጃዎትን ለመድረስ ያዘጋጁ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api አውታረ መረጃ ያቀናብሩ",
+        "description" : "AI ድምር ጥናቶች ለመፈጸም ከ Google search api የማመንጫ መረጃዎችን ያቀናብሩ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ያቀናብሩ",
+        "description" : "የ Deep search መለኪያዎችን ያቀናብሩ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "መግለጫ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api ቁልፍ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "የ google search ማመንጫ መረጃ ይፍጠሩ"
+      },
+      "CreateBtn" : {
+        "label" : "ይፍጠሩ"
+      },
+      "customSearchEngineId" : {
+        "label" : "የ ፍለጋ ማሽን መታወቂያ",
+        "help" : "በ google search api መረጃ መመዝገቢያ የተገኘውን የ ፍለጋ ማሽን መታወቂያ ያስገቡ።"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የቅኝቻ ኮድ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "apiKey" : {
+        "label" : "Api ቁልፍ",
+        "help" : "በ google search api መዝገብ የተቀበሉትን api ቁልፍ ያስገቡ።"
+      },
+      "MainPanel" : {
+        "label" : "Google search api ያቀናብሩ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ያሰርዙ",
+        "help" : "ከ Google search api ማመንጫ መረጃዎችን ያሰርዙ"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search ቅኝቻ",
+        "help" : "አዲስ Deep search ቅኝቻ ያክሉ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ቅኝቻን ያስተካክሉ"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ይህን ውይይት መሰረዝ መፈለጋችሁ ይታወቃል?",
         "header" : "የውይይት ማጥፊያ እርምጃ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ይዘት ያክሉ ወይም የፍለጋ አካላዊነትን ያስተካክሉ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ይዘት ያክሉ ወይም የፍለጋ አካላዊነትን ያስተካክሉ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ይዘት ያክሉ ወይም የፍለጋ አካላዊነትን ያስተካክሉ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ይህን ማሰረዝ አይችሉም",
         "detail" : "ይህ እቃ ከመተግበሪያው ሌሎች ክፍሎች ጋር ተያይዞ አለ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ዋና እንቅስቃሴ ላይ ስህተት፡ URL ማስተዳደር ላይ ስህተት፡ http://localhost:11434/v1/models",
+        "detail" : "የአገልጋይ ስህተት፡ URL ማስተዳደር ላይ ስህተት፡ http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ዋና እንቅስቃሴ ላይ ስህተት: apiKey መቀመጥ አለበት",
+        "detail" : "የአገልጋይ ስህተት: apiKey መቀመጥ አለበት"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "የቻት ምላሽ ስህተት ሲቀርበው",
+        "detail" : "የአገልጋይ ስህተት: 400 ስህተት መጠየቂያ ከ POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "የተጠቀሱት መለያ",
         "help" : "ወደ google drive ስርዓቱ ለመድረስ መለያ ይምረጡ ወይም ይፍጠሩ"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ውይይት"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ተገቢ መረጃዎችን በመፈለግ ላይ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "የመጨረሻውን ሪፖርት በማኅተም ላይ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ያክሉ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ያሰርዙ"
+      },
+      "SearchSettingTab" : {
+        "label" : "የፍለጋ ቅኝቻ"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ሰነዶች አስፈላጊ መረጃ ለማውጣት prompt ያስገቡ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ገለጻ ያገኙትን አስፈላጊ መረጃ ለማኅተም prompt ያስገቡ"
+      },
+      "MainPanel" : {
+        "label" : "የ deep search ቅኝቻን በማስተካከል ላይ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "የሰፊ ቋንቋ ሞዴል ቅኝቻ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "ስለ Deep search ቅኝቻ መግለጫ ያስገቡ"
+      },
+      "code" : {
+        "label" : "በተለይ የተዘጋጀ ኮድ",
+        "help" : "አውቶማቲካሊ የተፈጠረ በተለይ የ deep search ቅኝቻ ኮድ"
+      },
+      "searchType" : {
+        "label" : "የፍለጋ አይነት",
+        "help" : "ከ single hop semantic search ወይም multi hop መካከል ይምረጡ"
+      },
+      "topK" : {
+        "label" : "የተመረጡ የጽሑፍ ክፍሎች ብዛት (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "የተጠቀሰ llm",
+        "help" : "ለ Deep search የተጠቀሰውን ሰፊ ቋንቋ ሞዴል ይግለጹ፣ አንዱ ካልተመረጠ ነባር የሚገኝ ይጠቀማል።"
+      },
+      "analisysPrompt" : {
+        "label" : "የሰነዶች ትንተና ፕሮምፕት",
+        "help" : "የሰነዶች ክፍል አስፈላጊ መረጃ ለማውጣት የሚጠቀሙትን prompt ያስተካክሉ።"
+      },
+      "consolidationPrompt" : {
+        "label" : "የተወጡ መረጃዎችን ማኅተም ፕሮምፕት",
+        "help" : "ከተመረጡ ሰነዶች የተወጡ አስፈላጊ መረጃዎችን በአንድ ሪፖርት ለማኅተም የሚጠቀሙትን prompt ያስተካክሉ።"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "የፍለጋ ተመሳሳይነት መጠን",
+        "help" : "የመጀመሪያ hop ሰማንቲክ ተመሳሳይነት መጠን (0.5 እስከ 1.0 መካከል)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "የሁለተኛ  hop ተመሳሳይነት መጠን",
+        "help" : "የሁለተኛ  hop ሰማንቲክ ተመሳሳይነት መጠን (0.5 እስከ 1.0 መካከል)"
+      },
+      "defaultModel" : {
+        "label" : "ነባር የሰፊ ቋንቋ ሞዴል",
+        "help" : "ነባር የሰፊ ቋንቋ ሞዴል ለ Deep search ማካሄድ ይተገበራል"
+      },
+      "similarityThreashold" : {
+        "label" : "የፍለጋ ተመሳሳይነት መጠን",
+        "help" : "መስክ ሰማንቲክ ተመሳሳይነት መጠን (0.5 እስከ 1.0 መካከል)"
       }
     }
   }

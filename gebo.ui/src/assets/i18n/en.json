@@ -173,6 +173,14 @@
             "googleDriveWorkspacesSystemSetupSection": {
                 "label": "Google Drive/Workspaces integration",
                 "description": "Configure Gebo.ai to access your Google cloud Drive/Workspaces team data"
+            },
+            "googleSearchApiSetupSection": {
+                "label": "Configure Google search api",
+                "description": "Configure Google search api credentials for AI web searches"
+            },
+            "deepSearchApiSetupSection": {
+                "label": "Configure Deep search",
+                "description": "Configure Deep search parameters"
             }
         },
         "ConfluenceWizardComponent": {
@@ -444,6 +452,48 @@
             },
             "DescriptionHeader": {
                 "label": "Description"
+            }
+        },
+        "GeboAIGoogleSearchWizardComponent": {
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "GoogleSearchCredentialsBtn": {
+                "label": "Google search api key"
+            },
+            "CreateCredentialsPanel": {
+                "label": "Create google search credentials"
+            },
+            "CreateBtn": {
+                "label": "Create"
+            },
+            "customSearchEngineId": {
+                "label": "Search engine id",
+                "help": "Enter the search engine id obtained in the google search api credentials registration."
+            },
+            "ConfigCodeHeader": {
+                "label": "Config code"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "apiKey": {
+                "label": "Api key",
+                "help": "Enter the api key obtained in the google search api credentials registration."
+            },
+            "MainPanel": {
+                "label": "Setup google search api"
+            },
+            "DeleteCredentialsBtn": {
+                "label": "Delete",
+                "help": "Delete Google search api credentials"
+            },
+            "AddDeepSearchBtn": {
+                "label": "Deep search config",
+                "help": "Add a deep search configuration"
+            },
+            "EditSystemBtn": {
+                "label": "Edit config"
             }
         }
     },
@@ -1798,6 +1848,15 @@
             "DELETE_CHAT_ACTION": {
                 "message": "Are you shure you whant to delete this chat?",
                 "header": "Delete chat action"
+            },
+            "PlusContextualMenu": {
+                "help": "Add content or modify search behavior"
+            },
+            "[object HTMLElement]": {
+                "help": "Add content or modify search behavior"
+            },
+            "ContextMenuBtn": {
+                "help": "Add content or modify search behavior"
             }
         },
         "ChangeDescriptionComponent": {
@@ -1990,7 +2049,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 200000 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 4096 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -3036,12 +3095,10 @@
                 "summary": "OK!",
                 "detail": "Operation done successfully"
             },
-           
             "OK": {
                 "summary": "Saved with success",
                 "detail": "Update operation done successfully"
             },
-            
             "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed": {
                 "summary": "You can delete this",
                 "detail": "The current viewed data can be deleted safely"
@@ -3049,6 +3106,18 @@
             "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1": {
                 "summary": "You cannot delete this",
                 "detail": "This object is referred from other part(s) of the application"
+            },
+            "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e": {
+                "summary": "Exception during operation:Error working with url:http://localhost:11434/v1/models",
+                "detail": "Server error: Error working with url:http://localhost:11434/v1/models"
+            },
+            "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc": {
+                "summary": "Exception during operation:apiKey must be set",
+                "detail": "Server error: apiKey must be set"
+            },
+            "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2": {
+                "summary": "Error while streaming chat respose",
+                "detail": "Server error: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
             }
         }
     },
@@ -3202,6 +3271,100 @@
             "driveAccessSecret": {
                 "label": "Identity used",
                 "help": "Select or create the identity to access the google drive system"
+            }
+        }
+    },
+    "GeboAIReusableChatModel": {
+        "GeboAIChatInputShellComponent": {
+            "standard-chat": {
+                "label": "Chat"
+            },
+            "deep-search": {
+                "label": "Deep search"
+            }
+        }
+    },
+    "GeboAIDeepSearchModule": {
+        "GeboAIDeepSearchComponent": {
+            "deepSearchUI": {
+                "label": "Deep Search"
+            },
+            "DeepSearchProcessingSearch": {
+                "label": "Searching relevant informations"
+            },
+            "DeepSearchingConsolidating": {
+                "label": "Consolidating the final report"
+            }
+        }
+    },
+    "GeboAIDeepSearchConfigAdminModule": {
+        "DeepSearchConfig": {
+            "InsertBtn": {
+                "label": "Insert"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "SearchSettingTab": {
+                "label": "Search setting"
+            },
+            "analisysPromptCtrl": {
+                "placeholder": "Insert prompt for documents relevant information extraction"
+            },
+            "consolidationPromptCtrl": {
+                "placeholder": "Insert prompt for extracted relevant information consolidation"
+            },
+            "MainPanel": {
+                "label": "Editing deep search configuration"
+            },
+            "LLmsSettingsTab": {
+                "label": "Large language model setting"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the deep search configuration"
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the deep search configuration"
+            },
+            "searchType": {
+                "label": "Search type",
+                "help": "Select between single hop semantic search or multi hop"
+            },
+            "topK": {
+                "label": "Number of retrieved text segments (TopK)"
+            },
+            "chatModelConfiguration": {
+                "label": "Used llm",
+                "help": "Specify large language model used for Deep search, default one will be\n                                    used if none is selected."
+            },
+            "analisysPrompt": {
+                "label": "Documents analisys prompt",
+                "help": "Edit the prompt that will be used for documents fragment relevant information extraction."
+            },
+            "consolidationPrompt": {
+                "label": "Extracted informations consolidation prompt",
+                "help": "Edit the prompt that will be used to consolidate in a single report rilevant informations extracted from retrieved documents."
+            },
+            "firstHopSimilarityThreashold": {
+                "label": "Search similarity threashold",
+                "help": "First hop semantic similarity threashold (between 0.5 to 1.0)"
+            },
+            "secondHopSimilarityThreashold": {
+                "label": "Second hop similarity threashold",
+                "help": "Second hop semantic similarity threashold (between 0.5 to 1.0)"
+            },
+            "defaultModel": {
+                "label": "Default large language model",
+                "help": "The default large language model will be used for Deep search processing"
+            },
+            "similarityThreashold": {
+                "label": "Search similarity threashold",
+                "help": "Semantic similarity threashold (between 0.5 to 1.0)"
             }
         }
     }

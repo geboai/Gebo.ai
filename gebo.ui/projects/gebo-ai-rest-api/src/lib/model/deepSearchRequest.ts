@@ -22,4 +22,5 @@ export interface DeepSearchRequest {
     knowledgeBases: Array<string>;
     userChatContextCode?: string;
     chatRequestCode?: string;
+    deepSearchDataSources?: Array<string>;
 }

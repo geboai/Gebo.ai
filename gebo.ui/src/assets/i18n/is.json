@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces samþætting",
         "description" : "Stilltu Gebo.ai til að fá aðgang að Google cloud Drive/Workspaces teymisgögnum þínum"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Stilla Google search api",
+        "description" : "Settu inn auðkenni fyrir Google search api fyrir AI vefleitir"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Stilla Deep search",
+        "description" : "Settu upp breytur fyrir Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Lýsing"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api lykill"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Búa til Google search auðkenni"
+      },
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "customSearchEngineId" : {
+        "label" : "Leitarnúmer",
+        "help" : "Sláðu inn leitarnúmer sem fékkst við skráningu Google search api auðkenna."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "apiKey" : {
+        "label" : "Api lykill",
+        "help" : "Sláðu inn api lykil sem fékkst við skráningu á Google search api auðkenni."
+      },
+      "MainPanel" : {
+        "label" : "Setja upp Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Eyða",
+        "help" : "Eyða Google search api auðkennum"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search stillingar",
+        "help" : "Bæta við deep search stillingu"
+      },
+      "EditSystemBtn" : {
+        "label" : "Breyta stillingum"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ertu viss um að þú viljir eyða þessu spjalli?",
         "header" : "Eyða spjalli"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Bæta efni við eða breyta leitarhegðun"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Bæta efni við eða breyta leitarhegðun"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Bæta efni við eða breyta leitarhegðun"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Þú getur ekki eytt þessu",
         "detail" : "Þessu atriði er vísað í annars staðar í forritinu"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Undantekning varð í aðgerð: Villa við vinnslu á url:http://localhost:11434/v1/models",
+        "detail" : "Þjónustuvilla: Villa við vinnslu á url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Undantekning varð í aðgerð: apiKey verður að vera settur",
+        "detail" : "Þjónustuvilla: apiKey verður að vera settur"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Villa kom upp við gagnaflutning úr spjalli",
+        "detail" : "Þjónustuvilla: 400 Bad Request frá POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,100 @@
       "driveAccessSecret" : {
         "label" : "Auðkenni sem notað er",
         "help" : "Veldu eða búðu til auðkenni til að fá aðgang að google drive kerfinu"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Spjall"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Leita að viðeigandi upplýsingum"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Taka saman lokaskýrslu"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Setja inn"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SearchSettingTab" : {
+        "label" : "Leitarstilling"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Settu inn fyrirspurn til að draga fram viðeigandi upplýsingar úr skjölum"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Settu inn fyrirspurn til að taka saman fram dregnar upplýsingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyta deep search stillingum"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Stilling stórs tungumálalíkans"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á deep search stillingu"
+      },
+      "code" : {
+        "label" : "Einkvæmur kóði",
+        "help" : "Sjálfvirkt búinn til einkvæmur kóði fyrir deep search stillingu"
+      },
+      "searchType" : {
+        "label" : "Leitartegund",
+        "help" : "Veldu á milli einnar eða margra lotu skynsamlegrar leitar"
+      },
+      "topK" : {
+        "label" : "Fjöldi textabúta sem sóttir eru (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Notað llm",
+        "help" : "Skilgreindu stórt tungumálalíkan notað fyrir Deep search, sjálfgefið verður notað ef ekkert er valið."
+      },
+      "analisysPrompt" : {
+        "label" : "Fyrirspurn til greiningar skjala",
+        "help" : "Breyttu fyrirspurn sem notuð verður til að draga fram viðeigandi upplýsingar úr textabútum skjala."
+      },
+      "consolidationPrompt" : {
+        "label" : "Fyrirspurn til samantektar upplýsingum",
+        "help" : "Breyttu fyrirspurn sem notuð verður til að taka saman í eina skýrslu þær upplýsingar sem dregnar eru úr sóttum skjölum."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Lágmarksleitarlíkindi",
+        "help" : "Fyrsta lota skynsamlegra líkinda (á bilinu 0.5 til 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Seinni lota líkindaþröskuldur",
+        "help" : "Önnur lota skynsamlegra líkinda (á bilinu 0.5 til 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Sjálfgefið stórt tungumálalíkan",
+        "help" : "Sjálfgefið stórt tungumálalíkan verður notað við Deep search vinnslu"
+      },
+      "similarityThreashold" : {
+        "label" : "Líkindaþröskuldur fyrir leit",
+        "help" : "Skynsamleg líkindaþröskuldur (á bilinu 0.5 til 1.0)"
       }
     }
   }
