@@ -21,14 +21,16 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.client.rest.model.DeepSearchStep;
-import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
-import ai.gebo.llms.deepsearch.model.DeepSearchChatResponseEvent;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
-import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
-import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
-import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.GUserMessage;
 import jakarta.validation.Valid;
@@ -85,6 +87,18 @@ public class GeboDeepSearchController {
 	public DeepSearchResponse getMyDeepSearchResponseByRequestCode(
 			@RequestParam("deepSearchCode") String deepSearchCode) {
 		return deepSearchService.findDeepSearchResponse(deepSearchCode);
+	}
+
+	@GetMapping(value = "getMyDeepSearchDataSourceDocumentResultsByRequestCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<DeepSearchDataSourceDocumentResult> getMyDeepSearchDataSourceDocumentResultsByRequestCode(
+			@RequestParam("deepSearchCode") String deepSearchCode) {
+		return deepSearchService.findDataSourceDocumentResults(deepSearchCode);
+	}
+
+	@GetMapping(value = "getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<DeepSearchDataSourceResponse> getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode(
+			@RequestParam("deepSearchCode") String deepSearchCode) {
+		return deepSearchService.findDataSourceResponses(deepSearchCode);
 	}
 
 	@DeleteMapping(value = "deleteDeepSearch", consumes = MediaType.APPLICATION_JSON_VALUE)

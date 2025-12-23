@@ -22,7 +22,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
-import ai.gebo.llms.deepsearch.datasources.model.RemoteSystemDeepSearchDataSourceStandardState;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceStandardState;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
@@ -93,7 +93,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 
 	@Override
 	protected List<SearchResult> extractAdditionalReferencesToScan(CustomSearchResultExtractionDataType returned,
-			RemoteSystemDeepSearchDataSourceStandardState state) {
+			DeepSearchDataSourceStandardState state) {
 
 		return List.of();
 	}

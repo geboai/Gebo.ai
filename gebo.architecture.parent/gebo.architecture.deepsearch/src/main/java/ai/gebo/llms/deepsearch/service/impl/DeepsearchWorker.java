@@ -27,16 +27,16 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
-import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceProcessedEvent;
-import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
-import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
-import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
@@ -94,6 +94,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				IGDeepSearchDataSourceService businessLogic = handler.get();
 				nextStepValue = businessLogic.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
 						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state.getConsolidatedResult());
+				
 			}
 		} else {
 			// find next data source to evaluate end execute

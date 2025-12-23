@@ -11,27 +11,28 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.deepsearch.datasources.model.AnalyzedSearchResult;
-import ai.gebo.llms.deepsearch.datasources.model.ExtractedSearchQueries;
-import ai.gebo.llms.deepsearch.datasources.model.RemoteReferenceAnalyzedDeepSearchEvent;
-import ai.gebo.llms.deepsearch.datasources.model.RemoteSystemDeepSearchDataSourceStandardState;
-import ai.gebo.llms.deepsearch.datasources.model.SearchResults;
-import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceSearchResults;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceStandardState;
+import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
+import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
-import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceProcessedEvent;
-import ai.gebo.llms.deepsearch.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
 public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
-		IGDeepSearchDataSourceService<RemoteSystemDeepSearchDataSourceStandardState, SearchResult, AnalyzedSearchResult, RemoteReferenceAnalyzedDeepSearchEvent> {
+		IGDeepSearchDataSourceService<DeepSearchDataSourceStandardState, SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
 
 	final Class<CustomContentExtractionType> customContentExtractionType;
 	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
@@ -46,34 +47,39 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	}
 
 	@Override
-	public RemoteSystemDeepSearchDataSourceStandardState createInitialState(IGConfigurableChatModel chatModel,
+	public DeepSearchDataSourceStandardState createInitialState(IGConfigurableChatModel chatModel,
 			DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
-		RemoteSystemDeepSearchDataSourceStandardState state = new RemoteSystemDeepSearchDataSourceStandardState();
+		DeepSearchDataSourceStandardState state = new DeepSearchDataSourceStandardState();
 		return state;
 	}
 
 	@Override
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
-			RemoteSystemDeepSearchDataSourceStandardState state, String previusConsolidatedResult)
+			DeepSearchDataSourceStandardState state, String previusConsolidatedResult)
 			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException {
 		if (state.getExtractedSearchQueries() == null) {
-			ExtractedSearchQueries searchQueries = this.extractSearchQueries(request, pastSystemsResponses,
-					deepSearchConfig, chatModel, previusConsolidatedResult);
+			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
+					pastSystemsResponses, deepSearchConfig, chatModel, previusConsolidatedResult);
 			state.setExtractedSearchQueries(searchQueries);
 			if (searchQueries.getSearchIsUnnecessary() != null && searchQueries.getSearchIsUnnecessary()) {
 				DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
 				returned.setInputData(request);
 				returned.setOutputData(new DeepSearchDataSourceResponse());
 				returned.getOutputData().setSearchResultsEmpty(true);
+				returned.getOutputData().setHandlerId(getHandlerId());
+				returned.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+				returned.getOutputData().setDataSourceIndex(state.getDataSourceIndex());
+				returned.getOutputData().setDeepsearchCode(request.getCode());
+				state.setDataSourceIndex(state.getDataSourceIndex() + 1);
 				return returned;
 			}
-			List<SearchResults> queryResults = new ArrayList<SearchResults>();
+			List<DeepSearchDataSourceSearchResults> queryResults = new ArrayList<DeepSearchDataSourceSearchResults>();
 			for (SearchQuery query : searchQueries.getSearchQuery()) {
 				List<SearchResult> results = executeSearch(query, request);
 				if (results.isEmpty())
 					continue;
-				SearchResults sr = new SearchResults();
+				DeepSearchDataSourceSearchResults sr = new DeepSearchDataSourceSearchResults();
 				sr.setResults(results);
 				sr.setSearchQuery(query);
 				queryResults.add(sr);
@@ -85,12 +91,18 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			returned.setInputData(request);
 			returned.setOutputData(new DeepSearchDataSourceResponse());
 			returned.getOutputData().setSearchResultsEmpty(true);
+			returned.getOutputData().setHandlerId(getHandlerId());
+			returned.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			returned.getOutputData().setDataSourceIndex(state.getDataSourceIndex());
+			returned.getOutputData().setDeepsearchCode(request.getCode());
+			state.setDataSourceIndex(state.getDataSourceIndex() + 1);
+
 			return returned;
 		}
 
 		if (state.getQueryResultsIndex() < state.getQueryResults().size()) {
 			SearchResult actualSearchResultToLoad = null;
-			SearchResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
+			DeepSearchDataSourceSearchResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
 			if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
 				actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
 				int index = state.getQueryResultsReferenceIndex() + 1;
@@ -132,16 +144,25 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 						for (SearchResult r : additionalResults) {
 							r.setNestingLevel(actualSearchResultToLoad.getNestingLevel() + 1);
 						}
-						SearchResults sr = new SearchResults();
+						DeepSearchDataSourceSearchResults sr = new DeepSearchDataSourceSearchResults();
 						sr.setResults(additionalResults);
 						state.getQueryResults().set(state.getQueryResultsIndex() + 1, sr);
 					}
 				}
 			}
-			RemoteReferenceAnalyzedDeepSearchEvent analyzedEvent = new RemoteReferenceAnalyzedDeepSearchEvent();
+			DeepSearchDataSourceDocumentResultEvent analyzedEvent = new DeepSearchDataSourceDocumentResultEvent();
 			analyzedEvent.setInputData(actualSearchResultToLoad);
-			analyzedEvent.setOutputData(new AnalyzedSearchResult());
+			analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
 			analyzedEvent.getOutputData().setEmptyResult(analyzed.isEmpty());
+			analyzedEvent.getOutputData().setHandlerId(getHandlerId());
+			analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
+			analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
+			analyzedEvent.getOutputData()
+					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			analyzedEvent.getOutputData().setDocumentIndex(state.getQueryResultsReferenceIndex());
+
+			analyzedEvent.getOutputData()
+					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
 			if (!analyzed.isEmpty()) {
 				if (analyzed.size() == 1) {
 					analyzedEvent.getOutputData().setAnalyzedResult(analyzed.get(0).getExtractedRelevantContent());
@@ -164,7 +185,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
 
-	private DeepSearchDataSourceProcessedEvent consolidate(List<AnalyzedSearchResult> cumulatedAnalisys,
+	private DeepSearchDataSourceProcessedEvent consolidate(List<DeepSearchDataSourceDocumentResult> cumulatedAnalisys,
 			DeepSearchRequest request, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
 		List<ConsolidationInput> inputs = cumulatedAnalisys.stream().map(x -> {
 			ConsolidationInput input = new ConsolidationInput(null, null, null, x.getAnalyzedResult());
@@ -174,8 +195,15 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		event.setInputData(request);
 		event.setOutputData(new DeepSearchDataSourceResponse());
 		event.getOutputData().setDataSourceDescription(this.getDescription(chatModel, deepSearchConfig, request));
+		event.getOutputData().setHandlerId(getHandlerId());
 		event.getOutputData().setDeepsearchCode(request.getCode());
 		event.getOutputData().setSearchResultsEmpty(cumulatedAnalisys.isEmpty());
+		List<SearchResultReference> dsReferences = new ArrayList<SearchResultReference>();
+		for (DeepSearchDataSourceDocumentResult r : cumulatedAnalisys) {
+			if (r.getAnalyzedSearchResult() != null && r.getAnalyzedSearchResult().getResultReference() != null)
+				dsReferences.add(r.getAnalyzedSearchResult().getResultReference());
+		}
+		event.getOutputData().setDataSourceReferences(dsReferences);
 		if (!cumulatedAnalisys.isEmpty()) {
 			String data = super.callLLMConsolidateText(chatModel, deepSearchConfig.getConsolidationPrompt(),
 					request.getQuery(), null, inputs);
@@ -200,7 +228,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	}
 
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned,
-			RemoteSystemDeepSearchDataSourceStandardState state);
+			DeepSearchDataSourceStandardState state);
 
 	protected abstract List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
 			DeepSearchRequest request, int maxTokens)
@@ -209,14 +237,15 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
 			throws IOException;
 
-	protected ExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
+	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel, String consolidatedText) throws LLMConfigException {
 		String prompt = createExtractSearchQueriesPrompt(request, pastSystemsResponses, deepSearchConfig, chatModel);
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
 		additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel, deepSearchConfig, request));
 		return super.callLLMWithConsolidationStructuredReturn(chatModel, prompt, request.getQuery(),
-				consolidatedText != null ? consolidatedText : "", additionalVariables, ExtractedSearchQueries.class);
+				consolidatedText != null ? consolidatedText : "", additionalVariables,
+				DeepSearchDataSourceExtractedSearchQueries.class);
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,

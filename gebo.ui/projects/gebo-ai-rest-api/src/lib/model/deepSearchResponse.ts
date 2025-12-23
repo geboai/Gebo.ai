@@ -20,4 +20,5 @@ export interface DeepSearchResponse {
     deepsearchCode?: string;
     response?: string;
     searchResultsEmpty?: boolean;
+    dataSourceDescription?: string;
 }
