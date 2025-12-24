@@ -1,6 +1,5 @@
-package ai.gebo.llms.deepsearch.model.events;
+package ai.gebo.llms.deepsearch.model;
 
-import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.model.GUserMessage;
 
 public class DeepSearchErrorEvent extends AbstractDeepSearchEvent<DeepSearchRequest,GUserMessage> {

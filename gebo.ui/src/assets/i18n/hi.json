@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces एकीकरण",
         "description" : "अपने Google cloud Drive/Workspaces टीम डेटा तक पहुँच के लिए Gebo.ai को कॉन्फ़िगर करें"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Google search api कॉन्फ़िगर करें",
-        "description" : "AI वेब खोजों के लिए Google search api क्रेडेंशियल्स कॉन्फ़िगर करें"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Deep search कॉन्फ़िगर करें",
-        "description" : "Deep search पैरामीटर सेट करें"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "विवरण"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "रद्द करें"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api key"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Google search क्रेडेंशियल्स बनाएं"
-      },
-      "CreateBtn" : {
-        "label" : "बनाएं"
-      },
-      "customSearchEngineId" : {
-        "label" : "सर्च इंजन id",
-        "help" : "Google search api क्रेडेंशियल्स रजिस्ट्रेशन में प्राप्त सर्च इंजन id दर्ज करें।"
-      },
-      "ConfigCodeHeader" : {
-        "label" : "कॉन्फ़िग कोड"
-      },
-      "DescriptionHeader" : {
-        "label" : "विवरण"
-      },
-      "apiKey" : {
-        "label" : "Api key",
-        "help" : "Google search api क्रेडेंशियल्स रजिस्ट्रेशन में प्राप्त api key दर्ज करें।"
-      },
-      "MainPanel" : {
-        "label" : "Google search api सेटअप करें"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "हटाएं",
-        "help" : "Google search api क्रेडेंशियल्स हटाएं"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search कांफिग",
-        "help" : "Deep search कॉन्फ़िगरेशन जोड़ें"
-      },
-      "EditSystemBtn" : {
-        "label" : "कॉन्फ़िग संपादित करें"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
         "header" : "चैट हटाने की क्रिया"
-      },
-      "PlusContextualMenu" : {
-        "help" : "सामग्री जोड़ें या खोज व्यवहार बदलें"
-      },
-      "[object HTMLElement]" : {
-        "help" : "सामग्री जोड़ें या खोज व्यवहार बदलें"
-      },
-      "ContextMenuBtn" : {
-        "help" : "सामग्री जोड़ें या खोज व्यवहार बदलें"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "आप इसे नहीं हटा सकते",
         "detail" : "यह वस्तु ऐप्लिकेशन के अन्य हिस्सों से संदर्भित है"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "ऑपरेशन के दौरान अपवाद: url के साथ कार्य करने में त्रुटि:http://localhost:11434/v1/models",
-        "detail" : "सर्वर त्रुटि: url के साथ कार्य करने में त्रुटि:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "ऑपरेशन के दौरान अपवाद: apiKey सेट होना चाहिए",
-        "detail" : "सर्वर त्रुटि: apiKey सेट होना चाहिए"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "चैट स्ट्रीमिंग के दौरान त्रुटि",
-        "detail" : "सर्वर त्रुटि: 400 खराब अनुरोध POST http://localhost:8000/v1/chat/completions से"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "इस्तेमाल की गई पहचान",
         "help" : "google drive सिस्टम का उपयोग करने के लिए पहचान चुनें या बनाएँ"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "चैट"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "संबंधित जानकारी खोजी जा रही है"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "अंतिम रिपोर्ट संकलित की जा रही है"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "विश्लेषित खोज परिणाम"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "के लिए विश्लेषित सिस्टम खोज परिणाम"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "डालें"
-      },
-      "CancelBtn" : {
-        "label" : "रद्द करें"
-      },
-      "DeleteBtn" : {
-        "label" : "हटाएं"
-      },
-      "SearchSettingTab" : {
-        "label" : "खोज सेटिंग"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "दस्तावेज़ों से प्रासंगिक जानकारी निकालने के लिए प्रॉम्प्ट डालें"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "निकाली गई प्रासंगिक जानकारी को संकलित करने के लिए प्रॉम्प्ट डालें"
-      },
-      "MainPanel" : {
-        "label" : "Deep search कॉन्फ़िगरेशन संपादित करना"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "लार्ज लैंग्वेज मॉडल सेटिंग"
-      },
-      "description" : {
-        "label" : "विवरण",
-        "help" : "Deep search कॉन्फ़िगरेशन के लिए विवरण दर्ज करें"
-      },
-      "code" : {
-        "label" : "अद्वितीय कोड",
-        "help" : "Deep search कॉन्फ़िगरेशन का स्वतः जनरेटेड अद्वितीय कोड"
-      },
-      "searchType" : {
-        "label" : "खोज प्रकार",
-        "help" : "Single hop semantic search या multi hop में से चुनें"
-      },
-      "topK" : {
-        "label" : "प्राप्त टेक्स्ट सेगमेंट्स की संख्या (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "प्रयुक्त llm",
-        "help" : "Deep search के लिए प्रयुक्त large language model निर्दिष्ट करें, कोई चयन न होने पर डिफ़ॉल्ट उपयोग होगा।"
-      },
-      "analisysPrompt" : {
-        "label" : "दस्तावेज़ विश्लेषण प्रॉम्प्ट",
-        "help" : "वह प्रॉम्प्ट संपादित करें जो दस्तावेज़ अंशों से प्रासंगिक जानकारी निकालने के लिए उपयोग होगा।"
-      },
-      "consolidationPrompt" : {
-        "label" : "निकाली गई जानकारी का संकलन प्रॉम्प्ट",
-        "help" : "संग्रहित दस्तावेज़ों से निकाली गई प्रासंगिक जानकारी को एक रिपोर्ट में संकलित करने के लिए प्रॉम्प्ट संपादित करें।"
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "खोज समानता सीमा",
-        "help" : "पहला hop semantic समानता सीमा (0.5 से 1.0 के बीच)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "दूसरा hop समानता सीमा",
-        "help" : "दूसरा hop semantic समानता सीमा (0.5 से 1.0 के बीच)"
-      },
-      "defaultModel" : {
-        "label" : "डिफ़ॉल्ट लार्ज लैंग्वेज मॉडल",
-        "help" : "Deep search प्रोसेसिंग के लिए डिफ़ॉल्ट लार्ज लैंग्वेज मॉडल उपयोग होगा"
-      },
-      "similarityThreashold" : {
-        "label" : "खोज समानता सीमा",
-        "help" : "Semantic समानता सीमा (0.5 से 1.0 के बीच)"
       }
     }
   }

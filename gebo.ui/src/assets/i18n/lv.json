@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integrācija",
         "description" : "Konfigurējiet Gebo.ai lai piekļūtu jūsu Google cloud Drive/Workspaces komandas datiem"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Konfigurēt Google meklēšanas api",
-        "description" : "Konfigurējiet Google meklēšanas api akreditācijas datus AI tīmekļa meklējumiem"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Konfigurēt Deep search",
-        "description" : "Konfigurējiet Deep search parametrus"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Apraksts"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Atcelt"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google meklēšanas api atslēga"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Izveidot google meklēšanas akreditācijas datus"
-      },
-      "CreateBtn" : {
-        "label" : "Izveidot"
-      },
-      "customSearchEngineId" : {
-        "label" : "Meklētāja id",
-        "help" : "Ievadiet meklētāja id, ko ieguvāt reģistrējoties google meklēšanas api akreditācijas datos."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Konfigurācijas kods"
-      },
-      "DescriptionHeader" : {
-        "label" : "Apraksts"
-      },
-      "apiKey" : {
-        "label" : "Api atslēga",
-        "help" : "Ievadiet api atslēgu, ko ieguvāt reģistrējoties google meklēšanas api akreditācijas datos."
-      },
-      "MainPanel" : {
-        "label" : "Iestatīt google meklēšanas api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Dzēst",
-        "help" : "Dzēst Google meklēšanas api akreditācijas datus"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search konfigurācija",
-        "help" : "Pievienot Deep search konfigurāciju"
-      },
-      "EditSystemBtn" : {
-        "label" : "Rediģēt konfigurāciju"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Vai esat pārliecināts, ka vēlaties dzēst šo tērzēšanu?",
         "header" : "Tērzēšanas dzēšanas darbība"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Jūs nevarat to dzēst",
         "detail" : "Uz šo objektu ir atsauces citās lietotnes daļās"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Izņēmums darbības laikā: Kļūda, strādājot ar url: http://localhost:11434/v1/models",
-        "detail" : "Servera kļūda: Kļūda, strādājot ar url: http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Izņēmums darbības laikā: apiKey jābūt iestatītam",
-        "detail" : "Servera kļūda: apiKey jābūt iestatītam"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Kļūda straumējot tērzēšanas atbildi",
-        "detail" : "Servera kļūda: 400 Bad Request no POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Lietotā identitāte",
         "help" : "Izvēlieties vai izveidojiet identitāti, lai piekļūtu google drive sistēmai"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Tērzēšana"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Meklē atbilstošu informāciju"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Konsolidē gala ziņojumu"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Analizētais meklēšanas rezultāts"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Analizētā sistēmas meklēšanas rezultāts priekš"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Pievienot"
-      },
-      "CancelBtn" : {
-        "label" : "Atcelt"
-      },
-      "DeleteBtn" : {
-        "label" : "Dzēst"
-      },
-      "SearchSettingTab" : {
-        "label" : "Meklēšanas iestatījumi"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Ievadiet dokumentu būtiskās informācijas iegūšanas promptu"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Ievadiet ekstraktētās informācijas apvienošanas promptu"
-      },
-      "MainPanel" : {
-        "label" : "Rediģē Deep search konfigurāciju"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Lielā valodas modeļa iestatījumi"
-      },
-      "description" : {
-        "label" : "Apraksts",
-        "help" : "Ievadiet Deep search konfigurācijas aprakstu"
-      },
-      "code" : {
-        "label" : "Unikāls kods",
-        "help" : "Automātiski ģenerēts unikāls Deep search konfigurācijas kods"
-      },
-      "searchType" : {
-        "label" : "Meklēšanas tips",
-        "help" : "Izvēlieties starp vienpakāpes semantisko meklēšanu vai vairāku pakāpju"
-      },
-      "topK" : {
-        "label" : "Atrastie teksta segmenti (TopK) skaits"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Lietotais llm",
-        "help" : "Norādiet lielo valodas modeli, kas izmantots Deep search. Ja nekas nav izvēlēts, tiks izmantots noklusējuma modelis."
-      },
-      "analisysPrompt" : {
-        "label" : "Dokumentu analīzes prompts",
-        "help" : "Rediģējiet promptu, kas tiks izmantots dokumentu fragmentu būtiskās informācijas ieguvei."
-      },
-      "consolidationPrompt" : {
-        "label" : "Ekstrahētās informācijas apvienošanas prompts",
-        "help" : "Rediģējiet promptu, kas tiks izmantots, lai apvienotu atgūto dokumentu izvilkto būtisko informāciju vienā pārskatā."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Meklēšanas līdzības slieksnis",
-        "help" : "Pirmās pakāpes semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Otrās pakāpes līdzības slieksnis",
-        "help" : "Otrās pakāpes semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Noklusējuma lielais valodas modelis",
-        "help" : "Noklusējuma lielais valodas modelis tiks izmantots Deep search apstrādei"
-      },
-      "similarityThreashold" : {
-        "label" : "Meklēšanas līdzības slieksnis",
-        "help" : "Semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
       }
     }
   }

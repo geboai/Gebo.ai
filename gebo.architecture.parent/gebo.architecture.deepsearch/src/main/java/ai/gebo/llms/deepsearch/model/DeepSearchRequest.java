@@ -24,7 +24,6 @@ public class DeepSearchRequest extends GBaseObject {
 	@GObjectReference(referencedType = GUserChatContext.class)
 	String userChatContextCode = null;
 	String chatRequestCode = null;
-	List<String> deepSearchDataSources = null;
 
 	public DeepSearchRequest() {
 		this.setCode(UUID.randomUUID().toString());

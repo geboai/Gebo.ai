@@ -6,21 +6,10 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DeepSearchConfig extends GBaseObject {
-	public static enum SearchType {
-		SINGLE_HOP, MULTI_HOP
-	}
-
-	@NotNull
-	protected SearchType searchType = null;
 	protected String consolidationPrompt = null;
 	protected String analisysPrompt = null;
 	protected RagQueryOptions ragQueryOptions;
@@ -28,18 +17,10 @@ public class DeepSearchConfig extends GBaseObject {
 	protected Double secondHopSimilarityThreashold = null;
 	protected Integer graphRagTopN = null;
 	protected Integer tokensLimit = null;
-	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
+	@GObjectReference(referencedType = GBaseChatModelConfig.class,referencesExtensions = true)
 	protected GObjectRef<GBaseChatModelConfig> chatModelConfiguration = null;
 	protected Boolean defaultConfig = null;
 	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	protected String chatProfileCode = null;
-
-	public DeepSearchConfig(DeepSearchConfig c) {
-		this(c.searchType, c.consolidationPrompt, c.analisysPrompt, c.ragQueryOptions, c.firstHopSimilarityThreashold,
-				c.secondHopSimilarityThreashold, c.graphRagTopN, c.tokensLimit, c.chatModelConfiguration,
-				c.defaultConfig, c.chatProfileCode);
-		this.setCode(c.getCode());
-		this.setDescription(c.getDescription());
-	}
 
 }

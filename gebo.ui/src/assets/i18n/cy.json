@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integreiddio Google Drive/Workspaces",
         "description" : "Ffurfweddu Gebo.ai i gael mynediad at ddata tîm Google cloud Drive/Workspaces"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Ffurfweddu api chwilio Google",
-        "description" : "Ffurfweddu manylion mewngofnodi api chwilio Google ar gyfer chwiliadau gwe AI"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Ffurfweddu Deep search",
-        "description" : "Ffurfweddu paramedrau Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Disgrifiad"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Canslo"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Allwedd api chwilio Google"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Creu manylion mewngofnodi chwilio Google"
-      },
-      "CreateBtn" : {
-        "label" : "Creu"
-      },
-      "customSearchEngineId" : {
-        "label" : "Id peiriant chwilio",
-        "help" : "Rhowch yr id peiriant chwilio a gafwyd wrth gofrestru manylion mewngofnodi api chwilio Google."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Cod ffurfweddiad"
-      },
-      "DescriptionHeader" : {
-        "label" : "Disgrifiad"
-      },
-      "apiKey" : {
-        "label" : "Allwedd api",
-        "help" : "Rhowch yr allwedd api a gafwyd wrth gofrestru manylion mewngofnodi api chwilio Google."
-      },
-      "MainPanel" : {
-        "label" : "Ffurfweddu api chwilio Google"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Dileu",
-        "help" : "Dileu manylion mewngofnodi api chwilio Google"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Ffurfweddiad Deep search",
-        "help" : "Ychwanegu ffurfweddiad deep search"
-      },
-      "EditSystemBtn" : {
-        "label" : "Golygu ffurfweddiad"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ydych chi'n siŵr eich bod chi eisiau dileu'r sgwrs hon?",
         "header" : "Gweithred dileu sgwrs"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ni allwch ddileu hwn",
         "detail" : "Cyfeirir at y gwrthrych hwn o rannau eraill o’r cymhwysiad"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Eithriad yn ystod y weithred: Gwall wrth weithio gyda url:http://localhost:11434/v1/models",
-        "detail" : "Gwall gweinydd: Gwall wrth weithio gyda url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Eithriad yn ystod y weithred: rhaid gosod apiKey",
-        "detail" : "Gwall gweinydd: rhaid gosod apiKey"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Gwall wrth ffrydio ymateb sgwrsio",
-        "detail" : "Gwall gweinydd: 400 Cais Annilys gan POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Hunaniaeth sydd wedi'i ddefnyddio",
         "help" : "Dewiswch neu crëwch hunaniaeth i gael mynediad i'r system google drive"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Sgwrs"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Yn chwilio am wybodaeth berthnasol"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Yn cadarnhau'r adroddiad terfynol"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Canlyniad chwilio a ddadansoddwyd"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Canlyniad chwilio system a ddadansoddwyd ar gyfer"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Mewnosod"
-      },
-      "CancelBtn" : {
-        "label" : "Canslo"
-      },
-      "DeleteBtn" : {
-        "label" : "Dileu"
-      },
-      "SearchSettingTab" : {
-        "label" : "Gosodiad chwilio"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Mewnosod prompt ar gyfer tynnu gwybodaeth berthnasol o ddogfennau"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Mewnosod prompt ar gyfer cyfuno gwybodaeth berthnasol sydd wedi'i dynnu"
-      },
-      "MainPanel" : {
-        "label" : "Yn golygu ffurfweddiad deep search"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Gosodiad model iaith mawr"
-      },
-      "description" : {
-        "label" : "Disgrifiad",
-        "help" : "Rhowch ddisgrifiad o ffurfweddiad deep search"
-      },
-      "code" : {
-        "label" : "Cod Unigryw",
-        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y ffurfweddiad deep search"
-      },
-      "searchType" : {
-        "label" : "Math o chwiliad",
-        "help" : "Dewiswch rhwng chwiliad semantig un hop neu aml-hop"
-      },
-      "topK" : {
-        "label" : "Nifer y darnau testun a gafwyd (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "llm a ddefnyddir",
-        "help" : "Nodwch y model iaith mawr a ddefnyddir ar gyfer Deep search, bydd un diofyn yn cael ei ddefnyddio os na chaiff un ei ddewis."
-      },
-      "analisysPrompt" : {
-        "label" : "Prompt dadansoddi dogfennau",
-        "help" : "Golygu'r prompt a fydd yn cael ei ddefnyddio ar gyfer tynnu gwybodaeth berthnasol o ddarnau dogfen."
-      },
-      "consolidationPrompt" : {
-        "label" : "Prompt cyfuno gwybodaeth a gafwyd",
-        "help" : "Golygu'r prompt a fydd yn cael ei ddefnyddio i gyfuno mewn adroddiad sengl y wybodaeth berthnasol sydd wedi'i thynnu o ddogfennau a gafwyd."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Trothwy tebygrwydd chwilio",
-        "help" : "Trothwy tebygrwydd semantig hop cyntaf (rhwng 0.5 a 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Trothwy tebygrwydd ail hop",
-        "help" : "Trothwy tebygrwydd semantig ail hop (rhwng 0.5 a 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Model iaith mawr diofyn",
-        "help" : "Bydd y model iaith mawr diofyn yn cael ei ddefnyddio ar gyfer prosesu Deep search"
-      },
-      "similarityThreashold" : {
-        "label" : "Trothwy tebygrwydd chwilio",
-        "help" : "Trothwy tebygrwydd semantig (rhwng 0.5 a 1.0)"
       }
     }
   }

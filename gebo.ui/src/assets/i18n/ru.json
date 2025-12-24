@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Интеграция Google Drive/Workspaces",
         "description" : "Настройте Gebo.ai для доступа к данным вашей команды в Google cloud Drive/Workspaces"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Настроить Google search api",
-        "description" : "Настройте учетные данные Google search api для поиска в Интернете с помощью ИИ"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Настроить Deep search",
-        "description" : "Настройте параметры Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Описание"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Отмена"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Ключ Google search api"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Создать учетные данные google search"
-      },
-      "CreateBtn" : {
-        "label" : "Создать"
-      },
-      "customSearchEngineId" : {
-        "label" : "ID поисковой системы",
-        "help" : "Введите id поисковой системы, полученный при регистрации учетных данных google search api."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Код конфигурации"
-      },
-      "DescriptionHeader" : {
-        "label" : "Описание"
-      },
-      "apiKey" : {
-        "label" : "Api ключ",
-        "help" : "Введите api ключ, полученный при регистрации учетных данных google search api."
-      },
-      "MainPanel" : {
-        "label" : "Настройка google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Удалить",
-        "help" : "Удалить учетные данные Google search api"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Настройка Deep search",
-        "help" : "Добавить конфигурацию deep search"
-      },
-      "EditSystemBtn" : {
-        "label" : "Редактировать конфигурацию"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Вы уверены, что хотите удалить этот чат?",
         "header" : "Удаление чата"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Добавьте содержимое или измените поведение поиска"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Добавьте содержимое или измените поведение поиска"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Добавьте содержимое или измените поведение поиска"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Вы не можете это удалить",
         "detail" : "Этот объект используется в другой части приложения"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Исключение во время операции:Ошибка работы с url:http://localhost:11434/v1/models",
-        "detail" : "Ошибка сервера: Ошибка работы с url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Исключение во время операции: необходимо указать apiKey",
-        "detail" : "Ошибка сервера: необходимо указать apiKey"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Ошибка при потоковой передаче ответа чата",
-        "detail" : "Ошибка сервера: 400 Bad Request от POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Используемая идентификация",
         "help" : "Выберите или создайте идентификацию для доступа к системе google drive"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Чат"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Поиск релевантной информации"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Формируем итоговый отчет"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Анализированный результат поиска"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Анализированный результат системного поиска для"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Вставить"
-      },
-      "CancelBtn" : {
-        "label" : "Отмена"
-      },
-      "DeleteBtn" : {
-        "label" : "Удалить"
-      },
-      "SearchSettingTab" : {
-        "label" : "Настройки поиска"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Введите подсказку для извлечения релевантной информации из документов"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Введите подсказку для объединения извлеченной информации"
-      },
-      "MainPanel" : {
-        "label" : "Редактирование конфигурации deep search"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Настройки крупных языковых моделей"
-      },
-      "description" : {
-        "label" : "Описание",
-        "help" : "Введите описание конфигурации deep search"
-      },
-      "code" : {
-        "label" : "Уникальный код",
-        "help" : "Автоматически сгенерированный уникальный код для конфигурации deep search"
-      },
-      "searchType" : {
-        "label" : "Тип поиска",
-        "help" : "Выберите одноступенчатый семантический поиск или многоступенчатый"
-      },
-      "topK" : {
-        "label" : "Количество извлечённых текстовых сегментов (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Используемая llm",
-        "help" : "Укажите крупную языковую модель для Deep search, по умолчанию будет использована стандартная модель если не выбрано."
-      },
-      "analisysPrompt" : {
-        "label" : "Подсказка для анализа документов",
-        "help" : "Измените подсказку, которая будет использоваться для извлечения релевантной информации из фрагментов документов."
-      },
-      "consolidationPrompt" : {
-        "label" : "Подсказка для объединения информации",
-        "help" : "Измените подсказку для объединения в одном отчете релевантной информации, извлечённой из найденных документов."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Порог сходства поиска",
-        "help" : "Первый порог семантического сходства (от 0.5 до 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Порог сходства второго шага",
-        "help" : "Второй порог семантического сходства (от 0.5 до 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Модель крупного языка по умолчанию",
-        "help" : "Модель крупного языка по умолчанию будет использоваться для обработки Deep search"
-      },
-      "similarityThreashold" : {
-        "label" : "Порог сходства поиска",
-        "help" : "Порог семантического сходства (от 0.5 до 1.0)"
       }
     }
   }

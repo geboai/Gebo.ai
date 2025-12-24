@@ -96,9 +96,6 @@ public interface IGDocumentReferenceFactory {
 			String code, String name, String contentType, String url, Date modificationTimestamp,
 			HashMap<String, Object> meta, String moduleId) throws GeboContentHandlerSystemException;
 
-	public GDocumentReference createReference(Path newPath) throws GeboContentHandlerSystemException;
-
-	public GDocumentReference createReference(String uri, String name, String contentType, String extension, Long size)
-			throws GeboContentHandlerSystemException;
+	public GDocumentReference createReference(Path newPath) throws GeboContentHandlerSystemException ;
 
 }

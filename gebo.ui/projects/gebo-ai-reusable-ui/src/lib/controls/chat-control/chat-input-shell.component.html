@@ -2,8 +2,8 @@
   @if(currentDeepsearchChatRequest) {
   <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest"
                                  [mode]="'progress-only'"
-                                 (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)" [chatProfileCode]="chatInfo?.chatProfileCode" [nextRequestMode]="nextRequestMode"
-            (errorOccurredEvent)="onErrorOccurred($event)" (skipDeepSearchEvent)="onSkipDeepSearchEvent($event)"></gebo-ai-deep-search-component>
+                                 (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)"
+                                 (errorOccurredEvent)="onErrorOccurred($event)"></gebo-ai-deep-search-component>
   }
   <form [formGroup]="formGroup"
         (submit)="onSubmit()">

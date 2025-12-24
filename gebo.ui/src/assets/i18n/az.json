@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces inteqrasiyası",
         "description" : "Gebo.ai-nı Google cloud Drive/Workspaces komanda məlumatlarınıza çıxış üçün qurun"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Google axtarış api-ni qurun",
-        "description" : "AI veb axtarışlar üçün Google axtarış api məlumatlarını qurun"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Deep search-u qurun",
-        "description" : "Deep search parametrlərini qurun"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Təsvir"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Ləğv et"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google axtarış api açarı"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Google axtarış üçün məlumat yaradın"
-      },
-      "CreateBtn" : {
-        "label" : "Yarat"
-      },
-      "customSearchEngineId" : {
-        "label" : "Axtarış mühərriki id-si",
-        "help" : "Google axtarış api məlumatları qeydiyyatında əldə olunan axtarış mühərriki id-sini daxil edin."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Konfiq kodu"
-      },
-      "DescriptionHeader" : {
-        "label" : "Təsvir"
-      },
-      "apiKey" : {
-        "label" : "Api açarı",
-        "help" : "Google axtarış api məlumatları qeydiyyatında əldə olunan api açarını daxil edin."
-      },
-      "MainPanel" : {
-        "label" : "Google axtarış api-ni qur"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Sil",
-        "help" : "Google axtarış api məlumatlarını sil"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search konfiqi",
-        "help" : "Deep search konfiqurasiyası əlavə edin"
-      },
-      "EditSystemBtn" : {
-        "label" : "Konfiqi redaktə et"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Bu söhbəti silmək istədiyinizə əminsiniz?",
         "header" : "Söhbəti silmə əməliyyatı"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Bunu silə bilməzsiniz",
         "detail" : "Bu obyekt tətbiqin başqa hissəsindən istinad olunur"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Əməliyyat zamanı istisna: URL-lə işləmə zamanı xəta: http://localhost:11434/v1/models",
-        "detail" : "Server xətası: URL-lə işləmə zamanı xəta: http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Əməliyyat zamanı istisna: apiKey təyin edilməlidir",
-        "detail" : "Server xətası: apiKey təyin edilməlidir"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Chat cavabını axın zamanı xəta",
-        "detail" : "Server xətası: 400 Səhv Sorğu POST http://localhost:8000/v1/chat/completions ünvanından"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "İstifadə olunan şəxsiyyət",
         "help" : "Google drive sisteminə giriş üçün şəxsiyyəti seçin və ya yaradın"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Söhbət"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Əlaqədar məlumatlar axtarılır"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Son hesabat formalaşdırılır"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Təhlil edilmiş axtarış nəticəsi"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Sistem üçün təhlil edilmiş axtarış nəticəsi"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Əlavə et"
-      },
-      "CancelBtn" : {
-        "label" : "Ləğv et"
-      },
-      "DeleteBtn" : {
-        "label" : "Sil"
-      },
-      "SearchSettingTab" : {
-        "label" : "Axtarış tənzimləmələri"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Sənədlərin əlaqədar məlumatlarının çıxarılması üçün prompt daxil edin"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Çıxarılmış əlaqədar məlumatların birləşməsi üçün prompt daxil edin"
-      },
-      "MainPanel" : {
-        "label" : "Deep search konfiqurasiyasını redaktə etmək"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Böyük dil modeli tənzimləmələri"
-      },
-      "description" : {
-        "label" : "Təsvir",
-        "help" : "Deep search konfiqurasiyasının təsvirini daxil edin"
-      },
-      "code" : {
-        "label" : "Unikal Kod",
-        "help" : "Deep search konfiqurasiyasının avtomatik yaradılan unikal kodu"
-      },
-      "searchType" : {
-        "label" : "Axtarış növü",
-        "help" : "Birdəfəlik semantik axtarış və ya çox addımlı seçin"
-      },
-      "topK" : {
-        "label" : "Geri qaytarılan mətn fraqmentlərinin sayı (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "İstifadə olunan llm",
-        "help" : "Deep search üçün istifadə olunan böyük dil modelini göstər, heç biri seçilməzsə,\n                                    standart modeldən istifadə olunacaq."
-      },
-      "analisysPrompt" : {
-        "label" : "Sənədlərin analiz promptu",
-        "help" : "Sənədlər fraqmentlərindən əlaqədar məlumatların çıxarılması üçün istifadə olunacaq promptu redaktə edin."
-      },
-      "consolidationPrompt" : {
-        "label" : "Çıxarılmış məlumatların birləşməsi promptu",
-        "help" : "Geri qaytarılmış sənədlərdən çıxarılan əlaqədar məlumatların bir hesabatda birləşdirilməsi üçün istifadə olunacaq promptu redaktə edin."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Axtarış oxşarlıq həddi",
-        "help" : "Birinci addım üçün semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "İkinci addım oxşarlıq həddi",
-        "help" : "İkinci addım üçün semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
-      },
-      "defaultModel" : {
-        "label" : "Standart böyük dil modeli",
-        "help" : "Standart böyük dil modeli Deep search üçün istifadə olunacaq"
-      },
-      "similarityThreashold" : {
-        "label" : "Axtarış oxşarlıq həddi",
-        "help" : "Semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
       }
     }
   }

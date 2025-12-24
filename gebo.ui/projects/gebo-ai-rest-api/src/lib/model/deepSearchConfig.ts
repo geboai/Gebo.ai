@@ -19,7 +19,6 @@ export interface DeepSearchConfig {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    searchType: DeepSearchConfig.SearchTypeEnum;
     consolidationPrompt?: string;
     analisysPrompt?: string;
     ragQueryOptions?: RagQueryOptions;
@@ -30,11 +29,4 @@ export interface DeepSearchConfig {
     chatModelConfiguration?: GObjectRefGBaseChatModelConfig;
     defaultConfig?: boolean;
     chatProfileCode?: string;
-}
-export namespace DeepSearchConfig {
-    export type SearchTypeEnum = 'SINGLE_HOP' | 'MULTI_HOP';
-    export const SearchTypeEnum = {
-        SINGLEHOP: 'SINGLE_HOP' as SearchTypeEnum,
-        MULTIHOP: 'MULTI_HOP' as SearchTypeEnum
-    };
 }

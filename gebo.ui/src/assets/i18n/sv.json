@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces-integration",
         "description" : "Konfigurera Gebo.ai för att få åtkomst till ditt Google cloud Drive/Workspaces teamdata"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Konfigurera Google search api",
-        "description" : "Konfigurera Google search api-uppgifter för AI-webbsökningar"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Konfigurera Deep search",
-        "description" : "Konfigurera parametrar för Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Beskrivning"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Avbryt"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api-nyckel"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Skapa Google search-uppgifter"
-      },
-      "CreateBtn" : {
-        "label" : "Skapa"
-      },
-      "customSearchEngineId" : {
-        "label" : "Sökmotor-id",
-        "help" : "Ange sökmotor-id som du fått vid registreringen av Google search api-uppgifter."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Konfigurationskod"
-      },
-      "DescriptionHeader" : {
-        "label" : "Beskrivning"
-      },
-      "apiKey" : {
-        "label" : "Api-nyckel",
-        "help" : "Ange api-nyckeln som du fått vid registreringen av Google search api-uppgifter."
-      },
-      "MainPanel" : {
-        "label" : "Konfigurera Google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Ta bort",
-        "help" : "Ta bort Google search api-uppgifter"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search-konfiguration",
-        "help" : "Lägg till en deep search-konfiguration"
-      },
-      "EditSystemBtn" : {
-        "label" : "Redigera konfiguration"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Är du säker på att du vill ta bort denna chat?",
         "header" : "Ta bort chatåtgärd"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Lägg till innehåll eller ändra sökbeteende"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Lägg till innehåll eller ändra sökbeteende"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Lägg till innehåll eller ändra sökbeteende"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Du kan inte ta bort detta",
         "detail" : "Detta objekt är refererat från en annan del av applikationen"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Undantag vid åtgärd: Fel vid arbete med url:http://localhost:11434/v1/models",
-        "detail" : "Serverfel: Fel vid arbete med url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Undantag vid åtgärd: apiKey måste anges",
-        "detail" : "Serverfel: apiKey måste anges"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Fel vid strömmande svarsmeddelande i chatten",
-        "detail" : "Serverfel: 400 Felaktig begäran från POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Använd identitet",
         "help" : "Välj eller skapa en identitet för åtkomst till Google Drive-systemet"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Chatt"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Söker efter relevant information"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Sammanställer slutrapporten"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Analyserat sökresultat"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Analyserat systemsökresultat för"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Infoga"
-      },
-      "CancelBtn" : {
-        "label" : "Avbryt"
-      },
-      "DeleteBtn" : {
-        "label" : "Ta bort"
-      },
-      "SearchSettingTab" : {
-        "label" : "Sökinställning"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Ange prompt för extrahering av relevant information ur dokument"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Ange prompt för konsolidering av extraherad relevant information"
-      },
-      "MainPanel" : {
-        "label" : "Redigerar deep search-konfiguration"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Inställning för stort språkmodell"
-      },
-      "description" : {
-        "label" : "Beskrivning",
-        "help" : "Ange beskrivning av deep search-konfigurationen"
-      },
-      "code" : {
-        "label" : "Unik kod",
-        "help" : "Automatiskt genererad unik kod för deep search-konfigurationen"
-      },
-      "searchType" : {
-        "label" : "Söktyp",
-        "help" : "Välj mellan enkel hopp-sökning eller flera hopp"
-      },
-      "topK" : {
-        "label" : "Antal hämtade textsegment (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Använd llm",
-        "help" : "Ange vilken stor språkmodell som används för Deep search, standardmodell används om ingen väljs."
-      },
-      "analisysPrompt" : {
-        "label" : "Prompt för dokumentanalys",
-        "help" : "Redigera prompten som används för att extrahera relevant information från dokumentfragment."
-      },
-      "consolidationPrompt" : {
-        "label" : "Prompt för konsolidering av extraherad information",
-        "help" : "Redigera prompten som används för att sammanställa all relevant information som extraherats från hämtade dokument till en rapport."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Tröskelvärde för söklikhet",
-        "help" : "Första hoppets semantiska likhetströskel (mellan 0,5 och 1,0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Tröskelvärde för andra hoppets likhet",
-        "help" : "Andra hoppets semantiska likhetströskel (mellan 0,5 och 1,0)"
-      },
-      "defaultModel" : {
-        "label" : "Förvald stor språkmodell",
-        "help" : "Förvald stor språkmodell används för Deep search-bearbetning"
-      },
-      "similarityThreashold" : {
-        "label" : "Tröskelvärde för söklikhet",
-        "help" : "Semantisk likhetströskel (mellan 0,5 och 1,0)"
       }
     }
   }

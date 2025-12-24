@@ -6,6 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
+ 
+ 
+ 
 
 package ai.gebo.core.contents.security.services.impl;
 
@@ -19,20 +22,18 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 /**
- * Service implementation for managing the visibility of knowledge bases. AI
- * generated comments
+ * Service implementation for managing the visibility of knowledge bases.
+ * AI generated comments
  */
 @Service
 public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisibilityService {
-
+	
 	// Repository for accessing knowledge base data
 	@Autowired
 	KnowledgeBaseRepository kbRepository;
-
+	
 	// Security service for managing access control
 	@Autowired
 	IGSecurityService securityService;
@@ -55,8 +56,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	}
 
 	/**
-	 * Retrieves visible knowledge bases and their child knowledge bases based on
-	 * provided root codes.
+	 * Retrieves visible knowledge bases and their child knowledge bases based on provided root codes.
 	 *
 	 * @param rootkbCodes - List of root knowledge base codes.
 	 * @return List of visible knowledge bases including children.
@@ -99,12 +99,6 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GKnowledgeBase> allVisibleRootKnowledgebases() {
 		List<GKnowledgeBase> list = kbRepository.findByParentKnowledgebaseCodeIsNull();
-		return securityService.filterAccessible(list, true);
-	}
-
-	@Override
-	public List<GKnowledgeBase> getVisibleKnowledgeBaseByCodes(@NotNull @NotEmpty List<String> codes) {
-		List<GKnowledgeBase> list = kbRepository.findAllById(codes);
 		return securityService.filterAccessible(list, true);
 	}
 

@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Інтеграція Google Drive/Workspaces",
         "description" : "Налаштуйте Gebo.ai для доступу до даних вашої команди в Google cloud Drive/Workspaces"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Налаштувати Google search api",
-        "description" : "Налаштуйте облікові дані Google search api для AI-пошуку в Інтернеті"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Налаштувати Deep search",
-        "description" : "Налаштуйте параметри Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Опис"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Скасувати"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api ключ"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Створити облікові дані google search"
-      },
-      "CreateBtn" : {
-        "label" : "Створити"
-      },
-      "customSearchEngineId" : {
-        "label" : "ID пошукової системи",
-        "help" : "Введіть ID пошукової системи, отриманий під час реєстрації облікових даних google search api."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Код конфігурації"
-      },
-      "DescriptionHeader" : {
-        "label" : "Опис"
-      },
-      "apiKey" : {
-        "label" : "Api ключ",
-        "help" : "Введіть api ключ, отриманий під час реєстрації облікових даних google search api."
-      },
-      "MainPanel" : {
-        "label" : "Налаштування google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Видалити",
-        "help" : "Видалити облікові дані Google search api"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Налаштування Deep search",
-        "help" : "Додати конфігурацію deep search"
-      },
-      "EditSystemBtn" : {
-        "label" : "Редагувати конфігурацію"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ви впевнені, що бажаєте видалити цей чат?",
         "header" : "Дія видалення чату"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Додати вміст або змінити поведінку пошуку"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Додати вміст або змінити поведінку пошуку"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Додати вміст або змінити поведінку пошуку"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ви не можете видалити це",
         "detail" : "На цей об'єкт посилаються інші частини додатка"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Виняток під час операції:Помилка роботи з url:http://localhost:11434/v1/models",
-        "detail" : "Помилка сервера: Помилка роботи з url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Виняток під час операції:apiKey має бути встановлений",
-        "detail" : "Помилка сервера: apiKey має бути встановлений"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Помилка під час передавання відповіді чату",
-        "detail" : "Помилка сервера: 400 Bad Request при POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Використана ідентичність",
         "help" : "Виберіть або створіть ідентифікатор для доступу до системи google drive"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Чат"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Пошук релевантної інформації"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Формування підсумкового звіту"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Аналізований результат пошуку"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Аналізований результат системного пошуку для"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Додати"
-      },
-      "CancelBtn" : {
-        "label" : "Скасувати"
-      },
-      "DeleteBtn" : {
-        "label" : "Видалити"
-      },
-      "SearchSettingTab" : {
-        "label" : "Налаштування пошуку"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Введіть запит для витягу релевантної інформації з документів"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Введіть запит для консолідації вилученої релевантної інформації"
-      },
-      "MainPanel" : {
-        "label" : "Редагування конфігурації deep search"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Налаштування великої мовної моделі"
-      },
-      "description" : {
-        "label" : "Опис",
-        "help" : "Введіть опис конфігурації deep search"
-      },
-      "code" : {
-        "label" : "Унікальний код",
-        "help" : "Автоматично згенерований унікальний код конфігурації deep search"
-      },
-      "searchType" : {
-        "label" : "Тип пошуку",
-        "help" : "Оберіть між семантичним пошуком з одним або декількома переходами"
-      },
-      "topK" : {
-        "label" : "Кількість знайдених текстових сегментів (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Використовувана llm",
-        "help" : "Вкажіть велику мовну модель для Deep search, буде використано типову, якщо жодна не вибрана."
-      },
-      "analisysPrompt" : {
-        "label" : "Запит для аналізу документів",
-        "help" : "Редагуйте запит, який використовуватиметься для витягу релевантної інформації з фрагментів документів."
-      },
-      "consolidationPrompt" : {
-        "label" : "Запит для консолідації вилученої інформації",
-        "help" : "Редагуйте запит, який використовуватиметься для створення підсумкового звіту з релевантної інформації, отриманої з документів."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Поріг схожості пошуку",
-        "help" : "Поріг семантичної схожості першого переходу (від 0.5 до 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Поріг схожості другого переходу",
-        "help" : "Поріг семантичної схожості другого переходу (від 0.5 до 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Типова велика мовна модель",
-        "help" : "Типова велика мовна модель буде використовуватися для обробки Deep search"
-      },
-      "similarityThreashold" : {
-        "label" : "Поріг схожості пошуку",
-        "help" : "Поріг семантичної схожості (від 0.5 до 1.0)"
       }
     }
   }

@@ -1,4 +1,4 @@
-package ai.gebo.llms.deepsearch.model.events;
+package ai.gebo.llms.deepsearch.model;
 
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;

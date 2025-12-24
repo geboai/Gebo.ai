@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integració de Google Drive/Workspaces",
         "description" : "Configura Gebo.ai per accedir a les dades d'equip de Google cloud Drive/Workspaces"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Configura Google search api",
-        "description" : "Configura les credencials de Google search api per a cerques web amb IA"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Configura Deep search",
-        "description" : "Configura els paràmetres de Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Descripció"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Cancel·la"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Clau Google search api"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Crea credencials de google search"
-      },
-      "CreateBtn" : {
-        "label" : "Crea"
-      },
-      "customSearchEngineId" : {
-        "label" : "Identificador del motor de cerca",
-        "help" : "Introdueix l'identificador del motor de cerca obtingut en el registre de credencials de google search api."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Codi de configuració"
-      },
-      "DescriptionHeader" : {
-        "label" : "Descripció"
-      },
-      "apiKey" : {
-        "label" : "Clau Api",
-        "help" : "Introdueix la clau api obtinguda en el registre de credencials de google search api."
-      },
-      "MainPanel" : {
-        "label" : "Configura google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Elimina",
-        "help" : "Elimina les credencials de Google search api"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Configuració Deep search",
-        "help" : "Afegeix una configuració de deep search"
-      },
-      "EditSystemBtn" : {
-        "label" : "Edita configuració"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Estàs segur que vols suprimir aquest xat?",
         "header" : "Acció de suprimir xat"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Afegeix contingut o modifica el comportament de la cerca"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Afegeix contingut o modifica el comportament de la cerca"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Afegeix contingut o modifica el comportament de la cerca"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "No pots suprimir això",
         "detail" : "Aquest objecte està referenciat des d’altres parts de l’aplicació"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Excepció durant l'operació: Error treballant amb url:http://localhost:11434/v1/models",
-        "detail" : "Error del servidor: Error treballant amb url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Excepció durant l'operació: s'ha d'establir apiKey",
-        "detail" : "Error del servidor: s'ha d'establir apiKey"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Error durant la transmissió de la resposta del xat",
-        "detail" : "Error del servidor: 400 Sol·licitud incorrecta des de POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Identitat utilitzada",
         "help" : "Selecciona o crea la identitat per accedir al sistema google drive"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Xat"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Cercant informacions rellevants"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Consolidant l'informe final"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Resultat de cerca analitzat"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Resultat de cerca al sistema analitzat per a"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Insereix"
-      },
-      "CancelBtn" : {
-        "label" : "Cancel·la"
-      },
-      "DeleteBtn" : {
-        "label" : "Elimina"
-      },
-      "SearchSettingTab" : {
-        "label" : "Paràmetres de cerca"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Introdueix una prompt per extreure informació rellevant dels documents"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Introdueix una prompt per consolidar la informació rellevant extreta"
-      },
-      "MainPanel" : {
-        "label" : "Editant configuració de deep search"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Paràmetres del model de llenguatge"
-      },
-      "description" : {
-        "label" : "Descripció",
-        "help" : "Introdueix la descripció de la configuració de deep search"
-      },
-      "code" : {
-        "label" : "Codi únic",
-        "help" : "Codi únic generat automàticament de la configuració de deep search"
-      },
-      "searchType" : {
-        "label" : "Tipus de cerca",
-        "help" : "Selecciona entre cerca semàntica d'un salt o de múltiples salts"
-      },
-      "topK" : {
-        "label" : "Nombre de segments de text recuperats (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Llm usat",
-        "help" : "Especifica el model de llenguatge utilitzat per a Deep search. S'utilitzarà el predeterminat si no se'n selecciona cap."
-      },
-      "analisysPrompt" : {
-        "label" : "Prompt d'anàlisi de documents",
-        "help" : "Edita la prompt que s'utilitzarà per extreure informació rellevant dels fragments de documents."
-      },
-      "consolidationPrompt" : {
-        "label" : "Prompt de consolidació d'informació extreta",
-        "help" : "Edita la prompt que s'utilitzarà per consolidar en un únic informe la informació rellevant extreta dels documents recuperats."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Llindar de similitud de cerca",
-        "help" : "Llindar de similitud semàntica del primer salt (entre 0,5 i 1,0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Llindar de similitud del segon salt",
-        "help" : "Llindar de similitud semàntica del segon salt (entre 0,5 i 1,0)"
-      },
-      "defaultModel" : {
-        "label" : "Model de llenguatge predeterminat",
-        "help" : "El model de llenguatge predeterminat s'utilitzarà per al processament de Deep search"
-      },
-      "similarityThreashold" : {
-        "label" : "Llindar de similitud de cerca",
-        "help" : "Llindar de similitud semàntica (entre 0,5 i 1,0)"
       }
     }
   }

@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Comhtháthú Google Drive/Workspaces",
         "description" : "Cumraigh Gebo.ai chun do chuid sonraí foirne Google cloud Drive/Workspaces a rochtain"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Cumraigh Google search api",
-        "description" : "Cumraigh dintiúir Google search api le haghaidh cuardaigh gréasáin AI"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Cumraigh Deep search",
-        "description" : "Cumraigh paraiméadair Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Cur síos"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Cealaigh"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Eochair Google search api"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Cruthaigh dintiúir google search"
-      },
-      "CreateBtn" : {
-        "label" : "Cruthaigh"
-      },
-      "customSearchEngineId" : {
-        "label" : "Aitheantas inneall cuardaigh",
-        "help" : "Cuir isteach an t-aitheantas inneall cuardaigh a fuarthas le linn clárúchán dintiúir google search api."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Cód cumraíochta"
-      },
-      "DescriptionHeader" : {
-        "label" : "Cur síos"
-      },
-      "apiKey" : {
-        "label" : "Eochair api",
-        "help" : "Cuir isteach an eochair api a fuarthas le linn clárúchán dintiúir google search api."
-      },
-      "MainPanel" : {
-        "label" : "Socraigh google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Scrios",
-        "help" : "Scrios dintiúir Google search api"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Cumraíocht Deep search",
-        "help" : "Cuir cumraíocht deep search leis"
-      },
-      "EditSystemBtn" : {
-        "label" : "Cuir an chumraíocht in eagar"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "An bhfuil tú cinnte gur mian leat an comhrá seo a scriosadh?",
         "header" : "Gníomh scriosta comhrá"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ní féidir leat é seo a scriosadh",
         "detail" : "Tagraítear don réad seo ó chuid eile den fheidhmchlár"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Eisceacht le linn oibríochta: Earráid ag obair leis an url:http://localhost:11434/v1/models",
-        "detail" : "Earráid freastalaí: Earráid ag obair leis an url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Eisceacht le linn oibríochta: Caithfidh apiKey a bheith socraithe",
-        "detail" : "Earráid freastalaí: Caithfidh apiKey a bheith socraithe"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Earráid agus freagra comhrá á shruthú",
-        "detail" : "Earráid freastalaí: 400 Droch-Iarratas ó POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Aitheantas in úsáid",
         "help" : "Roghnaigh nó cruthaigh an taitheantas chun rochtain a fháil ar an gcóras google drive"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Comhrá"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Cuardach faisnéise ábhartha"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Á comhdhlúthú an tuarascáil deiridh"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Toradh cuardaigh anailísithe"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Toradh cuardaigh córas anailísithe do"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Ionsáigh"
-      },
-      "CancelBtn" : {
-        "label" : "Cealaigh"
-      },
-      "DeleteBtn" : {
-        "label" : "Scrios"
-      },
-      "SearchSettingTab" : {
-        "label" : "Socrú cuardaigh"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Cuir isteach luaigh do bhaint faisnéise ábhartha ó cháipéisí"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Cuir isteach luaigh do chomhdhlúthú na faisnéise bainte"
-      },
-      "MainPanel" : {
-        "label" : "Cumraíocht deep search á heagarthóireacht"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Socrú samhail teanga mhóir"
-      },
-      "description" : {
-        "label" : "Cur síos",
-        "help" : "Cuir isteach cur síos ar an gcumraíocht deep search"
-      },
-      "code" : {
-        "label" : "Cód uathúil",
-        "help" : "Cód uathúil ginte go huathoibríoch ar an gcumraíocht deep search"
-      },
-      "searchType" : {
-        "label" : "Cineál cuardaigh",
-        "help" : "Roghnaigh idir cuardach seimeantach hop amháin nó il-hop"
-      },
-      "topK" : {
-        "label" : "Líon na míreanna téacs a faightear (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Úsáid llm",
-        "help" : "Sonraigh an tsamhail teanga mhór le húsáid don Deep search, úsáidfear an ceann réamhshocraithe mura roghnaítear ceann."
-      },
-      "analisysPrompt" : {
-        "label" : "Luaigh anailíse do cháipéisí",
-        "help" : "Cuir in eagar an luaigh a úsáidfear chun faisnéis ábhartha a bhaint as codanna de cháipéisí."
-      },
-      "consolidationPrompt" : {
-        "label" : "Luaigh comhdhlúthaithe faisnéise bainte",
-        "help" : "Cuir in eagar an luaigh a úsáidfear chun faisnéis ábhartha bainte a chomhdhlúthú i dtuarascáil aonair ó cháipéisí faighte."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Tairseach cosúlachta cuardaigh",
-        "help" : "Tairseach cosúlachta seimeantaigh an chéad hop (idir 0.5 agus 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Tairseach cosúlachta an dara hop",
-        "help" : "Tairseach cosúlachta seimeantaigh an dara hop (idir 0.5 agus 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Samhail teanga mhór réamhshocraithe",
-        "help" : "Úsáidfear an samhail teanga mhór réamhshocraithe do phróiseáil Deep search"
-      },
-      "similarityThreashold" : {
-        "label" : "Tairseach cosúlachta cuardaigh",
-        "help" : "Tairseach cosúlachta seimeantaigh (idir 0.5 agus 1.0)"
       }
     }
   }

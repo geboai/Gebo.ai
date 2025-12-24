@@ -13,9 +13,6 @@ public interface DeepSearchRequestRepository extends IGBaseMongoDBRepository<Dee
 	public Page<DeepSearchRequest> findByUsername(String username, Pageable pageable);
 
 	public List<DeepSearchRequest> findByUsername(String username);
-
-	public List<DeepSearchRequest> findByUserChatContextCode(String userChatContextCode);
-
 	@Override
 	default Class<DeepSearchRequest> getManagedType() {
 		return DeepSearchRequest.class;

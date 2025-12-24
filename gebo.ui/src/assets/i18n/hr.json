@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integracija",
         "description" : "Konfigurirajte Gebo.ai za pristup podacima svog tima na Google cloud Drive/Workspaces"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Postavite Google search api",
-        "description" : "Postavite vjerodajnice Google search api za AI pretragu weba"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "Postavite Deep search",
-        "description" : "Postavite parametre za Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "Opis"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "Odustani"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api ključ"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Kreirajte Google search vjerodajnice"
-      },
-      "CreateBtn" : {
-        "label" : "Kreiraj"
-      },
-      "customSearchEngineId" : {
-        "label" : "ID tražilice",
-        "help" : "Unesite ID tražilice dobiven kod registracije Google search api vjerodajnica."
-      },
-      "ConfigCodeHeader" : {
-        "label" : "Kod postavki"
-      },
-      "DescriptionHeader" : {
-        "label" : "Opis"
-      },
-      "apiKey" : {
-        "label" : "API ključ",
-        "help" : "Unesite API ključ dobiven kod registracije Google search api vjerodajnica."
-      },
-      "MainPanel" : {
-        "label" : "Postavite Google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "Obriši",
-        "help" : "Obriši Google search api vjerodajnice"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search postavke",
-        "help" : "Dodajte konfiguraciju za deep search"
-      },
-      "EditSystemBtn" : {
-        "label" : "Uredi postavke"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Jeste li sigurni da želite obrisati ovaj chat?",
         "header" : "Akcija brisanja chata"
-      },
-      "PlusContextualMenu" : {
-        "help" : "Dodajte sadržaj ili promijenite ponašanje pretrage"
-      },
-      "[object HTMLElement]" : {
-        "help" : "Dodajte sadržaj ili promijenite ponašanje pretrage"
-      },
-      "ContextMenuBtn" : {
-        "help" : "Dodajte sadržaj ili promijenite ponašanje pretrage"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ne možete obrisati ovo",
         "detail" : "Na ovaj objekt se odnose drugi dijelovi aplikacije"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "Izuzetak tijekom operacije: Greška u radu s url:http://localhost:11434/v1/models",
-        "detail" : "Greška na poslužitelju: Greška u radu s url:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "Izuzetak tijekom operacije: apiKey mora biti postavljen",
-        "detail" : "Greška na poslužitelju: apiKey mora biti postavljen"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "Greška tijekom prijenosa chat odgovora",
-        "detail" : "Greška na poslužitelju: 400 Loš zahtjev iz POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "Korišteni identitet",
         "help" : "Odaberi ili kreiraj identitet za pristup google drive sustavu"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "Chat"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "Pretraživanje relevantnih informacija"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "Konsolidiranje završnog izvješća"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "Analizirani rezultat pretrage"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "Analizirani rezultat pretrage sustava za"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "Unesi"
-      },
-      "CancelBtn" : {
-        "label" : "Odustani"
-      },
-      "DeleteBtn" : {
-        "label" : "Obriši"
-      },
-      "SearchSettingTab" : {
-        "label" : "Postavke pretrage"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "Unesite prompt za ekstrakciju relevantnih informacija iz dokumenata"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "Unesite prompt za konsolidaciju izvučenih informacija"
-      },
-      "MainPanel" : {
-        "label" : "Uređivanje deep search konfiguracije"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "Postavke large language modela"
-      },
-      "description" : {
-        "label" : "Opis",
-        "help" : "Unesite opis deep search konfiguracije"
-      },
-      "code" : {
-        "label" : "Jedinstveni kod",
-        "help" : "Automatski generiran jedinstveni kod deep search konfiguracije"
-      },
-      "searchType" : {
-        "label" : "Tip pretrage",
-        "help" : "Odaberite između jednostruke semantičke pretrage ili višestruke"
-      },
-      "topK" : {
-        "label" : "Broj dohvaćenih tekstualnih segmenata (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "Korišteni llm",
-        "help" : "Navedite large language model koji se koristi za Deep search, zadani će se koristiti\n                                    ako nijedan nije odabran."
-      },
-      "analisysPrompt" : {
-        "label" : "Prompt za analizu dokumenata",
-        "help" : "Uredite prompt koji će se koristiti za ekstrakciju relevantnih informacija iz dijelova dokumenata."
-      },
-      "consolidationPrompt" : {
-        "label" : "Prompt za konsolidaciju izvučenih informacija",
-        "help" : "Uredite prompt koji će se koristiti za konsolidaciju u jedno izvješće relevantnih informacija iz dohvaćenih dokumenata."
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "Prag sličnosti pretrage",
-        "help" : "Prvi prag semantičke sličnosti (između 0.5 i 1.0)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "Drugi prag sličnosti pretrage",
-        "help" : "Drugi prag semantičke sličnosti (između 0.5 i 1.0)"
-      },
-      "defaultModel" : {
-        "label" : "Zadani large language model",
-        "help" : "Zadani large language model koristit će se za procesiranje Deep search-a"
-      },
-      "similarityThreashold" : {
-        "label" : "Prag sličnosti pretrage",
-        "help" : "Prag semantičke sličnosti (između 0.5 i 1.0)"
       }
     }
   }

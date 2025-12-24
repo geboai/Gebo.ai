@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces انضمام",
         "description" : "Gebo.ai کو اپنی Google cloud Drive/Workspaces ٹیم ڈیٹا تک رسائی کے لیے ترتیب دیں"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "Google search api ترتیب دیں",
-        "description" : "AI ویب تلاشوں کے لیے Google search api اسناد ترتیب دیں"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "ڈیپ سرچ ترتیب دیں",
-        "description" : "ڈیپ سرچ کے پیرامیٹرز ترتیب دیں"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "تفصیل"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "منسوخ کریں"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api کی"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "Google search اسناد بنائیں"
-      },
-      "CreateBtn" : {
-        "label" : "بنائیں"
-      },
-      "customSearchEngineId" : {
-        "label" : "سرچ انجن ID",
-        "help" : "Google search api اسناد کے اندراج میں حاصل شدہ سرچ انجن ID درج کریں۔"
-      },
-      "ConfigCodeHeader" : {
-        "label" : "کنفگ کوڈ"
-      },
-      "DescriptionHeader" : {
-        "label" : "تفصیل"
-      },
-      "apiKey" : {
-        "label" : "API کی",
-        "help" : "Google search api اسناد کے اندراج میں حاصل شدہ API کی درج کریں۔"
-      },
-      "MainPanel" : {
-        "label" : "Google search api سیٹ اپ کریں"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "حذف کریں",
-        "help" : "Google search api اسناد حذف کریں"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "ڈیپ سرچ کنفگ",
-        "help" : "ڈیپ سرچ کنفیگریشن شامل کریں"
-      },
-      "EditSystemBtn" : {
-        "label" : "کنفگ میں ترمیم کریں"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "کیا آپ واقعی اس چیٹ کو حذف کرنا چاہتے ہیں؟",
         "header" : "چیٹ حذف کرنے کا عمل"
-      },
-      "PlusContextualMenu" : {
-        "help" : "مواد شامل کریں یا تلاش کے رویے میں ترمیم کریں"
-      },
-      "[object HTMLElement]" : {
-        "help" : "مواد شامل کریں یا تلاش کے رویے میں ترمیم کریں"
-      },
-      "ContextMenuBtn" : {
-        "help" : "مواد شامل کریں یا تلاش کے رویے میں ترمیم کریں"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "آپ اسے حذف نہیں کر سکتے",
         "detail" : "اس آبجیکٹ کا حوالہ ایپلیکیشن کے دوسرے حصے میں دیا گیا ہے"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "آپریشن کے دوران استثنا: URL پر کام کرتے وقت خرابی:http://localhost:11434/v1/models",
-        "detail" : "سرور کی خرابی: URL پر کام کرتے وقت خرابی:http://localhost:11434/v1/models"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "آپریشن کے دوران استثنا: apiKey سیٹ کرنا ضروری ہے",
-        "detail" : "سرور کی خرابی: apiKey سیٹ کرنا ضروری ہے"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "چیٹ جواب اسٹریم کرتے وقت خرابی",
-        "detail" : "سرور کی خرابی: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "استعمال شدہ شناخت",
         "help" : "google drive سسٹم تک رسائی کے لئے شناخت منتخب کریں یا بنائیں"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "چیٹ"
-      },
-      "deep-search" : {
-        "label" : "ڈیپ سرچ"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "ڈیپ سرچ"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "متعلقہ معلومات تلاش کی جا رہی ہیں"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "حتمی رپورٹ مجتمع کی جا رہی ہے"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "تجزیہ شدہ تلاش کا نتیجہ"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "کے لئے تجزیہ شدہ سسٹم تلاش کا نتیجہ"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "درج کریں"
-      },
-      "CancelBtn" : {
-        "label" : "منسوخ کریں"
-      },
-      "DeleteBtn" : {
-        "label" : "حذف کریں"
-      },
-      "SearchSettingTab" : {
-        "label" : "تلاش کی سیٹنگ"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "دستاویزات کی متعلقہ معلومات اخذ کرنے کے لیے پرامپٹ درج کریں"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "اخذ شدہ متعلقہ معلومات مجتمع کرنے کے لیے پرامپٹ درج کریں"
-      },
-      "MainPanel" : {
-        "label" : "ڈیپ سرچ کنفیگریشن میں ترمیم کی جا رہی ہے"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "بڑی لینگویج ماڈل سیٹنگ"
-      },
-      "description" : {
-        "label" : "تفصیل",
-        "help" : "ڈیپ سرچ کنفیگریشن کی تفصیل درج کریں"
-      },
-      "code" : {
-        "label" : "یونیک کوڈ",
-        "help" : "ڈیپ سرچ کنفیگریشن کا خودکار طور پر بننے والا یونیک کوڈ"
-      },
-      "searchType" : {
-        "label" : "تلاش کی قسم",
-        "help" : "سنگل ہاپ سیمنٹک سرچ یا ملٹی ہاپ میں سے انتخاب کریں"
-      },
-      "topK" : {
-        "label" : "واپس آنے والے متن کے حصے کی تعداد (TopK)"
-      },
-      "chatModelConfiguration" : {
-        "label" : "استعمال شدہ LLM",
-        "help" : "ڈیپ سرچ کے لیے استعمال ہونے والا بڑی لینگویج ماڈل منتخب کریں، اگر کوئی منتخب نہ ہو تو ڈیفالٹ استعمال ہوگا۔"
-      },
-      "analisysPrompt" : {
-        "label" : "دستاویزات تجزیہ پرامپٹ",
-        "help" : "وہ پرامپٹ ایڈٹ کریں جو دستاویزات کے ٹکڑوں سے متعلقہ معلومات اخذ کرنے کے لیے استعمال ہو گا۔"
-      },
-      "consolidationPrompt" : {
-        "label" : "اخذ شدہ معلومات کے انضمام کے لیے پرامپٹ",
-        "help" : "وہ پرامپٹ ایڈٹ کریں جو ریٹریو شدہ دستاویزات سے اخذ شدہ متعلقہ معلومات کو ایک رپورٹ میں مجتمع کرے گا۔"
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "تلاش کے مشابہت کی حد",
-        "help" : "پہلے ہاپ کی سیمنٹک مشابہت کی حد (0.5 سے 1.0 کے درمیان)"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "دوسرے ہاپ کی مشابہت کی حد",
-        "help" : "دوسرے ہاپ کی سیمنٹک مشابہت کی حد (0.5 سے 1.0 کے درمیان)"
-      },
-      "defaultModel" : {
-        "label" : "ڈیفالٹ بڑی لینگویج ماڈل",
-        "help" : "ڈیپ سرچ پروسیسنگ کے لیے ڈیفالٹ بڑی لینگویج ماڈل استعمال ہو گا"
-      },
-      "similarityThreashold" : {
-        "label" : "تلاش کے مشابہت کی حد",
-        "help" : "سیمنٹک مشابہت کی حد (0.5 سے 1.0 کے درمیان)"
       }
     }
   }

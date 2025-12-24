@@ -32,7 +32,7 @@ public class GeboDeepSearchAdminController {
 
 	@GetMapping(value = "getDeepSearchSystemConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DeepSearchConfig getDeepSearchSystemConfig() {
-		return new DeepSearchConfig(deepSearchDefaultConfig);
+		return deepSearchDefaultConfig;
 	}
 
 	@GetMapping(value = "getDeepSearchDefaultConfig", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -173,14 +173,6 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces 集成",
         "description" : "配置 Gebo.ai 以访问您的 Google 云端硬盘/Workspaces 团队数据"
-      },
-      "googleSearchApiSetupSection" : {
-        "label" : "配置 Google search api",
-        "description" : "为 AI 网页搜索配置 Google search api 凭据"
-      },
-      "deepSearchApiSetupSection" : {
-        "label" : "配置 Deep search",
-        "description" : "配置 Deep search 参数"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -452,48 +444,6 @@
       },
       "DescriptionHeader" : {
         "label" : "描述"
-      }
-    },
-    "GeboAIGoogleSearchWizardComponent" : {
-      "CancelBtn" : {
-        "label" : "取消"
-      },
-      "GoogleSearchCredentialsBtn" : {
-        "label" : "Google search api 密钥"
-      },
-      "CreateCredentialsPanel" : {
-        "label" : "创建 google search 凭据"
-      },
-      "CreateBtn" : {
-        "label" : "创建"
-      },
-      "customSearchEngineId" : {
-        "label" : "搜索引擎 ID",
-        "help" : "输入在 Google search api 凭据注册中获得的搜索引擎 ID。"
-      },
-      "ConfigCodeHeader" : {
-        "label" : "配置代码"
-      },
-      "DescriptionHeader" : {
-        "label" : "描述"
-      },
-      "apiKey" : {
-        "label" : "API 密钥",
-        "help" : "输入在 Google search api 凭据注册中获得的 API 密钥。"
-      },
-      "MainPanel" : {
-        "label" : "设置 google search api"
-      },
-      "DeleteCredentialsBtn" : {
-        "label" : "删除",
-        "help" : "删除 Google search api 凭据"
-      },
-      "AddDeepSearchBtn" : {
-        "label" : "Deep search 配置",
-        "help" : "添加一个 deep search 配置"
-      },
-      "EditSystemBtn" : {
-        "label" : "编辑配置"
       }
     }
   },
@@ -1848,15 +1798,6 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "你确定要删除此聊天吗？",
         "header" : "删除聊天操作"
-      },
-      "PlusContextualMenu" : {
-        "help" : "添加内容或修改搜索行为"
-      },
-      "[object HTMLElement]" : {
-        "help" : "添加内容或修改搜索行为"
-      },
-      "ContextMenuBtn" : {
-        "help" : "添加内容或修改搜索行为"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3114,18 +3055,6 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "你无法删除这个",
         "detail" : "该对象被应用程序的其他部分引用"
-      },
-      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
-        "summary" : "操作过程中发生异常：处理 url:http://localhost:11434/v1/models 时出错",
-        "detail" : "服务器错误：处理 url:http://localhost:11434/v1/models 时出错"
-      },
-      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
-        "summary" : "操作过程中发生异常：必须设置 apiKey",
-        "detail" : "服务器错误：必须设置 apiKey"
-      },
-      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
-        "summary" : "流式聊天响应时出错",
-        "detail" : "服务器错误：POST http://localhost:8000/v1/chat/completions 返回 400 Bad Request"
       }
     }
   },
@@ -3279,106 +3208,6 @@
       "driveAccessSecret" : {
         "label" : "使用的身份",
         "help" : "选择或创建用于访问 google drive 系统的身份"
-      }
-    }
-  },
-  "GeboAIReusableChatModel" : {
-    "GeboAIChatInputShellComponent" : {
-      "standard-chat" : {
-        "label" : "聊天"
-      },
-      "deep-search" : {
-        "label" : "Deep search"
-      }
-    }
-  },
-  "GeboAIDeepSearchModule" : {
-    "GeboAIDeepSearchComponent" : {
-      "deepSearchUI" : {
-        "label" : "Deep Search"
-      },
-      "DeepSearchProcessingSearch" : {
-        "label" : "正在搜索相关信息"
-      },
-      "DeepSearchingConsolidating" : {
-        "label" : "正在整合最终报告"
-      },
-      "DeepSearchDataSourceProcessingDocument" : {
-        "label" : "已分析的搜索结果"
-      },
-      "DeepSearchDataSourceProcessing" : {
-        "label" : "已分析的系统搜索结果"
-      }
-    }
-  },
-  "GeboAIDeepSearchConfigAdminModule" : {
-    "DeepSearchConfig" : {
-      "InsertBtn" : {
-        "label" : "插入"
-      },
-      "CancelBtn" : {
-        "label" : "取消"
-      },
-      "DeleteBtn" : {
-        "label" : "删除"
-      },
-      "SearchSettingTab" : {
-        "label" : "搜索设置"
-      },
-      "analisysPromptCtrl" : {
-        "placeholder" : "输入用于文档相关信息提取的提示词"
-      },
-      "consolidationPromptCtrl" : {
-        "placeholder" : "输入用于提取信息整合的提示词"
-      },
-      "MainPanel" : {
-        "label" : "编辑 deep search 配置"
-      },
-      "LLmsSettingsTab" : {
-        "label" : "大语言模型设置"
-      },
-      "description" : {
-        "label" : "描述",
-        "help" : "输入 deep search 配置的描述"
-      },
-      "code" : {
-        "label" : "唯一代码",
-        "help" : "自动生成的 deep search 配置唯一代码"
-      },
-      "searchType" : {
-        "label" : "搜索类型",
-        "help" : "选择单跳语义搜索或多跳"
-      },
-      "topK" : {
-        "label" : "检索文本片段数量（TopK）"
-      },
-      "chatModelConfiguration" : {
-        "label" : "使用的 llm",
-        "help" : "指定 Deep search 使用的大语言模型，未选则使用默认模型。"
-      },
-      "analisysPrompt" : {
-        "label" : "文档分析提示词",
-        "help" : "编辑用于文档片段相关信息提取的提示。"
-      },
-      "consolidationPrompt" : {
-        "label" : "提取信息整合提示词",
-        "help" : "编辑将在单份报告中整合提取自检索文档的相关信息的提示。"
-      },
-      "firstHopSimilarityThreashold" : {
-        "label" : "搜索相似度阈值",
-        "help" : "首跳语义相似度阈值（0.5 至 1.0 之间）"
-      },
-      "secondHopSimilarityThreashold" : {
-        "label" : "二跳相似度阈值",
-        "help" : "二跳语义相似度阈值（0.5 至 1.0 之间）"
-      },
-      "defaultModel" : {
-        "label" : "默认大语言模型",
-        "help" : "默认大语言模型将用于 Deep search 处理"
-      },
-      "similarityThreashold" : {
-        "label" : "搜索相似度阈值",
-        "help" : "语义相似度阈值（0.5 至 1.0 之间）"
       }
     }
   }

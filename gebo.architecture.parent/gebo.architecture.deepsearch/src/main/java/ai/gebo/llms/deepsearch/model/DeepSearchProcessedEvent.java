@@ -1,8 +1,6 @@
-package ai.gebo.llms.deepsearch.model.events;
+package ai.gebo.llms.deepsearch.model;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import lombok.Data;
 
 

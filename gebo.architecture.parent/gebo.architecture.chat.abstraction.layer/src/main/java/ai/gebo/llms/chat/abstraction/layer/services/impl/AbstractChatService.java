@@ -48,8 +48,6 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFun
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatContext;
@@ -117,7 +115,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
 	final protected ChatHistoryConsolidationService historyConsolidationService;
-	final protected IGKnowledgebaseVisibilityService knowledgeBaseSecurityService;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	/**
@@ -599,11 +596,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		response.setQuery(request.getQuery());
 		response.setUserChatContextCode(context);
 		return response;
-	}
-
-	public List<GKnowledgeBase> getVisibleKnowledgeBases() {
-
-		return this.knowledgeBaseSecurityService.allVisibleKnowledgebases();
 	}
 
 }

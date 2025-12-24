@@ -15,8 +15,6 @@ package ai.gebo.core.contents.security.services;
 import java.util.List;
 
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * AI generated comments
@@ -61,6 +59,4 @@ public interface IGKnowledgebaseVisibilityService {
      * @return a list of visible root GKnowledgeBase instances.
      */
     public List<GKnowledgeBase> visiblesRootKnowledgebases(List<String> rootkbCodes);
-
-	public List<GKnowledgeBase> getVisibleKnowledgeBaseByCodes(@NotNull @NotEmpty List<String> codes);
 }

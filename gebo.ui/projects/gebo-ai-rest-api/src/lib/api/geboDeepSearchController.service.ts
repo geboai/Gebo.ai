@@ -17,12 +17,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { DeepSearchDataSourceDocumentResult } from '../model/deepSearchDataSourceDocumentResult';
-import { DeepSearchDataSourceResponse } from '../model/deepSearchDataSourceResponse';
 import { DeepSearchDocumentAnalisysResultStep } from '../model/deepSearchDocumentAnalisysResultStep';
 import { DeepSearchRequest } from '../model/deepSearchRequest';
 import { DeepSearchResponse } from '../model/deepSearchResponse';
-import { GBaseObject } from '../model/gBaseObject';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { PageDeepSearchDocumentAnalisysResultStep } from '../model/pageDeepSearchDocumentAnalisysResultStep';
 import { PageDeepSearchRequest } from '../model/pageDeepSearchRequest';
@@ -160,42 +157,6 @@ export class GeboDeepSearchControllerService {
     /**
      * 
      * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDeepSearchDataSources(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
-    public getDeepSearchDataSources(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
-    public getDeepSearchDataSources(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
-    public getDeepSearchDataSources(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/users/GeboDeepSearchController/getDeepSearchDataSources`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
      * @param deepSearchCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -230,100 +191,6 @@ export class GeboDeepSearchControllerService {
         ];
 
         return this.httpClient.request<DeepSearchRequest>('get',`${this.basePath}/api/users/GeboDeepSearchController/getMyDeepSearchById`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param deepSearchCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMyDeepSearchDataSourceDocumentResultsByRequestCode(deepSearchCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<DeepSearchDataSourceDocumentResult>>;
-    public getMyDeepSearchDataSourceDocumentResultsByRequestCode(deepSearchCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DeepSearchDataSourceDocumentResult>>>;
-    public getMyDeepSearchDataSourceDocumentResultsByRequestCode(deepSearchCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DeepSearchDataSourceDocumentResult>>>;
-    public getMyDeepSearchDataSourceDocumentResultsByRequestCode(deepSearchCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (deepSearchCode === null || deepSearchCode === undefined) {
-            throw new Error('Required parameter deepSearchCode was null or undefined when calling getMyDeepSearchDataSourceDocumentResultsByRequestCode.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (deepSearchCode !== undefined && deepSearchCode !== null) {
-            queryParameters = queryParameters.set('deepSearchCode', <any>deepSearchCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<DeepSearchDataSourceDocumentResult>>('get',`${this.basePath}/api/users/GeboDeepSearchController/getMyDeepSearchDataSourceDocumentResultsByRequestCode`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param deepSearchCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode(deepSearchCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<DeepSearchDataSourceResponse>>;
-    public getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode(deepSearchCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DeepSearchDataSourceResponse>>>;
-    public getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode(deepSearchCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DeepSearchDataSourceResponse>>>;
-    public getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode(deepSearchCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (deepSearchCode === null || deepSearchCode === undefined) {
-            throw new Error('Required parameter deepSearchCode was null or undefined when calling getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (deepSearchCode !== undefined && deepSearchCode !== null) {
-            queryParameters = queryParameters.set('deepSearchCode', <any>deepSearchCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<DeepSearchDataSourceResponse>>('get',`${this.basePath}/api/users/GeboDeepSearchController/getMyDeepSearchDeepSearchDataSourceResponsesByRequestCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

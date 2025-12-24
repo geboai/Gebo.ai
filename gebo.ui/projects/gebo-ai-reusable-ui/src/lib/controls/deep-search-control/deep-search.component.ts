@@ -1,28 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchRequest, DeepSearchResponse, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FormControl, FormGroup } from "@angular/forms";
+import { DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { MessageService, ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { forkJoin, Observable, of } from "rxjs";
-interface IChooseSources {
-    deepSearchDataSources?: string[];
-    knowledgeBases?: string[];
-}
-const atLeastAKnowledgeBaseOrSystemValidator: ValidatorFn = (ctrl) => {
-    const fg: FormGroup = ctrl as FormGroup;
-    const value: IChooseSources = fg.value;
-    const hasKBS: boolean = (value?.knowledgeBases ? true : false) && ((value?.knowledgeBases?.length && value?.knowledgeBases?.length > 0) ? true : false);
-    const hasSRC: boolean = (value?.deepSearchDataSources ? true : false) && ((value?.deepSearchDataSources?.length && value?.deepSearchDataSources?.length > 0) ? true : false);
-    let out: any | null = null;
-    if (!(hasKBS || hasSRC)) {
-        out = {
-            noSourceSelected: "noSrc"
-        };
-    }
-    return out;
-}
 @Component({
     selector: "gebo-ai-deep-search-component",
     templateUrl: "deep-search.component.html",
@@ -37,18 +19,11 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     @Input() currentDeepSearchRequest?: DeepSearchRequest;
     @Input() currentChatRequest?: GeboChatRequest;
     @Input() mode: "full-ui" | "progress-only" = "full-ui";
-    @Input() nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
-    @Input() chatProfileCode?: string;
     protected deepSearchProcessType?: "standalone" | "chat-context";
     @Output() deepSearchResponseReceived: EventEmitter<DeepSearchResponse> = new EventEmitter();
     @Output() deepSearchChatResponseReceived: EventEmitter<GeboChatResponse> = new EventEmitter();
-    @Output() skipDeepSearchEvent: EventEmitter<boolean> = new EventEmitter();
-    @Output() errorOccurredEvent: EventEmitter<any> = new EventEmitter();
+    @Output() errorOccurredEvent:EventEmitter<any>=new EventEmitter();
     protected streamingResponse: boolean = false;
-    protected loadingRelatedBackend: boolean = false;
-    protected choosableDataSources: GBaseObject[] = [];
-    protected choosableKnowledgeBases: GBaseObject[] = [];
-
 
     protected get loading(): boolean {
         return this.streamingResponse === true;
@@ -57,14 +32,9 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         code: new FormControl(),
         description: new FormControl(),
         query: new FormControl(),
-        knowledgeBases: new FormControl(),
-        deepSearchDataSources: new FormControl()
-    });
-    protected chooseDeepSearchDataSourcesFormGroup: FormGroup = new FormGroup({
-        deepSearchDataSources: new FormControl(),
         knowledgeBases: new FormControl()
-    });
 
+    });
     protected deepSearchResponse?: DeepSearchResponse;
     protected chatResponse?: GeboChatResponse;
     protected analisysStep?: {
@@ -72,35 +42,13 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         analisysPortion?: string,
         completionPercent?: number
     };
-    protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
-    protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected completionPercent: number = 0;
-    protected showChooseDataSourceDialog: boolean = false;
-    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
-        private deepSearchControllerService: GeboDeepSearchControllerService,
-        private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
-        private ragChatService: GeboRagChatControllerService,
-        private chatService: GeboChatControllerService,
-        private messageService: MessageService) {
-        this.chooseDeepSearchDataSourcesFormGroup.setValidators(atLeastAKnowledgeBaseOrSystemValidator);
+    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService, private messageService: MessageService) {
+
     }
     ngOnInit(): void {
 
     }
-    private clearEventsDisplay(): void {
-        this.deepSearchResponse = undefined;
-        this.deepSearchDataSourceDocumentResult = undefined;
-        this.deepSearchDataSourceResponse = undefined;
-        this.analisysStep = undefined;
-        this.deepSearchResponse = undefined;
-    }
-    protected get inEventsLoop(): boolean {
-        return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
-    }
-    protected get isDieplayingDeepSearchProcess(): boolean {
-        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
-    }
-
     private onMessage(msg: IGeboChatMessage | string) {
         if (typeof msg === "string") {
 
@@ -108,7 +56,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             if (msg.contentObjectType) {
                 switch (msg.contentObjectType) {
                     case "DeepSearchStep": {
-                        this.clearEventsDisplay();
+                        this.deepSearchResponse = undefined;
                         this.analisysStep = msg.content;
                         if (msg.content?.completionPercent) {
 
@@ -116,21 +64,13 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                         }
                     } break;
                     case "DeepSearchResponse": {
-                        this.clearEventsDisplay();
+                        this.analisysStep = undefined;
                         this.deepSearchResponse = msg.content;
                         this.completionPercent = 100;
                         this.deepSearchResponseReceived.emit(this.deepSearchResponse);
                     } break;
-                    case "DeepSearchDataSourceDocumentResult": {
-                        this.clearEventsDisplay();
-                        this.deepSearchDataSourceDocumentResult = msg.content;
-                    } break;
-                    case "DeepSearchDataSourceResponse": {
-                        this.clearEventsDisplay();
-                        this.deepSearchDataSourceResponse = msg.content;
-                    } break;
                     case "GUserMessage": {
-                        this.clearEventsDisplay();
+                        this.analisysStep = undefined;
                         const message: ToastMessageOptions = {
                             summary: msg.content?.summary,
                             detail: msg.content?.detail,
@@ -140,7 +80,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                         this.errorOccurredEvent.emit(msg.content);
                     } break;
                     case "GeboChatResponse": {
-                        this.clearEventsDisplay();
+                        this.analisysStep = undefined;
                         this.chatResponse = msg.content;
                         this.deepSearchChatResponseReceived.emit(msg.content);
                     } break;
@@ -157,80 +97,16 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.errorOccurredEvent.emit(err);
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search") {
-            this.chooseDataSources();
-        }
         if (changes["currentDeepSearchRequest"] && this.currentDeepSearchRequest) {
             this.formGroup.patchValue(this.currentDeepSearchRequest);
-
             this.deepSearchProcessType = "standalone";
             if (this.mode === "progress-only") {
                 this.doStreamDeepSearch();
             }
         }
         if (changes["currentChatRequest"] && this.currentChatRequest) {
-            const choosedDataSourcesObject: IChooseSources = this.chooseDeepSearchDataSourcesFormGroup.value;
-            const deepSearchDataSources = choosedDataSourcesObject?.deepSearchDataSources;
-            const knowledgeBases = choosedDataSourcesObject?.knowledgeBases;
-            this.currentChatRequest.deepSearchDataSources = deepSearchDataSources;
-            this.currentChatRequest.choosedKnowledgeBases = knowledgeBases;
             this.doStreamDeepSearchInChat();
         }
-    }
-    private chooseSources(): Observable<[GBaseObject[], GBaseObject[]]> {
-        const kbObservable: Observable<GBaseObject[]> = (this.chatProfileCode) ? this.ragChatService.getVisibleKnowledgeBasesByProfileCode(this.chatProfileCode) : this.chatService.getVisibleKnowledgeBases();
-        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable]);
-    }
-    private chooseDataSources(): void {
-        this.chooseDeepSearchDataSourcesFormGroup.reset();
-        this.loadingRelatedBackend = true;
-        this.chooseSources().subscribe({
-            next: (dsList) => {
-                this.choosableDataSources = dsList[0];
-                this.choosableKnowledgeBases = dsList[1];
-                const defaultSelection: IChooseSources = {
-                    deepSearchDataSources: this.choosableDataSources ? this.choosableDataSources.map(x => x.code) as string[] : [],
-                    knowledgeBases: this.choosableKnowledgeBases ? this.choosableKnowledgeBases.map(x => x.code) as string[] : []
-                };
-                this.chooseDeepSearchDataSourcesFormGroup.patchValue(defaultSelection);
-                this.loadingRelatedBackend = false;
-                let totalChoices: number = 0;
-                if (this.choosableDataSources?.length) {
-                    totalChoices += this.choosableDataSources.length;
-                }
-                if (this.choosableKnowledgeBases?.length) {
-                    totalChoices += this.choosableKnowledgeBases.length;
-                }
-                //Choice UI has to be viewed only where options for data sources are more than one
-                if (totalChoices > 1) {
-                    this.showChooseDataSourceDialog = true;
-                }
-            },
-            complete: () => {
-                this.loadingRelatedBackend = false;
-            }
-        });
-    }
-
-    protected doChoosedSources(): void {
-        this.showChooseDataSourceDialog = false;
-        const choosedDataSourcesObject: IChooseSources = this.chooseDeepSearchDataSourcesFormGroup.value;
-        const deepSearchDataSources = choosedDataSourcesObject?.deepSearchDataSources;
-        const knowledgeBases = choosedDataSourcesObject?.knowledgeBases;
-        if (this.currentChatRequest) {
-
-            this.currentChatRequest.deepSearchDataSources = deepSearchDataSources;
-            this.currentChatRequest.choosedKnowledgeBases = knowledgeBases;
-
-        } else {
-            this.formGroup.controls["deepSearchDataSources"].setValue(deepSearchDataSources);
-            this.formGroup.controls["knowledgeBases"].setValue(knowledgeBases);
-
-        }
-    }
-    protected skipDeepSearchOnDataSourceChoice(): void {
-        this.showChooseDataSourceDialog = false;
-        this.skipDeepSearchEvent.emit(true);
     }
     protected doStreamDeepSearch(): void {
         const data: DeepSearchRequest = this.formGroup.value;
