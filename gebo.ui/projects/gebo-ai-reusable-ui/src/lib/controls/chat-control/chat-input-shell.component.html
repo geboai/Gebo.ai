@@ -1,11 +1,11 @@
 <div class="chat-input-shell">
-  <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest" [mode]="'progress-only'"
+  <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest" [mode]="'progress-only'" 
             (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)" [chatProfileCode]="chatInfo?.chatProfileCode" [nextRequestMode]="nextRequestMode"
             (errorOccurredEvent)="onErrorOccurred($event)" (skipDeepSearchEvent)="onSkipDeepSearchEvent($event)"></gebo-ai-deep-search-component>
   <form [formGroup]="formGroup"
         (submit)="onSubmit()">
 
-    <gebo-ai-choose-documents-panel-component *ngIf="ragsystem && chatUserInfos?.knowledgeBases"
+    <gebo-ai-choose-documents-panel-component *ngIf="ragsystem"
                                               [interactionDisabled]="loading"
                                               [knowledgeBaseCodes]="knowledgeBaseCodes"
                                               [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"

@@ -153,11 +153,13 @@
   </div>
 
   <div class="gebo-ai-rag-chat-section__content">
-    <gebo-ai-reusable-chat-component [ragsystem]="openRagChat"
-                                     [chatInfo]="currentChat"
-                                     (deleteChatAction)="reloadChatsAndCloseChat()"
-                                     (addedChatAction)="loadChatList()"
-                                     (updatedChatAction)="onUpdatedChat($event)"
-                                     [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+    <gebo-ai-reusable-chat-component *ngIf="openRagChat===true" [ragsystem]="true" [chatInfo]="currentChat"
+                (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                (updatedChatAction)="onUpdatedChat($event)"
+                [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+            <gebo-ai-reusable-chat-component *ngIf="openChat===true" [ragsystem]="false" [chatInfo]="currentChat"
+                (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                (updatedChatAction)="onUpdatedChat($event)"
+                [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
   </div>
 </div>
