@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GBaseChatModelChoice } from '../model/gBaseChatModelChoice';
+import { GBaseObject } from '../model/gBaseObject';
 import { GUserChatInfo } from '../model/gUserChatInfo';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { GeboChatResponse } from '../model/geboChatResponse';
@@ -291,6 +292,42 @@ export class GeboChatControllerService {
         return this.httpClient.request<ModelProviderCapabilities>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getProviderCapabilities`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getVisibleKnowledgeBases(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getVisibleKnowledgeBases(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getVisibleKnowledgeBases(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
+    public getVisibleKnowledgeBases(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

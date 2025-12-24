@@ -6,6 +6,7 @@ import java.util.List;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 
 public interface ISearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType> {
@@ -35,8 +36,10 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public TypedInputStream loadSearchResult(SearchResult result) throws IOException;
 
 	public Class<CustomSearchResultExtractionDataType> getCustomResultsAggregationDataType();
-	
+
 	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
 			CustomSearchResultExtractionDataType consolidated);
+
+	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
 
 }

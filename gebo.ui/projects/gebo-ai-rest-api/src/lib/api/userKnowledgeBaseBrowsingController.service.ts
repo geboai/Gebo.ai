@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { BrowseParam } from '../model/browseParam';
 import { GBaseObject } from '../model/gBaseObject';
+import { GKnowledgeBase } from '../model/gKnowledgeBase';
 import { OperationStatusListGVirtualFilesystemRoot } from '../model/operationStatusListGVirtualFilesystemRoot';
 import { OperationStatusListPathInfo } from '../model/operationStatusListPathInfo';
 import { OperationStatusListVirtualFilesystemNavigationTreeStatus } from '../model/operationStatusListVirtualFilesystemNavigationTreeStatus';
@@ -257,6 +258,53 @@ export class UserKnowledgeBaseBrowsingControllerService {
         return this.httpClient.request<OperationStatusListGVirtualFilesystemRoot>('get',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<GKnowledgeBase>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GKnowledgeBase>>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GKnowledgeBase>>>;
+    public getVisibleKnowledgeBaseByCodes(body: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getVisibleKnowledgeBaseByCodes.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<GKnowledgeBase>>('post',`${this.basePath}/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -5,7 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SearchResult {
+
+public class SearchResult implements Cloneable {
 	@NotNull
 	private SearchResultReference resultReference = null;
 	@NotNull
@@ -17,4 +18,10 @@ public class SearchResult {
 	private String systemHandlerId = null;
 	@NotNull
 	private String systemConfigurationCode = null;
+
+	public Object clone() throws CloneNotSupportedException {
+
+		return super.clone();
+
+	}
 }

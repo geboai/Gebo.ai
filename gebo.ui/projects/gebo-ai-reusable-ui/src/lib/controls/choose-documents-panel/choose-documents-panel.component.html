@@ -24,7 +24,7 @@
     </div>
 </div>
 <p-dialog  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'70%'}" [closable]="true"
-    [showHeader]="true" (onHide)="this.openedSearchDocumentsWindows=false;"
+    [showHeader]="true" 
     (visibleChange)="this.openedSearchDocumentsWindowsChange.emit(false)" [formGroup]="editingFormGroup">
     <gebo-ai-search-documents-component [knowledgeBaseCodes]="knowledgeBaseCodes" formControlName="documentsList"
         (confirmed)="acceptedValues()"

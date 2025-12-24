@@ -13,6 +13,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.TypedInputStream;
@@ -180,6 +181,13 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		String originalPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
 
 		return deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
+	}
+
+	@Override
+	protected List<SearchWithResults> cleanAndRemoveDuplicated(
+			List<SearchWithResults> queryResults) {
+		
+		return searchService.cleanAndRemoveDuplicated(queryResults);
 	}
 
 }

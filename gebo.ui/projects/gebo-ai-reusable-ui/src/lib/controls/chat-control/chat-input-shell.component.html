@@ -1,9 +1,9 @@
-<div *ngIf="currentDeepsearchChatRequest" class="deep-search-feedbacks-area grid w-full">
+<div  class="deep-search-feedbacks-area grid w-full">
     <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>
     <div class="col-6   sm:col-10 md:col-10 lg:col-8 xl:col-6 xxl:col-6 justify-content-center ">
         <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest" [mode]="'progress-only'"
-            (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)"
-            (errorOccurredEvent)="onErrorOccurred($event)"></gebo-ai-deep-search-component>
+            (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)" [chatProfileCode]="chatInfo?.chatProfileCode" [nextRequestMode]="nextRequestMode"
+            (errorOccurredEvent)="onErrorOccurred($event)" (skipDeepSearchEvent)="onSkipDeepSearchEvent($event)"></gebo-ai-deep-search-component>
     </div>
     <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>
 </div>
@@ -47,10 +47,11 @@
                                     <p-button #ContextMenuBtn id="ContextMenuBtn" icon="pi pi-plus-circle" gebo-ai-label
                                         (click)="contextAddChatBehaviorMenu1.toggle($event)" [rounded]="true"
                                         [text]="true" title="Add content or modify search behavior">
-                                        
+
                                     </p-button>
-                                        <p-contextMenu   #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu" appendTo="body"></p-contextMenu>
-                                    
+                                    <p-contextMenu #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu"
+                                        appendTo="body"></p-contextMenu>
+
                                 </div>
                                 <textarea rows="3" pTextarea formControlName="query" class="chatbox-input" gebo-ai-label
                                     id="QueryControl" placeholder="Write a message for the chat bot"

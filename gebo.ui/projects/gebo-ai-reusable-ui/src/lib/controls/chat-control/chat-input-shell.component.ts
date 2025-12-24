@@ -22,7 +22,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
 
   @Input() chatInfo?: GUserChatInfo;
   @Input() userChatContextCode?: string;
-
+  
   @Input() capabilities: any;
   @Input() currentAudioTrack: any;
   @Input() loading = false;
@@ -50,6 +50,10 @@ export class GeboAIChatInputShellComponent implements OnInit {
   });
   constructor(private translationService: GeboAITranslationService) {
     this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data => { this.nextRequestMode = data; });
+    this.setStandardChatMode();
+  }
+  private setStandardChatMode(): void {
+    this.nextRequestMode="standard-chat";
     this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
   }
   addBehaviorsMenu: MenuItem[] = [{
@@ -72,6 +76,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
     label: "Deep search",
     command: (event) => {
       this.nextRequestMode = "deep-search";
+      this.chooseModeFormGroup.controls["nextRequestMode"].setValue(this.nextRequestMode);
     }
   }];
   ngOnInit(): void {
@@ -135,5 +140,8 @@ export class GeboAIChatInputShellComponent implements OnInit {
     this.currentDeepsearchChatRequest = undefined;
     this.loading = false;
     this.loadingChange.emit(false);
+  }
+  onSkipDeepSearchEvent(_event: any): void {
+    this.setStandardChatMode();
   }
 }

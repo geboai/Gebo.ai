@@ -1,29 +1,30 @@
 <p-panel id="deepSearchUI" #deepSearchUI gebo-ai-label header="Deep Search" [showHeader]="mode==='full-ui'"
-    styleClass="w-full">
+    *ngIf="loading" styleClass="w-full">
 
-    <div class="grid" *ngIf="loading">
+    <div class="grid">
 
         <label *ngIf="inEventsLoop && !isDieplayingDeepSearchProcess" class="col-12" id="DeepSearchProcessingSearch"
             gebo-ai-text>Searching relevant informations</label>
         <label class="col-12" *ngIf="analisysStep"><span id="DeepSearchProcessingFile" gebo-ai-text>Analized
-                file</span>
+                file</span>&nbsp;
             <span>{{analisysStep?.documentRef?.name}}</span></label>
         <label class="col-12" *ngIf="deepSearchDataSourceDocumentResult">
             <span>
                 {{deepSearchDataSourceDocumentResult.dataSourceDescription}}
-            </span>
+            </span>&nbsp;
             <span id="DeepSearchDataSourceProcessingDocument" gebo-ai-text>Analyzed search result</span>
+            &nbsp;
             <span *ngIf="deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference">
                 {{(deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.path?deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.path?.name:deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.root?.description)}}
             </span>
             <span
                 *ngIf="(!deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference) && deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference">{{deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference?.uri}}
             </span>
-            
+
 
         </label>
         <label class="col-12" *ngIf="deepSearchDataSourceResponse">
-            <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>
+            <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>&nbsp;
             <span>{{deepSearchDataSourceResponse.dataSourceDescription}}</span>
         </label>
         <label class="col-12" *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
@@ -40,10 +41,38 @@
         -->
 
 </p-panel>
-<p-dialog  [maximizable]="true" [visible]="showChooseDataSourceDialog" [modal]="true" [style]="{width:'30%',height:'30%'}" [closable]="true"
-  [showHeader]="true" (onHide)="skipDeepSearchOnDataSourceChoice()" (visibleChange)="skipDeepSearchOnDataSourceChoice()"
-  header="Choose Deep search sources">
-  <div class="grid" [formGroup]="chooseDeepSearchDataSourcesFormGroup">
-    
-  </div>
+<p-dialog [maximizable]="true" [visible]="showChooseDataSourceDialog" [modal]="true"
+    [style]="{width:'30%',height:'30%'}" [closable]="true" [showHeader]="true"
+    (visibleChange)="skipDeepSearchOnDataSourceChoice()" header="Choose Deep search sources">
+    <div class="grid" [formGroup]="chooseDeepSearchDataSourcesFormGroup">
+        <div class="col-12"><b id="ChooseAtLeastMessage" gebo-ai-text>Choose at least one of the following options</b>
+        </div>
+        <p-fieldset *ngIf="choosableKnowledgeBases && choosableKnowledgeBases.length" id="KnowledgeBaseChoicesArea"
+            gebo-ai-label legend="Choosed knowledge bases" class="col-12">
+            <p-selectbutton [options]="choosableKnowledgeBases" formControlName="knowledgeBases" [multiple]="true"
+                optionLabel="description" optionValue="code" />
+
+        </p-fieldset>
+        <p-fieldset *ngIf="choosableDataSources && choosableDataSources.length" id="DataSourceChoicesArea" gebo-ai-label
+            legend="Choosed systems" class="col-12">
+            <p-selectbutton [options]="choosableDataSources" formControlName="deepSearchDataSources" [multiple]="true"
+                optionLabel="description" optionValue="code" />
+        </p-fieldset>
+    </div>
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+        <div class="grid">
+            <div class="col-6">
+                <p-button id="SelectSourcesBtn" gebo-ai-label [outlined]="true" label="Select sources"
+                    (onClick)="doChoosedSources()" icon="pi pi-search-plus" severity="success"
+                    [disabled]="chooseDeepSearchDataSourcesFormGroup.invalid"></p-button>
+            </div>
+
+            <div class="col-6">
+                <p-button id="SkipDeepSearch" gebo-ai-label [outlined]="true" label="Skip deep search"
+                    severity="contrast" (onClick)="skipDeepSearchOnDataSourceChoice()" />
+            </div>
+
+
+        </div>
+    </div>
 </p-dialog>

@@ -11,8 +11,9 @@ import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from "primeng/dialog";
+import { SelectButtonModule } from 'primeng/selectbutton';
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,TabsModule,ButtonModule,FieldsetModule,PanelModule,BlockUIModule,GeboAIFieldTranslationContainerModule,ProgressBarModule,DialogModule],
+    imports:[CommonModule,ReactiveFormsModule,FormsModule,TabsModule,ButtonModule,FieldsetModule,PanelModule,BlockUIModule,GeboAIFieldTranslationContainerModule,ProgressBarModule,DialogModule,SelectButtonModule,FieldsetModule ],
     declarations:[GeboAIDeepSearchComponent],
     exports:[GeboAIDeepSearchComponent],
     providers:[GeboAIStreamDeepSearchService]

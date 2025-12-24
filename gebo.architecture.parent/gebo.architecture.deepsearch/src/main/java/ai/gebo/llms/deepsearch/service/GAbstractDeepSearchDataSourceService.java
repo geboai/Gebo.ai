@@ -12,6 +12,7 @@ import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
+import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -20,7 +21,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
-import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceSearchResults;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceStandardState;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
@@ -74,17 +74,17 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				state.setDataSourceIndex(state.getDataSourceIndex() + 1);
 				return returned;
 			}
-			List<DeepSearchDataSourceSearchResults> queryResults = new ArrayList<DeepSearchDataSourceSearchResults>();
+			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 			for (SearchQuery query : searchQueries.getSearchQuery()) {
 				List<SearchResult> results = executeSearch(query, request);
 				if (results.isEmpty())
 					continue;
-				DeepSearchDataSourceSearchResults sr = new DeepSearchDataSourceSearchResults();
+				SearchWithResults sr = new SearchWithResults();
 				sr.setResults(results);
 				sr.setSearchQuery(query);
 				queryResults.add(sr);
 			}
-			state.setQueryResults(queryResults);
+			state.setQueryResults(cleanAndRemoveDuplicated(queryResults));
 		}
 		if (state.getQueryResults() == null || state.getQueryResults().isEmpty()) {
 			DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
@@ -102,7 +102,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 
 		if (state.getQueryResultsIndex() < state.getQueryResults().size()) {
 			SearchResult actualSearchResultToLoad = null;
-			DeepSearchDataSourceSearchResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
+			SearchWithResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
 			if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
 				actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
 				int index = state.getQueryResultsReferenceIndex() + 1;
@@ -144,7 +144,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 						for (SearchResult r : additionalResults) {
 							r.setNestingLevel(actualSearchResultToLoad.getNestingLevel() + 1);
 						}
-						DeepSearchDataSourceSearchResults sr = new DeepSearchDataSourceSearchResults();
+						SearchWithResults sr = new SearchWithResults();
 						sr.setResults(additionalResults);
 						state.getQueryResults().set(state.getQueryResultsIndex() + 1, sr);
 					}
@@ -181,6 +181,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				deepSearchConfig, chatModel);
 		return returned;
 	}
+
+	protected abstract List<SearchWithResults> cleanAndRemoveDuplicated(
+			List<SearchWithResults> queryResults);
 
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
