@@ -66,7 +66,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
     this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
   }
 
-  constructor(private translationService: GeboAITranslationService) { }
+  
   addBehaviorsMenu: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
