@@ -8,4 +8,10 @@
 		<version>1.0.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>gebo.architecture.patterns</artifactId>
+	
+
+
+	<dependencies>
+		
+	</dependencies>
 </project>

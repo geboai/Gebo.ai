@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrimi me Google Drive/Workspaces",
         "description" : "Konfiguro Gebo.ai për të aksesuar të dhënat e ekipit tënd në Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfiguro Google search api",
+        "description" : "Konfiguro kredencialet e Google search api për kërkime në ueb me AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfiguro kërkimin e thellë",
+        "description" : "Konfiguro parametrat e kërkimit të thellë"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Përshkrimi"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Anulo"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Krijo kredencialet e google search"
+      },
+      "CreateBtn" : {
+        "label" : "Krijo"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID e motorit të kërkimit",
+        "help" : "Shkruani ID-në e motorit të kërkimit që keni marrë gjatë regjistrimit të kredencialeve të google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kodi i konfigurimit"
+      },
+      "DescriptionHeader" : {
+        "label" : "Përshkrim"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Shkruani api key që keni marrë gjatë regjistrimit të kredencialeve të google search api."
+      },
+      "MainPanel" : {
+        "label" : "Konfigurimi i google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Fshij",
+        "help" : "Fshij kredencialet e Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfigurimi i kërkimit të thellë",
+        "help" : "Shto një konfigurim të kërkimit të thellë"
+      },
+      "EditSystemBtn" : {
+        "label" : "Ndrysho konfigurimin"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Jeni i sigurt që doni të fshini këtë bisedë?",
         "header" : "Veprimi i fshirjes së bisedës"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Shto përmbajtje ose modifiko mënyrën e kërkimit"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Shto përmbajtje ose modifiko mënyrën e kërkimit"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Shto përmbajtje ose modifiko mënyrën e kërkimit"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Nuk mund ta fshini këtë",
         "detail" : "Ky objekt përdoret në pjesë të tjera të aplikacionit"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Përjashtim gjatë operacionit:Gabim gjatë punës me url:http://localhost:11434/v1/models",
+        "detail" : "Gabim në server: Gabim gjatë punës me url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Përjashtim gjatë operacionit:apiKey duhet të vendoset",
+        "detail" : "Gabim në server: apiKey duhet të vendoset"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Gabim gjatë transmetimit të përgjigjes së bisedës",
+        "detail" : "Gabim në server: 400 Kërkesë e keqe nga POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Identiteti i përdorur",
         "help" : "Zgjidh ose krijo identitetin për të aksesuar sistemin google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Bisedë"
+      },
+      "deep-search" : {
+        "label" : "Kërkim i thellë"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Kërkim i thellë"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Po kërkohen informacione të rëndësishme"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Po përpilohet raporti final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultati i analizuar i kërkimit"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultati i analizuar i kërkimit në sistem për"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Shto"
+      },
+      "CancelBtn" : {
+        "label" : "Anulo"
+      },
+      "DeleteBtn" : {
+        "label" : "Fshij"
+      },
+      "SearchSettingTab" : {
+        "label" : "Parametrat e kërkimit"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Shkruani promptin për nxjerrjen e informacioneve të rëndësishme nga dokumentet"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Shkruani promptin për përmbledhjen e informacioneve të nxjerra"
+      },
+      "MainPanel" : {
+        "label" : "Duke redaktuar konfigurimin e kërkimit të thellë"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Parametrat e large language model"
+      },
+      "description" : {
+        "label" : "Përshkrim",
+        "help" : "Shkruani përshkrimin për konfigurimin e kërkimit të thellë"
+      },
+      "code" : {
+        "label" : "Kodi unik",
+        "help" : "Kodi unik i gjeneruar automatikisht i konfigurimit të kërkimit të thellë"
+      },
+      "searchType" : {
+        "label" : "Lloji i kërkimit",
+        "help" : "Zgjidhni mes kërkimit semantik \"single hop\" ose \"multi hop\""
+      },
+      "topK" : {
+        "label" : "Numri i segmenteve të tekstit të gjetur (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "llm i përdorur",
+        "help" : "Specifikoni modelin e madh të gjuhës që përdoret për Deep search, do të përdoret ai parazgjedhur nëse nuk zgjidhni asnjë."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompti i analizës së dokumenteve",
+        "help" : "Ndryshoni promptin që do të përdoret për nxjerrjen e informacioneve të rëndësishme nga fragmentet e dokumenteve."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompti i përmbledhjes së informacioneve të nxjerra",
+        "help" : "Ndryshoni promptin që do të përdoret për të përmbledhur në një raport të vetëm informacionet e rëndësishme të nxjerra nga dokumentet e gjetura."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Pragu i ngjashmërisë së kërkimit",
+        "help" : "Pragu i ngjashmërisë semantike për \"first hop\" (nga 0.5 deri në 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Pragu i ngjashmërisë së \"second hop\"",
+        "help" : "Pragu i ngjashmërisë semantike për \"second hop\" (nga 0.5 deri në 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Modeli parazgjedhur i madh i gjuhës",
+        "help" : "Modeli i madh i gjuhës parazgjedhur do të përdoret për përpunimin e Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Pragu i ngjashmërisë së kërkimit",
+        "help" : "Pragu i ngjashmërisë semantike (nga 0.5 deri në 1.0)"
       }
     }
   }

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.controllers;
 
@@ -35,11 +32,13 @@ import ai.gebo.model.virtualfs.VirtualFilesystemNavigationTreeStatus;
 import ai.gebo.systems.abstraction.layer.IGKnowledgeBaseBrowsingService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 import ai.gebo.systems.abstraction.layer.model.KnowledgeBaseContext;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * A REST controller for handling user interactions with their knowledge base in the virtual filesystem.
- * Provides endpoints for browsing, retrieving the roots, and checking navigation status of knowledge bases.
+ * A REST controller for handling user interactions with their knowledge base in
+ * the virtual filesystem. Provides endpoints for browsing, retrieving the
+ * roots, and checking navigation status of knowledge bases.
  *
  * AI generated comments
  */
@@ -52,12 +51,15 @@ public class UserKnowledgeBaseBrowsingController {
 	IGKnowledgeBaseBrowsingService browsingService; // Service for browsing knowledge base files
 
 	/**
-	 * Retrieves the root directories of knowledge bases a user is authorized to access based on provided codes.
+	 * Retrieves the root directories of knowledge bases a user is authorized to
+	 * access based on provided codes.
 	 *
 	 * @param codes The list of codes identifying accessible knowledge bases.
 	 * @return The status and list of root directories accessible to the user.
-	 * @throws VirtualFilesystemBrowsingException If an error occurs during browsing.
-	 * @throws GeboPersistenceException If there is a persistence layer error.
+	 * @throws VirtualFilesystemBrowsingException If an error occurs during
+	 *                                            browsing.
+	 * @throws GeboPersistenceException           If there is a persistence layer
+	 *                                            error.
 	 */
 	@GetMapping(value = "getKnowledgeBaseRoots", produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GVirtualFilesystemRoot>> getKnowledgeBaseRoots(
@@ -69,14 +71,22 @@ public class UserKnowledgeBaseBrowsingController {
 
 	}
 
+	@PostMapping(value = "getVisibleKnowledgeBaseByCodes", produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE, consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+	public List<GKnowledgeBase> getVisibleKnowledgeBaseByCodes(@RequestBody @NotNull @NotEmpty List<String> codes) {
+		return visibilityService.getVisibleKnowledgeBaseByCodes(codes);
+	}
+
 	/**
-	 * Allows browsing of a knowledge base path based on specified parameters and codes, retrieving path information.
+	 * Allows browsing of a knowledge base path based on specified parameters and
+	 * codes, retrieving path information.
 	 *
 	 * @param param Parameters detailing the path to browse.
 	 * @param codes Codes representing the accessible knowledge bases.
 	 * @return The status and list of path information.
-	 * @throws GeboPersistenceException If there is a persistence layer error.
-	 * @throws VirtualFilesystemBrowsingException If an error occurs during browsing.
+	 * @throws GeboPersistenceException           If there is a persistence layer
+	 *                                            error.
+	 * @throws VirtualFilesystemBrowsingException If an error occurs during
+	 *                                            browsing.
 	 */
 	@PostMapping(value = "browseKnowledgeBasePath", produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE, consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<PathInfo>> browseKnowledgeBasePath(@RequestBody BrowseParam param,
@@ -88,13 +98,16 @@ public class UserKnowledgeBaseBrowsingController {
 	}
 
 	/**
-	 * Retrieves the navigation status within a virtual filesystem for given references and codes.
+	 * Retrieves the navigation status within a virtual filesystem for given
+	 * references and codes.
 	 *
 	 * @param references Filesystem references to check navigation status.
-	 * @param codes Codes representing the accessible knowledge bases.
+	 * @param codes      Codes representing the accessible knowledge bases.
 	 * @return The status and navigation tree information.
-	 * @throws GeboPersistenceException If there is a persistence layer error.
-	 * @throws VirtualFilesystemBrowsingException If an error occurs while retrieving navigation status.
+	 * @throws GeboPersistenceException           If there is a persistence layer
+	 *                                            error.
+	 * @throws VirtualFilesystemBrowsingException If an error occurs while
+	 *                                            retrieving navigation status.
 	 */
 	@PostMapping(value = "getKnowledgeBaseNavigationStatus", produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE, consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<VirtualFilesystemNavigationTreeStatus>> getKnowledgeBaseNavigationStatus(
@@ -113,7 +126,8 @@ public class UserKnowledgeBaseBrowsingController {
 	@GetMapping(value = "getAccessibleRootKnowledgeBases", produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getAccessibleRootKnowledgeBases() {
 		List<GKnowledgeBase> kbases = visibilityService.allVisibleRootKnowledgebases();
-		// Transforms each knowledge base into a GBaseObject containing code and description
+		// Transforms each knowledge base into a GBaseObject containing code and
+		// description
 		return kbases.stream().map(x -> {
 			var k = new GBaseObject();
 			k.setCode(x.getCode());

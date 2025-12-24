@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integración de Google Drive/Workspaces",
         "description" : "Configura Gebo.ai para acceder a los datos de tu equipo en Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Configurar Google search api",
+        "description" : "Configura las credenciales de Google search api para búsquedas web con IA"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Configurar Deep search",
+        "description" : "Configura los parámetros de Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Descripción"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Clave api de Google search"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Crear credenciales de Google search"
+      },
+      "CreateBtn" : {
+        "label" : "Crear"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID del motor de búsqueda",
+        "help" : "Introduce el ID del motor de búsqueda obtenido en el registro de credenciales de Google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código de configuración"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripción"
+      },
+      "apiKey" : {
+        "label" : "Clave api",
+        "help" : "Introduce la clave api obtenida en el registro de credenciales de Google search api."
+      },
+      "MainPanel" : {
+        "label" : "Configurar Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Eliminar",
+        "help" : "Eliminar credenciales de Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Configurar Deep search",
+        "help" : "Añadir una configuración de Deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Editar configuración"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "¿Estás seguro de que quieres eliminar este chat?",
         "header" : "Acción de eliminar chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Agregar contenido o modificar el comportamiento de búsqueda"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Agregar contenido o modificar el comportamiento de búsqueda"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Agregar contenido o modificar el comportamiento de búsqueda"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "No puedes eliminar esto",
         "detail" : "Este objeto está referenciado desde otra parte de la aplicación"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Excepción durante la operación:Error al trabajar con url:http://localhost:11434/v1/models",
+        "detail" : "Error del servidor: Error al trabajar con url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Excepción durante la operación:apiKey debe estar configurada",
+        "detail" : "Error del servidor: apiKey debe estar configurada"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Error al transmitir la respuesta del chat",
+        "detail" : "Error del servidor: 400 Solicitud incorrecta de POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Identidad utilizada",
         "help" : "Selecciona o crea la identidad para acceder al sistema google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Buscando información relevante"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidando el informe final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Resultado de búsqueda analizado"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Resultado del sistema de búsqueda analizado para"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Insertar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Eliminar"
+      },
+      "SearchSettingTab" : {
+        "label" : "Configuración de búsqueda"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Introduce el prompt para la extracción de información relevante de documentos"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Introduce el prompt para la consolidación de la información relevante extraída"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuración de Deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Configuración de large language model"
+      },
+      "description" : {
+        "label" : "Descripción",
+        "help" : "Introduce la descripción de la configuración de Deep search"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único generado automáticamente para la configuración de Deep search"
+      },
+      "searchType" : {
+        "label" : "Tipo de búsqueda",
+        "help" : "Selecciona entre búsqueda semántica de un solo paso o de varios pasos"
+      },
+      "topK" : {
+        "label" : "Número de segmentos de texto recuperados (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "llm utilizado",
+        "help" : "Especifica el large language model usado para Deep search, se usará el predeterminado si no se selecciona ninguno."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt de análisis de documentos",
+        "help" : "Edita el prompt que se usará para extraer información relevante de fragmentos de documentos."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt de consolidación de información extraída",
+        "help" : "Edita el prompt que se usará para consolidar en un solo informe la información relevante extraída de los documentos recuperados."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Umbral de similitud de búsqueda",
+        "help" : "Umbral de similitud semántica para el primer paso (entre 0.5 y 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Umbral de similitud del segundo paso",
+        "help" : "Umbral de similitud semántica para el segundo paso (entre 0.5 y 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model predeterminado",
+        "help" : "Se usará el large language model predeterminado para el procesamiento de Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Umbral de similitud de búsqueda",
+        "help" : "Umbral de similitud semántica (entre 0.5 y 1.0)"
       }
     }
   }

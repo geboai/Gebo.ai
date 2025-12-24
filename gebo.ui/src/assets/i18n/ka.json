@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ინტეგრაცია",
         "description" : "დააყენეთ Gebo.ai, რომ ჰქონდეს წვდომა თქვენს Google cloud Drive/Workspaces გუნდის მონაცემებზე"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "დააკონფიგურირეთ Google search api",
+        "description" : "დააკონფიგურირეთ Google search api-ს ავტორიზაციის დეტალები AI ვებ ძიებებისთვის"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "დააკონფიგურირეთ Deep search",
+        "description" : "დააკონფიგურირეთ Deep search-ის პარამეტრები"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "აღწერა"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "შექმენით google search ავტორიზაციის დეტალები"
+      },
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "customSearchEngineId" : {
+        "label" : "ძებნის სისტემის id",
+        "help" : "შეიყვანეთ ძებნის სისტემის id, რომელიც მიიღეთ google search api-ს ავტორიზაციის რეგისტრაციაში."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "შეიყვანეთ api key, რომელიც მიიღეთ google search api-ს ავტორიზაციის რეგისტრაციაში."
+      },
+      "MainPanel" : {
+        "label" : "დააყენეთ google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "წაშლა",
+        "help" : "წაშალეთ Google search api-ს ავტორიზაციის დეტალები"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search-ის კონფიგურაცია",
+        "help" : "დაამატეთ deep search-ის კონფიგურაცია"
+      },
+      "EditSystemBtn" : {
+        "label" : "კონფიგურაციის რედაქტირება"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "დარწმუნებული ხართ, რომ გსურთ ამ ჩატის წაშლა?",
         "header" : "ჩატის წაშლის ქმედება"
+      },
+      "PlusContextualMenu" : {
+        "help" : "დაამატეთ შინაარსი ან შეცვალეთ ძებნის მოქმედება"
+      },
+      "[object HTMLElement]" : {
+        "help" : "დაამატეთ შინაარსი ან შეცვალეთ ძებნის მოქმედება"
+      },
+      "ContextMenuBtn" : {
+        "help" : "დაამატეთ შინაარსი ან შეცვალეთ ძებნის მოქმედება"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ეს ვერ წაშალეთ",
         "detail" : "ეს ობიექტი გამოყენებულია აპლიკაციის სხვა ნაწილებში"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ოპერაციისას შეცდომა: სერვერთან მუშაობის შეცდომა url-ზე:http://localhost:11434/v1/models",
+        "detail" : "სერვერის შეცდომა: სერვერთან მუშაობის შეცდომა url-ზე:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ოპერაციისას შეცდომა: აუცილებელია apiKey მნიშვნელობა",
+        "detail" : "სერვერის შეცდომა: აუცილებელია apiKey მნიშვნელობა"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ჩატში ნაკადის გამოხმაურების შეცდომა",
+        "detail" : "სერვერის შეცდომა: 400 Bad Request POST მოთხოვნისგან http://localhost:8000/v1/chat/completions-დან"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "გამოყენებული იდენტობა",
         "help" : "აირჩიეთ ან შექმენით იდენტობა google drive სისტემაზე წვდომისთვის"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ჩატი"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ძებნა შესაფერისი ინფორმაციისთვის"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "საბოლოო ანგარიშის გამთლიანება"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "გაცხრილული საძიებო შედეგი"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ანალიზირებული სისტემის საძიებო შედეგი მისთვის"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ჩასმა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SearchSettingTab" : {
+        "label" : "ძებნის პარამეტრი"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ჩასვით პრომპტი დოკუმენტებისგან მნიშვნელოვანი ინფორმაციის ამოსაღებად"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ჩასვით პრომპტი ამოღებული ინფორმაციის გასაერთიანებლად"
+      },
+      "MainPanel" : {
+        "label" : "Deep search-ის კონფიგურაციის რედაქტირება"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "დიდი ენობრივი მოდელის პარამეტრი"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ deep search-ის კონფიგურაციის აღწერა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი deep search-ის კონფიგურაციისთვის"
+      },
+      "searchType" : {
+        "label" : "ძებნის ტიპი",
+        "help" : "აირჩიეთ ერთსაფეხურიანი სემანტიკური ძებნა ან მრავალსაფეხურიანი"
+      },
+      "topK" : {
+        "label" : "ამოღებული ტექსტური სეგმენტების რაოდენობა (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "გამოყენებული llm",
+        "help" : "მიუთითეთ Deep search-ისთვის გამოყენებული დიდი ენობრივი მოდელი, თუ არჩეული არ იქნება, გამოყენებული იქნება ნაგულისხმევი."
+      },
+      "analisysPrompt" : {
+        "label" : "დოკუმენტების ანალიზის პრომპტი",
+        "help" : "დაარედაქტირეთ პრომპტი, რომელიც გამოიყენება დოკუმენტების ფრაგმენტებიდან შესაბამისი ინფორმაციის გამოსაყვანად."
+      },
+      "consolidationPrompt" : {
+        "label" : "ამოღებული ინფორმაციის გაერთიანების პრომპტი",
+        "help" : "დაარედაქტირეთ პრომპტი, რომელიც გამოიყენება ამოღებული შესაბამისი ინფორმაციის ერთ ანგარიშში გასაერთიანებლად."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ძებნის მსგავსების ზღვარი",
+        "help" : "პირველი საფეხურის სემანტიკური მსგავსების ზღვარი (0.5-დან 1.0-მდე)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "მეორე საფეხურის მსგავსების ზღვარი",
+        "help" : "მეორე საფეხურის სემანტიკური მსგავსების ზღვარი (0.5-დან 1.0-მდე)"
+      },
+      "defaultModel" : {
+        "label" : "ნაგულისხმევი დიდი ენობრივი მოდელი",
+        "help" : "ნაგულისხმევი დიდი ენობრივი მოდელი იქნება გამოყენებული Deep search-ის დამუშავებისთვის"
+      },
+      "similarityThreashold" : {
+        "label" : "ძებნის მსგავსების ზღვარი",
+        "help" : "სემანტიკური მსგავსების ზღვარი (0.5-დან 1.0-მდე)"
       }
     }
   }

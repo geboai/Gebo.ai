@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces एकीकरण",
         "description" : "Gebo.ai लाई तपाईंको Google cloud Drive/Workspaces टिम डाटामा पहुँच गर्न कन्फिगर गर्नुहोस्"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api कन्फिगर गर्नुहोस्",
+        "description" : "AI वेब खोजहरूको लागि Google search api प्रमाणपत्रहरू कन्फिगर गर्नुहोस्"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search कन्फिगर गर्नुहोस्",
+        "description" : "Deep search को प्यारामिटरहरू कन्फिगर गर्नुहोस्"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "विवरण"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search प्रमाणपत्रहरू बनाउनुहोस्"
+      },
+      "CreateBtn" : {
+        "label" : "बनाउनुहोस्"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Google search api प्रमाणपत्र दर्ता गर्दा प्राप्त भएको search engine id प्रविष्ट गर्नुहोस्।"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Google search api प्रमाणपत्र दर्ता गर्दा प्राप्त भएको api key प्रविष्ट गर्नुहोस्।"
+      },
+      "MainPanel" : {
+        "label" : "Google search api सेटअप गर्नुहोस्"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "हटाउनुहोस्",
+        "help" : "Google search api प्रमाणपत्रहरू हटाउनुहोस्"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search कन्फिग",
+        "help" : "Deep search कन्फिगरेसन थप्नुहोस्"
+      },
+      "EditSystemBtn" : {
+        "label" : "कन्फिग सम्पादन गर्नुहोस्"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "के तपाईं यो च्याट मेटाउन चाहनुहुन्छ पक्का हुनुहुन्छ?",
         "header" : "च्याट मेटाउने प्रक्रिया"
+      },
+      "PlusContextualMenu" : {
+        "help" : "सामग्री थप्नुहोस् वा खोज व्यवहार परिमार्जन गर्नुहोस्"
+      },
+      "[object HTMLElement]" : {
+        "help" : "सामग्री थप्नुहोस् वा खोज व्यवहार परिमार्जन गर्नुहोस्"
+      },
+      "ContextMenuBtn" : {
+        "help" : "सामग्री थप्नुहोस् वा खोज व्यवहार परिमार्जन गर्नुहोस्"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "तपाईंले यो मेटाउन सक्नुहुन्न",
         "detail" : "यो वस्तु अरू अनुप्रयोगको भाग(हरू) बाट सन्दर्भित गरिएको छ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "अपरेशनको क्रममा अपवाद: url मा समस्या आयो:http://localhost:11434/v1/models",
+        "detail" : "सर्भर त्रुटि: url मा समस्या आयो:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "अपरेशनको क्रममा अपवाद: apiKey सेट हुनुपर्छ",
+        "detail" : "सर्भर त्रुटि: apiKey सेट हुनुपर्छ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "च्याट उत्तर स्ट्रिमिङ गर्दा समस्या आयो",
+        "detail" : "सर्भर त्रुटि: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "प्रयोग भएको परिचय",
         "help" : "google drive प्रणालीमा पहुँच गर्नको लागि परिचय छान्नुहोस् वा सिर्जना गर्नुहोस्"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "च्याट"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "सम्बन्धित जानकारी खोज्दै"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "अन्तिम रिपोर्ट तयार पार्दै"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "विश्लेषण गरिएको खोज परिणाम"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "यसका लागि विश्लेषण गरिएको प्रणाली खोज परिणाम"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "हाल्नुहोस्"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "DeleteBtn" : {
+        "label" : "हटाउनुहोस्"
+      },
+      "SearchSettingTab" : {
+        "label" : "खोज सेटिंग"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "डोक्युमेन्टहरूको सम्बन्धित जानकारी निकासीका लागि प्रोम्प्ट हाल्नुहोस्"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "निकालिएको सम्बन्धित जानकारी एकत्र गर्ने प्रोम्प्ट हाल्नुहोस्"
+      },
+      "MainPanel" : {
+        "label" : "Deep search कन्फिगरेसन सम्पादन गर्दै"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ठूलो भाषा मोडेल सेटिंग"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "Deep search कन्फिगरेसनको विवरण प्रविष्ट गर्नुहोस्"
+      },
+      "code" : {
+        "label" : "युनिक कोड",
+        "help" : "Deep search कन्फिगरेसनको स्वतः उत्पन्न युनिक कोड"
+      },
+      "searchType" : {
+        "label" : "खोज प्रकार",
+        "help" : "Single hop semantic search वा multi hop 중बाट छान्नुहोस्"
+      },
+      "topK" : {
+        "label" : "प्राप्त गरिएको पाठ खण्डहरूको संख्या (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "प्रयोग भएको llm",
+        "help" : "Deep search का लागि प्रयोग भएको ठूलो भाषा मोडेल तोक्नुहोस्, छानिएमा डिफल्ट मोडेल प्रयोग हुनेछ।"
+      },
+      "analisysPrompt" : {
+        "label" : "डोक्युमेन्टहरुको विश्लेषण प्रोम्प्ट",
+        "help" : "डोक्युमेन्टका टुक्रामा रहेको सम्बन्धित जानकारी निकासीका लागि प्रयोग हुने प्रोम्प्ट सम्पादन गर्नुहोस्।"
+      },
+      "consolidationPrompt" : {
+        "label" : "निकालिएको जानकारी एकत्र गर्ने प्रोम्प्ट",
+        "help" : "प्राप्त डोक्युमेन्टबाट निकालिएको प्रमुख जानकारी एउटै रिपोर्टमा एकत्र गर्न प्रयोग हुने प्रोम्प्ट सम्पादन गर्नुहोस्।"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Search similarity threashold",
+        "help" : "प्रथम चरणको सेमान्टिक समानता थ्रेसहोल्ड (०.५ देखि १.० बीचमा)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "दोस्रो चरण similarity threashold",
+        "help" : "दोस्रो चरण सेमान्टिक समानता थ्रेसहोल्ड (०.५ देखि १.० बीचमा)"
+      },
+      "defaultModel" : {
+        "label" : "डिफल्ट ठूलो भाषा मोडेल",
+        "help" : "Deep search प्रोसेसिङका लागि डिफल्ट ठूलो भाषा मोडेल प्रयोग हुनेछ"
+      },
+      "similarityThreashold" : {
+        "label" : "Search similarity threashold",
+        "help" : "सेमान्टिक समानता थ्रेसहोल्ड (०.५ देखि १.० बीचमा)"
       }
     }
   }

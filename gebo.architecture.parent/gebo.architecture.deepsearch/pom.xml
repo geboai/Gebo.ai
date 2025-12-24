@@ -24,5 +24,10 @@
 			<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

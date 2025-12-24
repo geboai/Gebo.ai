@@ -11,6 +11,7 @@ package ai.gebo.llms.chat.client.rest.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
@@ -39,6 +41,7 @@ import ai.gebo.llms.chat.abstraction.layer.richresponse.model.RichResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService.ModelProviderCapabilities;
+import ai.gebo.model.base.GBaseObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -213,5 +216,11 @@ public class GeboChatController {
 	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) throws GeboPersistenceException {
 		return chatService.createCleanChatByModelCode(modelCode);
+	}
+	@GetMapping(value = "getVisibleKnowledgeBases", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GBaseObject> getVisibleKnowledgeBases()
+			throws GeboPersistenceException, LLMConfigException {
+		List<GKnowledgeBase> visibles = chatService.getVisibleKnowledgeBases();
+		return visibles.stream().map(x -> new GBaseObject(x)).toList();
 	}
 }

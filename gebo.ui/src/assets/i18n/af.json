@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integrasie",
         "description" : "Stel Gebo.ai op om toegang te hê tot jou Google cloud Drive/Workspaces span data"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Stel Google-soek api op",
+        "description" : "Stel Google-soek api geloofsbriewe op vir KI-websoektogte"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Stel Deep search op",
+        "description" : "Stel Deep search parameters op"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Beskrywing"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google-soek api sleutel"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Skep Google-soek geloofsbriewe"
+      },
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "customSearchEngineId" : {
+        "label" : "Soekenjin-ID",
+        "help" : "Voer die soekenjin-ID in wat verkry is tydens die Google-soek api geloofsbriewe registrasie."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "apiKey" : {
+        "label" : "Api sleutel",
+        "help" : "Voer die api sleutel in wat verkry is tydens die Google-soek api geloofsbriewe registrasie."
+      },
+      "MainPanel" : {
+        "label" : "Stel Google-soek api op"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Verwyder",
+        "help" : "Verwyder Google-soek api geloofsbriewe"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfigurasie",
+        "help" : "Voeg 'n deep search konfigurasie by"
+      },
+      "EditSystemBtn" : {
+        "label" : "Wysig konfigurasie"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Is jy seker jy wil hierdie geselskap uitvee?",
         "header" : "Verwyder geselskap-aksie"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Jy kan dit nie uitvee nie",
         "detail" : "Hierdie objek word vanuit ander deel(e) van die toepassing verwys"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Uitsondering tydens operasie: Fout met url: http://localhost:11434/v1/models",
+        "detail" : "Bedienerfout: Fout met url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Uitsondering tydens operasie: apiKey moet gestel wees",
+        "detail" : "Bedienerfout: apiKey moet gestel wees"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Fout tydens stroom van chat antwoord",
+        "detail" : "Bedienerfout: 400 Bad Request vanaf POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Identiteit gebruik",
         "help" : "Kies of skep die identiteit om toegang te verkry tot die google drive-stelsel"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Gesels"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Soek relevante inligting"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolideer die finale verslag"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Geanaliseerde soekresultaat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Geanaliseerde stelselsoekresultaat vir"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Voeg in"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SearchSettingTab" : {
+        "label" : "Soekinstelling"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Voeg prompt in vir relevante inligting-uittrek uit dokumente"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Voeg prompt in vir konsolidasie van onttrekte relevante inligting"
+      },
+      "MainPanel" : {
+        "label" : "Wysig deep search konfigurasie"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Groot taalmodel instelling"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die deep search konfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die deep search konfigurasie"
+      },
+      "searchType" : {
+        "label" : "Soektipe",
+        "help" : "Kies tussen enkel hop semantiese soektog of multi hop"
+      },
+      "topK" : {
+        "label" : "Aantal gesoekte tekssegmente (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Gebruik llm",
+        "help" : "Spesifiseer groot taalmodel gebruik vir Deep search, die verstek een sal gebruik word as geen gekies is nie."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokument-analise prompt",
+        "help" : "Wysig die prompt wat gebruik gaan word vir fragment inligting-onttrekking uit dokumente."
+      },
+      "consolidationPrompt" : {
+        "label" : "Onttrekte inligting konsolidasie prompt",
+        "help" : "Wysig die prompt wat gebruik sal word om 'n enkele verslag te konsolideer met relevante inligting uit onttrekte dokumente."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Soeksemanthese drempelwaarde",
+        "help" : "Eerste hop semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Tweede hop gelyksoortigheid drempelwaarde",
+        "help" : "Tweede hop semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Verstek groot taalmodel",
+        "help" : "Die verstek groot taalmodel sal gebruik word vir Deep search verwerking"
+      },
+      "similarityThreashold" : {
+        "label" : "Soek se gelyksoortigheid drempelwaarde",
+        "help" : "Semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
       }
     }
   }

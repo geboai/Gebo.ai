@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ինտեգրացիա",
         "description" : "Կազմակերպեք Gebo.ai-ը, որպեսզի մուտք գործի ձեր Google cloud Drive/Workspaces թիմային տվյալները"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Կարգավորել Google search api-ը",
+        "description" : "Կարգավորեք Google search api-ի վկայականները AI վեբ որոնման համար"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Կարգավորել խորը որոնում",
+        "description" : "Կարգավորեք խորը որոնման պարամետրերը"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Նկարագրություն"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api բանալի"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Ստեղծել google search վկայականներ"
+      },
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "customSearchEngineId" : {
+        "label" : "Որոնման շարժիչի id",
+        "help" : "Մուտքագրեք որոնման շարժիչի id-ը, որը ստացվել է google search api-ի վկայականների գրանցման ժամանակ։"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կարգավորման կոդ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "apiKey" : {
+        "label" : "Api բանալի",
+        "help" : "Մուտքագրեք api բանալին, որը ստացվել է google search api-ի վկայականների գրանցման ժամանակ։"
+      },
+      "MainPanel" : {
+        "label" : "Կարգավորել google search api-ը"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Ջնջել",
+        "help" : "Ջնջել Google search api-ի վկայականները"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Խորը որոնման կարգավորումները",
+        "help" : "Ավելացնել խորը որոնման կարգավորում"
+      },
+      "EditSystemBtn" : {
+        "label" : "Փոփոխել կարգավորումները"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Վստա՞հ եք, որ ցանկանում եք ջնջել այս զրույցը։",
         "header" : "Ջնջել զրույցի գործողություն"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Դուք չեք կարող ջնջել սա",
         "detail" : "Այս օբյեկտը կապված է հավելվածի այլ մաս(եր)ից"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Վրիպում գործողության ընթացքում: Սխալ url-ի հետ աշխատանքի ժամանակ:http://localhost:11434/v1/models",
+        "detail" : "Սերվերի սխալ: Սխալ url-ի հետ աշխատանքի ժամանակ:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Վրիպում գործողության ընթացքում:apiKey-ը պետք է սահմանված լինի",
+        "detail" : "Սերվերի սխալ: apiKey-ը պետք է սահմանված լինի"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Սխալը հաղորդագրության հոսքի ժամանակ",
+        "detail" : "Սերվերի սխալ: 400 վատ հարցում POST http://localhost:8000/v1/chat/completions-ից"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Օգտագործված ինքնություն",
         "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ google drive համակարգին մուտք գործելու համար"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Զրուցարան"
+      },
+      "deep-search" : {
+        "label" : "Խորը որոնում"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Խորը որոնում"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Որոնվում են համապատասխան տեղեկությունները"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Վերջնական հաշվետվության ամփոփում"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Վերլուծված որոնման արդյունք"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Համակարգի որոնման վերլուծված արդյունք՝"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ավելացնել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SearchSettingTab" : {
+        "label" : "Որոնման կարգավորում"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Մուտքագրեք հորդորը՝ փաստաթղթերից համապատասխան տեղեկության արտահանման համար"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Մուտքագրեք հորդորը՝ արտահանված տեղեկության համալրման համար"
+      },
+      "MainPanel" : {
+        "label" : "Խորը որոնման կարգավորումների խմբագրում"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Մեծ լեզվական մոդելի կարգավորումներ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք խորը որոնման կարգավորման նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Հատուկ կոդ",
+        "help" : "Խորը որոնման կարգավորման համար ավտոմատ գեներացված հատուկ կոդ"
+      },
+      "searchType" : {
+        "label" : "Որոնման տեսակ",
+        "help" : "Ընտրեք մեկ քայլանոց սեմանտիկ որոնում կամ բազմաքայլ"
+      },
+      "topK" : {
+        "label" : "Վերադարձվող տեքստային հատվածների քանակը (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Օգտագործվող llm",
+        "help" : "Նշել խորը որոնման համար օգտագործվող մեծ լեզվական մոդելը, եթե ոչ, ապա օգտագործվելու է լռելյայն տարբերակը։"
+      },
+      "analisysPrompt" : {
+        "label" : "Փաստաթղթերի վերլուծության հորդոր",
+        "help" : "Խմբագրեք հորդորը, որը կօգտագործվի փաստաթղթից համապատասխան տեղեկության արտահանման համար։"
+      },
+      "consolidationPrompt" : {
+        "label" : "Արտահանված տեղեկության ամփոփման հորդոր",
+        "help" : "Խմբագրեք հորդորը, որը կօգտագործվի մի ընդհանուր հաշվետվության մեջ արտահանված տեղեկությունը ամփոփելու համար։"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Որոնման նմանության շեմ",
+        "help" : "Առաջին քայլի սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Երկրորդ քայլի նմանության շեմ",
+        "help" : "Երկրորդ քայլի սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
+      },
+      "defaultModel" : {
+        "label" : "Լռելյայն մեծ լեզվական մոդել",
+        "help" : "Խորը որոնման ժամանակ կօգտագործվի լռելյայն մեծ լեզվական մոդելը"
+      },
+      "similarityThreashold" : {
+        "label" : "Որոնման նմանության շեմ",
+        "help" : "Սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
       }
     }
   }

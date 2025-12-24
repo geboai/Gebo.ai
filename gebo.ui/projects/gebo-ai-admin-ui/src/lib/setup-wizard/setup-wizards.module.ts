@@ -61,6 +61,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from "primeng/api";
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
+import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -281,7 +282,17 @@ const googleSearchApiSetupSection: SetupWizardsSection = {
     wizardSectionId: "googleSearchApiSetupSection",
     mandatory: false
 };
-
+const deepSearchApiSetupSection: SetupWizardsSection = {
+    orderEntry: 16,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: AlwaysTrueStatusService,
+    label: "Configure Deep search",
+    description: "Configure Deep search parameters",
+    wizardComponent: GeboAIDeepSearchWizardComponent,
+    wizardSectionId: "deepSearchApiSetupSection",
+    mandatory: false
+};
 
 
 /**
@@ -293,7 +304,7 @@ const googleSearchApiSetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         MessageService,
@@ -333,7 +344,7 @@ const googleSearchApiSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleSearchApiSetupSection, multi: true },
-        
+        { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
 

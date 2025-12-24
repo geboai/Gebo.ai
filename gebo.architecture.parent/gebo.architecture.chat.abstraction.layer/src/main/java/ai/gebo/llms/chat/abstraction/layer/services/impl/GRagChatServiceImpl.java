@@ -98,7 +98,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			ChatHistoryConsolidationService historyConsolidationService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, historyConsolidationService);
+				generatedResourceRepository, historyConsolidationService, knowledgeBaseVisibilityService);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -629,5 +629,28 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		userContext = persistenceManager.insert(userContext);
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 		return data;
+	}
+
+	@Override
+	public List<GKnowledgeBase> getVisibleKnowledgeBasesByProfileCode(@NotNull String profileCode) {
+		Optional<GChatProfileConfiguration> chatProfileData = this.chatProfilesRepository.findById(profileCode);
+		if (chatProfileData.isEmpty())
+			throw new RuntimeException("Chat profile does not exist");
+		final GChatProfileConfiguration chatProfile = chatProfileData.get();
+		boolean canAccess = securityService.isCanAccess(chatProfile, true);
+		if (!canAccess)
+			throw new SecurityException("Trying to access wrong chat profile");
+		List<GKnowledgeBase> allVisibles = getVisibleKnowledgeBases();
+		if (chatProfile.getUserChoosesKnowledgeBases() == null || !chatProfile.getUserChoosesKnowledgeBases()) {
+			if (chatProfile.getKnowledgeBaseCodes() != null && !chatProfile.getKnowledgeBaseCodes().isEmpty()) {
+				return allVisibles.stream().filter(x -> chatProfile.getKnowledgeBaseCodes().contains(x.getCode()))
+						.toList();
+			} else {
+				return List.of();
+			}
+		} else {
+			return allVisibles;
+		}
+
 	}
 }

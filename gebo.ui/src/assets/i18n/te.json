@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ఇంటిగ్రేషన్",
         "description" : "మీ Google cloud Drive/Workspaces టీమ్ డేటాను యాక్సెస్ చేయడానికి Gebo.ai ను ఆక్రమించండి"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google శోధన api కాన్ఫిగర్ చేయండి",
+        "description" : "AI వెబ్ శోధనల కోసం Google శోధన api క్రెడెషియల్స్‌ను కాన్ఫిగర్ చేయండి"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search కాన్ఫిగర్ చేయండి",
+        "description" : "Deep search పరామితులను కాన్ఫిగర్ చేయండి"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "వివరణ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google శోధన api కీ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google శోధన క్రెడెషియల్స్ సృష్టించండి"
+      },
+      "CreateBtn" : {
+        "label" : "సృష్టించండి"
+      },
+      "customSearchEngineId" : {
+        "label" : "శోధన ఇంజిన్ id",
+        "help" : "Google శోధన api క్రెడెషియల్స్ రిజిస్ట్రేషన్‌లో పొందిన శోధన ఇంజిన్ id నమోదు చేయండి."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "apiKey" : {
+        "label" : "Api కీ",
+        "help" : "Google శోధన api క్రెడెషియల్స్ రిజిస్ట్రేషన్‌లో పొందిన api కీ నమోదు చేయండి."
+      },
+      "MainPanel" : {
+        "label" : "Google శోధన api సెటప్ చేయండి"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "డిలీట్ చేయండి",
+        "help" : "Google శోధన api క్రెడెషియల్స్‌ను డిలీట్ చేయండి"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search కాన్ఫిగ్",
+        "help" : "Deep search కాన్ఫిగరేషన్‌ను జోడించండి"
+      },
+      "EditSystemBtn" : {
+        "label" : "కాన్ఫిగ్ సవరించండి"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "మీరు ఈ చాటును ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?",
         "header" : "చాట్ తొలిగింపు చర్య"
+      },
+      "PlusContextualMenu" : {
+        "help" : "కంటెంట్ జోడించండి లేదా శోధన ప్రవర్తనను మారుస్తుంది"
+      },
+      "[object HTMLElement]" : {
+        "help" : "కంటెంట్ జోడించండి లేదా శోధన ప్రవర్తనను మారుస్తుంది"
+      },
+      "ContextMenuBtn" : {
+        "help" : "కంటెంట్ జోడించండి లేదా శోధన ప్రవర్తనను మారుస్తుంది"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ఇది మీరు తొలగించలేరు",
         "detail" : "ఈ అంశాన్ని యాప్‌లోని ఇతర భాగాలు ఉపయోగిస్తున్నాయి"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ఆపరేషన్ సమయంలో తప్పు: url తో సమస్య: http://localhost:11434/v1/models",
+        "detail" : "సర్వర్ లోపం: url తో సమస్య: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ఆపరేషన్ సమయంలో తప్పు: apiKey సెటప్ చేయాలి",
+        "detail" : "సర్వర్ లోపం: apiKey సెటప్ చేయాలి"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "చాట్ స్ట్రీమింగ్ సమాధానంలో లోపం",
+        "detail" : "సర్వర్ లోపం: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "వాడబడే ఐడెంటిటీ",
         "help" : "Google Drive సిస్టమ్‌కి యాక్సెస్ చేసేందుకు ఐడెంటిటీని ఎంచుకోండి లేదా సృష్టించండి"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "చాట్"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "సంబంధిత సమాచారాన్ని శోధించుతోంది"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "తుదివివరణను సంకలనం చేస్తోంది"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "విశ్లేషించబడిన శోధన ఫలితం"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "కోసం విశ్లేషించబడిన సిస్టమ్ శోధన ఫలితం"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "చేర్చండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "SearchSettingTab" : {
+        "label" : "శోధన సెట్టింగ్"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "పత్రాల నుంచి సంబంధిత సమాచారాన్ని సేకరించడానికి ప్రాంప్ట్ ఇవ్వండి"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "సేకరించిన సంబంధిత సమాచారం కోసం కన్సోలిడేషన్ ప్రాంప్ట్ ఇవ్వండి"
+      },
+      "MainPanel" : {
+        "label" : "Deep search కాన్ఫిగరేషన్ ఎడిటింగ్"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "లార్జ్ లాంగ్వేజ్ మోడల్ సెట్టింగ్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Deep search కాన్ఫిగరేషన్ యొక్క వివరణ ఇవ్వండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "Deep search కాన్ఫిగరేషన్ కోసం ఆటోమేటిక్‌గా రూపొందిన యూనిక్ కోడ్"
+      },
+      "searchType" : {
+        "label" : "శోధన రకం",
+        "help" : "సింగల్ హాప్ సెమాంటిక్ శోధన లేదా మల్టీ హాప్ మధ్య ఎంచుకోండి"
+      },
+      "topK" : {
+        "label" : "పొంది తీసుకున్న టెక్స్ట్ భాగాల సంఖ్య (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ఉపయోగించిన llm",
+        "help" : "Deep search కోసం ఉపయోగించిన లార్జ్ లాంగ్వేజ్ మోడల్ స్పెసిఫై చేయండి, ఎంచుకోకపోతే డిఫాల్ట్ వాడబడుతుంది."
+      },
+      "analisysPrompt" : {
+        "label" : "పత్రాల అనాలిసిస్ ప్రాంప్ట్",
+        "help" : "పత్రాల ఫ్రాగ్మెంట్ల నుంచి సంబంధిత సమాచారాన్ని సేకరించడానికి ఉపయోగించే ప్రాంప్ట్‌ని సవరించండి."
+      },
+      "consolidationPrompt" : {
+        "label" : "సేకరించిన సమాచారం కన్సోలిడేషన్ ప్రాంప్ట్",
+        "help" : "పొంది తీసుకున్న పత్రాల నుండి తీసిన సమాచారం ఒకే నివేదికలోకి కన్సోలిడేట్ చేయడానికి ఉపయోగించే ప్రాంప్ట్‌ని సవరించండి."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "శోధన సామాన్యత థ్రెషోల్డ్",
+        "help" : "ఫస్ట్ హాప్ సెమాంటిక్ సామాన్యత థ్రెషోల్డ్ (0.5 నుంచి 1.0 మధ్య)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "సెకండ్ హాప్ సామాన్యత థ్రెషోల్డ్",
+        "help" : "సెకండ్ హాప్ సెమాంటిక్ సామాన్యత థ్రెషోల్డ్ (0.5 నుంచి 1.0 మధ్య)"
+      },
+      "defaultModel" : {
+        "label" : "డిఫాల్ట్ లార్జ్ లాంగ్వేజ్ మోడల్",
+        "help" : "Deep search ప్రాసెసింగ్ కోసం డిఫాల్ట్ లార్జ్ లాంగ్వేజ్ మోడల్ వాడబడుతుంది"
+      },
+      "similarityThreashold" : {
+        "label" : "శోధన సామాన్యత థ్రెషోల్డ్",
+        "help" : "సెమాంటిక్ సామాన్యత థ్రెషోల్డ్ (0.5 నుంచి 1.0 మధ్య)"
       }
     }
   }

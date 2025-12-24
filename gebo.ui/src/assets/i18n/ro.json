@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrare Google Drive/Workspaces",
         "description" : "Configurează Gebo.ai pentru a accesa datele echipei tale din Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Configurează Google search api",
+        "description" : "Configurează datele de autentificare Google search api pentru căutări AI pe web"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Configurează Deep search",
+        "description" : "Configurează parametrii pentru Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Descriere"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Cheie Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Creează date de autentificare google search"
+      },
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID motor de căutare",
+        "help" : "Introduceți id-ul motorului de căutare obținut la înregistrarea datelor de autentificare google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod de configurare"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "apiKey" : {
+        "label" : "Cheie api",
+        "help" : "Introduceți cheia api obținută la înregistrarea datelor de autentificare google search api."
+      },
+      "MainPanel" : {
+        "label" : "Configurează google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Șterge",
+        "help" : "Șterge datele de autentificare Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Configurație Deep search",
+        "help" : "Adaugă o configurație pentru deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Editează configurația"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Sigur doriți să ștergeți această conversație?",
         "header" : "Acțiune de ștergere chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Nu poți șterge acest lucru",
         "detail" : "Acest obiect este referit din alte părți ale aplicației"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Excepție în timpul operațiunii: Eroare la procesarea url: http://localhost:11434/v1/models",
+        "detail" : "Eroare de server: Eroare la procesarea url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Excepție în timpul operațiunii: trebuie setat apiKey",
+        "detail" : "Eroare de server: trebuie setat apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Eroare la transmiterea răspunsului chat",
+        "detail" : "Eroare de server: 400 Bad Request de la POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Identitatea folosită",
         "help" : "Selectează sau creează identitatea pentru accesul la sistemul Google Drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Se caută informații relevante"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Se consolidează raportul final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultat de căutare analizat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultat analizat al căutării în sistem pentru"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Inserează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SearchSettingTab" : {
+        "label" : "Setare căutare"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Introduceți promptul pentru extragerea informațiilor relevante din documente"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Introduceți promptul pentru consolidarea informațiilor extrase"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Setare model de limbaj mare"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației deep search"
+      },
+      "code" : {
+        "label" : "Cod Unic",
+        "help" : "Cod unic generat automat pentru configurația deep search"
+      },
+      "searchType" : {
+        "label" : "Tip de căutare",
+        "help" : "Selectează între căutare semantică cu un singur hop sau cu mai multe hop-uri"
+      },
+      "topK" : {
+        "label" : "Număr de segmente de text returnate (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM utilizat",
+        "help" : "Specificați modelul de limbaj mare folosit pentru Deep search; se va folosi cel implicit dacă nu este selectat niciunul."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt pentru analiză documente",
+        "help" : "Editează promptul folosit pentru extragerea informațiilor relevante din fragmentele documentelor."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt pentru consolidarea informațiilor extrase",
+        "help" : "Editează promptul care va fi folosit pentru consolidarea într-un singur raport a informațiilor relevante extrase din documentele recuperate."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Prag de similaritate la prima căutare",
+        "help" : "Prag de similaritate semantică la primul hop (între 0.5 și 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Prag de similaritate la a doua căutare",
+        "help" : "Prag de similaritate semantică la al doilea hop (între 0.5 și 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Model de limbaj mare implicit",
+        "help" : "Modelul de limbaj mare implicit va fi folosit pentru procesarea Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Prag de similaritate la căutare",
+        "help" : "Prag de similaritate semantică (între 0.5 și 1.0)"
       }
     }
   }

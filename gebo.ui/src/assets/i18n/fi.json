@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces -integraatio",
         "description" : "Määritä Gebo.ai käyttämään Google cloud Drive/Workspaces -tiimitietoja"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Määritä Google search api",
+        "description" : "Määritä Google search api -tunnistetiedot tekoälyn verkkohakuihin"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Määritä Deep search",
+        "description" : "Määritä Deep search -parametrit"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Kuvaus"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api -avain"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Luo Google search -tunnistetiedot"
+      },
+      "CreateBtn" : {
+        "label" : "Luo"
+      },
+      "customSearchEngineId" : {
+        "label" : "Hakukoneen id",
+        "help" : "Anna hakukoneen id, jonka sait rekisteröidessäsi Google search api -tunnistetietoja."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguraatiokoodi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "apiKey" : {
+        "label" : "Api-avain",
+        "help" : "Anna api-avain, jonka sait rekisteröidessäsi Google search api -tunnistetietoja."
+      },
+      "MainPanel" : {
+        "label" : "Aseta Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Poista",
+        "help" : "Poista Google search api -tunnistetiedot"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search -asetukset",
+        "help" : "Lisää deep search -konfiguraatio"
+      },
+      "EditSystemBtn" : {
+        "label" : "Muokkaa asetuksia"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Oletko varma, että haluat poistaa tämän keskustelun?",
         "header" : "Poista keskustelu"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Lisää sisältöä tai muuta hakukäytöstä"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Lisää sisältöä tai muuta hakukäytöstä"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Lisää sisältöä tai muuta hakukäytöstä"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Et voi poistaa tätä",
         "detail" : "Tähän objektiin viitataan sovelluksen muista osista"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Poikkeus toiminnossa:Virhe url-osoitteen kanssa:http://localhost:11434/v1/models",
+        "detail" : "Palvelinvirhe: Virhe url-osoitteen kanssa:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Poikkeus toiminnossa:apiKey pitää olla asetettu",
+        "detail" : "Palvelinvirhe: apiKey pitää olla asetettu"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Virhe chat-vastauksen latauksessa",
+        "detail" : "Palvelinvirhe: 400 Bad Request POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Käytetty tunnus",
         "help" : "Valitse tai luo tunnus pääsyyn google drive -järjestelmään"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Keskustelu"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Etsitään olennaista tietoa"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Yhdistetään lopullinen raportti"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysoitu hakutulos"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Järjestelmän analysoitu hakutulos kohteelle"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Lisää"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SearchSettingTab" : {
+        "label" : "Haun asetukset"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Anna kehotus dokumenttien oleellisen tiedon poimintaan"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Anna kehotus poimitun tiedon yhdistämiseen"
+      },
+      "MainPanel" : {
+        "label" : "Muokkaa deep search -asetuksia"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Suurten kielimallien asetukset"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna deep search -konfiguraation kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu uniikki deep search -konfiguroinnin koodi"
+      },
+      "searchType" : {
+        "label" : "Haun tyyppi",
+        "help" : "Valitse yksiasteinen semanttinen haku tai moniaskelinen"
+      },
+      "topK" : {
+        "label" : "Noudettujen tekstikatkelmien määrä (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Käytetty llm",
+        "help" : "Määrittele deep searchissä käytettävä suuri kielimalli, oletusmalli käytetään jos mitään ei valita."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumenttianalyysin kehotus",
+        "help" : "Muokkaa kehotusta, jota käytetään dokumenttikappaleiden olennaisen tiedon poimintaan."
+      },
+      "consolidationPrompt" : {
+        "label" : "Poimitun tiedon yhdistämiskehotus",
+        "help" : "Muokkaa kehotusta, jolla yhdistetään haetuista dokumenteista poimitut oleelliset tiedot yhteen raporttiin."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Haun samankaltaisuuden kynnys",
+        "help" : "Ensimmäisen asteen semanttisen samankaltaisuuden kynnys (väliltä 0.5–1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Toisen asteen samankaltaisuuden kynnys",
+        "help" : "Toisen asteen semanttisen samankaltaisuuden kynnys (väliltä 0.5–1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Oletus suuri kielimalli",
+        "help" : "Oletus suuri kielimalli käytetään deep search -prosessoinnissa"
+      },
+      "similarityThreashold" : {
+        "label" : "Haun samankaltaisuuden kynnys",
+        "help" : "Semanttisen samankaltaisuuden kynnys (väliltä 0.5–1.0)"
       }
     }
   }

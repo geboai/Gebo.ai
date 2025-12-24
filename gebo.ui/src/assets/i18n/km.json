@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "ការរួមបញ្ចូល Google Drive/Workspaces",
         "description" : "កំណត់រចនាសម្ព័ន្ធ Gebo.ai ដើម្បីចូលប្រើទិន្នន័យក្រុម Google cloud Drive/Workspaces របស់អ្នក"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Google search api",
+        "description" : "កំណត់ព័ត៌មានសម្ងាត់ Google search api សម្រាប់ស្វែងរកតាមបណ្ដាញដោយ AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Deep search",
+        "description" : "កំណត់ប៉ារ៉ាម៉ែត្រ Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "សេចក្ដីពិពណ៌នា"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "កូនសោ Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "បង្កើតព័ត៌មានសម្ងាត់ google search"
+      },
+      "CreateBtn" : {
+        "label" : "បង្កើត"
+      },
+      "customSearchEngineId" : {
+        "label" : "លេខសម្គាល់ម៉ាស៊ីនស្វែងរក",
+        "help" : "បញ្ចូលលេខសម្គាល់ម៉ាស៊ីនស្វែងរកដែលទទួលបាននៅក្នុងការចុះឈ្មោះព័ត៌មានសម្ងាត់ google search api ។"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "កូដកំណត់រចនាសម្ព័ន្ធ"
+      },
+      "DescriptionHeader" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "apiKey" : {
+        "label" : "កូនសោ Api",
+        "help" : "បញ្ចូលកូនសោ api ដែលទទួលបាននៅក្នុងការចុះឈ្មោះព័ត៌មានសម្ងាត់ google search api ។"
+      },
+      "MainPanel" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "លុប",
+        "help" : "លុបព័ត៌មានសម្ងាត់ Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Deep search",
+        "help" : "បន្ថែមកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "កែសម្រួលកំណត់រចនាសម្ព័ន្ធ"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "តើអ្នកប្រាកដថាអ្នកចង់លុបការជជែកនេះ?",
         "header" : "សកម្មភាពលុបការជជែក"
+      },
+      "PlusContextualMenu" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
+      },
+      "[object HTMLElement]" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
+      },
+      "ContextMenuBtn" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "អ្នកមិនអាចលុបវានេះបានទេ",
         "detail" : "វត្ថុនេះត្រូវបានយោងពីផ្នែកផ្សេងៗនៃកម្មវិធី"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "មានបញ្ហាក្នុងការជួសជុលប្រតិបត្តិការ:មានកំហុសក្នុងការដំណើរការ url:http://localhost:11434/v1/models",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ មានកំហុសក្នុងការដំណើរការ url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "មានបញ្ហាក្នុងប្រតិបត្ដិការ:ត្រូវតែដាក់ apiKey",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ ត្រូវតែដាក់ apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "កំហុសពេលចេញលទ្ធផលជជែកល្បឿនលឿន",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ 400 សំណើមិនត្រឹមត្រូវពី POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "អត្តសញ្ញាណដែលបានប្រើ",
         "help" : "ជ្រើសរើស ឬបង្កើតអត្តសញ្ញាណសម្រាប់ចូលប្រើប្រព័ន្ធ google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ជជែក"
+      },
+      "deep-search" : {
+        "label" : "ស្វែងរកជ្រៅ"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "ស្វែងរកជ្រៅ"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "កំពុងស្វែងរកព័ត៌មានសក្ដិសម"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "កំពុងបង្រួមរបាយការណ៍ចុងក្រោយ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "លទ្ធផលស្វែងរកដែលបានវិភាគ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "លទ្ធផលស្វែងរកប្រព័ន្ធដែលបានវិភាគ សម្រាប់"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "បញ្ចូល"
+      },
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "DeleteBtn" : {
+        "label" : "លុប"
+      },
+      "SearchSettingTab" : {
+        "label" : "កំណត់ការស្វែងរក"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "បញ្ចូល prompt សម្រាប់បង្ហាញព័ត៌មានពាក់ព័ន្ធនៃឯកសារ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "បញ្ចូល prompt សម្រាប់បង្រួមព័ត៌មានពាក់ព័ន្ធដែលបានសម្រេច"
+      },
+      "MainPanel" : {
+        "label" : "កែសម្រួលកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធម៉ូដែលភាសាធំ"
+      },
+      "description" : {
+        "label" : "សេចក្ដីពិពណ៌នា",
+        "help" : "បញ្ចូលសេចក្ដីពិពណ៌នានៃកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "code" : {
+        "label" : "កូដតែមួយគត់",
+        "help" : "កូដតែមួយគត់ដែលបង្កើតដោយស្វ័យប្រវត្តិនៃកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "searchType" : {
+        "label" : "ប្រភេទស្វែងរក",
+        "help" : "ជ្រើសរើសស្វែងរកសេមេនតិកតែមួយគ្រឿង ឬច្រើន hop"
+      },
+      "topK" : {
+        "label" : "ចំនួនផ្នែកអត្ថបទដែលបានយក (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ម៉ូដែលភាសាធំដែលប្រើ",
+        "help" : "បញ្ជាក់ម៉ូដែលភាសាធំដែលប្រើសម្រាប់ Deep search គ្មានជ្រើសរើសនឹងប្រើលំនាំដើម។"
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt វិភាគឯកសារ",
+        "help" : "កែសម្រួល prompt ដែលនឹងប្រើសម្រាប់បង្ហាញព័ត៌មានពាក់ព័ន្ធនៅក្នុងផ្នែកឯកសារ។"
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt បង្រួមព័ត៌មានដែលបានសន្និដ្ឋាន",
+        "help" : "កែសម្រួល prompt ដែលនឹងប្រើសម្រាប់បង្រួមព័ត៌មានសំខាន់ៗដែលបានស្រាវជ្រាវចេញពីឯកសារ។"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរកលើកទី១",
+        "help" : "កម្រិតសេមេនតិចលើកទី១ (ជួរពី 0.5 ដល់ 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរកលើកទី២",
+        "help" : "កម្រិតសេមេនតិចលើកទី២ (ជួរពី 0.5 ដល់ 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "ម៉ូដែលភាសាធំលំនាំដើម",
+        "help" : "ម៉ូដែលភាសាធំលំនាំដើមនឹងត្រូវប្រើសម្រាប់ដំណើរការ Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរក",
+        "help" : "កម្រិតសេមេនតិច (ជួរពី 0.5 ដល់ 1.0)"
       }
     }
   }
