@@ -48,9 +48,9 @@ export function getBaseUrl() {
   if (port === "4200") {
     port = "12999";
   }
-  // let localBasePath = protocol + "//" + host + ":" + port;
-  // console.log("Setting basePath: " + localBasePath);
-  return 'http://209.227.236.72:12999';
+  let localBasePath = protocol + "//" + host + ":" + port;
+  console.log("Setting basePath: " + localBasePath);
+  return localBasePath;
 }
 export const routes: Routes = [
   { path: 'ui', redirectTo: "ui/chat", pathMatch: "full" },
