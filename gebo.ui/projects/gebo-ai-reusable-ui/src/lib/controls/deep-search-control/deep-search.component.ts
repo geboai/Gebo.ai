@@ -8,6 +8,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
 @Component({
     selector: "gebo-ai-deep-search-component",
     templateUrl: "deep-search.component.html",
+    styleUrls: ["./deep-search.component.scss"],
     standalone: false,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIDeepSearchModule", multi: false },

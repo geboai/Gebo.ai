@@ -20,12 +20,11 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, forwardRef, HostListener, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
-import { ConfirmationService, ToastMessageOptions, MessageService, Confirmation } from "primeng/api";
-import { ScrollPanel } from "primeng/scrollpanel";
+import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { ReactiveRagChatService } from "./reactive-chat.service";
@@ -63,6 +62,7 @@ interface GeboChatTemplatedResponse {
 };
 const moduleId: string = "GeboAIChatControlModule";
 const entityId: string = "GeboAIReusableChatComponent";
+const scrollStart: number = 350;
 /**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
@@ -72,7 +72,7 @@ const entityId: string = "GeboAIReusableChatComponent";
 @Component({
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
-    styleUrls: ["gebo-ai-reusable-chat.component.css"],
+    styleUrls: ["gebo-ai-reusable-chat.component.scss"],
     providers: [MessageService,
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         {
@@ -103,6 +103,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public get loading(): boolean {
         return this.loadingChatHistory === true || this.loadingChatResponse === true || this.loadingModelMetaInfo === true || this.waitingForTranscript === true;
     }
+
+    /**
+     * Flag indicating if chat loading
+     */
+    public loadingSearchResult: boolean = false;
 
     /**
      * Flag indicating if chat history is being loaded
@@ -223,21 +228,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
 
     /**
-     * Reference to the chat scroll panel
-     */
-    @ViewChild("chatScroller") scrollPanel?: ScrollPanel;
-
-    /**
-     * Reference to the element that should receive focus
-     */
-    @ViewChild("focusable") focusable?: ElementRef<HTMLButtonElement>;
-
-    /**
-     * Reference to the element that should receive focus to scroll up
-     */
-    @ViewChild("focusableTop") focusableTop?: ElementRef<HTMLButtonElement>;
-
-    /**
      * Configuration options for Mermaid diagrams
      */
     public options: MermaidAPI.MermaidConfig = {
@@ -272,7 +262,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatCreationDateTime: new FormControl()
         }
     );
-
+    /**
+     * Scroll buttons
+     */
+    public showTopButton: boolean = false;
+    public showBottomButton: boolean = false;
     /**
      * Metadata about the current chat model
      */
@@ -301,6 +295,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Constructor - injects all required services
      */
+
     public constructor(
         private geboUserChatsControllerService: GeboUserChatsControllerService,
         private confirmService: ConfirmationService,
@@ -317,6 +312,20 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             }
         });
     }
+
+    @HostListener('window:scroll')
+    onWindowScroll() {
+      this.showTopButton = window.scrollY > scrollStart;
+      this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart && this.showTopButton;
+    }
+    public scrollToTop(): void {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    public scrollToBottom(): void {
+      window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+    }
+
     public getEntityName(): string {
         return entityId;
     }
@@ -405,12 +414,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
             this.formGroup.controls["userChatContextCode"].setValue(this.chatInfo?.code);
             this.loadingChatHistory = true;
+            this.loadingSearchResult = true;
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = false;
             this.chatStreamingUpdatedTime = undefined;
             this.geboUserChatsControllerService.getChatHistory(this.chatInfo?.code).subscribe({
                 next: (value) => {
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
+                    this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
                     const subscription = this.geboAiTranslationService.translateMessage(moduleId, entityId, chat_history_loaded.id, chat_history_loaded).subscribe({
                         next: (msg) => {
@@ -426,7 +437,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         }
                     })
 
-                    this.scrollDown();
+                    this.scrollToBottom();
 
                 },
                 complete: () => {
@@ -580,7 +591,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             query: null
                         };
                         this.formGroup.patchValue(dataUpdate);
-                        this.scrollDown();
+                        this.scrollToBottom();
                         this.loadingChatResponse = false;
                         if (doSpeach === true) {
                             this.speechPlay(response.queryResponse);
@@ -595,7 +606,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
             );
         }
-        this.scrollDown();
+        // this.scrollDown();
     }
 
     /**
@@ -696,7 +707,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             }
                         }
                     }
-                    this.scrollDown();
+                    this.scrollToBottom();
                 } else if (recvd.contentObjectType === "String") {
                     if (interaction.response) {
                         if (!interaction.response.queryResponse) {
@@ -744,6 +755,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const uuid: string = uuidv4();
         qry.id = uuid;
         qry.streamResponse = true;
+        // this.loadingSearchResult = true;
         this.formGroup.controls["query"].setValue(null);
         this.formGroup.controls["userUploadedContents"].setValue([]);
         if (this.useRestOnly === true) {
@@ -752,47 +764,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.callReactiveChat(qry, doSpeach);
         }
     }
-
-    /**
-     * Scrolls to the bottom of the chat
-     */
-    scrollDown(): void {
-        const scrollFunction = () => {
-
-            if (this.focusable) {
-                try {
-                    this.focusable.nativeElement.scrollTo();
-                } catch (e) {
-                    console.error(e);
-                }
-                try {
-                    this.focusable.nativeElement.scrollIntoView();
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        }
-        setTimeout(scrollFunction, 500);
-    }
-    scrollUp() {
-        const scrollFunction = () => {
-
-            if (this.focusableTop) {
-                try {
-                    this.focusableTop.nativeElement.scrollTo();
-                } catch (e) {
-                    console.error(e);
-                }
-                try {
-                    this.focusableTop.nativeElement.scrollIntoView();
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        }
-        setTimeout(scrollFunction, 500);
-    }
-
     /**
      * Sends a text-to-speech request and plays the audio
      * 

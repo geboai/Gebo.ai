@@ -45,13 +45,18 @@ export class GeboAIChatInputShellComponent implements OnInit {
   protected currentDeepsearchChatRequest?: GeboChatRequest;
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
   protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
-  protected chooseModeFormGroup: FormGroup = new FormGroup({
-    nextRequestMode: new FormControl()
-  });
-  constructor(private translationService: GeboAITranslationService) {
-    this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data => { this.nextRequestMode = data; });
-    this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
+
+  get submitIcon(): string {
+    if (this.loading) {
+      return 'pi pi-spin pi-spinner';
+    }
+
+    return this.nextRequestMode === 'standard-chat'
+      ? 'pi pi-search'
+      : 'pi pi-deep-search';
   }
+
+  constructor(private translationService: GeboAITranslationService) { }
   addBehaviorsMenu: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -68,7 +73,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
     }
   }, {
     id: "DeepSearchItem",
-    icon: "pi pi-search-plus",
+    icon: "pi pi-deep-search",
     label: "Deep search",
     command: (event) => {
       this.nextRequestMode = "deep-search";
@@ -101,8 +106,6 @@ export class GeboAIChatInputShellComponent implements OnInit {
       this.currentDeepsearchChatRequest = request;
       this.formGroup.controls["query"].setValue(null);
       this.formGroup.controls["userUploadedContents"].setValue([]);
-      this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
-      this.nextRequestMode = "standard-chat";
     } else {
       this.messageSubmit.emit();
     }
@@ -117,11 +120,13 @@ export class GeboAIChatInputShellComponent implements OnInit {
   }
 
   openUploadDialog() {
+    this.nextRequestMode = "standard-chat";
     this.openedUploadDocumentsWindow = true;
     this.openedUploadDocumentsWindowChange.emit(true);
   }
 
   openSelectDocsDialog() {
+    this.nextRequestMode = "standard-chat";
     this.openSelectDocumentsWindow = true;
     this.openSelectDocumentsWindowChange.emit(true);
   }
