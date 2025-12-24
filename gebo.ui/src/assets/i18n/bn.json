@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ইন্টিগ্রেশন",
         "description" : "Gebo.ai কনফিগার করুন যেন আপনার Google ক্লাউড Drive/Workspaces টিম ডাটায় অ্যাক্সেস পায়"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google সার্চ এপিআই কনফিগার করুন",
+        "description" : "এআই ওয়েব সার্চের জন্য Google সার্চ এপিআই ক্রেডেনশিয়াল কনফিগার করুন"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "ডিপ সার্চ কনফিগার করুন",
+        "description" : "ডিপ সার্চের প্যারামিটার কনফিগার করুন"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "বর্ণনা"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "বাতিল করুন"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google সার্চ এপিআই কী"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google সার্চ ক্রেডেনশিয়াল তৈরি করুন"
+      },
+      "CreateBtn" : {
+        "label" : "তৈরি করুন"
+      },
+      "customSearchEngineId" : {
+        "label" : "সার্চ ইঞ্জিন আইডি",
+        "help" : "Google সার্চ এপিআই ক্রেডেনশিয়ালের রেজিস্ট্রেশনে প্রাপ্ত সার্চ ইঞ্জিন আইডি লিখুন।"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "কনফিগ কোড"
+      },
+      "DescriptionHeader" : {
+        "label" : "বর্ণনা"
+      },
+      "apiKey" : {
+        "label" : "এপিআই কী",
+        "help" : "Google সার্চ এপিআই ক্রেডেনশিয়ালের রেজিস্ট্রেশনে প্রাপ্ত এপিআই কী লিখুন।"
+      },
+      "MainPanel" : {
+        "label" : "Google সার্চ এপিআই সেটআপ করুন"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ডিলিট করুন",
+        "help" : "Google সার্চ এপিআই ক্রেডেনশিয়াল ডিলিট করুন"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "ডিপ সার্চ কনফিগ",
+        "help" : "নতুন ডিপ সার্চ কনফিগারেশন যোগ করুন"
+      },
+      "EditSystemBtn" : {
+        "label" : "কনফিগ এডিট করুন"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "আপনি কি নিশ্চিত যে আপনি এই চ্যাটটি মুছে ফেলতে চান?",
         "header" : "চ্যাট মুছে ফেলার অ্যাকশন"
+      },
+      "PlusContextualMenu" : {
+        "help" : "কন্টেন্ট যোগ করুন বা সার্চ আচরণ পরিবর্তন করুন"
+      },
+      "[object HTMLElement]" : {
+        "help" : "কন্টেন্ট যোগ করুন বা সার্চ আচরণ পরিবর্তন করুন"
+      },
+      "ContextMenuBtn" : {
+        "help" : "কন্টেন্ট যোগ করুন বা সার্চ আচরণ পরিবর্তন করুন"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "আপনি এটি মুছতে পারবেন না",
         "detail" : "অ্যাপ্লিকেশনের অন্য অংশ থেকে এই অবজেক্টটি রেফারেন্স করা হয়েছে"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "অপারেশন চলাকালে ব্যতিক্রম: url-এর সাথে সমস্যা:http://localhost:11434/v1/models",
+        "detail" : "সার্ভার ত্রুটি: url-এর সাথে সমস্যা:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "অপারেশন চলাকালে ব্যতিক্রম: apiKey সেট করা আবশ্যক",
+        "detail" : "সার্ভার ত্রুটি: apiKey সেট করা আবশ্যক"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিমিং করতে সমস্যা হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "ব্যবহৃত পরিচিতি",
         "help" : "গুগল ড্রাইভ সিস্টেমে অ্যাক্সেসের জন্য পরিচিতি নির্বাচন করুন বা তৈরি করুন"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "চ্যাট"
+      },
+      "deep-search" : {
+        "label" : "ডিপ সার্চ"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "ডিপ সার্চ"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "প্রাসঙ্গিক তথ্য অনুসন্ধান করা হচ্ছে"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "চূড়ান্ত প্রতিবেদন সংহত করা হচ্ছে"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "বিশ্লেষিত অনুসন্ধানের ফলাফল"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "জন্য বিশ্লেষিত সিস্টেম অনুসন্ধানের ফলাফল"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ইনসার্ট করুন"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল করুন"
+      },
+      "DeleteBtn" : {
+        "label" : "ডিলিট করুন"
+      },
+      "SearchSettingTab" : {
+        "label" : "সার্চ সেটিং"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ডকুমেন্ট থেকে প্রাসঙ্গিক তথ্য বের করতে প্রম্পট লিখুন"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "তুলে আনা তথ্য একত্র করার জন্য প্রম্পট লিখুন"
+      },
+      "MainPanel" : {
+        "label" : "ডিপ সার্চ কনফিগারেশন এডিট হচ্ছে"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "লার্জ ল্যাঙ্গুয়েজ মডেল সেটিং"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "ডিপ সার্চ কনফিগারেশনের বর্ণনা লিখুন"
+      },
+      "code" : {
+        "label" : "ইউনিক কোড",
+        "help" : "ডিপ সার্চ কনফিগারেশনের স্বয়ংক্রিয়ভাবে জেনারেটেড ইউনিক কোড"
+      },
+      "searchType" : {
+        "label" : "সার্চ টাইপ",
+        "help" : "সিঙ্গেল হপ সেমান্টিক সার্চ অথবা মাল্টি হপের মধ্যে নির্বাচন করুন"
+      },
+      "topK" : {
+        "label" : "প্রাপ্ত টেক্সট সেগমেন্টের সংখ্যা (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ব্যবহৃত llm",
+        "help" : "ডিপ সার্চের জন্য ব্যবহৃত লার্জ ল্যাঙ্গুয়েজ মডেল নির্দিষ্ট করুন, কিছু না দিলে ডিফল্টটি ব্যবহার হবে।"
+      },
+      "analisysPrompt" : {
+        "label" : "ডকুমেন্ট অনালাইসিস প্রম্পট",
+        "help" : "ডকুমেন্ট ফрагমেন্ট থেকে প্রাসঙ্গিক তথ্য বের করতে যেই প্রম্পট ব্যবহার করা হবে তা এডিট করুন।"
+      },
+      "consolidationPrompt" : {
+        "label" : "সংগ্রহীত তথ্য সংহতকরণ প্রম্পট",
+        "help" : "প্রাপ্ত ডকুমেন্ট থেকে বেরকৃত প্রাসঙ্গিক তথ্য একত্র করতে যেই প্রম্পট ব্যবহার করা হবে তা এডিট করুন।"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "সার্চ সিমিলারিটি থ্রেশহোল্ড",
+        "help" : "প্রথম হপ সেমান্টিক সিমিলারিটি থ্রেশহোল্ড (০.৫ থেকে ১.০ এর মধ্যে)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "দ্বিতীয় হপ সিমিলারিটি থ্রেশহোল্ড",
+        "help" : "দ্বিতীয় হপ সেমান্টিক সিমিলারিটি থ্রেশহোল্ড (০.৫ থেকে ১.০ এর মধ্যে)"
+      },
+      "defaultModel" : {
+        "label" : "ডিফল্ট লার্জ ল্যাঙ্গুয়েজ মডেল",
+        "help" : "ডিপ সার্চ প্রসেসিংয়ের জন্য ডিফল্ট লার্জ ল্যাঙ্গুয়েজ মডেল ব্যবহার হবে"
+      },
+      "similarityThreashold" : {
+        "label" : "সার্চ সিমিলারিটি থ্রেশহোল্ড",
+        "help" : "সেমান্টিক সিমিলারিটি থ্রেশহোল্ড (০.৫ থেকে ১.০ এর মধ্যে)"
       }
     }
   }

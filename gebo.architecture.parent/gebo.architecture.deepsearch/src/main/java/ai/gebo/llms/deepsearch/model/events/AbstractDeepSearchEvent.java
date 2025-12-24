@@ -1,4 +1,4 @@
-package ai.gebo.llms.deepsearch.model;
+package ai.gebo.llms.deepsearch.model.events;
 
 import lombok.Data;
 

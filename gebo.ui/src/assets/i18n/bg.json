@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Интеграция с Google Drive/Workspaces",
         "description" : "Конфигурирайте Gebo.ai, за да има достъп до данните на екипа ви в Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Конфигурирайте Google search api",
+        "description" : "Добавете данни за достъп на Google search api за AI уеб търсения"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Конфигурирайте Deep search",
+        "description" : "Настройте параметрите за Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Описание"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api ключ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Създайте google search удостоверения"
+      },
+      "CreateBtn" : {
+        "label" : "Създай"
+      },
+      "customSearchEngineId" : {
+        "label" : "Идентификатор на търсачката",
+        "help" : "Въведете идентификатора на търсачката, получен при регистрацията на google search api удостоверения."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код за конфигурация"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "apiKey" : {
+        "label" : "Api ключ",
+        "help" : "Въведете api ключа, получен при регистрация на google search api удостоверения."
+      },
+      "MainPanel" : {
+        "label" : "Настройте google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Изтрий",
+        "help" : "Изтрийте Google search api удостоверения"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Конфигурация на Deep search",
+        "help" : "Добавете конфигурация за deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Редактирай конфигурация"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Сигурни ли сте, че искате да изтриете този чат?",
         "header" : "Изтриване на чат"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Не можете да изтриете това",
         "detail" : "Този обект е свързан с друга част на приложението"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Изключение по време на операция: Грешка при работа с url:http://localhost:11434/v1/models",
+        "detail" : "Грешка на сървъра: Грешка при работа с url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Изключение по време на операция: apiKey трябва да бъде зададен",
+        "detail" : "Грешка на сървъра: apiKey трябва да бъде зададен"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Грешка при поточно получаване на chat отговор",
+        "detail" : "Грешка на сървъра: 400 Bad Request от POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Използвана идентичност",
         "help" : "Изберете или създайте идентичност за достъп до google drive системата"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Чат"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Търсене на релевантна информация"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Консолидиране на крайния доклад"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Анализиран резултат от търсенето"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Анализиран системен резултат от търсенето за"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Добави"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "SearchSettingTab" : {
+        "label" : "Настройки на търсенето"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Въведете prompt за извличане на релевантна информация от документите"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Въведете prompt за консолидиране на извлечената релевантна информация"
+      },
+      "MainPanel" : {
+        "label" : "Редактиране на Deep search конфигурация"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Настройки на големи езикови модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на Deep search конфигурацията"
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код за Deep search конфигурацията"
+      },
+      "searchType" : {
+        "label" : "Тип търсене",
+        "help" : "Изберете между едностъпково семантично търсене или многостъпково"
+      },
+      "topK" : {
+        "label" : "Брой извлечени текстови сегменти (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Използван llm",
+        "help" : "Изберете голям езиков модел за Deep search, ако не е избран ще се използва\n                                    по подразбиране."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt за анализа на документи",
+        "help" : "Редактирайте prompt-а, който ще се използва за извличане на релевантна информация от фрагментите на документите."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt за консолидиране на извлечена информация",
+        "help" : "Редактирайте prompt-а, който ще се използва за консолидиране в един доклад на релевантната информация, извлечена от откритите документи."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Праг за прилика при първа стъпка в търсенето",
+        "help" : "Праг за семантична прилика при първа стъпка (между 0.5 и 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Праг за прилика при втора стъпка",
+        "help" : "Праг за семантична прилика при втора стъпка (между 0.5 и 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Модел по подразбиране",
+        "help" : "Стандартният голям езиков модел ще се използва при Deep search обработка"
+      },
+      "similarityThreashold" : {
+        "label" : "Праг за прилика в търсенето",
+        "help" : "Праг за семантична прилика (между 0.5 и 1.0)"
       }
     }
   }

@@ -22,7 +22,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
 
   @Input() chatInfo?: GUserChatInfo;
   @Input() userChatContextCode?: string;
-
+  
   @Input() capabilities: any;
   @Input() currentAudioTrack: any;
   @Input() loading = false;
@@ -45,7 +45,6 @@ export class GeboAIChatInputShellComponent implements OnInit {
   protected currentDeepsearchChatRequest?: GeboChatRequest;
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
   protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
-
   get submitIcon(): string {
     if (this.loading) {
       return 'pi pi-spin pi-spinner';
@@ -54,6 +53,17 @@ export class GeboAIChatInputShellComponent implements OnInit {
     return this.nextRequestMode === 'standard-chat'
       ? 'pi pi-search'
       : 'pi pi-deep-search';
+  }
+  protected chooseModeFormGroup: FormGroup = new FormGroup({
+    nextRequestMode: new FormControl()
+  });
+  constructor(private translationService: GeboAITranslationService) {
+    this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data => { this.nextRequestMode = data; });
+    this.setStandardChatMode();
+  }
+  private setStandardChatMode(): void {
+    this.nextRequestMode="standard-chat";
+    this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
   }
 
   constructor(private translationService: GeboAITranslationService) { }
@@ -77,6 +87,7 @@ export class GeboAIChatInputShellComponent implements OnInit {
     label: "Deep search",
     command: (event) => {
       this.nextRequestMode = "deep-search";
+      this.chooseModeFormGroup.controls["nextRequestMode"].setValue(this.nextRequestMode);
     }
   }];
   ngOnInit(): void {
@@ -140,5 +151,8 @@ export class GeboAIChatInputShellComponent implements OnInit {
     this.currentDeepsearchChatRequest = undefined;
     this.loading = false;
     this.loadingChange.emit(false);
+  }
+  onSkipDeepSearchEvent(_event: any): void {
+    this.setStandardChatMode();
   }
 }

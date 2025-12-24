@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integration",
         "description" : "I-configure ang Gebo.ai upang makuha ang iyong Google cloud Drive/Workspaces team data"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "I-configure ang Google search api",
+        "description" : "Ilagay ang Google search api credentials para sa AI web searches"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "I-configure ang Deep search",
+        "description" : "Ilagay ang mga parameter ng Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Deskripsyon"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Gumawa ng google search credentials"
+      },
+      "CreateBtn" : {
+        "label" : "Gumawa"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Ilagay ang search engine id na nakuha sa google search api credentials registration."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Ilagay ang api key na nakuha sa google search api credentials registration."
+      },
+      "MainPanel" : {
+        "label" : "I-setup ang google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Tanggalin",
+        "help" : "Tanggalin ang Google search api credentials"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search config",
+        "help" : "Magdagdag ng deep search configuration"
+      },
+      "EditSystemBtn" : {
+        "label" : "I-edit ang config"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Sigurado ka bang gusto mong tanggalin ang chat na ito?",
         "header" : "Aksyon sa pagtanggal ng chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Magdagdag ng nilalaman o baguhin ang kilos ng paghahanap"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Magdagdag ng nilalaman o baguhin ang kilos ng paghahanap"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Magdagdag ng nilalaman o baguhin ang kilos ng paghahanap"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Hindi mo puwedeng tanggalin ito",
         "detail" : "Ang bagay na ito ay ginagamit pa sa ibang bahagi ng application"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Exception habang isinasagawa ang operasyon: Error sa pagproseso ng url:http://localhost:11434/v1/models",
+        "detail" : "Server error: Error sa pagproseso ng url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Exception habang isinasagawa ang operasyon: Kailangan itakda ang apiKey",
+        "detail" : "Server error: Kailangan itakda ang apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "May mali habang pinapadaloy ang chat response",
+        "detail" : "Server error: 400 Bad Request mula sa POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Ginamit na identity",
         "help" : "Pumili o gumawa ng identity para ma-access ang google drive system"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Hinahanap ang kaugnay na impormasyon"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Pinagsasama-sama ang huling ulat"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Na-analisa na resulta ng paghahanap"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Na-analisa na resulta ng paghahanap mula sa sistema para sa"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ipasok"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SearchSettingTab" : {
+        "label" : "Search setting"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Ipasok ang prompt para sa pagkuha ng kaugnay na impormasyon ng dokumento"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Ipasok ang prompt para sa konsolidasyon ng nakuha na impormasyon"
+      },
+      "MainPanel" : {
+        "label" : "Ini-edit ang deep search configuration"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Large language model setting"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng deep search configuration"
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong ginawang natatanging code ng deep search configuration"
+      },
+      "searchType" : {
+        "label" : "Search type",
+        "help" : "Pumili sa pagitan ng single hop semantic search o multi hop"
+      },
+      "topK" : {
+        "label" : "Bilang ng makukuhang text segments (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Ginamit na llm",
+        "help" : "Tukuyin ang large language model na gagamitin para sa Deep search, default ang gagamitin kung wala kang pinili."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt sa pag-aanalisa ng dokumento",
+        "help" : "I-edit ang prompt na gagamitin para sa pagkuha ng kaugnay na impormasyon mula sa bahagi ng dokumento."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt para sa pagsasama ng nakuha na impormasyon",
+        "help" : "I-edit ang prompt na gagamitin upang pagsamahin sa isang ulat ang mga nakuha na mahahalagang impormasyon mula sa mga nakuhang dokumento."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Search similarity threshold",
+        "help" : "Unang hop semantic similarity threshold (sa pagitan ng 0.5 hanggang 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Second hop similarity threshold",
+        "help" : "Pangalawang hop semantic similarity threshold (sa pagitan ng 0.5 hanggang 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Default large language model",
+        "help" : "Ang default na large language model ang gagamitin sa Deep search processing"
+      },
+      "similarityThreashold" : {
+        "label" : "Search similarity threshold",
+        "help" : "Semantic similarity threshold (sa pagitan ng 0.5 hanggang 1.0)"
       }
     }
   }

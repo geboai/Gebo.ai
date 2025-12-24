@@ -25,4 +25,5 @@ export interface GeboChatRequest {
     forcedRequestDocuments?: Array<string>;
     documents?: RagDocumentsCachedDaoResult;
     userUploadedContents?: Array<UserUploadedContent>;
+    deepSearchDataSources?: Array<string>;
 }

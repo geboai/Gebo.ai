@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integracija",
         "description" : "Konfigūruokite Gebo.ai, kad galėtumėte pasiekti savo Google cloud Drive/Workspaces komandos duomenis"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfigūruokite Google paieškos api",
+        "description" : "Nustatykite Google paieškos api duomenis AI internetinėms paieškoms"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfigūruokite Deep paiešką",
+        "description" : "Nustatykite Deep paieškos parametrus"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Aprašymas"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google paieškos api raktas"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Sukurti google paieškos prisijungimus"
+      },
+      "CreateBtn" : {
+        "label" : "Sukurti"
+      },
+      "customSearchEngineId" : {
+        "label" : "Paieškos variklio id",
+        "help" : "Įveskite paieškos variklio id, gautą registruojant google paieškos api duomenis."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūravimo kodas"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "apiKey" : {
+        "label" : "Api raktas",
+        "help" : "Įveskite api raktą, gautą registruojant google paieškos api duomenis."
+      },
+      "MainPanel" : {
+        "label" : "Nustatyti google paieškos api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Ištrinti",
+        "help" : "Ištrinti Google paieškos api duomenis"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep paieškos konfigūracija",
+        "help" : "Pridėti deep paieškos konfigūraciją"
+      },
+      "EditSystemBtn" : {
+        "label" : "Redaguoti konfigūraciją"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ar tikrai norite ištrinti šį pokalbį?",
         "header" : "Pokalbio ištrynimo veiksmas"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Pridėti turinį arba keisti paieškos elgseną"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Pridėti turinį arba keisti paieškos elgseną"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Pridėti turinį arba keisti paieškos elgseną"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Negalite ištrinti šio",
         "detail" : "Į šį objektą yra nuorodų iš kitų programos dalių"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Klaida operacijos metu:Klaida dirbant su url:http://localhost:11434/v1/models",
+        "detail" : "Serverio klaida: Klaida dirbant su url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Klaida operacijos metu:turi būti nustatytas apiKey",
+        "detail" : "Serverio klaida: turi būti nustatytas apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Klaida transliuojant pokalbio atsakymą",
+        "detail" : "Serverio klaida: 400 Bloga užklausa iš POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Naudojama tapatybė",
         "help" : "Pasirinkite arba sukurkite tapatybę google drive sistemai pasiekti"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Pokalbis"
+      },
+      "deep-search" : {
+        "label" : "Deep paieška"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep paieška"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Ieškoma aktualios informacijos"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Galutinės ataskaitos apjungimas"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizuotas paieškos rezultatas"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizuotas sistemos paieškos rezultatas dėl"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Įterpti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SearchSettingTab" : {
+        "label" : "Paieškos nustatymai"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Įrašykite užklausą dokumentų aktualios informacijos ištraukimui"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Įrašykite užklausą ištrauktos informacijos apjungimui"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojama deep paieškos konfigūracija"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Didelio kalbos modelio nustatymai"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite deep paieškos konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas deep paieškos konfigūracijos unikalus kodas"
+      },
+      "searchType" : {
+        "label" : "Paieškos tipas",
+        "help" : "Pasirinkite tarp vieno žingsnio semantinės paieškos arba daugiapakopės"
+      },
+      "topK" : {
+        "label" : "Grąžinamų teksto segmentų skaičius (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Naudojamas llm",
+        "help" : "Nurodykite Deep paieškai naudojamą didelį kalbos modelį, pagal nutylėjimą bus\n                                    naudojamas, jei neišrinktas."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentų analizės užklausa",
+        "help" : "Redaguokite užklausą, kuri bus naudojama dokumentų fragmentų aktualios informacijos ištraukimui."
+      },
+      "consolidationPrompt" : {
+        "label" : "Ištrauktos informacijos apjungimo užklausa",
+        "help" : "Redaguokite užklausą, kuri bus naudojama konsoliduoti iš gautų dokumentų ištrauktą aktualią informaciją į bendrą ataskaitą."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Paieškos panašumo slenkstis",
+        "help" : "Pirmo žingsnio semantinis panašumo slenkstis (nuo 0.5 iki 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Antro žingsnio panašumo slenkstis",
+        "help" : "Antro žingsnio semantinio panašumo slenkstis (nuo 0.5 iki 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Numatytasis didelis kalbos modelis",
+        "help" : "Numatytasis didelis kalbos modelis bus naudojamas Deep paieškai vykdyti"
+      },
+      "similarityThreashold" : {
+        "label" : "Paieškos panašumo slenkstis",
+        "help" : "Semantinio panašumo slenkstis (nuo 0.5 iki 1.0)"
       }
     }
   }

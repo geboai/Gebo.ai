@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces entegrasyonu",
         "description" : "Gebo.ai'yi Google cloud Drive/Workspaces ekip verilerinize erişecek şekilde yapılandırın"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google arama api yapılandır",
+        "description" : "AI web aramaları için Google arama api kimlik bilgilerini yapılandır"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search yapılandır",
+        "description" : "Deep search parametrelerini yapılandır"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Açıklama"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google arama api anahtarı"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google arama kimlik bilgilerini oluştur"
+      },
+      "CreateBtn" : {
+        "label" : "Oluştur"
+      },
+      "customSearchEngineId" : {
+        "label" : "Arama motoru kimliği",
+        "help" : "Google arama api kimlik bilgileri kaydında elde edilen arama motoru kimliğini girin."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Yapılandırma kodu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Açıklama"
+      },
+      "apiKey" : {
+        "label" : "Api anahtarı",
+        "help" : "Google arama api kimlik bilgileri kaydında elde edilen api anahtarını girin."
+      },
+      "MainPanel" : {
+        "label" : "Google arama api'yi kur"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Sil",
+        "help" : "Google arama api kimlik bilgilerini sil"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search yapılandırması",
+        "help" : "Bir deep search yapılandırması ekle"
+      },
+      "EditSystemBtn" : {
+        "label" : "Yapılandırmayı düzenle"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Bu sohbeti silmek istediğinizden emin misiniz?",
         "header" : "Sohbeti silme işlemi"
+      },
+      "PlusContextualMenu" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
+      },
+      "[object HTMLElement]" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
+      },
+      "ContextMenuBtn" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Bunu silemezsiniz",
         "detail" : "Bu nesne uygulamanın başka bir bölümünden referans alınmış"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "İşlem sırasında istisna:Url ile çalışırken hata:http://localhost:11434/v1/models",
+        "detail" : "Sunucu hatası: Url ile çalışırken hata:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "İşlem sırasında istisna:apiKey ayarlanmalı",
+        "detail" : "Sunucu hatası: apiKey ayarlanmalı"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Sohbet yanıtı iletilirken hata oluştu",
+        "detail" : "Sunucu hatası: 400 Hatalı İstek POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Kullanılan kimlik",
         "help" : "Google drive sistemine erişmek için bir kimlik seçin veya oluşturun"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Sohbet"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "İlgili bilgiler aranıyor"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Nihai rapor birleştiriliyor"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiz edilen arama sonucu"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "için analiz edilen sistem arama sonucu"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ekle"
+      },
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SearchSettingTab" : {
+        "label" : "Arama ayarı"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Belgelerden ilgili bilgileri çıkarmak için prompt yazın"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Çıkarılan ilgili bilgileri birleştirmek için prompt yazın"
+      },
+      "MainPanel" : {
+        "label" : "Deep search yapılandırmasını düzenle"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Büyük dil modeli ayarı"
+      },
+      "description" : {
+        "label" : "Açıklama",
+        "help" : "Deep search yapılandırmasının açıklamasını girin"
+      },
+      "code" : {
+        "label" : "Benzersiz kod",
+        "help" : "Deep search yapılandırmasının otomatik oluşturulan benzersiz kodu"
+      },
+      "searchType" : {
+        "label" : "Arama türü",
+        "help" : "Tek adımlı anlamsal arama veya çok adımlı seçeneklerinden birini seçin"
+      },
+      "topK" : {
+        "label" : "Alınan metin segmenti sayısı (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Kullanılan llm",
+        "help" : "Deep search için hangi büyük dil modelinin kullanılacağını belirtin, eğer seçilmezse varsayılan kullanılacak."
+      },
+      "analisysPrompt" : {
+        "label" : "Belgeler analiz prompt'u",
+        "help" : "Belgelerden ilgili bilgileri çıkarmak için kullanılacak prompt'u düzenleyin."
+      },
+      "consolidationPrompt" : {
+        "label" : "Çıkarılan bilgileri birleştirme prompt'u",
+        "help" : "Alınan belgelerden çıkarılan ilgili bilgileri tek bir raporda birleştirmek için kullanılacak prompt'u düzenleyin."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Arama benzerlik eşiği",
+        "help" : "İlk adım anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "İkinci adım benzerlik eşiği",
+        "help" : "İkinci adım anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      },
+      "defaultModel" : {
+        "label" : "Varsayılan büyük dil modeli",
+        "help" : "Deep search işlemleri için varsayılan büyük dil modeli kullanılacak"
+      },
+      "similarityThreashold" : {
+        "label" : "Arama benzerlik eşiği",
+        "help" : "Anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
       }
     }
   }

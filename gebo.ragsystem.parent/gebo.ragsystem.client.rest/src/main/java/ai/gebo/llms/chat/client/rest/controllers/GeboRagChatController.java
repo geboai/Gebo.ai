@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -36,6 +37,7 @@ import ai.gebo.llms.chat.abstraction.layer.richresponse.model.RichResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService.ModelProviderCapabilities;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
+import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
@@ -169,7 +171,16 @@ public class GeboRagChatController {
 	}
 
 	@GetMapping(value = "createCleanRagChatByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanRagChatByProfileCode(@RequestParam("profileCode") @NotNull String profileCode) throws GeboPersistenceException, LLMConfigException {
+	public GUserChatInfo createCleanRagChatByProfileCode(@RequestParam("profileCode") @NotNull String profileCode)
+			throws GeboPersistenceException, LLMConfigException {
 		return chatService.createCleanRagChatByProfileCode(profileCode);
+	}
+
+	@GetMapping(value = "getVisibleKnowledgeBasesByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GBaseObject> getVisibleKnowledgeBasesByProfileCode(
+			@RequestParam("profileCode") @NotNull String profileCode)
+			throws GeboPersistenceException, LLMConfigException {
+		List<GKnowledgeBase> visibles = chatService.getVisibleKnowledgeBasesByProfileCode(profileCode);
+		return visibles.stream().map(x -> new GBaseObject(x)).toList();
 	}
 }

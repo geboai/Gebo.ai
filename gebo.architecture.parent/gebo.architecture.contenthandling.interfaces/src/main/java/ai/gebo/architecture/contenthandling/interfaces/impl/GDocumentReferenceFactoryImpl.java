@@ -322,4 +322,17 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			}
 		}
 	}
+
+	@Override
+	public GDocumentReference createReference(String uri,String name, String contentType, String extension,Long size) throws GeboContentHandlerSystemException {
+		GDocumentReference reference = new GDocumentReference();
+		reference.setReferenceType(ReferenceType.WEB);
+		reference.setAbsolutePath(uri);
+		reference.setCode(uri);
+		reference.setContentType(contentType);
+		reference.setExtension(extension);
+		reference.setName(name);
+		reference.setParentVirtualFolderCode(null);
+		return reference;
+	}
 }

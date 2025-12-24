@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Tích hợp Google Drive/Workspaces",
         "description" : "Cấu hình Gebo.ai để truy cập dữ liệu nhóm Google cloud Drive/Workspaces của bạn"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Cấu hình Google search api",
+        "description" : "Cấu hình thông tin xác thực Google search api cho tìm kiếm web AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Cấu hình Deep search",
+        "description" : "Cấu hình các thông số Deep search"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Mô tả"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Tạo thông tin xác thực google search"
+      },
+      "CreateBtn" : {
+        "label" : "Tạo"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID máy tìm kiếm",
+        "help" : "Nhập ID máy tìm kiếm lấy được khi đăng ký thông tin xác thực google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Nhập api key lấy được khi đăng ký thông tin xác thực google search api."
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Xóa",
+        "help" : "Xóa thông tin xác thực Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Cấu hình Deep search",
+        "help" : "Thêm một cấu hình deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Chỉnh sửa cấu hình"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?",
         "header" : "Hành động xóa trò chuyện"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Thêm nội dung hoặc điều chỉnh hành vi tìm kiếm"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Thêm nội dung hoặc điều chỉnh hành vi tìm kiếm"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Thêm nội dung hoặc điều chỉnh hành vi tìm kiếm"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Bạn không thể xóa mục này",
         "detail" : "Đối tượng này đang được tham chiếu từ phần khác của ứng dụng"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Lỗi trong quá trình thao tác: Lỗi khi làm việc với url:http://localhost:11434/v1/models",
+        "detail" : "Lỗi máy chủ: Lỗi khi làm việc với url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Lỗi trong quá trình thao tác: apiKey chưa được thiết lập",
+        "detail" : "Lỗi máy chủ: apiKey chưa được thiết lập"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Có lỗi khi truyền kết quả trò chuyện",
+        "detail" : "Lỗi máy chủ: 400 Yêu cầu không hợp lệ từ POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "Danh tính sử dụng",
         "help" : "Chọn hoặc tạo danh tính để truy cập hệ thống google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Trò chuyện"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Đang tìm kiếm thông tin liên quan"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Đang tổng hợp báo cáo cuối cùng"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Kết quả tìm kiếm đã được phân tích"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Kết quả tìm kiếm hệ thống đã được phân tích cho"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Chèn"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SearchSettingTab" : {
+        "label" : "Cài đặt tìm kiếm"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Nhập prompt để trích xuất thông tin liên quan từ tài liệu"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Nhập prompt cho việc tổng hợp thông tin liên quan đã trích xuất"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Cài đặt large language model"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả của cấu hình deep search"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất được tạo tự động cho cấu hình deep search"
+      },
+      "searchType" : {
+        "label" : "Loại tìm kiếm",
+        "help" : "Chọn giữa tìm kiếm ngữ nghĩa một bước hoặc nhiều bước"
+      },
+      "topK" : {
+        "label" : "Số lượng đoạn văn bản truy xuất (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Llm sử dụng",
+        "help" : "Chỉ định large language model sử dụng cho Deep search, mặc định sẽ được sử dụng nếu không chọn."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt phân tích tài liệu",
+        "help" : "Chỉnh sửa prompt sẽ dùng để trích xuất thông tin liên quan từ đoạn tài liệu."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt tổng hợp thông tin đã trích xuất",
+        "help" : "Chỉnh sửa prompt sẽ dùng để tổng hợp các thông tin liên quan rút ra từ tài liệu đã truy xuất vào một báo cáo."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Ngưỡng tương đồng tìm kiếm",
+        "help" : "Ngưỡng tương đồng ngữ nghĩa bước đầu (từ 0.5 đến 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Ngưỡng tương đồng bước hai",
+        "help" : "Ngưỡng tương đồng ngữ nghĩa bước hai (từ 0.5 đến 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model mặc định",
+        "help" : "Large language model mặc định sẽ được sử dụng để xử lý Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Ngưỡng tương đồng tìm kiếm",
+        "help" : "Ngưỡng tương đồng ngữ nghĩa (từ 0.5 đến 1.0)"
       }
     }
   }

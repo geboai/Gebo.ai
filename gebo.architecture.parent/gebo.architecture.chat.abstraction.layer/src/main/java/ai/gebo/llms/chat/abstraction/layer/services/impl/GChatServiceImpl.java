@@ -30,6 +30,7 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -79,11 +80,11 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
 			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-			IGChatRequestResourcesUsePolicy requestResourceUsePolicy,
-			ChatHistoryConsolidationService historyConsolidationService) {
+			IGChatRequestResourcesUsePolicy requestResourceUsePolicy,			
+			ChatHistoryConsolidationService historyConsolidationService, IGKnowledgebaseVisibilityService knowledgeBaseSecurityService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, historyConsolidationService);
+				generatedResourceRepository, historyConsolidationService, knowledgeBaseSecurityService);
 		this.requestResourceUsePolicy = requestResourceUsePolicy;
 	}
 

@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "ادغام Google Drive/Workspaces",
         "description" : "Gebo.ai را برای دسترسی به داده‌های تیم Google cloud Drive/Workspaces خود پیکربندی کنید"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "پیکربندی Google search api",
+        "description" : "اعتبارنامه‌های Google search api را برای جستجوی وب هوشمند پیکربندی کنید"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "پیکربندی Deep search",
+        "description" : "پارامترهای Deep search را پیکربندی کنید"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "توضیحات"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "کلید Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "ایجاد اعتبارنامه google search"
+      },
+      "CreateBtn" : {
+        "label" : "ایجاد"
+      },
+      "customSearchEngineId" : {
+        "label" : "شناسه موتور جستجو",
+        "help" : "شناسه موتور جستجویی که در ثبت‌نام اعتبارنامه google search api دریافت کردید را وارد کنید."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "apiKey" : {
+        "label" : "کلید api",
+        "help" : "کلید api که در ثبت‌نام اعتبارنامه google search api دریافت کردید را وارد کنید."
+      },
+      "MainPanel" : {
+        "label" : "راه‌اندازی google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "حذف",
+        "help" : "حذف اعتبارنامه Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "پیکربندی Deep search",
+        "help" : "یک پیکربندی Deep search اضافه کنید"
+      },
+      "EditSystemBtn" : {
+        "label" : "ویرایش پیکربندی"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "آیا مطمئن هستید که می‌خواهید این گفتگو را حذف کنید؟",
         "header" : "حذف گفتگو"
+      },
+      "PlusContextualMenu" : {
+        "help" : "افزودن محتوا یا تغییر رفتار جستجو"
+      },
+      "[object HTMLElement]" : {
+        "help" : "افزودن محتوا یا تغییر رفتار جستجو"
+      },
+      "ContextMenuBtn" : {
+        "help" : "افزودن محتوا یا تغییر رفتار جستجو"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "نمی‌توانید این را حذف کنید",
         "detail" : "این مورد در بخش(های) دیگری از برنامه استفاده شده است"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "استثناء در عملیات: خطا هنگام کار با url:http://localhost:11434/v1/models",
+        "detail" : "خطای سرور: خطا هنگام کار با url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "استثناء در عملیات: apiKey باید تنظیم شود",
+        "detail" : "خطای سرور: apiKey باید تنظیم شود"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "خطا هنگام دریافت پاسخ چت",
+        "detail" : "خطای سرور: 400 Bad Request از POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "هویت مورد استفاده",
         "help" : "هویت لازم برای دسترسی به سیستم google drive را انتخاب یا ایجاد کنید"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "گفتگو"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "در حال جستجوی اطلاعات مرتبط"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "در حال تجمیع گزارش نهایی"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "نتیجه جستجوی تحلیل‌شده"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "نتیجه جستجوی تحلیل‌شده سیستم برای"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "درج"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SearchSettingTab" : {
+        "label" : "تنظیمات جستجو"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "پرامپت استخراج اطلاعات مرتبط از اسناد را وارد کنید"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "پرامپت تجمیع اطلاعات استخراج‌شده را وارد کنید"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی Deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "تنظیمات مدل زبان بزرگ"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای پیکربندی Deep search وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای به طور خودکار تولید شده برای پیکربندی Deep search"
+      },
+      "searchType" : {
+        "label" : "نوع جستجو",
+        "help" : "انتخاب بین جستجوی معنایی تک مرحله‌ای یا چند مرحله‌ای"
+      },
+      "topK" : {
+        "label" : "تعداد بخش‌های متنی بازیابی‌شده (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "مدل llm استفاده شده",
+        "help" : "مدل زبان بزرگ مورد استفاده برای Deep search را مشخص کنید، اگر چیزی انتخاب نشود مدل پیش‌فرض استفاده می‌شود."
+      },
+      "analisysPrompt" : {
+        "label" : "پرامپت تحلیل اسناد",
+        "help" : "پرامپتی که برای استخراج اطلاعات مرتبط از بخش‌های اسناد استفاده خواهد شد را ویرایش کنید."
+      },
+      "consolidationPrompt" : {
+        "label" : "پرامپت تجمیع اطلاعات استخراج‌شده",
+        "help" : "پرامپتی که برای تجمیع اطلاعات مرتبط استخراج‌شده از اسناد بازیابی‌شده در یک گزارش استفاده می‌شود را ویرایش کنید."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "آستانه شباهت جستجو",
+        "help" : "آستانه شباهت معنایی مرحله اول (بین 0.5 تا 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "آستانه شباهت مرحله دوم",
+        "help" : "آستانه شباهت معنایی مرحله دوم (بین 0.5 تا 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "مدل زبان بزرگ پیش‌فرض",
+        "help" : "مدل زبان بزرگ پیش‌فرض برای پردازش Deep search استفاده خواهد شد"
+      },
+      "similarityThreashold" : {
+        "label" : "آستانه شباهت جستجو",
+        "help" : "آستانه شباهت معنایی (بین 0.5 تا 1.0)"
       }
     }
   }

@@ -173,6 +173,14 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces एकत्रीकरण",
         "description" : "Gebo.ai ला तुमच्या Google cloud Drive/Workspaces टीम डेटामध्ये प्रवेश करण्यासाठी संरचीत करा"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google शोध api कॉन्फिगर करा",
+        "description" : "AI वेब शोधांसाठी Google शोध api ओळखपत्रे कॉन्फिगर करा"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep शोध कॉन्फिगर करा",
+        "description" : "Deep शोध पॅरामीटर्स कॉन्फिगर करा"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -444,6 +452,48 @@
       },
       "DescriptionHeader" : {
         "label" : "वर्णन"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "रद्द करा"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google शोध api की"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google शोध ओळखपत्रे तयार करा"
+      },
+      "CreateBtn" : {
+        "label" : "तयार करा"
+      },
+      "customSearchEngineId" : {
+        "label" : "शोध इंजिन id",
+        "help" : "Google शोध api ओळखपत्र नोंदणीमध्ये मिळालेला शोध इंजिन id प्रविष्ट करा."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "कॉन्फिग कोड"
+      },
+      "DescriptionHeader" : {
+        "label" : "वर्णन"
+      },
+      "apiKey" : {
+        "label" : "Api की",
+        "help" : "Google शोध api ओळखपत्र नोंदणीमध्ये मिळालेली api की प्रविष्ट करा."
+      },
+      "MainPanel" : {
+        "label" : "Google शोध api सेटअप करा"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "डकले करा",
+        "help" : "Google शोध api ओळखपत्रे डिलीट करा"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep शोध कॉन्फिग",
+        "help" : "Deep शोध कॉन्फिगरेशन जोडा"
+      },
+      "EditSystemBtn" : {
+        "label" : "कॉन्फिग संपादित करा"
       }
     }
   },
@@ -1798,6 +1848,15 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "तुम्हाला हे संभाषण हटवायचे आहे याची खात्री आहे का?",
         "header" : "चॅट हटवा क्रिया"
+      },
+      "PlusContextualMenu" : {
+        "help" : "सामग्री जोडा किंवा शोध वर्तन बदला"
+      },
+      "[object HTMLElement]" : {
+        "help" : "सामग्री जोडा किंवा शोध वर्तन बदला"
+      },
+      "ContextMenuBtn" : {
+        "help" : "सामग्री जोडा किंवा शोध वर्तन बदला"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3055,6 +3114,18 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "तुम्ही हे हटवू शकत नाही",
         "detail" : "हे ऑब्जेक्ट अ‍ॅप्लिकेशनच्या इतर भागांद्वारे संदर्भित आहे"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ऑपरेशनदरम्यान अपवाद: url शी कार्य करताना त्रुटी:http://localhost:11434/v1/models",
+        "detail" : "सर्व्हर त्रुटी: url शी कार्य करताना त्रुटी:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ऑपरेशनदरम्यान अपवाद: apiKey सेट केलेले असणे आवश्यक आहे",
+        "detail" : "सर्व्हर त्रुटी: apiKey सेट केलेले असणे आवश्यक आहे"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "चॅट प्रतिसाद प्रवाहित करताना त्रुटी",
+        "detail" : "सर्व्हर त्रुटी: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
       }
     }
   },
@@ -3208,6 +3279,106 @@
       "driveAccessSecret" : {
         "label" : "वापरलेली ओळख",
         "help" : "google drive प्रणालीमध्ये प्रवेश करण्यासाठी ओळख निवडा किंवा तयार करा"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "चॅट"
+      },
+      "deep-search" : {
+        "label" : "Deep शोध"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep शोध"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "संबंधित माहिती शोधत आहे"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "अंतिम अहवाल एकत्रित करत आहे"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "विश्लेषित शोध परिणाम"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "यासाठीचे प्रणाली शोध परिणाम विश्लेषित केले"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "घाला"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द करा"
+      },
+      "DeleteBtn" : {
+        "label" : "डकले करा"
+      },
+      "SearchSettingTab" : {
+        "label" : "शोध सेटिंग"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "दस्तऐवजातील संबंधित माहिती काढण्यासाठी संकेत प्रविष्ट करा"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "काढण्यात आलेली संबंधित माहिती एकत्रीकरणासाठी संकेत प्रविष्ट करा"
+      },
+      "MainPanel" : {
+        "label" : "Deep शोध कॉन्फिगरेशन संपादन"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "मोठ्या भाषा मॉडेलचे सेटिंग"
+      },
+      "description" : {
+        "label" : "वर्णन",
+        "help" : "Deep शोध कॉन्फिगरेशनचे वर्णन प्रविष्ट करा"
+      },
+      "code" : {
+        "label" : "युनिक कोड",
+        "help" : "Deep शोध कॉन्फिगरेशनचा आपोआप तयार केलेला युनिक कोड"
+      },
+      "searchType" : {
+        "label" : "शोध प्रकार",
+        "help" : "सिंगल हॉप सिमॅंटिक शोध किंवा मल्टी हॉपमधून निवडा"
+      },
+      "topK" : {
+        "label" : "मिळवलेल्या मजकूर तुकड्यांची संख्या (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "वापरलेले llm",
+        "help" : "Deep शोधसाठी वापरलेले मोठे भाषा मॉडेल निर्दिष्ट करा, कोणतेही निवडले नाही तर डीफॉल्ट वापरले जाईल."
+      },
+      "analisysPrompt" : {
+        "label" : "दस्तऐवज विश्लेषण संकेत",
+        "help" : "दस्तऐवज तुकड्यांमधून संबंधित माहिती काढण्यासाठी वापरला जाणारा संकेत संपादित करा."
+      },
+      "consolidationPrompt" : {
+        "label" : "काढलेल्या माहितीचे एकत्रीकरण संकेत",
+        "help" : "मिळवलेल्या दस्तऐवजांमधून काढलेल्या संबंधित माहितीचे एकत्रीकरण एका अहवालात करण्यासाठी वापरला जाणारा संकेत संपादित करा."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "शोध सादृश्य थ्रेशोल्ड",
+        "help" : "फर्स्ट हॉप सिमॅंटिक सादृश्य थ्रेशोल्ड (0.5 ते 1.0 दरम्यान)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "सेकंड हॉप सादृश्य थ्रेशोल्ड",
+        "help" : "सेकंड हॉप सिमॅंटिक सादृश्य थ्रेशोल्ड (0.5 ते 1.0 दरम्यान)"
+      },
+      "defaultModel" : {
+        "label" : "डीफॉल्ट मोठे भाषा मॉडेल",
+        "help" : "Deep शोध प्रक्रियेसाठी डीफॉल्ट मोठे भाषा मॉडेल वापरले जाईल"
+      },
+      "similarityThreashold" : {
+        "label" : "शोध सादृश्य थ्रेशोल्ड",
+        "help" : "सिमॅंटिक सादृश्य थ्रेशोल्ड (0.5 ते 1.0 दरम्यान)"
       }
     }
   }
