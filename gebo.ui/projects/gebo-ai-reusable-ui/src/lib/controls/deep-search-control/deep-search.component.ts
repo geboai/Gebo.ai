@@ -26,6 +26,7 @@ const atLeastAKnowledgeBaseOrSystemValidator: ValidatorFn = (ctrl) => {
 @Component({
     selector: "gebo-ai-deep-search-component",
     templateUrl: "deep-search.component.html",
+    styleUrls: ["./deep-search.component.scss"],
     standalone: false,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIDeepSearchModule", multi: false },

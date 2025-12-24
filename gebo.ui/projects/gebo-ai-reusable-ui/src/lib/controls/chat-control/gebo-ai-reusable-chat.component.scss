@@ -1,0 +1,106 @@
+.gebo-ai-reusable-chat {
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+
+  &__header {
+    align-items: center;
+    display: flex;
+    height: fit-content;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e080;
+    position: relative;
+
+    &-title {
+      color: #136084;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    &-icons {
+      display: flex;
+    }
+
+    &-info {
+      position: absolute;
+      top: 45px;
+    }
+  }
+
+  &__interaction {
+    &-request-item {
+      display: flex;
+      justify-content: flex-end;
+
+      &-text {
+        background-color: #e9e9e980;
+        border-radius: 16px;
+        margin: 10px 0;
+        padding: 6px 16px;
+      }
+    }
+
+    &-item-title {
+      margin-top: 1.2rem;
+      font-weight: 600;
+    }
+
+    &-item-icon {
+      margin-right: 5px;
+    }
+
+    &-spinner {
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      opacity: 0.5;
+    }
+
+    &-empty {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: #94a3b8;
+      margin-top: 2rem;
+      transform: translateX(-50%);
+    }
+  }
+
+  &__footer {
+    display: inline-block;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding-bottom: 0.5rem;
+    background-color: #fff;
+  }
+
+  &__error {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  &__scroll {
+    display: flex;
+    position: sticky;
+    bottom: 50%;
+    z-index: 1;
+    flex-direction: column;
+    height: 100%;
+    align-items: end;
+    gap: 10px;
+    opacity: 0.8;
+  }
+}

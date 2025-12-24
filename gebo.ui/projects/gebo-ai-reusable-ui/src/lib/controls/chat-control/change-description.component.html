@@ -26,12 +26,12 @@
     </div>
     <div class="geboButtonsBar" style="vertical-align: baseline;">
         <div class="grid">
-            <div class="col-3">
+            <div class="col-3 col-sm-6">
                 <p-button [outlined]="true" id="SaveBtn" gebo-ai-label label="Save" (onClick)="saveAction.emit(true)" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid"></p-button>
             </div>
 
-            <div class="col-3">
+            <div class="col-3  col-sm-6">
                 <p-button [outlined]="true"  id="CancelBtn" gebo-ai-label  label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
             </div>
 

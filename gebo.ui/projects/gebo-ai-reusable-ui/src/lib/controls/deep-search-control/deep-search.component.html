@@ -1,14 +1,23 @@
-<p-panel id="deepSearchUI" #deepSearchUI gebo-ai-label header="Deep Search" [showHeader]="mode==='full-ui'"
-    *ngIf="loading" styleClass="w-full">
+@if(loading) {
+<p-panel id="deepSearchUI"
+         #deepSearchUI
+         gebo-ai-label
+         header="Deep Search"
+         [showHeader]="mode==='full-ui'">
 
-    <div class="grid">
-
-        <label *ngIf="inEventsLoop && !isDieplayingDeepSearchProcess" class="col-12" id="DeepSearchProcessingSearch"
-            gebo-ai-text>Searching relevant informations</label>
-        <label class="col-12" *ngIf="analisysStep"><span id="DeepSearchProcessingFile" gebo-ai-text>Analized
+  
+  <div class="deep-search">
+    <div class="deep-search__progressbar">
+      <p-progressbar [value]="completionPercent"
+                     [style]="{ height: '10px' }"></p-progressbar>
+    </div>
+    <div class="deep-search__label">
+    <span *ngIf="inEventsLoop && !isDieplayingDeepSearchProcess" class="deep-search__label" id="DeepSearchProcessingSearch"
+            gebo-ai-text>Searching relevant informations</span>
+        <span class="deep-search__label" *ngIf="analisysStep"><span id="DeepSearchProcessingFile" gebo-ai-text>Analized
                 file</span>&nbsp;
-            <span>{{analisysStep?.documentRef?.name}}</span></label>
-        <label class="col-12" *ngIf="deepSearchDataSourceDocumentResult">
+            <span>{{analisysStep?.documentRef?.name}}</span></span>
+        <span class="deep-search__label" *ngIf="deepSearchDataSourceDocumentResult">
             <span>
                 {{deepSearchDataSourceDocumentResult.dataSourceDescription}}
             </span>&nbsp;
@@ -22,25 +31,41 @@
             </span>
 
 
-        </label>
-        <label class="col-12" *ngIf="deepSearchDataSourceResponse">
+        </span>
+        <span class="deep-search__label" *ngIf="deepSearchDataSourceResponse">
             <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>&nbsp;
             <span>{{deepSearchDataSourceResponse.dataSourceDescription}}</span>
-        </label>
-        <label class="col-12" *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
+        </span>
+        <span class="deep-search__label" *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
             Consolidating the final report
-        </label>
-        <div class="col-12">
-            <p-progressbar [value]="completionPercent" styleClass="col-12 w-full">
-
-            </p-progressbar>
-        </div>
+        </span>
+        <!-- 
+    
+      <span *ngIf="!analisysStep && !deepSearchResponse"
+            class="deep-search__label-item"
+            id="DeepSearchProcessingSearch"
+            gebo-ai-text>Searching relevant informations</span>
+      <span class="deep-search__label-item"
+            *ngIf="analisysStep && completionPercent<100"><span id="DeepSearchProcessingFile"
+              gebo-ai-text>Analized
+          file</span>
+        <span>{{analisysStep?.documentRef?.name}}</span></span>
+      <span class="deep-search__label-item"
+            *ngIf="completionPercent===100"
+            id="DeepSearchingConsolidating"
+            gebo-ai-text>
+        Consolidating the final report
+      </span> -->
     </div>
-    <!-- 
+  </div>
+
+  <!-- 
         <p-blockUI [target]="deepSearchUI" [blocked]="loading" ></p-blockUI>
         -->
 
 </p-panel>
+  }
+
 <p-dialog [maximizable]="true" [visible]="showChooseDataSourceDialog" [modal]="true"
     [style]="{width:'30%',height:'30%'}" [closable]="true" [showHeader]="true"
     (visibleChange)="skipDeepSearchOnDataSourceChoice()" header="Choose Deep search sources">
