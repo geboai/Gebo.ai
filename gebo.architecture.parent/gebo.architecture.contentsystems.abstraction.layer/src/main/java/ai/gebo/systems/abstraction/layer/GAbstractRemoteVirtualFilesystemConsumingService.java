@@ -9,6 +9,7 @@
 
 package ai.gebo.systems.abstraction.layer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -631,6 +632,6 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 			Map<String, Object> environment) throws GeboContentHandlerSystemException;
 
 	protected abstract InputStream streamResource(SystemType system, ResourceReferenceType remoteReference,
-			Map<String, Object> environment);
+			Map<String, Object> environment) throws GeboContentHandlerSystemException, IOException;
 
 }
