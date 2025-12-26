@@ -1,0 +1,64 @@
+package ai.gebo.sharepoint.handler.impl;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.sharepoint.handler.GSharepointContentManagementSystem;
+import ai.gebo.sharepoint.handler.GSharepointProjectEndpoint;
+import ai.gebo.sharepoint.handler.IGMicrosoftGraphVirtualFilesystemConsumingService;
+import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNativePositionObject;
+import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates;
+import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
+import ai.gebo.sharepoint.handler.impl.model.MicrosoftResultsExtractionData;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+
+@Service
+public class GMicrosoftGraphSearchService extends
+		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService> {
+	final GMicrosoftGraphClientFactory msGraphConnectionFactory;
+
+	public GMicrosoftGraphSearchService(GMicrosoftGraphClientFactory msGraphConnectionFactory,
+			GMicrosoftGraphVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
+			GSharepointContentManagementSystemHandlerImpl contentManagementSystemHandler) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
+		this.msGraphConnectionFactory = msGraphConnectionFactory;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return "Sharepoint/OneDrive Search";
+	}
+
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
+			throws IOException, SearchServiceException {
+		if (system.getSystemConfigurationReference() instanceof GSharepointContentManagementSystem spSystem) {
+
+			boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
+			
+		}
+		return List.of();
+	}
+
+	@Override
+	public Class<MicrosoftResultsExtractionData> getCustomResultsAggregationDataType() throws SearchServiceException {
+
+		return MicrosoftResultsExtractionData.class;
+	}
+
+	@Override
+	public MicrosoftResultsExtractionData aggregate(MicrosoftResultsExtractionData oldConsolidated,
+			MicrosoftResultsExtractionData consolidated) {
+		MicrosoftResultsExtractionData data = new MicrosoftResultsExtractionData();
+		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
+		return data;
+	}
+
+}
