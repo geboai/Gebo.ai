@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.cloud.client;
 
@@ -28,63 +25,65 @@ import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContent;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContentItem;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContentsList;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceFullContent;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageResponseSearchResult.CloudConfluenceSearchResult;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSpacesListItem;
 import ai.gebo.restintegration.abstraction.layer.GeboNotFoundException;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 
 /**
- * AI generated comments
- * This class handles interactions with the Confluence Cloud API,
- * providing methods to retrieve and interact with content, comments,
+ * AI generated comments This class handles interactions with the Confluence
+ * Cloud API, providing methods to retrieve and interact with content, comments,
  * and attachments.
  */
 public class CloudConfluenceContentApi {
-    // Connection object for the Confluence Cloud API
+	// Connection object for the Confluence Cloud API
 	protected final CloudConfluenceConnection api;
 
-    /**
-     * Constructor for creating an instance of CloudConfluenceContentApi.
-     *
-     * @param api The CloudConfluenceConnection to use for API requests.
-     */
+	/**
+	 * Constructor for creating an instance of CloudConfluenceContentApi.
+	 *
+	 * @param api The CloudConfluenceConnection to use for API requests.
+	 */
 	public CloudConfluenceContentApi(CloudConfluenceConnection api) {
 		this.api = api;
 	}
 
-    /**
-     * Sorts the contents list based on their title.
-     *
-     * @param list The list of CloudConfluenceContents to sort.
-     */
+	/**
+	 * Sorts the contents list based on their title.
+	 *
+	 * @param list The list of CloudConfluenceContents to sort.
+	 */
 	private void sort(CloudConfluenceContentsList list) {
 		list.setResults(NodesSorterUtil.sort(x -> {
 			return x.getTitle();
 		}, list.getResults()));
 	}
 
-    /**
-     * Retrieves a list of contents for a specific space.
-     * 
-     * @param item  The space item for which contents are requested.
-     * @param start The starting index for content retrieval.
-     * @param limit The maximum number of contents to retrieve.
-     * @return A CloudConfluenceContentsList object containing the contents.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves a list of contents for a specific space.
+	 * 
+	 * @param item  The space item for which contents are requested.
+	 * @param start The starting index for content retrieval.
+	 * @param limit The maximum number of contents to retrieve.
+	 * @return A CloudConfluenceContentsList object containing the contents.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContentsList getContents(CloudConfluenceSpacesListItem item, int start, int limit)
 			throws GeboRestIntegrationException {
 		return getContents(item.getKey(), start, limit);
 	}
 
-    /**
-     * Retrieves a list of contents for a specific space by its key.
-     * 
-     * @param spaceKey The key of the space.
-     * @param start    The starting index for content retrieval.
-     * @param limit    The maximum number of contents to retrieve.
-     * @return A CloudConfluenceContentsList object containing the contents.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves a list of contents for a specific space by its key.
+	 * 
+	 * @param spaceKey The key of the space.
+	 * @param start    The starting index for content retrieval.
+	 * @param limit    The maximum number of contents to retrieve.
+	 * @return A CloudConfluenceContentsList object containing the contents.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContentsList getContents(String spaceKey, int start, int limit)
 			throws GeboRestIntegrationException {
 		String relative = "/wiki/rest/api/content?spaceKey=" + URLEncoder.encode(spaceKey) + "&start=" + start
@@ -99,15 +98,16 @@ public class CloudConfluenceContentApi {
 		return out;
 	}
 
-    /**
-     * Retrieves comments associated with a specific content ID.
-     * 
-     * @param id    The ID of the content.
-     * @param start The starting index for comments retrieval.
-     * @param limit The maximum number of comments to retrieve.
-     * @return A CloudConfluenceCommentList object containing the comments.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves comments associated with a specific content ID.
+	 * 
+	 * @param id    The ID of the content.
+	 * @param start The starting index for comments retrieval.
+	 * @param limit The maximum number of comments to retrieve.
+	 * @return A CloudConfluenceCommentList object containing the comments.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceCommentList getComments(String id, int start, int limit) throws GeboRestIntegrationException {
 		// 487981100
 		String relative = "/wiki/rest/api/content/" + id + "/child/comment";
@@ -119,13 +119,14 @@ public class CloudConfluenceContentApi {
 		return response.getBody();
 	}
 
-    /**
-     * Retrieves content using a relative URL.
-     * 
-     * @param relativeUrl The relative URL of the content.
-     * @return A CloudConfluenceContent object containing the content.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves content using a relative URL.
+	 * 
+	 * @param relativeUrl The relative URL of the content.
+	 * @return A CloudConfluenceContent object containing the content.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContent getContentByRelativeUrl(String relativeUrl) throws GeboRestIntegrationException {
 		String relative = relativeUrl + "?expand=space,body.view,version,container";
 		String url = api.getBaseUrl() + relative;
@@ -136,13 +137,14 @@ public class CloudConfluenceContentApi {
 		return response.getBody();
 	}
 
-    /**
-     * Retrieves a single content item by its ID.
-     * 
-     * @param id The ID of the content.
-     * @return A CloudConfluenceContent object.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves a single content item by its ID.
+	 * 
+	 * @param id The ID of the content.
+	 * @return A CloudConfluenceContent object.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContent getContent(String id) throws GeboRestIntegrationException {
 		String relative = "/wiki/rest/api/content/" + id + "?expand=space,body.view,version,container";
 		String url = api.getBaseUrl() + relative;
@@ -153,24 +155,26 @@ public class CloudConfluenceContentApi {
 		return response.getBody();
 	}
 
-    /**
-     * Retrieves a single content item using a CloudConfluenceContentItem object.
-     * 
-     * @param item The CloudConfluenceContentItem object.
-     * @return A CloudConfluenceContent object.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves a single content item using a CloudConfluenceContentItem object.
+	 * 
+	 * @param item The CloudConfluenceContentItem object.
+	 * @return A CloudConfluenceContent object.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContent getContent(CloudConfluenceContentItem item) throws GeboRestIntegrationException {
 		return getContent(item.getId());
 	}
 
-    /**
-     * Retrieves Word format for a given content ID.
-     * 
-     * @param id The ID of the content.
-     * @return An InputStream of the Word document.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves Word format for a given content ID.
+	 * 
+	 * @param id The ID of the content.
+	 * @return An InputStream of the Word document.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public InputStream getContentAsWord(String id) throws GeboRestIntegrationException {
 		String relative = "/wiki/exportword?pageId=" + id;
 		String url = api.getBaseUrl() + relative;
@@ -181,13 +185,14 @@ public class CloudConfluenceContentApi {
 		return new ByteArrayInputStream(response.getBody());
 	}
 
-    /**
-     * Retrieves PDF format for a given content ID.
-     * 
-     * @param id The ID of the content.
-     * @return An InputStream of the PDF document.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves PDF format for a given content ID.
+	 * 
+	 * @param id The ID of the content.
+	 * @return An InputStream of the PDF document.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public InputStream getContentAsPdf(String id) throws GeboRestIntegrationException {
 		String relative = "/wiki/spaces/flyingpdf/pdfpageexport.action?pageId=" + id;
 		String url = api.getBaseUrl() + relative;
@@ -198,15 +203,16 @@ public class CloudConfluenceContentApi {
 		return new ByteArrayInputStream(response.getBody());
 	}
 
-    /**
-     * Retrieves child contents of a specific content ID.
-     * 
-     * @param id    The ID of the parent content.
-     * @param start The starting index for child content retrieval.
-     * @param limit The maximum number of child contents to retrieve.
-     * @return A CloudConfluenceContentsList object containing the child contents.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves child contents of a specific content ID.
+	 * 
+	 * @param id    The ID of the parent content.
+	 * @param start The starting index for child content retrieval.
+	 * @param limit The maximum number of child contents to retrieve.
+	 * @return A CloudConfluenceContentsList object containing the child contents.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceContentsList getChildContents(String id, int start, int limit)
 			throws GeboRestIntegrationException {
 		String relative = "/wiki/rest/api/content/" + id + "/child/page?start=" + start + "&limit=" + limit;
@@ -224,13 +230,16 @@ public class CloudConfluenceContentApi {
 		}
 	}
 
-    /**
-     * Retrieves full content details, including child pages, comments, and attachments.
-     * 
-     * @param id The ID of the content.
-     * @return A CloudConfluenceFullContent object containing comprehensive content details.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves full content details, including child pages, comments, and
+	 * attachments.
+	 * 
+	 * @param id The ID of the content.
+	 * @return A CloudConfluenceFullContent object containing comprehensive content
+	 *         details.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceFullContent getFullContent(String id) throws GeboRestIntegrationException {
 		CloudConfluenceFullContent full = new CloudConfluenceFullContent();
 		full.setRootContent(getContent(id));
@@ -265,15 +274,16 @@ public class CloudConfluenceContentApi {
 		return full;
 	}
 
-    /**
-     * Retrieves attachments for a specific content ID.
-     * 
-     * @param id    The ID of the content.
-     * @param start The starting index for attachment retrieval.
-     * @param limit The maximum number of attachments to retrieve.
-     * @return A CloudConfluenceAttachmentsList object containing the attachments.
-     * @throws GeboRestIntegrationException if an error occurs during API interaction.
-     */
+	/**
+	 * Retrieves attachments for a specific content ID.
+	 * 
+	 * @param id    The ID of the content.
+	 * @param start The starting index for attachment retrieval.
+	 * @param limit The maximum number of attachments to retrieve.
+	 * @return A CloudConfluenceAttachmentsList object containing the attachments.
+	 * @throws GeboRestIntegrationException if an error occurs during API
+	 *                                      interaction.
+	 */
 	public CloudConfluenceAttachmentsList getContentAttachments(String id, int start, int limit)
 			throws GeboRestIntegrationException {
 		String relative = "/wiki/rest/api/content/" + id + "/child/attachment?start=" + start + "&limit=" + limit;
@@ -283,5 +293,37 @@ public class CloudConfluenceContentApi {
 		ResponseEntity<CloudConfluenceAttachmentsList> response = api.restTemplate.exchange(url, HttpMethod.GET,
 				requestEntity, responseType);
 		return response.getBody();
+	}
+
+	/***********************************************************************************************
+	 * Runs a simple cql query
+	 * 
+	 * @param cql
+	 * @param limit
+	 * @return
+	 * @throws GeboRestIntegrationException
+	 */
+	public CloudConfluenceSearchResult searchByCql(String cql, Integer limit) throws GeboRestIntegrationException {
+		String relative = "/wiki/rest/api/search?cql=" + URLEncoder.encode(cql) + "&start=0"
+				+ (limit != null ? "&limit=" + limit : "") + "&expand=ancestor,space";
+		String url = api.getBaseUrl() + relative;
+		HttpEntity requestEntity = new HttpEntity<CloudConfluenceSearchResult>(api.createHeaders());
+		Class responseType = CloudConfluenceSearchResult.class;
+		ResponseEntity<CloudConfluenceSearchResult> response = api.restTemplate.exchange(url, HttpMethod.GET,
+				requestEntity, responseType);
+		return response.getBody();
+	}
+
+	/***************************************************************************************************
+	 * Runs a full text search on all content types
+	 * 
+	 * @param text
+	 * @param limit
+	 * @return
+	 * @throws GeboRestIntegrationException
+	 */
+	public CloudConfluenceSearchResult searchFullText(String text, Integer limit) throws GeboRestIntegrationException {
+		String cql = "type IN (page, blogpost, comment, attachment) AND text ~ \"" + text + "\"";
+		return searchByCql(cql, limit);
 	}
 }

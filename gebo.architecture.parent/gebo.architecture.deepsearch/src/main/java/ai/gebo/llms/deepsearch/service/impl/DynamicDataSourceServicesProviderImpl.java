@@ -3,10 +3,13 @@ package ai.gebo.llms.deepsearch.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -29,17 +32,31 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 	final DeepSearchDefaultConfig deepSearchDefaultConfig;
+	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceServicesProviderImpl.class);
 
 	@Override
 	public List<IGDeepSearchDataSourceService> getDynamicDeepSearchServices() {
-		List<ISearchService> services = searchServicesRepository.findImplementations(x -> x.isEnabled());
+		List<ISearchService> services = searchServicesRepository.findImplementations(x -> {
+			try {
+				return x.isEnabled();
+			} catch (Throwable e) {
+				LOGGER.error("Exception calling isEnabled()", e);
+				return false;
+			}
+		});
 
 		List<IGDeepSearchDataSourceService> wrappers = new ArrayList<IGDeepSearchDataSourceService>();
 		for (ISearchService iSearchService : services) {
-			DeepSearchDataSourceServiceWrapper wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao,
-					embeddingModelsRuntimeDao, iSearchService.getCustomResultsAggregationDataType(), iSearchService,
-					documentReferenceFactory, ingestionHandler, deepSearchDefaultConfig);
-			wrappers.add(wrapper);
+			DeepSearchDataSourceServiceWrapper wrapper;
+			try {
+				wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
+						iSearchService.getCustomResultsAggregationDataType(), iSearchService, documentReferenceFactory,
+						ingestionHandler, deepSearchDefaultConfig);
+				wrappers.add(wrapper);
+			} catch (Throwable e) {
+				LOGGER.error("Exception in getDynamicDeepSearchServices()", e);
+			}
+
 		}
 		return wrappers;
 	}

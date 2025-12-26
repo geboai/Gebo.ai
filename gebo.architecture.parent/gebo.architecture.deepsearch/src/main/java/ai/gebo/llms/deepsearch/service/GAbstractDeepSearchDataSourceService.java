@@ -12,6 +12,7 @@ import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -57,7 +58,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
 			DeepSearchDataSourceStandardState state, String previusConsolidatedResult)
-			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException {
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 		if (state.getExtractedSearchQueries() == null) {
 			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
 					pastSystemsResponses, deepSearchConfig, chatModel, previusConsolidatedResult);
@@ -235,10 +236,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 
 	protected abstract List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
 			DeepSearchRequest request, int maxTokens)
-			throws IOException, GeboIngestionException, GeboContentHandlerSystemException;
+			throws IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
 
 	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
-			throws IOException;
+			throws IOException, SearchServiceException;
 
 	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,

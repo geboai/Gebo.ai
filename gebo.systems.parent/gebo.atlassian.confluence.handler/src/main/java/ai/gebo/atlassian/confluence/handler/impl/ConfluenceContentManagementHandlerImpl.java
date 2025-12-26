@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -50,44 +47,46 @@ public class ConfluenceContentManagementHandlerImpl extends
 	 * Constant representing the system type code for Atlassian Confluence.
 	 */
 	public static final String ATLASSIAN_CONFLUENCE = "ATLASSIAN-CONFLUENCE";
-	
+
 	/**
 	 * Static instance of GContentManagementSystemType representing Confluence.
 	 */
 	private static final GContentManagementSystemType systemType = new GContentManagementSystemType();
-	
+
 	/**
 	 * Service for accessing secrets needed for Confluence authentication.
 	 */
 	protected IGeboSecretsAccessService secretsService = null;
-	
+
 	static {
 		systemType.setCode(ATLASSIAN_CONFLUENCE);
 		systemType.setDescription("Atlassian confluence");
 	}
 
 	/**
-	 * Constructor for ConfluenceContentManagementHandlerImpl.
-	 * Initializes the handler with necessary dependencies for managing Confluence content.
+	 * Constructor for ConfluenceContentManagementHandlerImpl. Initializes the
+	 * handler with necessary dependencies for managing Confluence content.
 	 *
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param systemsRepo Repository for Confluence systems
-	 * @param endpointRepo Repository for Confluence project endpoints
-	 * @param localFolderDiscoveryService Service for discovering local folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for messaging
-	 * @param secretsService Service for accessing secrets
-	 * @param consumingService Service for consuming Confluence virtual filesystem
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for document references
+	 * @param systemsRepo                  Repository for Confluence systems
+	 * @param endpointRepo                 Repository for Confluence project
+	 *                                     endpoints
+	 * @param localFolderDiscoveryService  Service for discovering local folders
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for messaging
+	 * @param secretsService               Service for accessing secrets
+	 * @param consumingService             Service for consuming Confluence virtual
+	 *                                     filesystem
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
-	public ConfluenceContentManagementHandlerImpl(
-			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
+	public ConfluenceContentManagementHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
 			IGDocumentReferenceFactory contentHandler, ConfluenceSystemRepository systemsRepo,
 			ConfluenceProjectEndpointRepository endpointRepo,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
-			IGeboSecretsAccessService secretsService, IGConfluenceVirtualFilesystemConsumingService consumingService, IGDocumentReferenceIngestionHandler ingestionHandler) {
+			IGeboSecretsAccessService secretsService, IGConfluenceVirtualFilesystemConsumingService consumingService,
+			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler, IGContentManagementSystemConfigurationDao.of(systemsRepo),
 				IGProjectEndpointRuntimeConfigurationDao.of(endpointRepo), localFolderDiscoveryService,
 				persistentObjectManager, messageBroker, consumingService, ingestionHandler);
@@ -106,12 +105,14 @@ public class ConfluenceContentManagementHandlerImpl extends
 	}
 
 	/**
-	 * Finds a Confluence project endpoint by its system code and project endpoint code.
+	 * Finds a Confluence project endpoint by its system code and project endpoint
+	 * code.
 	 *
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The found GConfluenceProjectEndpoint
-	 * @throws GeboContentHandlerSystemException If an error occurs during the search
+	 * @throws GeboContentHandlerSystemException If an error occurs during the
+	 *                                           search
 	 */
 	@Override
 	public GConfluenceProjectEndpoint findProjectEndPoint(String systemCode, String projectEndpointCode)
@@ -135,7 +136,8 @@ public class ConfluenceContentManagementHandlerImpl extends
 	 *
 	 * @param projectEndPoint The Confluence project endpoint
 	 * @return The associated Confluence system
-	 * @throws GeboContentHandlerSystemException If an error occurs while retrieving the system
+	 * @throws GeboContentHandlerSystemException If an error occurs while retrieving
+	 *                                           the system
 	 */
 	@Override
 	public GConfluenceSystem getSystem(GConfluenceProjectEndpoint projectEndPoint)

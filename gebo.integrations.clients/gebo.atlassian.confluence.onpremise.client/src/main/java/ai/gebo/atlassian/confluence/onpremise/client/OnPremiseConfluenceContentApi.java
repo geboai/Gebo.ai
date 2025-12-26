@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.onpremise.client;
 
@@ -27,6 +24,7 @@ import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceCommentLi
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContent;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContentItem;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContentsList;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSearchPageResponseSearchResult.OnPremiseConfluenceSearchResult;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSpacesListItem;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseFullContent;
 import ai.gebo.restintegration.abstraction.layer.GeboNotFoundException;
@@ -34,9 +32,10 @@ import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import lombok.AllArgsConstructor;
 
 /**
- * This class provides methods to interact with the On-Premise Confluence API to manage and retrieve content, comments, and attachments.
- * It serves as a client for performing various operations on Confluence content.
- * AI generated comments
+ * This class provides methods to interact with the On-Premise Confluence API to
+ * manage and retrieve content, comments, and attachments. It serves as a client
+ * for performing various operations on Confluence content. AI generated
+ * comments
  */
 @AllArgsConstructor
 public class OnPremiseConfluenceContentApi {
@@ -45,11 +44,12 @@ public class OnPremiseConfluenceContentApi {
 	/**
 	 * Retrieves a list of content from a specific space using its list item.
 	 *
-	 * @param item the space list item
+	 * @param item  the space list item
 	 * @param start the starting index of the content
 	 * @param limit the maximum number of content items to retrieve
 	 * @return a list of Confluence contents
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContentsList getContents(OnPremiseConfluenceSpacesListItem item, int start, int limit)
 			throws GeboRestIntegrationException {
@@ -60,10 +60,11 @@ public class OnPremiseConfluenceContentApi {
 	 * Retrieves a list of content from a specific space using its space key.
 	 *
 	 * @param spaceKey the unique key of the space
-	 * @param start the starting index of the content
-	 * @param limit the maximum number of content items to retrieve
+	 * @param start    the starting index of the content
+	 * @param limit    the maximum number of content items to retrieve
 	 * @return a list of Confluence contents
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContentsList getContents(String spaceKey, int start, int limit)
 			throws GeboRestIntegrationException {
@@ -82,11 +83,12 @@ public class OnPremiseConfluenceContentApi {
 	/**
 	 * Retrieves a list of comments for a specific content item.
 	 *
-	 * @param id the content ID
+	 * @param id    the content ID
 	 * @param start the starting index of the comments
 	 * @param limit the maximum number of comments to retrieve
 	 * @return a list of comments for the specified content
-	 * @throws GeboRestIntegrationException if an error occurs during comment retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during comment
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceCommentList getComments(String id, int start, int limit)
 			throws GeboRestIntegrationException {
@@ -104,7 +106,8 @@ public class OnPremiseConfluenceContentApi {
 	 *
 	 * @param relativeUrl the relative URL of the content
 	 * @return the content details
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContent getContentByRelativeUrl(String relativeUrl) throws GeboRestIntegrationException {
 		String relative = relativeUrl + "?expand=space,body.view,version,container";
@@ -121,7 +124,8 @@ public class OnPremiseConfluenceContentApi {
 	 *
 	 * @param id the content ID
 	 * @return the content details
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContent getContent(String id) throws GeboRestIntegrationException {
 		String relative = "/rest/api/content/" + id + "?expand=space,body.view,version,container";
@@ -138,7 +142,8 @@ public class OnPremiseConfluenceContentApi {
 	 *
 	 * @param item the content item
 	 * @return the content details
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContent getContent(OnPremiseConfluenceContentItem item)
 			throws GeboRestIntegrationException {
@@ -150,7 +155,8 @@ public class OnPremiseConfluenceContentApi {
 	 *
 	 * @param id the content ID
 	 * @return an InputStream of the Word document
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public InputStream getContentAsWord(String id) throws GeboRestIntegrationException {
 		String relative = "/exportword?pageId=" + id;
@@ -167,7 +173,8 @@ public class OnPremiseConfluenceContentApi {
 	 *
 	 * @param id the content ID
 	 * @return an InputStream of the PDF document
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public InputStream getContentAsPdf(String id) throws GeboRestIntegrationException {
 		String relative = "/spaces/flyingpdf/pdfpageexport.action?pageId=" + id;
@@ -182,11 +189,12 @@ public class OnPremiseConfluenceContentApi {
 	/**
 	 * Retrieves a list of child contents for a specific content ID.
 	 *
-	 * @param id the content ID
+	 * @param id    the content ID
 	 * @param start the starting index of the child contents
 	 * @param limit the maximum number of child content items to retrieve
 	 * @return a list of child contents
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceContentsList getChildContents(String id, int start, int limit)
 			throws GeboRestIntegrationException {
@@ -206,11 +214,13 @@ public class OnPremiseConfluenceContentApi {
 	}
 
 	/**
-	 * Retrieves the full content, including root content, child pages, comments, and attachments, for a specific content ID.
+	 * Retrieves the full content, including root content, child pages, comments,
+	 * and attachments, for a specific content ID.
 	 *
 	 * @param id the content ID
 	 * @return the full content details
-	 * @throws GeboRestIntegrationException if an error occurs during content retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during content
+	 *                                      retrieval
 	 */
 	public OnPremiseFullContent getFullContent(String id) throws GeboRestIntegrationException {
 		OnPremiseFullContent full = new OnPremiseFullContent();
@@ -249,11 +259,12 @@ public class OnPremiseConfluenceContentApi {
 	/**
 	 * Retrieves a list of attachments for a specific content ID.
 	 *
-	 * @param id the content ID
+	 * @param id    the content ID
 	 * @param start the starting index of the attachments
 	 * @param limit the maximum number of attachments to retrieve
 	 * @return a list of attachments for the specified content
-	 * @throws GeboRestIntegrationException if an error occurs during attachment retrieval
+	 * @throws GeboRestIntegrationException if an error occurs during attachment
+	 *                                      retrieval
 	 */
 	public OnPremiseConfluenceAttachmentsList getContentAttachments(String id, int start, int limit)
 			throws GeboRestIntegrationException {
@@ -275,6 +286,39 @@ public class OnPremiseConfluenceContentApi {
 		list.setResults(NodesSorterUtil.sort(x -> {
 			return x.getTitle();
 		}, list.getResults()));
+	}
+
+	/***********************************************************************************************
+	 * Runs a simple cql query
+	 * 
+	 * @param cql
+	 * @param limit
+	 * @return
+	 * @throws GeboRestIntegrationException
+	 */
+	public OnPremiseConfluenceSearchResult searchByCql(String cql, Integer limit) throws GeboRestIntegrationException {
+		String relative = "/rest/api/search?cql=" + URLEncoder.encode(cql) + "&start=0"
+				+ (limit != null ? "&limit=" + limit : "") + "&expand=ancestors,space";
+		String url = api.getBaseUrl() + relative;
+		HttpEntity requestEntity = new HttpEntity<OnPremiseConfluenceSearchResult>(api.createHeaders());
+		Class responseType = OnPremiseConfluenceSearchResult.class;
+		ResponseEntity<OnPremiseConfluenceSearchResult> response = api.restTemplate.exchange(url, HttpMethod.GET,
+				requestEntity, responseType);
+		return response.getBody();
+	}
+
+	/***************************************************************************************************
+	 * Runs a full text search on all content types
+	 * 
+	 * @param text
+	 * @param limit
+	 * @return
+	 * @throws GeboRestIntegrationException
+	 */
+	public OnPremiseConfluenceSearchResult searchFullText(String text, Integer limit)
+			throws GeboRestIntegrationException {
+		String cql = "type IN (page, blogpost, comment, attachment) AND text ~ \"" + text + "\"";
+		return searchByCql(cql, limit);
 	}
 
 }

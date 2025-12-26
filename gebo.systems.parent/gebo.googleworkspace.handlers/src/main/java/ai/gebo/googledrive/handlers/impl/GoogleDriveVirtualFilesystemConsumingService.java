@@ -31,6 +31,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.GGoogleDriveSystem;
@@ -377,5 +378,35 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 			GoogleDriveResourceReference reference, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		return doc;
+	}
+
+	@Override
+	protected List<GoogleDriveNativePositionObject> toNativeCoordinates(GoogleDriveNavigationCoordinates position,
+			GGoogleDriveSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(GGoogleDriveSystem system)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected GoogleDriveResourceReference getResourceHandle(SearchableSystemMetaData system,
+			GoogleDriveNavigationCoordinates navigationPosition,
+			List<GoogleDriveNativePositionObject> nativeCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected InputStream streamResource(GGoogleDriveSystem system, GoogleDriveResourceReference remoteReference,
+			Map<String, Object> environment) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
