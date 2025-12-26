@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -41,17 +38,17 @@ public class ConfluenceNavigationUtil {
 	 * Prefix used to identify Confluence pages in path strings
 	 */
 	public static final String PAGE_PREFIX = "CONFLUENCE-PAGE:";
-	
+
 	/**
 	 * Prefix used to identify Confluence subpages in path strings
 	 */
 	public static final String SUBPAGES_PREFIX = "CONFLUENCE-SUBPAGES:";
-	
+
 	/**
 	 * Prefix used to identify Confluence attachments in path strings
 	 */
 	public static final String ATTACHMENT_PREFIX = "CONFLUENCE-ATTACHMENT:";
-	
+
 	/**
 	 * Delimiter used to separate path components in a hierarchy
 	 */
@@ -60,8 +57,8 @@ public class ConfluenceNavigationUtil {
 	/**
 	 * Creates a virtual filesystem root from an on-premise Confluence space
 	 * 
-	 * @param key The space key
-	 * @param name The space name
+	 * @param key         The space key
+	 * @param name        The space name
 	 * @param _expandable Expandable object containing additional space information
 	 * @return A new GVirtualFilesystemRoot object representing the space
 	 */
@@ -77,8 +74,8 @@ public class ConfluenceNavigationUtil {
 	/**
 	 * Creates a virtual filesystem root from a cloud Confluence space
 	 * 
-	 * @param key The space key
-	 * @param name The space name
+	 * @param key         The space key
+	 * @param name        The space name
 	 * @param _expandable Expandable object containing additional space information
 	 * @return A new GVirtualFilesystemRoot object representing the space
 	 */
@@ -174,7 +171,8 @@ public class ConfluenceNavigationUtil {
 	}
 
 	/**
-	 * Extracts page IDs from a list of filesystem references that represent individual pages
+	 * Extracts page IDs from a list of filesystem references that represent
+	 * individual pages
 	 * 
 	 * @param paths List of filesystem references
 	 * @return Array of page IDs
@@ -190,7 +188,8 @@ public class ConfluenceNavigationUtil {
 	}
 
 	/**
-	 * Extracts page IDs from a list of filesystem references that represent pages with subpages
+	 * Extracts page IDs from a list of filesystem references that represent pages
+	 * with subpages
 	 * 
 	 * @param paths List of filesystem references
 	 * @return Array of page IDs
@@ -398,6 +397,19 @@ public class ConfluenceNavigationUtil {
 		PathInfo pathIndfo = new PathInfo();
 		pathIndfo.absolutePath = ATTACHMENT_PREFIX + attach.getId();
 		pathIndfo.name = attach.getTitle();
+		return pathIndfo;
+	}
+
+	/**
+	 * Creates a PathInfo object for a cloud Confluence attachment
+	 * 
+	 * @param attach The attachment item
+	 * @return A PathInfo representing the attachment
+	 */
+	public static PathInfo encodeAsAttachment(String attachId, String title) {
+		PathInfo pathIndfo = new PathInfo();
+		pathIndfo.absolutePath = ATTACHMENT_PREFIX + attachId;
+		pathIndfo.name = title;
 		return pathIndfo;
 	}
 

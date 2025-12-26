@@ -25,6 +25,7 @@ import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContent;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContentItem;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContentsList;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceFullContent;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageResponseSearchResult;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageResponseSearchResult.CloudConfluenceSearchResult;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSpacesListItem;
 import ai.gebo.restintegration.abstraction.layer.GeboNotFoundException;
@@ -303,14 +304,15 @@ public class CloudConfluenceContentApi {
 	 * @return
 	 * @throws GeboRestIntegrationException
 	 */
-	public CloudConfluenceSearchResult searchByCql(String cql, Integer limit) throws GeboRestIntegrationException {
+	public CloudConfluenceSearchPageResponseSearchResult searchByCql(String cql, Integer limit)
+			throws GeboRestIntegrationException {
 		String relative = "/wiki/rest/api/search?cql=" + URLEncoder.encode(cql) + "&start=0"
 				+ (limit != null ? "&limit=" + limit : "") + "&expand=ancestor,space";
 		String url = api.getBaseUrl() + relative;
-		HttpEntity requestEntity = new HttpEntity<CloudConfluenceSearchResult>(api.createHeaders());
-		Class responseType = CloudConfluenceSearchResult.class;
-		ResponseEntity<CloudConfluenceSearchResult> response = api.restTemplate.exchange(url, HttpMethod.GET,
-				requestEntity, responseType);
+		HttpEntity requestEntity = new HttpEntity<CloudConfluenceSearchPageResponseSearchResult>(api.createHeaders());
+		Class responseType = CloudConfluenceSearchPageResponseSearchResult.class;
+		ResponseEntity<CloudConfluenceSearchPageResponseSearchResult> response = api.restTemplate.exchange(url,
+				HttpMethod.GET, requestEntity, responseType);
 		return response.getBody();
 	}
 
@@ -322,7 +324,8 @@ public class CloudConfluenceContentApi {
 	 * @return
 	 * @throws GeboRestIntegrationException
 	 */
-	public CloudConfluenceSearchResult searchFullText(String text, Integer limit) throws GeboRestIntegrationException {
+	public CloudConfluenceSearchPageResponseSearchResult searchFullText(String text, Integer limit)
+			throws GeboRestIntegrationException {
 		String cql = "type IN (page, blogpost, comment, attachment) AND text ~ \"" + text + "\"";
 		return searchByCql(cql, limit);
 	}
