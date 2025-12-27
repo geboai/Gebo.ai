@@ -74,12 +74,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		SYSTEM_METADATA.setSystemConfigurationReference(SYSTEM);
 	}
 
-	@Override
-	public boolean canHandle(SearchableSystemMetaData metaData) {
-
-		return false;
-	}
-
+	
 	@Override
 	public boolean isEnabled() {
 
@@ -177,7 +172,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		CloseableHttpClient client = createClient();
 		final HttpResponse response = client.execute(request);
 		int responseCode = response.getStatusLine().getStatusCode();
-		InputStream is = null;
+
 		if (responseCode >= 200 && responseCode < 400) {
 			String encoding = getEncoding(response);
 			String contentType = "text/html";
@@ -191,37 +186,12 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 				}
 			}
 			encoding = "UTF-8";
-			final String cType = contentType;
-			return new TypedInputStream() {
 
-				@Override
-				public InputStream getInputStream() throws UnsupportedOperationException, IOException {
-
-					return response.getEntity().getContent();
-				}
-
-				@Override
-				public String getContentType() {
-
-					return cType;
-				}
-			};
+			return TypedInputStream.of(response.getEntity().getContent(), contentType);
 
 		} else {
-			return new TypedInputStream() {
+			return TypedInputStream.of(InputStream.nullInputStream(), "text/html");
 
-				@Override
-				public InputStream getInputStream() throws UnsupportedOperationException, IOException {
-
-					return InputStream.nullInputStream();
-				}
-
-				@Override
-				public String getContentType() {
-
-					return "text/html";
-				}
-			};
 		}
 
 	}

@@ -13,6 +13,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -69,7 +70,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 
 	@Override
 	public boolean isEnabled(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request) {
+			DeepSearchRequest request) throws SearchServiceException {
 		if (searchService.isEnabled()) {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 			return systems != null && !systems.isEmpty();
@@ -102,7 +103,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	@Override
 	protected List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
 			DeepSearchRequest request, int maxTokens)
-			throws IOException, GeboIngestionException, GeboContentHandlerSystemException {
+			throws IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 		if (actualSearchResultToLoad.getResultReference() == null) {
 			LOGGER.warn("Search result=>" + actualSearchResultToLoad.toString()
 					+ " does not have a resultReference and cannot be read");
@@ -159,7 +160,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	}
 
 	@Override
-	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException {
+	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException, SearchServiceException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {

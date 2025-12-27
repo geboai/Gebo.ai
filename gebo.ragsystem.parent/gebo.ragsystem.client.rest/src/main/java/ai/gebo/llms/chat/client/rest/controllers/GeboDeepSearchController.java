@@ -24,6 +24,7 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
+import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
@@ -109,9 +110,11 @@ public class GeboDeepSearchController {
 			throws LLMConfigException {
 		return this.deepSearchService.search(request);
 	}
+
 	@GetMapping(value = "getDeepSearchDataSources", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<GBaseObject> getDeepSearchDataSources() {	
-			return this.deepSearchService.getDeepSearchActiveHandlers();
+	public List<GBaseObject> getDeepSearchDataSources() {
+		
+		return this.deepSearchService.getDeepSearchActiveHandlers();
 	}
 
 	@PostMapping(value = "streamDeepSearch", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -119,6 +122,11 @@ public class GeboDeepSearchController {
 			throws LLMConfigException {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.searchAsync(request);
 		return stream(flux, DeepSearchProcessedEvent.class);
+	}
+
+	@GetMapping(value = "getDeepSearchUISettings", produces = MediaType.APPLICATION_JSON_VALUE)
+	public DeepSearchUISettings getDeepSearchUISettings() {
+		return deepSearchService.getDeepSearchUISettings();
 	}
 
 	private Flux<ServerSentEvent<String>> stream(Flux<AbstractDeepSearchEvent> flux,

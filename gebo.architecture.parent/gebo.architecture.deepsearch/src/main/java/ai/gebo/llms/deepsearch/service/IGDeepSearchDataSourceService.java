@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
@@ -27,8 +28,9 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * Returns true if this handler is enabled for the actual request
 	 * 
 	 * @return
+	 * @throws SearchServiceException 
 	 */
-	public boolean isEnabled(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request);
+	public boolean isEnabled(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request) throws SearchServiceException;
 
 	/******************************************************************
 	 * Returns a description of the data source
@@ -59,8 +61,9 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @throws IOException 
 	 * @throws GeboContentHandlerSystemException 
 	 * @throws GeboIngestionException 
+	 * @throws SearchServiceException 
 	 */
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException;
+			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
 
 }

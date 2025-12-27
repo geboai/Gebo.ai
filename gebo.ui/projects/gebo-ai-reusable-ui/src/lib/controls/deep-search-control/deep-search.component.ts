@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchRequest, DeepSearchResponse, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchRequest, DeepSearchResponse, DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { MessageService, ToastMessageOptions } from "primeng/api";
@@ -76,6 +76,10 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected completionPercent: number = 0;
     protected showChooseDataSourceDialog: boolean = false;
+    protected deepSearchUISettings:DeepSearchUISettings= {
+        deepSearchUIAllowChooseSources:false,
+        externalSourcesEnabled:false
+    }
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
         private deepSearchControllerService: GeboDeepSearchControllerService,
         private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
@@ -149,6 +153,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
 
             if (msg.lastMessage === true) {
                 this.streamingResponse = false;
+                this.skipDeepSearchEvent.emit(true);
             }
         }
     }
@@ -177,9 +182,9 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             this.doStreamDeepSearchInChat();
         }
     }
-    private chooseSources(): Observable<[GBaseObject[], GBaseObject[]]> {
+    private chooseSources(): Observable<[GBaseObject[], GBaseObject[],DeepSearchUISettings]> {
         const kbObservable: Observable<GBaseObject[]> = (this.chatProfileCode) ? this.ragChatService.getVisibleKnowledgeBasesByProfileCode(this.chatProfileCode) : this.chatService.getVisibleKnowledgeBases();
-        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable]);
+        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable,this.deepSearchControllerService.getDeepSearchUISettings()]);
     }
     private chooseDataSources(): void {
         this.chooseDeepSearchDataSourcesFormGroup.reset();
@@ -188,10 +193,16 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             next: (dsList) => {
                 this.choosableDataSources = dsList[0];
                 this.choosableKnowledgeBases = dsList[1];
+                if (dsList[2]) {
+                    this.deepSearchUISettings=dsList[2];
+                }
                 const defaultSelection: IChooseSources = {
                     deepSearchDataSources: this.choosableDataSources ? this.choosableDataSources.map(x => x.code) as string[] : [],
                     knowledgeBases: this.choosableKnowledgeBases ? this.choosableKnowledgeBases.map(x => x.code) as string[] : []
                 };
+                if (this.deepSearchUISettings.externalSourcesEnabled!==true) {
+                    defaultSelection.deepSearchDataSources=[];
+                }
                 this.chooseDeepSearchDataSourcesFormGroup.patchValue(defaultSelection);
                 this.loadingRelatedBackend = false;
                 let totalChoices: number = 0;
@@ -202,7 +213,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                     totalChoices += this.choosableKnowledgeBases.length;
                 }
                 //Choice UI has to be viewed only where options for data sources are more than one
-                if (totalChoices > 1) {
+                if (totalChoices > 1 && this.deepSearchUISettings.deepSearchUIAllowChooseSources===true) {
                     this.showChooseDataSourceDialog = true;
                 }
             },

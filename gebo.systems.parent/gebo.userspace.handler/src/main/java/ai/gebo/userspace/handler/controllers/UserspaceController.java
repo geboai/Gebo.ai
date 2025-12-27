@@ -82,7 +82,7 @@ public class UserspaceController
 	 * 
 	 * @return List of knowledgebase DTOs
 	 */
-	@GetMapping(value = "getPersonalKnowledgebases", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "getPersonalKnowledgebases", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UserspaceKnowledgebaseDto> getPersonalKnowledgebases() {
 		return this.userspaceService.getPersonalKnowledgebases();
 	}

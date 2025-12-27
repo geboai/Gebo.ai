@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.googledrive.handlers.impl;
 
@@ -31,6 +28,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.GGoogleDriveSystem;
@@ -51,10 +49,10 @@ import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 /**
  * AI generated comments
  * 
- * Service class that provides virtual filesystem functionality for Google Drive.
- * This implementation extends the abstract remote virtual filesystem service
- * to handle specific Google Drive operations such as navigating through drives, folders,
- * and accessing files.
+ * Service class that provides virtual filesystem functionality for Google
+ * Drive. This implementation extends the abstract remote virtual filesystem
+ * service to handle specific Google Drive operations such as navigating through
+ * drives, folders, and accessing files.
  */
 @Service
 public class GoogleDriveVirtualFilesystemConsumingService extends
@@ -63,14 +61,14 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 
 	/** Constant key used to store the Drive service in the cache map */
 	public static final String DRIVE_SERVICE = "DRIVE-SERVICE";
-	
+
 	/** Factory for creating Google Drive credentials */
 	final GoogleDriveCredentialsFactory credentialsFactory;
 
 	/**
 	 * Constructor with required dependencies
 	 * 
-	 * @param documentFactory Factory for creating document references
+	 * @param documentFactory    Factory for creating document references
 	 * @param credentialsFactory Factory for creating Google Drive credentials
 	 */
 	public GoogleDriveVirtualFilesystemConsumingService(IGDocumentReferenceFactory documentFactory,
@@ -83,10 +81,10 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Creates a resource handle from a virtual filesystem object
 	 * 
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param system    The Google Drive system
+	 * @param endpoint  The project endpoint
 	 * @param reference The virtual filesystem object
-	 * @param cache The cache map
+	 * @param cache     The cache map
 	 * @return A Google Drive resource reference
 	 */
 	@Override
@@ -106,10 +104,10 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Opens a stream to a Google Drive resource
 	 * 
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param system    The Google Drive system
+	 * @param endpoint  The project endpoint
 	 * @param reference The resource reference
-	 * @param cache The cache map
+	 * @param cache     The cache map
 	 * @return InputStream to the requested resource
 	 */
 	@Override
@@ -182,11 +180,11 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	 * Retrieves child objects from a Google Drive folder
 	 * 
 	 * @param nativeCoordinates The current position in native coordinates
-	 * @param position The navigation coordinates
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
-	 * @param messagesConsumer Consumer for user messages
-	 * @param environment Environment containing the Drive service
+	 * @param position          The navigation coordinates
+	 * @param system            The Google Drive system
+	 * @param endpoint          The project endpoint
+	 * @param messagesConsumer  Consumer for user messages
+	 * @param environment       Environment containing the Drive service
 	 * @return List of coordinate pointers to child objects
 	 */
 	@Override
@@ -231,14 +229,14 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Converts navigation coordinates to native Google Drive coordinates
 	 * 
-	 * @param position The navigation coordinates
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
-	 * @param root The root virtual folder
-	 * @param consumer The content consumer
+	 * @param position         The navigation coordinates
+	 * @param system           The Google Drive system
+	 * @param endpoint         The project endpoint
+	 * @param root             The root virtual folder
+	 * @param consumer         The content consumer
 	 * @param messagesConsumer Consumer for user messages
-	 * @param errorConsumer Consumer for access errors
-	 * @param environment Environment containing the Drive service
+	 * @param errorConsumer    Consumer for access errors
+	 * @param environment      Environment containing the Drive service
 	 * @return List of native position objects
 	 */
 	@Override
@@ -277,8 +275,8 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Creates an environment with the Google Drive service
 	 * 
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param system        The Google Drive system
+	 * @param endpoint      The project endpoint
 	 * @param errorConsumer Consumer for access errors
 	 * @return Map containing the Drive service
 	 */
@@ -299,8 +297,8 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	 * Clears the environment map
 	 * 
 	 * @param environment The environment map to clear
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param system      The Google Drive system
+	 * @param endpoint    The project endpoint
 	 */
 	@Override
 	protected void clearEnvironment(Map<String, Object> environment, GGoogleDriveSystem system,
@@ -323,9 +321,9 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Returns a description of the object at the specified location
 	 * 
-	 * @param references List of native position objects
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param references  List of native position objects
+	 * @param system      The Google Drive system
+	 * @param endpoint    The project endpoint
 	 * @param environment The environment map
 	 * @return Description of the object
 	 */
@@ -350,8 +348,8 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Returns a description of the project endpoint
 	 * 
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
+	 * @param system      The Google Drive system
+	 * @param endpoint    The project endpoint
 	 * @param environment The environment map
 	 * @return Description of the project endpoint
 	 */
@@ -364,10 +362,10 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	/**
 	 * Verifies that a remote object exists
 	 * 
-	 * @param system The Google Drive system
-	 * @param endpoint The project endpoint
-	 * @param doc The virtual filesystem object
-	 * @param reference The resource reference
+	 * @param system      The Google Drive system
+	 * @param endpoint    The project endpoint
+	 * @param doc         The virtual filesystem object
+	 * @param reference   The resource reference
 	 * @param environment The environment map
 	 * @return The verified virtual filesystem object
 	 */
@@ -377,5 +375,52 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 			GoogleDriveResourceReference reference, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		return doc;
+	}
+
+	@Override
+	protected List<GoogleDriveNativePositionObject> toNativeCoordinates(GoogleDriveNavigationCoordinates position,
+			GGoogleDriveSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(GGoogleDriveSystem system)
+			throws GeboContentHandlerSystemException {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			map.put(DRIVE_SERVICE, credentialsFactory.getDriveService(system.getDriveAccessSecret()));
+		} catch (GeboCryptSecretException | IOException | VirtualFilesystemBrowsingException
+				| GeneralSecurityException e) {
+			throw new GeboContentHandlerSystemException("Cannot access google drive service", e);
+		}
+		return map;
+	}
+
+	@Override
+	protected GoogleDriveResourceReference getResourceHandle(SearchableSystemMetaData system,
+			GoogleDriveNavigationCoordinates navigationPosition,
+			List<GoogleDriveNativePositionObject> nativeCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException {
+		GoogleDriveNativePositionObject reference = nativeCoordinates.isEmpty() ? null
+				: nativeCoordinates.get(nativeCoordinates.size() - 1);
+		GoogleDriveResourceReference _reference = new GoogleDriveResourceReference();
+		_reference.driveId = (String) reference.getResourceReferenceMetaInfos()
+				.get(GoogleDriveNativePositionObject.GOOGLE_DRIVE_ID);
+		_reference.folderId = (String) reference.getResourceReferenceMetaInfos()
+				.get(GoogleDriveNativePositionObject.GOOGLE_FOLDER_ID);
+		_reference.resourceId = (String) reference.getResourceReferenceMetaInfos()
+				.get(GoogleDriveNativePositionObject.GOOGLE_RESOURCE_ID);
+		return _reference;
+	}
+
+	@Override
+	protected InputStream streamResource(GGoogleDriveSystem system, GoogleDriveResourceReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
+		if (!cache.containsKey(DRIVE_SERVICE)) {
+			cache.putAll(createEnvironment(system));
+		}
+		Drive driveService = (Drive) cache.get(DRIVE_SERVICE);
+		return driveService.files().get(reference.resourceId).setSupportsAllDrives(true).executeMediaAsInputStream();
 	}
 }

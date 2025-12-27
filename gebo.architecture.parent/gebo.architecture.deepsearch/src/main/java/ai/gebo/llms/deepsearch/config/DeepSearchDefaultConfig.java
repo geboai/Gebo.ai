@@ -74,6 +74,8 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "\r\nUSER:\r\nUser question:\r\n\r\n{question}\r\n";
 	private String searchQueryExtractionPrompt = null;
 	private int maxExternalSourcesSearchResults = 8;
+	private boolean externalSourcesEnabled = false;
+	private boolean deepSearchUIAllowChooseSources = false;
 
 	public DeepSearchDefaultConfig() {
 		this.setDescription("Default deep search configuration");

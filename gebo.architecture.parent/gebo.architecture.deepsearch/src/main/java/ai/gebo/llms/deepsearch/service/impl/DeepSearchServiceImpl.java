@@ -53,6 +53,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
+import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
@@ -345,7 +346,10 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		GeboChatResponse cleanResponse = null;
 		final boolean isRag = chatContext.getRagChat() != null && chatContext.getRagChat();
 		List<GKnowledgeBase> visibleKnowledgeBases = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
-		List<String> knowledgeBasesCodesList = visibleKnowledgeBases.stream().map(x -> x.getCode()).toList();
+		List<String> userSelectedKnowledgeBases = request.getChoosedKnowledgeBases();
+		List<String> knowledgeBasesCodesList = visibleKnowledgeBases.stream()
+				.filter(y -> userSelectedKnowledgeBases != null && userSelectedKnowledgeBases.contains(y.getCode()))
+				.map(x -> x.getCode()).toList();
 		if (chatContext.getChatProfileCode() != null && isRag) {
 			Optional<GChatProfileConfiguration> chatProfileOptional = chatProfilesRepository
 					.findById(chatContext.getChatProfileCode());
@@ -362,7 +366,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				}
 			}
 		}
-		
+
 		if (isRag) {
 			cleanResponse = this.ragChatService.createUnprocessedResponse(request);
 			cleanResponse.setQueryResponse("");
@@ -441,6 +445,12 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
 		final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
 		return worker.getDeepSearchActiveHandlers(configuration);
+	}
+
+	@Override
+	public DeepSearchUISettings getDeepSearchUISettings() {
+
+		return DeepSearchUISettings.of(defaultDeepsearchConfig);
 	}
 
 }

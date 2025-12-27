@@ -13,10 +13,12 @@ import { SearchResultReference } from './searchResultReference';
 import { VFilesystemReference } from './vFilesystemReference';
 
 export interface SearchResult { 
+    id: string;
     resultReference: SearchResultReference;
     navigationReference: VFilesystemReference;
     descriptiveText: string;
     nestingLevel?: number;
     systemHandlerId: string;
     systemConfigurationCode: string;
+    childs?: Array<SearchResult>;
 }
