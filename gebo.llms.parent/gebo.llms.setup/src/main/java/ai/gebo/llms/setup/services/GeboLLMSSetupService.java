@@ -119,6 +119,10 @@ public class GeboLLMSSetupService {
 				case CHAT: {
 					IGChatModelConfigurationSupportService handler = chatModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
+					if (handler==null) {
+						LOGGER.warn("The CHAT Handler "+preset.getServiceHandler()+" is not present or started up");
+						continue;
+					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableChatModel> chatConfigurations = chatModelsConfigDao.getConfigurations();
 					for (IGConfigurableChatModel chatModel : chatConfigurations) {
@@ -142,6 +146,10 @@ public class GeboLLMSSetupService {
 				case EMBEDDING: {
 					IGEmbeddingModelConfigurationSupportService handler = embedModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
+					if (handler==null) {
+						LOGGER.warn("The EMBEDDING Handler "+preset.getServiceHandler()+" is not present or started up");
+						continue;
+					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableEmbeddingModel> embeddingConfigurations = embeddingModelsConfigDao
 							.getConfigurations();

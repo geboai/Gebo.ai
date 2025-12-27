@@ -20,7 +20,8 @@ import java.util.List;
  * Gebo.ai comment agent
  */
 public class GStandardModulesConstraints {
-
+	public static final boolean UNDER_DEVELOPMENT_FEATURES_ENABLED = System.getProperty("under-development") != null
+			&& System.getProperty("under-development").equalsIgnoreCase("true");
 	// Constants for module names
 	public static final String CORE_MODULE = "core-module";
 	public static final String SHARED_FILESYSTEM_MODULE = "shared-filesystem-module";
@@ -70,9 +71,8 @@ public class GStandardModulesConstraints {
 	static {
 		// Check system property to determine if UNDER_DEVELOPMENT modules should be
 		// added to other lists
-		boolean underDevelopment = System.getProperty("under-development") != null
-				&& System.getProperty("under-development").equalsIgnoreCase("true");
-		if (underDevelopment) {
+
+		if (UNDER_DEVELOPMENT_FEATURES_ENABLED) {
 			// If in under-development mode, include under-development modules in all and
 			// community categories
 			ALL_MODULES.addAll(UNDER_DEVELOPMENT_MODULES);
