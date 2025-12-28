@@ -28,6 +28,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 
@@ -42,6 +43,7 @@ import ai.gebo.system.ingestion.model.IngestionFileType;
 public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferenceIngestionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentReferenceIngestionHandlerImpl.class);
 	protected final SpecializedHandlerRepositoryPattern repoPattern;
+	protected final IGLanguageDetector languageDetector;
 
 	/**
 	 * Map of content types that can be handled by this ingestion handler
@@ -61,8 +63,10 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	 * @param repoPattern Repository containing specialized document reference
 	 *                    ingestion handlers
 	 */
-	public GDocumentReferenceIngestionHandlerImpl(SpecializedHandlerRepositoryPattern repoPattern) {
+	public GDocumentReferenceIngestionHandlerImpl(SpecializedHandlerRepositoryPattern repoPattern,
+			IGLanguageDetector languageDetector) {
 		this.repoPattern = repoPattern;
+		this.languageDetector = languageDetector;
 		List<IGSpecializedDocumentReferenceIngestionHandler> impls = repoPattern.getImplementations();
 		for (IGSpecializedDocumentReferenceIngestionHandler handler : impls) {
 			List<String> contentTypes = handler.getHandledContentTypes();
@@ -161,6 +165,14 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		} else {
 			data.setUnmanagedContent(true);
 		}
+		outContents = outContents.map(x -> {
+			try {
+				languageDetector.addLanguageMetaData(x);
+			} catch (IOException e) {
+				
+			}
+			return x;
+		});
 		data.setStream(outContents);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End handleContent([" + reference.getCode() + ",...)");
