@@ -15,6 +15,8 @@ public class ThreasholdAutotuneProcessResult extends GBaseObject {
 	private String vectorStoreId = null;
 	private String embeddingModelCode = null;
 	private Long vectorStoreVectorizedCount = null;
+	private double evaluationPoints = 0;
+	private double score=0;	
 	@Order(value = Ordered.HIGHEST_PRECEDENCE)
 	private Date processedDateTime = null;
 

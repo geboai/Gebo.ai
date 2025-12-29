@@ -8,11 +8,12 @@ import lombok.Data;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "ai.gebo.rag_threashold_autotune.config")
+@ConfigurationProperties(prefix = "ai.gebo.rag-threashold-autotune.config")
 public class RagThreasholdAutotuneConfig {
 	OptimizedThreashold defaultOptimizedThreashold = new OptimizedThreashold();
 	private double documentsCardinalityAddedPercentTrigger = 5.0;
 	private int dayElapsedWithoutTuning = 3;
+	private int sampleFragmentsMinTokenLength = 100;
 
 	public RagThreasholdAutotuneConfig() {
 		defaultOptimizedThreashold.setFirstHopOptimizedThreashold(0.7);
