@@ -19,10 +19,10 @@ export interface PageDeepSearchDocumentAnalisysResultStep {
     size?: number;
     content?: Array<DeepSearchDocumentAnalisysResultStep>;
     number?: number;
+    numberOfElements?: number;
+    pageable?: PageableObject;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
     empty?: boolean;
 }

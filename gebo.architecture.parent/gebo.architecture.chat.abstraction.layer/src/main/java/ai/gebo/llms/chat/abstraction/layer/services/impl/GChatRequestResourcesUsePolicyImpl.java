@@ -28,6 +28,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
+import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
@@ -91,6 +93,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	IKnowledgeGraphSearchService knowledgeGraphSearch;
 	@Autowired
 	IGChatStorageAreaService storageAreaService;
+	@Autowired
+	IRagThreasholdAutotuneService threasholdAutotuneService;
 	protected JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	/**
@@ -195,7 +199,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		RagChatModelLimitedRequest lrequest = new RagChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
 		int contextWindowNToken = getContextLength(chatHandler);
-
+		OptimizedThreashold lastOptimizedThreasholds = threasholdAutotuneService
+				.findByEmbeddingModelCode(embeddingHandler.getCode());
 		// retrieve percentage of allocations settings and optimizations
 		ContextWindowLengthRangeSettings settings = findOptimizationSettings(contextWindowNToken);
 		lrequest.setContextWindowNToken(contextWindowNToken);
@@ -256,7 +261,12 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		ragQueryOptions.setMaxTokens(availableTokensForDocuments);
 		int topK = chatProfile.getTopK() != null ? chatProfile.getTopK() : ragResourcesConfig.getDefaultTopK();
 		ragQueryOptions.setSimilarityThreashold(this.ragResourcesConfig.getDefaultSimilarityThreshold());
-		if (chatProfile.getSimilaritySearchThreshold() != null) {
+		if (lastOptimizedThreasholds != null) {
+			ragQueryOptions.setSimilarityThreashold(lastOptimizedThreasholds.getOptimizedThreashold());
+		}
+		// if manual configuration is set for chat profile
+		if (chatProfile.getManualThreasholdsConfiguration() != null && chatProfile.getManualThreasholdsConfiguration()
+				&& chatProfile.getSimilaritySearchThreshold() != null) {
 			if (chatProfile.getSimilaritySearchThreshold() > 0.0 && chatProfile.getSimilaritySearchThreshold() < 1.00) {
 				ragQueryOptions.setSimilarityThreashold(chatProfile.getSimilaritySearchThreshold());
 			} else {
@@ -281,8 +291,12 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 						visibleKnowledgeBaseCodes, embeddingHandler, user);
 			} else {
 				extractedDocuments = ragDocumentsCachedDao.multiHopSemanticSearch(request.getQuery(), ragQueryOptions,
-						visibleKnowledgeBaseCodes, embeddingHandler, chatProfile.getSimilaritySearchThreshold(),
-						chatProfile.getOtherSearchSimilarityThreshold(), user);
+						visibleKnowledgeBaseCodes, embeddingHandler,
+						lastOptimizedThreasholds != null ? lastOptimizedThreasholds.getFirstHopOptimizedThreashold()
+								: ragQueryOptions.getSimilarityThreashold(),
+						lastOptimizedThreasholds != null ? lastOptimizedThreasholds.getSecondHopOptimizedThreashold()
+								: ragQueryOptions.getSimilarityThreashold(),
+						user);
 			}
 		}
 		extractedDocuments.getDocumentItems().forEach(x -> x.getFragments().forEach(y -> {
@@ -562,7 +576,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			if (nhistoryTokens < tokensBudget) {
 				for (int i = userContext.getInteractions().size() - 1; i >= firstInteractionToInclude; i--) {
 					ChatInteractions interaction = userContext.getInteractions().get(i);
-					int totalTokens=nhistoryTokens;
+					int totalTokens = nhistoryTokens;
 					if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
 						interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
 					}
@@ -581,7 +595,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 					}
 					if (totalTokens < tokensBudget) {
 						history.add(interaction);
-						nhistoryTokens=totalTokens;
+						nhistoryTokens = totalTokens;
 					} else
 						break;
 
