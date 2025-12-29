@@ -159,4 +159,6 @@ public interface VectorizedContentRepository extends MongoRepository<GVectorized
      */
     public long countByIdVectorStoreIdAndParentProjectCode(String vectorStoreId, String code);
 
+	public Stream<GVectorizedContent> findByIdVectorStoreId(String vectorStoreId);
+
 }

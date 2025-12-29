@@ -81,13 +81,14 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.setDescription("Default deep search configuration");
 		this.setDefaultConfig(true);
 		this.firstHopSimilarityThreashold = 0.5;
-		this.secondHopSimilarityThreashold = 0.6;
+		this.secondHopSimilarityThreashold = 0.5;
 		this.searchType = SearchType.MULTI_HOP;
 		this.chatModelConfiguration = null;
 		this.analisysPrompt = analisysDefaultPrompt;
 		this.consolidationPrompt = consolidationDefaultPrompt;
 		this.ragQueryOptions = new RagQueryOptions(1000000, CompletenessLevel.STRICT_QUERY_RELATED);
 		this.ragQueryOptions.setTopK(100);
+		this.ragQueryOptions.setSimilarityThreashold(0.5);
 		this.graphRagTopN = 50;
 		this.searchQueryExtractionPrompt = defaultSearchQueryExtractionPrompt;
 	}

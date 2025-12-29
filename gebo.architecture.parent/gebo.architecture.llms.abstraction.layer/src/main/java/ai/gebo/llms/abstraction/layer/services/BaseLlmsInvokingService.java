@@ -1,13 +1,19 @@
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -20,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +45,19 @@ public class BaseLlmsInvokingService {
 	public static final String FORMAT_TEMPLATE_VARIABLE = "format";
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	private static final JTokkitTokenCountEstimator tokensEstimation = new JTokkitTokenCountEstimator();
+
+	protected static final <T> Supplier<T> stream2supplier(Stream<T> stream) {
+		if (stream == null)
+			return () -> null;
+		final Iterator<T> iterator = stream.iterator();
+		return () -> iterator.hasNext() ? iterator.next() : null;
+	}
+
+	protected static <T> Stream<T> supplier2stream(Supplier<T> supplier) {
+		if (supplier == null)
+			return Stream.empty();
+		return Stream.generate(supplier).takeWhile(Objects::nonNull);
+	}
 
 	protected IGConfigurableEmbeddingModel getDefaultEmbeddingModel() {
 		return embeddingModelsRuntimeDao.defaultHandler();
@@ -87,11 +107,30 @@ public class BaseLlmsInvokingService {
 		return chatModel;
 	}
 
+	protected void loadParams(PromptTemplate template, Map<String, Object> params) {
+		if (params != null) {
+			for (Entry<String, Object> entry : params.entrySet()) {
+				template.add(entry.getKey(), entry.getValue());
+			}
+		}
+	}
+
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
 			String question) {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		String result = response.getResult().getOutput().getText();
+		return result;
+	}
+
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
+			String question, Map<String, Object> params) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		loadParams(promptTemplate, params);
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 		String result = response.getResult().getOutput().getText();
 		return result;
@@ -184,6 +223,12 @@ public class BaseLlmsInvokingService {
 
 	static class ConsolidationInputBatch {
 		List<ConsolidationBatchItem> inputs = new ArrayList<ConsolidationBatchItem>();
+		int totaltokens = 0;
+		boolean complete = false;
+	}
+
+	static class ConsolidationDocuments {
+		List<Document> inputs = new ArrayList<Document>();
 		int totaltokens = 0;
 		boolean complete = false;
 	}
@@ -396,6 +441,7 @@ public class BaseLlmsInvokingService {
 						ConsolidationInputBatch newBatch = new ConsolidationInputBatch();
 						newBatch.inputs.add(batchItem);
 						newBatch.totaltokens += batchItem.tokensCount;
+						currentBatchesQueue.add(newBatch);
 					}
 				}
 			}
@@ -418,6 +464,89 @@ public class BaseLlmsInvokingService {
 		return consolidated;
 	}
 
+	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalParams, Stream<Document> toCalculate) {
+		return callLLMConcatenateText(chatModel, prompt, question, additionalParams, stream2supplier(toCalculate));
+	}
+
+	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalParams, Supplier<Document> input) {
+		final int contextWindow = chatModel.getContextLength();
+		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
+		Document currentInput = null;
+		final int promptLength = tokensEstimation.estimate(prompt);
+		StringBuffer outBuffer = new StringBuffer();
+		// Following 2 variables have to be updated once a consolidation is re-run
+
+		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+		do {
+			currentInput = input.get();
+			if (currentInput != null && currentInput.isText() && currentInput.getText().trim().length() > 0) {
+
+				final int textTokensLength = currentInput.getMetadata() != null
+						&& currentInput.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
+								? ((Number) currentInput.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH))
+										.intValue()
+								: tokensEstimation.estimate(currentInput.getText());
+
+				if (textTokensLength > fragmentBudget) {
+					// splits will be loaded in currentBatchesQueue
+					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
+							fragmentBudget, true);
+					List<Document> documents = splitter.split(currentInput);
+					final Document _currentInput = currentInput;
+					List<ConsolidationDocuments> splitted = documents.stream().map(x -> {
+						ConsolidationDocuments batchItem = new ConsolidationDocuments();
+						batchItem.inputs.add(x);
+
+						batchItem.totaltokens = tokensEstimation.estimate(x.getText());
+						x.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, batchItem.totaltokens);
+						return batchItem;
+					}).toList();
+
+					currentBatchesQueue.addAll(splitted);
+				} else {
+
+					ConsolidationDocuments lastBatch = currentBatchesQueue.isEmpty() ? null
+							: currentBatchesQueue.get(currentBatchesQueue.size() - 1);
+
+					boolean allocateNewBatch = false;
+					if (lastBatch != null) {
+						if (fragmentBudget > (lastBatch.totaltokens + textTokensLength)) {
+							lastBatch.totaltokens += textTokensLength;
+							lastBatch.inputs.add(currentInput);
+						} else {
+							lastBatch.complete = true;
+							allocateNewBatch = true;
+						}
+					} else {
+						allocateNewBatch = true;
+					}
+					if (allocateNewBatch) {
+						ConsolidationDocuments newBatch = new ConsolidationDocuments();
+						newBatch.inputs.add(currentInput);
+						newBatch.totaltokens += textTokensLength;
+						currentBatchesQueue.add(newBatch);
+					}
+				}
+			}
+
+			for (ConsolidationDocuments consolidationInputBatch : currentBatchesQueue) {
+				// if this batch is complete or we are at the end of contents
+				if (consolidationInputBatch.complete || currentInput == null) {
+					String outValue = callLLMWithDocuments(chatModel, prompt, consolidationInputBatch.inputs, question,
+							additionalParams);
+					if (outValue != null) {
+						outBuffer.append(outValue);
+						outBuffer.append(NEWLINE);
+					}
+					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+				}
+			}
+		} while (currentInput != null);
+		return outBuffer.isEmpty() ? null : outBuffer.toString();
+	}
+
 	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
 			String pastConsolidation, List<ConsolidationInput> input) {
 		Iterator<ConsolidationInput> iterator = input.iterator();
@@ -438,6 +567,47 @@ public class BaseLlmsInvokingService {
 						return iterator.next();
 					return null;
 				});
+	}
+
+	public static final char CSV_COLUMN_SEPARATOR = ';';
+	public static final String CSV_COLUMN_SEPARATOR_STRING = ";";
+
+	protected boolean isCSV(String line, int nColumns) {
+		if (line == null || line.trim().length() == 0)
+			return false;
+		char chars[] = line.toCharArray();
+		int count = 0;
+		for (int i = 0; i < chars.length; i++) {
+			char c = chars[i];
+			if (c == CSV_COLUMN_SEPARATOR) {
+				count++;
+			}
+		}
+		return count >= (nColumns - 1);
+	}
+
+	protected Stream<String> filterCSVLines(String content, int nColumns) {
+		if (content == null || content.trim().length() == 0)
+			return Stream.empty();
+		final ByteArrayInputStream bis = new ByteArrayInputStream(content.getBytes());
+		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bis));
+		final Supplier<String> supplier = () -> {
+			String line = null;
+			try {
+				line = bufferedReader.readLine();
+			} catch (Throwable th) {
+			}
+			return line;
+		};
+		return filterCSVLines(supplier2stream(supplier), nColumns);
+	}
+
+	protected Stream<String> filterCSVLines(Stream<String> streamedLines, int nColumns) {
+		return streamedLines.filter(x -> this.isCSV(x, nColumns));
+	}
+
+	protected <T> Stream<T> readCSVLines(String content, int nColumns, Function<String, T> reader) {
+		return filterCSVLines(content, nColumns).map(reader).filter(y -> y != null);
 	}
 
 }
