@@ -294,15 +294,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			});
 		}
 		if (value == null) {
-			value = this.chatModelsConfiguration.findByPredicate(x -> {
-				GBaseChatModelConfig chatConfig;
-				chatConfig = ((GBaseChatModelConfig) x.getConfig());
-				return chatConfig.getForUses() != null
-						&& chatConfig.getForUses().contains(ChatModelsUses.GRAPH_EXTRACTION);
-			});
-			if (value == null) {
-				value = this.chatModelsConfiguration.defaultHandler();
-			}
+			value=this.chatModelsConfiguration.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);			
 		}
 		return value;
 	}

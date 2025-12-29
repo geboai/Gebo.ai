@@ -14,6 +14,7 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GObjectRef;
 
@@ -40,6 +41,9 @@ public interface IGChatModelRuntimeConfigurationDao
      *                            configuration.
      */
     public void addRuntimeByConfig(GBaseChatModelConfig config) throws LLMConfigException;
+
+	public IGConfigurableChatModel findByUses(ChatModelsUses ...graphExtraction);
+	public IGConfigurableChatModel findByUsesOrGetDefault(ChatModelsUses ...graphExtraction);
 
 	
 }

@@ -26,6 +26,7 @@ import { FileUploadsControllerService } from './api/fileUploadsController.servic
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
+import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
@@ -120,6 +121,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     FunctionsLookupControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminPromptsControllerService,
+    GeboAdminRagAutotuneControllerService,
     GeboAdvancedSetupStatusControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,

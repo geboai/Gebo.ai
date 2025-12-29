@@ -27,6 +27,7 @@ export interface DeepSearchConfig {
     secondHopSimilarityThreashold?: number;
     graphRagTopN?: number;
     tokensLimit?: number;
+    manualThreasholdsConfiguration?: boolean;
     chatModelConfiguration?: GObjectRefGBaseChatModelConfig;
     defaultConfig?: boolean;
     chatProfileCode?: string;

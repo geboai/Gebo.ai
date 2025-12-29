@@ -1,0 +1,34 @@
+<div class=" grid">
+
+    <div class="col-12"><p-table [value]="autotunedVectorStores" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header pTemplate="header">
+                <tr>
+                    <th id="Code" gebo-ai-text>Embedding model/VectorStore code</th>
+                    <th id="Description" gebo-ai-text>Description</th>
+                    <th id="Autotuned" gebo-ai-text>Autotuned</th>
+                    <th id="LastAutotunedDate" gebo-ai-text>Last tuning update</th>
+                    <th id="ComputedThreashold" gebo-ai-text>Computed threashold</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-item pTemplate="body">
+                <tr>
+                    <td>
+                        {{item.code}}
+                    </td>
+                    <td>
+                        {{item.description}}
+                    </td>
+                    <td [style]="{color:item.autotuneResult?'green':'red'}">
+                        {{item.autotuneResult?"Yes":"No"}}
+                    </td>
+                    <td>
+                        {{item.autotuneResult?.processedDateTime}}
+                    </td>
+                    <td>
+                        {{item.autotuneResult?.threasholds?.optimizedThreashold}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table></div>
+
+</div>

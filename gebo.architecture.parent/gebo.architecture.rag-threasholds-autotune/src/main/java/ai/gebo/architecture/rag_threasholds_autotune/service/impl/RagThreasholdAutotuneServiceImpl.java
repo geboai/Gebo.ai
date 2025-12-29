@@ -28,11 +28,19 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.DiscreteDomain;
 
 import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotuneConfig;
+import ai.gebo.architecture.rag_threasholds_autotune.model.AutotuneVectorStoreInfo;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.model.ThreasholdAutotuneProcessResult;
 import ai.gebo.architecture.rag_threasholds_autotune.repository.ThreasholdAutotuneProcessResultRepository;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneMatchRate;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneMatchWithRate;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQueryHardness;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQuestion;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQuestionResult;
+import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneRatedThreashold;
 import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -41,7 +49,6 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
-import lombok.ToString;
 
 @Service
 public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService implements IRagThreasholdAutotuneService {
@@ -49,24 +56,6 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RagThreasholdAutotuneServiceImpl.class);
-
-	public static enum Hardness {
-		EASY, MEDIUM, HARD
-	};
-
-	static class Question {
-		String id = UUID.randomUUID().toString();
-		String text = null;
-		Hardness hardness = Hardness.MEDIUM;
-		String documentId = null;
-	}
-
-	static class QuestionResult {
-		Question query;
-		List<Document> relatedDocuments = new ArrayList<Document>();
-		double threashold;
-		int topK;
-	}
 
 	private static final String IN_TOPIC_PROMPT = "You are a synthetic query generator for retrieval evaluation.\r\n"
 			+ "\r\n" + "INPUT\r\n" + "You will receive a batch of N text segments (\"chunks\"). Each chunk has:\r\n"
@@ -165,7 +154,6 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			IGConfigurableEmbeddingModel embeddingModel = embeddingModelsRuntimeDao.findByCode(vectorStoreId);
 			VectorStore vectorStore = embeddingModel.getVectorStore();
 			final int budgetTotal = 30;
-			Stream<GVectorizedContent> contents = vectorizedContentsRepository.findByIdVectorStoreId(vectorStoreId);
 			final List<Document> sampled = new ArrayList<Document>();
 			Builder builder = SearchRequest.builder();
 			builder.filterExpression(
@@ -177,9 +165,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			List<Document> documents = vectorStore.similaritySearch(request);
 			sampled.addAll(documents);
 			final int topK = sampled.size();
-			IGConfigurableChatModel defaultChatModel = chatModelsConfigDao.defaultHandler();
-			String csvResult = callLLMWithDocuments(defaultChatModel, IN_TOPIC_PROMPT, sampled, "");
-			List<Question> questions = parseQuestions(csvResult);
+			IGConfigurableChatModel serviceChatModel = chatModelsConfigDao
+					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+			String csvResult = callLLMWithDocuments(serviceChatModel, IN_TOPIC_PROMPT, sampled, "");
+			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
 			double startingSearch = 1.0;
 			final double increment = 0.025;
 			final double fineIncrement = 0.025;
@@ -187,9 +176,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			int nMaxIterations = 100;
 			double threashold = startingSearch;
 			do {
-				List<QuestionResult> results = new ArrayList<RagThreasholdAutotuneServiceImpl.QuestionResult>();
-				for (Question question : questions) {
-					QuestionResult result = executeQuestion(question, threashold, topK, vectorStore);
+				List<AutoTuneQuestionResult> results = new ArrayList<AutoTuneQuestionResult>();
+				for (AutoTuneQuestion question : questions) {
+					AutoTuneQuestionResult result = executeQuestion(question, threashold, topK, vectorStore);
 					results.add(result);
 				}
 				resultsCardinality = computeCardinality(results);
@@ -212,9 +201,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			final int nMaxTotalCardinality = questions.size() * topK;
 			do {
 
-				List<QuestionResult> results = new ArrayList<RagThreasholdAutotuneServiceImpl.QuestionResult>();
-				for (Question question : questions) {
-					QuestionResult result = executeQuestion(question, threashold, topK, vectorStore);
+				List<AutoTuneQuestionResult> results = new ArrayList<AutoTuneQuestionResult>();
+				for (AutoTuneQuestion question : questions) {
+					AutoTuneQuestionResult result = executeQuestion(question, threashold, topK, vectorStore);
 					results.add(result);
 				}
 				LOGGER.info("Finding minimum threashold limit trying with:" + threashold);
@@ -232,10 +221,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			} while (resultsCardinality >= nMaxTotalCardinality && nMaxIterations > 0);
 			final double lowerBound = threashold;
 			LOGGER.info("Tuning will go between " + lowerBound + " and " + upperBound);
-			TreeMap<Double, List<RatedThreashold>> rateOrderedOptimizationThreasholds = new TreeMap<Double, List<RatedThreashold>>();
+			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds = new TreeMap<Double, List<AutoTuneRatedThreashold>>();
 			Map<String, Double> cache = new HashMap<String, Double>();
-			RatedThreashold foundThreashold = maximizeInTreeSequence(lowerBound, upperBound, fineIncrement, vectorStore,
-					defaultChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
+			AutoTuneRatedThreashold foundThreashold = maximizeInTreeSequence(lowerBound, upperBound, fineIncrement,
+					vectorStore, serviceChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
 
 			OptimizedThreashold optimized = new OptimizedThreashold();
 			optimized.setFirstHopOptimizedThreashold(foundThreashold.threashold);
@@ -258,16 +247,16 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		}
 	}
 
-	private RatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,
-			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<Question> questions,
-			TreeMap<Double, List<RatedThreashold>> rateOrderedOptimizationThreasholds, Map<String, Double> cache,
-			int topK) {
+	private AutoTuneRatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,
+			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions,
+			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds,
+			Map<String, Double> cache, int topK) {
 		boolean isInRange = Math.abs(upperBound - lowerBound) < fineIncrement;
 		lowerBound = round3decimal(lowerBound);
 		upperBound = round3decimal(upperBound);
 		double midStep = round3decimal((lowerBound + upperBound) / 2.0);
 		if (isInRange) {
-			RatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
+			AutoTuneRatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
 					questions, cache, topK, rateOrderedOptimizationThreasholds);
 			if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThreasholdMid.rating)) {
 				rateOrderedOptimizationThreasholds.put(evaluateThreasholdMid.rating, new ArrayList());
@@ -277,12 +266,12 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		}
 		LOGGER.info("maximizeInTreeSequence scanning between: " + lowerBound + "," + midStep + "," + upperBound);
 
-		RatedThreashold evaluateThresholdLeft = evaluateThreashold(lowerBound, vectorStore, defaultChatModel, questions,
-				cache, topK, rateOrderedOptimizationThreasholds);
-		RatedThreashold evaluateThreasholdRight = evaluateThreashold(upperBound, vectorStore, defaultChatModel,
+		AutoTuneRatedThreashold evaluateThresholdLeft = evaluateThreashold(lowerBound, vectorStore, defaultChatModel,
 				questions, cache, topK, rateOrderedOptimizationThreasholds);
-		RatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel, questions,
-				cache, topK, rateOrderedOptimizationThreasholds);
+		AutoTuneRatedThreashold evaluateThreasholdRight = evaluateThreashold(upperBound, vectorStore, defaultChatModel,
+				questions, cache, topK, rateOrderedOptimizationThreasholds);
+		AutoTuneRatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
+				questions, cache, topK, rateOrderedOptimizationThreasholds);
 		if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThresholdLeft.rating)) {
 			rateOrderedOptimizationThreasholds.put(evaluateThresholdLeft.rating, new ArrayList());
 		}
@@ -295,7 +284,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		rateOrderedOptimizationThreasholds.get(evaluateThresholdLeft.rating).add(evaluateThresholdLeft);
 		rateOrderedOptimizationThreasholds.get(evaluateThreasholdRight.rating).add(evaluateThreasholdRight);
 		rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
-		RatedThreashold maxevaluation = null;
+		AutoTuneRatedThreashold maxevaluation = null;
 		if ((midStep - lowerBound) <= fineIncrement || (upperBound - midStep) <= fineIncrement) {
 			maxevaluation = rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
 
@@ -312,18 +301,6 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 		}
 		return maxevaluation;
-	}
-
-	static class MatchWithRate {
-		Document document = null;
-		Double distance = null;
-		Double rating = null;
-	}
-
-	static class MatchRate {
-		String documentId = null;
-		Double distance = null;
-		Double rating = null;
 	}
 
 	private static final String EVALUATE_RATING_PROMPT = "You are a strict RAG retrieval judge.\r\n" + "\r\n"
@@ -351,23 +328,24 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			+ "Do not quote or escape fields unless documentId contains ';' (if it does, replace ';' with '_').\r\n"
 			+ "DOCUMENT FRAGMENTS\r\n\r\n{documents}\r\n";
 
-	private RatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
-			IGConfigurableChatModel defaultChatModel, List<Question> questions, Map<String, Double> cache, int topK,
-			TreeMap<Double, List<RatedThreashold>> rateOrderedOptimizationThreasholds) {
+	private AutoTuneRatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
+			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
+			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
 		double globalRating = 0.0;
 		double evaluationPoints = 0.0;
 		double totalDistance = 0.0;
 		double answeredQuestions = 0.0;
-		List<RatedThreashold> allComputed = new ArrayList<RagThreasholdAutotuneServiceImpl.RatedThreashold>();
+		List<AutoTuneRatedThreashold> allComputed = new ArrayList<AutoTuneRatedThreashold>();
 		rateOrderedOptimizationThreasholds.values().forEach(x -> {
 			allComputed.addAll(x);
 		});
-		Optional<RatedThreashold> cacheHit = allComputed.stream().filter(x -> x.threashold == threashold).findFirst();
+		Optional<AutoTuneRatedThreashold> cacheHit = allComputed.stream().filter(x -> x.threashold == threashold)
+				.findFirst();
 		if (cacheHit.isPresent()) {
 			LOGGER.info("Returning cached rates:" + cacheHit.get());
 			return cacheHit.get();
 		}
-		for (final Question question : questions) {
+		for (final AutoTuneQuestion question : questions) {
 			Builder builder = SearchRequest.builder();
 			builder.query(question.text);
 			builder.topK(topK);
@@ -382,8 +360,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			for (Document d : retrieved) {
 				retrievedById.put(d.getId(), d);
 			}
-			final List<MatchWithRate> matchWithRate = retrieved.stream().map(x -> {
-				MatchWithRate mr = new MatchWithRate();
+			final List<AutoTuneMatchWithRate> matchWithRate = retrieved.stream().map(x -> {
+				AutoTuneMatchWithRate mr = new AutoTuneMatchWithRate();
 				mr.document = x;
 				Object distance = x.getMetadata().get("distance");
 				if (distance != null) {
@@ -405,27 +383,28 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 				mr.rating = cache.get(question.id + "<-->" + x.getId());
 				return mr;
 			}).toList();
-			for (MatchWithRate x : matchWithRate) {
+			for (AutoTuneMatchWithRate x : matchWithRate) {
 				if (x.distance != null) {
 					totalDistance += x.distance;
 				}
 			}
-			final List<MatchWithRate> alreadyMatched = matchWithRate.stream().filter(x -> x.rating != null).toList();
+			final List<AutoTuneMatchWithRate> alreadyMatched = matchWithRate.stream().filter(x -> x.rating != null)
+					.toList();
 			Stream<Document> toCalculate = matchWithRate.stream().filter(x -> x.rating == null).map(y -> y.document);
 			String csvExtracted = callLLMConcatenateText(defaultChatModel, EVALUATE_RATING_PROMPT, question.text,
 					new HashMap<String, Object>(), toCalculate);
-			List<MatchRate> matches = readCSVLines(csvExtracted, 2, this::readMatchRate).toList();
-			List<MatchWithRate> rated = new ArrayList<RagThreasholdAutotuneServiceImpl.MatchWithRate>(alreadyMatched);
-			for (MatchRate match : matches) {
+			List<AutoTuneMatchRate> matches = readCSVLines(csvExtracted, 2, this::readMatchRate).toList();
+			List<AutoTuneMatchWithRate> rated = new ArrayList<AutoTuneMatchWithRate>(alreadyMatched);
+			for (AutoTuneMatchRate match : matches) {
 				String key = question.id + "<-->" + match.documentId;
 				cache.put(key, match.rating);
 				Document document = retrievedById.get(match.documentId);
-				MatchWithRate mr = new MatchWithRate();
+				AutoTuneMatchWithRate mr = new AutoTuneMatchWithRate();
 				mr.document = document;
 				mr.rating = match.rating;
 				rated.add(mr);
 			}
-			for (MatchWithRate mr : rated) {
+			for (AutoTuneMatchWithRate mr : rated) {
 				if (mr.rating != null) {
 					globalRating += mr.rating.doubleValue();
 				}
@@ -433,7 +412,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 
 		}
-		RatedThreashold ratedT = new RatedThreashold();
+		AutoTuneRatedThreashold ratedT = new AutoTuneRatedThreashold();
 		ratedT.threashold = threashold;
 		ratedT.resultsPoints = evaluationPoints;
 		ratedT.totalDistance = totalDistance;
@@ -449,8 +428,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return Math.round(value * 1000.0) / 1000.0;
 	}
 
-	private MatchRate readMatchRate(String csvExtracted) {
-		MatchRate rate = new MatchRate();
+	private AutoTuneMatchRate readMatchRate(String csvExtracted) {
+		AutoTuneMatchRate rate = new AutoTuneMatchRate();
 		StringTokenizer tokenizer = new StringTokenizer(csvExtracted, CSV_COLUMN_SEPARATOR_STRING);
 		rate.documentId = tokenizer.nextToken();
 		rate.rating = 0.0;
@@ -462,15 +441,6 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 		}
 		return rate;
-	}
-
-	@ToString
-	static class RatedThreashold {
-		double threashold = 0.0;
-		double rating = 0.0;
-		double totalDistance = 0.0;
-		double averageDistance = 0.0;
-		double resultsPoints = 0.0;
 	}
 
 	private double[] createTreeSequence(double lowerBound, double upperBound, double fineIncrement) {
@@ -492,15 +462,15 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 
 	}
 
-	private int computeCardinality(List<QuestionResult> results) {
+	private int computeCardinality(List<AutoTuneQuestionResult> results) {
 		int total = 0;
-		for (QuestionResult questionResult : results) {
+		for (AutoTuneQuestionResult questionResult : results) {
 			total += questionResult.relatedDocuments.size();
 		}
 		return total;
 	}
 
-	private double topKSaturationPercent(List<QuestionResult> results, int topK) {
+	private double topKSaturationPercent(List<AutoTuneQuestionResult> results, int topK) {
 		double cardinality = computeCardinality(results);
 		double maxTopK = results.size() * topK;
 		if (maxTopK != 0.0)
@@ -508,8 +478,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return 0;
 	}
 
-	private QuestionResult executeQuestion(Question question, double threashold, int topK, VectorStore vectorStore) {
-		QuestionResult qr = new QuestionResult();
+	private AutoTuneQuestionResult executeQuestion(AutoTuneQuestion question, double threashold, int topK,
+			VectorStore vectorStore) {
+		AutoTuneQuestionResult qr = new AutoTuneQuestionResult();
 		qr.query = question;
 		qr.threashold = threashold;
 		qr.topK = topK;
@@ -522,9 +493,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return qr;
 	}
 
-	private List<Question> parseQuestions(String csvResult) {
+	private List<AutoTuneQuestion> parseQuestions(String csvResult) {
 		if (csvResult != null && csvResult.trim().length() > 0) {
-			List<Question> out = new ArrayList<RagThreasholdAutotuneServiceImpl.Question>();
+			List<AutoTuneQuestion> out = new ArrayList<AutoTuneQuestion>();
 			ByteArrayInputStream bis = new ByteArrayInputStream(csvResult.getBytes());
 			BufferedReader br = new BufferedReader(new InputStreamReader(bis));
 			String line = null;
@@ -532,7 +503,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 				do {
 
 					line = br.readLine();
-					Question question = readCSVLine(line);
+					AutoTuneQuestion question = readCSVLine(line);
 					if (question != null) {
 						out.add(question);
 					}
@@ -545,16 +516,16 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return List.of();
 	}
 
-	private Question readCSVLine(String line) {
-		Question q = null;
+	private AutoTuneQuestion readCSVLine(String line) {
+		AutoTuneQuestion q = null;
 		if (line != null && line.indexOf(";") >= 0) {
 			StringTokenizer tokenizer = new StringTokenizer(line, ";");
 			if (tokenizer.hasMoreTokens()) {
-				q = new Question();
+				q = new AutoTuneQuestion();
 				q.text = tokenizer.nextToken();
 				if (tokenizer.hasMoreTokens()) {
 					try {
-						q.hardness = Hardness.valueOf(tokenizer.nextToken());
+						q.hardness = AutoTuneQueryHardness.valueOf(tokenizer.nextToken());
 					} catch (Throwable th) {
 					}
 					if (tokenizer.hasMoreTokens()) {
@@ -564,6 +535,19 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 		}
 		return q;
+	}
+
+	@Override
+	public List<AutotuneVectorStoreInfo> getLatestComputedVectorStores() {
+		List<AutotuneVectorStoreInfo> out = new ArrayList<AutotuneVectorStoreInfo>();
+		List<IGConfigurableEmbeddingModel> data = embeddingModelsRuntimeDao.getConfigurations();
+		for (IGConfigurableEmbeddingModel model : data) {
+			AutotuneVectorStoreInfo vectorStoreInfo = new AutotuneVectorStoreInfo(model.getConfig());
+			List<ThreasholdAutotuneProcessResult> entries = resultRepo.findByVectorStoreId(vectorStoreInfo.getCode());
+			vectorStoreInfo.setAutotuneResult(entries.isEmpty() ? null : entries.get(0));
+			out.add(vectorStoreInfo);
+		}
+		return out;
 	}
 
 }
