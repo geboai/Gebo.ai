@@ -199,6 +199,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 					threashold -= increment;
 					threashold = round3decimal(threashold);
 				}
+				if (threashold < 0) {
+					LOGGER.error("Threashold is " + threashold + " seriusly wrong!");
+					return;
+				}
 				nMaxIterations--;
 			} while (resultsCardinality <= 0 && nMaxIterations > 0);
 			final double upperBound = threashold;
@@ -219,6 +223,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 				if (resultsCardinality >= nMaxTotalCardinality) {
 					threashold += increment;
 					threashold = round3decimal(threashold);
+				}
+				if (threashold > 1.0) {
+					LOGGER.error("Threashold is " + threashold + " seriusly wrong!");
+					return;
 				}
 				nMaxIterations--;
 			} while (resultsCardinality >= nMaxTotalCardinality && nMaxIterations > 0);
@@ -254,10 +262,21 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<Question> questions,
 			TreeMap<Double, List<RatedThreashold>> rateOrderedOptimizationThreasholds, Map<String, Double> cache,
 			int topK) {
+		boolean isInRange = Math.abs(upperBound - lowerBound) < fineIncrement;
 		lowerBound = round3decimal(lowerBound);
 		upperBound = round3decimal(upperBound);
 		double midStep = round3decimal((lowerBound + upperBound) / 2.0);
+		if (isInRange) {
+			RatedThreashold evaluateThreasholdMid = evaluateThreashold(midStep, vectorStore, defaultChatModel,
+					questions, cache, topK, rateOrderedOptimizationThreasholds);
+			if (!rateOrderedOptimizationThreasholds.containsKey(evaluateThreasholdMid.rating)) {
+				rateOrderedOptimizationThreasholds.put(evaluateThreasholdMid.rating, new ArrayList());
+			}
+			rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
+			return rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
+		}
 		LOGGER.info("maximizeInTreeSequence scanning between: " + lowerBound + "," + midStep + "," + upperBound);
+
 		RatedThreashold evaluateThresholdLeft = evaluateThreashold(lowerBound, vectorStore, defaultChatModel, questions,
 				cache, topK, rateOrderedOptimizationThreasholds);
 		RatedThreashold evaluateThreasholdRight = evaluateThreashold(upperBound, vectorStore, defaultChatModel,
@@ -338,6 +357,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		double globalRating = 0.0;
 		double evaluationPoints = 0.0;
 		double totalDistance = 0.0;
+		double answeredQuestions = 0.0;
 		List<RatedThreashold> allComputed = new ArrayList<RagThreasholdAutotuneServiceImpl.RatedThreashold>();
 		rateOrderedOptimizationThreasholds.values().forEach(x -> {
 			allComputed.addAll(x);
@@ -354,6 +374,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			builder.similarityThreshold(threashold);
 			SearchRequest request = builder.build();
 			final List<Document> retrieved = vectorStore.similaritySearch(request);
+			if (!retrieved.isEmpty()) {
+				answeredQuestions++;
+			}
 			evaluationPoints += retrieved.size();
 			final Map<String, Document> retrievedById = new HashMap<String, Document>();
 			for (Document d : retrieved) {
@@ -415,7 +438,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		ratedT.resultsPoints = evaluationPoints;
 		ratedT.totalDistance = totalDistance;
 		ratedT.averageDistance = totalDistance / evaluationPoints;
-		ratedT.rating = evaluationPoints > 1 ? globalRating / (evaluationPoints * ratedT.averageDistance) : 0;
+		ratedT.rating = evaluationPoints > 1
+				? answeredQuestions * globalRating / (evaluationPoints * ratedT.totalDistance)
+				: 0;
 		LOGGER.info("Calculated rating:" + ratedT);
 		return ratedT;
 	}

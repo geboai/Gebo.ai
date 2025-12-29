@@ -17,12 +17,15 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
+import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -76,6 +79,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private IDynamicDataSourceServicesProvider dataSourcesProvider;
 	@Autowired
 	private DeepSearchDefaultConfig defaultDeepsearchConfig;
+	@Autowired
+	private IRagThreasholdAutotuneService threasholdAutotuneService;
 
 	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
@@ -343,6 +348,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels) {
 		RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
+			OptimizedThreashold optimizedSetting = this.threasholdAutotuneService
+					.findByEmbeddingModelCode(embeddingModel.getCode());
 			RagDocumentsCachedDaoResult semanticDaoResult = new RagDocumentsCachedDaoResult();
 			SearchType searchType = configuration.getSearchType();
 			if (searchType == null) {
@@ -350,15 +357,31 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			}
 			switch (searchType) {
 			case MULTI_HOP: {
+				double firstHopSimilarityThreashold = optimizedSetting != null
+						? optimizedSetting.getFirstHopOptimizedThreashold()
+						: defaultDeepsearchConfig.getFirstHopSimilarityThreashold();
+				double secondHopSimilarityThreashold = optimizedSetting != null
+						? optimizedSetting.getSecondHopOptimizedThreashold()
+						: defaultDeepsearchConfig.getSecondHopSimilarityThreashold();
+				if (configuration.getManualThreasholdsConfiguration() != null
+						&& configuration.getManualThreasholdsConfiguration()
+						&& configuration.getFirstHopSimilarityThreashold() != null
+						&& configuration.getSecondHopSimilarityThreashold() != null) {
+					firstHopSimilarityThreashold = configuration.getFirstHopSimilarityThreashold();
+					secondHopSimilarityThreashold = configuration.getSecondHopSimilarityThreashold();
+				}
 				semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(request.getQuery(),
 						configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel,
-						configuration.getFirstHopSimilarityThreashold(),
-						configuration.getSecondHopSimilarityThreashold(), userInfos);
+						firstHopSimilarityThreashold, secondHopSimilarityThreashold, userInfos);
 			}
 				break;
 			case SINGLE_HOP: {
-				semanticDaoResult = ragDocumentsCachedDao.semanticSearch(request.getQuery(),
-						configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel, userInfos);
+				double similarityThreashold = optimizedSetting != null ? optimizedSetting.getOptimizedThreashold()
+						: defaultDeepsearchConfig.getRagQueryOptions().getSimilarityThreashold();
+				RagQueryOptions ragQueryOptions = new RagQueryOptions(configuration.getRagQueryOptions());
+				ragQueryOptions.setSimilarityThreashold(similarityThreashold);
+				semanticDaoResult = ragDocumentsCachedDao.semanticSearch(request.getQuery(), ragQueryOptions,
+						request.getKnowledgeBases(), embeddingModel, userInfos);
 			}
 				break;
 			}
