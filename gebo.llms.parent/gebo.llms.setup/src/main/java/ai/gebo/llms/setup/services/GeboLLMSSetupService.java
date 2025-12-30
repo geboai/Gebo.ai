@@ -11,6 +11,7 @@ package ai.gebo.llms.setup.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.springframework.ai.tool.ToolCallback;
@@ -39,6 +40,7 @@ import ai.gebo.llms.setup.config.LLMSVendor;
 import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
 import ai.gebo.llms.setup.config.ModelType;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMAutoconfigureCreationData;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
@@ -108,6 +110,7 @@ public class GeboLLMSSetupService {
 
 	public LLMSSetupConfigurationData getActualConfiguration() throws GeboCryptSecretException {
 		LLMSSetupConfigurationData configData = new LLMSSetupConfigurationData();
+		configData.setCanRunAutoconfigure(!checkLlmsDefaultModelsPresence().getResult());
 		for (LLMSVendor vendor : vendorsSetupConfig.getVendors()) {
 			LLMSSetupConfiguration vendorData = new LLMSSetupConfiguration();
 			vendorData.setParentModel(vendor.getVendorInfo());
@@ -119,8 +122,8 @@ public class GeboLLMSSetupService {
 				case CHAT: {
 					IGChatModelConfigurationSupportService handler = chatModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
-					if (handler==null) {
-						LOGGER.warn("The CHAT Handler "+preset.getServiceHandler()+" is not present or started up");
+					if (handler == null) {
+						LOGGER.warn("The CHAT Handler " + preset.getServiceHandler() + " is not present or started up");
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -146,8 +149,9 @@ public class GeboLLMSSetupService {
 				case EMBEDDING: {
 					IGEmbeddingModelConfigurationSupportService handler = embedModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
-					if (handler==null) {
-						LOGGER.warn("The EMBEDDING Handler "+preset.getServiceHandler()+" is not present or started up");
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
 						continue;
 					}
 					GModelType modelProviderType = handler.getType();
@@ -194,10 +198,10 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<SecretInfo> createLLMCredentials(@Valid @NotNull LLMCredentialsCreationData apiKeyData)
 			throws GeboCryptSecretException {
+
 		GeboTokenContent geboToken = new GeboTokenContent();
 		geboToken.setToken(apiKeyData.getNewApiSecret());
 		geboToken.setUser(apiKeyData.getNewUserName());
-
 		switch (apiKeyData.getType()) {
 		case CHAT: {
 			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
@@ -245,6 +249,51 @@ public class GeboLLMSSetupService {
 
 	}
 
+	public OperationStatus<List<GBaseModelConfig>> runAutoConfigure(
+			@Valid @NotNull LLMAutoconfigureCreationData autoconfiguredata) throws GeboCryptSecretException {
+		Optional<LLMSVendor> vendor = vendorsSetupConfig.getVendors().stream().filter(x -> {
+			boolean choosedVendor = false;
+			Optional foundMatchingService = x.getPresets().stream()
+					.filter(y -> y.getServiceHandler() != null && autoconfiguredata.getServiceHandler() != null
+							&& y.getServiceHandler().equals(autoconfiguredata.getServiceHandler()))
+					.findFirst();
+			return foundMatchingService.isPresent();
+		}).findFirst();
+		if (vendor.isPresent()) {
+			LLMSVendor vendorData = vendor.get();
+			List<LLMCreateModelData> configs = new ArrayList<LLMCreateModelData>();
+			for (LLMSModelsPresets preset : vendorData.getPresets()) {
+				switch (preset.getType()) {
+				case CHAT: {
+					// check if a default chat model is present and if not add one
+
+				}
+					break;
+
+				case EMBEDDING: {
+					// check if a default embedding model is present and if not add one
+				}
+					break;
+				}
+			}
+			return createLLMS(configs);
+		} else
+			throw new RuntimeException("Vendor not found by data:" + autoconfiguredata);
+	}
+
+	public OperationStatus<List<GBaseModelConfig>> runAutoConfigure(
+			@Valid @NotNull LLMCredentialsCreationData apiKeyData) throws GeboCryptSecretException {
+		GeboTokenContent geboToken = new GeboTokenContent();
+		geboToken.setToken(apiKeyData.getNewApiSecret());
+		geboToken.setUser(apiKeyData.getNewUserName());
+		String secretId = secretService.storeSecret(geboToken, "AI api key", apiKeyData.getApiKeySecretContext());
+		LLMAutoconfigureCreationData autoconfiguredata = new LLMAutoconfigureCreationData();
+		autoconfiguredata.setSecretId(secretId);
+		autoconfiguredata.setServiceHandler(apiKeyData.getServiceHandler());
+		return runAutoConfigure(autoconfiguredata);
+
+	}
+
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
 			@Valid @NotNull LLMModelsLookupParameter credentials) {
 
@@ -289,6 +338,10 @@ public class GeboLLMSSetupService {
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
+					configuration.setForUses(config.getUses());
+					if (config.getContextWindow() != null) {
+						configuration.setContextLength(config.getContextWindow());
+					}
 					if (config.getEnableAllFunctions() != null && config.getEnableAllFunctions()) {
 						List<ToolCallback> tools = this.toolsRepo.getTools();
 						List<String> names = tools.stream().map(x -> {

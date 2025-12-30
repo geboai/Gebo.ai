@@ -10,9 +10,10 @@ import lombok.Data;
 
 @Data
 public class LLMSSetupConfigurationData {
-	public static class LLMSSetupConfiguration extends
-			RuntimeConfigurationContainer<List<LLMSModelsPresets>, LLMSVendorInfo, LLMExistingConfiguration> {
+	public static class LLMSSetupConfiguration
+			extends RuntimeConfigurationContainer<List<LLMSModelsPresets>, LLMSVendorInfo, LLMExistingConfiguration> {
 	};
 
 	private List<LLMSSetupConfiguration> configurations = new ArrayList<LLMSSetupConfigurationData.LLMSSetupConfiguration>();
+	private Boolean canRunAutoconfigure = null;
 }

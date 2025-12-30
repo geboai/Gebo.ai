@@ -13,5 +13,6 @@ public class LLMModelPresetChoice {
 	String code = null;
 	String description = null;
 	boolean defaultChoice = false;
+	Integer contextWindow = null;
 	List<ChatModelsUses> uses = null;
 }

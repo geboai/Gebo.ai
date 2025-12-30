@@ -24,6 +24,7 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMAutoconfigureCreationData;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
@@ -78,6 +79,19 @@ public class GeboFastLLMSSetupController {
 	public OperationStatus<SecretInfo> createLLMCredentials(
 			@RequestBody @Valid @NotNull LLMCredentialsCreationData apiKeyData) throws GeboCryptSecretException {
 		return service.createLLMCredentials(apiKeyData);
+	}
+
+	@PostMapping(value = "createLLMCredentialsAndAutoconfigure", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GBaseModelConfig>> createLLMCredentialsAndAutoconfigure(
+			@RequestBody @Valid @NotNull LLMCredentialsCreationData apiKeyData) throws GeboCryptSecretException {
+		return service.runAutoConfigure(apiKeyData);
+	}
+
+	@PostMapping(value = "createLLMByAutoconfigure", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GBaseModelConfig>> createLLMByAutoconfigure(
+			@RequestBody @Valid @NotNull LLMAutoconfigureCreationData autoconfigureData)
+			throws GeboCryptSecretException {
+		return service.runAutoConfigure(autoconfigureData);
 	}
 
 	@PostMapping(value = "createLLMS", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

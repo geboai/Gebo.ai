@@ -1,251 +1,317 @@
 ai.gebo.llms.vendors.setup.config:
-    vendors:
-        - vendorInfo:
-              vendorId: openai
-              name: OpenAI
-              description: OpenAI chatgpt
-              acquireKeyUrl: https://platform.openai.com/api-keys
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://openai.com/
-              apiKeySecretContext: openai
-          presets:
-              - type: CHAT
-                serviceHandler: chatgpt-OpenAI
-                doModelsLookup: true
-                choices:
-                    - code: gpt-4o
-                      description: Gpt 4o
-                      uses: CHAT
-                    - code: gpt-4.1
-                      description: Gpt 4.1
-                      uses: CHAT
-                      defaultChoice: true
-                    - code: gpt-5
-                      description: Gpt 5
-                      uses: CHAT
-                    - code: gpt-4o-mini
-                      uses: INTERNAL_SERVICES
-              - type: EMBEDDING
-                serviceHandler: embedding-OpenAI
-                doModelsLookup: true
-                choices:
-                    - code: text-embedding-3-large
-                      description: text embedding 3 large
-                      defaultChoice: true
-        - vendorInfo:
-              vendorId: anthropic
-              name: Anthropic
-              description: Anthropic
-              acquireKeyUrl: https://console.anthropic.com/settings/keys
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://anthropic.com/
-              apiKeySecretContext: anthropic
-          presets:
-              - type: CHAT
-                serviceHandler: chat-anthropic
-                doModelsLookup: true
-                choices:
-                    - code: claude-3-7-sonnet-latest
-                      description: Claude Sonnet 3.7
-                      uses: CHAT
-                    - code: claude-sonnet-4-0
-                      uses: CHAT
-                      description: Claude Sonnet 4
-                    - code: claude-opus-4-0
-                      uses: CHAT
-                      description: Claude Opus 4
-                    - code: claude-opus-4-1
-                      description: Claude Opus 4.1
-                      uses: CHAT
-                      defaultChoice: true
-        - vendorInfo:
-              vendorId: deepseek
-              name: Deepseek
-              description: Deepseek
-              acquireKeyUrl: https://platform.deepseek.com/api_keys
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://www.deepseek.com/
-              apiKeySecretContext: deepseek
-          presets:
-              - type: CHAT
-                serviceHandler: chat-deepseek
-                doModelsLookup: true
-        - vendorInfo:
-              vendorId: xai
-              name: XaI
-              description: XaI (grok)
-              acquireKeyUrl: https://console.x.ai/
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://xai.com/
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-xai
-                apiKeySecretContext: chatmodel-xai
-                doModelsLookup: true
-                choices:
-                    - code: grok-3
-                      description: Grok 3
-                      uses: CHAT
-                    - code: grok-4
-                      description: Grok 4
-                      uses: CHAT
-                      defaultChoice: true
-              - type: EMBEDDING
-                serviceHandler: embedding-xai
-                apiKeySecretContext: embedding-xai
-                doModelsLookup: true
-                choices:
-                    - code: embedding
-                      description: embedding model
-                      defaultChoice: true
-        - vendorInfo:
-              vendorId: nvidia
-              name: NVidia
-              description: NVidia cloud AI services
-              acquireKeyUrl: https://build.nvidia.com/
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://build.nvidia.com/models
-              apiKeySecretContext: nvidia
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-nvidia
-                doModelsLookup: true
-                choices:
-                    - code: meta/llama-3.1-405b-instruct
-                      description: meta llama 3.1 405b instruct model on nvidia infrastructures
-                      uses: CHAT
-                    - code: deepseek-ai/deepseek-r1-0528
-                      description: deepseek R1 0528 on nvidia infrastructures
-                      defaultChoice: true
-                      uses: CHAT
-              - type: EMBEDDING
-                serviceHandler: embedding-nvidia
-                doModelsLookup: true
-                choices:
-                    - code: nvidia/nv-embed-v1
-                      description: nvidia embed v1
-                      defaultChoice: true
-        - vendorInfo:
-              vendorId: mistral.ai
-              name: Mistral.ai
-              description: Mistral AI provider (France)
-              acquireKeyUrl: https://console.mistral.ai/home
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              apiKeySecretContext: mistralai
-              webSite: https://mistral.ai
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-mistral
-                doModelsLookup: true
-                choices:
-                    - code: magistral-medium-latest
-                      description: Magistral medium Latest
-                    - code: devstral-medium-latest
-                      description: Devstral medium
-                    - code: mistral-medium-latest
-                      description: Mistral Medium Latest
-                    - code: mistral-large-latest
-                      description: Mistral Large Latest
-                      defaultChoice: true
-              - type: EMBEDDING
-                serviceHandler: embedding-mistral
-                doModelsLookup: true
-                choices:
-                    - code: mistral-embed
-                      description: mistral-embed
-                      defaultChoice: true
-                    - code: codestral-embed
-                      description: codestral-embed code extraction embedding model
-        - vendorInfo:
-              vendorId: regolo.ai
-              name: Regolo.ai
-              description: Regolo.ai AI provider (Italian)
-              acquireKeyUrl: https://dashboard.regolo.ai/api-keys
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://regolo.ai
-              apiKeySecretContext: regolo.ai
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-regolo.ai
-                doModelsLookup: true
-              - type: EMBEDDING
-                serviceHandler: embedding-regolo.ai
-                doModelsLookup: true
+  vendors:
+    - vendorInfo:
+        vendorId: openai
+        name: OpenAI
+        description: OpenAI chatgpt
+        acquireKeyUrl: https://platform.openai.com/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://openai.com/
+        apiKeySecretContext: openai
+        minContextWindow: 128000
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatgpt-OpenAI
+          doModelsLookup: true
+          choices:
+            - code: gpt-4o
+              description: Gpt 4o
+              contextWindow: 128000
+              uses: CHAT
+              defaultChoice: true
+            - code: gpt-4.1
+              description: Gpt 4.1
+              contextWindow: 1000000
+              uses: CHAT
+            - code: gpt-5
+              description: Gpt 5
+              contextWindow: 400000
+              uses: CHAT
+            - code: gpt-4o-mini
+              contextWindow: 128000
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-OpenAI
+          doModelsLookup: true
+          choices:
+            - code: text-embedding-3-large
+              description: text embedding 3 large
+              defaultChoice: true
+    - vendorInfo:
+        vendorId: anthropic
+        name: Anthropic
+        description: Anthropic
+        acquireKeyUrl: https://console.anthropic.com/settings/keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://anthropic.com/
+        apiKeySecretContext: anthropic
+        minContextWindow: 200000
+      presets:
+        - type: CHAT
+          serviceHandler: chat-anthropic
+          doModelsLookup: true
+          choices:
+            - code: claude-sonnet-4-5
+              uses: CHAT
+              description: Claude Sonnet 4.5
+              defaultChoice: true
+            - code: claude-haiku-4-5
+              uses: INTERNAL_SERVICES
+              description: Claude Hiku 4.5
+            - code: claude-opus-4-5
+              description: Claude Opus 4.5
+              uses: CHAT
 
-        - vendorInfo:
-              vendorId: groq
-              name: Groq
-              description: Groq AI provider
-              acquireKeyUrl: https://dashboard.regolo.ai/api-keys
-              requiresApiKeY: true
-              requiresCustomUrl: false
-              webSite: https://groq.com/
-              apiKeySecretContext: groq
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-groq
-                doModelsLookup: true
-              - type: EMBEDDING
-                serviceHandler: embedding-groq
-                doModelsLookup: true
+    - vendorInfo:
+        vendorId: deepseek
+        name: Deepseek
+        description: Deepseek
+        acquireKeyUrl: https://platform.deepseek.com/api_keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://www.deepseek.com/
+        apiKeySecretContext: deepseek
+        minContextWindow: 128000
+      presets:
+        - type: CHAT
+          serviceHandler: chat-deepseek
+          doModelsLookup: true
+          choices:
+            - code: deepseek-chat
+              description: DeepSeek Latest Non thinking
+              uses: CHAT , INTERNAL_SERVICES
+            - code: deepseek-reasoner
+              description: DeepSeek Latest Thinking
+              uses: CHAT
+              defaultChoice: true
+    - vendorInfo:
+        vendorId: xai
+        name: XaI
+        description: XaI (grok)
+        acquireKeyUrl: https://console.x.ai/
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://xai.com/
+        minContextWindow: 138000
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-xai
+          apiKeySecretContext: chatmodel-xai
+          doModelsLookup: true
+          choices:
+            - code: grok-4-1-fast-reasoning
+              description: Grok 4.1 fast reasoning
+              contextWindow: 2000000
+              uses: CHAT
+            - code: grok-4-1-fast-non-reasoning
+              description: Grok 4.1 fast non reasoning
+              contextWindow: 2000000
+              uses: CHAT
+              defaultChoice: true
+            - code: grok-4-fast-reasoning
+              description: Grok 4 fast reasoning
+              contextWindow: 2000000
+              uses: CHAT
+            - code: grok-4-fast-non-reasoning
+              description: Grok 4 fast non reasoning
+              contextWindow: 2000000
+              uses: CHAT
+            - code: grok-3-mini
+              description: Grok 3 mini
+              contextWindow: 138000
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-xai
+          apiKeySecretContext: embedding-xai
+          doModelsLookup: true
+          choices:
+            - code: embedding
+              description: embedding model
+              defaultChoice: true
+    - vendorInfo:
+        vendorId: nvidia
+        name: NVidia
+        description: NVidia cloud AI services
+        acquireKeyUrl: https://build.nvidia.com/
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://build.nvidia.com/models
+        apiKeySecretContext: nvidia
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-nvidia
+          doModelsLookup: true
+          choices:
+            - code: meta/llama-3.1-405b-instruct
+              description: Meta Llama 3.1 405b instruct
+              uses: CHAT
+            - code: deepseek-ai/deepseek-r1-0528
+              description: DeepSeek R1 0528
+              defaultChoice: true
+              uses: CHAT
+            - code: meta/llama-3.1-70b-instruct
+              description: Meta Llama 3.1 70b instruct
+              uses: CHAT
+            - code: meta/llama-3.1-8b-instruct
+              description: Meta Llama 3.1 8b instruct
+              uses: INTERNAL_SERVICES
 
-        - vendorInfo:
-              vendorId: ollama
-              name: Ollama
-              description: Ollama, large language model server that runs on your infrastructure
-              requiresApiKeY: false
-              requiresCustomUrl: true
-              defaultCustomUrl: http://localhost:11434
-              webSite: https://ollama.com/
-              apiKeySecretContext: ollama
-          presets:
-              - type: CHAT
-                serviceHandler: chat-ollama
-                doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-nvidia
+          doModelsLookup: true
+          choices:
+            - code: nvidia/nv-embed-v1
+              description: nvidia embed v1
+              defaultChoice: true
+    - vendorInfo:
+        vendorId: mistral.ai
+        name: Mistral.ai
+        description: Mistral AI provider (France)
+        acquireKeyUrl: https://console.mistral.ai/home
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        apiKeySecretContext: mistralai
+        webSite: https://mistral.ai
+        minContextWindow: 256000
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-mistral
+          doModelsLookup: true
+          choices:
+            - code: magistral-medium-latest
+              description: Magistral medium Latest
+              uses: CHAT
+            - code: devstral-medium-latest
+              description: Devstral medium
+              uses: CHAT
+            - code: mistral-medium-latest
+              description: Mistral Medium Latest
+              uses: CHAT
+            - code: mistral-large-latest
+              description: Mistral Large Latest
+              uses: CHAT
+              defaultChoice: true
+            - code: magistral-small-latest
+              description: Mistral Small Latest
+              uses: CHAT
+            - code: ministral-8b-latest
+              description: Ministral 8b
+              uses: INTERNAL_SERVICES
 
-              - type: EMBEDDING
-                serviceHandler: embedding-ollama
-                doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-mistral
+          doModelsLookup: true
+          choices:
+            - code: mistral-embed
+              description: mistral-embed
+              defaultChoice: true
+            - code: codestral-embed
+              description: codestral-embed code extraction embedding model
+    - vendorInfo:
+        vendorId: regolo.ai
+        name: Regolo.ai
+        description: Regolo.ai AI provider (Italian)
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://regolo.ai
+        apiKeySecretContext: regolo.ai
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: Llama-3.3-70B-Instruct
+              description: Meta LLama 3.3 70b instruct
+              uses: CHAT
+              defaultChoice: true
+            - code: Llama-3.1-8B-Instruct
+              description: Meta LLama 3.1 8b instruct
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: gte-Qwen2
+              description: Gte Qwen2 Embedding
+            - code: Qwen3-Embedding-8B
+              description: Qwen3 Embedding 8b
+              defaultChoice: true
 
-        - vendorInfo:
-              vendorId: vllm
-              name: vLLM on premise infrastructure
-              description: vLLM on premise infrastructure
-              requiresApiKeY: false
-              requiresCustomUrl: true
-              webSite: https://docs.vllm.ai/en/latest/
-              defaultCustomUrl: http://localhost:8000/
-              apiKeySecretContext: vllm
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-vllm
-                doModelsLookup: true
+    - vendorInfo:
+        vendorId: groq
+        name: Groq
+        description: Groq AI provider
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://groq.com/
+        apiKeySecretContext: groq
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-groq
+          doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-groq
+          doModelsLookup: true
 
-              - type: EMBEDDING
-                serviceHandler: embedding-vllm
-                doModelsLookup: true
+    - vendorInfo:
+        vendorId: ollama
+        name: Ollama
+        description: Ollama, large language model server that runs on your infrastructure
+        requiresApiKeY: false
+        requiresCustomUrl: true
+        defaultCustomUrl: http://localhost:11434
+        webSite: https://ollama.com/
+        apiKeySecretContext: ollama
+      presets:
+        - type: CHAT
+          serviceHandler: chat-ollama
+          doModelsLookup: true
 
-        - vendorInfo:
-              vendorId: generic-openai
-              name: OpenAI compliant API provider
-              description: Generic OpenAI compliant API provider
-              requiresApiKeY: false
-              requiresCustomUrl: true
-              defaultCustomUrl:
-              webSite:
-              apiKeySecretContext: generic-openai
-          presets:
-              - type: CHAT
-                serviceHandler: chatmodel-generic-openai
-                doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-ollama
+          doModelsLookup: true
 
-              - type: EMBEDDING
-                serviceHandler: embedding-generic-openai
-                doModelsLookup: true
+    - vendorInfo:
+        vendorId: vllm
+        name: vLLM on premise infrastructure
+        description: vLLM on premise infrastructure
+        requiresApiKeY: false
+        requiresCustomUrl: true
+        webSite: https://docs.vllm.ai/en/latest/
+        defaultCustomUrl: http://localhost:8000/
+        apiKeySecretContext: vllm
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-vllm
+          doModelsLookup: true
+
+        - type: EMBEDDING
+          serviceHandler: embedding-vllm
+          doModelsLookup: true
+
+    - vendorInfo:
+        vendorId: generic-openai
+        name: OpenAI compliant API provider
+        description: Generic OpenAI compliant API provider
+        requiresApiKeY: false
+        requiresCustomUrl: true
+        defaultCustomUrl:
+        webSite:
+        apiKeySecretContext: generic-openai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-generic-openai
+          doModelsLookup: true
+
+        - type: EMBEDDING
+          serviceHandler: embedding-generic-openai
+          doModelsLookup: true
