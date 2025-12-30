@@ -13,4 +13,5 @@ import { LLMSSetupConfiguration } from './lLMSSetupConfiguration';
 
 export interface LLMSSetupConfigurationData { 
     configurations?: Array<LLMSSetupConfiguration>;
+    canRunAutoconfigure?: boolean;
 }

@@ -1,0 +1,23 @@
+<p-panel id="EasySetupLLMS" [formGroup]="formGroup">
+    <div class="grid">
+        <div class="col-12">
+            <gebo-ai-field id="vendorId" label="Choose your large language model vendor"
+                help="Choose the initial vendor for your default chat and embedding models">
+                <p-selectbutton [options]="choosableVendors" formControlName="vendorId" optionLabel="name"
+                    optionValue="vendorId" aria-labelledby="basic" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
+        </div>
+        <div class="col-4" *ngIf="choosableIdentities?.length">
+            <gebo-ai-field id="secretId" label="Choose provider credentials (api key)" help="Choose one of the existing credentials for the selected llm provider">
+                <geboai-editable-listbox-component [data]="choosableIdentities" formControlName="secretId"></geboai-editable-listbox-component>
+            </gebo-ai-field>
+        </div>
+        <div class="col-12">
+            <ul>
+                <li *ngFor="let preset of presetsSummary">
+                    {{preset.preset.description}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</p-panel>

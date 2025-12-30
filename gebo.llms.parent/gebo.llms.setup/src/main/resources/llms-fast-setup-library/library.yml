@@ -30,6 +30,7 @@ ai.gebo.llms.vendors.setup.config:
               contextWindow: 400000
               uses: CHAT
             - code: gpt-4o-mini
+              description: Gpt 4o mini
               contextWindow: 128000
               uses: INTERNAL_SERVICES
         - type: EMBEDDING

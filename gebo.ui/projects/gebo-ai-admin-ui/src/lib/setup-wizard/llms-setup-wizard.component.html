@@ -12,36 +12,48 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel id="MainPanelHeader" gebo-ai-label #instModeUI header="Setup Gebo.ai llms providers access">
-    
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <form>
-        <div class="grid " *ngIf="actualProvidersConfiguration">
-            <div class="col-12">
-                <p-accordion [value]="currentIndex" (activeIndexChange)="currentIndex">
-                    <p-accordion-panel
-                        *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
-                        [value]="i">
-                        <p-accordion-header>
-                            <div style="font-weight: bolder;color:black"
-                                *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
-                                {{providerSituation.parentModel?.name}} ({{providerSituation.runtimeConfigs?.length}})
-                            </div>
-                            <div style="font-weight: bolder;color:gray"
-                                *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
-                                {{providerSituation.parentModel?.name}}</div>
-                        </p-accordion-header>
-                        <p-accordion-content>
-                            <gebo-ai-llms-vendor-configuration
-                                [vendorConfiguration]="providerSituation" (vendorConfigurationChanged)="onVendorConfigurationChanged($event,i)"></gebo-ai-llms-vendor-configuration>
-                        </p-accordion-content>
-                    </p-accordion-panel>
-                </p-accordion>
-            </div>
-        </div>
+<p-panel id="MainPanelTitle" gebo-ai-label #instModeUI header="Setup used Large language models">
 
-    </form>
-   
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <p-tabView class="geboFullHeight" [activeIndex]="0">
+
+        <p-tabPanel id="EasySetup" gebo-ai-label header="Easy initial setup/configuration fix"
+            *ngIf="actualProvidersConfiguration?.canRunAutoconfigure===true" >
+            <gebo-ai-llms-easy-vendor-configuration-component [autoSettingsConfigurations]="autoSettingsConfigurations"></gebo-ai-llms-easy-vendor-configuration-component>
+        </p-tabPanel>
+        <p-tabPanel id="ExtensiveStup" gebo-ai-label header="Extended infrastructure/suppliers choices"   >
+            
+
+            <div class="grid " *ngIf="actualProvidersConfiguration">
+                <div class="col-12">
+                    <p-accordion [value]="currentIndex" (activeIndexChange)="currentIndex">
+                        <p-accordion-panel
+                            *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
+                            [value]="i">
+                            <p-accordion-header>
+                                <div style="font-weight: bolder;color:black"
+                                    *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
+                                    {{providerSituation.parentModel?.name}}
+                                    ({{providerSituation.runtimeConfigs?.length}})
+                                </div>
+                                <div style="font-weight: bolder;color:gray"
+                                    *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
+                                    {{providerSituation.parentModel?.name}}</div>
+                            </p-accordion-header>
+                            <p-accordion-content>
+                                <gebo-ai-llms-vendor-configuration [vendorConfiguration]="providerSituation"
+                                    (vendorConfigurationChanged)="onVendorConfigurationChanged($event,i)"></gebo-ai-llms-vendor-configuration>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+                </div>
+            </div>
+         
+
+
+        </p-tabPanel>
+    </p-tabView>
+
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
