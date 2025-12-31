@@ -37,6 +37,7 @@ function filterNotContained<T>(v1: T[], v2: T[]): T[] {
 }
 const moduleId: string = "SetupWizardPanelModule";
 const fieldHostId: string = "SetupWizardPanelComponent";
+interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<BaseWizardSectionComponent> };
 /**
  * Component that renders a wizard panel to guide users through a sequence of setup steps.
  * This component manages the navigation, state, and validation of a multi-step setup process.
@@ -60,6 +61,11 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     public userMessages: ToastMessageOptions[] = [];
     /** List of all wizard steps available to the user */
     public wizardsEntries: SetupWizardItem[] = [];
+    /** List of mandatory unsatisfied wizard steps to display in a popup */
+    public mandatoryUnsatisfiedEntries: MandatoryUIEntry[] = [];
+    public mandatoryUnsatisfiedEntriesWindowOpened: boolean = false;
+    public userShowedMandatoryUnsatisfiedEntries:boolean=false;
+    @Input() public popupOnMandatoryUnsatisfiedEntriesExisting: boolean = true;
     /** Currently selected wizard item */
     public actualItem?: SetupWizardItem;
     /** Component type for the currently active wizard section */
@@ -157,6 +163,14 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
                     }
                 });
                 this.actualSetupStatus = this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
+                this.mandatoryUnsatisfiedEntries = this.wizardsEntries.filter(x => x.mandatory === true && x.alreadyCompleted !== true)?.map(y => {
+                    const m: MandatoryUIEntry = {
+                        config: y,
+                        wizardComponent: y.wizardComponent
+                    };
+                    return m;
+                });
+                this.mandatoryUnsatisfiedEntriesWindowOpened=this.userShowedMandatoryUnsatisfiedEntries===false && this.mandatoryUnsatisfiedEntries && this.mandatoryUnsatisfiedEntries.length>0;
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
                 let messageObservable: Observable<ToastMessageOptions | undefined> | undefined = undefined;
                 const completeMessage: ToastMessageOptions = { summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
