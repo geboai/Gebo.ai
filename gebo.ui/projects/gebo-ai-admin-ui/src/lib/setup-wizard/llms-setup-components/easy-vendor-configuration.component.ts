@@ -6,7 +6,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
 interface PresetSummary {
     type: LLMSModelsPresets.TypeEnum;
     mainUse?: LLMModelPresetChoice.UsesEnum;
-    preset: LLMModelPresetChoice
+    presetChoices?: LLMModelPresetChoice[];
+    choice?: string;
 }
 @Component({
     selector: "gebo-ai-llms-easy-vendor-configuration-component",
@@ -22,7 +23,10 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
     protected presetsSummary: PresetSummary[] = [];
     protected formGroup: FormGroup = new FormGroup({
         vendorId: new FormControl(),
-        secretId: new FormControl()
+        secretId: new FormControl(),
+        defaultChatModel: new FormControl(),
+        internalServicesModel: new FormControl(),
+        embeddingModel: new FormControl()
     });
     constructor(private secretController: SecretsControllerService,
         private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
@@ -39,29 +43,39 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                         if (chatModels.length) {
                             const models = chatModels[0];
                             const defaultPreset = models.choices?.find(x => x.defaultChoice === true);
+                            const chatpresets = models.choices?.filter(x => x.uses && ('CHAT' in x.uses));
+                            const defaultChoice: string | undefined = (defaultPreset ? (defaultPreset.code as string) : undefined);
                             if (defaultPreset)
                                 presets.push({
                                     type: "CHAT",
-                                    preset: defaultPreset,
+                                    choice: defaultChoice,
+                                    presetChoices: chatpresets,
                                     mainUse: "CHAT"
                                 });
+                            this.formGroup.controls["defaultChatModel"].setValue(defaultChoice);
                             const internalServicesChoices = models.choices?.filter(x => x.uses && x.uses.find(y => y === "INTERNAL_SERVICES"));
                             if (internalServicesChoices && internalServicesChoices.length > 0) {
                                 presets.push({
                                     type: "CHAT",
-                                    preset: internalServicesChoices[0],
+                                    choice: internalServicesChoices[0]?.code,
+                                    presetChoices: internalServicesChoices,
                                     mainUse: "INTERNAL_SERVICES"
                                 });
+                                this.formGroup.controls["internalServicesModel"].setValue(internalServicesChoices[0]?.code);
                             }
+
                         }
                         const embeddingModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "EMBEDDING");
                         if (embeddingModels && embeddingModels.length) {
                             const defaultEmbeddingPreset = embeddingModels[0].choices?.find(x => x.defaultChoice === true);
-                            if (defaultEmbeddingPreset)
+                            if (defaultEmbeddingPreset) {
                                 presets.push({
                                     type: "EMBEDDING",
-                                    preset: defaultEmbeddingPreset
+                                    presetChoices: embeddingModels[0].choices,
+                                    choice: defaultEmbeddingPreset?.code
                                 });
+                                this.formGroup.controls["embeddingModel"].setValue(defaultEmbeddingPreset?.code);
+                            }
                         }
                         this.presetsSummary = presets;
                     }
