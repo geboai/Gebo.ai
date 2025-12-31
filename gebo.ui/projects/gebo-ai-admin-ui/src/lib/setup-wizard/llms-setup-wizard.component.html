@@ -8,6 +8,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
+ 
 <p-blockUI id="BlockUi" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
@@ -18,10 +19,14 @@
     <p-tabView class="geboFullHeight" [activeIndex]="0">
 
         <p-tabPanel id="EasySetup" gebo-ai-label header="Easy initial setup/configuration fix"
-            *ngIf="actualProvidersConfiguration?.canRunAutoconfigure===true" >
-            <gebo-ai-llms-easy-vendor-configuration-component [autoSettingsConfigurations]="autoSettingsConfigurations"></gebo-ai-llms-easy-vendor-configuration-component>
+            *ngIf="actualProvidersConfiguration?.canRunAutoconfigure===true">
+            <gebo-ai-llms-easy-vendor-configuration-component
+                [actualProvidersConfiguration]="actualProvidersConfiguration"
+                [autoSettingsConfigurations]="autoSettingsConfigurations" (llmsAutoSettingErrors)="userMessages=$event"
+                (llmsAutoSettingSuccessfull)="onAutomaticSetupDone()">
+            </gebo-ai-llms-easy-vendor-configuration-component>
         </p-tabPanel>
-        <p-tabPanel id="ExtensiveStup" gebo-ai-label header="Extended infrastructure/suppliers choices"   >
+        <p-tabPanel id="ExtensiveStup" gebo-ai-label header="Extended infrastructure/suppliers choices">
             
 
             <div class="grid " *ngIf="actualProvidersConfiguration">
@@ -48,7 +53,7 @@
                     </p-accordion>
                 </div>
             </div>
-         
+
 
 
         </p-tabPanel>

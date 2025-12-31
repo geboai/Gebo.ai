@@ -18,7 +18,6 @@ export interface LLMCredentialsCreationData {
     newApiSecret: string;
     newUserName: string;
     baseUrl?: string;
-    runAutoconfigure?: boolean;
 }
 export namespace LLMCredentialsCreationData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING';

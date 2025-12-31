@@ -16,4 +16,7 @@ public class LLMSSetupConfigurationData {
 
 	private List<LLMSSetupConfiguration> configurations = new ArrayList<LLMSSetupConfigurationData.LLMSSetupConfiguration>();
 	private Boolean canRunAutoconfigure = null;
+	private Boolean embeddingModelExists = null;
+	private Boolean defaultChatModelExists = null;
+	private Boolean internalServicesChatModelExists = null;
 }

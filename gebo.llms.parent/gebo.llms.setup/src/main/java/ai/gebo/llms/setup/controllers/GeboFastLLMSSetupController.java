@@ -81,11 +81,7 @@ public class GeboFastLLMSSetupController {
 		return service.createLLMCredentials(apiKeyData);
 	}
 
-	@PostMapping(value = "createLLMCredentialsAndAutoconfigure", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GBaseModelConfig>> createLLMCredentialsAndAutoconfigure(
-			@RequestBody @Valid @NotNull LLMCredentialsCreationData apiKeyData) throws GeboCryptSecretException {
-		return service.runAutoConfigure(apiKeyData);
-	}
+	
 
 	@PostMapping(value = "createLLMByAutoconfigure", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GBaseModelConfig>> createLLMByAutoconfigure(

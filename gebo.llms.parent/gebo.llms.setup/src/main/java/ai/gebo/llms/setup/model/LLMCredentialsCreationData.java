@@ -18,6 +18,6 @@ public class LLMCredentialsCreationData {
 	@NotNull
 	private String newUserName = null;
 	private String baseUrl = null;
-	private Boolean runAutoconfigure = null;
+	
 
 }

@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { GeboFastLlmsSetupControllerService, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSVendorInfo, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAITranslationService } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-translation-container/gebo-translation.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-host-component-iface/field-host-component-iface";
@@ -17,6 +17,9 @@ interface PresetSummary {
 })
 export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges {
     @Input() autoSettingsConfigurations?: LLMSSetupConfiguration[] = [];
+    @Input() actualProvidersConfiguration?: LLMSSetupConfigurationData;
+    @Output() llmsAutoSettingSuccessfull: EventEmitter<boolean> = new EventEmitter();
+    @Output() llmsAutoSettingErrors:EventEmitter<GUserMessage[]>=new EventEmitter();
     protected choosableVendors: LLMSVendorInfo[] = [];
     protected vendorSetupMetaInfos?: LLMSSetupConfiguration;
     protected choosableIdentities: SecretInfo[] = [];
@@ -24,10 +27,13 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
     protected formGroup: FormGroup = new FormGroup({
         vendorId: new FormControl(),
         secretId: new FormControl(),
+        newApiSecret: new FormControl(),
+        newUserName: new FormControl(),
         defaultChatModel: new FormControl(),
         internalServicesModel: new FormControl(),
         embeddingModel: new FormControl()
     });
+    protected loading: boolean = false;
     constructor(private secretController: SecretsControllerService,
         private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
         private geboAITranslationService: GeboAITranslationService) {
@@ -40,21 +46,24 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                     if (this.vendorSetupMetaInfos) {
                         const presets: PresetSummary[] = [];
                         const chatModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "CHAT");
+                        const models = chatModels[0];
+
                         if (chatModels.length) {
-                            const models = chatModels[0];
                             const defaultPreset = models.choices?.find(x => x.defaultChoice === true);
-                            const chatpresets = models.choices?.filter(x => x.uses && ('CHAT' in x.uses));
+                            const chatpresets = models.choices?.filter(x => x.uses && x.uses.find(y => y === "CHAT"));
                             const defaultChoice: string | undefined = (defaultPreset ? (defaultPreset.code as string) : undefined);
-                            if (defaultPreset)
+                            if (defaultPreset && this.actualProvidersConfiguration?.defaultChatModelExists !== true) {
                                 presets.push({
                                     type: "CHAT",
                                     choice: defaultChoice,
                                     presetChoices: chatpresets,
                                     mainUse: "CHAT"
                                 });
-                            this.formGroup.controls["defaultChatModel"].setValue(defaultChoice);
+                                this.formGroup.controls["defaultChatModel"].setValue(defaultChoice);
+                            }
+
                             const internalServicesChoices = models.choices?.filter(x => x.uses && x.uses.find(y => y === "INTERNAL_SERVICES"));
-                            if (internalServicesChoices && internalServicesChoices.length > 0) {
+                            if (internalServicesChoices && internalServicesChoices.length > 0 && this.actualProvidersConfiguration?.internalServicesChatModelExists !== true) {
                                 presets.push({
                                     type: "CHAT",
                                     choice: internalServicesChoices[0]?.code,
@@ -68,7 +77,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                         const embeddingModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "EMBEDDING");
                         if (embeddingModels && embeddingModels.length) {
                             const defaultEmbeddingPreset = embeddingModels[0].choices?.find(x => x.defaultChoice === true);
-                            if (defaultEmbeddingPreset) {
+                            if (defaultEmbeddingPreset && this.actualProvidersConfiguration?.embeddingModelExists !== true) {
                                 presets.push({
                                     type: "EMBEDDING",
                                     presetChoices: embeddingModels[0].choices,
@@ -99,6 +108,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
     ngOnInit(): void {
 
     }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["autoSettingsConfigurations"]) {
             let defaultVendorId: string | undefined;
@@ -118,6 +128,18 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         }
     }
     protected doAutoConfigure() {
-
+        const creationData: LLMAutoconfigureCreationData = this.formGroup.value;
+        this.loading = true;
+        this.geboFastLLMSSetupService.createLLMByAutoconfigure(creationData).subscribe({
+            next: (operationStatus) => {
+                if (operationStatus.hasErrorMessages) {
+                    this.llmsAutoSettingErrors.emit(operationStatus.messages);
+                }else {
+                    this.llmsAutoSettingSuccessfull.emit(true);
+                }
+            }, complete: () => {
+                this.loading = false;
+            }
+        });
     }
 }

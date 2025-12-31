@@ -92,6 +92,9 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     onVendorConfigurationChanged(changedFlag:boolean, index: number) {
        this.reloadData();
     }
+    onAutomaticSetupDone():void {
+        this.closeWizard();
+    }
     /**
      * Submits the LLM setup form data to the backend service.
      * Creates new LLM configurations based on user input.

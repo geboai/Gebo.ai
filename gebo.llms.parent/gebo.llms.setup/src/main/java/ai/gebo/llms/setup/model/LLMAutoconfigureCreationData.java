@@ -1,9 +1,16 @@
 package ai.gebo.llms.setup.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class LLMAutoconfigureCreationData {
-	private String serviceHandler = null;
+	@NotNull
+	private String vendorId = null;
 	private String secretId = null;
+	private String newApiSecret = null;
+	private String newUserName = null;
+	private String defaultChatModel = null;
+	private String internalServicesModel = null;
+	private String embeddingModel = null;
 }

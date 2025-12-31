@@ -11,6 +11,11 @@
  */
 
 export interface LLMAutoconfigureCreationData { 
-    serviceHandler?: string;
+    vendorId: string;
     secretId?: string;
+    newApiSecret?: string;
+    newUserName?: string;
+    defaultChatModel?: string;
+    internalServicesModel?: string;
+    embeddingModel?: string;
 }
