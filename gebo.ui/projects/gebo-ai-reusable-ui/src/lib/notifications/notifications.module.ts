@@ -4,11 +4,15 @@ import { MessagesModule } from "primeng/messages";
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 import { MessageService } from "primeng/api";
 import { GeboAIRootNotificationService } from "./root-notification.service";
+import { GeboAINotificationComponent } from "./notification.component";
+import { GeboAIDisplayMessagesComponent } from "./display-messages.component";
+import { ToastModule } from "primeng/toast";
 
 @NgModule({
-    imports: [CommonModule, MessagesModule, GeboAIFieldTranslationContainerModule],
-    providers: [MessageService, GeboAIRootNotificationService]
-
+    imports: [CommonModule, MessagesModule, GeboAIFieldTranslationContainerModule, ToastModule],
+    providers: [GeboAIRootNotificationService],
+    declarations: [GeboAINotificationComponent, GeboAIDisplayMessagesComponent],
+    exports: [GeboAINotificationComponent, GeboAIDisplayMessagesComponent]
 })
 export class GeboAINotificationsModule {
     public static forRoot(): ModuleWithProviders<GeboAINotificationsModule> {

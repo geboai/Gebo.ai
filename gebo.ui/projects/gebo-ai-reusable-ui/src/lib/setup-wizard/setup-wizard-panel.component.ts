@@ -15,10 +15,10 @@ import { SetupWizardItem } from "./setup-wizard-step";
 import { SetupStatus, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
-import { MenuItem, ToastMessageOptions, MessageService } from "primeng/api";
+import { MenuItem, ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
-import { map, Observable, of, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { findMatchingTranlations, UIExistingText } from "../controls/field-translation-container/text-language-resources";
 /**
  * AI generated comments
@@ -46,7 +46,7 @@ interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<Base
 @Component({
     selector: "gebo-setup-wizard-panel-component",
     templateUrl: "setup-wizard-panel.component.html",
-    providers: [SetupWizardComunicationService, MessageService, {
+    providers: [SetupWizardComunicationService, {
         provide: GEBO_AI_MODULE, useValue: "SetupWizardPanelModule", multi: false
     }, {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SetupWizardPanelComponent")
@@ -97,8 +97,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     constructor(
         private setupWizardService: SetupWizardService,
         private setupWizardComunicationService: SetupWizardComunicationService,
-        private geboLanguageService: GeboAITranslationService,
-        private messagesService: MessageService) {
+        private geboLanguageService: GeboAITranslationService) {
     }
     private actualLanguage(items: SetupWizardItem[]): Observable<SetupWizardItem[] | undefined> {
         const texts: UIExistingText[] = [];

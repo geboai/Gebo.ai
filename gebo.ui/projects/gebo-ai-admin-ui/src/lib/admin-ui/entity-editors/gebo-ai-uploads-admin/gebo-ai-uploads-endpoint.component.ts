@@ -37,7 +37,7 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-uploads-endpoint-component",
     templateUrl: "gebo-ai-uploads-endpoint.component.html",
-    providers: [MessageService, 
+    providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },   
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadsEndpointComponent), multi: true
     }],

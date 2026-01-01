@@ -36,7 +36,7 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
 @Component({
     selector: "gebo-ai-confluence-endpoint-component",
     templateUrl: "gebo-ai-confluence-endpoint.component.html",
-    providers: [MessageService, { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false }, {
+    providers: [ { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIConfluenceEndpointComponent),
         multi: false
     }],

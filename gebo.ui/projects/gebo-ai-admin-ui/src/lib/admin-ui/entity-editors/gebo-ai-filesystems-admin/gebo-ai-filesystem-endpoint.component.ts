@@ -29,7 +29,7 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-filesystem-endpoint-component",
     templateUrl: "gebo-ai-filesystem-endpoint.component.html",
-    providers: [MessageService,
+    providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIFileSystemModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIFileSystemEndpointComponent),
