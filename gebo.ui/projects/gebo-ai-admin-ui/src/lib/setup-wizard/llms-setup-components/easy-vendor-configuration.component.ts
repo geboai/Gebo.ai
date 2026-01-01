@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAITranslationService } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-translation-container/gebo-translation.service";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-host-component-iface/field-host-component-iface";
 interface PresetSummary {
     type: LLMSModelsPresets.TypeEnum;
@@ -9,6 +9,22 @@ interface PresetSummary {
     presetChoices?: LLMModelPresetChoice[];
     choice?: string;
 }
+interface IFormGroupData {
+    vendorId?: string,
+    secretId?: string,
+    defaultChatModel?: string,
+    internalServicesModel?: string,
+    embeddingModel?: string,
+}
+function validateVendorSetup(fg: FormGroup): ValidationErrors | null {
+    const value: IFormGroupData = fg.value;
+    const ok: boolean = (value?.vendorId ? true : false) && (value?.secretId ? true : false) && ((value?.embeddingModel ? true : false) || (value?.internalServicesModel ? true : false) || (value?.defaultChatModel ? true : false));
+    if (ok) return null;
+    else return { erroneus: "true" };
+}
+const formValidator:ValidatorFn=(control)=>{
+    return validateVendorSetup(control as FormGroup);
+};
 @Component({
     selector: "gebo-ai-llms-easy-vendor-configuration-component",
     templateUrl: "easy-vendor-configuration.component.html",
@@ -19,29 +35,36 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
     @Input() autoSettingsConfigurations?: LLMSSetupConfiguration[] = [];
     @Input() actualProvidersConfiguration?: LLMSSetupConfigurationData;
     @Output() llmsAutoSettingSuccessfull: EventEmitter<boolean> = new EventEmitter();
-    @Output() llmsAutoSettingErrors:EventEmitter<GUserMessage[]>=new EventEmitter();
+    @Output() llmsAutoSettingErrors: EventEmitter<GUserMessage[]> = new EventEmitter();
     protected choosableVendors: LLMSVendorInfo[] = [];
     protected vendorSetupMetaInfos?: LLMSSetupConfiguration;
-    protected choosableIdentities: SecretInfo[] = [];
+
     protected presetsSummary: PresetSummary[] = [];
     protected formGroup: FormGroup = new FormGroup({
         vendorId: new FormControl(),
         secretId: new FormControl(),
-        newApiSecret: new FormControl(),
-        newUserName: new FormControl(),
         defaultChatModel: new FormControl(),
         internalServicesModel: new FormControl(),
         embeddingModel: new FormControl()
     });
     protected loading: boolean = false;
+    protected vendorId?: string;
+    protected secretContext?: string;
+    protected secretDescription?: string;
     constructor(private secretController: SecretsControllerService,
         private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
         private geboAITranslationService: GeboAITranslationService) {
+        this.formGroup.addValidators(formValidator);
         this.formGroup.controls["vendorId"].valueChanges.subscribe({
             next: (vendorId) => {
                 this.vendorSetupMetaInfos = undefined;
+                this.vendorId = vendorId;
+                this.secretContext = "llm-vendor";
+                this.secretDescription = "llm credentials";
                 if (vendorId) {
                     this.vendorSetupMetaInfos = this.autoSettingsConfigurations?.find(x => x.parentModel.vendorId === vendorId);
+                    this.secretDescription = vendorId ? vendorId + " credentials" : "credentials";
+                    this.secretContext = this.vendorSetupMetaInfos?.parentModel?.apiKeySecretContext;
                     const secrets: SecretInfo[] = [];
                     if (this.vendorSetupMetaInfos) {
                         const presets: PresetSummary[] = [];
@@ -96,12 +119,13 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                                 }
                             }
                         });
-                        this.choosableIdentities = secrets;
-                        if (this.choosableIdentities && this.choosableIdentities.length > 0) {
-                            this.formGroup.controls["secretId"].setValue(this.choosableIdentities[0].code);
-                        }
+
                     }
                 }
+                if (this.vendorId)
+                    this.formGroup.controls["secretId"].enable();
+                else
+                    this.formGroup.controls["secretId"].disable();
             }
         });
     }
@@ -134,7 +158,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
             next: (operationStatus) => {
                 if (operationStatus.hasErrorMessages) {
                     this.llmsAutoSettingErrors.emit(operationStatus.messages);
-                }else {
+                } else {
                     this.llmsAutoSettingSuccessfull.emit(true);
                 }
             }, complete: () => {

@@ -16,7 +16,7 @@
 <p-panel id="MainPanelTitle" gebo-ai-label #instModeUI header="Setup used Large language models">
 
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <p-tabView class="geboFullHeight" [activeIndex]="0">
+    <p-tabView class="geboFullHeight" >
 
         <p-tabPanel id="EasySetup" gebo-ai-label header="Easy initial setup/configuration fix"
             *ngIf="actualProvidersConfiguration?.canRunAutoconfigure===true">
@@ -31,7 +31,8 @@
 
             <div class="grid " *ngIf="actualProvidersConfiguration">
                 <div class="col-12">
-                    <p-accordion [value]="currentIndex" (activeIndexChange)="currentIndex">
+                    <!-- [value]="currentIndex" (activeIndexChange)="currentIndex"-->
+                    <p-accordion >
                         <p-accordion-panel
                             *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
                             [value]="i">

@@ -96,6 +96,7 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://xai.com/
+        apiKeySecretContext: xai
         minContextWindow: 138000
         supportsAutoconfig: true
       presets:

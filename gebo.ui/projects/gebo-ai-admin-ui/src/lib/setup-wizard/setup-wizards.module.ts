@@ -23,7 +23,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { LLMSetupWizardComponent } from "./llms-setup-wizard.component";
-import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI, TranslableModule } from "@Gebo.ai/reusable-ui";
+import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI, TranslableModule, GeboAIApiKeyModule } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { SetupWizardsComponent } from "./setup-wizards.component";
 import { DialogModule } from "primeng/dialog";
@@ -317,7 +317,7 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({ 
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule,GeboAIApiKeyModule],
     declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent,GeboAIRagAutotuneWizardComponent,GeboAIEasyVendorConfigurationComponent],
     exports: [SetupWizardsComponent],
     providers: [

@@ -52,7 +52,10 @@
     
 </div>
 <p-dialog [visible]="mandatoryUnsatisfiedEntriesWindowOpened" [modal]="true" [maximizable]="true" [style]="{with:'95%',height:'95%'}" (onHide)="mandatoryUnsatisfiedEntriesWindowOpened=false;userShowedMandatoryUnsatisfiedEntries=true;">
-    <p-tabview>
+    <span *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length ==1 && mandatoryUnsatisfiedEntries[0].wizardComponent">
+        <ng-container    #ngOutletItem *ngComponentOutlet="mandatoryUnsatisfiedEntries[0].wizardComponent;inputs: {}"  />
+    </span>
+    <p-tabview *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length >1">
         <p-tabPanel *ngFor="let p of mandatoryUnsatisfiedEntries" [header]="p.config.label">
             <ng-container   #ngOutletItem *ngComponentOutlet="p.wizardComponent;inputs: {}"  />
         </p-tabPanel>

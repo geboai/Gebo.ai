@@ -3,19 +3,35 @@
 </p-blockUI>
 <p-panel id="EasySetupLLMS" #EasySetupLLMS [formGroup]="formGroup">
     <div class="grid">
-        <div class="col-12">
-            <gebo-ai-field id="vendorId" label="Choose your large language model vendor"
+        <div class="col-4 col-sm-12 col-xs-12">
+            <gebo-ai-field id="vendorId" label="Choose your large language model vendor" [required]="true"
                 help="Choose the initial vendor for your default chat and embedding models">
                 <p-selectbutton [options]="choosableVendors" formControlName="vendorId" optionLabel="name"
-                    optionValue="vendorId" aria-labelledby="basic" [required]="true" gebo-ai-field-element />
+                    optionValue="vendorId" aria-labelledby="basic" [required]="true" gebo-ai-field-element
+                    [allowEmpty]="false" />
             </gebo-ai-field>
         </div>
-        <div class="col-4" *ngIf="choosableIdentities?.length">
-            <gebo-ai-field id="secretId" label="Choose provider credentials (api key)"
-                help="Choose one of the existing credentials for the selected llm provider">
-                <geboai-editable-listbox-component [data]="choosableIdentities"
-                    formControlName="secretId"></geboai-editable-listbox-component>
+        <div class="col-4  col-sm-12 col-xs-12">
+            <gebo-ai-field id="WebSiteLink" label="Provider web site"
+                help="Click here for general provider informations.">
+                <a [href]="vendorSetupMetaInfos?.parentModel?.webSite" target="_blank"
+                    gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.webSite}}</a>
             </gebo-ai-field>
+
+
+
+        </div>
+        <div class="col-4 col-sm-12 col-xs-12"><gebo-ai-field id="AcquireCreditLink" label="Provider buy credit page"
+                help="Click here to buy credit for your api key(s).">
+                <a [href]="vendorSetupMetaInfos?.parentModel?.acquireKeyUrl" target="_blank"
+                    gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.acquireKeyUrl}}</a>
+
+            </gebo-ai-field>
+        </div>
+
+        <div class="col-12">
+            <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
+                [apiKeyDescription]="secretDescription"></gebo-ai-api-key-component>
         </div>
         <div class="col-12"></div>
         <div class="col-4 col-xs-12 col-sm-6" *ngFor="let preset of presetsSummary">
@@ -39,9 +55,9 @@
         </div>
         <div class="col-12"></div>
         <div class="col-3">
-             <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
-                            (onClick)="doAutoConfigure()" [disabled]="formGroup.invalid" icon="pi pi-save"
-                            severity="success" styleClass="w-full"></p-button>
+            <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
+                (onClick)="doAutoConfigure()" [disabled]="formGroup.invalid" icon="pi pi-save" severity="success"
+                styleClass="w-full"></p-button>
         </div>
     </div>
 </p-panel>
