@@ -9,4 +9,6 @@ public class AutoTuneRatedThreashold {
 	public double totalDistance = 0.0;
 	public double averageDistance = 0.0;
 	public double resultsPoints = 0.0;
+	public double answeredQuestions= 0.0;
+	public double totalLLMRating;
 }

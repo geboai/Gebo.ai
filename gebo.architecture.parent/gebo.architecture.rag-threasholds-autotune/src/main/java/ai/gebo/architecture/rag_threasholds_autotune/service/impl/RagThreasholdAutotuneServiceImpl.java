@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,12 +28,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.DiscreteDomain;
 
 import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotuneConfig;
 import ai.gebo.architecture.rag_threasholds_autotune.model.AutotuneVectorStoreInfo;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.model.ThreasholdAutotuneProcessResult;
+import ai.gebo.architecture.rag_threasholds_autotune.model.ThreasholdAutotuneProcessResult.ListOfJsonObjects;
 import ai.gebo.architecture.rag_threasholds_autotune.repository.ThreasholdAutotuneProcessResultRepository;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneMatchRate;
@@ -132,6 +135,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		}
 	}
 
+	private final static int MAXQUESTIONS = 12;
+
 	@Override
 	public void processAutotune(String vectorStoreId) {
 		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByVectorStoreId(vectorStoreId);
@@ -170,8 +175,17 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			final int topK = sampled.size();
 			IGConfigurableChatModel serviceChatModel = chatModelsConfigDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+			if (serviceChatModel == null) {
+				LOGGER.error("No INTERNAL_SERVICE or Default chat model configured");
+				return;
+			} else {
+				LOGGER.info("Running tuning with module:" + serviceChatModel.getCode());
+			}
 			String csvResult = callLLMWithDocuments(serviceChatModel, IN_TOPIC_PROMPT, sampled, "");
 			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
+			while (questions.size() > MAXQUESTIONS) {
+				questions.remove(questions.size() - 1);
+			}
 			double startingSearch = 1.0;
 			final double increment = 0.025;
 			final double fineIncrement = 0.025;
@@ -228,7 +242,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			Map<String, Double> cache = new HashMap<String, Double>();
 			AutoTuneRatedThreashold foundThreashold = maximizeInTreeSequence(lowerBound, upperBound, fineIncrement,
 					vectorStore, serviceChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
-
+			List<AutoTuneRatedThreashold> logrates = new ArrayList<AutoTuneRatedThreashold>();
+			rateOrderedOptimizationThreasholds.values().forEach(x -> {
+				logrates.addAll(x);
+			});
 			OptimizedThreashold optimized = new OptimizedThreashold();
 			optimized.setFirstHopOptimizedThreashold(foundThreashold.threashold);
 			optimized.setSecondHopOptimizedThreashold(foundThreashold.threashold);
@@ -245,6 +262,13 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			result.setEvaluationPoints(foundThreashold.resultsPoints);
 			result.setScore(foundThreashold.rating);
 			result.setThreasholds(optimized);
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				String value = mapper.writeValueAsString(logrates);
+				ListOfJsonObjects mapped = mapper.readValue(value, ListOfJsonObjects.class);
+				result.setComputedElements(mapped);
+			} catch (Throwable th) {
+			}
 			resultRepo.insert(result);
 
 		}
@@ -419,6 +443,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		ratedT.threashold = threashold;
 		ratedT.resultsPoints = evaluationPoints;
 		ratedT.totalDistance = totalDistance;
+		ratedT.answeredQuestions = answeredQuestions;
+		ratedT.totalLLMRating = globalRating;
 		ratedT.averageDistance = totalDistance / evaluationPoints;
 		ratedT.rating = evaluationPoints > 1
 				? answeredQuestions * globalRating / (evaluationPoints * ratedT.totalDistance)
