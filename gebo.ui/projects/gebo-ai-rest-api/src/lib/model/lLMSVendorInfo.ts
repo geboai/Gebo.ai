@@ -22,6 +22,8 @@ export interface LLMSVendorInfo {
     webSite: string;
     acquireKeyUrl?: string;
     apiKeySecretContext: string;
+    minContextWindow?: number;
+    supportsAutoconfig?: boolean;
 }
 export namespace LLMSVendorInfo {
     export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT';

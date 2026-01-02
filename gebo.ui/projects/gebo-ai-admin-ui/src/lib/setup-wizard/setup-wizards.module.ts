@@ -23,7 +23,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { LLMSetupWizardComponent } from "./llms-setup-wizard.component";
-import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI, TranslableModule } from "@Gebo.ai/reusable-ui";
+import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, TranslableModule, GeboAIApiKeyModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { SetupWizardsComponent } from "./setup-wizards.component";
 import { DialogModule } from "primeng/dialog";
@@ -35,7 +35,7 @@ import { ToggleButtonModule } from "primeng/togglebutton";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { TextareaModule } from "primeng/textarea";
-import { MessagesModule } from "primeng/messages";
+
 import { TableModule } from 'primeng/table';
 import { VectorStoreWizardComponent, VectorStoreWizardService } from "./vectorstore-wizard.component";
 import { CheckboxModule } from "primeng/checkbox";
@@ -58,11 +58,11 @@ import { GeboAILLMSVendorConfiguration } from "./llms-setup-components/llms-vend
 import { GeboAILlmsVendorModelTypeConfig } from "./llms-setup-components/llms-vendor-modeltype.component";
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabViewModule } from 'primeng/tabview';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from "primeng/api";
+
 import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
+import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -315,12 +315,11 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
  * multiple sequential wizard sections that guide users through the configuration process.
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
-@NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent,GeboAIRagAutotuneWizardComponent],
+@NgModule({ 
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule,GeboAINotificationsModule],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent,GeboAIRagAutotuneWizardComponent,GeboAIEasyVendorConfigurationComponent],
     exports: [SetupWizardsComponent],
     providers: [
-        MessageService,
         Oauth2SetupWizardService,
         Oauth2SetupEnabledService,
         LLMSetupWizardService,

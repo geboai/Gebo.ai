@@ -16,7 +16,7 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="SetupPage" gebo-ai-label #setupUI header="Setup your gebo.ai installation" [formGroup]="formGroup">
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid">
 
         <div class="col-12">

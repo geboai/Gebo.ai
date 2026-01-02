@@ -7,7 +7,7 @@
     <p-panel id="MainPanel" gebo-ai-label #vectorStoreUI header="Vector database configuration">
         <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
             search, please choose wich of the supported products you'ld like to use</p>
-        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid geboLargeButtonsBar">
             <div class="col-6">
                 <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"

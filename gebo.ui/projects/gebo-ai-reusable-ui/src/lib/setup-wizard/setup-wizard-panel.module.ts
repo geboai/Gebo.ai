@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -23,18 +23,20 @@ import { SetupWizardPanelComponent } from "./setup-wizard-panel.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AlwaysTrueStatusService, WizardSectionWithNoUI } from "./setup-wizard-step";
 import { PanelModule } from "primeng/panel";
-import {BlockUIModule} from "primeng/blockui"
+import { BlockUIModule } from "primeng/blockui";
 import { ButtonModule } from "primeng/button";
 import { SetupWizardService } from "./setup-wizard.service";
-import { MessagesModule } from "primeng/messages";
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
+import { DialogModule } from "primeng/dialog";
+import { TabViewModule } from "primeng/tabview";
+import { GeboAINotificationsModule } from "../notifications/notifications.module";
 
 /**
  * Route configuration for the setup wizard, mapping the 'setup-wizard' path to the
  * SetupWizardPanelComponent.
  */
-const routes:Routes=[{path:"setup-wizard",component:SetupWizardPanelComponent}];
+const routes: Routes = [{ path: "setup-wizard", component: SetupWizardPanelComponent }];
 
 /**
  * The SetupWizardPanelModule encapsulates all required elements for the setup wizard
@@ -55,9 +57,9 @@ const routes:Routes=[{path:"setup-wizard",component:SetupWizardPanelComponent}];
  * - SetupWizardService: Main service managing the wizard workflow
  */
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,RouterModule.forChild(routes),PanelModule,BlockUIModule,ButtonModule,MessagesModule,BreadcrumbModule,GeboAIFieldTranslationContainerModule],
-    declarations:[SetupWizardPanelComponent,WizardSectionWithNoUI],
-    exports:[SetupWizardPanelComponent,WizardSectionWithNoUI],
-    providers:[AlwaysTrueStatusService,SetupWizardService]
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild(routes), PanelModule, BlockUIModule, ButtonModule, GeboAINotificationsModule, BreadcrumbModule, GeboAIFieldTranslationContainerModule, DialogModule, TabViewModule],
+    declarations: [SetupWizardPanelComponent, WizardSectionWithNoUI],
+    exports: [SetupWizardPanelComponent, WizardSectionWithNoUI],
+    providers: [AlwaysTrueStatusService, SetupWizardService]
 })
-export class SetupWizardPanelModule {}
+export class SetupWizardPanelModule { }

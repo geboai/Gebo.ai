@@ -95,3 +95,6 @@ export * from "./lib/controls/choose-llm-functions/choose-llm-functions.module";
 export * from "./lib/architecture/validation";
 export * from "./lib/services/base-streaming.service";
 export * from "./lib/controls/deep-search-control/deep-search.module";
+export * from "./lib/controls/api-key-component/api-key.module";
+export * from "./lib/notifications/notifications.module";
+export * from "./lib/notifications/root-notification.service";

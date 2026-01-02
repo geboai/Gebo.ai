@@ -15,8 +15,7 @@ import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, FileSystemsBrowsingControllerService, FileSystemsControllerService, GFilesystemProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemReference } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
-import { UploadEvent } from "primeng/fileupload";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 
@@ -29,7 +28,7 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-filesystem-endpoint-component",
     templateUrl: "gebo-ai-filesystem-endpoint.component.html",
-    providers: [MessageService,
+    providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIFileSystemModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIFileSystemEndpointComponent),
@@ -90,8 +89,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
         private projectsController: ProjectsControllerService,
         private JobLauncherControllerService: JobLauncherControllerService,
         private actionsRouter: GeboUIActionRoutingService,
-        private messageService: MessageService,
-
+        
         confirmService: ConfirmationService,
         outputForwardingService?: GeboUIOutputForwardingService
     ) {
@@ -180,15 +178,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
         return of({ canBeDeleted: true, message: "" });
     }
 
-    /**
-     * Handles file upload events
-     * @param event The upload event
-     */
-    onBasicUploadAuto(event: UploadEvent) {
-        this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
-    }
-
+    
     /**
      * Performs both save and publish operations
      * Uses the utility function doSaveAndPublishCall

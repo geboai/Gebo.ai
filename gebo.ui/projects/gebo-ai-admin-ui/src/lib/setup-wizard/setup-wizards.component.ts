@@ -18,7 +18,6 @@
  * visibility and completion state.
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { SetupWizardPanelModule } from "../../../../gebo-ai-reusable-ui/src/lib/setup-wizard/setup-wizard-panel.module";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupStatus } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { ActivatedRoute } from "@angular/router";

@@ -20,8 +20,8 @@ export interface PageDeepSearchDocumentAnalisysResultStep {
     content?: Array<DeepSearchDocumentAnalisysResultStep>;
     number?: number;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
     empty?: boolean;

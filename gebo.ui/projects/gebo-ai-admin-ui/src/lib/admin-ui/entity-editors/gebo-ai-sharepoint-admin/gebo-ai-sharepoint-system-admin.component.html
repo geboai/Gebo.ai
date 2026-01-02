@@ -17,7 +17,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #sharepointSystemCtrl header="Editing sharepoint system" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <p-tabView>
             <p-tabPanel id="GeneralSettingsTab" gebo-ai-label header="General settings">
                 <div class="grid">

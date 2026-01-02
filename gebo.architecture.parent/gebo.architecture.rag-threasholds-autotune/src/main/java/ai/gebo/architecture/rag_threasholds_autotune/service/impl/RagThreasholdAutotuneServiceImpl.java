@@ -22,7 +22,9 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SearchRequest.Builder;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.DiscreteDomain;
@@ -50,7 +52,8 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
 
-@Service
+@Component
+@Scope("singleton")
 public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService implements IRagThreasholdAutotuneService {
 	private final ThreasholdAutotuneProcessResultRepository resultRepo;
 	private final VectorizedContentRepository vectorizedContentsRepository;
@@ -120,7 +123,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return _expression;
 	}
 
-	@Scheduled(initialDelay = 10000, fixedRate = 10 * 60000)
+	@Scheduled(initialDelay = 10000, fixedRate = 120 * 60000)
 	public void onTick() {
 		List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
 				.toList();

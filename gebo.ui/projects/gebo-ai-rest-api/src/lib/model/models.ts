@@ -189,6 +189,7 @@ export * from './jobWorkflowStepSummaryTimeSlotStats';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';
+export * from './lLMAutoconfigureCreationData';
 export * from './lLMCreateModelData';
 export * from './lLMCredentialsCreationData';
 export * from './lLMExistingConfiguration';

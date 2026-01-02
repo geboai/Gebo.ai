@@ -1,0 +1,51 @@
+<gebo-ai-notifications *ngIf="messages" [messages]="messages"></gebo-ai-notifications>
+<p-fieldset id="HeaderFieldSet" gebo-ai-label legend="Use or create api key credentials">
+    <p-blockUI id="BlockUI" gebo-ai-label [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <div class="grid" [formGroup]="secretFormGroup">
+        <div class="col-3">
+            <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
+                help="Use existing or create new credentials for this provider">
+                <p-selectbutton [options]="useExistingOrNewOptions" optionLabel="label" optionValue="value"
+                    formControlName="useExistingOrNew" gebo-ai-field-element [allowEmpty]="false" />
+            </gebo-ai-field>
+        </div>
+
+        <div class="col-9 grid">
+            <div class="col-12" *ngIf="view==='FULL' || useExistingOrNew==='EXISTING'">
+                <gebo-ai-field id="ExistingApiKey" label="Api key/credentials"
+                    help="Choose api key or credentials for this provider">
+                    <geboai-editable-listbox-component formControlName="selectedSecret" [data]="secrets"
+                        gebo-ai-field-element></geboai-editable-listbox-component>
+                </gebo-ai-field>
+
+            </div>
+            <div class="col-11" *ngIf="view==='FULL' || useExistingOrNew==='NEW'">
+                <gebo-ai-field id="newSecretDescription" label="Credentials description"
+                    help="Api key credentials description">
+                    <input pInputText type="text" gebo-ai-field-element formControlName="newSecretDescription">
+                </gebo-ai-field>
+            </div>
+            <div class="col-3" *ngIf="view==='FULL' || useExistingOrNew==='NEW'">
+                <gebo-ai-field id="NewUserName" label="User name" help="User name used to access provider services"
+                    [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+                    <input pInputText type="text" gebo-ai-field-element formControlName="newUserName">
+                </gebo-ai-field>
+            </div>
+            <div class="col-8" *ngIf="view==='FULL' || useExistingOrNew==='NEW'">
+                <gebo-ai-field id="NewApiKey" label="New api key"
+                    help="Insert a new api key to be used with this provider"
+                    [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+                    <input pInputText type="text" gebo-ai-field-element formControlName="newApiSecret">
+                </gebo-ai-field>
+            </div>
+            <div class="col-1" style="vertical-align: middle;" *ngIf="view==='FULL' || useExistingOrNew==='NEW'">
+                <gebo-ai-field id="PiSave" label="Save" help="">
+                    <p-button icon="pi pi-save" [outlined]="true" gebo-ai-field-element [disabled]="saveDisabled"
+                        (onClick)="createCredentials()"></p-button>
+                </gebo-ai-field>
+            </div>
+        </div>
+    </div>
+</p-fieldset>

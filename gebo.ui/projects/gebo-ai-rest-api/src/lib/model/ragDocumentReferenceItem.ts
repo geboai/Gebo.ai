@@ -23,6 +23,6 @@ export interface RagDocumentReferenceItem {
     name?: string;
     originalUrl?: string;
     weightedResultsRanking?: number;
-    nbytes?: number;
     ntokens?: number;
+    nbytes?: number;
 }

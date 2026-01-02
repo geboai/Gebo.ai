@@ -21,7 +21,7 @@
     </p-blockUI>
     <p-panel id="promptWizardUI" gebo-ai-label #promptWizardUI header="Prompt template generation wizard"
         [formGroup]="formGroup">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
             <div class="col-12">
                 <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true"

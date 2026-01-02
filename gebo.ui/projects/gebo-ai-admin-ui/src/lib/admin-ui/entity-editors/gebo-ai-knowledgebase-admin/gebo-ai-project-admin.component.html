@@ -14,7 +14,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #pjCompo header="Editing a project or item" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
 
             <div class="col-6">

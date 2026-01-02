@@ -1,14 +1,15 @@
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibraryControllerService, UserUploadedContent, OperationStatusListUserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboUserChatUploadsControllerService, IngestionFileTypesLibraryControllerService, UserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
-import { MessageService } from "primeng/api";
-import { getAuth, getAuthHeader, getHttpHeaders } from "../../infrastructure/gebo-credentials";
+
+import { getHttpHeaders } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { FileBeforeUploadEvent, FileProgressEvent, FileSelectEvent, FileSendEvent, FileUploadErrorEvent, FileUploadEvent } from "primeng/fileupload";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GeboAIBuildUrlService } from "../../services/build-gebo-url.service";
+import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
 const urlPostfixRagCreateSession = "api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/";
@@ -17,7 +18,7 @@ const urlPostfixCreateSession = "api/users/GeboUserChatUploadsController/chatSes
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-documents-files",
     standalone: false,
-    providers: [MessageService, GeboAIBuildUrlService,
+    providers: [ GeboAIBuildUrlService,
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUploadChatDocumentComponent),
@@ -59,12 +60,10 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
 
     constructor(
         private contentTypeService: IngestionFileTypesLibraryControllerService,
-        private messageService: MessageService,
+        private messageService: GeboAIRootNotificationService,
         private geboAITranslatorService: GeboAITranslationService,
         private chatDocumentsUploadService: GeboUserChatUploadsControllerService,
         private urlBulder: GeboAIBuildUrlService) {
-
-
     }
     getEntityName(): string {
         return "GeboAIUploadChatDocumentComponent";
@@ -159,14 +158,9 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
                 }
             }
             if (this.response?.messages) {
-                this.geboAITranslatorService.translateBackendMessages(this.response?.messages).subscribe({
-                    next: (msgs: GUserMessage[] | undefined) => {
-                        if (msgs) {
-                            this.messageService.addAll(msgs);
-                        }
-                    }
-                });
-            }
+                
+               this.messageService.addMessages("GeboAIUploadChatDocumentModule","GeboAIUploadChatDocumentComponent",this.response?.messages);
+              }
             if (this.response?.hasErrorMessages !== true) {
                 this.showUploadChange.emit(false);
             }

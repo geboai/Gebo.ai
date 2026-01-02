@@ -11,10 +11,10 @@
 
 
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ScrollerOptions, TreeNode } from "primeng/api";
 import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -114,8 +114,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         private geboRagChatControllerService: GeboRagChatControllerService,
         private geboChatControllerService: GeboChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
-        private geboChatModelsControllerService: ChatModelsLookupControllerService,
-        private geboTranslationService: GeboAITranslationService) {
+        private geboChatModelsControllerService: ChatModelsLookupControllerService) {
         this.scrollOptions = {
 
             onLazyLoad: () => {

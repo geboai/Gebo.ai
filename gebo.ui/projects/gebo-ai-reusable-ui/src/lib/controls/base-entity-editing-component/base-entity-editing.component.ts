@@ -34,7 +34,7 @@ import { errorStatus, IOperationStatus } from "./operation-status";
 import { GeboActionType, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
-import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 
 
 /**

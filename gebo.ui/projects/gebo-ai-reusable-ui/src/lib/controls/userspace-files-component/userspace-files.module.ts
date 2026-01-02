@@ -41,7 +41,6 @@ import { FieldsetModule } from "primeng/fieldset";
 import { GeboUIEntityFormConfig } from "../../architecture/gebo-ui-entity-form-config";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 
 /**

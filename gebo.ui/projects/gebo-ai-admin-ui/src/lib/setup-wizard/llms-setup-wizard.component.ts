@@ -51,7 +51,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
 
     protected actualProvidersConfiguration?: LLMSSetupConfigurationData;
     protected currentIndex:number=0;
-
+    protected autoSettingsConfigurations?:LLMSSetupConfiguration[]=[];
     /**
      * Constructor initializes services required for LLM setup functionality.
      */
@@ -82,6 +82,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
                     this.userMessages = [{ severity: "error", summary: "Large language models setup not yet done", detail: "At least a default chat bot model and a default embedding model both correctly configured are required" }];
                 }
                 this.actualProvidersConfiguration = value[2];
+                this.autoSettingsConfigurations=this.actualProvidersConfiguration?.canRunAutoconfigure===true?this.actualProvidersConfiguration.configurations?.filter(x=>x.parentModel.supportsAutoconfig===true):[];
             },
             complete: () => {
                 this.loading = false;
@@ -90,6 +91,9 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     }
     onVendorConfigurationChanged(changedFlag:boolean, index: number) {
        this.reloadData();
+    }
+    onAutomaticSetupDone():void {
+        this.closeWizard();
     }
     /**
      * Submits the LLM setup form data to the backend service.

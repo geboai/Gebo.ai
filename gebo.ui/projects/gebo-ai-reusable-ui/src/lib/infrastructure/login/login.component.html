@@ -23,8 +23,9 @@
         <div class="col-6">
             <p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai">
                 <div class="grid">
-                    <div class="col-12"><p-messages [(value)]="userMessages" [enableService]="false"
-                            [closable]="false" /></div>
+                    <div class="col-12">
+                        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+                    </div>
                     <div class="col-12">
                         <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login"
                             [required]="true"> <input pInputText formControlName="username" class="col-12"
