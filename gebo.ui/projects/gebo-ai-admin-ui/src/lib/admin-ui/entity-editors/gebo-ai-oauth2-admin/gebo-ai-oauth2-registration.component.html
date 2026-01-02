@@ -1,5 +1,5 @@
 <p-panel id="MainPanel" gebo-ai-label header="Insert new OAUTH2 Authentication/Integration infos" [formGroup]="formGroup">
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
     <div class="grid geboDialogContent">
         <div class="col-6" *ngIf="redirectUrls?.length">
             <p-fieldset id="RedirectUrls" gebo-ai-label legend="Redirect urls to enable on oauth2 provider">

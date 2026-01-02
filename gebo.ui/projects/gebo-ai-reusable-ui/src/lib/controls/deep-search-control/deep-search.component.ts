@@ -3,9 +3,12 @@ import { FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms"
 import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchRequest, DeepSearchResponse, DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
-import { MessageService, ToastMessageOptions } from "primeng/api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+
+
 import { forkJoin, Observable, of } from "rxjs";
+import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
+import { ToastMessageOptions } from "primeng/api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 interface IChooseSources {
     deepSearchDataSources?: string[];
     knowledgeBases?: string[];
@@ -85,7 +88,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
         private ragChatService: GeboRagChatControllerService,
         private chatService: GeboChatControllerService,
-        private messageService: MessageService) {
+        private messageService: GeboAIRootNotificationService) {
         this.chooseDeepSearchDataSourcesFormGroup.setValidators(atLeastAKnowledgeBaseOrSystemValidator);
     }
     ngOnInit(): void {
@@ -140,7 +143,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             detail: msg.content?.detail,
                             severity: msg.content?.severity
                         };
-                        this.messageService.add(message);
+                        this.messageService.addMessage("GeboAIDeepSearchModule","GeboAIDeepSearchComponent",message);
                         this.errorOccurredEvent.emit(msg.content);
                     } break;
                     case "GeboChatResponse": {

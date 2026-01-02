@@ -21,8 +21,8 @@
 import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
@@ -110,7 +110,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         private projectsController: ProjectsControllerService,
         private JobLauncherControllerService: JobLauncherControllerService,
         private actionsRouter: GeboUIActionRoutingService,
-        private messageService: MessageService,
+        private messageService: GeboAIRootNotificationService,
         private uploadControllerService: FileUploadControllerService,
 
         confirmService: ConfirmationService,
@@ -248,7 +248,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      */
     onBasicUploadAuto(event: UploadEvent) {
         this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
+        this.messageService.addMessage("GeboAIUploadsModule","GeboAIUploadsEndpointComponent",{id:"FILE_UPLOAD_SUCCESS", severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
         console.log("onBasicUploadAuto");
         this.loadingRelatedBackend = false;
     }

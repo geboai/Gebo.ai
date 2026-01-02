@@ -26,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
 import { TreeSelectModule } from 'primeng/treeselect';
-import { GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+
 
 /**
  * Module that encapsulates the GeboAIChooseLLMFunctionscomponent.

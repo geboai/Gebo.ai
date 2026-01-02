@@ -20,14 +20,14 @@ import { PanelModule } from "primeng/panel";
 import { DialogModule } from "primeng/dialog";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
-import { MessagesModule } from "primeng/messages";
+
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, TextareaModule, PanelModule, DialogModule, ButtonModule, BlockUIModule, MessagesModule, EditableListboxModule, MonacoEditorModule, GeboAIFieldTranslationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TextareaModule, PanelModule, DialogModule, ButtonModule, BlockUIModule,  EditableListboxModule, MonacoEditorModule, GeboAIFieldTranslationContainerModule,GeboAINotificationsModule],
     declarations: [GeboAIPromptEditingComponent, GeboAIPromptWizardComponent],
     exports: [GeboAIPromptEditingComponent],
     providers: []

@@ -17,7 +17,7 @@
  */
 
 import { Component, Injectable } from "@angular/core";
-import { BrowseParam, FileSystemSharesSettingControllerService, GFileSystemShareReference, PathInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { BrowseParam, FileSystemSharesSettingControllerService, GFileSystemShareReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";

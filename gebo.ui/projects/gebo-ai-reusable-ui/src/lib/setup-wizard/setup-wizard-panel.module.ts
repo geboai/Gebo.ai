@@ -23,16 +23,14 @@ import { SetupWizardPanelComponent } from "./setup-wizard-panel.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AlwaysTrueStatusService, WizardSectionWithNoUI } from "./setup-wizard-step";
 import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui"
+import { BlockUIModule } from "primeng/blockui";
 import { ButtonModule } from "primeng/button";
 import { SetupWizardService } from "./setup-wizard.service";
-import { MessagesModule } from "primeng/messages";
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 import { DialogModule } from "primeng/dialog";
 import { TabViewModule } from "primeng/tabview";
 import { GeboAINotificationsModule } from "../notifications/notifications.module";
-import { Toast } from "primeng/toast";
 
 /**
  * Route configuration for the setup wizard, mapping the 'setup-wizard' path to the

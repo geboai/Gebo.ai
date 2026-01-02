@@ -14,7 +14,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #OllamaUI header="Editing Ollama local (or lan) server chat model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages id="MessagesMessages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         
         <p-tabView id="TabViewTabView" gebo-ai-label class="standardTabDialogueHeight">
             <p-tabPanel header="General infos" id="GeneralInfosTab">

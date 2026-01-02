@@ -14,8 +14,8 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <div class="geboDialogContent">
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <p-toast id="Toast" gebo-ai-label />
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    
     <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
       <p-tabPanel header="Settings" id="SettingsTab" gebo-ai-label>
         <div class="grid">

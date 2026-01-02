@@ -16,8 +16,8 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing server shared file folder" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages id="UserMessages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
-        <p-toast id="Toast" gebo-ai-label />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+        
         <div class="grid">
 
             <div class="col-6">

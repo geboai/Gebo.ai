@@ -38,8 +38,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PopoverModule } from 'primeng/popover';
-import { MessagesModule } from "primeng/messages";
-import { Toast } from "primeng/toast";
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader();
 }
@@ -109,8 +108,7 @@ const GeboAIPreset = definePreset(Aura, {
     GeboAIUserProfileModule,
     ConfirmDialogModule,
     MonacoEditorModule.forRoot(),
-    GeboAINotificationsModule.forRoot(),
-    MessagesModule,
+    GeboAINotificationsModule.forRoot(),    
     TranslateModule.forRoot({
         lang: "en",
         fallbackLang: "en",
@@ -119,7 +117,7 @@ const GeboAIPreset = definePreset(Aura, {
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes),
-    GeboAIFieldTranslationContainerModule.forRoot(), PopoverModule, Toast],
+    GeboAIFieldTranslationContainerModule.forRoot(), PopoverModule],
 
   providers: [
     GeboBackendListService,

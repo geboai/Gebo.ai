@@ -19,7 +19,7 @@
         <p-blockUI [target]="window" [blocked]="loading">
             <i class="pi pi-lock" style="font-size: 3rem"></i>
         </p-blockUI>
-        <p-messages [value]="messages" enableService="false" />
+        <gebo-ai-notifications [messages]="messages"></gebo-ai-notifications>
 
         <div class="grid" style="width:240px;">
             <div class="col-6">

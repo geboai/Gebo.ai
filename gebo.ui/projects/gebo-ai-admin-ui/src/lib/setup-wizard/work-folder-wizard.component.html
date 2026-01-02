@@ -4,7 +4,7 @@
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <p-panel id="MainPanel" gebo-ai-label #workFolderUI header="Gebo.ai work folder configuration">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
             <div class="col-12">
                 <gebo-ai-field id="workDirectory" label="Choose a folder as Gebo.ai work directory" help="Choose a server folder that this installation will use as work folder for its configurations and contents storage." [required]="true">

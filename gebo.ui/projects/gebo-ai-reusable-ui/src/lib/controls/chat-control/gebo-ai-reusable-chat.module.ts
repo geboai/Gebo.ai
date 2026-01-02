@@ -20,7 +20,7 @@ import { PanelModule } from "primeng/panel";
 import { DialogModule } from "primeng/dialog";
 import { BlockUIModule } from "primeng/blockui";
 import { TextareaModule } from 'primeng/textarea';
-import { MessagesModule } from "primeng/messages";
+
 import { ChangeDescriptionComponent } from "./change-description.component";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { DocumentRefComponent } from "./document-ref.component";
@@ -38,14 +38,14 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { InputTextModule } from "primeng/inputtext";
 import { ReactiveRagChatService } from "./reactive-chat.service";
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToastModule } from "primeng/toast";
+
 import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module";
 import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIUploadChatDocumentModule } from "../choose-documents-panel/upload-chat-document.module";
-import { MessageService } from "primeng/api";
+
 import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.component";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 import { GeboAIGeneratedDocumentRefComponent } from "./llm-generated-document-ref.component";
@@ -53,6 +53,7 @@ import { GeboAIDeepSearchModule } from "../deep-search-control/deep-search.modul
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { PopoverModule } from 'primeng/popover';
 import { ContextMenuModule } from "primeng/contextmenu";
+import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 console.log(
   '[GeboAIReusableChatModule] declarations =',
   GeboAIReusableChatComponent,
@@ -75,20 +76,22 @@ console.log(
     GeboAIChooseDocumentsPanelModule,
     InputTextModule,
     ProgressSpinnerModule,
-    ToastModule,
     DialogModule,
     ButtonModule,
     PanelModule,
     BlockUIModule,
     TextareaModule,
-    MessagesModule,
     GeboAIContentViewerModule,
     BrowseContentModule,
     GeboAIViewTableModule,
     MarkdownModule.forChild(),
     GeboAIFieldTranslationContainerModule,
     GeboAIUploadChatDocumentModule,
-    GeboAIDeepSearchModule, PopoverModule, TieredMenuModule, ContextMenuModule],
+    GeboAIDeepSearchModule, 
+    PopoverModule, 
+    TieredMenuModule, 
+    ContextMenuModule, 
+    GeboAINotificationsModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
   provideMarkdown({
@@ -99,8 +102,8 @@ console.log(
         buttonComponent: ClipboardButtonComponent,
       }
     }
-  }), ReactiveRagChatService, MessageService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent],
+  }), ReactiveRagChatService],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent],
   exports: [GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

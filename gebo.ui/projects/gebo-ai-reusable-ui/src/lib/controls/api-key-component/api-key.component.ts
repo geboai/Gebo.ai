@@ -3,7 +3,8 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Valida
 import { GUserMessage, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { Observable, of } from "rxjs";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+
 interface ApiKeyInternalFG {
     requireApiKeyAniway?: boolean,
     newSecretDescription?: string,

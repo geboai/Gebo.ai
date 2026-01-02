@@ -20,7 +20,8 @@ export class RagAutotuneStatusService extends AbstractStatusService {
 })
 export class GeboAIRagAutotuneWizardComponent extends BaseWizardSectionComponent implements OnInit,OnChanges{
     protected autotunedVectorStores:AutotuneVectorStoreInfo[]=[];
-    constructor( setupWizardComunicationService: SetupWizardComunicationService,private ragAutoTuneService:GeboAdminRagAutotuneControllerService) {
+    constructor( setupWizardComunicationService: SetupWizardComunicationService,
+        private ragAutoTuneService:GeboAdminRagAutotuneControllerService) {
         super(setupWizardComunicationService);
     }
     public override reloadData(): void {

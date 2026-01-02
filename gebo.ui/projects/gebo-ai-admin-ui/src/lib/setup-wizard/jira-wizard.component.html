@@ -13,7 +13,7 @@
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Atlassian Jira systems">
-  <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
   <div class="grid geboLargeButtonsBar">
 
     <div class="col-6">
