@@ -16,7 +16,8 @@ export class GeboAINotificationComponent implements OnChanges {
     constructor(
         private service: GeboAIRootNotificationService,
         @Inject(GEBO_AI_MODULE) private moduleId: string,
-        @Inject(GEBO_AI_FIELD_HOST) private host: GeboAIFieldHost) {
+        @Inject(GEBO_AI_FIELD_HOST) private host: GeboAIFieldHost
+        ) {
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["messages"] && this.messages) {

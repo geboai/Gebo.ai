@@ -22,6 +22,8 @@ import { ButtonModule } from "primeng/button";
 import { StepsModule } from 'primeng/steps';
 import { GeboUIEntityFormsLauncherComponent } from "./gebo-ui-entity-forms-launcher.component";
 import { GeboUIModalComponent } from "./gebo-ui-modal.component";
+import {GeboAINotificationsModule} from "../notifications/notifications.module"
+
 
 /**
  * @NgModule GeboUIArchitectureModule
@@ -48,7 +50,7 @@ import { GeboUIModalComponent } from "./gebo-ui-modal.component";
  * - Modal display
  */
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule],
+    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule,GeboAINotificationsModule],
     providers:[GeboUIActionRoutingService,GeboFormGroupsService],
     declarations:[GeboUIModalOpenerComponent,GeboUIModalOpenerWrapperComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent],
     exports:[GeboUIModalOpenerComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent]
