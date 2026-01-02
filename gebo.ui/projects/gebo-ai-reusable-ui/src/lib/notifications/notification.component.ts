@@ -13,6 +13,7 @@ import { ToastMessageOptions } from "primeng/api";
 })
 export class GeboAINotificationComponent implements OnChanges {
     @Input() messages: (GUserMessage | ToastMessageOptions)[] = [];
+    private oldMessages: (GUserMessage | ToastMessageOptions)[]=[];
     constructor(
         private service: GeboAIRootNotificationService,
         @Inject(GEBO_AI_MODULE) private moduleId: string,
@@ -20,8 +21,19 @@ export class GeboAINotificationComponent implements OnChanges {
         ) {
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["messages"] && this.messages) {
-            this.service.addMessages(this.moduleId, this.host.getEntityName(), this.messages as GUserMessage[]);
+        if (changes["messages"] && this.messages && this.messages.length) {
+            let filteredMsgs:(GUserMessage | ToastMessageOptions)[]=this.messages;
+            if (this.messages.length===this.oldMessages.length) {
+                filteredMsgs=[];
+                this.messages.forEach(x=>{
+                    const hasCorresponding=this.oldMessages.filter(y=>x.id===y.id || (x.detail===y.detail && x.summary===y.summary));
+                    if (!hasCorresponding || hasCorresponding.length===0) {
+                        filteredMsgs.push(x);
+                    }
+                });
+            }
+            this.service.addMessages(this.moduleId, this.host.getEntityName(),filteredMsgs as GUserMessage[]);
+            this.oldMessages=this.messages;
         }
     }
 }
