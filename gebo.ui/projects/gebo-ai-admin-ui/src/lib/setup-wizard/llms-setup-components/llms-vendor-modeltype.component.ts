@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboAITranslationService, GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, Subscription } from "rxjs";
 interface IModelChoice {
@@ -61,8 +61,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected llmsStatus!: ComponentLLMSStatus;
     protected subscription?: Subscription;
     constructor(private secretController: SecretsControllerService,
-        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
-        private geboAITranslationService: GeboAITranslationService) {
+        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService
+    ) {
         this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
             next: (value) => {
                 if (this.vendorConfiguration?.parentModel?.requiresApiKey === true) return;
@@ -133,14 +133,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     withoutDuplicates.push(msg);
                 }
             });
-            this.subscription = this.geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
-                next: (msgs) => {
-                    if (msgs)
-                        this.userMessages = msgs;
-                    else
-                        this.userMessages = withoutDuplicates;
-                }
-            });
+
+            this.userMessages = withoutDuplicates;
+
+
         } else {
             this.userMessages = [];
         }
@@ -284,9 +280,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 //set a value from existing configs or from default url value
                 let defaultBaseUrl = this.vendorConfiguration.parentModel.defaultCustomUrl;
                 if (this.vendorConfiguration.runtimeConfigs && this.vendorConfiguration.runtimeConfigs.length) {
-                    const firstNonNull=this.vendorConfiguration.runtimeConfigs.find(x=>x.baseUrl?true:false);
+                    const firstNonNull = this.vendorConfiguration.runtimeConfigs.find(x => x.baseUrl ? true : false);
                     if (firstNonNull?.baseUrl) {
-                        defaultBaseUrl=firstNonNull.baseUrl;
+                        defaultBaseUrl = firstNonNull.baseUrl;
                     }
                 }
                 if (defaultBaseUrl) {

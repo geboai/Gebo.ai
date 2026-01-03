@@ -3,6 +3,7 @@ import { GeboAIRootNotificationService } from "./root-notification.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
+import { NotificationLayerEnum } from "./notification-layer";
 /*************************
  * This component will forward to the display messages area messages
  */
@@ -13,6 +14,7 @@ import { ToastMessageOptions } from "primeng/api";
 })
 export class GeboAINotificationComponent implements OnChanges {
     @Input() messages: (GUserMessage | ToastMessageOptions)[] = [];
+    @Input() layer:NotificationLayerEnum="GLOBAL";
     private oldMessages: (GUserMessage | ToastMessageOptions)[]=[];
     constructor(
         private service: GeboAIRootNotificationService,
@@ -32,7 +34,7 @@ export class GeboAINotificationComponent implements OnChanges {
                     }
                 });
             }
-            this.service.addMessages(this.moduleId, this.host.getEntityName(),filteredMsgs as GUserMessage[]);
+            this.service.addMessages(this.moduleId, this.host.getEntityName(),filteredMsgs as GUserMessage[],this.layer);
             this.oldMessages=this.messages;
         }
     }

@@ -192,6 +192,7 @@ export * from './jobsEntriesForProjectEndpointFilter';
 export * from './lLMAutoconfigureCreationData';
 export * from './lLMCreateModelData';
 export * from './lLMCredentialsCreationData';
+export * from './lLMCredentialsVerificationData';
 export * from './lLMExistingConfiguration';
 export * from './lLMGeneratedResource';
 export * from './lLMModelPresetChoice';

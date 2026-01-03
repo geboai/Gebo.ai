@@ -67,7 +67,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**
      * Messages to display to the user in the UI
      */
-    public userMessages: ToastMessageOptions[] = [{ severity: "info", summary: "Ask AI to write a prompt template", detail: "With this screen AI will assist you on writing the correct template for your objectives" }];
+    public userMessages: ToastMessageOptions[] = [];
 
     /**
      * Flag to indicate when async operations are in progress

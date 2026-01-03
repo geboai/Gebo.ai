@@ -10,16 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface RagDocumentFragment { 
-    documentId?: string;
-    documentContent?: string;
-    code?: string;
-    rootKnowledgebaseCode?: string;
-    parentProjectCode?: string;
-    rankIndex?: number;
-    weightedResultsRanking?: number;
-    origin?: string;
-    chunkPosition?: number;
-    nbytes?: number;
-    ntokens?: number;
+export interface LLMCredentialsVerificationData { 
+    vendorId: string;
+    secretId: string;
+    baseUrl?: string;
 }

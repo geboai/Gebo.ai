@@ -17,9 +17,6 @@
                 <a [href]="vendorSetupMetaInfos?.parentModel?.webSite" target="_blank"
                     gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.webSite}}</a>
             </gebo-ai-field>
-
-
-
         </div>
         <div class="col-4 col-sm-12 col-xs-12"><gebo-ai-field id="AcquireCreditLink" label="Purchase provider's credit"
                 help="Click here to buy credit for your api key(s).">
@@ -28,10 +25,9 @@
 
             </gebo-ai-field>
         </div>
-
         <div class="col-12">
             <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
-                [apiKeyDescription]="secretDescription"></gebo-ai-api-key-component>
+                [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials" [backendValidationOnChange]="true"></gebo-ai-api-key-component>
         </div>
         <div class="col-12"></div>
         <div class="col-4 col-xs-12 col-sm-6" *ngFor="let preset of presetsSummary">

@@ -28,7 +28,7 @@ interface ApiKeyInternalFG {
 export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAccessor {
     @Input({ required: true }) contextCode?: string;
     @Input({ required: true }) apiKeyDescription?: string;
-    @Input() backendValidationOnChange:boolean=true;
+    @Input() backendValidationOnChange: boolean = true;
     @Input() backendValidation: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
         const data: IOperationStatus<any> = {
             hasErrorMessages: false,
@@ -46,11 +46,11 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         newUserName: new FormControl(),
         baseUrl: new FormControl()
     });
-    protected messages?:GUserMessage[]=[];
+    protected messages?: GUserMessage[] = [];
     protected view: "COMPACT" | "FULL" = "COMPACT";
     protected existingOrNewShow: boolean = true;
     protected saveDisabled: boolean = false;
-    protected get loading():boolean {
+    protected get loading(): boolean {
         return this.loadingBackend || this.validating || this.deleting;
     }
     protected loadingBackend: boolean = false;
@@ -97,9 +97,35 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         this.secretFormGroup.controls["selectedSecret"].valueChanges.subscribe({
             next: (secretId) => {
                 if (this.secretId != secretId) {
-                    if (this.onChange) {
-                        this.secretId = secretId;
-                        this.onChange(secretId);
+                    if (this.backendValidationOnChange === true && secretId) {
+                        const credential = this.secrets.find(x => x.code === secretId);
+                        if (credential) {
+                            this.validating = true;
+                            this.backendValidation(credential).subscribe({
+                                next: (value) => {
+                                    this.validating = false;
+                                    if (value?.hasErrorMessages === true) {
+                                        this.messages = value.messages;
+                                    } else {
+                                        if (this.onChange) {
+                                            this.secretId = secretId;
+                                            this.onChange(secretId);
+                                        }
+                                    }
+                                },
+                                error: (err) => {
+                                    this.validating = false;
+                                },
+                                complete: () => {
+                                    this.validating = false;
+                                }
+                            })
+                        }
+                    } else {
+                        if (this.onChange) {
+                            this.secretId = secretId;
+                            this.onChange(secretId);
+                        }
                     }
                 }
             }
@@ -150,15 +176,15 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                                 this.secretId = secret?.code;
                                 if (this.onChange)
                                     this.onChange(this.secretId);
-                            }else {
-                                this.messages=value.messages;
-                                this.deleting=true;
+                            } else {
+                                this.messages = value.messages;
+                                this.deleting = true;
                                 this.secretController.deleteSecret(secret).subscribe({
-                                    next:()=>{
+                                    next: () => {
 
                                     },
-                                    complete:()=>{
-                                        this.deleting=false;
+                                    complete: () => {
+                                        this.deleting = false;
                                     }
                                 });
                             }

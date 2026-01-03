@@ -7,10 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +27,6 @@ import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.SecretInfo;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 @Component
 @Scope("singleton")

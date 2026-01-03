@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 
 import { MessageService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map } from "rxjs";
+import { forkJoin, map, Subscription } from "rxjs";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 import { ToastZIndexService } from "./toast-z-index.service";
+import { NotificationLayerEnum } from "./notification-layer";
 
 @Injectable({
     providedIn: "root"
@@ -12,12 +13,14 @@ import { ToastZIndexService } from "./toast-z-index.service";
 })
 export class GeboAIRootNotificationService {
 
-    constructor(private messageService: MessageService, 
-        private geboAiTranslationService: GeboAITranslationService, 
+    constructor(private messageService: MessageService,
+        private geboAiTranslationService: GeboAITranslationService,
         private zIndexService: ToastZIndexService) {
     }
-
-    public addMessage(moduleId: string, entityId: string, msg: GUserMessage | ToastMessageOptions): void {
+    public layersComputing():void {
+        this.zIndexService.bumpAboveOverlays();
+    }
+    public addMessage(moduleId: string, entityId: string, msg: GUserMessage | ToastMessageOptions, layer: NotificationLayerEnum = "GLOBAL"): void {
         const toast: ToastMessageOptions = {
             detail: msg.detail,
             id: msg.id,
@@ -26,15 +29,20 @@ export class GeboAIRootNotificationService {
             text: msg.detail,
             life: 10000
         };
-        this.geboAiTranslationService.translateMessage(moduleId, entityId, msg.id, toast).subscribe({
+        const subscription = this.geboAiTranslationService.translateMessage(moduleId, entityId, msg.id, toast).subscribe({
             next: (data) => {
                 const tmsg = data ? data : toast;
-                tmsg.key = "global";
+                tmsg.key = layer;
+                this.zIndexService.bumpAboveOverlays();
                 this.messageService.add(tmsg);
+                try {
+                    if (subscription)
+                        subscription.unsubscribe();
+                } catch (e) { }
             }
         });
     }
-    public addMessages(moduleId: string, entityId: string, msg: GUserMessage[]) {
+    public addMessages(moduleId: string, entityId: string, msg: GUserMessage[], layer: NotificationLayerEnum = "GLOBAL"): void {
         if (msg && msg.length) {
             const observables = msg.map(x => this.geboAiTranslationService.translateMessage(moduleId, entityId, x.id, x).pipe(map(r => {
                 const retMsg = r ? r : x;
@@ -43,30 +51,39 @@ export class GeboAIRootNotificationService {
                     id: retMsg.id,
                     severity: retMsg.severity,
                     summary: retMsg.summary,
-                    key: "global",
+                    key: layer,
                     life: 10000
                 };
                 return toast;
             })));
             if (observables && observables.length === 1) {
-                observables[0].subscribe({
+                const subscription = observables[0].subscribe({
                     next: (tmsgs) => {
                         this.zIndexService.bumpAboveOverlays();
                         this.messageService.add(tmsgs);
+                        try {
+                            if (subscription)
+                                subscription.unsubscribe();
+                        } catch (e) { }
                     }
                 });
             } else {
-                forkJoin(observables).subscribe({
+                const subscription = forkJoin(observables).subscribe({
                     next: (tmsgs) => {
                         this.zIndexService.bumpAboveOverlays();
                         this.messageService.addAll(tmsgs);
+                        try {
+                            if (subscription)
+                                subscription.unsubscribe();
+                        } catch (e) { }
                     },
                     error: (err) => {
-                        this.messageService.addAll(msg);
+                        
                     }
                 });
             }
         }
+        
     }
 
 }

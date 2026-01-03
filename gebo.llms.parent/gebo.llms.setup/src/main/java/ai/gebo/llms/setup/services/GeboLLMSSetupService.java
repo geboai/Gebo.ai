@@ -44,6 +44,7 @@ import ai.gebo.llms.setup.model.ComponentLLMSStatus;
 import ai.gebo.llms.setup.model.LLMAutoconfigureCreationData;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
+import ai.gebo.llms.setup.model.LLMCredentialsVerificationData;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
@@ -356,6 +357,30 @@ public class GeboLLMSSetupService {
 		md.setType(ModelType.CHAT);
 		md.setUses(List.of(use));
 		return md;
+	}
+
+	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
+			@Valid @NotNull LLMCredentialsVerificationData data) {
+		Optional<LLMSVendor> vendorOpt = this.vendorsSetupConfig.getVendors().stream()
+				.filter(x -> x.getVendorInfo() != null && x.getVendorInfo().getVendorId() != null
+						&& x.getVendorInfo().getVendorId().equals(data.getVendorId()))
+				.findFirst();
+		if (vendorOpt.isEmpty()) {
+			return OperationStatus.ofError("Vendor unknown", "Vendor " + data.getVendorId() + " unknown");
+		}
+		LLMSVendor vendor = vendorOpt.get();
+		if (!vendor.getPresets().isEmpty()) {
+			LLMSModelsPresets preset = vendor.getPresets().get(0);
+			LLMModelsLookupParameter credentials = new LLMModelsLookupParameter();
+			credentials.setSecretId(data.getSecretId());
+			credentials.setServiceHandler(preset.getServiceHandler());
+			credentials.setBaseUrl(data.getBaseUrl());
+			credentials.setType(preset.getType());
+			return verifyCredentialsAndDownloadModels(credentials);
+		} else {
+			return OperationStatus.ofError("Vendor without presets",
+					"Vendor " + data.getVendorId() + " has no presets");
+		}
 	}
 
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(

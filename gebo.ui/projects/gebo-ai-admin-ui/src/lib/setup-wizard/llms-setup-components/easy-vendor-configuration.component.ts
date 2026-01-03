@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboAITranslationService } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-translation-container/gebo-translation.service";
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../../../../gebo-ai-reusable-ui/src/lib/controls/field-host-component-iface/field-host-component-iface";
+import { GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { Observable, of } from "rxjs";
 interface PresetSummary {
     type: LLMSModelsPresets.TypeEnum;
     mainUse?: LLMModelPresetChoice.UsesEnum;
@@ -22,7 +22,7 @@ function validateVendorSetup(fg: FormGroup): ValidationErrors | null {
     if (ok) return null;
     else return { erroneus: "true" };
 }
-const formValidator:ValidatorFn=(control)=>{
+const formValidator: ValidatorFn = (control) => {
     return validateVendorSetup(control as FormGroup);
 };
 @Component({
@@ -51,9 +51,16 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
     protected vendorId?: string;
     protected secretContext?: string;
     protected secretDescription?: string;
-    constructor(private secretController: SecretsControllerService,
-        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
-        private geboAITranslationService: GeboAITranslationService) {
+    protected validateCredentials: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
+
+        return this.geboFastLLMSSetupService.verifyVendorCredentialsAndDownloadModels({
+            secretId: credentials.code as string,
+            vendorId: this.vendorId as string,
+            baseUrl: undefined
+        });
+    };
+    constructor(
+        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService) {
         this.formGroup.addValidators(formValidator);
         this.formGroup.controls["vendorId"].valueChanges.subscribe({
             next: (vendorId) => {

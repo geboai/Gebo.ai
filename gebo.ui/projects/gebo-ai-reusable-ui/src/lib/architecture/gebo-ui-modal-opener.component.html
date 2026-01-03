@@ -14,7 +14,7 @@
 
 <p-dialog   *ngIf="modal && componentType" [visible]="true" [modal]="true"  [style]="{width:'98%',height:'100%'}" [maximizable]="true"
 
-    (onHide)="closeModal(modal)" [baseZIndex]="5000" (visibleChange)="cancelAction.emit(true);visible=false;closeModal(modal);">
+    (onHide)="closeModal(modal)"  (visibleChange)="cancelAction.emit(true);visible=false;closeModal(modal);">
     <gebo-ui-modal-wrapper [componentType]="componentType" [modal]="modal"
         (cancelAction)="closeModal(modal);cancelAction.emit($event)" (createdNew)="createdNew.emit($event)"
         (deleted)="deleted.emit($event)" (updated)="updated.emit($event)"></gebo-ui-modal-wrapper>

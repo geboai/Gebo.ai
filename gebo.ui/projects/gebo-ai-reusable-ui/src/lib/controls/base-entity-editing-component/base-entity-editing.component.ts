@@ -763,28 +763,20 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     if (messages && messages.length) {
       if (this.injector) {
         try {
-          const geboAITranslationService: GeboAITranslationService = this.injector.get(GeboAITranslationService);
-          if (geboAITranslationService) {
-            const withoutDuplicates: GUserMessage[] = [];
-            messages.forEach(msg => {
-              if (!withoutDuplicates.find(x => x.id === msg.id)) {
-                withoutDuplicates.push(msg);
-              }
-            });
-            this._msgsSubscription = geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
-              next: (msgs) => {
-                if (msgs)
-                  this.userMessages = msgs;
-                else 
-                  this.userMessages = withoutDuplicates;
-              }
-            });
-          }
+          const withoutDuplicates: GUserMessage[] = [];
+          messages.forEach(msg => {
+            if (!withoutDuplicates.find(x => x.id === msg.id)) {
+              withoutDuplicates.push(msg);
+            }
+          });
+          this.userMessages = withoutDuplicates;
+
+
         } catch (e) {
           console.error(e);
           this.userMessages = messages;
         }
-      }else {
+      } else {
         this.userMessages = messages;
       }
 

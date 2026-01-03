@@ -318,15 +318,15 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
     @HostListener('window:scroll')
     onWindowScroll() {
-      this.showTopButton = window.scrollY > scrollStart;
-      this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart && this.showTopButton;
+        this.showTopButton = window.scrollY > scrollStart;
+        this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart && this.showTopButton;
     }
     public scrollToTop(): void {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     public scrollToBottom(): void {
-      window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+        window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
     }
 
     public getEntityName(): string {
@@ -426,20 +426,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
                     this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    const subscription = this.geboAiTranslationService.translateMessage(moduleId, entityId, chat_history_loaded.id, chat_history_loaded).subscribe({
-                        next: (msg) => {
-                            if (msg) {
-                                this.lastInteractionMessages = [msg];
-                                
-                                try {
-                                    subscription.unsubscribe();
-                                } catch (e) {
-
-                                }
-                            }
-                        }
-                    })
-
+                    this.lastInteractionMessages = [chat_history_loaded];
                     this.scrollToBottom();
 
                 },
@@ -586,7 +573,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             this.addedChatAction.emit(newContext);
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                       
+
                         const dataUpdate: any = {
                             chatProfileCode: r.chatProfileCode,
                             chatModelCode: r.chatModelCode,
@@ -645,13 +632,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     const message = recvd.content as ToastMessageOptions;
                     this.lastInteractionMessages = [message];
                     this.chatStreamingErrorOccurred = true;
-                    this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
-                        next: (msg) => {
-                            const showMessage: ToastMessageOptions = msg ? { summary: msg.summary, detail: msg.detail, severity: msg.severity } : { summary: message.summary, detail: message.detail, severity: message.severity };
-                            this.lastInteractionMessages = [showMessage];
-                            
-                        }
-                    });
+                    
                 }
                 if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
@@ -693,7 +674,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             }
 
                             this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                           
+
                             const dataUpdate: any = {
                                 chatProfileCode: r.chatProfileCode,
                                 chatModelCode: r.chatModelCode,
@@ -783,16 +764,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
 
         if (chatModelCode) {
-            this.messageService.addMessage(moduleId, entityId,  loading_vocal_answer);
-            
+            this.messageService.addMessage(moduleId, entityId, loading_vocal_answer);
+
 
             this.waitingForAudiocontent = true;
             this.chatService.speechText(sr, chatModelCode).subscribe(
                 {
                     next: (value) => {
                         this.currentAudioTrack = value;
-                        this.messageService.addMessage(moduleId, entityId,  loading_vocal_answer_received);
-                        
+                        this.messageService.addMessage(moduleId, entityId, loading_vocal_answer_received);
+
                     },
                     error: (err) => {
                         this.waitingForAudiocontent = false;
@@ -841,8 +822,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatModelCode = this.capabilities?.configurationCode;
         }
         if (chatModelCode) {
-            this.messageService.addMessage(moduleId, entityId,  your_speech_is_uploading);
-            
+            this.messageService.addMessage(moduleId, entityId, your_speech_is_uploading);
+
 
             const url: string = this.basePath + "/api/users/GeboDirectModelChatController/transcriptText";
             console.log("sending directly to model code:" + chatModelCode);

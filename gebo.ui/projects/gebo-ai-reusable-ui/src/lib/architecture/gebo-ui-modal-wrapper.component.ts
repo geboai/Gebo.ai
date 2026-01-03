@@ -25,6 +25,7 @@ import { GeboUIOutputForwardingService } from "./gebo-ui-output-forwarding.servi
 
 import { MenuItem } from "primeng/api";
 import { WizardButtonsBarData } from "../controls/base-entity-editing-component/entities-modification-wizard";
+import { GeboAIRootNotificationService } from "../notifications/root-notification.service";
 
 @Component({
     selector: "gebo-ui-modal-wrapper",
@@ -76,7 +77,12 @@ export class GeboUIModalOpenerWrapperComponent implements OnChanges, OnInit, Aft
     /**
      * Constructor initializes the action routing and output forwarding services
      */
-    public constructor(private actionRouting: GeboUIActionRoutingService, public outForwardingService: GeboUIOutputForwardingService) { }
+    public constructor(
+        private actionRouting: GeboUIActionRoutingService, 
+        public outForwardingService: GeboUIOutputForwardingService,
+        private notificationService:GeboAIRootNotificationService) {
+
+         }
     
     /**
      * Cleanup method called when component is destroyed
@@ -183,7 +189,7 @@ export class GeboUIModalOpenerWrapperComponent implements OnChanges, OnInit, Aft
      * Lifecycle hook called after the view has been initialized
      */
     ngAfterViewInit(): void {
-
+        this.notificationService.layersComputing();
     }
     
     /**
