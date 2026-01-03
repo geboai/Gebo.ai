@@ -4,7 +4,8 @@ import { GUserMessage, SecretInfo, SecretsControllerService } from "@Gebo.ai/geb
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { Observable, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
-
+import { ToastMessageOptions } from "primeng/api";
+const credentialCreatedOk:ToastMessageOptions={id:"APIKEY_CREATED_OK",severity:"success",detail:"Credentials successfully created",summary:"Credentials created"};
 interface ApiKeyInternalFG {
     requireApiKeyAniway?: boolean,
     newSecretDescription?: string,
@@ -176,6 +177,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                                 this.secretId = secret?.code;
                                 if (this.onChange)
                                     this.onChange(this.secretId);
+                                this.messages=[credentialCreatedOk as GUserMessage];
                             } else {
                                 this.messages = value.messages;
                                 this.deleting = true;

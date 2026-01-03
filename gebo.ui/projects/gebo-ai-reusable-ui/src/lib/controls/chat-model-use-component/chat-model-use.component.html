@@ -1,0 +1,9 @@
+
+    <div class="flex flex-wrap gap-4" [formGroup]="formGroup">
+        @for (item of options; track item) {
+            <div class="flex items-center gap-2">
+                <p-checkbox [formControlName]="item.code" [binary]="true" [inputId]="item.code" [trueValue]="true" [falseValue]="false"  />
+                <label > {{ item.description }} </label>
+            </div>
+        }
+    </div>

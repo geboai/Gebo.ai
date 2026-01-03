@@ -72,7 +72,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                     this.vendorSetupMetaInfos = this.autoSettingsConfigurations?.find(x => x.parentModel.vendorId === vendorId);
                     this.secretDescription = vendorId ? vendorId + " credentials" : "credentials";
                     this.secretContext = this.vendorSetupMetaInfos?.parentModel?.apiKeySecretContext;
-                    const secrets: SecretInfo[] = [];
+                    
                     if (this.vendorSetupMetaInfos) {
                         const presets: PresetSummary[] = [];
                         const chatModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "CHAT");
@@ -118,16 +118,8 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                         }
                         this.presetsSummary = presets;
                     }
-                    if (this.vendorSetupMetaInfos?.runtimeConfigs) {
-                        this.vendorSetupMetaInfos.runtimeConfigs.forEach(x => {
-                            if (x.secretInfo) {
-                                if (!secrets.find(y => y.code === x.secretInfo?.code)) {
-                                    secrets.push(x.secretInfo);
-                                }
-                            }
-                        });
-
-                    }
+                    
+                    
                 }
                 if (this.vendorId)
                     this.formGroup.controls["secretId"].enable();
@@ -154,7 +146,11 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                         }
                     });
                 }
+                if (!defaultVendorId) {
+                    defaultVendorId=this.autoSettingsConfigurations.length?this.autoSettingsConfigurations[0].parentModel.vendorId:undefined;
             }
+            }
+            
             this.formGroup.controls["vendorId"].setValue(defaultVendorId);
         }
     }

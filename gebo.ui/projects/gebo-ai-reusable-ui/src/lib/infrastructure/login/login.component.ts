@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
   /**
    * Collection of toast messages to display to the user
    */
-  userMessages: ToastMessageOptions[] = [welcomeMessage];
+  userMessages: ToastMessageOptions[] = [];
   private subscription?: Subscription;
   providers: Oauth2ClientAuthorizativeInfo[] = [];
 
@@ -119,8 +119,7 @@ export class LoginComponent implements OnInit {
       this.subscription.unsubscribe();
       this.subscription = undefined;
     }
-    this.userMessages = [welcomeMessage];
-
+    //this.userMessages = [welcomeMessage];
     this.loginService.loginActivated.next(true);
   }
 

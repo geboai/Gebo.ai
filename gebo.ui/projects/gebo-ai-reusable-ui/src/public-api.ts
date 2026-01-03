@@ -99,3 +99,4 @@ export * from "./lib/controls/api-key-component/api-key.module";
 export * from "./lib/notifications/notifications.module";
 export * from "./lib/notifications/root-notification.service";
 export * from "./lib/notifications/notification-layer";
+export * from "./lib/controls/chat-model-use-component/chat-model-use.module";
