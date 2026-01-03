@@ -189,7 +189,7 @@ class GeboIngestionManager {
 	 * @throws GeboPersistenceException If an error occurs while retrieving the
 	 *                                  endpoint
 	 */
-	public GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GObjectRef<GProjectEndpoint> endpoint,
+	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GObjectRef<GProjectEndpoint> endpoint,
 			String workflowType, String workflowId) throws GeboPersistenceException {
 		GProjectEndpoint ep = persistentObjectManager.findByReference(endpoint, GProjectEndpoint.class);
 		return internalCreateContentsExtractionAndVectorizationStatus(ep, workflowType, workflowId);

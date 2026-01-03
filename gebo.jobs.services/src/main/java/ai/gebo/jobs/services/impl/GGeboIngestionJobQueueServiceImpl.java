@@ -42,6 +42,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.base.GObjectRef;
+import lombok.AllArgsConstructor;
 
 /**
  * Implementation of the Gebo Ingestion Job Queue Service. This service manages
@@ -50,38 +51,25 @@ import ai.gebo.model.base.GObjectRef;
  */
 @Component()
 @Scope("singleton")
+@AllArgsConstructor
 public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueueService {
 	/** The ingestion manager responsible for handling ingestion tasks */
-	@Autowired
-	GeboIngestionManager ingestionManager;
-
+	private final GeboIngestionManager ingestionManager;
 	/** Map to track the status of jobs by their code */
-	Map<String, GJobStatus> statusMap = new HashMap<String, GJobStatus>();
-
+	private final Map<String, GJobStatus> statusMap = new HashMap<String, GJobStatus>();
 	/** Service for handling ingestion job operations */
-	@Autowired
-	IGGeboIngestionJobService readingService;
-
+	private final IGGeboIngestionJobService readingService;
 	/** Repository for persisting job status information */
-	@Autowired
-	JobStatusRepository statusRepository;
-
+	private final JobStatusRepository statusRepository;
 	/** Repository for content batch processing data */
-	@Autowired
-	ContentsBatchProcessedRepository contentsBatchRepo;
-	@Autowired
-	IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
-
+	private final ContentsBatchProcessedRepository contentsBatchRepo;
+	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
+	private final JobStatusEmitter statusEmitter;
+	
 	private final static long STATS_TIME_SLOT = 1000 * 60;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
-	/**
-	 * Default constructor
-	 */
-	public GGeboIngestionJobQueueServiceImpl() {
-
-	}
-
+	
 	/**
 	 * Creates a new asynchronous ingestion job for the specified endpoint
 	 * 
@@ -98,7 +86,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		try {
 			status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
 					workflowId);
-
+			statusEmitter.broadcastStarted(status);
 			synchronized (statusMap) {
 				statusMap.put(status.getCode(), status);
 				readingService.completeAsyncJob(status);
@@ -136,6 +124,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		try {
 			GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item,
 					workflowType, workflowId);
+			statusEmitter.broadcastStarted(status);
 			return ingestionManager.internalReadAndVectorizeContents(status);
 		} catch (GeboPersistenceException e) {
 			throw new GeboJobServiceException("Exception on persistence access", e);
@@ -201,6 +190,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			throw new GeboJobServiceException("Already running sync on " + endpoint.getCode());
 		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
 				workflowType, workflowId);
+		statusEmitter.broadcastStarted(status);
 		synchronized (statusMap) {
 			statusMap.put(status.getCode(), status);
 		}

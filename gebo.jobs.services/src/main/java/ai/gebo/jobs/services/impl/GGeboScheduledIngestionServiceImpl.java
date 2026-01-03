@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -28,9 +25,14 @@ import org.springframework.data.domain.Example;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.multithreading.IGRunnableFactory;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.scheduling.services.IGSchedulingTimeService;
 import ai.gebo.config.GeboConfig;
@@ -47,9 +49,10 @@ import ai.gebo.model.base.GObjectRef;
 /**
  * AI generated comments
  * 
- * Implementation of the IGGeboScheduledSyncronizationService interface that handles
- * scheduled ingestion tasks. This singleton component manages scheduling of content reading
- * and vectorization for project endpoints, and maintains job statuses in the system.
+ * Implementation of the IGGeboScheduledSyncronizationService interface that
+ * handles scheduled ingestion tasks. This singleton component manages
+ * scheduling of content reading and vectorization for project endpoints, and
+ * maintains job statuses in the system.
  */
 @Component
 @Scope("singleton")
@@ -69,10 +72,14 @@ public class GGeboScheduledIngestionServiceImpl
 	UserMessageRepository userMessageRepository;
 	@Autowired
 	IGSchedulingTimeService publicationSchedulingService;
+	@Autowired
+	JobStatusEmitter statusEmitter;
+	@Autowired
+	IWorkflowStatusHandlerRepositoryPattern workflowStatusRepoPattern;
 
 	/**
-	 * Factory class for creating runnable tasks for endpoint processing.
-	 * Implements IGRunnableFactory interface to provide custom runnable instances.
+	 * Factory class for creating runnable tasks for endpoint processing. Implements
+	 * IGRunnableFactory interface to provide custom runnable instances.
 	 */
 	class RunnableFactory implements IGRunnableFactory {
 		final GObjectRef<GProjectEndpoint> endpont;
@@ -105,9 +112,9 @@ public class GGeboScheduledIngestionServiceImpl
 	}
 
 	/**
-	 * Schedules updates for all project endpoints.
-	 * On first run, it clears any pending jobs from previous executions.
-	 * Then processes all project endpoints and manages their publication scheduling.
+	 * Schedules updates for all project endpoints. On first run, it clears any
+	 * pending jobs from previous executions. Then processes all project endpoints
+	 * and manages their publication scheduling.
 	 */
 	@Override
 	public void scheduleUpdates() {
@@ -155,8 +162,9 @@ public class GGeboScheduledIngestionServiceImpl
 	}
 
 	/**
-	 * Marks all jobs that were previously in a "processing" state as no longer processing.
-	 * This is executed only in non-clustered mode to prevent orphaned job statuses.
+	 * Marks all jobs that were previously in a "processing" state as no longer
+	 * processing. This is executed only in non-clustered mode to prevent orphaned
+	 * job statuses.
 	 */
 	private void clearOpened() {
 		try {
@@ -180,13 +188,51 @@ public class GGeboScheduledIngestionServiceImpl
 	}
 
 	/**
-	 * Handles the Spring context refreshed event by scheduling updates.
-	 * This ensures that job scheduling begins when the application context is fully initialized.
+	 * Handles the Spring context refreshed event by scheduling updates. This
+	 * ensures that job scheduling begins when the application context is fully
+	 * initialized.
 	 * 
 	 * @param event The context refreshed event
 	 */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		this.scheduleUpdates();
+	}
+
+	public static final int CHECK_JOB_STATUS_PERIOD = 1000 * 60 * 2;
+	public static final int EXECUTION_TIMEOUT = 1000 * 60 * 120;
+
+	@Scheduled(fixedDelay = 10000, fixedRate = CHECK_JOB_STATUS_PERIOD)
+	public void checkJobsStatus() {
+		Stream<GJobStatusItem> processingStream = jobStatusRepository.findByProcessingTrue();
+		processingStream.forEach(status -> {
+			long now = System.currentTimeMillis();
+			if (status.getStartDateTime() != null
+					&& (status.getStartDateTime().getTime() + CHECK_JOB_STATUS_PERIOD) > now) {
+				GWorkflowType wType = GWorkflowType.STANDARD;
+				try {
+					wType = GWorkflowType.valueOf(status.getWorkflowType());
+				} catch (Throwable t) {
+				}
+				List<IWorkflowStatusHandler> handlers = workflowStatusRepoPattern
+						.findByWorkflowsTypeAndWorkflowId(wType, status.getWorkflowId());
+				if (!handlers.isEmpty()) {
+					ComputedWorkflowResult measures = handlers.get(0).computeWorkflowStatus(status.getCode(),
+							status.getWorkflowType(), status.getWorkflowId());
+					if (measures.isFinished() || (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) > now) {
+						try {
+							GJobStatus writablestatus = persistenceManager.findById(GJobStatus.class, status.getCode());
+							writablestatus.setProcessing(false);
+							writablestatus.setFinished(true);
+							writablestatus.setEndDateTime(new Date());
+							persistenceManager.update(writablestatus);
+							statusEmitter.broadcastEnded(writablestatus);
+						} catch (GeboPersistenceException e) {
+							LOGGER.error("Erro accessing persistence", e);
+						}
+					}
+				}
+			}
+		});
 	}
 }
