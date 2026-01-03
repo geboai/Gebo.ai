@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Seadista Deep search",
         "description" : "Määra Deep search parameetrid"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automaatne laiendatud genereerimise parameetrite häälestamine"
+      },
+      "Description" : {
+        "label" : "Kirjeldus"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Viimase häälestuse uuendus"
+      },
+      "Code" : {
+        "label" : "Embedimise mudeli/vektorpanga kood"
+      },
+      "ComputedThreashold" : {
+        "label" : "Arvutatud lävi"
+      },
+      "Autotuned" : {
+        "label" : "Automaatselt häälestatud"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai kohustuslikud seadistamise sammud tehtud...",
+        "detail" : "Kohustuslikud seadistamise sammud on lõpetatud, kuid mõned puuduvad etapid takistavad teie organisatsioonil sellest tarkvarast maksimaalset kasu saada"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai seadistamisel puudub mõni kohustuslik samm",
+        "detail" : "Palun vaadake üle punasega tähistatud etapid seadistamise protsessis"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Seadista Gebo.ai LLM pakkujate ligipääs"
+      },
+      "ExtensiveStup" : {
+        "label" : "Laiendatud infrastruktuuri/tarnijate valikud"
+      },
+      "MainPanelTitle" : {
+        "label" : "Kasutatavate suurte keelemudelite seadistamine"
+      },
+      "EasySetup" : {
+        "label" : "Lihtne algne seadistus/konfiguratsiooni parandus"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Suurte keelemudelite seadistamine"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugteenuse pakkuja OK",
+        "detail" : "Teenusepakkuja töötab ja on edukalt seadistatud"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: https://api.openai.com/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "seadista see vaikimisi embedding mudeliks",
         "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugteenuse pakkuja OK",
+        "detail" : "Teenusepakkuja töötab ja on edukalt seadistatud"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama kohaliku (või võrgus) vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "luba kõik funktsioonikutsed",
         "help" : "Luba kõik saadaolevad tööriistad ja funktsioonikutsed; kui pole määratud, saab neid hiljem llms-i halduspaneelis lubada"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Tõrge toimingul: Anthropic api ei saa töötada ilma vajaliku api võtmeta",
+        "detail" : "Serveri viga: Anthropic api ei saa töötada ilma vajaliku api võtmeta"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Loo ja aktiveeri"
+      },
+      "vendorId" : {
+        "label" : "Vali oma suurte keelemudelite pakkuja",
+        "help" : "Vali algne pakkuja vaikimisi vestlus- ja embedding-mudelitele"
+      },
+      "secretId" : {
+        "label" : "Vali teenusepakkuja mandaadid (api võti)",
+        "help" : "Vali üks olemasolevatest mandaatidest valitud llm pakkujale"
+      },
+      "InternalServiceModel" : {
+        "label" : "Sisemiste teenuste vestlusmudel",
+        "help" : "Sisemiste teenuste jaoks seadistatud vestlusmudel on vastutav info väljavõtmise, kokkuvõtete tegemise ning sisemiste töövoogude täitmise eest."
+      },
+      "ChatModel" : {
+        "label" : "Vaikimisi vestlusmudel",
+        "help" : "Vaikimisi vestlusmudel vastab kasutajate küsimustele ja täidab töövooge, millele ei ole spetsiaalselt määratud mudeleid. See peab olema võimas ja usaldusväärne, hea tasakaaluga hinna, jõudluse ja tulemuse kvaliteedi vahel."
+      },
+      "ProviderBuy" : {
+        "label" : "Osta Apy võtme krediiti link"
+      },
+      "ProviderWWW" : {
+        "label" : "Veebisaidi link"
+      },
+      "WebSiteLink" : {
+        "label" : "Teenusepakkuja veebisait",
+        "help" : "Klõpsa siin, et näha teenusepakkuja üldinfot."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Osta teenusepakkuja krediiti",
+        "help" : "Klõpsa siia, et osta krediiti oma api võtme(te) jaoks."
+      },
+      "EmbeddingModel" : {
+        "label" : "Vaikimisi embedding-mudel",
+        "help" : "See mudel tegeleb teie andmete ja dokumentide semantilise indekseerimise (embedding) ja leidmisega"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Viga vestluse voogedastamisel",
         "detail" : "Serveri tõrge: 400 Bad Request POST-i korral http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: http://localhost:8000/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Viga vestluse vastuse voogedastamisel",
+        "detail" : "Serveri viga: Ühendus lähtestatud"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: https://api.openai.com/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Tõrge toimingul: Anthropic api ei saa töötada ilma vajaliku api võtmeta",
+        "detail" : "Serveri viga: Anthropic api ei saa töötada ilma vajaliku api võtmeta"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Süsteemi analüüsitud otsingutulemus:"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vali vähemalt üks järgmistest valikutest"
+      },
+      "LaunchBtn" : {
+        "label" : "Käivita otsing"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Jäta süvaotsing vahele"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valitud teadmistebaasid"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valitud süsteemid"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vali allikad"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Otsingu sarnasuse lävi",
         "help" : "Semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Kasuta või loo api võtme mandaadid"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api võti/mandaadid",
+        "help" : "Vali api võti või mandaadid selle teenusepakkuja jaoks"
+      },
+      "NewApiKey" : {
+        "label" : "Uus api võti",
+        "help" : "Sisesta uus api võti selle teenusepakkuja jaoks"
+      },
+      "PiSave" : {
+        "label" : "Salvesta"
+      },
+      "NewUserName" : {
+        "label" : "Kasutajanimi",
+        "help" : "Teenusepakkuja teenustele ligipääsemiseks kasutatav nimi"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Kasuta olemasolevat või uut",
+        "help" : "Kasuta olemasolevaid või loo uusi mandaate selle teenusepakkuja jaoks"
+      },
+      "newSecretDescription" : {
+        "label" : "Mandaatide kirjeldus",
+        "help" : "Api võtme mandaadi kirjeldus"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Mandaadid loodud",
+        "detail" : "Mandaadid loodi edukalt"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Vestlus kasutajatega"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Siseteenusteks kasutatav mudel"
       }
     }
   }

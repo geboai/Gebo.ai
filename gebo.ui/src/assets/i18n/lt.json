@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfigūruokite Deep paiešką",
         "description" : "Nustatykite Deep paieškos parametrus"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autoderinimas",
+        "description" : "Automatinis praturtintos generacijos parametrų derinimas"
+      },
+      "Description" : {
+        "label" : "Aprašymas"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Paskutinis derinimo atnaujinimas"
+      },
+      "Code" : {
+        "label" : "Įterpimo modelio/vektorių saugyklos kodas"
+      },
+      "ComputedThreashold" : {
+        "label" : "Apskaičiuota riba"
+      },
+      "Autotuned" : {
+        "label" : "Automatiškai suderinta"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai sąranka privalomi žingsniai atlikti...",
+        "detail" : "Privalomi sąrankos žingsniai atlikti, tačiau kai kurie trūkstami žingsniai neleidžia jūsų organizacijai maksimaliai išnaudoti šią programinę įrangą"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai sąrankoje trūksta kai kurių privalomų žingsnių",
+        "detail" : "Peržiūrėkite raudonus sąrankos proceso žingsnius"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Nustatykite Gebo.ai llms teikėjų prieigą"
+      },
+      "ExtensiveStup" : {
+        "label" : "Išplėstiniai infrastruktūros/tiekėjų pasirinkimai"
+      },
+      "MainPanelTitle" : {
+        "label" : "Konfigūruoti naudojamus didžiuosius kalbos modelius"
+      },
+      "EasySetup" : {
+        "label" : "Lengva pradinė sąranka/konfigūravimo pataisa"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Konfigūruoti didžiuosius kalbos modelius"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modelio prieigos nustatymai"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI nuotolinis tiekėjas veikia gerai",
+        "detail" : "Tiekėjas veikia ir yra sėkmingai sukonfigūruotas"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Klaida operacijos metu: Klaida dirbant su url: https://api.openai.com/v1/models",
+        "detail" : "Serverio klaida: Klaida dirbant su url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "nustatyti kaip numatytąjį embedding modelį",
         "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI nuotolinis tiekėjas veikia gerai",
+        "detail" : "Tiekėjas veikia ir yra sėkmingai sukonfigūruotas"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama vietinio (arba LAN) pokalbio modelio konfigūracijos redagavimas"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic pokalbio modelio konfigūracijos redagavimas"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI pokalbio modelio konfigūracijos redagavimas"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI pokalbio modelio konfigūracijos redagavimas"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modelio prieigos nustatymai"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modelio prieigos nustatymai"
+      },
+      "forUses" : {
+        "label" : "Modelio panaudojimas (-ai)",
+        "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
+        "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "įjungti visas funkcijas",
         "help" : "Įjungia visus galimus įrankius ir funkcijų iškvietimus. Jei nepažymėta, juos bus galima įjungti vėliau llms administravimo skydelyje"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Klaida operacijos metu: Anthropic api negali veikti be būtinos api rakto konfigūracijos",
+        "detail" : "Serverio klaida: Anthropic api negali veikti be būtinos api rakto konfigūracijos"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Sukurti ir aktyvuoti"
+      },
+      "vendorId" : {
+        "label" : "Pasirinkite savo didžiųjų kalbos modelių tiekėją",
+        "help" : "Pasirinkite pradinį tiekėją savo numatytiesiems pokalbio ir įterpimo modeliams"
+      },
+      "secretId" : {
+        "label" : "Pasirinkite tiekėjo prisijungimus (api raktą)",
+        "help" : "Pasirinkite vieną iš esamų prisijungimų pasirinktam llm tiekėjui"
+      },
+      "InternalServiceModel" : {
+        "label" : "Vidinių paslaugų pokalbio modelis",
+        "help" : "Vidinių paslaugų konfigūruotas pokalbio modelis bus atsakingas už informacijos išgavimą, santraukų sudarymą ir vidinių darbo srautų vykdymą."
+      },
+      "ChatModel" : {
+        "label" : "Numatytasis pokalbio modelis",
+        "help" : "Numatytasis pokalbio modelis bus atsakingas už atsakymus į naudotojų klausimus ir darbo srautų vykdymą, kuriems nėra specialiai konfigūruotų modelių. Jis turi būti galingas ir patikimas, užtikrinant gerą kainos, našumo ir rezultatų kokybės balansą."
+      },
+      "ProviderBuy" : {
+        "label" : "Pirkti Apy raktų kreditą (nuoroda)"
+      },
+      "ProviderWWW" : {
+        "label" : "Svetainės nuoroda"
+      },
+      "WebSiteLink" : {
+        "label" : "Tiekėjo svetainė",
+        "help" : "Spauskite čia dėl bendros tiekėjo informacijos."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Įsigyti tiekėjo kreditą",
+        "help" : "Spauskite čia norėdami įsigyti kreditą savo api raktui (-ams)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Numatytasis įterpimo modelis",
+        "help" : "Šis modelis bus atsakingas už semantinį indeksavimą (įterpimą) ir jūsų duomenų bei dokumentų gavimą"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Klaida transliuojant pokalbio atsakymą",
         "detail" : "Serverio klaida: 400 Bloga užklausa iš POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Klaida operacijos metu: Klaida dirbant su url: http://localhost:8000/v1/models",
+        "detail" : "Serverio klaida: Klaida dirbant su url: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Klaida srautuojant pokalbio atsakymą",
+        "detail" : "Serverio klaida: Prisijungimas atjungtas"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Klaida operacijos metu: Klaida dirbant su url: https://api.openai.com/v1/models",
+        "detail" : "Serverio klaida: Klaida dirbant su url: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Klaida operacijos metu: Anthropic api negali veikti be būtinos api rakto konfigūracijos",
+        "detail" : "Serverio klaida: Anthropic api negali veikti be būtinos api rakto konfigūracijos"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analizuotas sistemos paieškos rezultatas dėl"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pasirinkite bent vieną iš šių parinkčių"
+      },
+      "LaunchBtn" : {
+        "label" : "Vykdyti paiešką"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Praleisti išplėstinę paiešką"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Pasirinktos žinių bazės"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Pasirinktos sistemos"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pasirinkti šaltinius"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Paieškos panašumo slenkstis",
         "help" : "Semantinio panašumo slenkstis (nuo 0.5 iki 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Naudoti arba sukurti api raktų prisijungimus"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api raktas/prisijungimai",
+        "help" : "Pasirinkite api raktą arba prisijungimus šiam tiekėjui"
+      },
+      "NewApiKey" : {
+        "label" : "Naujas api raktas",
+        "help" : "Įveskite naują api raktą naudoti su šiuo tiekėju"
+      },
+      "PiSave" : {
+        "label" : "Išsaugoti"
+      },
+      "NewUserName" : {
+        "label" : "Naudotojo vardas",
+        "help" : "Naudotojo vardas, naudojamas prisijungti prie tiekėjo paslaugų"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Naudoti esamus arba naujus",
+        "help" : "Naudokite esamus arba sukurkite naujus prisijungimus šiam tiekėjui"
+      },
+      "newSecretDescription" : {
+        "label" : "Prisijungimų aprašymas",
+        "help" : "Api rakto prisijungimų aprašymas"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Prisijungimai sukurti",
+        "detail" : "Prisijungimai sėkmingai sukurti"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Pokalbis su naudotojais"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modelis naudojamas vidinėms paslaugoms"
       }
     }
   }

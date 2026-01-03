@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search を設定",
         "description" : "Deep search パラメーターを設定してください"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g.自動チューニング",
+        "description" : "自動リトリーブ拡張生成パラメータのチューニング"
+      },
+      "Description" : {
+        "label" : "説明"
+      },
+      "LastAutotunedDate" : {
+        "label" : "最終チューニング更新日"
+      },
+      "Code" : {
+        "label" : "埋め込みモデル／ベクトルストア コード"
+      },
+      "ComputedThreashold" : {
+        "label" : "計算済みしきい値"
+      },
+      "Autotuned" : {
+        "label" : "自動チューニング済み"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai の必須セットアップステップが完了しました...",
+        "detail" : "必須セットアップは完了しましたが、いくつかの不足しているステップによって本ソフトウェアの最大限の体験ができません"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai の必須セットアップステップが一部未完了です",
+        "detail" : "セットアッププロセスの赤いステップを確認してください"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llmsプロバイダーアクセスの設定"
+      },
+      "ExtensiveStup" : {
+        "label" : "拡張インフラ／プロバイダー選択"
+      },
+      "MainPanelTitle" : {
+        "label" : "使用する大規模言語モデルの設定"
+      },
+      "EasySetup" : {
+        "label" : "簡単初期設定／構成の修正"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "大規模言語モデルの設定"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "モデルアクセス設定"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AIリモートプロバイダーOK",
+        "detail" : "プロバイダーは稼働中で正常に設定されています"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "操作中に例外発生:Error working with url:https://api.openai.com/v1/models",
+        "detail" : "サーバーエラー: Error working with url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "これをデフォルト埋め込みモデルに設定",
         "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AIリモートプロバイダーOK",
+        "detail" : "プロバイダーは稼働中で正常に設定されています"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollamaローカル（またはLAN）サーバーチャットモデル設定の編集"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropicチャットモデル設定の編集"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAIチャットモデル設定の編集"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AIチャットモデル設定の編集"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "モデルアクセス設定"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "モデルアクセス設定"
+      },
+      "forUses" : {
+        "label" : "モデル用途",
+        "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
+        "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "すべての機能呼び出しを有効化",
         "help" : "すべての利用可能なツールや機能呼び出しを有効化します。設定しない場合は、後でLLMS管理パネルで有効化できます"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "操作中に例外発生:Anthropic api cannot work without needed api key configuration",
+        "detail" : "サーバーエラー: Anthropic api cannot work without needed api key configuration"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "作成して有効化"
+      },
+      "vendorId" : {
+        "label" : "大規模言語モデルのベンダーを選択",
+        "help" : "デフォルトのチャット・埋め込みモデル用の初期ベンダーを選択してください"
+      },
+      "secretId" : {
+        "label" : "プロバイダー認証情報（APIキー）を選択",
+        "help" : "選択したLLMプロバイダーの既存認証情報のいずれかを選択してください"
+      },
+      "InternalServiceModel" : {
+        "label" : "内部サービスチャットモデル",
+        "help" : "内部サービス用に設定されたチャットモデルは情報抽出、要約、内部ワークフローの実行を担います。"
+      },
+      "ChatModel" : {
+        "label" : "デフォルトのチャットモデル",
+        "help" : "デフォルトのチャットモデルは、ユーザーの質問への回答や、特定に設定されていないワークフローの実行を担当します。費用、性能、品質のバランスが重要です。"
+      },
+      "ProviderBuy" : {
+        "label" : "APIキーのクレジット購入リンク"
+      },
+      "ProviderWWW" : {
+        "label" : "ウェブサイトリンク"
+      },
+      "WebSiteLink" : {
+        "label" : "プロバイダーのウェブサイト",
+        "help" : "一般的なプロバイダー情報はこちらをクリック。"
+      },
+      "AcquireCreditLink" : {
+        "label" : "プロバイダーのクレジットを購入",
+        "help" : "APIキー用のクレジットを購入するにはこちらをクリック。"
+      },
+      "EmbeddingModel" : {
+        "label" : "デフォルトの埋め込みモデル",
+        "help" : "このモデルはデータ・ドキュメントのセマンティックインデックス化（埋め込み）および検索を担当します"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "チャット応答のストリーミング中にエラー",
         "detail" : "サーバーエラー: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "操作中に例外発生:Error working with url:http://localhost:8000/v1/models",
+        "detail" : "サーバーエラー: Error working with url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "チャット応答ストリーム中にエラーが発生しました",
+        "detail" : "サーバーエラー: 接続リセット"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "操作中に例外発生:Error working with url:https://api.openai.com/v1/models",
+        "detail" : "サーバーエラー: Error working with url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "操作中に例外発生:Anthropic api cannot work without needed api key configuration",
+        "detail" : "サーバーエラー: Anthropic api cannot work without needed api key configuration"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "のための分析済みシステム検索結果"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "次のいずれかを最低一つ選択してください"
+      },
+      "LaunchBtn" : {
+        "label" : "検索を実行"
+      },
+      "SkipDeepSearch" : {
+        "label" : "詳細検索をスキップ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "選択されたナレッジベース"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "選択されたシステム"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ソースを選択"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "検索類似度しきい値",
         "help" : "セマンティック類似度しきい値 (0.5 ～ 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "APIキー認証情報の利用または作成"
+      },
+      "ExistingApiKey" : {
+        "label" : "APIキー／認証情報",
+        "help" : "このプロバイダー用のAPIキーまたは認証情報を選択してください"
+      },
+      "NewApiKey" : {
+        "label" : "新しいAPIキー",
+        "help" : "このプロバイダーで使う新しいAPIキーを入力してください"
+      },
+      "PiSave" : {
+        "label" : "保存"
+      },
+      "NewUserName" : {
+        "label" : "ユーザー名",
+        "help" : "プロバイダーサービスへアクセスするためのユーザー名"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "既存または新規を利用",
+        "help" : "このプロバイダー用に既存または新規認証情報を利用してください"
+      },
+      "newSecretDescription" : {
+        "label" : "認証情報の説明",
+        "help" : "APIキー認証情報の説明"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "認証情報を作成しました",
+        "detail" : "認証情報の作成に成功しました"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ユーザーとチャット"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "内部サービス用モデル"
       }
     }
   }

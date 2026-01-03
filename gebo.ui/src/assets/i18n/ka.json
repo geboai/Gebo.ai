@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "დააკონფიგურირეთ Deep search",
         "description" : "დააკონფიგურირეთ Deep search-ის პარამეტრები"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ავტომატური გამართვა",
+        "description" : "ავტომატური მიღების გაფართოებული გენერაციის პარამეტრების გამართვა"
+      },
+      "Description" : {
+        "label" : "აღწერა"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ბოლო განახლების დრო"
+      },
+      "Code" : {
+        "label" : "დაშლა მოდელის/ვექტორული საცავის კოდი"
+      },
+      "ComputedThreashold" : {
+        "label" : "გამოთვლილი ზღვარი"
+      },
+      "Autotuned" : {
+        "label" : "ავტომატურად გამართული"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai-ის საწყისი პარამეტრები დასრულებულია...",
+        "detail" : "სავალდებულო პარამეტრები დასრულებულია, მაგრამ დარჩენილი ნაბიჯები ხელს უშლის თქვენს ორგანიზაციას გამოიყენოს პროგრამა სრულად"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai-ის პარამეტრი მიუთითებს, რომ სავალდებულო ნაბიჯი აკლია",
+        "detail" : "დაუბრუნდით პარამეტრების პროცესის წითელ ნაფერებს"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms მომწოდებლებზე წვდომის დაყენება"
+      },
+      "ExtensiveStup" : {
+        "label" : "გაფართოებული ინფრასტრუქტურის/მომწოდებლის არჩევანი"
+      },
+      "MainPanelTitle" : {
+        "label" : "დაყენება გამოყენებული დიდი ენის მოდელების"
+      },
+      "EasySetup" : {
+        "label" : "მარტივი საწყისი დაკავშირება/კონფიგურაციის გამოსწორება"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "გააწყეთ დიდი ენის მოდელები"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI დისტანციური მომწოდებელი მზადაა",
+        "detail" : "მომწოდებელი მუშაობს და წარმატებით დაკონფიგურირებულია"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ოპერაციის გამონაკლისი: Error working with url:https://api.openai.com/v1/models",
+        "detail" : "სერვერის შეცდომა: Error working with url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
         "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI დისტანციური მომწოდებელი მზადაა",
+        "detail" : "მომწოდებელი მუშაობს და წარმატებით დაკონფიგურირებულია"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama ლოკალური (ან LAN) სერვერის ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "forUses" : {
+        "label" : "მოდელის გამოყენება(ები)",
+        "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
+        "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "ყველა ფუნქციის ჩართვა",
         "help" : "ჩართეთ ყველა ხელმისაწვდომი ინსტრუმენტი და ფუნქცია, თუ არ არის მონიშნული, მათი ჩართვა შესაძლებელია მოგვიანებით llms ადმინისტრატორის პანელში"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ოპერაციის გამონაკლისი: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე",
+        "detail" : "სერვერის შეცდომა: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "შექმნა და აქტივაცია"
+      },
+      "vendorId" : {
+        "label" : "აირჩიეთ თქვენი დიდი ენის მოდელის მომწოდებელი",
+        "help" : "აირჩიეთ საწყისი მომწოდებელი თქვენი ნაგულისხმევი ჩატისა და ემბედინგის მოდელებისთვის"
+      },
+      "secretId" : {
+        "label" : "აირჩიეთ მომწოდებლის ავტორიზაცია (api key)",
+        "help" : "აირჩიეთ უკვე არსებული ავტორიზაცია არჩეული llm მომწოდებლისთვის"
+      },
+      "InternalServiceModel" : {
+        "label" : "შიდა სერვისების ჩატის მოდელი",
+        "help" : "შიდა სერვისებისთვის კონფიგურირებული ჩატის მოდელი პასუხისმგებელია ინფორმაციის ამოსაღებად, შეჯამებისთვის და შიდა სამუშაოების შესრულებაზე."
+      },
+      "ChatModel" : {
+        "label" : "ნაგულისხმევი ჩატის მოდელი",
+        "help" : "ნაგულისხმევი ჩატის მოდელი პასუხობს მომხმარებლის კითხვებზე და ასრულებს სამუშაოებს, რომლისთვისაც არ არის სპეციალურად კონფიგურირებული მოდელი. ეს უნდა იყოს ძლიერი და სანდო, კარგი ბალანსით ღირებულებასა და ხარისხს შორის."
+      },
+      "ProviderBuy" : {
+        "label" : "შეიძინეთ Api key საკრედიტო ლინკი"
+      },
+      "ProviderWWW" : {
+        "label" : "ვებგვერდის ბმული"
+      },
+      "WebSiteLink" : {
+        "label" : "მომწოდებლის ვებგვერდი",
+        "help" : "დააკლიკეთ აქ საერთო ინფორმაციისთვის."
+      },
+      "AcquireCreditLink" : {
+        "label" : "მომწოდებლის საკრედიტო შესყიდვა",
+        "help" : "დააკლიკეთ აქ, რომ შეიძინოთ ანგარიში თქვენი api key-სთვის."
+      },
+      "EmbeddingModel" : {
+        "label" : "ნაგულისხმევი embedding მოდელი",
+        "help" : "ეს მოდელი პასუხისმგებელია თქვენს მონაცემებზე და დოკუმენტებზე სემანტიკური ინდექსაციის (embedding) და მოძიებისთვის"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "ჩატში ნაკადის გამოხმაურების შეცდომა",
         "detail" : "სერვერის შეცდომა: 400 Bad Request POST მოთხოვნისგან http://localhost:8000/v1/chat/completions-დან"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ოპერაციის გამონაკლისი: Error working with url:http://localhost:8000/v1/models",
+        "detail" : "სერვერის შეცდომა: Error working with url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "შეცდომა ჩატის სტრიმინგისას პასუხის მიღებისას",
+        "detail" : "სერვერის შეცდომა: კავშირი გაწყვეტილია"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ოპერაციის გამონაკლისი: Error working with url:https://api.openai.com/v1/models",
+        "detail" : "სერვერის შეცდომა: Error working with url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ოპერაციის გამონაკლისი: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე",
+        "detail" : "სერვერის შეცდომა: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "ანალიზირებული სისტემის საძიებო შედეგი მისთვის"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "აირჩიეთ მინიმუმ ერთი ჩამოთვლილთაგან"
+      },
+      "LaunchBtn" : {
+        "label" : "მოძებნეთ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "დაახვიეთ სიღრმისეული ძიება"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "არჩეული ცოდნის ბაზები"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "არჩეული სისტემები"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "აირჩიეთ წყაროები"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "ძებნის მსგავსების ზღვარი",
         "help" : "სემანტიკური მსგავსების ზღვარი (0.5-დან 1.0-მდე)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "გამოიყენეთ ან შექმენით api key ავტორიზაცია"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ავტორიზაცია",
+        "help" : "აირჩიეთ ამ მომწოდებლისთვის api key ან ავტორიზაცია"
+      },
+      "NewApiKey" : {
+        "label" : "ახალი api key",
+        "help" : "შეიყვანეთ ახალი api key ამ მომწოდებელთან გამოსაყენებლად"
+      },
+      "PiSave" : {
+        "label" : "შენახვა"
+      },
+      "NewUserName" : {
+        "label" : "მომხმარებლის სახელი",
+        "help" : "მომხმარებლის სახელი ამ მომწოდებლის სერვისებზე მისაღებად"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "გამოიყენეთ არსებული ან ახალი",
+        "help" : "გამოიყენეთ არსებული ან შექმენით ახლი ავტორიზაცია ამ მომწოდებლისთვის"
+      },
+      "newSecretDescription" : {
+        "label" : "ავტორიზაციის აღწერა",
+        "help" : "Api key ავტორიზაციის აღწერა"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ავტორიზაცია შეიქმნა",
+        "detail" : "ავტორიზაცია წარმატებით შეიქმნა"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "მომხამრებლებთან ჩათი"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "მოდელი გამოიყენება შიდა სერვისებისთვის"
       }
     }
   }

@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Cấu hình Deep search",
         "description" : "Cấu hình các thông số Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. tự động điều chỉnh",
+        "description" : "Tự động điều chỉnh tham số truy xuất augment generation"
+      },
+      "Description" : {
+        "label" : "Mô tả"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Cập nhật điều chỉnh lần cuối"
+      },
+      "Code" : {
+        "label" : "Mã mô hình Embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Ngưỡng đã tính toán"
+      },
+      "Autotuned" : {
+        "label" : "Đã tự động điều chỉnh"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Đã hoàn thành các bước thiết lập bắt buộc của Gebo.ai...",
+        "detail" : "Các bước thiết lập bắt buộc đã hoàn tất nhưng vẫn còn một số bước thiếu khiến tổ chức của bạn chưa tận dụng tối đa phần mềm này"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Thiếu một số bước bắt buộc khi thiết lập Gebo.ai",
+        "detail" : "Vui lòng kiểm tra các bước màu đỏ trong quá trình thiết lập"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Thiết lập quyền truy cập nhà cung cấp llms của Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Lựa chọn hạ tầng/nhà cung cấp mở rộng"
+      },
+      "MainPanelTitle" : {
+        "label" : "Thiết lập các mô hình ngôn ngữ lớn được sử dụng"
+      },
+      "EasySetup" : {
+        "label" : "Thiết lập ban đầu dễ dàng/sửa cấu hình"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Thiết lập mô hình ngôn ngữ lớn"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Nhà cung cấp AI từ xa OK",
+        "detail" : "Nhà cung cấp đang hoạt động và cấu hình thành công"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Lỗi ngoại lệ khi thao tác:Error working with url:https://api.openai.com/v1/models",
+        "detail" : "Lỗi máy chủ: Error working with url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "đặt làm mô hình embedding mặc định",
         "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Nhà cung cấp AI từ xa OK",
+        "detail" : "Nhà cung cấp đang hoạt động và cấu hình thành công"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Chỉnh sửa cấu hình mô hình trò chuyện máy chủ Ollama local (hoặc LAN)"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Chỉnh sửa cấu hình mô hình trò chuyện Anthropic"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Chỉnh sửa cấu hình mô hình trò chuyện MistralAI"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Chỉnh sửa cấu hình mô hình trò chuyện Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "forUses" : {
+        "label" : "Trường hợp sử dụng mô hình",
+        "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
+        "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "bật tất cả cuộc gọi chức năng",
         "help" : "Bật tất cả công cụ và cuộc gọi chức năng khả dụng, nếu chưa được đặt bạn có thể bật chúng sau trong bảng quản trị llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Lỗi ngoại lệ khi thao tác:Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết",
+        "detail" : "Lỗi máy chủ: Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Tạo và kích hoạt"
+      },
+      "vendorId" : {
+        "label" : "Chọn nhà cung cấp mô hình ngôn ngữ lớn của bạn",
+        "help" : "Chọn nhà cung cấp ban đầu cho các mô hình chat và embedding mặc định"
+      },
+      "secretId" : {
+        "label" : "Chọn thông tin xác thực nhà cung cấp (api key)",
+        "help" : "Chọn một trong các thông tin xác thực hiện có cho nhà cung cấp llm đã chọn"
+      },
+      "InternalServiceModel" : {
+        "label" : "Mô hình chat cho dịch vụ nội bộ",
+        "help" : "Mô hình chat được cấu hình cho dịch vụ nội bộ sẽ chịu trách nhiệm trích xuất thông tin, tóm tắt và thực thi quy trình nội bộ."
+      },
+      "ChatModel" : {
+        "label" : "Mô hình chat mặc định",
+        "help" : "Mô hình chat mặc định sẽ chịu trách nhiệm trả lời câu hỏi của người dùng, và thực hiện các quy trình không có mô hình nào khác được cấu hình cụ thể. Mô hình cần mạnh và tin cậy, cân đối giữa chi phí, hiệu suất và chất lượng kết quả."
+      },
+      "ProviderBuy" : {
+        "label" : "Liên kết mua tín dụng Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Liên kết trang web"
+      },
+      "WebSiteLink" : {
+        "label" : "Trang web nhà cung cấp",
+        "help" : "Nhấn vào đây để xem thông tin chung về nhà cung cấp."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Mua tín dụng từ nhà cung cấp",
+        "help" : "Nhấn vào đây để mua tín dụng cho các api key của bạn."
+      },
+      "EmbeddingModel" : {
+        "label" : "Mô hình embedding mặc định",
+        "help" : "Mô hình này sẽ chịu trách nhiệm đánh chỉ mục ngữ nghĩa (embedding) và truy xuất dữ liệu, tài liệu của bạn"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Có lỗi khi truyền kết quả trò chuyện",
         "detail" : "Lỗi máy chủ: 400 Yêu cầu không hợp lệ từ POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Lỗi ngoại lệ khi thao tác:Error working with url:http://localhost:8000/v1/models",
+        "detail" : "Lỗi máy chủ: Error working with url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Lỗi khi truyền dữ liệu phản hồi chat",
+        "detail" : "Lỗi máy chủ: Kết nối bị đặt lại"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Lỗi ngoại lệ khi thao tác:Error working with url:https://api.openai.com/v1/models",
+        "detail" : "Lỗi máy chủ: Error working with url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Lỗi ngoại lệ khi thao tác:Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết",
+        "detail" : "Lỗi máy chủ: Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Kết quả tìm kiếm hệ thống đã được phân tích cho"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chọn ít nhất một trong các tùy chọn sau"
+      },
+      "LaunchBtn" : {
+        "label" : "Chạy tìm kiếm"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Bỏ qua tìm kiếm sâu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Kho kiến thức đã chọn"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Hệ thống đã chọn"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chọn nguồn"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Ngưỡng tương đồng tìm kiếm",
         "help" : "Ngưỡng tương đồng ngữ nghĩa (từ 0.5 đến 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Sử dụng hoặc tạo thông tin xác thực api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/thông tin xác thực",
+        "help" : "Chọn api key hoặc thông tin xác thực cho nhà cung cấp này"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mới",
+        "help" : "Nhập một api key mới để sử dụng với nhà cung cấp này"
+      },
+      "PiSave" : {
+        "label" : "Lưu"
+      },
+      "NewUserName" : {
+        "label" : "Tên người dùng",
+        "help" : "Tên người dùng sử dụng để truy cập dịch vụ nhà cung cấp"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Sử dụng thông tin có sẵn hoặc mới",
+        "help" : "Sử dụng hoặc tạo mới thông tin xác thực cho nhà cung cấp này"
+      },
+      "newSecretDescription" : {
+        "label" : "Mô tả thông tin xác thực",
+        "help" : "Mô tả api key thông tin xác thực"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Đã tạo thông tin xác thực",
+        "detail" : "Tạo thông tin xác thực thành công"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Trò chuyện với người dùng"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Mô hình dùng cho dịch vụ nội bộ"
       }
     }
   }

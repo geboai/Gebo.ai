@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Sanidi Deep search",
         "description" : "Sanidi vigezo vya Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Urekebishaji wa vigezo vya uzalishaji ulioboreshwa otomatiki"
+      },
+      "Description" : {
+        "label" : "Maelezo"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Sasisho la mwisho la urekebishaji"
+      },
+      "Code" : {
+        "label" : "Nambari ya mfano wa Embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Kiwango kilichokadiriwa"
+      },
+      "Autotuned" : {
+        "label" : "Imerekebishwa otomatiki"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Hatua muhimu za usanidi wa Gebo.ai zimekamilika...",
+        "detail" : "Hatua muhimu za usanidi zimekamilika lakini hatua fulani zilizokosekana zinazuia shirika lako kufurahia zaidi programu hii"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Kuna hatua muhimu iliyokosekana kwenye usanidi wa Gebo.ai",
+        "detail" : "Tafadhali kagua hatua nyekundu za mchakato wa usanidi"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Sanidi ufikiaji wa watoa huduma wa Gebo.ai llms"
+      },
+      "ExtensiveStup" : {
+        "label" : "Chaguo za miundombinu/wasambazaji zilizopanuliwa"
+      },
+      "MainPanelTitle" : {
+        "label" : "Sanidi mifano mikubwa ya lugha inayotumika"
+      },
+      "EasySetup" : {
+        "label" : "Usanidi/urekebishaji rahisi wa awali"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Sanidi mifano mikubwa ya lugha"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa mbali wa AI yuko sawa",
+        "detail" : "Mtoa huduma yuko tayari na amesanidiwa vyema"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:https://api.openai.com/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "weka hii kama modeli chaguo-msingi ya embedding",
         "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa mbali wa AI yuko sawa",
+        "detail" : "Mtoa huduma yuko tayari na amesanidiwa vyema"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya seva ya Ollama ya ndani (au lan)"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya Anthropic"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya MistralAI"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "wezesha simu zote za kazi",
         "help" : "Washa zana zote na simu za kazi zinazopatikana, kama haitowekwa itawezekana kuzianisha baadaye kwenye paneli ya utawala wa llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
+        "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Unda na washa"
+      },
+      "vendorId" : {
+        "label" : "Chagua msambazaji wa mfano wako mkubwa wa lugha",
+        "help" : "Chagua msambazaji wa awali kwa mifano yako chaguo-msingi ya gumzo na embedding"
+      },
+      "secretId" : {
+        "label" : "Chagua kitambulisho cha mtoa huduma (api key)",
+        "help" : "Chagua mojawapo ya kitambulisho kilichopo kwa mtoa huduma aliyechaguliwa"
+      },
+      "InternalServiceModel" : {
+        "label" : "Mfano wa mazungumzo kwa huduma za ndani",
+        "help" : "Mfano wa gumzo uliosanidiwa kwa huduma za ndani utahusika na kutoa taarifa, kufupisha na kutekeleza kazi za ndani."
+      },
+      "ChatModel" : {
+        "label" : "Mfano wa gumzo chaguo-msingi",
+        "help" : "Mfano wa gumzo chaguo-msingi utahusika kujibu maswali ya watumiaji, na kutekeleza kazi ambazo hazina mifano mahususi ya kufanya hivyo. Lazima uwe na nguvu na kutegemewa, ukiwa na uwiano mzuri kati ya gharama, utendaji na ubora wa matokeo."
+      },
+      "ProviderBuy" : {
+        "label" : "Kiungo cha kununua mkopo wa Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Kiungo cha tovuti"
+      },
+      "WebSiteLink" : {
+        "label" : "Tovuti ya mtoa huduma",
+        "help" : "Bofya hapa kwa taarifa za jumla za mtoa huduma."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Nunua mkopo wa mtoa huduma",
+        "help" : "Bofya hapa kununua mkopo kwa api key zako."
+      },
+      "EmbeddingModel" : {
+        "label" : "Mfano wa embedding chaguo-msingi",
+        "help" : "Mfano huu utakuwa na jukumu la kufanya uorodheshaji wa kisemantiki (embedding) na kurejesha data na hati zako"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Hitilafu wakati wa kusambaza majibu ya gumzo",
         "detail" : "Hitilafu ya seva: 400 Ombi Mbaya kutoka kwa POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:http://localhost:8000/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Hitilafu wakati wa mchakato wa kutuma jibu la gumzo",
+        "detail" : "Hitilafu ya seva: Muunganisho kukatizwa"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:https://api.openai.com/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
+        "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Matokeo ya utafutaji wa mfumo yaliyotathminiwa kwa"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chagua angalau moja kati ya chaguo zifuatazo"
+      },
+      "LaunchBtn" : {
+        "label" : "Anzisha utafutaji"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ruka utafutaji wa kina"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Misingi ya maarifa iliyochaguliwa"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Mifumo iliyochaguliwa"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chagua vyanzo"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Kizingiti cha ufanano wa utafutaji",
         "help" : "Kizingiti cha ufanano wa semantic (kati ya 0.5 hadi 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Tumia au tengeneza kitambulisho cha api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/vitambulisho",
+        "help" : "Chagua api key au kitambulisho cha mtoa huduma huyu"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mpya",
+        "help" : "Ingiza api key mpya ya kutumiwa na mtoa huduma huyu"
+      },
+      "PiSave" : {
+        "label" : "Hifadhi"
+      },
+      "NewUserName" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Jina la mtumiaji linalotumika kufikia huduma za mtoa huduma"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Tumia kilichopo au kipya",
+        "help" : "Tumia kitambulisho kilichopo au tengeneza kipya kwa mtoa huduma huyu"
+      },
+      "newSecretDescription" : {
+        "label" : "Maelezo ya kitambulisho",
+        "help" : "Maelezo ya kitambulisho cha api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kitambulisho kimeundwa",
+        "detail" : "Kitambulisho kimeundwa kwa mafanikio"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Gumzo na watumiaji"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Mfano unaotumika kwa huduma za ndani"
       }
     }
   }

@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search configureren",
         "description" : "Parameters voor Deep search configureren"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatisch afstemmen van parameters voor retrieve augmented generation"
+      },
+      "Description" : {
+        "label" : "Beschrijving"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Laatste update tuning"
+      },
+      "Code" : {
+        "label" : "Embeddingmodel/VectorStore-code"
+      },
+      "ComputedThreashold" : {
+        "label" : "Berekende drempel"
+      },
+      "Autotuned" : {
+        "label" : "Automatisch afgestemd"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai verplichte installatie-stappen voltooid...",
+        "detail" : "Verplichte installatie-stappen zijn voltooid, maar er ontbreken nog stappen waardoor uw organisatie niet het maximale uit deze software haalt"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai-installatie mist een verplichte stap",
+        "detail" : "Controleer de rode stappen in het installatieproces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Toegang tot Gebo.ai llms providers instellen"
+      },
+      "ExtensiveStup" : {
+        "label" : "Uitgebreide keuzes infrastructuur/leveranciers"
+      },
+      "MainPanelTitle" : {
+        "label" : "Gebruikte large language models instellen"
+      },
+      "EasySetup" : {
+        "label" : "Eenvoudige eerste configuratie/correctie"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Large language models instellen"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Toegangsinstellingen model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI externe aanbieder OK",
+        "detail" : "Aanbieder werkt en is succesvol geconfigureerd"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Fout tijdens uitvoeren: Fout bij werken met url: https://api.openai.com/v1/models",
+        "detail" : "Serverfout: Fout bij werken met url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "stel in als standaard embeddingmodel",
         "help" : "Indien waar, wordt dit als standaard embeddingmodel gebruikt waar geen embeddingmodel is aangegeven"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI externe aanbieder OK",
+        "detail" : "Aanbieder werkt en is succesvol geconfigureerd"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama lokale (of lan) server chatmodelconfiguratie bewerken"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic chatmodelconfiguratie bewerken"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI chatmodelconfiguratie bewerken"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI chatmodelconfiguratie bewerken"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Toegangsinstellingen model"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Toegangsinstellingen model"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik",
+        "help" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt.",
+        "placeholder" : "Toepassingen waarvoor het Gebo.ai-platform dit model overweegt."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "alle functies inschakelen",
         "help" : "Schakel alle beschikbare tools en functieaanroepen in. Als dit niet is ingesteld, kun je ze later inschakelen in het llms-beheerpanel"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Fout tijdens uitvoeren: Anthropic api kan niet werken zonder benodigde api key-configuratie",
+        "detail" : "Serverfout: Anthropic api kan niet werken zonder benodigde api key-configuratie"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Aanmaken en activeren"
+      },
+      "vendorId" : {
+        "label" : "Kies uw large language model-leverancier",
+        "help" : "Kies de eerste leverancier voor uw standaard chat- en embeddingmodellen"
+      },
+      "secretId" : {
+        "label" : "Kies provider-referenties (api key)",
+        "help" : "Kies een bestaande referentie voor de geselecteerde llm-provider"
+      },
+      "InternalServiceModel" : {
+        "label" : "Chatmodel voor interne diensten",
+        "help" : "Het chatmodel dat geconfigureerd is voor interne diensten is verantwoordelijk voor het extraheren van informatie, samenvatten en uitvoeren van interne workflows."
+      },
+      "ChatModel" : {
+        "label" : "Standaard chatmodel",
+        "help" : "Het standaard chatmodel is verantwoordelijk voor het beantwoorden van gebruikersvragen en het uitvoeren van workflows waarvoor geen specifiek model geconfigureerd is. Moet krachtig en betrouwbaar zijn, met een goede balans tussen kosten, prestaties en uitkomstkwaliteit."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy key kredietlink kopen"
+      },
+      "ProviderWWW" : {
+        "label" : "Website-link"
+      },
+      "WebSiteLink" : {
+        "label" : "Website aanbieder",
+        "help" : "Klik hier voor algemene informatie over de aanbieder."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Krediet van aanbieder kopen",
+        "help" : "Klik hier om krediet te kopen voor uw api key(s)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Standaard embeddingmodel",
+        "help" : "Dit model is verantwoordelijk voor het semantisch indexeren (embedding) en ophalen van uw data en documenten"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Fout tijdens streamen van chatantwoord",
         "detail" : "Serverfout: 400 Bad Request van POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Fout tijdens uitvoeren: Fout bij werken met url: http://localhost:8000/v1/models",
+        "detail" : "Serverfout: Fout bij werken met url: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Fout bij streamen van chatreactie",
+        "detail" : "Serverfout: Verbindingsreset"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Fout tijdens uitvoeren: Fout bij werken met url: https://api.openai.com/v1/models",
+        "detail" : "Serverfout: Fout bij werken met url: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Fout tijdens uitvoeren: Anthropic api kan niet werken zonder benodigde api key-configuratie",
+        "detail" : "Serverfout: Anthropic api kan niet werken zonder benodigde api key-configuratie"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Geanalyseerd systeemzoekresultaat voor"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Kies ten minste één van de volgende opties"
+      },
+      "LaunchBtn" : {
+        "label" : "Zoek uitvoeren"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Diepgaande zoekopdracht overslaan"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Gekozen kennisbanken"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Gekozen systemen"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Bronnen selecteren"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Zoek-similariteitdrempel",
         "help" : "Semantische similariteitdrempel (tussen 0.5 en 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Gebruik of maak api key-referenties"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/referenties",
+        "help" : "Kies api key of referenties voor deze aanbieder"
+      },
+      "NewApiKey" : {
+        "label" : "Nieuwe api key",
+        "help" : "Voer een nieuwe api key in om te gebruiken met deze aanbieder"
+      },
+      "PiSave" : {
+        "label" : "Opslaan"
+      },
+      "NewUserName" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Gebruikersnaam voor toegang tot diensten van aanbieder"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Bestaande of nieuwe gebruiken",
+        "help" : "Gebruik bestaande of maak nieuwe referenties voor deze aanbieder"
+      },
+      "newSecretDescription" : {
+        "label" : "Beschrijving referenties",
+        "help" : "Beschrijving van api key-referenties"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Referenties aangemaakt",
+        "detail" : "Referenties succesvol aangemaakt"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chatten met gebruikers"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model gebruikt voor interne diensten"
       }
     }
   }

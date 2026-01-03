@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Configurează Deep search",
         "description" : "Configurează parametrii pentru Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Ajustare automată a parametrilor pentru generarea augmentată de informații"
+      },
+      "Description" : {
+        "label" : "Descriere"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Ultima actualizare a optimizării"
+      },
+      "Code" : {
+        "label" : "Cod model de embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Prag calculat"
+      },
+      "Autotuned" : {
+        "label" : "Optimizat automat"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Pașii obligatorii pentru configurarea Gebo.ai au fost realizați...",
+        "detail" : "Pașii obligatorii de configurare au fost finalizați, dar lipsesc unele etape care împiedică organizația să beneficieze la maxim de acest software"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Lipsesc unii pași obligatorii din configurarea Gebo.ai",
+        "detail" : "Vă rugăm să verificați pașii marcați cu roșu din procesul de configurare"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Setați accesul la furnizorii llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Alege infrastructura sau furnizorii extinși"
+      },
+      "MainPanelTitle" : {
+        "label" : "Configurează modelele lingvistice mari utilizate"
+      },
+      "EasySetup" : {
+        "label" : "Configurare/fixare rapidă inițială"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Configurează modelele lingvistice mari"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul funcționează și a fost configurat cu succes"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:https://api.openai.com/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "setează ca model embedding implicit",
         "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul funcționează și a fost configurat cu succes"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat pe server ollama local (sau rețea)"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat Anthropic"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat MistralAI"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "activează toate apelurile de funcții",
         "help" : "Activează toate instrumentele și apelurile de funcții disponibile, dacă nu este setat, va fi posibil să le activezi mai târziu din panoul de administrare llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepție în timpul operației:Anthropic api nu poate funcționa fără configurarea necesară a cheii api",
+        "detail" : "Eroare server: Anthropic api nu poate funcționa fără configurarea necesară a cheii api"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Creează și activează"
+      },
+      "vendorId" : {
+        "label" : "Alege furnizorul tău de model lingvistic mare",
+        "help" : "Alege furnizorul inițial pentru modelele tale implicite de chat și embedding"
+      },
+      "secretId" : {
+        "label" : "Alege acreditările furnizorului (cheie api)",
+        "help" : "Alege una dintre acreditările existente pentru furnizorul de llm selectat"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model de chat pentru servicii interne",
+        "help" : "Modelul de chat configurat pentru servicii interne va extrage informații, va rezuma și va executa fluxuri de lucru interne."
+      },
+      "ChatModel" : {
+        "label" : "Model implicit de chat",
+        "help" : "Modelul implicit de chat va răspunde la întrebările utilizatorilor și va executa fluxuri de lucru pentru care nu sunt configurate modele specifice. Trebuie să fie puternic și fiabil, cu un echilibru bun între cost, performanță și calitate."
+      },
+      "ProviderBuy" : {
+        "label" : "Link de cumpărare credit Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Link site web"
+      },
+      "WebSiteLink" : {
+        "label" : "Site-ul furnizorului",
+        "help" : "Click aici pentru informații generale despre furnizor."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Cumpără credit de la furnizor",
+        "help" : "Click aici pentru a cumpăra credit pentru cheia(le) ta(le) api."
+      },
+      "EmbeddingModel" : {
+        "label" : "Modelul implicit de embedding",
+        "help" : "Acest model se va ocupa de indexarea semantică (embedding) și regăsirea datelor și documentelor."
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Eroare la transmiterea răspunsului chat",
         "detail" : "Eroare de server: 400 Bad Request de la POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:http://localhost:8000/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Eroare la transmiterea fluxului de răspuns chat",
+        "detail" : "Eroare server: Conexiune resetată"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:https://api.openai.com/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepție în timpul operației:Anthropic api nu poate funcționa fără configurarea necesară a cheii api",
+        "detail" : "Eroare server: Anthropic api nu poate funcționa fără configurarea necesară a cheii api"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Rezultat analizat al căutării în sistem pentru"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Alege cel puțin una dintre opțiunile de mai jos"
+      },
+      "LaunchBtn" : {
+        "label" : "Pornește căutarea"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Sari peste căutare avansată"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Baze de cunoștințe alese"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sisteme alese"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selectează surse"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Prag de similaritate la căutare",
         "help" : "Prag de similaritate semantică (între 0.5 și 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Folosește sau creează acreditări de chei api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Cheie api/acreditări",
+        "help" : "Alege cheia api sau acreditările pentru acest furnizor"
+      },
+      "NewApiKey" : {
+        "label" : "Cheie api nouă",
+        "help" : "Introdu o cheie api nouă pentru acest furnizor"
+      },
+      "PiSave" : {
+        "label" : "Salvează"
+      },
+      "NewUserName" : {
+        "label" : "Nume utilizator",
+        "help" : "Numele utilizatorului pentru accesarea serviciilor furnizorului"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Folosește existente sau creează noi",
+        "help" : "Folosește acreditările existente sau creează altele noi pentru acest furnizor"
+      },
+      "newSecretDescription" : {
+        "label" : "Descriere acreditări",
+        "help" : "Descrierea acreditărilor cheii api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Acreditările au fost create",
+        "detail" : "Acreditările au fost create cu succes"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Conversații cu utilizatorii"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model utilizat pentru servicii interne"
       }
     }
   }

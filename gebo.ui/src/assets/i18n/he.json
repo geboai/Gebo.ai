@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "הגדרת Deep search",
         "description" : "הגדר את פרמטרי Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. אוטוטיונינג",
+        "description" : "כוונון אוטומטי של פרמטרי הפקה משופרים"
+      },
+      "Description" : {
+        "label" : "תיאור"
+      },
+      "LastAutotunedDate" : {
+        "label" : "עדכון כוונון אחרון"
+      },
+      "Code" : {
+        "label" : "קוד מודל ההטמעה/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "סף מחושב"
+      },
+      "Autotuned" : {
+        "label" : "כוון אוטומטי"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "השלבים החיוניים להגדרת Gebo.ai הושלמו...",
+        "detail" : "השלבים החיוניים הושלמו אך יש צעדים חסרים שמונעים מהארגון שלך להפיק את המקסימום מהתוכנה"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "חסרים שלבים חיוניים בהגדרת Gebo.ai",
+        "detail" : "אנא בדוק את השלבים באדום בתהליך ההגדרה"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "הגדר גישה לספקי llms של Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "אפשרויות תשתית/ספקים מורחבות"
+      },
+      "MainPanelTitle" : {
+        "label" : "הגדר מודלים שפתיים גדולים בשימוש"
+      },
+      "EasySetup" : {
+        "label" : "הגדרה ראשונית קלה/תיקון קונפיגורציה"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "הגדר מודלים שפתיים גדולים"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "הגדרות גישה למודל"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ספק AI מרוחק תקין",
+        "detail" : "הספק פועל ומוגדר בהצלחה"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "חריגה במהלך פעולה: שגיאה בעבודה עם url:https://api.openai.com/v1/models",
+        "detail" : "שגיאת שרת: שגיאה בעבודה עם url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "הגדר כמודל ההטמעה ברירת מחדל",
         "help" : "אם מאופשר, זה ישמש כמודל ההטמעה ברירת מחדל כאשר מודל ההטמעה לא צוין"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ספק AI מרוחק תקין",
+        "detail" : "הספק פועל ומוגדר בהצלחה"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "עריכת תצורת מודל שיחה של שרת Ollama מקומי (או ברשת)"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "עריכת תצורת מודל שיחה של Anthropic"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "עריכת תצורת מודל שיחה של MistralAI"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "עריכת תצורת מודל שיחה של Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "הגדרות גישה למודל"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "הגדרות גישה למודל"
+      },
+      "forUses" : {
+        "label" : "שימושי המודל",
+        "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
+        "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "הפעל את כל הפונקציות",
         "help" : "אפשר את כל הכלים והפונקציות הזמינות. אם לא מוגדר, ניתן להפעיל אותן מאוחר יותר בלוח הניהול של llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "חריגה במהלך פעולה: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת",
+        "detail" : "שגיאת שרת: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "צור והפעל"
+      },
+      "vendorId" : {
+        "label" : "בחר ספק מודל שפה גדול",
+        "help" : "בחר את הספק ההתחלתי למודלים המוגדרים כברירת מחדל לצ'אט והטמעה"
+      },
+      "secretId" : {
+        "label" : "בחר פרטי גישה (api key)",
+        "help" : "בחר מאחת מהתעודות הקיימות עבור ספק ה-llm שנבחר"
+      },
+      "InternalServiceModel" : {
+        "label" : "מודל צ'אט לשירותים פנימיים",
+        "help" : "מודל הצ'אט המוגדר לשירותים פנימיים יהיה אחראי על חילוץ מידע, סיכום והרצת תהליכים פנימיים."
+      },
+      "ChatModel" : {
+        "label" : "מודל צ'אט ברירת מחדל",
+        "help" : "מודל הצ'אט ברירת המחדל יהיה אחראי לענות על שאלות המשתמשים ולהריץ תהליכים שאין עבורם מודלים מוגדרים. עליו להיות חזק ואמין, עם איזון טוב בין עלות, ביצועים ואיכות תוצאה."
+      },
+      "ProviderBuy" : {
+        "label" : "קישור קניית קרדיט למפתח api"
+      },
+      "ProviderWWW" : {
+        "label" : "קישור לאתר"
+      },
+      "WebSiteLink" : {
+        "label" : "אתר הספק",
+        "help" : "לחץ כאן למידע כללי על הספק."
+      },
+      "AcquireCreditLink" : {
+        "label" : "רכישת קרדיט מספק",
+        "help" : "לחץ כאן לרכישת קרדיט עבור מפתח(י) ה-api שלך."
+      },
+      "EmbeddingModel" : {
+        "label" : "מודל הטמעה ברירת מחדל",
+        "help" : "מודל זה יהיה אחראי לאינדוקס סמנטי (הטמעה) ושליפת נתונים ומסמכים"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "שגיאה בעת הזרמת תגובת הצ'אט",
         "detail" : "שגיאת שרת: 400 בקשה שגויה מ-POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "חריגה במהלך פעולה: שגיאה בעבודה עם url:http://localhost:8000/v1/models",
+        "detail" : "שגיאת שרת: שגיאה בעבודה עם url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "שגיאה בעת הזרמת תוצאות הצ'אט",
+        "detail" : "שגיאת שרת: החיבור אופס"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "חריגה במהלך פעולה: שגיאה בעבודה עם url:https://api.openai.com/v1/models",
+        "detail" : "שגיאת שרת: שגיאה בעבודה עם url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "חריגה במהלך פעולה: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת",
+        "detail" : "שגיאת שרת: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "תוצאת חיפוש מערכת מנותחת עבור"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "בחר לפחות אחת מהאפשרויות הבאות"
+      },
+      "LaunchBtn" : {
+        "label" : "הרץ חיפוש"
+      },
+      "SkipDeepSearch" : {
+        "label" : "דלג על חיפוש מעמיק"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "מאגרי ידע שנבחרו"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "מערכות שנבחרו"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "בחר מקורות"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "סף דמיון בחיפוש",
         "help" : "סף דמיון סמנטי (בין 0.5 ל-1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "השתמש או צור פרטי api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "מפתח api/פרטי גישה",
+        "help" : "בחר מפתח api או פרטי גישה עבור ספק זה"
+      },
+      "NewApiKey" : {
+        "label" : "מפתח api חדש",
+        "help" : "הזן מפתח api חדש לשימוש עם ספק זה"
+      },
+      "PiSave" : {
+        "label" : "שמירה"
+      },
+      "NewUserName" : {
+        "label" : "שם משתמש",
+        "help" : "שם המשתמש המשמש לגישה לשירותי הספק"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "השתמש בקיימים או צור חדשים",
+        "help" : "השתמש בפרטי גישה קיימים או צור חדשים עבור ספק זה"
+      },
+      "newSecretDescription" : {
+        "label" : "תיאור פרטי גישה",
+        "help" : "תיאור של פרטי הגישה למפתח ה-api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "פרטי גישה נוצרו",
+        "detail" : "פרטי הגישה נוצרו בהצלחה"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "צ'אט עם משתמשים"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "מודל לשירותים פנימיים"
       }
     }
   }

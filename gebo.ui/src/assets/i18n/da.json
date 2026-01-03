@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfigurer Deep search",
         "description" : "Konfigurer Deep search parametre"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatisk justering af parametre for udvidet generering"
+      },
+      "Description" : {
+        "label" : "Beskrivelse"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Senest opdaterede tuning"
+      },
+      "Code" : {
+        "label" : "Embeddingmodel/VectorStore kode"
+      },
+      "ComputedThreashold" : {
+        "label" : "Beregnet grænseværdi"
+      },
+      "Autotuned" : {
+        "label" : "Autotunet"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai opsætning påkrævede trin er fuldført...",
+        "detail" : "De påkrævede opsætnings trin er fuldført, men nogle manglende trin forhindrer din organisation i at få det fulde udbytte af softwaren"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai opsætning mangler nogle påkrævede trin",
+        "detail" : "Gennemgå venligst de røde trin i opsætningsprocessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Opsæt adgang til Gebo.ai llms-udbydere"
+      },
+      "ExtensiveStup" : {
+        "label" : "Udvidede valg for infrastruktur/leverandører"
+      },
+      "MainPanelTitle" : {
+        "label" : "Opsæt anvendte store sprogmodeller"
+      },
+      "EasySetup" : {
+        "label" : "Nem grundopsætning/konfiguration"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Opsæt store sprogmodeller"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Indstillinger for modeladgang"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjern-udbyder OK",
+        "detail" : "Udbyder er aktiv og korrekt konfigureret"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undtagelse under operation:Fejl ved arbejde med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfejl: Fejl ved arbejde med url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "sæt dette som standard embeddingmodel",
         "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjern-udbyder OK",
+        "detail" : "Udbyder er aktiv og korrekt konfigureret"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Ollama lokal (eller LAN) server chatmodelkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Anthropic chatmodelkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer MistralAI chatmodelkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Google Vertex AI chatmodelkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Indstillinger for modeladgang"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Indstillinger for modeladgang"
+      },
+      "forUses" : {
+        "label" : "Modelanvendelse(r)",
+        "help" : "Anvendelser som Gebo.ai platformen vil bruge denne model til.",
+        "placeholder" : "Anvendelser som Gebo.ai platformen vil bruge denne model til."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "aktiver alle funktionkald",
         "help" : "Aktiver alle tilgængelige værktøjer og funktionkald. Hvis det ikke er sat, vil det være muligt at aktivere dem senere i llms-administrationspanelet"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undtagelse under operation:Anthropic api kan ikke fungere uden nødvendig api key konfiguration",
+        "detail" : "Serverfejl: Anthropic api kan ikke fungere uden nødvendig api key konfiguration"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Opret og aktiver"
+      },
+      "vendorId" : {
+        "label" : "Vælg din store sprogmodel-leverandør",
+        "help" : "Vælg den indledende leverandør til dine standard chat- og embeddingmodeller"
+      },
+      "secretId" : {
+        "label" : "Vælg udbyderens legitimationsoplysninger (api key)",
+        "help" : "Vælg en af de eksisterende legitimationsoplysninger til den valgte llm-udbyder"
+      },
+      "InternalServiceModel" : {
+        "label" : "Intern service chatmodel",
+        "help" : "Den chatmodel, der er konfigureret til interne tjenester, vil være ansvarlig for at udtrække informationer, opsummere og udføre interne arbejdsprocesser."
+      },
+      "ChatModel" : {
+        "label" : "Standard chatmodel",
+        "help" : "Standard chatmodellen vil være ansvarlig for at svare på brugerspørgsmål og udføre opgaver, hvor der ikke er specifikt konfigurerede modeller. Den skal være effektiv og pålidelig med en god balance mellem pris, ydeevne og kvalitet af resultater."
+      },
+      "ProviderBuy" : {
+        "label" : "Køb Apy key kreditlink"
+      },
+      "ProviderWWW" : {
+        "label" : "Website-link"
+      },
+      "WebSiteLink" : {
+        "label" : "Udbyderens websted",
+        "help" : "Klik her for generelle oplysninger om udbyderen."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Køb udbyderkredit",
+        "help" : "Klik her for at købe kredit til dine api key(s)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Standard embeddingmodel",
+        "help" : "Denne model vil være ansvarlig for semantisk indeksering (embedding) og søgning i dine data og dokumenter"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Fejl under streaming af chat svar",
         "detail" : "Serverfejl: 400 Bad Request fra POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Undtagelse under operation:Fejl ved arbejde med url:http://localhost:8000/v1/models",
+        "detail" : "Serverfejl: Fejl ved arbejde med url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Fejl under streaming af chatbesvarelse",
+        "detail" : "Serverfejl: Forbindelse blev nulstillet"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undtagelse under operation:Fejl ved arbejde med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfejl: Fejl ved arbejde med url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undtagelse under operation:Anthropic api kan ikke fungere uden nødvendig api key konfiguration",
+        "detail" : "Serverfejl: Anthropic api kan ikke fungere uden nødvendig api key konfiguration"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analyseret systemsøgeresultat for"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vælg mindst én af følgende muligheder"
+      },
+      "LaunchBtn" : {
+        "label" : "Kør søgning"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Spring deep search over"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valgte vidensbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valgte systemer"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vælg kilder"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Søge-similaritetsgrænse",
         "help" : "Semantisk similaritetsgrænse (mellem 0.5 og 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Brug eller opret api key legitimationsoplysninger"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/legitimationsoplysninger",
+        "help" : "Vælg api key eller legitimationsoplysninger til denne udbyder"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api key",
+        "help" : "Indsæt en ny api key til denne udbyder"
+      },
+      "PiSave" : {
+        "label" : "Gem"
+      },
+      "NewUserName" : {
+        "label" : "Brugernavn",
+        "help" : "Brugernavn brugt for at tilgå udbyderens tjenester"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Brug eksisterende eller ny",
+        "help" : "Brug eksisterende eller opret nye legitimationsoplysninger til denne udbyder"
+      },
+      "newSecretDescription" : {
+        "label" : "Legitimationsbeskrivelse",
+        "help" : "Beskrivelse af api key legitimationsoplysninger"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Legitimationsoplysninger oprettet",
+        "detail" : "Legitimationsoplysninger oprettet"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chat med brugere"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model brugt til interne services"
       }
     }
   }

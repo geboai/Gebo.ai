@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "配置 Deep search",
         "description" : "配置 Deep search 参数"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. 自动调优",
+        "description" : "自动检索增强生成参数调优"
+      },
+      "Description" : {
+        "label" : "描述"
+      },
+      "LastAutotunedDate" : {
+        "label" : "最近调优更新时间"
+      },
+      "Code" : {
+        "label" : "嵌入模型/向量库代码"
+      },
+      "ComputedThreashold" : {
+        "label" : "计算阈值"
+      },
+      "Autotuned" : {
+        "label" : "已自动调优"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai 必要设置步骤已完成...",
+        "detail" : "强制设置步骤已完成，但仍有遗漏步骤，会影响组织体验此软件的最佳效果"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai 设置缺少部分必要步骤",
+        "detail" : "请检查设置流程中标红的步骤"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "设置 Gebo.ai llms 提供商访问权限"
+      },
+      "ExtensiveStup" : {
+        "label" : "扩展基础架构/供应商选择"
+      },
+      "MainPanelTitle" : {
+        "label" : "配置已用的大语言模型"
+      },
+      "EasySetup" : {
+        "label" : "快捷初始化配置修正"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "配置大语言模型"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "模型访问设置"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI 远程服务商正常",
+        "detail" : "服务商已运行且配置成功"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "操作异常：处理 url 时出错：https://api.openai.com/v1/models",
+        "detail" : "服务器错误：处理 url 时出错：https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "设为默认向量模型",
         "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI 远程服务商正常",
+        "detail" : "服务商已运行且配置成功"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "编辑 Ollama 本地（或局域网）服务器聊天模型配置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "编辑 Anthropic 聊天模型配置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "编辑 MistralAI 聊天模型配置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "编辑 Google Vertex AI 聊天模型配置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "模型访问设置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "模型访问设置"
+      },
+      "forUses" : {
+        "label" : "模型用途",
+        "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
+        "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "启用所有功能调用",
         "help" : "启用所有可用工具和功能调用，若未设置，可在llms管理面板后续启用"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "操作异常：Anthropic api 需配置 api key 才可用",
+        "detail" : "服务器错误：Anthropic api 需配置 api key 才可用"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "创建并激活"
+      },
+      "vendorId" : {
+        "label" : "选择你的大语言模型供应商",
+        "help" : "为默认聊天及嵌入模型选择初始服务商"
+      },
+      "secretId" : {
+        "label" : "选择供应商凭证（api key）",
+        "help" : "为所选 llm 供应商选择一个已存在的凭证"
+      },
+      "InternalServiceModel" : {
+        "label" : "内部服务聊天模型",
+        "help" : "已设置为内部服务的聊天模型将负责信息提取、摘要及流程执行。"
+      },
+      "ChatModel" : {
+        "label" : "默认聊天模型",
+        "help" : "默认聊天模型会负责回答用户问题，以及执行未特别配置模型的流程。需要具备高效、可靠、性价比好的表现。"
+      },
+      "ProviderBuy" : {
+        "label" : "购买 Apy key 信用链接"
+      },
+      "ProviderWWW" : {
+        "label" : "网站链接"
+      },
+      "WebSiteLink" : {
+        "label" : "服务商官网",
+        "help" : "点击了解服务商基本信息。"
+      },
+      "AcquireCreditLink" : {
+        "label" : "购买服务商积分",
+        "help" : "点击购买你的 api key 信用。"
+      },
+      "EmbeddingModel" : {
+        "label" : "默认嵌入模型",
+        "help" : "该模型将负责进行语义索引（嵌入）和数据、文档检索"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "流式聊天响应时出错",
         "detail" : "服务器错误：POST http://localhost:8000/v1/chat/completions 返回 400 Bad Request"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "操作异常：处理 url 时出错：http://localhost:8000/v1/models",
+        "detail" : "服务器错误：处理 url 时出错：http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "流式聊天响应出错",
+        "detail" : "服务器错误：连接重置"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "操作异常：处理 url 时出错：https://api.openai.com/v1/models",
+        "detail" : "服务器错误：处理 url 时出错：https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "操作异常：Anthropic api 需配置 api key 才可用",
+        "detail" : "服务器错误：Anthropic api 需配置 api key 才可用"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "已分析的系统搜索结果"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "请至少选择以下一项"
+      },
+      "LaunchBtn" : {
+        "label" : "开始搜索"
+      },
+      "SkipDeepSearch" : {
+        "label" : "跳过深度搜索"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "已选知识库"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "已选系统"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "选择来源"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "搜索相似度阈值",
         "help" : "语义相似度阈值（0.5 至 1.0 之间）"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "使用或创建 api key 凭证"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/凭证",
+        "help" : "为该服务商选择 api key 或凭证"
+      },
+      "NewApiKey" : {
+        "label" : "新 api key",
+        "help" : "输入新 api key 以用于该服务商"
+      },
+      "PiSave" : {
+        "label" : "保存"
+      },
+      "NewUserName" : {
+        "label" : "用户名",
+        "help" : "用于访问服务商服务的用户名"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "使用已有或新建",
+        "help" : "为该服务商使用已有或者创建新凭证"
+      },
+      "newSecretDescription" : {
+        "label" : "凭证描述",
+        "help" : "api key 凭证描述"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "凭证已创建",
+        "detail" : "凭证创建成功"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "与用户聊天"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "模型用于内部服务"
       }
     }
   }

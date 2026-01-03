@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "ຕັ້ງຄ່າ Deep search",
         "description" : "ຕັ້ງຄ່າພາຣາມິເຕີ Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ປັບສູດອັດຕະໂນມັດ",
+        "description" : "ປັບຄ່າພາລາມິເຕີສໍາລັບການສ້າງຂໍ້ມູນເພີ່ມແບບອັດຕະໂນມັດ"
+      },
+      "Description" : {
+        "label" : "ຄໍາອະທິບາຍ"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ການອັບເດດການປັບຄ່າລ່າສຸດ"
+      },
+      "Code" : {
+        "label" : "ລະຫັດ Embedding model/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "ຄ່າຂອບເຂດທີ່ຄໍານວນ"
+      },
+      "Autotuned" : {
+        "label" : "ປັບຄ່າອັດຕະໂນມັດ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ສ້າງຕັ້ງຄ່າທີ່ຈໍາເປັນສໍາເລັດແລ້ວ...",
+        "detail" : "ການຕັ້ງຄ່າພື້ນຖານໄດ້ສໍາເລັດແລ້ວ ແຕ່ຍັງມີຂັ້ນຕອນບາງອັນທີ່ຂາດຫາຍ ເຮັດໃຫ້ອົງກອນຂອງທ່ານບໍ່ສາມາດໃຊ້ງານໄດ້ຢ່າງເຕັມປະສິດທິພາບ"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ການຕັ້ງຄ່າຂາດຂັ້ນຕອນທີ່ຈໍາເປັນ",
+        "detail" : "ກະລຸນາກວດສອບຂັ້ນຕອນສີແດງໃນຂະບວນການຕັ້ງຄ່າ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "ຕັ້ງຄ່າສິດເຂົ້າໃຊ້ Gebo.ai llms providers"
+      },
+      "ExtensiveStup" : {
+        "label" : "ເລືອກອິນຟຣາສະທຣັກເຈີ / ຜູ້ໃຫ້ບໍລິການເພີ່ມເຕີມ"
+      },
+      "MainPanelTitle" : {
+        "label" : "ຕັ້ງຄ່າຮູບແບບພາສາໃຫຍ່"
+      },
+      "EasySetup" : {
+        "label" : "ຕັ້ງຄ່າ / ແກ້ໄຂຄືນຕົ້ນສຳລັບເລີ່ມຕົ້ນ"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ຕັ້ງຄ່າຮູບແບບພາສາໃຫຍ່"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ຜູ້ສະຫນອງລະບົບອອນລາຍພ້ອມໃຊ້",
+        "detail" : "ຜູ້ສະຫນອງພ້ອມໃຊ້ແລະຕັ້ງຄ່າສົມບູນ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:https://api.openai.com/v1/models",
+        "detail" : "Error ຈາກ server: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
         "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ຜູ້ສະຫນອງລະບົບອອນລາຍພ້ອມໃຊ້",
+        "detail" : "ຜູ້ສະຫນອງພ້ອມໃຊ້ແລະຕັ້ງຄ່າສົມບູນ"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Ollama ທ້ອງຖິ່ນ (ຫຼື LAN) chat model"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Anthropic chat model"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "ແກ້ໄຂການຕັ້ງຄ່າ MistralAI chat model"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Google Vertex AI chat model"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "forUses" : {
+        "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
+        "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
+        "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "ເປີດໃຊ້ງານຟັງຊັນທັງໝົດ",
         "help" : "ເປີດໃຊ້ງານເຄື່ອງມືແລະການໂທຟັງຊັນທັງໝົດທີ່ມີຢູ່, ຖ້າບໍ່ໄດ້ຕັ້ງຄ່າ ສາມາດເປີດໃຊ້ງານໄດ້ພາຍຫຼັງໃນ llms admin panel"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key",
+        "detail" : "Error ຈາກ server: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ສ້າງແລະເປີດໃຊ້"
+      },
+      "vendorId" : {
+        "label" : "ເລືອກຜູ້ໃຫ້ບໍລິການຮູບແບບພາສາໃຫຍ່ຂອງທ່ານ",
+        "help" : "ເລືອກຜູ້ໃຫ້ບໍລິການເລີ່ມຕົ້ນສໍາລັບຮູບແບບ chat ແລະ embedding ເລີ່ມຕົ້ນ"
+      },
+      "secretId" : {
+        "label" : "ເລືອກຄຽດນີ໌ provider (api key)",
+        "help" : "ເລືອກຄຽດນີ້ທີ່ມີຢູ່ແລ້ວສຳລັບ provider llm ທີ່ເລືອກ"
+      },
+      "InternalServiceModel" : {
+        "label" : "ຮູບແບບສົນທະນາພາຍໃນ",
+        "help" : "ຮູບແບບສົນທະນາທີ່ຕັ້ງຄ່າສຳລັບຕິດຕາມບໍລິການພາຍໃນ ເຊິ່ງຈະຮັບຜິດຊອບໃນການດຶງຂໍ້ມູນ, ສະຫຼຸບ ແລະ ຫຼັກຫຼີກຂະບວນງານ"
+      },
+      "ChatModel" : {
+        "label" : "ແບບ chat ຄ່າໂຕເລືອກ",
+        "help" : "ແບບ chat ຄ່າໂຕເລືອກຈະຮັບຜິດຊອບໃນການຕອບຄໍາຖາມຜູ້ໃຊ້ ແລະ ດໍາເນີນຂະບວນງານທີ່ບໍ່ມີຮູບແບບຕັ້ງຄ່າໄວ້ເປັນພິເສດ ຄວນເລືອກທີ່ມີປະສິດທິພາບ, ສົມດຸນລາຄາກັບປະສິດທິພາບ."
+      },
+      "ProviderBuy" : {
+        "label" : "ລິ້ງຊໍາລະ Apy key ເຄຣດິດ"
+      },
+      "ProviderWWW" : {
+        "label" : "ລິ້ງເວັບໄຊ"
+      },
+      "WebSiteLink" : {
+        "label" : "ເວັບໄຊ provider",
+        "help" : "ຄິກທີ່ນີ້ ເພື່ອຮັບຂໍ້ມູນທົ່ວໄປກ່ຽວກັບ provider."
+      },
+      "AcquireCreditLink" : {
+        "label" : "ຊື້ເຄຣດິດ provider",
+        "help" : "ຄິກທີ່ນີ້ເພື່ອຊື້ເຄຣດິດໃຫ້ api key ຂອງທ່ານ."
+      },
+      "EmbeddingModel" : {
+        "label" : "ຮູບແບບ embedding ແບບຄ່າໂຕເລືອກ",
+        "help" : "ຮູບແບບນີ້ຈະຮັບຜິດຊອບສໍາລັບການດັດແປງ semantic (embedding) ແລະການຄົ້ນຫາຂໍ້ມູນແລະເອກະສານຂອງທ່ານ"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "ຜິດພາດໃນເວລາກຳລັງສົ່ງພາບ chat",
         "detail" : "Server error: 400 Bad Request ຈາກ POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:http://localhost:8000/v1/models",
+        "detail" : "Error ຈາກ server: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ມີຂໍ້ຜິດພາດໃນການສົ່ງຂໍ້ຄວາມ chat",
+        "detail" : "Error ຈາກ server: ການເຊື່ອມຕໍ່ຖືກຕັດ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:https://api.openai.com/v1/models",
+        "detail" : "Error ຈາກ server: ມີຂໍ້ຜິດພາດໃນການໃຊ້ url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key",
+        "detail" : "Error ຈາກ server: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "ຜົນການຄົ້ນຫາລະບົບທີ່ຖືກວິເຄາະ ສໍາລັບ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ເລືອກຢ່າງນ້ອຍໜຶ່ງທາງເລືອກຂ້າງລຸ່ມນີ້"
+      },
+      "LaunchBtn" : {
+        "label" : "ເລີ່ມຄົ້ນຫາ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ຂ້າມ deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ຖານຄວາມຮູ້ທີ່ເລືອກ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ລະບົບທີ່ເລືອກ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ເລືອກແຫຼ່ງຂໍ້ມູນ"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "ຄ່າ similarity ການຄົ້ນຫາ",
         "help" : "semantic similarity threashold (ລະຫວ່າງ 0.5 ຫາ 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "ໃຊ້ຫຼືສ້າງຄຽດນີ້ api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ຄຽດນີ້",
+        "help" : "ເລືອກ api key ຫຼືຄຽດນີ້ສໍາລັບ provider ນີ້"
+      },
+      "NewApiKey" : {
+        "label" : "api key ໃໝ່",
+        "help" : "ປ້ອນ api key ໃໝ່ ເພື່ອໃຊ້ກັບ provider ນີ້"
+      },
+      "PiSave" : {
+        "label" : "ບັນທຶກ"
+      },
+      "NewUserName" : {
+        "label" : "ຊື່ຜູ້ໃຊ້",
+        "help" : "ຊື່ຜູ້ໃຊ້ທີ່ໃຊ້ເຂົ້າຖືກບໍລິການ provider"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ໃຊ້ໃໝ່ຫຼືທີ່ມີຢູ່",
+        "help" : "ໃຊ້ທີ່ມີຢູ່ ຫຼື ສ້າງຄຽດນີ້ໃໝ່ສໍາລັບ provider ນີ້"
+      },
+      "newSecretDescription" : {
+        "label" : "ລາຍລະອຽດຄຽດນີ້",
+        "help" : "ລາຍລະອຽດ api key ຄຽດນີ້"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ສ້າງຄຽດນີ້ສໍາເລັດ",
+        "detail" : "ສ້າງຄຽດນີ້ສໍາເລັດ"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ສົນທະນາກັບຜູ້ໃຊ້"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ໂມເດວໃຊ້ສຳລັບບໍລິການພາຍໃນ"
       }
     }
   }

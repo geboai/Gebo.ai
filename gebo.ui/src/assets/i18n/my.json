@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search ကိုပြင်ဆင်ပါ",
         "description" : "Deep search ရဲ့ ပါရာမီတာများကို ပြင်ဆင်ပါ"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. အော်တိုတွန်း",
+        "description" : "မိမိကိုယ်တိုင် ပြုပြင်ခြင်းနှင့် တိုးတက်စေသည့် မီတာများ အလိုအလျောက် သတ်မှတ်ခြင်း"
+      },
+      "Description" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "LastAutotunedDate" : {
+        "label" : "နောက်ဆုံးပြင်ဆင်မှု Update"
+      },
+      "Code" : {
+        "label" : "Embedding မော်ဒယ်/VectorStore code"
+      },
+      "ComputedThreashold" : {
+        "label" : "တွက်ချက်ထားသော threashold"
+      },
+      "Autotuned" : {
+        "label" : "အော်တိုတွန်း ပြုလုပ်ပြီး"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ဆက်တင်လုပ်ငန်းစဉ် မဖြစ်မနေ အဆင့်များ ပြီးဆုံးပါပြီ...",
+        "detail" : "မဖြစ်မနေ လိုအပ်သော ဆက်တင်အဆင့်များ ပြီးသွားပါပြီ။ သို့သော် အချို့သော လိုအပ်မှုများ မပြည့်စုံသေးသဖြင့် သင့်ကော်ပိုရေးရှင်းသည် software ၏ အပြည့်အစုံအရ သုံးစွဲနိုင်ရန် အချို့တားမြစ်နေသည်"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ဆက်တင်အဆင့်များ အနည်းငယ် လိုအပ်နေသည်",
+        "detail" : "Setup လုပ်ငန်းစဉ်၏ အနီရောင်အဆင့်များ ပြန်စစ်ပါ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms ပံ့ပိုးသူများသို့ ဝင်ရောက်ခွင့် တပ်ဆင်ပါ"
+      },
+      "ExtensiveStup" : {
+        "label" : "တိုးချဲ့ထားသော အောက်ခံစနစ်/ပေးသွင်းသူရွေးချယ်မှု"
+      },
+      "MainPanelTitle" : {
+        "label" : "အသုံးပြုသော ဧရာမဘာသာစကား မော်ဒယ်များ ဆက်တင်"
+      },
+      "EasySetup" : {
+        "label" : "လွယ်ကူသော စတင်ဆက်တင်ခြင်း/ပြုပြင်ပေးခြင်း"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ဧရာမဘာသာစကား မော်ဒယ်များ ဆက်တင်"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider ကိုက်ညီသည်",
+        "detail" : "ပေးသွင်းသူသည် လည်ပတ်နေပြီး အောင်မြင်စွာ ပံုစံချထားပါသည်"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: url တွင် ပြဿနာကြုံတွေ့ခြင်း: https://api.openai.com/v1/models",
+        "detail" : "Server error: url တွင် ပြဿနာကြုံတွေ့ခြင်း: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
         "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider ကိုက်ညီသည်",
+        "detail" : "ပေးသွင်းသူသည် လည်ပတ်နေပြီး အောင်မြင်စွာ ပံုစံချထားပါသည်"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama local (သို့မဟုတ် lan) server စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "forUses" : {
+        "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
+        "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
+        "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "လုပ်ဆောင်ချက်အားလုံးကို ဖွင့်ပါ",
         "help" : "ရနိုင်သောကိရိယာများနှင့် လုပ်ဆောင်ချက် ခေါ်ယူမှုအားလုံးကို ဖွင့်ရန်။ ရွေးချယ်မထားပါက llms admin panel မှလည်း နောက်မှ ဖွင့်ခြင်း တစ်ခုခု ပြုလုပ်နိုင်ပါမည်"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ",
+        "detail" : "Server error: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ဖန်တီးပြီး ပြုလုပ်ပါ"
+      },
+      "vendorId" : {
+        "label" : "သင့် ဧရာမဘာသာစကား မော်ဒယ်ပေးသွင်းသူ ရွေးချယ်ပါ",
+        "help" : "သင့် default chat နှင့် embedding မော်ဒယ်များအတွက် ပထမဦးဆုံး vendor ရွေးချယ်ပါ"
+      },
+      "secretId" : {
+        "label" : "ပေးသွင်းသူ လက်မှတ် (api key) ရွေးပါ",
+        "help" : "ရွေးချယ်ထားသော llm ပေးသွင်းသူအတွက် ရှိပြီးသား လက်မှတ်များထဲမှ တစ်ခုရွေးပါ"
+      },
+      "InternalServiceModel" : {
+        "label" : "အတွင်းပိုင်း ဝန်ဆောင်မှုများ chat မော်ဒယ်",
+        "help" : "အတွင်းပိုင်းဝန်ဆောင်မှုများအတွက် ချိတ်ဆက်ထားသော chat မော်ဒယ်သည် သတင်းအချက်အလက်တွေ ထုတ်ယူခြင်း၊ အကျဉ်းချုပ်ရေးခြင်းနှင့် အတွင်းပေါ် လုပ်ငန်းစဉ်များ ဆောင်ရွက်မှုများကို တာဝန်ယူပါမည်။"
+      },
+      "ChatModel" : {
+        "label" : "မာတိကာ chat မော်ဒယ်",
+        "help" : "မာတိကာ chat မော်ဒယ်သည် အသုံးပြုသူမေးခွန်းများလျှောက်ထားခြင်းနှင့် သီးခြား သတ်မှတ်ထားသော မော်ဒယ်မျိုး မရှိသည့်လုပ်ငန်းစဉ်များကို ဆောင်ရွက်ပါမည်။ စရိတ်၊ စွမ်းဆောင်ရည်နှင့် အရည်အသွေးအကြား အဆင်ပြေအောင် ချိန်ညှိထားသင့်သည်။"
+      },
+      "ProviderBuy" : {
+        "label" : "Apy key credit ဝယ်ယူရန် လင့်ခ်"
+      },
+      "ProviderWWW" : {
+        "label" : "ဝက်ဘ်ဆိုက်လင့်ခ်"
+      },
+      "WebSiteLink" : {
+        "label" : "ပေးသွင်းသူ၏ ဝက်ဘ်ဆိုက်",
+        "help" : "ပေးသွင်းသူအကြောင်း အထွေထွေသတင်းအချက်အလက်အတွက် ဤနေရာကိုနှိပ်ပါ။"
+      },
+      "AcquireCreditLink" : {
+        "label" : "ပေးသွင်းသူ၏ credit ဝယ်ယူရန်",
+        "help" : "သင့် api key(များ)အတွက် credit ဝယ်ရန် ဤနေရာကိုနှိပ်ပါ။"
+      },
+      "EmbeddingModel" : {
+        "label" : "မာတိကာ embedding မော်ဒယ်",
+        "help" : "ဤမော်ဒယ်သည် သင့်ဒေတာနှင့် စာရွက်စာတမ်းများကို အဓိပ္ပာယ်တန်ဖိုးဖြင့် နိယာမတည်ပေးခြင်းနှင့် ရယူခြင်းကို တာဝန်ယူပါသည်"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Chat ကို stream လုပ်စဉ် အမှားဖြစ်ပွားပါသည်",
         "detail" : "Server အမှား: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: url တွင် ပြဿနာကြုံတွေ့ခြင်း: http://localhost:8000/v1/models",
+        "detail" : "Server error: url တွင် ပြဿနာကြုံတွေ့ခြင်း: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "chat ဖြန့်ဝေရန် ပြဿနာ",
+        "detail" : "Server error: ချိတ်ဆက်မှု ပြတ်တောက်သွားသည်"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: url တွင် ပြဿနာကြုံတွေ့ခြင်း: https://api.openai.com/v1/models",
+        "detail" : "Server error: url တွင် ပြဿနာကြုံတွေ့ခြင်း: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ",
+        "detail" : "Server error: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "စနစ်မှ မှန်ကန်မှုစစ်ဆေးပြီးသော ရှာဖွေမှုရလဒ်"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "အနည်းဆုံး အောက်ပါရွေးချယ်စရာတစ်ခုခု ရွေးပါ"
+      },
+      "LaunchBtn" : {
+        "label" : "ရှာဖွေရန် လုပ်ဆောင်ပါ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ဂေရင်းရှာဖွေမှု ကျော်ရန်"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ရွေးချယ်ထားသော knowledge bases"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ရွေးချယ်ထားသော စနစ်များ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ရင်းမြစ်များ ရွေးချယ်ပါ"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "ရှာဖွေမှု ဆက်စပ်မှုအနုတ်အတွက်",
         "help" : "Semantic ဆက်စပ်မှုအနုတ္တု (0.5 မှ 1.0 အတွင်း)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "api key လက်မှတ်ကို အသုံးပြုခြင်း သို့မဟုတ် အသစ်ဖန်တီးခြင်း"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/လက်မှတ်များ",
+        "help" : "ဤပေးသွင်းသူအတွက် api key သို့မဟုတ် လက်မှတ် ရွေးချယ်ပါ"
+      },
+      "NewApiKey" : {
+        "label" : "အကိုင်းသစ် api key",
+        "help" : "ဤပေးသွင်းသူနှင့် အသုံးပြုမည့် အကိုင်းသစ် api key ဖြည့်ပါ"
+      },
+      "PiSave" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "NewUserName" : {
+        "label" : "အသုံးပြုသူအမည်",
+        "help" : "ပေးသွင်းသူဝန်ဆောင်မှုများသုံးရန် အသုံးပြုသော အသုံးပြုသူအမည်"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ရှိပြီးသား သို့မဟုတ် အသစ်",
+        "help" : "ဤပေးသွင်းသူအတွက် ရှိပြီးသား သို့မဟုတ် အသစ်ဖန်တီးပါ"
+      },
+      "newSecretDescription" : {
+        "label" : "လက်မှတ်ဖော်ပြချက်",
+        "help" : "Api key လက်မှတ်အကြောင်းဖော်ပြချက်"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "လက်မှတ် ဖန်တီးပြီး",
+        "detail" : "လက်မှတ်ကို အောင်မြင်စွာဖန်တီးပြီးပါပြီ"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "အသုံးပြုသူများနှင့် စကားပြောရန်"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "အတွင်းပိုင်းဝန်ဆောင်မှုများအတွက် အသုံးပြုသော မော်ဒယ်"
       }
     }
   }

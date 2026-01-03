@@ -181,6 +181,33 @@
             "deepSearchApiSetupSection": {
                 "label": "Configure Deep search",
                 "description": "Configure Deep search parameters"
+            },
+            "ragAutotuneSetupSection": {
+                "label": "R.a.g. autotune",
+                "description": "Automatic retrieve augmented generation parameters tuning"
+            },
+            "Description": {
+                "label": "Description"
+            },
+            "LastAutotunedDate": {
+                "label": "Last tuning update"
+            },
+            "Code": {
+                "label": "Embedding model/VectorStore code"
+            },
+            "ComputedThreashold": {
+                "label": "Computed threashold"
+            },
+            "Autotuned": {
+                "label": "Autotuned"
+            },
+            "SETUP-DONE_DO_MORE": {
+                "summary": "Gebo.ai setup mandatory steps done...",
+                "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+            },
+            "SETUP-MISSING_SOME": {
+                "summary": "Gebo.ai setup is missing some mandatory step",
+                "detail": "Please review the red steps of the setup process"
             }
         },
         "ConfluenceWizardComponent": {
@@ -273,6 +300,18 @@
             },
             "MainPanelHeader": {
                 "label": "Setup Gebo.ai llms providers access"
+            },
+            "ExtensiveStup": {
+                "label": "Extended infrastructure/suppliers choices"
+            },
+            "MainPanelTitle": {
+                "label": "Setup used Large language models"
+            },
+            "EasySetup": {
+                "label": "Easy initial setup/configuration fix"
+            },
+            "MainLLMSPanelTitle": {
+                "label": "Setup Large language models"
             }
         },
         "GraphRagWizardComponent": {
@@ -1353,6 +1392,19 @@
             },
             "ModelAccessSettingsTab": {
                 "label": "Model access settings"
+            },
+            "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
+                "summary": "AI remote provider OK",
+                "detail": "Provider is up and running and successfully configured"
+            },
+            "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08": {
+                "summary": "Exception during operation:Error working with url:https://api.openai.com/v1/models",
+                "detail": "Server error: Error working with url:https://api.openai.com/v1/models"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GOpenAIEmbeddingModelConfig": {
@@ -1387,6 +1439,10 @@
             "defaultModel": {
                 "label": "set this as default embedding model",
                 "help": "If true this will be used as default embedding model where embedding model is not indicated"
+            },
+            "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
+                "summary": "AI remote provider OK",
+                "detail": "Provider is up and running and successfully configured"
             }
         },
         "GOllamaChatModelConfig": {
@@ -1426,6 +1482,11 @@
             },
             "MainPanel": {
                 "label": "Editing Ollama local (or lan) server chat model configuration"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GAnthropicChatModelConfig": {
@@ -1470,6 +1531,11 @@
             },
             "MainPanel": {
                 "label": "Editing Anthropic chat model configuration"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GMistralChatModelConfig": {
@@ -1513,6 +1579,11 @@
             },
             "MainPanel": {
                 "label": "Editing MistralAI chat model configuration"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GGoogleVertexChatModelConfig": {
@@ -1556,6 +1627,11 @@
             },
             "MainPanel": {
                 "label": "Editing Google Vertex AI chat model configuration"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GDeepseekChatModelConfig": {
@@ -1600,6 +1676,11 @@
             },
             "ModelAccessSettingsTab": {
                 "label": "Model access settings"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GenericOpenAIAPIChatModelConfig": {
@@ -1647,6 +1728,11 @@
             },
             "ModelAccessSettingsTab": {
                 "label": "Model access settings"
+            },
+            "forUses": {
+                "label": "Model usage(s)",
+                "help": "Uses that the Gebo.ai platform will consider this model for.",
+                "placeholder": "Uses that the Gebo.ai platform will consider this model for."
             }
         },
         "GOllamaEmbeddingModelConfig": {
@@ -2049,7 +2135,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 1047576 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 4096 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -3078,6 +3164,49 @@
             "enableAllFunctions": {
                 "label": "enable all function calls",
                 "help": "Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel"
+            },
+            "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757": {
+                "summary": "Exception during operation:Anthropic api cannot work without needed api key configuration",
+                "detail": "Server error: Anthropic api cannot work without needed api key configuration"
+            }
+        },
+        "GeboAIEasyVendorConfigurationComponent": {
+            "CreateAdvancedBtn": {
+                "label": "Create and activate"
+            },
+            "vendorId": {
+                "label": "Choose your large language model vendor",
+                "help": "Choose the initial vendor for your default chat and embedding models"
+            },
+            "secretId": {
+                "label": "Choose provider credentials (api key)",
+                "help": "Choose one of the existing credentials for the selected llm provider"
+            },
+            "InternalServiceModel": {
+                "label": "Internal services chat model",
+                "help": "The chat model configured for internal services will be responsable on extracting informations, summarizing and executing internal workflows."
+            },
+            "ChatModel": {
+                "label": "Default chat model",
+                "help": "The default chat model will be responsable on answering users questions, and executing worflows for wich there aren't specifically configured models. It has to be powerfull and reliable, with a good balance between cost, performance and outcome quality."
+            },
+            "ProviderBuy": {
+                "label": "Buy Apy key credit link"
+            },
+            "ProviderWWW": {
+                "label": "Web site link"
+            },
+            "WebSiteLink": {
+                "label": "Provider web site",
+                "help": "Click here for general provider informations."
+            },
+            "AcquireCreditLink": {
+                "label": "Purchase provider's credit",
+                "help": "Click here to buy credit for your api key(s)."
+            },
+            "EmbeddingModel": {
+                "label": "Default embedding model",
+                "help": "This model will be responsable of doing semantic indexing (embedding) and retrieve of your data and documents"
             }
         }
     },
@@ -3107,12 +3236,34 @@
                 "summary": "You cannot delete this",
                 "detail": "This object is referred from other part(s) of the application"
             },
-            
             "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc": {
                 "summary": "Exception during operation:apiKey must be set",
                 "detail": "Server error: apiKey must be set"
+            },
+            "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e": {
+                "summary": "Exception during operation:Error working with url:http://localhost:11434/v1/models",
+                "detail": "Server error: Error working with url:http://localhost:11434/v1/models"
+            },
+            "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2": {
+                "summary": "Error while streaming chat respose",
+                "detail": "Server error: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+            },
+            "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532": {
+                "summary": "Exception during operation:Error working with url:http://localhost:8000/v1/models",
+                "detail": "Server error: Error working with url:http://localhost:8000/v1/models"
+            },
+            "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640": {
+                "summary": "Error while streaming chat respose",
+                "detail": "Server error: Connection reset"
+            },
+            "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08": {
+                "summary": "Exception during operation:Error working with url:https://api.openai.com/v1/models",
+                "detail": "Server error: Error working with url:https://api.openai.com/v1/models"
+            },
+            "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757": {
+                "summary": "Exception during operation:Anthropic api cannot work without needed api key configuration",
+                "detail": "Server error: Anthropic api cannot work without needed api key configuration"
             }
-            
         }
     },
     "GeboAIUploadChatDocumentModule": {
@@ -3294,6 +3445,24 @@
             },
             "DeepSearchDataSourceProcessing": {
                 "label": "Analyzed system search result for"
+            },
+            "ChooseAtLeastMessage": {
+                "label": "Choose at least one of the following options"
+            },
+            "LaunchBtn": {
+                "label": "Run search"
+            },
+            "SkipDeepSearch": {
+                "label": "Skip deep search"
+            },
+            "KnowledgeBaseChoicesArea": {
+                "label": "Choosed knowledge bases"
+            },
+            "DataSourceChoicesArea": {
+                "label": "Choosed systems"
+            },
+            "SelectSourcesBtn": {
+                "label": "Select sources"
             }
         }
     },
@@ -3365,6 +3534,50 @@
             "similarityThreashold": {
                 "label": "Search similarity threashold",
                 "help": "Semantic similarity threashold (between 0.5 to 1.0)"
+            }
+        }
+    },
+    "GeboAIApiKeyModule": {
+        "GeboAIApiKeyComponent": {
+            "HeaderFieldSet": {
+                "label": "Use or create api key credentials"
+            },
+            "ExistingApiKey": {
+                "label": "Api key/credentials",
+                "help": "Choose api key or credentials for this provider"
+            },
+            "NewApiKey": {
+                "label": "New api key",
+                "help": "Insert a new api key to be used with this provider"
+            },
+            "PiSave": {
+                "label": "Save"
+            },
+            "NewUserName": {
+                "label": "User name",
+                "help": "User name used to access provider services"
+            },
+            "UseExistingOrNewCredentials": {
+                "label": "Use existing or new",
+                "help": "Use existing or create new credentials for this provider"
+            },
+            "newSecretDescription": {
+                "label": "Credentials description",
+                "help": "Api key credentials description"
+            },
+            "APIKEY_CREATED_OK": {
+                "summary": "Credentials created",
+                "detail": "Credentials successfully created"
+            }
+        }
+    },
+    "GeboAIChatModelUseModule": {
+        "GeboAIChatModelUseComponent": {
+            "CHAT": {
+                "description": "Chat with users"
+            },
+            "INTERNAL_SERVICES": {
+                "description": "Model used for internal services"
             }
         }
     }

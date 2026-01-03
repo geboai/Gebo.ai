@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Määritä Deep search",
         "description" : "Määritä Deep search -parametrit"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. automaattinen viritys",
+        "description" : "Automaattinen hakupohjaisten generointiparametrien säätö"
+      },
+      "Description" : {
+        "label" : "Kuvaus"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Viimeisin virityspäivitys"
+      },
+      "Code" : {
+        "label" : "Upotusmallin/VectorStorin koodi"
+      },
+      "ComputedThreashold" : {
+        "label" : "Laskettu kynnysarvo"
+      },
+      "Autotuned" : {
+        "label" : "Automaattisesti viritetty"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai -pakolliset askeleet suoritettu...",
+        "detail" : "Pakolliset askelet on suoritettu, mutta puuttuvia vaiheita estää organisaatiotasi hyödyntämästä ohjelmistoa täysimääräisesti"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai -asennuksesta puuttuu pakollinen vaihe",
+        "detail" : "Tarkista asetusten punaiset vaiheet"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Aseta Gebo.ai llms-palveluntarjoajien käyttöoikeus"
+      },
+      "ExtensiveStup" : {
+        "label" : "Laajennetut infrastruktuuri/toimittajavalinnat"
+      },
+      "MainPanelTitle" : {
+        "label" : "Määritä käytettävät suuret kielimallit"
+      },
+      "EasySetup" : {
+        "label" : "Helppo aloitus/asetusten korjaus"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Määritä suuret kielimallit"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mallin käyttöoikeudet"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Älykäs etäpalveluntarjoaja OK",
+        "detail" : "Palveluntarjoaja toimii ja on onnistuneesti määritetty"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Poikkeus toiminnon aikana:Virhe käsiteltäessä osoitetta:https://api.openai.com/v1/models",
+        "detail" : "Palvelinvirhe: Virhe käsiteltäessä osoitetta:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "aseta tämä oletusupotusmalliksi",
         "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Älykäs etäpalveluntarjoaja OK",
+        "detail" : "Palveluntarjoaja toimii ja on onnistuneesti määritetty"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Muokataan Ollama lähipalvelimen keskustelumalliasetuksia"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Muokataan Anthropic-keskustelumalliasetuksia"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Muokataan MistralAI-keskustelumalliasetuksia"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Muokataan Google Vertex AI keskustelumalliasetuksia"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mallin käyttöoikeudet"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mallin käyttöoikeudet"
+      },
+      "forUses" : {
+        "label" : "Mallin käyttötarkoitukset",
+        "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
+        "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "ota käyttöön kaikki toimintokutsut",
         "help" : "Ota käyttöön kaikki saatavilla olevat työkalut ja toimintokutsut, jos ei valittu, ne voi ottaa käyttöön myöhemmin llms-hallintapaneelissa"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Poikkeus toiminnon aikana:Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä",
+        "detail" : "Palvelinvirhe: Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Luo ja aktivoi"
+      },
+      "vendorId" : {
+        "label" : "Valitse suuri kielimallitoimittaja",
+        "help" : "Valitse ensisijainen toimittaja oletuskeskustelu- ja upotusmalleille"
+      },
+      "secretId" : {
+        "label" : "Valitse palveluntarjoajan tunniste (api-avain)",
+        "help" : "Valitse yksi olemassa olevista tunnisteista valitulle llm-palveluntarjoajalle"
+      },
+      "InternalServiceModel" : {
+        "label" : "Sisäpalveluiden keskustelumalli",
+        "help" : "Sisäpalveluille asetettu keskustelumalli vastaa tietojen poiminnasta, tiivistelystä ja sisäisten työnkulkujen toteutuksesta."
+      },
+      "ChatModel" : {
+        "label" : "Oletuskeskustelumalli",
+        "help" : "Oletuskeskustelumalli vastaa käyttäjien kysymyksiin ja suorittaa työnkulkuja, joille ei ole asetettu erillisiä malleja. Mallin tulee olla tehokas ja luotettava, kustannusten, suorituskyvyn ja laadun kannalta tasapainoinen."
+      },
+      "ProviderBuy" : {
+        "label" : "Osta apy-avaimen saldo-linkki"
+      },
+      "ProviderWWW" : {
+        "label" : "Verkkosivulinkki"
+      },
+      "WebSiteLink" : {
+        "label" : "Palveluntarjoajan verkkosivu",
+        "help" : "Klikkaa tästä saadaksesi yleisiä tietoja palveluntarjoajasta."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Osta palveluntarjoajan saldoa",
+        "help" : "Klikkaa tästä ostaaksesi saldoa api-avaimellesi."
+      },
+      "EmbeddingModel" : {
+        "label" : "Oletus upotusmalli",
+        "help" : "Tämä malli vastaa tietojen ja dokumenttien semanttisesta indeksoinnista (upotus) ja hausta"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Virhe chat-vastauksen latauksessa",
         "detail" : "Palvelinvirhe: 400 Bad Request POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Poikkeus toiminnon aikana:Virhe käsiteltäessä osoitetta:http://localhost:8000/v1/models",
+        "detail" : "Palvelinvirhe: Virhe käsiteltäessä osoitetta:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Virhe chat-virran aikana",
+        "detail" : "Palvelinvirhe: Yhteys katkaistu"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Poikkeus toiminnon aikana:Virhe käsiteltäessä osoitetta:https://api.openai.com/v1/models",
+        "detail" : "Palvelinvirhe: Virhe käsiteltäessä osoitetta:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Poikkeus toiminnon aikana:Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä",
+        "detail" : "Palvelinvirhe: Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Järjestelmän analysoitu hakutulos kohteelle"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Valitse vähintään yksi seuraavista vaihtoehdoista"
+      },
+      "LaunchBtn" : {
+        "label" : "Käynnistä haku"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ohita syvähaku"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valitut tietopohjat"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valitut järjestelmät"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Valitse lähteet"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Haun samankaltaisuuden kynnys",
         "help" : "Semanttisen samankaltaisuuden kynnys (väliltä 0.5–1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Käytä tai luo api-avain tunnisteita"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-avain/tunnisteet",
+        "help" : "Valitse tämän palveluntarjoajan api-avain tai tunniste"
+      },
+      "NewApiKey" : {
+        "label" : "Uusi api-avain",
+        "help" : "Syötä uusi api-avain tämän palveluntarjoajan käyttöön"
+      },
+      "PiSave" : {
+        "label" : "Tallenna"
+      },
+      "NewUserName" : {
+        "label" : "Käyttäjänimi",
+        "help" : "Käyttäjänimi palveluiden käyttöön"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Käytä olemassa olevaa tai uutta",
+        "help" : "Käytä olemassa olevaa tai luo uusi tunniste tälle palveluntarjoajalle"
+      },
+      "newSecretDescription" : {
+        "label" : "Tunnisteen kuvaus",
+        "help" : "Api-avain tunnisteen kuvaus"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Tunniste luotu",
+        "detail" : "Tunniste luotu onnistuneesti"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Keskustele käyttäjien kanssa"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Mallia käytetään sisäisiin palveluihin"
       }
     }
   }

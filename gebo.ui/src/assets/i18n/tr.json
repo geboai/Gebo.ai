@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search yapılandır",
         "description" : "Deep search parametrelerini yapılandır"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. otomatik ayar",
+        "description" : "Otomatik alınan artırılmış oluşturma parametrelerinin ayarlanması"
+      },
+      "Description" : {
+        "label" : "Açıklama"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Son ayar güncellemesi"
+      },
+      "Code" : {
+        "label" : "Gömme modeli/VectorStore kodu"
+      },
+      "ComputedThreashold" : {
+        "label" : "Hesaplanan eşik"
+      },
+      "Autotuned" : {
+        "label" : "Otomatik ayarlandı"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai kurulumunun zorunlu adımları tamamlandı...",
+        "detail" : "Zorunlu kurulum adımları tamamlandı ancak bazı eksik adımlar, kuruluşunuzun bu yazılımdan en iyi şekilde faydalanmasını engelliyor"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai kurulumunda bazı zorunlu adımlar eksik",
+        "detail" : "Lütfen kurulum sürecindeki kırmızı adımları gözden geçirin"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms sağlayıcılarına erişimi yapılandır"
+      },
+      "ExtensiveStup" : {
+        "label" : "Genişletilmiş altyapı/tedarikçi seçenekleri"
+      },
+      "MainPanelTitle" : {
+        "label" : "Kullanılan büyük dil modellerini ayarlayın"
+      },
+      "EasySetup" : {
+        "label" : "Kolay ilk kurulum/konfigürasyon düzeltmesi"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Büyük dil modellerini ayarlayın"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktan sağlayıcı OK",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "İşlem sırasında istisna: url ile çalışırken hata oluştu:https://api.openai.com/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata oluştu:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "bunu varsayılan gömme modeli olarak ayarla",
         "help" : "Eğer seçilirse, gömme modeli belirtilmediğinde bu varsayılan gömme modeli olarak kullanılacaktır"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktan sağlayıcı OK",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama yerel (veya ağ) sunucu sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "Tüm fonksiyon çağrılarını etkinleştir",
         "help" : "Mevcut tüm araçları ve fonksiyon çağrılarını etkinleştir. Eğer ayarlanmazsa, daha sonra llms yönetici panelinde etkinleştirilebilir"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "İşlem sırasında istisna:Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz",
+        "detail" : "Sunucu hatası: Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Oluştur ve etkinleştir"
+      },
+      "vendorId" : {
+        "label" : "Büyük dil modeli tedarikçinizi seçin",
+        "help" : "Varsayılan sohbet ve gömme modeliniz için ilk tedarikçiyi seçin"
+      },
+      "secretId" : {
+        "label" : "Sağlayıcı kimlik bilgileri (api anahtarı) seçin",
+        "help" : "Seçilen llm sağlayıcısı için mevcut kimlik bilgilerinden birini seçin"
+      },
+      "InternalServiceModel" : {
+        "label" : "Dahili hizmetler sohbet modeli",
+        "help" : "Dahili hizmetler için yapılandırılmış sohbet modeli, bilgileri çıkarmaktan, özetlemekten ve dahili iş akışlarını yürütmekten sorumlu olacaktır."
+      },
+      "ChatModel" : {
+        "label" : "Varsayılan sohbet modeli",
+        "help" : "Varsayılan sohbet modeli, kullanıcıların sorularını yanıtlamaktan ve özel olarak yapılandırılmış modellerin olmadığı iş akışlarını yürütmekten sorumlu olacaktır. Güçlü ve güvenilir olmalı; maliyet, performans ve sonuç kalitesi arasında iyi bir denge sağlamalıdır."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy anahtar kredi bağlantısı satın al"
+      },
+      "ProviderWWW" : {
+        "label" : "Web sitesi bağlantısı"
+      },
+      "WebSiteLink" : {
+        "label" : "Sağlayıcı web sitesi",
+        "help" : "Genel sağlayıcı bilgileri için buraya tıklayın."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Sağlayıcı kredisi satın alın",
+        "help" : "Api anahtar(lar)ınız için kredi satın almak için buraya tıklayın."
+      },
+      "EmbeddingModel" : {
+        "label" : "Varsayılan gömme modeli",
+        "help" : "Bu model, veri ve belgelerinizin anlamsal indekslemesi (gömme) ve alınmasından sorumlu olacaktır"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Sohbet yanıtı iletilirken hata oluştu",
         "detail" : "Sunucu hatası: 400 Hatalı İstek POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "İşlem sırasında istisna:http://localhost:8000/v1/models adresinde hata oluştu",
+        "detail" : "Sunucu hatası: http://localhost:8000/v1/models adresinde hata oluştu"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Sohbet akışında hata oluştu",
+        "detail" : "Sunucu hatası: Bağlantı sıfırlandı"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "İşlem sırasında istisna: url ile çalışırken hata oluştu:https://api.openai.com/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata oluştu:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "İşlem sırasında istisna:Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz",
+        "detail" : "Sunucu hatası: Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "için analiz edilen sistem arama sonucu"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdaki seçeneklerden en az birini seçin"
+      },
+      "LaunchBtn" : {
+        "label" : "Aramayı başlat"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Derin aramayı atla"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilen bilgi tabanları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilen sistemler"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kaynakları seç"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Arama benzerlik eşiği",
         "help" : "Anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api anahtar kimlik bilgileri kullan veya oluştur"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api anahtarı/kimlik bilgileri",
+        "help" : "Bu sağlayıcı için api anahtarı veya kimlik bilgileri seçin"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api anahtarı",
+        "help" : "Bu sağlayıcıyla kullanılacak yeni bir api anahtarı girin"
+      },
+      "PiSave" : {
+        "label" : "Kaydet"
+      },
+      "NewUserName" : {
+        "label" : "Kullanıcı adı",
+        "help" : "Sağlayıcı hizmetlerine erişmek için kullanılan kullanıcı adı"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mevcudu kullan veya yeni oluştur",
+        "help" : "Bu sağlayıcı için mevcut olan veya yeni oluşturulacak kimlik bilgilerini kullanın"
+      },
+      "newSecretDescription" : {
+        "label" : "Kimlik bilgileri açıklaması",
+        "help" : "Api anahtarı kimlik bilgileri açıklaması"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kimlik bilgileri oluşturuldu",
+        "detail" : "Kimlik bilgileri başarıyla oluşturuldu"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Kullanıcılarla sohbet"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Dahili hizmetler için kullanılan model"
       }
     }
   }

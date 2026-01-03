@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Stilla Deep search",
         "description" : "Settu upp breytur fyrir Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. sjálfvirk stilling",
+        "description" : "Sjálfvirk stilling á breytum fyrir útvíkkaða gagnasöfnun"
+      },
+      "Description" : {
+        "label" : "Lýsing"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Síðasta stilling uppfærð"
+      },
+      "Code" : {
+        "label" : "Innfellingarlíkan/VectorStore kóði"
+      },
+      "ComputedThreashold" : {
+        "label" : "Reiknaður þröskuldur"
+      },
+      "Autotuned" : {
+        "label" : "Sjálfstillt"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Nauðsynlegum stillingum fyrir Gebo.ai lokið...",
+        "detail" : "Nauðsynlegum skrefum í uppsetningu er lokið en einhver skref vantar sem hindra að teymið geti nýtt hugbúnaðinn til fulls"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Vantar nauðsynlegt skref í uppsetningu fyrir Gebo.ai",
+        "detail" : "Vinsamlegast skoðaðu rauðu skrefin í uppsetningarferlinu"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Stilla aðgang að Gebo.ai llms veitendum"
+      },
+      "ExtensiveStup" : {
+        "label" : "Val á ítarlegri innviðum/veitendum"
+      },
+      "MainPanelTitle" : {
+        "label" : "Stilla notuð stór tungumálalíkön"
+      },
+      "EasySetup" : {
+        "label" : "Auðveld upphafsstilling/leiðrétting"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Stilla stór tungumálalíkön"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Aðgangsstillingar líkans"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Gervigreindar veitandi virkur",
+        "detail" : "Veitandi er uppi og búið að stilla rétt"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undantekning kom upp:Villa við að vinna með url:https://api.openai.com/v1/models",
+        "detail" : "Þjónustuvilla: Villa við að vinna með url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "setja þetta sem sjálfgefið innbyggt líkan",
         "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert innbyggt líkan er valið"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Gervigreindar veitandi virkur",
+        "detail" : "Veitandi er uppi og búið að stilla rétt"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Breyti Ollama staðbundna (eða LAN) þjóns spjalllíkansuppsetningu"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Breyti Anthropic spjalllíkansuppsetningu"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Breyti MistralAI spjalllíkansuppsetningu"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Breyti Google Vertex AI spjalllíkansuppsetningu"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Aðgangsstillingar líkans"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Aðgangsstillingar líkans"
+      },
+      "forUses" : {
+        "label" : "Notkun líkans",
+        "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
+        "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "virkja allar aðgerðir",
         "help" : "Virkja öll tiltæk verkfæri og aðgerðir, ef það er ekki valið er hægt að virkja þau síðar í llms stjórnborði"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undantekning kom upp:Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar",
+        "detail" : "Þjónustuvilla: Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Búa til og virkja"
+      },
+      "vendorId" : {
+        "label" : "Veldu aðila stórs tungumálalíkans",
+        "help" : "Veldu upphaflega veitanda fyrir sjálfgefna spjall- og innfellingarlíkön"
+      },
+      "secretId" : {
+        "label" : "Veldu auðkenni veitanda (api lykill)",
+        "help" : "Veldu einn af fyrirliggjandi auðkennum fyrir valinn LLM veitanda"
+      },
+      "InternalServiceModel" : {
+        "label" : "Spjallmódel fyrir innri þjónustur",
+        "help" : "Spjallmódelið sem stillt er fyrir innri þjónustur sér um að draga upplýsingar saman, yfirfara og framkvæma innri ferla."
+      },
+      "ChatModel" : {
+        "label" : "Sjálfgefið spjallmódel",
+        "help" : "Sjálfgefna spjallmódelið sér um að svara spurningum notenda og framkvæma ferla þar sem ekki eru til sértæk líkön. Þarf að vera öflugt og áreiðanlegt með gott jafnvægi á milli kostnaðar, afkasta og gæða niðurstaðna."
+      },
+      "ProviderBuy" : {
+        "label" : "Hlekkur fyrir Apy key inneign"
+      },
+      "ProviderWWW" : {
+        "label" : "Vefslóð"
+      },
+      "WebSiteLink" : {
+        "label" : "Vefslóð veitanda",
+        "help" : "Smelltu hér fyrir almennar upplýsingar um veitanda."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Kaupa inneign hjá veitanda",
+        "help" : "Smelltu hér til að kaupa inneign fyrir API-lykil(ana) þína."
+      },
+      "EmbeddingModel" : {
+        "label" : "Sjálfgefið innfellingarlíkan",
+        "help" : "Þetta líkan sér um merkingarvísun (embedding) og gagna- og skjalaleit"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Villa kom upp við gagnaflutning úr spjalli",
         "detail" : "Þjónustuvilla: 400 Bad Request frá POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Undantekning kom upp:Villa við að vinna með url:http://localhost:8000/v1/models",
+        "detail" : "Þjónustuvilla: Villa við að vinna með url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Villa meðan verið er að senda svör úr spjalli",
+        "detail" : "Þjónustuvilla: Tengingu lokað"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undantekning kom upp:Villa við að vinna með url:https://api.openai.com/v1/models",
+        "detail" : "Þjónustuvilla: Villa við að vinna með url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undantekning kom upp:Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar",
+        "detail" : "Þjónustuvilla: Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Greind niðurstaða kerfisleitar fyrir"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Veldu að minnsta kosti einn af eftirfarandi valkostum"
+      },
+      "LaunchBtn" : {
+        "label" : "Keyra leit"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Sleppa djúpum leitarferli"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valin þekkingargrunnur"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valin kerfi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Velja uppruna"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Líkindaþröskuldur fyrir leit",
         "help" : "Skynsamleg líkindaþröskuldur (á bilinu 0.5 til 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Nota eða búa til API-lyklauðkenni"
+      },
+      "ExistingApiKey" : {
+        "label" : "API lykill/auðkenni",
+        "help" : "Veldu API lykil eða auðkenni fyrir þennan veitanda"
+      },
+      "NewApiKey" : {
+        "label" : "Nýr API lykill",
+        "help" : "Settu inn nýjan API lykil til að nota fyrir þennan veitanda"
+      },
+      "PiSave" : {
+        "label" : "Vista"
+      },
+      "NewUserName" : {
+        "label" : "Notandanafn",
+        "help" : "Notandanafn fyrir aðgang að þjónustu veitanda"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Nota fyrirliggjandi eða ný",
+        "help" : "Nota fyrirliggjandi eða búa til ný auðkenni fyrir þennan veitanda"
+      },
+      "newSecretDescription" : {
+        "label" : "Lýsing á auðkenni",
+        "help" : "Lýsing á API lykils auðkenni"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Auðkenni búið til",
+        "detail" : "Auðkenni voru búin til með góðum árangri"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Spjalla við notendur"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Líkan notað fyrir innri þjónustu"
       }
     }
   }

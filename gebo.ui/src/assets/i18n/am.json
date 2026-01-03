@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search ያቀናብሩ",
         "description" : "የ Deep search መለኪያዎችን ያቀናብሩ"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ራስ-ሰር ማዋቀሪያ",
+        "description" : "የበርካታ ፍጠር ትዕዛዞችን በራስ-ሰር ማሻሻያ"
+      },
+      "Description" : {
+        "label" : "መግለጫ"
+      },
+      "LastAutotunedDate" : {
+        "label" : "የመጨረሻው ማሻሻያ አዘል"
+      },
+      "Code" : {
+        "label" : "የEmbedding ሞዴል/VectorStore ኮድ"
+      },
+      "ComputedThreashold" : {
+        "label" : "የተቆጣጠረ threshold"
+      },
+      "Autotuned" : {
+        "label" : "በራስ-ሰር የተሻሻለ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "የGebo.ai መመዝገቢያ አስፈላጊ ደረጃዎች ተጠናቋል...",
+        "detail" : "አስፈላጊ የመመዝገቢያ ደረጃዎች ተጠናቅቋል፣ ግን ቀረው ያሉ ደረጃዎች ድርጅትዎ ከዚህ ሶፍትዌሩ ብዙ ተጠቃሚነት እንዳያገኝ ያበረክቱታል"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "የGebo.ai መዋቅር አንዳንድ አስፈላጊ ደረጃዎች ተጎድቷል",
+        "detail" : "ወደቀዩት ደረጃዎች እባክዎ ይመልከቱ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "የ Gebo.ai llms አቅራቢዎች መዳረሻ አዘጋጅ"
+      },
+      "ExtensiveStup" : {
+        "label" : "የተስፋፋ መገናኛ/አቅራቢዎች ምርጫዎች"
+      },
+      "MainPanelTitle" : {
+        "label" : "የተጠቀሱት ትልቅ ቋንቋ ሞዴሎች መዋቅር"
+      },
+      "EasySetup" : {
+        "label" : "ቀላል መጀመሪያ መዋቅር/አሰራር ማሻሻያ"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ትልቅ ቋንቋ ሞዴሎች መዋቅር"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI የርቀት አቅራቢ ዝግጁ ነው",
+        "detail" : "አቅራቢው በመስመር ላይ ነውና በትክክል ተዘጋጅቷል"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "በእንቅስቃሴ ውስጥ ልዩነት ፡ ምንጭ ጋር ችግር :https://api.openai.com/v1/models",
+        "detail" : "የአገልጋይ ስህተት: ምንጭ ጋር ችግር :https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
         "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI የርቀት አቅራቢ ዝግጁ ነው",
+        "detail" : "አቅራቢው በመስመር ላይ ነውና በትክክል ተዘጋጅቷል"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "የOllama አካባቢ (ወይም LAN) ሰርቨር ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "የAnthropic ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "የMistralAI ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "የGoogle Vertex AI ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "forUses" : {
+        "label" : "የሞዴሉ አጠቃቀም(ዎች)",
+        "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
+        "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "ሁሉንም የስራ ጥሪዎች አንቃ",
         "help" : "ሁሉንም ያሉትን መሳሪያዎች እና የስራ ጥሪዎች አንቃ፣ ካልተመረጠ በኋላ በ llms አስተዳዳሪ ፓነል ማንቃት ይችላሉ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "በእንቅስቃሴ ውስጥ ልዩነት : Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ",
+        "detail" : "የአገልጋይ ስህተት፦ Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ፍጠርና አንብብ"
+      },
+      "vendorId" : {
+        "label" : "የትልቅ ቋንቋ ሞዴል አቅራቢዎን ይምረጡ",
+        "help" : "ለዲፎልት ውይይትና የembedding ሞዴሎች የመጀመሪያ አቅራቢዎን ይምረጡ"
+      },
+      "secretId" : {
+        "label" : "የአቅራቢ መረጃዎች (api ቁልፍ)",
+        "help" : "ለተመረጠው የllm አቅራቢ ከአለነው መረጃዎች አንዱን ይምረጡ"
+      },
+      "InternalServiceModel" : {
+        "label" : "የውስጣዊ አገልግሎቶች ውይይት ሞዴል",
+        "help" : "ለውስጣዊ አገልግሎቶች ተዘጋጅቷ የሚሰራው የውይይት ሞዴል መረጃ ማውጣት፣ መደነገጥና የውስጣዊ ስራዎችን ማከናወን ላይ ይሰራል።"
+      },
+      "ChatModel" : {
+        "label" : "ዲፎልት ውይይት ሞዴል",
+        "help" : "ዲፎልት ውይይት ሞዴሉ የተጠቃሚ ጥያቄዎችን መልስ ማቅረብና በተወሰነ ሞዴል የተዘጋጀ ሰራዎች ላይ ሳይሆን ውስጣዊ ስራዎችን ማከናወን ላይ ይሰራል። የተፈጥሮ ውፅኢት ፣ የዋጋ፣ እና ውጤት ጥራት ግምገማ ማድረግ የሚችል እና የሚታመን መሆን አለበት።"
+      },
+      "ProviderBuy" : {
+        "label" : "የApy ቁልፍ የክሬዲት አግድስ አገናኝ"
+      },
+      "ProviderWWW" : {
+        "label" : "የድርጅቱ ድር ጣቢያ አገናኝ"
+      },
+      "WebSiteLink" : {
+        "label" : "የአቅራቢ ድር ጣቢያ",
+        "help" : "ለአቅራቢ አጠቃላይ መረጃዎች እዚህ ይጫኑ።"
+      },
+      "AcquireCreditLink" : {
+        "label" : "የአቅራቢ ክሬዲት ይግዙ",
+        "help" : "ለapi ቁልፎችዎ ክሬዲት እዚህ ይግዙ።"
+      },
+      "EmbeddingModel" : {
+        "label" : "ዲፎልት embedding ሞዴል",
+        "help" : "ይህ ሞዴል የሰማይን ማውጣት (embedding) እና ውሂብዎን እና ሰነዶችን ማግኘት ላይ ይሰራል"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "የቻት ምላሽ ስህተት ሲቀርበው",
         "detail" : "የአገልጋይ ስህተት: 400 ስህተት መጠየቂያ ከ POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "በእንቅስቃሴ ውስጥ ልዩነት: ምንጭ ጋር ችግር:http://localhost:8000/v1/models",
+        "detail" : "የአገልጋይ ስህተት፦ ምንጭ ጋር ችግር:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "በውይይት ቀጣይ ላይ ስህተት",
+        "detail" : "የአገልጋይ ስህተት፦ አገናኝ ተቋርጧል"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "በእንቅስቃሴ ውስጥ ልዩነት ፡ ምንጭ ጋር ችግር :https://api.openai.com/v1/models",
+        "detail" : "የአገልጋይ ስህተት: ምንጭ ጋር ችግር :https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "በእንቅስቃሴ ውስጥ ልዩነት : Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ",
+        "detail" : "የአገልጋይ ስህተት፦ Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "ለስርዓት የተተነተነ የፍለጋ ውጤት"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ከዚህ አማራጮች ቢያንስ አንዱን ይምረጡ"
+      },
+      "LaunchBtn" : {
+        "label" : "ፈልግ አስኪድ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ጥልቅ ፍለጋ ይዝሉ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "የተመረጡ የእውቀት ቤዞች"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "የተመረጡ ሲስተሞች"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ምንጮችን ይምረጡ"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "የፍለጋ ተመሳሳይነት መጠን",
         "help" : "መስክ ሰማንቲክ ተመሳሳይነት መጠን (0.5 እስከ 1.0 መካከል)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "api ቁልፍ መረጃዎችን ይጠቀሙ ወይም ፍጠሩ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ቁልፍ/መረጃዎች",
+        "help" : "ለዚህ አቅራቢ api ቁልፍ ወይም መረጃዎችን ይምረጡ"
+      },
+      "NewApiKey" : {
+        "label" : "አዲስ api ቁልፍ",
+        "help" : "ከዚህ አቅራቢ ጋር ለመጠቀም አዲስ api ቁልፍ ያስገቡ"
+      },
+      "PiSave" : {
+        "label" : "አስቀምጥ"
+      },
+      "NewUserName" : {
+        "label" : "የተጠቃሚ ስም",
+        "help" : "በአቅራቢ አገልግሎቶች ለመግባት የተጠቃሚ ስም"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ካለ ወይም አዲስ ይጠቀሙ",
+        "help" : "ካለ ወይም አዲስ መረጃዎች ለዚህ አቅራቢ ይጠቀሙ ወይም ፍጠሩ"
+      },
+      "newSecretDescription" : {
+        "label" : "መረጃ መግለጫ",
+        "help" : "api ቁልፍ መረጃዎች መግለጫ"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "መረጃ ተፈጥሯል",
+        "detail" : "መረጃዎች በትክክል ተፈጥሯል"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ከተጠቃሚዎች ጋር ውይይት"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ለውስጣዊ አገልግሎቶች የተጠቀሰ ሞዴል"
       }
     }
   }

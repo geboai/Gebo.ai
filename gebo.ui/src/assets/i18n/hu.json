@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search beállítása",
         "description" : "Állítsd be a Deep search paramétereit"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. önhangolás",
+        "description" : "Automatikus augmented generálási paraméterek hangolása"
+      },
+      "Description" : {
+        "label" : "Leírás"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Legutóbbi hangolás frissítése"
+      },
+      "Code" : {
+        "label" : "Embedding modell/VectorStore kód"
+      },
+      "ComputedThreashold" : {
+        "label" : "Kiszámított küszöb"
+      },
+      "Autotuned" : {
+        "label" : "Automatikusan hangolva"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai beállítási kötelező lépések befejezve...",
+        "detail" : "A kötelező beállítások megtörténtek, de néhány hiányzó lépés miatt szervezete nem használhatja ki teljesen ezt a szoftvert"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "A Gebo.ai beállításból hiányzik néhány kötelező lépés",
+        "detail" : "Kérjük, nézze át a piros lépéseket a beállítási folyamatban"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms szolgáltatók elérésének beállítása"
+      },
+      "ExtensiveStup" : {
+        "label" : "Kiterjesztett infrastruktúra/szállítói lehetőségek"
+      },
+      "MainPanelTitle" : {
+        "label" : "Használatban lévő nagy nyelvi modellek beállítása"
+      },
+      "EasySetup" : {
+        "label" : "Könnyű kezdeti beállítás/javítás"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Nagy nyelvi modellek beállítása"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató rendben",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálták"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "állítsd be alapértelmezett beágyazási modellként",
         "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató rendben",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálták"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama helyi (vagy hálózati) szerver chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "minden funkció engedélyezése",
         "help" : "Minden elérhető eszköz és funkcióhívás engedélyezése, ha nincs beállítva, később az llms admin panelen is lehetséges aktiválni"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Kivétel történt a művelet során: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül",
+        "detail" : "Szerverhiba: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Létrehozás és aktiválás"
+      },
+      "vendorId" : {
+        "label" : "Válassza ki a nagy nyelvi modell szolgáltatót",
+        "help" : "Válassza ki a kezdeti szolgáltatót az alapértelmezett chathez és embedding modellekhez"
+      },
+      "secretId" : {
+        "label" : "Válasszon szolgáltatói hitelesítést (api kulcsot)",
+        "help" : "Válasszon egy meglévő hitelesítést a kiválasztott llm szolgáltatóhoz"
+      },
+      "InternalServiceModel" : {
+        "label" : "Belső szolgáltatások chat modell",
+        "help" : "A belső szolgáltatásokhoz konfigurált chat modell felel az információk kinyeréséért, összefoglalásáért és a belső folyamatok végrehajtásáért."
+      },
+      "ChatModel" : {
+        "label" : "Alapértelmezett chat modell",
+        "help" : "Az alapértelmezett chat modell felel a felhasználói kérdésekre adandó válaszokért, illetve a specifikusan nem konfigurált workflow-k végrehajtásáért. Erősnek, megbízhatónak kell lennie, jó egyensúlyt tartva az ár, a teljesítmény és a minőség között."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy kulcs vásárlási hivatkozás"
+      },
+      "ProviderWWW" : {
+        "label" : "Weboldal hivatkozás"
+      },
+      "WebSiteLink" : {
+        "label" : "Szolgáltató weboldala",
+        "help" : "Kattintson ide általános szolgáltatói információkért."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Szolgáltatói kredit vásárlása",
+        "help" : "Kattintson ide, hogy kredithez jusson api kulcsaihoz."
+      },
+      "EmbeddingModel" : {
+        "label" : "Alapértelmezett embedding modell",
+        "help" : "Ez a modell felel az adatok és dokumentumok szemantikus indexeléséért (embedding) és visszakereséséért"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Hiba a chat válasz streamelésekor",
         "detail" : "Szerverhiba: 400 Hibás kérés a POST http://localhost:8000/v1/chat/completions címről"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: http://localhost:8000/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Hiba történt a chat válasz közvetítése közben",
+        "detail" : "Szerverhiba: Kapcsolat alaphelyzetbe állítva"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Kivétel történt a művelet során: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül",
+        "detail" : "Szerverhiba: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Elemzett rendszer keresési eredménye ehhez:"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Válasszon legalább egy lehetőséget az alábbiak közül"
+      },
+      "LaunchBtn" : {
+        "label" : "Keresés indítása"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Mélykeresés kihagyása"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Kiválasztott tudásbázisok"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Kiválasztott rendszerek"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Források kiválasztása"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Keresési hasonlósági küszöb",
         "help" : "Szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api kulcs hitelesítés használata vagy létrehozása"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api kulcs/hitelesítés",
+        "help" : "Válassza ki a szolgáltatóhoz tartozó api kulcsot vagy hitelesítést"
+      },
+      "NewApiKey" : {
+        "label" : "Új api kulcs",
+        "help" : "Adjon meg új api kulcsot ehhez a szolgáltatóhoz"
+      },
+      "PiSave" : {
+        "label" : "Mentés"
+      },
+      "NewUserName" : {
+        "label" : "Felhasználónév",
+        "help" : "A szolgáltatást elérő felhasználónév"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Létező vagy új használata",
+        "help" : "Válassza a meglévő vagy hozzon létre új hitelesítést ehhez a szolgáltatóhoz"
+      },
+      "newSecretDescription" : {
+        "label" : "Hitelesítés leírása",
+        "help" : "Api kulcs hitelesítés leírása"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Hitelesítés létrejött",
+        "detail" : "A hitelesítés sikeresen létrejött"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Csevegés felhasználókkal"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modell belső szolgáltatásokhoz"
       }
     }
   }

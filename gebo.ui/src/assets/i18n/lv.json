@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfigurēt Deep search",
         "description" : "Konfigurējiet Deep search parametrus"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. automātiskā regulēšana",
+        "description" : "Automātiska ģenerēšanas parametru pielāgošana ar paplašinātu izgūšanu"
+      },
+      "Description" : {
+        "label" : "Apraksts"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Pēdējā regulēšanas atjaunināšana"
+      },
+      "Code" : {
+        "label" : "Iegulšanas modeļa/VectorStore kods"
+      },
+      "ComputedThreashold" : {
+        "label" : "Aprēķinātais slieksnis"
+      },
+      "Autotuned" : {
+        "label" : "Automātiski pielāgots"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai iestatīšanas obligātie soļi pabeigti...",
+        "detail" : "Obligātie iestatīšanas soļi ir pabeigti, taču trūkstošie soļi neļauj jūsu organizācijai pilnībā izmantot šo programmatūru"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
+        "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Iestatiet Gebo.ai llms nodrošinātāju piekļuvi"
+      },
+      "ExtensiveStup" : {
+        "label" : "Paplašinātas infrastruktūras/piegādātāju izvēles"
+      },
+      "MainPanelTitle" : {
+        "label" : "Iestatīt izmantotos lielos valodas modeļus"
+      },
+      "EasySetup" : {
+        "label" : "Vienkārša sākotnējā iestatīšana/konfigurācijas labošana"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Iestatīt lielos valodas modeļus"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālināts nodrošinātājs ir aktīvs",
+        "detail" : "Nodrošinātājs darbojas un ir veiksmīgi konfigurēts"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izņēmums darbības laikā: Kļūda, darbojoties ar url:https://api.openai.com/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "iestatīt kā noklusējuma iegulējuma modelis",
         "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālināts nodrošinātājs ir aktīvs",
+        "detail" : "Nodrošinātājs darbojas un ir veiksmīgi konfigurēts"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama lokālā (vai LAN) servera čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "iespējot visas funkciju izsaukšanas",
         "help" : "Iespējo visus pieejamos rīkus un funkciju izsaukšanas; ja nav atzīmēts, tos varēs aktivizēt vēlāk llms administrēšanas panelī"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izņēmums darbības laikā:Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas",
+        "detail" : "Servera kļūda: Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "vendorId" : {
+        "label" : "Izvēlieties savu lielā valodas modeļa piegādātāju",
+        "help" : "Izvēlieties sākotnējo piegādātāju saviem noklusētajiem tērzēšanas un iegulšanas modeļiem"
+      },
+      "secretId" : {
+        "label" : "Izvēlieties pakalpojumu sniedzēja akreditācijas datus (api atslēga)",
+        "help" : "Izvēlieties kādu no esošajiem akreditācijas datiem izvēlētajam llm nodrošinātājam"
+      },
+      "InternalServiceModel" : {
+        "label" : "Iekšējo pakalpojumu tērzēšanas modelis",
+        "help" : "Iekšējiem pakalpojumiem konfigurētais tērzēšanas modelis būs atbildīgs par informācijas izguvi, kopsavilkumu sniegšanu un iekšējo darbplūsmu izpildi."
+      },
+      "ChatModel" : {
+        "label" : "Noklusējuma tērzēšanas modelis",
+        "help" : "Noklusējuma tērzēšanas modelis atbildēs uz lietotāju jautājumiem un izpildīs darbplūsmas, kam nav speciāli konfigurētu modeļu. Tam jābūt jaudīgam un uzticamam, ar labu līdzsvaru starp izmaksām, veiktspēju un rezultātu kvalitāti."
+      },
+      "ProviderBuy" : {
+        "label" : "Pirkt api atslēgas kredīta saiti"
+      },
+      "ProviderWWW" : {
+        "label" : "Tīmekļa vietnes saite"
+      },
+      "WebSiteLink" : {
+        "label" : "Pakalpojumu sniedzēja tīmekļa vietne",
+        "help" : "Noklikšķiniet šeit, lai iegūtu vispārīgu informāciju par pakalpojumu sniedzēju."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Pirkt pakalpojumu sniedzēja kredītu",
+        "help" : "Noklikšķiniet šeit, lai iegādātos kredītu savām api atslēgām."
+      },
+      "EmbeddingModel" : {
+        "label" : "Noklusējuma iegulšanas modelis",
+        "help" : "Šis modelis būs atbildīgs par semantisko indeksēšanu (iegulšanu) un datu un dokumentu izgūšanu"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Kļūda straumējot tērzēšanas atbildi",
         "detail" : "Servera kļūda: 400 Bad Request no POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Izņēmums darbības laikā:Kļūda, darbojoties ar url:http://localhost:8000/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Kļūda, straumējot tērzēšanas atbildi",
+        "detail" : "Servera kļūda: Savienojums atiestatīts"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izņēmums darbības laikā:Kļūda, darbojoties ar url:https://api.openai.com/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izņēmums darbības laikā:Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas",
+        "detail" : "Servera kļūda: Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analizētā sistēmas meklēšanas rezultāts priekš"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izvēlieties vismaz vienu no šīm opcijām"
+      },
+      "LaunchBtn" : {
+        "label" : "Sākt meklēšanu"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Izlaist dziļo meklēšanu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izvēlētās zināšanu bāzes"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izvēlētās sistēmas"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izvēlēties avotus"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Meklēšanas līdzības slieksnis",
         "help" : "Semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Izmantot vai izveidot api atslēgas akreditācijas datus"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api atslēga/akreditācijas dati",
+        "help" : "Izvēlieties api atslēgu vai akreditācijas datus šim pakalpojumu sniedzējam"
+      },
+      "NewApiKey" : {
+        "label" : "Jauna api atslēga",
+        "help" : "Ievadiet jaunu api atslēgu, ko izmantot ar šo pakalpojumu sniedzēju"
+      },
+      "PiSave" : {
+        "label" : "Saglabāt"
+      },
+      "NewUserName" : {
+        "label" : "Lietotājvārds",
+        "help" : "Lietotājvārds piekļuvei pakalpojumu sniedzēja pakalpojumiem"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Izmantot esošos vai jaunus",
+        "help" : "Izmantot esošos vai izveidot jaunus akreditācijas datus šim pakalpojumu sniedzējam"
+      },
+      "newSecretDescription" : {
+        "label" : "Akreditācijas datu apraksts",
+        "help" : "Api atslēgas akreditācijas datu apraksts"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Akreditācijas dati izveidoti",
+        "detail" : "Akreditācijas dati veiksmīgi izveidoti"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Tērzēšana ar lietotājiem"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modelis izmantošanai iekšējiem pakalpojumiem"
       }
     }
   }

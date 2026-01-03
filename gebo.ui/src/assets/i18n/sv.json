@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfigurera Deep search",
         "description" : "Konfigurera parametrar för Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatisk justering av parametrar för förbättrad generering"
+      },
+      "Description" : {
+        "label" : "Beskrivning"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Senaste uppdatering av justering"
+      },
+      "Code" : {
+        "label" : "Kod för embeddingmodell/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Beräknad tröskel"
+      },
+      "Autotuned" : {
+        "label" : "Automatiskt justerad"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai obligatoriska inställningar klara...",
+        "detail" : "Obligatoriska konfigurationssteg är genomförda, men vissa saknade steg gör att din organisation inte får ut det mesta av denna programvara"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai saknar några obligatoriska steg",
+        "detail" : "Gå igenom de röda stegen i installationsprocessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Ställ in Gebo.ai llms leverantörsåtkomst"
+      },
+      "ExtensiveStup" : {
+        "label" : "Utökade infrastruktur-/leverantörsval"
+      },
+      "MainPanelTitle" : {
+        "label" : "Konfigurera använda stora språkmodeller"
+      },
+      "EasySetup" : {
+        "label" : "Enkel startkonfiguration/fix"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Konfigurera stora språkmodeller"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Åtkomstinställningar för modell"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-fjärrleverantör OK",
+        "detail" : "Leverantören är igång och korrekt konfigurerad"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undantag vid operation: Fel vid arbete med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfel: Fel vid arbete med url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "sätt som standard embeddingmodell",
         "help" : "Om denna är markerad kommer den användas som standard embeddingmodell där ingen är angiven"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-fjärrleverantör OK",
+        "detail" : "Leverantören är igång och korrekt konfigurerad"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerar Ollama lokal (eller lan) server chattmodellkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerar Anthropic chattmodellkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerar MistralAI chattmodellkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerar Google Vertex AI chattmodellkonfiguration"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Åtkomstinställningar för modell"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Åtkomstinställningar för modell"
+      },
+      "forUses" : {
+        "label" : "Modellanvändning(ar)",
+        "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
+        "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "aktivera alla funktioner",
         "help" : "Aktivera alla tillgängliga verktyg och funktionsanrop. Om det inte är valt går det att aktivera dem senare i llms administrationspanel"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undantag vid operation:Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration",
+        "detail" : "Serverfel: Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Skapa och aktivera"
+      },
+      "vendorId" : {
+        "label" : "Välj din leverantör av stora språkmodeller",
+        "help" : "Välj initial leverantör för dina standard chatt- och embeddingmodeller"
+      },
+      "secretId" : {
+        "label" : "Välj leverantörsinloggning (api-nyckel)",
+        "help" : "Välj en av de befintliga inloggningarna för vald llm-leverantör"
+      },
+      "InternalServiceModel" : {
+        "label" : "Intern tjänstemodell för chatt",
+        "help" : "Chattmodellen som är konfigurerad för interna tjänster ansvarar för att extrahera information, sammanfatta och köra interna arbetsflöden."
+      },
+      "ChatModel" : {
+        "label" : "Standard chattmodell",
+        "help" : "Standard chattmodell ansvarar för att svara på användarnas frågor och utföra arbetsflöden för vilka det inte finns särskilt konfigurerade modeller. Den ska vara kraftfull och pålitlig, med god balans mellan kostnad, prestanda och resultatkvalitet."
+      },
+      "ProviderBuy" : {
+        "label" : "Köp länk för api-nyckelkredit"
+      },
+      "ProviderWWW" : {
+        "label" : "Webbplatslänk"
+      },
+      "WebSiteLink" : {
+        "label" : "Leverantörens webbplats",
+        "help" : "Klicka här för allmän information om leverantören."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Köp kredit från leverantören",
+        "help" : "Klicka här för att köpa kredit till din/dina api-nyckel."
+      },
+      "EmbeddingModel" : {
+        "label" : "Standard embeddingmodell",
+        "help" : "Den här modellen ansvarar för semantisk indexering (embedding) och hämtning av dina data och dokument"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Fel vid strömmande svarsmeddelande i chatten",
         "detail" : "Serverfel: 400 Felaktig begäran från POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Undantag vid operation: Fel vid arbete med url:http://localhost:8000/v1/models",
+        "detail" : "Serverfel: Fel vid arbete med url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Fel vid strömmande chatt-svar",
+        "detail" : "Serverfel: Anslutningen återställd"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Undantag vid operation: Fel vid arbete med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfel: Fel vid arbete med url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Undantag vid operation:Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration",
+        "detail" : "Serverfel: Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analyserat systemsökresultat för"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Välj minst ett av följande alternativ"
+      },
+      "LaunchBtn" : {
+        "label" : "Starta sökning"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hoppa över djupsökning"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valda kunskapsbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valda system"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Välj källor"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Tröskelvärde för söklikhet",
         "help" : "Semantisk likhetströskel (mellan 0,5 och 1,0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Använd eller skapa api-nyckelinloggningar"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-nyckel/inloggningar",
+        "help" : "Välj api-nyckel eller inloggningar för denna leverantör"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api-nyckel",
+        "help" : "Ange en ny api-nyckel att använda med denna leverantör"
+      },
+      "PiSave" : {
+        "label" : "Spara"
+      },
+      "NewUserName" : {
+        "label" : "Användarnamn",
+        "help" : "Användarnamn som används för att få tillgång till leverantörens tjänster"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Använd befintlig eller ny",
+        "help" : "Använd befintlig eller skapa en ny inloggning för denna leverantör"
+      },
+      "newSecretDescription" : {
+        "label" : "Beskrivning av inloggning",
+        "help" : "Beskrivning av api-nyckelinloggning"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Inloggning skapad",
+        "detail" : "Inloggning skapad"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chatta med användare"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modell används för interna tjänster"
       }
     }
   }

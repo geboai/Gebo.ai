@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfigurasikan Deep search",
         "description" : "Sediakan parameter Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Penalaan parameter penjanaan dipertingkat secara automatik"
+      },
+      "Description" : {
+        "label" : "Deskripsi"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Kemaskini penalaan terakhir"
+      },
+      "Code" : {
+        "label" : "Kod model embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Ambang yang dikira"
+      },
+      "Autotuned" : {
+        "label" : "Ditala automatik"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Langkah mandatori Gebo.ai telah selesai...",
+        "detail" : "Langkah mandatori telah diselesaikan tetapi beberapa langkah yang masih belum lengkap menghalang organisasi anda daripada mendapat pengalaman penuh perisian ini"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai belum lengkap beberapa langkah mandatori",
+        "detail" : "Sila semak langkah berwarna merah dalam proses tetapan"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Tetapkan akses penyedia llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Pilihan infrastruktur/pembekal lanjutan"
+      },
+      "MainPanelTitle" : {
+        "label" : "Tetapan model bahasa besar yang digunakan"
+      },
+      "EasySetup" : {
+        "label" : "Penyelesaian konfigurasi/tetapan awal yang mudah"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Tetapan model bahasa besar"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Tetapan akses model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jarak jauh OK",
+        "detail" : "Penyedia berjalan lancar dan telah dikonfigurasi dengan berjaya"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Pengecualian semasa operasi: Ralat semasa bekerja dengan url: https://api.openai.com/v1/models",
+        "detail" : "Ralat pelayan: Ralat semasa bekerja dengan url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "jadikan ini sebagai model embedding lalai",
         "help" : "Jika benar, ini akan digunakan sebagai model embedding lalai jika model embedding tidak dinyatakan"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jarak jauh OK",
+        "detail" : "Penyedia berjalan lancar dan telah dikonfigurasi dengan berjaya"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Sunting konfigurasi model chat pelayan Ollama setempat (atau lan)"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Sunting konfigurasi model chat Anthropic"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Sunting konfigurasi model chat MistralAI"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Sunting konfigurasi model chat Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Tetapan akses model"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Tetapan akses model"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
+        "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "aktifkan semua panggilan fungsi",
         "help" : "Aktifkan semua alat dan panggilan fungsi yang tersedia, jika tidak ditetapkan ia boleh diaktifkan kemudian di panel pentadbiran llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Pengecualian semasa operasi: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan",
+        "detail" : "Ralat pelayan: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Cipta dan aktifkan"
+      },
+      "vendorId" : {
+        "label" : "Pilih pembekal model bahasa besar anda",
+        "help" : "Pilih pembekal awal untuk model chat dan embedding lalai anda"
+      },
+      "secretId" : {
+        "label" : "Pilih kelayakan pembekal (api key)",
+        "help" : "Pilih satu daripada kelayakan yang sedia ada untuk pembekal llm yang dipilih"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model chat perkhidmatan dalaman",
+        "help" : "Model chat yang dikonfigurasikan untuk perkhidmatan dalaman akan bertanggungjawab mengekstrak maklumat, meringkaskan dan menjalankan aliran kerja dalaman."
+      },
+      "ChatModel" : {
+        "label" : "Model chat lalai",
+        "help" : "Model chat lalai akan bertanggungjawab menjawab soalan pengguna, dan menjalankan aliran kerja yang tiada model khusus. Ia perlu berkuasa dan boleh dipercayai, dengan keseimbangan yang baik antara kos, prestasi dan kualiti hasil."
+      },
+      "ProviderBuy" : {
+        "label" : "Pautan kredit beli Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Pautan laman web"
+      },
+      "WebSiteLink" : {
+        "label" : "Laman web pembekal",
+        "help" : "Klik di sini untuk maklumat umum pembekal."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Beli kredit pembekal",
+        "help" : "Klik di sini untuk membeli kredit untuk api key anda."
+      },
+      "EmbeddingModel" : {
+        "label" : "Model embedding lalai",
+        "help" : "Model ini akan bertanggungjawab melakukan pengindeksan semantik (embedding) dan mengambil data & dokumen anda"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Ralat semasa menstrim balasan chat",
         "detail" : "Ralat pelayan: 400 Bad Request dari POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Pengecualian semasa operasi: Ralat semasa bekerja dengan url: http://localhost:8000/v1/models",
+        "detail" : "Ralat pelayan: Ralat semasa bekerja dengan url: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Ralat semasa penstriman respons chat",
+        "detail" : "Ralat pelayan: Sambungan diset semula"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Pengecualian semasa operasi: Ralat semasa bekerja dengan url: https://api.openai.com/v1/models",
+        "detail" : "Ralat pelayan: Ralat semasa bekerja dengan url: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Pengecualian semasa operasi: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan",
+        "detail" : "Ralat pelayan: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Hasil carian sistem yang dianalisis untuk"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pilih sekurang-kurangnya satu pilihan berikut"
+      },
+      "LaunchBtn" : {
+        "label" : "Jalankan carian"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Langkau carian mendalam"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Pangkalan pengetahuan yang dipilih"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistem yang dipilih"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pilih sumber"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Ambang kesamaan carian",
         "help" : "Ambang kesamaan semantik (antara 0.5 hingga 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Guna atau cipta kelayakan api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kelayakan",
+        "help" : "Pilih api key atau kelayakan untuk pembekal ini"
+      },
+      "NewApiKey" : {
+        "label" : "Api key baru",
+        "help" : "Masukkan api key baru untuk digunakan dengan pembekal ini"
+      },
+      "PiSave" : {
+        "label" : "Simpan"
+      },
+      "NewUserName" : {
+        "label" : "Nama pengguna",
+        "help" : "Nama pengguna untuk akses perkhidmatan pembekal"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Guna sedia ada atau baru",
+        "help" : "Guna atau cipta kelayakan baru untuk pembekal ini"
+      },
+      "newSecretDescription" : {
+        "label" : "Deskripsi kelayakan",
+        "help" : "Deskripsi kelayakan api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kelayakan berjaya dicipta",
+        "detail" : "Kelayakan berjaya dicipta"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Berbual dengan pengguna"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model digunakan untuk perkhidmatan dalaman"
       }
     }
   }

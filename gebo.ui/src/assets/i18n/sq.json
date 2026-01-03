@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Konfiguro kërkimin e thellë",
         "description" : "Konfiguro parametrat e kërkimit të thellë"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Rregullimi automatik i parametrave të gjenerimit të zgjeruar nga kërkimi"
+      },
+      "Description" : {
+        "label" : "Përshkrimi"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Përditësimi i fundit i tuning"
+      },
+      "Code" : {
+        "label" : "Kodi i modelit të integrimit/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Pragu i llogaritur"
+      },
+      "Autotuned" : {
+        "label" : "Tuning automatik"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Hapat e domosdoshëm të konfigurimit të Gebo.ai janë përfunduar...",
+        "detail" : "Hapat e domosdoshëm të konfigurimit janë përfunduar, por disa hapa që mungojnë pengojnë organizatën tuaj të përfitojë plotësisht nga kjo platformë"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Disa hapa të domosdoshëm të konfigurimit të Gebo.ai mungojnë",
+        "detail" : "Ju lutemi kontrolloni hapat me të kuqe në procesin e konfigurimit"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Konfiguro qasjen te ofruesit e llms të Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Zgjedhje të zgjeruara të infrastrukturës/furnizuesve"
+      },
+      "MainPanelTitle" : {
+        "label" : "Konfiguro modelet e mëdha të gjuhës të përdorura"
+      },
+      "EasySetup" : {
+        "label" : "Konfigurim/fiksim i lehtë fillestar"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Konfiguro modelet e mëdha të gjuhës"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Parametrat e aksesit te modeli"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ofruesi AI në distancë OK",
+        "detail" : "Ofruesi është aktiv dhe i konfiguruar me sukses"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Përjashtim gjatë operacionit:Gabim gjatë punës me url:https://api.openai.com/v1/models",
+        "detail" : "Gabim serveri: Gabim gjatë punës me url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "vendoseni si modeli bazë i embedding",
         "help" : "Nëse është vërtetë, ky do të përdoret si modeli i parazgjedhur embedding kur nuk tregohet një model tjetër"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ofruesi AI në distancë OK",
+        "detail" : "Ofruesi është aktiv dhe i konfiguruar me sukses"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Duke redaktuar konfigurimin e modelit të bisedës për serverin lokal (ose lan) Ollama"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Duke redaktuar konfigurimin e modelit të bisedës Anthropic"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Duke redaktuar konfigurimin e modelit të bisedës MistralAI"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Duke redaktuar konfigurimin e modelit të bisedës Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Parametrat e aksesit te modeli"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Parametrat e aksesit te modeli"
+      },
+      "forUses" : {
+        "label" : "Përdorimi i modelit",
+        "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
+        "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "aktivizo të gjitha thirrjet e funksioneve",
         "help" : "Aktivizo të gjitha mjetet dhe thirrjet e funksioneve të disponueshme; nëse nuk caktohet, mund t’i aktivizoni më vonë në panelin e administrimit të llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Përjashtim gjatë operacionit:Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api",
+        "detail" : "Gabim serveri: Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Krijo dhe aktivizo"
+      },
+      "vendorId" : {
+        "label" : "Zgjidh shitësin tënd të modelit të madh të gjuhës",
+        "help" : "Zgjidh shitësin fillestar për modelet e tua të paracaktuara të chat dhe embedding"
+      },
+      "secretId" : {
+        "label" : "Zgjidh kredencialet e ofruesit (api key)",
+        "help" : "Zgjidh një nga kredencialet ekzistuese për ofruesin LLM të zgjedhur"
+      },
+      "InternalServiceModel" : {
+        "label" : "Modeli i chat-it për shërbime të brendshme",
+        "help" : "Modeli i chat-it i konfiguruar për shërbime të brendshme do të jetë përgjegjës për nxjerrjen e informacionit, përmbledhjet dhe ekzekutimin e proceseve të brendshme."
+      },
+      "ChatModel" : {
+        "label" : "Modeli i paracaktuar i chat-it",
+        "help" : "Modeli i paracaktuar i chat-it do të jetë përgjegjës për përgjigjen ndaj pyetjeve të përdoruesve dhe për ekzekutime të proceseve që nuk kanë modele të konfiguruara posaçërisht. Duhet të jetë i fuqishëm dhe i besueshëm, me një balancë të mirë mes kosto, performancës dhe cilësisë së rezultateve."
+      },
+      "ProviderBuy" : {
+        "label" : "Lidhje për blerjen e kreditit të Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Lidhje e faqes së internetit"
+      },
+      "WebSiteLink" : {
+        "label" : "Faqja e ofruesit",
+        "help" : "Kliko këtu për informacione të përgjithshme për ofruesin."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Bli kredite nga ofruesi",
+        "help" : "Kliko këtu për të blerë kredi për çelësin tuaj api."
+      },
+      "EmbeddingModel" : {
+        "label" : "Modeli i paracaktuar i embedding",
+        "help" : "Ky model do të jetë përgjegjës për indeksimin semantik (embedding) dhe kërkimin e të dhënave dhe dokumenteve tuaj"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Gabim gjatë transmetimit të përgjigjes së bisedës",
         "detail" : "Gabim në server: 400 Kërkesë e keqe nga POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Përjashtim gjatë operacionit:Gabim gjatë punës me url:http://localhost:8000/v1/models",
+        "detail" : "Gabim serveri: Gabim gjatë punës me url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Gabim gjatë transmetimit të përgjigjes së chat-it",
+        "detail" : "Gabim serveri: Lidhja u rivendos"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Përjashtim gjatë operacionit:Gabim gjatë punës me url:https://api.openai.com/v1/models",
+        "detail" : "Gabim serveri: Gabim gjatë punës me url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Përjashtim gjatë operacionit:Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api",
+        "detail" : "Gabim serveri: Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Rezultati i analizuar i kërkimit në sistem për"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Zgjidh të paktën një nga opsionet në vijim"
+      },
+      "LaunchBtn" : {
+        "label" : "Kërko"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Anashkalo kërkimin e thellë"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bazat e njohurive të zgjedhura"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistemet e zgjedhura"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Zgjidh burimet"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Pragu i ngjashmërisë së kërkimit",
         "help" : "Pragu i ngjashmërisë semantike (nga 0.5 deri në 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Përdor ose krijo kredenciale të çelësit api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kredencialet",
+        "help" : "Zgjidh çelësin api ose kredencialet për këtë ofrues"
+      },
+      "NewApiKey" : {
+        "label" : "Çelës api i ri",
+        "help" : "Fusni një çelës api të ri për ta përdorur me këtë ofrues"
+      },
+      "PiSave" : {
+        "label" : "Ruaj"
+      },
+      "NewUserName" : {
+        "label" : "Emri i përdoruesit",
+        "help" : "Emri i përdoruesit që përdoret për të hyrë në shërbimet e ofruesit"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Përdor ekzistuese ose të reja",
+        "help" : "Përdor ose krijo kredenciale të reja për këtë ofrues"
+      },
+      "newSecretDescription" : {
+        "label" : "Përshkrimi i kredencialeve",
+        "help" : "Përshkrimi i kredencialeve të çelësit api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kredencialet u krijuan",
+        "detail" : "Kredencialet u krijuan me sukses"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Bisedo me përdoruesit"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modeli i përdorur për shërbime të brendshme"
       }
     }
   }

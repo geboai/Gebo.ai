@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Nastavenie Deep search",
         "description" : "Nakonfigurujte parametre Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatické ladenie parametrov pre retrieve augmented generation"
+      },
+      "Description" : {
+        "label" : "Popis"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Dátum poslednej aktualizácie ladenia"
+      },
+      "Code" : {
+        "label" : "Embedovacie model/VectorStore kód"
+      },
+      "ComputedThreashold" : {
+        "label" : "Vypočítaný prah"
+      },
+      "Autotuned" : {
+        "label" : "Automaticky doladené"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Povinné kroky nastavenia Gebo.ai dokončené...",
+        "detail" : "Povinné kroky nastavenia boli dokončené, ale stále chýbajú niektoré kroky, ktoré bránia vašej organizácii naplno využívať tento softvér"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "V nastavení Gebo.ai chýba niektorý povinný krok",
+        "detail" : "Skontrolujte červené kroky v procese nastavenia"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Nastavenie prístupu poskytovateľov Gebo.ai llms"
+      },
+      "ExtensiveStup" : {
+        "label" : "Rozšírené možnosti infraštruktúry/dodávateľov"
+      },
+      "MainPanelTitle" : {
+        "label" : "Nastavenie použitých veľkých jazykových modelov"
+      },
+      "EasySetup" : {
+        "label" : "Rýchle počiatočné nastavenie/uprava konfigurácie"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Nastavenie veľkých jazykových modelov"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ je v poriadku",
+        "detail" : "Poskytovateľ je spustený, funkčný a správne nastavený"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:https://api.openai.com/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "nastaviť ako predvolený embedding model",
         "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ je v poriadku",
+        "detail" : "Poskytovateľ je spustený, funkčný a správne nastavený"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie chat modelu pre Ollama lokálny (alebo LAN) server"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie Anthropic chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie MistralAI chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie Google Vertex AI chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "povoliť všetky funkčné volania",
         "help" : "Povoľte všetky dostupné nástroje a funkčné volania, ak nie je nastavené, bude ich možné povoliť neskôr v llms administračnom paneli"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
+        "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Vytvoriť a aktivovať"
+      },
+      "vendorId" : {
+        "label" : "Vyberte svojho dodávateľa veľkého jazykového modelu",
+        "help" : "Vyberte počiatočného dodávateľa pre predvolené chat a embedding modely"
+      },
+      "secretId" : {
+        "label" : "Vyberte prihlasovacie údaje poskytovateľa (api key)",
+        "help" : "Vyberte si z existujúcich prihlasovacích údajov pre vybraného poskytovateľa llm"
+      },
+      "InternalServiceModel" : {
+        "label" : "Chat model interných služieb",
+        "help" : "Chatovací model nakonfigurovaný pre interné služby je zodpovedný za extrakciu informácií, sumarizáciu a vykonávanie interných workflow."
+      },
+      "ChatModel" : {
+        "label" : "Predvolený chatovací model",
+        "help" : "Predvolený chatovací model bude zodpovedný za zodpovedanie otázok používateľov a vykonávanie workflow, pre ktoré nie sú špecificky nakonfigurované modely. Mal by byť výkonný a spoľahlivý, s dobrým pomerom medzi cenou, výkonom a kvalitou výsledku."
+      },
+      "ProviderBuy" : {
+        "label" : "Odkaz na nákup kreditu pre Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Odkaz na webstránku"
+      },
+      "WebSiteLink" : {
+        "label" : "Webová stránka poskytovateľa",
+        "help" : "Kliknite sem pre všeobecné informácie o poskytovateľovi."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Zakúpiť kredit poskytovateľa",
+        "help" : "Kliknite sem pre nákup kreditu pre vaše api key(e)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Predvolený embedding model",
+        "help" : "Tento model bude zodpovedný za sémantický index (embedding) a vyhľadávanie vašich údajov a dokumentov"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Chyba počas streamovania odpovede chatu",
         "detail" : "Chyba servera: 400 Zlá požiadavka z POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8000/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Chyba počas streamovania odpovede na chat",
+        "detail" : "Chyba servera: Pripojenie bolo resetované"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:https://api.openai.com/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
+        "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analyzovaný systémový výsledok vyhľadávania pre"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vyberte aspoň jednu z nasledujúcich možností"
+      },
+      "LaunchBtn" : {
+        "label" : "Spustiť vyhľadávanie"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskočiť hĺbkové vyhľadávanie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Zvolené znalostné bázy"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Zvolené systémy"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vybrať zdroje"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Prah podobnosti vyhľadávania",
         "help" : "Semantický prah podobnosti (medzi 0.5 a 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Použiť alebo vytvoriť prihlasovacie údaje api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/prihlasovacie údaje",
+        "help" : "Vyberte api key alebo údaje na prihlásenie pre tohto poskytovateľa"
+      },
+      "NewApiKey" : {
+        "label" : "Nový api key",
+        "help" : "Zadajte nový api key, ktorý bude použitý s týmto poskytovateľom"
+      },
+      "PiSave" : {
+        "label" : "Uložiť"
+      },
+      "NewUserName" : {
+        "label" : "Používateľské meno",
+        "help" : "Používateľské meno používané na prístup k službám poskytovateľa"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Použiť existujúce alebo vytvoriť nové",
+        "help" : "Použiť existujúce alebo vytvoriť nové prihlasovacie údaje pre tohto poskytovateľa"
+      },
+      "newSecretDescription" : {
+        "label" : "Popis prihlasovacích údajov",
+        "help" : "Popis prihlasovacích údajov api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Prihlasovacie údaje boli vytvorené",
+        "detail" : "Prihlasovacie údaje úspešne vytvorené"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chat s používateľmi"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model používaný pre interné služby"
       }
     }
   }

@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Конфигурирај Deep search",
         "description" : "Конфигурирај ги параметрите за Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. автотјунинг",
+        "description" : "Автоматско подесување на параметри за генерирање со дополнително пребарување"
+      },
+      "Description" : {
+        "label" : "Опис"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Последно ажурирање на тјунинг"
+      },
+      "Code" : {
+        "label" : "Код за Embedding модел/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Пресметан праг"
+      },
+      "Autotuned" : {
+        "label" : "Автоматски тјунирано"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Задолжителните чекори за Gebo.ai се завршени...",
+        "detail" : "Задолжителните чекори од конфигурацијата се завршени, но некои недостасуваат и не дозволуваат вашата организација целосно да го искористи овој софтвер"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Недостасуваат задолжителни чекори за Gebo.ai конфигурација",
+        "detail" : "Ве молиме прегледајте ги црвените чекори од процесот на конфигурација"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Поставете пристап до добавувачи на llms за Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Избор на проширена инфраструктура/добавувачи"
+      },
+      "MainPanelTitle" : {
+        "label" : "Конфигурирајте Large language модели"
+      },
+      "EasySetup" : {
+        "label" : "Лесна почетна конфигурација/исправка"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Конфигурирајте Large language модели"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Поставки за пристап до модел"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI далечински провајдер: ОК",
+        "detail" : "Провајдерот работи и е успешно конфигуриран"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Исклучок при операција: Грешка при работа со url:https://api.openai.com/v1/models",
+        "detail" : "Грешка на серверот: Грешка при работа со url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "постави како стандарден embedding модел",
         "help" : "Ако е означено, овој модел ќе биде стандарден embedding модел кога не е одреден"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI далечински провајдер: ОК",
+        "detail" : "Провајдерот работи и е успешно конфигуриран"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Уредување на Ollama локална (или LAN) конфигурација за модел за разговор"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Уредување на Anthropic конфигурација за модел за разговор"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Уредување на MistralAI конфигурација за модел за разговор"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Уредување на Google Vertex AI конфигурација за модел за разговор"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Поставки за пристап до модел"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Поставки за пристап до модел"
+      },
+      "forUses" : {
+        "label" : "Употреба(и) на моделот",
+        "help" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел.",
+        "placeholder" : "Употреби за кои Gebo.ai платформата ќе го користи овој модел."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "овозможи ги сите функции",
         "help" : "Овозможи ги сите достапни алатки и повици на функции, ако не се избере сега, ќе може да се овозможат подоцна преку llms админ панелот"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Исклучок при операција: Anthropic api не може да работи без соодветна конфигурација на api клуч",
+        "detail" : "Грешка на серверот: Anthropic api не може да работи без соодветна конфигурација на api клуч"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Креирај и активирај"
+      },
+      "vendorId" : {
+        "label" : "Изберете добавувач на large language модел",
+        "help" : "Изберете го иницијалниот добавувач за вашите основни chat и embedding модели"
+      },
+      "secretId" : {
+        "label" : "Изберете креденцијали на провајдерот (api клуч)",
+        "help" : "Изберете некој од постоечките креденцијали за избраниот llm провајдер"
+      },
+      "InternalServiceModel" : {
+        "label" : "Модел за внатрешни сервисни разговори",
+        "help" : "Моделот за внатрешни сервиси ќе биде одговорен за извлекување информации, резимирање и извршување на внатрешни работни процеси."
+      },
+      "ChatModel" : {
+        "label" : "Основен chat модел",
+        "help" : "Основниот chat модел ќе одговара на прашања од корисници и ќе извршува работни процеси ако не се конфигурирани посебни модели. Треба да биде моќен и сигурен, со добар баланс меѓу цена, перформанси и квалитет на резултати."
+      },
+      "ProviderBuy" : {
+        "label" : "Купи линк за кредит за Apy клуч"
+      },
+      "ProviderWWW" : {
+        "label" : "Линк до веб страна"
+      },
+      "WebSiteLink" : {
+        "label" : "Веб страна на провајдерот",
+        "help" : "Кликнете овде за општи информации за провајдерот."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Купи кредит од провајдерот",
+        "help" : "Кликнете овде за да купите кредит за вашите api клуч(еви)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Основен embedding модел",
+        "help" : "Овој модел ќе биде одговорен за семантичко индексирање и пребарување на вашите податоци и документи"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Грешка при стримање на одговор од чет",
         "detail" : "Грешка на сервер: 400 Невалидно барање од POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Исклучок при операција: Грешка при работа со url:http://localhost:8000/v1/models",
+        "detail" : "Грешка на серверот: Грешка при работа со url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Грешка при пренос на одговор од разговор",
+        "detail" : "Грешка на серверот: Врската е ресетирана"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Исклучок при операција: Грешка при работа со url:https://api.openai.com/v1/models",
+        "detail" : "Грешка на серверот: Грешка при работа со url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Исклучок при операција: Anthropic api не може да работи без соодветна конфигурација на api клуч",
+        "detail" : "Грешка на серверот: Anthropic api не може да работи без соодветна конфигурација на api клуч"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Анализиран системски резултат од пребарување за"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Изберете барем една од следните опции"
+      },
+      "LaunchBtn" : {
+        "label" : "Покренете пребарување"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Прескокнете deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Избрани бази на знаење"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Избрани системи"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Изберете извори"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Праг за сличност на пребарување",
         "help" : "Праг за семантичка сличност (од 0.5 до 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Користете или создадете api key креденцијали"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/креденцијали",
+        "help" : "Изберете api key или креденцијали за овој провајдер"
+      },
+      "NewApiKey" : {
+        "label" : "Нов api key",
+        "help" : "Внесете нов api key што ќе се користи со овој провајдер"
+      },
+      "PiSave" : {
+        "label" : "Зачувај"
+      },
+      "NewUserName" : {
+        "label" : "Корисничко име",
+        "help" : "Корисничко име за пристап до сервисите на провајдерот"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Користете постоечки или нови",
+        "help" : "Користете постоечки или креирајте нови креденцијали за овој провајдер"
+      },
+      "newSecretDescription" : {
+        "label" : "Опис на креденцијали",
+        "help" : "Опис за креденцијалите за api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Креденцијалите се создадени",
+        "detail" : "Креденцијалите се успешно создадени"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Разговор со корисници"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Модел за внатрешни сервиси"
       }
     }
   }

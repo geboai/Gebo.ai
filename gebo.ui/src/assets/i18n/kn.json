@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search ಅನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ",
         "description" : "Deep search ಪರಿಮಿತಿಗಳನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ಸ್ವಯಂಅನುಕೂಲತೆ",
+        "description" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಹೆಚ್ಚು ಉತ್ತಮ ಪೀಳಿಗೆ ನಿಯತಾಂಕಗಳನ್ನು ಸರಿಹೊಂದಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "Description" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ಕೊನೆಯ ತಿದ್ದುಪಡಿ ದಿನಾಂಕ"
+      },
+      "Code" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ/ವೆಕ್ಟರ್‌ಸ್ಟೋರ್ ಕೋಡ್"
+      },
+      "ComputedThreashold" : {
+        "label" : "ಗಣನೆ ಮಾಡಿದ ಮಿತಿಮುಡುಪು"
+      },
+      "Autotuned" : {
+        "label" : "ಸ್ವಯಂ ಅರ್ಹತೆ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಅಗತ್ಯವಾದ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ...",
+        "detail" : "ಅಗತ್ಯವಾದ ಸೆಟಪ್ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ ಆದರೆ ಕೆಲವು ಬಾಕಿ ಹಂತಗಳು ನಿಮ್ಮ ಸಂಸ್ಥೆಗೂ ಈ ಸಾಫ್ಟ್‌ವೇರ್‌ನಿಂದ ಪೂರ್ಣ ಪ್ರಯೋಜನ ಪಡೆಯುವುದನ್ನು ಅಡ್ಡಿಪಡಿಸುತ್ತಿವೆ"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್‌ನಲ್ಲಿ ಕೆಲವು ಅಗತ್ಯ ಹಂತ ಬಾಕಿಯಿದೆ",
+        "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms ಪೂರೈಕೆದಾರರ ಪ್ರವೇಶವನ್ನು ಸಜ್ಜುಗೊಳಿಸಿ"
+      },
+      "ExtensiveStup" : {
+        "label" : "ವಿಸ್ತೃತ ಮೂಲಸೌಕರ್ಯ/ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಗಳು"
+      },
+      "MainPanelTitle" : {
+        "label" : "ಬಳಕೆ ಮಾಡಿದ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಗಳನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "EasySetup" : {
+        "label" : "ಸರಳ ಪ್ರಾರಂಭಿಕ ಸೆಟಪ್/ಕಾನ್ಫಿಗರೇಶನ್ ಸರಿಪಡಿಸಿ"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಗಳನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ಎಐ ದೂರದ ಪೂರೈಕೆದಾರ ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗೈಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
         "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ಎಐ ದೂರದ ಪೂರೈಕೆದಾರ ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗೈಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama ಸ್ಥಳೀಯ (ಅಥವಾ lan) ಸರ್ವರ್ ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "ಎಲ್ಲಾ ಕಾರ್ಯಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
         "help" : "ಎಲ್ಲಾ ಲಭ್ಯವಿರುವ ಉಪಕರಣಗಳು ಮತ್ತು ಕಾರ್ಯ ಆಹ್ವಾನಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ, ಇದನ್ನು ಸೆಟ್ ಮಾಡದೇ ಇದ್ದರೆ ನಂತರ llms ಆಡ್ಮಿನ್ ಪ್ಯಾನೆಲ್ ನಲ್ಲಿ ಅವುಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ರಚಿಸಿ ಮತ್ತು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "vendorId" : {
+        "label" : "ನಿಮ್ಮ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ನಿಮ್ಮ ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮತ್ತು ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಗಳ ಆರಂಭಿಕ ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "secretId" : {
+        "label" : "ಪೂರೈಕೆದಾರರ سندಸಂಪರ್ಕ (api ಕೀ) ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ಆಯ್ಕೆಯಾದ llm ಪೂರೈಕೆದಾರಕ್ಕೆ ಇರುವ سندಗಳನ್ನು ಆರಿಸಿ"
+      },
+      "InternalServiceModel" : {
+        "label" : "ಆಂತರಿಕ ಸೇವೆಗಳ ಚಾಟ್ ಮಾದರಿ",
+        "help" : "ಆಂತರಿಕ ಸೇವೆಗಳಿಗೆ ಸಂರಚಿಸಿದ ಚಾಟ್ ಮಾದರಿ ಮಾಹಿತಿ ಸಂಗ್ರಹ, ಸಾರಾಂಶ ಸೃಷ್ಟಿಸಲಿಕ್ಕೆ ಹಾಗು ಆಂಟೆನಲ್ ವರ್ಕ್‌ಫ್ಲೋಗಳಿಗೆ ಜವಾಬ್ದಾರಿ ವಹಿಸುತ್ತದೆ."
+      },
+      "ChatModel" : {
+        "label" : "ಡೀಫಾಲ್ಡ್ ಚಾಟ್ ಮಾದರಿ",
+        "help" : "ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿ ಬಳಕೆದಾರರ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸುವುದರ ಜೊತೆಗೆ ನಿರ್ದಿಷ್ಟವಾಗಿ ಸಂರಚಿಸದ ವರ್ಕ್‌ಫ್ಲೋಗಳನ್ನು ನಿರ್ವಹಿಸುತ್ತದೆ. ಇದು ಶಕ್ತಿಶಾಲಿಯಾಗಿದ್ದು, ವಿಶ್ವಾಸಾರ್ಹವಾಗಿರಬೇಕು, ವೆಚ್ಚ, ಪ್ರದರ್ಶನ ಮತ್ತು ಫಲಿತಾಂಶ ಗುಣಮಟ್ಟಕ್ಕೆ ಉತ್ತಮ ಸಮತೋಲನವಿರಬೇಕು."
+      },
+      "ProviderBuy" : {
+        "label" : "ಎಪಿ ಕೀ ಕ್ರೆಡಿಟ್ ಖರೀದಿ ಲಿಂಕ್"
+      },
+      "ProviderWWW" : {
+        "label" : "ವೆಬ್ ಸೈಟ್ ಲಿಂಕ್"
+      },
+      "WebSiteLink" : {
+        "label" : "ಪೂರೈಕೆದಾರ ವೆಬ್‌ಸೈಟ್",
+        "help" : "ಸಾಮಾನ್ಯ ಪೂರೈಕೆದಾರ ಮಾಹಿತಿಗಾಗಿ ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ."
+      },
+      "AcquireCreditLink" : {
+        "label" : "ಪೂರೈಕೆದಾರರ ಕ್ರೆಡಿಟ್ ಖರಿೀದಿ",
+        "help" : "ನಿಮ್ಮ api ಕೀ(ಗಳು)ಗಾಗಿ ಕ್ರೆಡಿಟ್ ಖರೀದಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ."
+      },
+      "EmbeddingModel" : {
+        "label" : "ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ",
+        "help" : "ಈ ಮಾದರಿ ನಿಮ್ಮ ಡೇಟಾ ಮತ್ತು ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಸೆಮಾಂಟಿಕ್ ಇಂಡೆಕ್ಸಿಂಗ್ (ಎಂಬೆಡ್ಡಿಂಗ್) ಮತ್ತು ಪುನಃತೆಗೆಯಲು ಜವಾಬ್ದಾರಿ ವಹಿಸುತ್ತದೆ"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "ಚಾಟ್ ಸ್ಟ್ರೀಮಿಂಗ್ ಉತ್ತರದಲ್ಲಿ ದೋಷ",
         "detail" : "ಸರ್ವರ್ ದೋಷ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: http://localhost:8000/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಸಂಪರ್ಕ ಪುನರ್ ಸೇರ್ಪಡೆ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "ಗುರಿಗೆ ವಿಶ್ಲೇಷಿಸಲಾದ ಸಿಸ್ಟಮ್ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ಇಲ್ಲಿದೆಗಾದರೂ ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ"
+      },
+      "LaunchBtn" : {
+        "label" : "ಹುಡುಕು ಆರಂಭಿಸಿ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ಆಳವಾದ ಹುಡುಕಾಟ ಬಿಟ್ಟುಬಿಡಿ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ಆಯ್ದ ಜ್ಞಾನ ತಳಸಾಲುಗಳು"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ಆಯ್ದ ವ್ಯವಸ್ಥೆಗಳು"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ಮೂಲಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
         "help" : "ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "বಳಕೆ ಮಾಡಿ ಅಥವಾ api ಕೀ سندಗಳನ್ನು ರಚಿಸಿ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ಕೀ/ سندಗಳು",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಿಗಾಗಿ api ಕೀ ಅಥವಾ سندಗಳನ್ನು ಆರಿಸಿ"
+      },
+      "NewApiKey" : {
+        "label" : "ಹೊಸ api ಕೀ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರ ಹಲಗಾಗಿ ಹೊಸ api ಕೀ ಸೇರಿಸಿ"
+      },
+      "PiSave" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "NewUserName" : {
+        "label" : "ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗಳನ್ನು ಬಳಸಲು ಬಳಸುವ ಹೆಸರು"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ಇರುವ ಅಥವಾ ಹೊಸದನ್ನು ಬಳಸಿ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಿಗಾಗಿ ಇರುವ ಅಥವಾ ಹೊಸ سندಗಳನ್ನು ಬಳಸಿ"
+      },
+      "newSecretDescription" : {
+        "label" : "ಸಂದರ್ಶನದ ವಿವರ",
+        "help" : "Api ಕೀ سند ವಿವರಣೆ"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ಸಂದರ್ಶನಗಳು ರಚಿಸಲಾಗಿದೆ",
+        "detail" : "ಸಂದರ್ಶನಗಳು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ಬಳಕೆದಾರರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ಆಂತರಿಕ ಸೇವೆಗಳಿಗೆ ಬಳಸುವ ಮಾದರಿ"
       }
     }
   }

@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "إعداد Deep search",
         "description" : "إعداد معلمات Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "ضبط R.a.g تلقائي",
+        "description" : "ضبط تلقائي لإعدادات توليد البيانات المعززة"
+      },
+      "Description" : {
+        "label" : "الوصف"
+      },
+      "LastAutotunedDate" : {
+        "label" : "آخر تحديث للضبط"
+      },
+      "Code" : {
+        "label" : "كود نموذج التح嶮يد/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "العَتَبة المحسوبة"
+      },
+      "Autotuned" : {
+        "label" : "تم الضبط التلقائي"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "تم الانتهاء من الخطوات الإلزامية لإعداد Gebo.ai...",
+        "detail" : "تم إكمال الخطوات الإلزامية للإعداد ولكن هناك خطوات مفقودة تمنع مؤسستك من الاستفادة الكاملة من هذا البرنامج"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "هناك خطوة إلزامية مفقودة في إعداد Gebo.ai",
+        "detail" : "يرجى مراجعة الخطوات ذات اللون الأحمر في عملية الإعداد"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "إعداد وصول مقدمي llms على Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "خيارات البنية التحتية/الموردين الموسعة"
+      },
+      "MainPanelTitle" : {
+        "label" : "إعداد نماذج اللغة الكبيرة المستخدمة"
+      },
+      "EasySetup" : {
+        "label" : "إصلاح الإعداد/التهيئة السهلة"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "إعداد نماذج اللغة الكبيرة"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي عن بعد جاهز",
+        "detail" : "المزود يعمل بنجاح وتم تكوينه بنجاح"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: https://api.openai.com/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "تعيين كنموذج تضمين افتراضي",
         "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي عن بعد جاهز",
+        "detail" : "المزود يعمل بنجاح وتم تكوينه بنجاح"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج محادثة خادم Ollama المحلي (أو على الشبكة)"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة Anthropic"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة MistralAI"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "تفعيل جميع استدعاءات الوظائف",
         "help" : "تفعيل جميع الأدوات ووظائف الاستدعاء المتاحة، إذا لم يتم تعيينها يمكن تفعيلها لاحقًا من لوحة إدارة llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
+        "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "إنشاء وتفعيل"
+      },
+      "vendorId" : {
+        "label" : "اختر مزود نموذج اللغة الكبير",
+        "help" : "اختر المزود الأولي للنموذج الافتراضي للدردشة ونماذج التح嶮يد"
+      },
+      "secretId" : {
+        "label" : "اختر بيانات اعتماد المزود (مفتاح api)",
+        "help" : "اختر واحدة من بيانات الاعتماد الحالية لمزود llm المحدد"
+      },
+      "InternalServiceModel" : {
+        "label" : "نموذج الدردشة لخدمات النظام الداخلية",
+        "help" : "سيكون نموذج الدردشة المكون للخدمات الداخلية مسؤولاً عن استخراج المعلومات، والتلخيص، وتنفيذ سير العمل الداخلي."
+      },
+      "ChatModel" : {
+        "label" : "نموذج الدردشة الافتراضي",
+        "help" : "سيكون نموذج الدردشة الافتراضي مسؤولاً عن الإجابة على أسئلة المستخدمين وتنفيذ سير العمل الذي لم تُخصص له نماذج محددة. يجب أن يكون قويًا وموثوقًا، مع توازن جيد بين التكلفة والأداء وجودة النتائج."
+      },
+      "ProviderBuy" : {
+        "label" : "رابط شراء رصيد Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "رابط الموقع الإلكتروني"
+      },
+      "WebSiteLink" : {
+        "label" : "موقع مزود الخدمة",
+        "help" : "اضغط هنا لمعلومات عامة حول المزود."
+      },
+      "AcquireCreditLink" : {
+        "label" : "شراء رصيد المزود",
+        "help" : "اضغط هنا لشراء رصيد لمفاتيح api الخاصة بك."
+      },
+      "EmbeddingModel" : {
+        "label" : "نموذج التح嶮يد الافتراضي",
+        "help" : "سيكون هذا النموذج مسؤولاً عن فهرسة البيانات الدلالية (التح嶮يد) واسترجاع بياناتك ومستنداتك"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "حدث خطأ أثناء بث استجابة الدردشة",
         "detail" : "خطأ في الخادم: 400 طلب غير صالح من POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: http://localhost:8000/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "حدث خطأ أثناء بث استجابة الدردشة",
+        "detail" : "خطأ في الخادم: تم قطع الاتصال"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: https://api.openai.com/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
+        "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "نتيجة البحث في النظام المحللة لـ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "اختر خيارًا واحدًا على الأقل من الخيارات التالية"
+      },
+      "LaunchBtn" : {
+        "label" : "تشغيل البحث"
+      },
+      "SkipDeepSearch" : {
+        "label" : "تخطي البحث المتعمق"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "قواعد المعرفة المختارة"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "الأنظمة المختارة"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "تحديد المصادر"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "حد تشابه البحث",
         "help" : "حد تشابه الدلالة (بين 0.5 إلى 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "استخدم أو أنشئ بيانات اعتماد مفتاح api"
+      },
+      "ExistingApiKey" : {
+        "label" : "مفتاح api/بيانات الاعتماد",
+        "help" : "اختر مفتاح api أو بيانات الاعتماد لهذا المزود"
+      },
+      "NewApiKey" : {
+        "label" : "مفتاح api جديد",
+        "help" : "أدخل مفتاح api جديد لاستخدامه مع هذا المزود"
+      },
+      "PiSave" : {
+        "label" : "حفظ"
+      },
+      "NewUserName" : {
+        "label" : "اسم المستخدم",
+        "help" : "اسم المستخدم المستخدم للوصول إلى خدمات المزود"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "استخدم الحالي أو أنشئ جديدًا",
+        "help" : "استخدم بيانات الاعتماد الحالية أو أنشئ بيانات جديدة لهذا المزود"
+      },
+      "newSecretDescription" : {
+        "label" : "وصف بيانات الاعتماد",
+        "help" : "وصف بيانات اعتماد مفتاح api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "تم إنشاء بيانات الاعتماد",
+        "detail" : "تم إنشاء بيانات الاعتماد بنجاح"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "الدردشة مع المستخدمين"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "نموذج يستخدم للخدمات الداخلية"
       }
     }
   }

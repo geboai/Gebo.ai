@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search કૉન્ફિગર કરો",
         "description" : "Deep search પરિમાણો કૉન્ફિગર કરો"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ઑટોટેન",
+        "description" : "ક્રમશઃ મંજૂર જનરેશન પેરામીટર્સનું આપોઆપ સુનિર્દિષ્ટ બંધારણ"
+      },
+      "Description" : {
+        "label" : "વર્ણન"
+      },
+      "LastAutotunedDate" : {
+        "label" : "છેલ્લી ટ્યુનિંગ અપડેટ"
+      },
+      "Code" : {
+        "label" : "એમ્પેડિંગ મોડેલ/VectorStore કોડ"
+      },
+      "ComputedThreashold" : {
+        "label" : "ગણતરી કરેલ થ્રેશોલ્ડ"
+      },
+      "Autotuned" : {
+        "label" : "ઓટોટ્યુનડ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ની જરૂરી ઊભી પ્રક્રિયાની સ્ટેપ્સ પૂર્ણ થઈ...",
+        "detail" : "મૂળભૂત સેટઅપના પગલાંઓ પૂરાં થયા છે, પણ કેટલાક ગેરહાજર સ્ટેપ્સથી તમારી સંસ્થા સોફટવેરમાંથી કાયમી લાભ મેળવી શકતી નથી"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ની સેટઅપમાં કેટલીક જરૂરી સ્ટેજ ગેરહાજર છે",
+        "detail" : "કૃપા કરીને સેટઅપ પ્રક્રિયાની લાલ ચિહ્નિત સ્ટેપ્સ તપાસો"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms પ્રદાતાની ઍક્સેસ સેટઅપ કરો"
+      },
+      "ExtensiveStup" : {
+        "label" : "વિસ્તૃત ઇન્ફ્રાસ્ટ્રક્ચર/સપ્લાયર્સના વિકલ્પો"
+      },
+      "MainPanelTitle" : {
+        "label" : "વપરાયેલ મોટી ભાષા મોડેલ્સ સ્થાપિત કરો"
+      },
+      "EasySetup" : {
+        "label" : "સરળ પ્રારંભિક સેટઅપ/રૂપાંતર સુધારો"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "મોટી ભાષા મોડેલ્સ સેટઅપ કરો"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI રિમોટ પ્રોવાઈડર ઠીક છે",
+        "detail" : "પ્રોવાઈડર ચાલુ છે અને સફળતાપૂર્વક રૂપરેખાંકિત થયેલ છે"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "કૃિયાપ્રક્રિયામાં અસાધારણતા: url:https://api.openai.com/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: url:https://api.openai.com/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
         "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI રિમોટ પ્રોવાઈડર ઠીક છે",
+        "detail" : "પ્રોવાઈડર ચાલુ છે અને સફળતાપૂર્વક રૂપરેખાંકિત થયેલ છે"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama લોંકલ (અથવા LAN) સર્વર ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "forUses" : {
+        "label" : "મોડેલ વપરાશ(ઓ)",
+        "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
+        "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "બધી ફંક્શન કોલ્સ સક્રિય કરો",
         "help" : "બધી ઉપલબ્ધ ટૂલ્સ અને ફંક્શન કોલ્સ સક્રિય કરો, જો સેટ ન હોય તો, તેને llms એડમિન પેનલમાં પછી સક્રિય કરી શકાશે"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "કૃિયાપ્રક્રિયામાં અસાધારણતા:Anthropic api જરૂરી api કી રૂપરેખાંકન વિના કામ કરી શકતી નથી",
+        "detail" : "સર્વર ભૂલ: Anthropic api જરૂરી api કી રૂપરેખાંકન વિના કામ કરી શકતી નથી"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "બનાવો અને સક્રિય કરો"
+      },
+      "vendorId" : {
+        "label" : "તમારો મોટો ભાષા મોડેલ વિક્રેતાનો પસંદ કરો",
+        "help" : "તમારા ડિફોલ્ટ ચેટ અને એમ્બેડિંગ મોડેલ્સ માટે પ્રાથમિક વિક્રેતાની પસંદગી કરો"
+      },
+      "secretId" : {
+        "label" : "પ્રોવાઈડર ક્રેડેન્શિયલ્સ પસંદ કરો (api કી)",
+        "help" : "પસંદ કરાયેલ llm પ્રોવાઈડર માટે વર્તમાન ક્રેડેન્શિયલ્સમાંથી એક પસંદ કરો"
+      },
+      "InternalServiceModel" : {
+        "label" : "આંતરિક સેવાઓનું ચેટ મોડેલ",
+        "help" : "આંતરિક સેવાઓ માટે રૂપરેખાંકિત ચેટ મોડેલ માહિતી કાઢવામાં, સારાંશ આપવામાં અને આંતરિક વર્કફ્લો ચલાવવાના જવાબદાર રહેશે."
+      },
+      "ChatModel" : {
+        "label" : "ડિફોલ્ટ ચેટ મોડેલ",
+        "help" : "ડિફોલ્ટ ચેટ મોડેલ વપરાશકર્તાઓના પ્રશ્નોના ઉત્તર આપશે અને એવા વર્કફ્લો ચલાવશે, જેના માટે સ્પષ્ટ રીતે રૂપરેખાંકિત મોડેલ્સ નહીં હોય. તેને શક્તિશાળી અને વિશ્વસનીય હોવું જોઈએ, ખર્ચ, પ્રદર્શન અને પરિણામ ગુણવત્તા વચ્ચે યોગ્ય સંતુલન હોવું જોઈએ."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy કી ક્રેડિટ લિંક ખરીદો"
+      },
+      "ProviderWWW" : {
+        "label" : "વેબસાઈટ લિંક"
+      },
+      "WebSiteLink" : {
+        "label" : "પ્રોવાઈડર વેબસાઈટ",
+        "help" : "પ્રોવાઈડર વિશે સામાન્ય માહિતી માટે અહીં ક્લિક કરો."
+      },
+      "AcquireCreditLink" : {
+        "label" : "પ્રોવાઈડરના ક્રેડિટ ખરીદો",
+        "help" : "તમારી api કી(ઓ) માટે ક્રેડિટ ખરીદવા અહીં ક્લિક કરો."
+      },
+      "EmbeddingModel" : {
+        "label" : "ડિફોલ્ટ એમ્બેડિંગ મોડેલ",
+        "help" : "આ મોડેલ તમારા ડેટા અને ડોક્યુમેન્ટ્સનું સેમેન્ટિક ઈન્ડેક્સિંગ (એમ્બેડિંગ) અને શોધ માટે જવાબદાર રહેશે"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "ચેટ સ્ટ્રીમ કરતી વખતે ભૂલ",
         "detail" : "સર્વર ભૂલ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "કૃિયાપ્રક્રિયામાં અસાધારણતા: url:http://localhost:8000/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: url:http://localhost:8000/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ચેટ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: કનેક્શન ફરી શરૂ થયું"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "કૃિયાપ્રક્રિયામાં અસાધારણતા: url:https://api.openai.com/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: url:https://api.openai.com/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "કૃિયાપ્રક્રિયામાં અસાધારણતા:Anthropic api જરૂરી api કી રૂપરેખાંકન વિના કામ કરી શકતી નથી",
+        "detail" : "સર્વર ભૂલ: Anthropic api જરૂરી api કી રૂપરેખાંકન વિના કામ કરી શકતી નથી"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "માટેનું વિશ્લેષિત સિસ્ટમ શોધ પરિણામ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "નીચે આપેલ વિકલ્પોમાંથી ઓછામાં ઓછો એક પસંદ કરો"
+      },
+      "LaunchBtn" : {
+        "label" : "સર્ચ ચલાવો"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ગહન શોધ અવગણો"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "પસંદ કરાયેલા જ્ઞાન આધાર"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "પસંદ કરાયેલ સિસ્ટમ્સ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "સ્રોત પસંદ કરો"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "શોધ સમાંતરતા થ્રેશોલ્ડ",
         "help" : "અર્થ સમાંતરતા થ્રેશોલ્ડ (0.5 થી 1.0 વચ્ચે)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "વપરાવવાની કે નવી api કી ક્રેડેન્શિયલ્સ બનાવો"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api કી/ક્રેડેન્શિયલ્સ",
+        "help" : "આ પ્રોવાઈડર માટે api કી અથવા ક્રેડેન્શિયલ્સ પસંદ કરો"
+      },
+      "NewApiKey" : {
+        "label" : "નવી api કી",
+        "help" : "આ પ્રોવાઈડર સાથે વાપરવા માટે નવી api કી દાખલ કરો"
+      },
+      "PiSave" : {
+        "label" : "સંગ્રહો"
+      },
+      "NewUserName" : {
+        "label" : "વપરાશકર્તાનામ",
+        "help" : "પ્રોવાઈડર સેવાઓ વાપરવા માટે વપરાયેલ વપરાશકર્તાનામ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "હાલની અથવા નવી વાપરો",
+        "help" : "આ પ્રોવાઈડર માટે વર્તમાન વાપરો અથવા નવી ક્રેડેન્શિયલ્સ બનાવો"
+      },
+      "newSecretDescription" : {
+        "label" : "ક્રેડેન્શિયલ્સનું વર્ણન",
+        "help" : "Api કી ક્રેડેન્શિયલ્સનું વર્ણન"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ક્રેડેન્શિયલ્સ બનાવાયા",
+        "detail" : "ક્રેડેન્શિયલ્સ સફળતાપૂર્વક બનાવાયા"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "વપરાશકર્તાઓ સાથે ચેટ કરો"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "આંતરિક સેવાઓ માટે ઉપયોગમાં લેવાતો મોડેલ"
       }
     }
   }

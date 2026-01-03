@@ -181,6 +181,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Nastavite Deep search",
         "description" : "Nastavite parametre za Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Samodejno prilagajanje parametrov generiranja z obogatenim iskanjem"
+      },
+      "Description" : {
+        "label" : "Opis"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Zadnja posodobitev prilagajanja"
+      },
+      "Code" : {
+        "label" : "Koda modela za vdelave/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Izračunan prag"
+      },
+      "Autotuned" : {
+        "label" : "Samodejno prilagojeno"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Obvezni koraki nastavitve Gebo.ai so zaključeni...",
+        "detail" : "Obvezni koraki nastavitve so bili zaključeni, nekaj korakov pa še manjka, zato vaša organizacija še ne izkoristi vsega potenciala te programske opreme"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "V nastavitvi Gebo.ai manjka še nekaj obveznih korakov",
+        "detail" : "Preglejte rdeče označene korake v postopku namestitve"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -273,6 +300,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Nastavite dostop do ponudnikov llms za Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Razširjene možnosti infrastrukture/dobaviteljev"
+      },
+      "MainPanelTitle" : {
+        "label" : "Nastavitev uporabljenih velikih jezikovnih modelov"
+      },
+      "EasySetup" : {
+        "label" : "Preprosta začetna nastavitev/popravilo konfiguracije"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Nastavi velike jezikovne modele"
       }
     },
     "GraphRagWizardComponent" : {
@@ -1353,6 +1392,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavitve dostopa do modela"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Oddaljeni ponudnik AI je v redu",
+        "detail" : "Ponudnik deluje in je uspešno konfiguriran"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izjema med izvajanjem: Napaka pri delu z url:https://api.openai.com/v1/models",
+        "detail" : "Napaka strežnika: Napaka pri delu z url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1439,10 @@
       "defaultModel" : {
         "label" : "nastavi kot privzeti vgraditveni model",
         "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Oddaljeni ponudnik AI je v redu",
+        "detail" : "Ponudnik deluje in je uspešno konfiguriran"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1482,11 @@
       },
       "MainPanel" : {
         "label" : "Urejanje konfiguracije Ollama lokalnega (ali LAN) klepetalnega modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1531,11 @@
       },
       "MainPanel" : {
         "label" : "Urejanje konfiguracije Anthropic klepetalnega modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1579,11 @@
       },
       "MainPanel" : {
         "label" : "Urejanje konfiguracije MistralAI klepetalnega modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1627,11 @@
       },
       "MainPanel" : {
         "label" : "Urejanje konfiguracije Google Vertex AI klepetalnega modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1676,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavitve dostopa do modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1728,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavitve dostopa do modela"
+      },
+      "forUses" : {
+        "label" : "Uporaba modela",
+        "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
+        "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -3078,6 +3164,49 @@
       "enableAllFunctions" : {
         "label" : "omogoči vse funkcije",
         "help" : "Omogoči vsa razpoložljiva orodja in klice funkcij; če ni nastavljeno, jih je mogoče omogočiti kasneje v administraciji llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izjema med izvajanjem: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa",
+        "detail" : "Napaka strežnika: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Ustvari in aktiviraj"
+      },
+      "vendorId" : {
+        "label" : "Izberite ponudnika velikega jezikovnega modela",
+        "help" : "Izberite začetnega ponudnika za vaš privzeti chat in embedding modele"
+      },
+      "secretId" : {
+        "label" : "Izberite poverilnice ponudnika (api ključ)",
+        "help" : "Izberite ene od obstoječih poverilnic za izbranega ponudnika llm"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model za klepet za interne storitve",
+        "help" : "Model za klepet, nastavljen za interne storitve, bo odgovoren za izločanje informacij, povzemanje in izvajanje notranjih potekov dela."
+      },
+      "ChatModel" : {
+        "label" : "Privzet model za klepet",
+        "help" : "Privzeti model za klepet bo odgovoren za odgovarjanje na vprašanja uporabnikov in za izvajanje potekov, za katere niso posebej nastavljeni modeli. Mora biti zmogljiv in zanesljiv, z dobrim ravnovesjem med ceno, zmogljivostjo in kakovostjo rezultatov."
+      },
+      "ProviderBuy" : {
+        "label" : "Povezava za nakup kredita za Apy ključ"
+      },
+      "ProviderWWW" : {
+        "label" : "Povezava do spletne strani"
+      },
+      "WebSiteLink" : {
+        "label" : "Spletna stran ponudnika",
+        "help" : "Kliknite tukaj za splošne informacije o ponudniku."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Nakup kredita ponudnika",
+        "help" : "Kliknite tukaj za nakup kredita za vaš(e) api ključ(e)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Privzeti model za vdelave",
+        "help" : "Ta model bo odgovoren za semantično indeksiranje (vdelave) in iskanje vaših podatkov in dokumentov"
       }
     }
   },
@@ -3126,6 +3255,22 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "Napaka med pretakanjem odgovora na klepet",
         "detail" : "Napaka strežnika: 400 Bad Request od POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Izjema med izvajanjem: Napaka pri delu z url:http://localhost:8000/v1/models",
+        "detail" : "Napaka strežnika: Napaka pri delu z url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Napaka pri prenosu odgovora v klepetu",
+        "detail" : "Napaka strežnika: Povezava je bila prekinjena"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izjema med izvajanjem: Napaka pri delu z url:https://api.openai.com/v1/models",
+        "detail" : "Napaka strežnika: Napaka pri delu z url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izjema med izvajanjem: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa",
+        "detail" : "Napaka strežnika: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa"
       }
     }
   },
@@ -3308,6 +3453,24 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "Analiziran rezultat iskanja sistema za"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izberite vsaj eno od naslednjih možnosti"
+      },
+      "LaunchBtn" : {
+        "label" : "Zaženi iskanje"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskoči globoko iskanje"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izbrane baze znanja"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izbrani sistemi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izberi vire"
       }
     }
   },
@@ -3379,6 +3542,50 @@
       "similarityThreashold" : {
         "label" : "Prag podobnosti iskanja",
         "help" : "Prag semantične podobnosti (med 0.5 in 1.0)"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Uporabi ali ustvari poverilnice za api ključ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ključ/poverilnice",
+        "help" : "Izberi api ključ ali poverilnice za tega ponudnika"
+      },
+      "NewApiKey" : {
+        "label" : "Nov api ključ",
+        "help" : "Vnesite nov api ključ za uporabo s tem ponudnikom"
+      },
+      "PiSave" : {
+        "label" : "Shrani"
+      },
+      "NewUserName" : {
+        "label" : "Uporabniško ime",
+        "help" : "Uporabniško ime za dostop do storitev ponudnika"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Uporabi obstoječe ali novo",
+        "help" : "Uporabi obstoječe ali ustvari nove poverilnice za tega ponudnika"
+      },
+      "newSecretDescription" : {
+        "label" : "Opis poverilnic",
+        "help" : "Opis poverilnic za api ključ"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Poverilnice ustvarjene",
+        "detail" : "Poverilnice uspešno ustvarjene"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Klepet z uporabniki"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model za interne storitve"
       }
     }
   }
