@@ -17,8 +17,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.application.messaging.external.IGExternalMessageEmitterSource;
-import ai.gebo.application.messaging.external.IGExternalMessageEmitterSourceRepositoryPattern;
+import ai.gebo.application.messaging.external.IGExternalMessageEmitterProviderSource;
+import ai.gebo.application.messaging.external.IGExternalMessageEmitterSourceProviderRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 /**
@@ -32,17 +32,17 @@ import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
  * sources.
  */
 @Service
-public class GExternalMessageEmitterSourceRepositoryPatternImpl
-		extends GAbstractImplementationsRepositoryPattern<IGExternalMessageEmitterSource>
-		implements IGExternalMessageEmitterSourceRepositoryPattern {
+public class GExternalMessageEmitterProviderSourceRepositoryPatternImpl
+		extends GAbstractImplementationsRepositoryPattern<IGExternalMessageEmitterProviderSource>
+		implements IGExternalMessageEmitterSourceProviderRepositoryPattern {
 
     /**
      * Injects a list of IGExternalMessageEmitterSource implementations.
      * 
      * @param implementations a list of implementations, injection may not be required.
      */
-	public GExternalMessageEmitterSourceRepositoryPatternImpl(
-			@Autowired(required = false) List<IGExternalMessageEmitterSource> implementations) {
+	public GExternalMessageEmitterProviderSourceRepositoryPatternImpl(
+			@Autowired(required = false) List<IGExternalMessageEmitterProviderSource> implementations) {
 		super(implementations);
 	}
 
@@ -53,7 +53,7 @@ public class GExternalMessageEmitterSourceRepositoryPatternImpl
      * @return the ID of the source
      */
 	@Override
-	public String getCodeValue(IGExternalMessageEmitterSource x) {
+	public String getCodeValue(IGExternalMessageEmitterProviderSource x) {
 		return x.getId();
 	}
 }

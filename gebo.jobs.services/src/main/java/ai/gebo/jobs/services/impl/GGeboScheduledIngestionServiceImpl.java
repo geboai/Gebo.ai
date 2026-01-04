@@ -202,7 +202,7 @@ public class GGeboScheduledIngestionServiceImpl
 	public static final int CHECK_JOB_STATUS_PERIOD = 1000 * 60 * 2;
 	public static final int EXECUTION_TIMEOUT = 1000 * 60 * 120;
 
-	@Scheduled(fixedDelay = 10000, fixedRate = CHECK_JOB_STATUS_PERIOD)
+	@Scheduled(initialDelay = 10000, fixedRate = CHECK_JOB_STATUS_PERIOD)
 	public void checkJobsStatus() {
 		Stream<GJobStatusItem> processingStream = jobStatusRepository.findByProcessingTrue();
 		processingStream.forEach(status -> {

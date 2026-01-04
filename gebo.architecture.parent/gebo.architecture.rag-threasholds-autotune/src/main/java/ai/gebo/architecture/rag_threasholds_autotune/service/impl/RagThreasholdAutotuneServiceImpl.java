@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,10 +25,8 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.DiscreteDomain;
 
 import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotuneConfig;
 import ai.gebo.architecture.rag_threasholds_autotune.model.AutotuneVectorStoreInfo;
@@ -44,14 +41,12 @@ import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTune
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQuestion;
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQuestionResult;
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneRatedThreashold;
-import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
 
@@ -62,6 +57,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RagThreasholdAutotuneServiceImpl.class);
+	private static boolean runningTuning = false;
 
 	private static final String IN_TOPIC_PROMPT = "You are a synthetic query generator for retrieval evaluation.\r\n"
 			+ "\r\n" + "INPUT\r\n" + "You will receive a batch of N text segments (\"chunks\"). Each chunk has:\r\n"
@@ -128,10 +124,21 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 
 	@Scheduled(initialDelay = 10000, fixedRate = 120 * 60000)
 	public void onTick() {
-		List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
-				.toList();
-		for (String vectorStoreId : vectorStoreIds) {
-			processAutotune(vectorStoreId);
+		if (runningTuning)
+			return;
+		try {
+			synchronized (this) {
+				runningTuning=true;
+			}
+			List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
+					.toList();
+			for (String vectorStoreId : vectorStoreIds) {
+				processAutotune(vectorStoreId);
+			}
+		} finally {
+			synchronized (this) {
+				runningTuning=false;
+			}
 		}
 	}
 

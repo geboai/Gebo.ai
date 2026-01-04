@@ -17,8 +17,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.application.messaging.external.IGExternalMessageReceiverSource;
-import ai.gebo.application.messaging.external.IGExternalMessageReceiverSourceRepositoryPattern;
+import ai.gebo.application.messaging.external.IGExternalMessageReceiverProviderSource;
+import ai.gebo.application.messaging.external.IGExternalMessageReceiverProviderSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 /**
@@ -29,9 +29,9 @@ import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
  * and is responsible for handling the collection of IGExternalMessageReceiverSource instances.
  */
 @Service
-public class GExternalMessageReceiverSourceRepositoryPatternImpl
-        extends GAbstractImplementationsRepositoryPattern<IGExternalMessageReceiverSource>
-        implements IGExternalMessageReceiverSourceRepositoryPattern {
+public class GExternalMessageReceiverProviderSourceRepositoryPatternImpl
+        extends GAbstractImplementationsRepositoryPattern<IGExternalMessageReceiverProviderSource>
+        implements IGExternalMessageReceiverProviderSourceRepositoryPattern {
 
     /**
      * Constructor for GExternalMessageReceiverSourceRepositoryPatternImpl.
@@ -40,8 +40,8 @@ public class GExternalMessageReceiverSourceRepositoryPatternImpl
      *                        that will be managed by this repository. Autowired to inject
      *                        dependencies, and not required by default.
      */
-    public GExternalMessageReceiverSourceRepositoryPatternImpl(
-            @Autowired(required = false) List<IGExternalMessageReceiverSource> implementations) {
+    public GExternalMessageReceiverProviderSourceRepositoryPatternImpl(
+            @Autowired(required = false) List<IGExternalMessageReceiverProviderSource> implementations) {
         super(implementations);
 
     }
@@ -53,7 +53,7 @@ public class GExternalMessageReceiverSourceRepositoryPatternImpl
      * @return the identifier of the external message receiver source.
      */
     @Override
-    public String getCodeValue(IGExternalMessageReceiverSource x) {
+    public String getCodeValue(IGExternalMessageReceiverProviderSource x) {
         return x.getId();
     }
 }

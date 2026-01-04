@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -27,22 +28,16 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
  * message broker. It manages the routing and acceptance of messages between
  * various messaging systems. Implements the {@code IGMessageBroker} interface.
  */
+@AllArgsConstructor
 public class GBaseMessageBroker implements IGMessageBroker {
-
+	protected final GeboCurrentApplication geboCurrentApplication;
 	// Maps to store message receivers and emitters organized by module and system
 	// IDs.
-	protected Map<String, Map<String, IGMessageReceiver>> receivers = new HashMap<String, Map<String, IGMessageReceiver>>();
-	protected Map<String, Map<String, IGMessageEmitter>> emitters = new HashMap<String, Map<String, IGMessageEmitter>>();
+	protected final Map<String, Map<String, IGMessageReceiver>> receivers = new HashMap<String, Map<String, IGMessageReceiver>>();
+	protected final Map<String, Map<String, IGMessageEmitter>> emitters = new HashMap<String, Map<String, IGMessageEmitter>>();
 
 	// Logger for this class
-	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
-
-	/**
-	 * Default constructor for GBaseMessageBroker.
-	 */
-	public GBaseMessageBroker() {
-
-	}
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * Returns a list of payload types that the message broker can accept. In this
@@ -278,5 +273,11 @@ public class GBaseMessageBroker implements IGMessageBroker {
 				}
 			}
 		}
+	}
+
+	@Override
+	public GeboCurrentApplication getCurrentApplication() {
+
+		return geboCurrentApplication;
 	}
 }

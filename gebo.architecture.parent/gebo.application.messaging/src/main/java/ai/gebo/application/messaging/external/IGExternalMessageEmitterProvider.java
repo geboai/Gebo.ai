@@ -10,20 +10,23 @@
  
  
 
+
 package ai.gebo.application.messaging.external;
 
-import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
+import ai.gebo.application.messaging.IGMessageEmitter;
 
 /**
  * Gebo.ai comment agent
  * 
- * Interface for a repository pattern specifically for handling
- * IGExternalMessageEmitterSource entities. This interface
- * extends the IGImplementationsRepositoryPattern, ensuring
- * functionalities for CRUD operations and other repository
- * behaviors.
+ * IGExternalMessageEmitter serves as a contract for classes that need to provide
+ * an external message emitter.
  */
-public interface IGExternalMessageEmitterSourceRepositoryPattern
-		extends IGImplementationsRepositoryPattern<IGExternalMessageEmitterSource> {
+public interface IGExternalMessageEmitterProvider {
 
+    /**
+     * Retrieves the message emitter associated with this external message emitter.
+     *
+     * @return an instance of IGMessageEmitter
+     */
+    public IGExternalMessageEmitter getEmitter();
 }

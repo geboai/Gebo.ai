@@ -21,7 +21,7 @@ import java.util.List;
  * Implementations of this interface should provide functionality
  * to retrieve an identifier and a list of external message receivers.
  */
-public interface IGExternalMessageReceiverSource {
+public interface IGExternalMessageReceiverProviderSource {
     
     /**
      * Retrieves the unique identifier of this external message receiver source.
@@ -35,5 +35,5 @@ public interface IGExternalMessageReceiverSource {
      * 
      * @return a List of IGExternalMessageReceiver instances.
      */
-    public List<IGExternalMessageReceiver> getExternalReceivers();
+    public List<IGExternalMessageReceiverProvider> getExternalReceivers();
 }

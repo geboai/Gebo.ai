@@ -17,14 +17,13 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 /**
  * Gebo.ai comment agent
  * 
- * Interface representing a repository pattern for external message receiver 
- * sources. This interface extends the generic repository pattern for 
- * implementations of {@code IGExternalMessageReceiverSource}.
- * 
- * @see IGExternalMessageReceiverSource
- * @see IGImplementationsRepositoryPattern
+ * Interface for a repository pattern specifically for handling
+ * IGExternalMessageEmitterSource entities. This interface
+ * extends the IGImplementationsRepositoryPattern, ensuring
+ * functionalities for CRUD operations and other repository
+ * behaviors.
  */
-public interface IGExternalMessageReceiverSourceRepositoryPattern
-        extends IGImplementationsRepositoryPattern<IGExternalMessageReceiverSource> {
+public interface IGExternalMessageEmitterSourceProviderRepositoryPattern
+		extends IGImplementationsRepositoryPattern<IGExternalMessageEmitterProviderSource> {
 
 }

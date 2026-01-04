@@ -22,7 +22,7 @@ import java.util.List;
  * of this interface are responsible for providing a unique identifier and a list
  * of external message emitters.
  */
-public interface IGExternalMessageEmitterSource {
+public interface IGExternalMessageEmitterProviderSource {
 
     /**
      * Retrieves the unique identifier for this message emitter source.
@@ -36,5 +36,5 @@ public interface IGExternalMessageEmitterSource {
      *
      * @return A List of IGExternalMessageEmitter objects.
      */
-    public List<IGExternalMessageEmitter> getExternalEmitters();
+    public List<IGExternalMessageEmitterProvider> getExternalEmitters();
 }

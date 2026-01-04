@@ -99,4 +99,6 @@ public interface IGMessageBroker extends IGMessageConsumer {
 	 */
 	public void broadcast(GMessageEnvelope envelope);
 
+	public GeboCurrentApplication getCurrentApplication();
+
 }
