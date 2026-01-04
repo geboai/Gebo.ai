@@ -27,6 +27,7 @@ import ai.gebo.core.messages.GDeletedKnowledgeBasePayload;
 import ai.gebo.core.messages.GDeletedProjectEndpointPayload;
 import ai.gebo.core.messages.GDeletedProjectPayload;
 import ai.gebo.core.messages.GFinishedWorkflowPayload;
+import ai.gebo.core.model.ComputeWorkflowEndPayload;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.security.services.IGSecurityService;
@@ -91,7 +92,8 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	@Override
 	public List<String> getEmittedPayloadTypes() {
 		return List.of(GDeletedKnowledgeBasePayload.class.getName(), GDeletedProjectPayload.class.getName(),
-				GDeletedProjectEndpointPayload.class.getName(), GFinishedWorkflowPayload.class.getName());
+				GDeletedProjectEndpointPayload.class.getName(), GFinishedWorkflowPayload.class.getName(),
+				ComputeWorkflowEndPayload.class.getName());
 	}
 
 	/**
