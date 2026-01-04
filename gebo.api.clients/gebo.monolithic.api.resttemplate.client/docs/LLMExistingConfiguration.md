@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 **existingModelConfig** | [**GObjectRefGBaseModelConfig**](GObjectRefGBaseModelConfig.md) |  | 
 **modelType** | [**ModelTypeEnum**](#ModelTypeEnum) |  | 
 **secretInfo** | [**SecretInfo**](SecretInfo.md) |  |  [optional]
+**baseUrl** | **String** |  |  [optional]
 
 <a name="ModelTypeEnum"></a>
 ## Enum: ModelTypeEnum

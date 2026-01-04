@@ -14,3 +14,4 @@ Name | Type | Description | Notes
 **forcedRequestDocuments** | **List&lt;String&gt;** |  |  [optional]
 **documents** | [**RagDocumentsCachedDaoResult**](RagDocumentsCachedDaoResult.md) |  |  [optional]
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
+**deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]

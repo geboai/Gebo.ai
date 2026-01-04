@@ -23,10 +23,21 @@ Name | Type | Description | Notes
 **contextLength** | **Integer** |  |  [optional]
 **defaultModelPrompt** | **String** |  |  [optional]
 **forUses** | [**List&lt;ForUsesEnum&gt;**](#List&lt;ForUsesEnum&gt;) |  |  [optional]
+**features** | [**List&lt;FeaturesEnum&gt;**](#List&lt;FeaturesEnum&gt;) |  |  [optional]
 
 <a name="List<ForUsesEnum>"></a>
 ## Enum: List&lt;ForUsesEnum&gt;
 Name | Value
 ---- | -----
 CHAT | &quot;CHAT&quot;
-GRAPH_EXTRACTION | &quot;GRAPH_EXTRACTION&quot;
+INTERNAL_SERVICES | &quot;INTERNAL_SERVICES&quot;
+
+<a name="List<FeaturesEnum>"></a>
+## Enum: List&lt;FeaturesEnum&gt;
+Name | Value
+---- | -----
+CHAT | &quot;CHAT&quot;
+REASONING | &quot;REASONING&quot;
+STRUCTURED_OUTPUT | &quot;STRUCTURED_OUTPUT&quot;
+MULTIMEDIA | &quot;MULTIMEDIA&quot;
+FUNCTION_CALLING | &quot;FUNCTION_CALLING&quot;

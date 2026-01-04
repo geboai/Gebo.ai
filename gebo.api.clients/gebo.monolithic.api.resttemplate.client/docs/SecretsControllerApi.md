@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**createSshKeySecret**](SecretsControllerApi.md#createSshKeySecret) | **POST** /api/admin/SecretsController/createSshKeySecret | 
 [**createTokenSecret**](SecretsControllerApi.md#createTokenSecret) | **POST** /api/admin/SecretsController/createTokenSecret | 
 [**createUsernamePasswordSecret**](SecretsControllerApi.md#createUsernamePasswordSecret) | **POST** /api/admin/SecretsController/createUsernamePasswordSecret | 
+[**deleteSecret**](SecretsControllerApi.md#deleteSecret) | **DELETE** /api/admin/SecretsController/deleteSecret | 
 [**getSecretsByContextCode**](SecretsControllerApi.md#getSecretsByContextCode) | **GET** /api/admin/SecretsController/getSecretsByContextCode | 
 
 <a name="createCustomSecret"></a>
@@ -313,6 +314,48 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+<a name="deleteSecret"></a>
+# **deleteSecret**
+> deleteSecret(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.SecretsControllerApi;
+
+
+SecretsControllerApi apiInstance = new SecretsControllerApi();
+SecretInfo body = new SecretInfo(); // SecretInfo | 
+try {
+    apiInstance.deleteSecret(body);
+} catch (ApiException e) {
+    System.err.println("Exception when calling SecretsControllerApi#deleteSecret");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**SecretInfo**](SecretInfo.md)|  |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
 
 <a name="getSecretsByContextCode"></a>
 # **getSecretsByContextCode**

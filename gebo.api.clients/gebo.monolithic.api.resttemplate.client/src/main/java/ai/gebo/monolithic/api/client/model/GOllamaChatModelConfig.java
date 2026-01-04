@@ -26,7 +26,7 @@ import java.util.List;
  * GOllamaChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
 
 public class GOllamaChatModelConfig {
   @JsonProperty("code")
@@ -91,7 +91,7 @@ public class GOllamaChatModelConfig {
    */
   public enum ForUsesEnum {
     CHAT("CHAT"),
-    GRAPH_EXTRACTION("GRAPH_EXTRACTION");
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
 
     private String value;
 
@@ -119,6 +119,43 @@ public class GOllamaChatModelConfig {
 
   }  @JsonProperty("forUses")
   private List<ForUsesEnum> forUses = null;
+
+  /**
+   * Gets or Sets features
+   */
+  public enum FeaturesEnum {
+    CHAT("CHAT"),
+    REASONING("REASONING"),
+    STRUCTURED_OUTPUT("STRUCTURED_OUTPUT"),
+    MULTIMEDIA("MULTIMEDIA"),
+    FUNCTION_CALLING("FUNCTION_CALLING");
+
+    private String value;
+
+    FeaturesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static FeaturesEnum fromValue(String input) {
+      for (FeaturesEnum b : FeaturesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("features")
+  private List<FeaturesEnum> features = null;
 
   public GOllamaChatModelConfig code(String code) {
     this.code = code;
@@ -512,6 +549,32 @@ public class GOllamaChatModelConfig {
     this.forUses = forUses;
   }
 
+  public GOllamaChatModelConfig features(List<FeaturesEnum> features) {
+    this.features = features;
+    return this;
+  }
+
+  public GOllamaChatModelConfig addFeaturesItem(FeaturesEnum featuresItem) {
+    if (this.features == null) {
+      this.features = new ArrayList<>();
+    }
+    this.features.add(featuresItem);
+    return this;
+  }
+
+   /**
+   * Get features
+   * @return features
+  **/
+  @Schema(description = "")
+  public List<FeaturesEnum> getFeatures() {
+    return features;
+  }
+
+  public void setFeatures(List<FeaturesEnum> features) {
+    this.features = features;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -541,12 +604,13 @@ public class GOllamaChatModelConfig {
         Objects.equals(this.temperature, gollamaChatModelConfig.temperature) &&
         Objects.equals(this.contextLength, gollamaChatModelConfig.contextLength) &&
         Objects.equals(this.defaultModelPrompt, gollamaChatModelConfig.defaultModelPrompt) &&
-        Objects.equals(this.forUses, gollamaChatModelConfig.forUses);
+        Objects.equals(this.forUses, gollamaChatModelConfig.forUses) &&
+        Objects.equals(this.features, gollamaChatModelConfig.features);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, contextLength, defaultModelPrompt, forUses);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, contextLength, defaultModelPrompt, forUses, features);
   }
 
 
@@ -575,6 +639,7 @@ public class GOllamaChatModelConfig {
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    defaultModelPrompt: ").append(toIndentedString(defaultModelPrompt)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");
+    sb.append("    features: ").append(toIndentedString(features)).append("\n");
     sb.append("}");
     return sb.toString();
   }

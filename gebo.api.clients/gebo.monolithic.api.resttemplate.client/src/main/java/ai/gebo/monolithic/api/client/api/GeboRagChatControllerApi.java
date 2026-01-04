@@ -3,6 +3,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.GBaseChatModelChoice;
+import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
@@ -30,7 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
 
 public class GeboRagChatControllerApi {
     private ApiClient apiClient;
@@ -266,6 +267,51 @@ public class GeboRagChatControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<ModelProviderCapabilities> returnType = new ParameterizedTypeReference<ModelProviderCapabilities>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param profileCode  (required)
+     * @return List&lt;GBaseObject&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GBaseObject> getVisibleKnowledgeBasesByProfileCode(String profileCode) throws RestClientException {
+        return getVisibleKnowledgeBasesByProfileCodeWithHttpInfo(profileCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param profileCode  (required)
+     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GBaseObject>> getVisibleKnowledgeBasesByProfileCodeWithHttpInfo(String profileCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'profileCode' is set
+        if (profileCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'profileCode' when calling getVisibleKnowledgeBasesByProfileCode");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "profileCode", profileCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**getChatProfileModelMetaInfos**](GeboRagChatControllerApi.md#getChatProfileModelMetaInfos) | **GET** /api/users/GeboChatController/getChatProfileModelMetaInfos | 
 [**getChatProfiles**](GeboRagChatControllerApi.md#getChatProfiles) | **GET** /api/users/GeboChatController/profiles | 
 [**getProfileProviderModelCapabilities**](GeboRagChatControllerApi.md#getProfileProviderModelCapabilities) | **GET** /api/users/GeboChatController/getProfileProviderModelCapabilities | 
+[**getVisibleKnowledgeBasesByProfileCode**](GeboRagChatControllerApi.md#getVisibleKnowledgeBasesByProfileCode) | **GET** /api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode | 
 [**ragChat**](GeboRagChatControllerApi.md#ragChat) | **POST** /api/users/GeboChatController/ragChat | 
 [**richRagChat**](GeboRagChatControllerApi.md#richRagChat) | **POST** /api/users/GeboChatController/richRagChat | 
 [**streamRagResponse**](GeboRagChatControllerApi.md#streamRagResponse) | **POST** /api/users/GeboChatController/streamRagResponse | 
@@ -215,6 +216,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ModelProviderCapabilities**](ModelProviderCapabilities.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getVisibleKnowledgeBasesByProfileCode"></a>
+# **getVisibleKnowledgeBasesByProfileCode**
+> List&lt;GBaseObject&gt; getVisibleKnowledgeBasesByProfileCode(profileCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboRagChatControllerApi;
+
+
+GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
+String profileCode = "profileCode_example"; // String | 
+try {
+    List<GBaseObject> result = apiInstance.getVisibleKnowledgeBasesByProfileCode(profileCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboRagChatControllerApi#getVisibleKnowledgeBasesByProfileCode");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **profileCode** | **String**|  |
+
+### Return type
+
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 

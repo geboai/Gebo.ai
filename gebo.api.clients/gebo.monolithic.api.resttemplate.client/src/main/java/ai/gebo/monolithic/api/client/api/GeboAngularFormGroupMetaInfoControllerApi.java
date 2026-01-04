@@ -2,7 +2,10 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.DeletableStatus;
 import ai.gebo.monolithic.api.client.model.FormGroupMetaInfo;
+import ai.gebo.monolithic.api.client.model.GObjectRef;
+import ai.gebo.monolithic.api.client.model.SimpleGObjectRef;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
 
 public class GeboAngularFormGroupMetaInfoControllerApi {
     private ApiClient apiClient;
@@ -42,6 +45,98 @@ public class GeboAngularFormGroupMetaInfoControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return DeletableStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public DeletableStatus checkDeletableByGObjectRef(GObjectRef body) throws RestClientException {
+        return checkDeletableByGObjectRefWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;DeletableStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<DeletableStatus> checkDeletableByGObjectRefWithHttpInfo(GObjectRef body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkDeletableByGObjectRef");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/AngularFormGroupController/checkDeletableByGObjectRef").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<DeletableStatus> returnType = new ParameterizedTypeReference<DeletableStatus>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return DeletableStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public DeletableStatus checkDeletableBySimpleObjectRef(SimpleGObjectRef body) throws RestClientException {
+        return checkDeletableBySimpleObjectRefWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;DeletableStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<DeletableStatus> checkDeletableBySimpleObjectRefWithHttpInfo(SimpleGObjectRef body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkDeletableBySimpleObjectRef");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<DeletableStatus> returnType = new ParameterizedTypeReference<DeletableStatus>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 

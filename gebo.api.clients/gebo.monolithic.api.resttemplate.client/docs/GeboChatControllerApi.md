@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**getChatModelMetaInfos**](GeboChatControllerApi.md#getChatModelMetaInfos) | **GET** /api/users/GeboDirectModelChatController/getChatModelMetaInfos | 
 [**getChatModelUserInfo**](GeboChatControllerApi.md#getChatModelUserInfo) | **GET** /api/users/GeboDirectModelChatController/getChatModelUserInfo | 
 [**getProviderCapabilities**](GeboChatControllerApi.md#getProviderCapabilities) | **GET** /api/users/GeboDirectModelChatController/getProviderCapabilities | 
+[**getVisibleKnowledgeBases**](GeboChatControllerApi.md#getVisibleKnowledgeBases) | **GET** /api/users/GeboDirectModelChatController/getVisibleKnowledgeBases | 
 [**richChat**](GeboChatControllerApi.md#richChat) | **POST** /api/users/GeboDirectModelChatController/richChat | 
 [**speechText**](GeboChatControllerApi.md#speechText) | **POST** /api/users/GeboDirectModelChatController/speechText | 
 [**streamResponse**](GeboChatControllerApi.md#streamResponse) | **POST** /api/users/GeboDirectModelChatController/streamResponse | 
@@ -220,6 +221,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ModelProviderCapabilities**](ModelProviderCapabilities.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getVisibleKnowledgeBases"></a>
+# **getVisibleKnowledgeBases**
+> List&lt;GBaseObject&gt; getVisibleKnowledgeBases()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
+
+
+GeboChatControllerApi apiInstance = new GeboChatControllerApi();
+try {
+    List<GBaseObject> result = apiInstance.getVisibleKnowledgeBases();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatControllerApi#getVisibleKnowledgeBases");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 

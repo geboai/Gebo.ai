@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMSVendorInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
 
 public class LLMSVendorInfo {
   @JsonProperty("vendorId")
@@ -130,6 +130,12 @@ public class LLMSVendorInfo {
 
   @JsonProperty("apiKeySecretContext")
   private String apiKeySecretContext = null;
+
+  @JsonProperty("minContextWindow")
+  private Integer minContextWindow = null;
+
+  @JsonProperty("supportsAutoconfig")
+  private Boolean supportsAutoconfig = null;
 
   public LLMSVendorInfo vendorId(String vendorId) {
     this.vendorId = vendorId;
@@ -329,6 +335,42 @@ public class LLMSVendorInfo {
     this.apiKeySecretContext = apiKeySecretContext;
   }
 
+  public LLMSVendorInfo minContextWindow(Integer minContextWindow) {
+    this.minContextWindow = minContextWindow;
+    return this;
+  }
+
+   /**
+   * Get minContextWindow
+   * @return minContextWindow
+  **/
+  @Schema(description = "")
+  public Integer getMinContextWindow() {
+    return minContextWindow;
+  }
+
+  public void setMinContextWindow(Integer minContextWindow) {
+    this.minContextWindow = minContextWindow;
+  }
+
+  public LLMSVendorInfo supportsAutoconfig(Boolean supportsAutoconfig) {
+    this.supportsAutoconfig = supportsAutoconfig;
+    return this;
+  }
+
+   /**
+   * Get supportsAutoconfig
+   * @return supportsAutoconfig
+  **/
+  @Schema(description = "")
+  public Boolean isSupportsAutoconfig() {
+    return supportsAutoconfig;
+  }
+
+  public void setSupportsAutoconfig(Boolean supportsAutoconfig) {
+    this.supportsAutoconfig = supportsAutoconfig;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -349,12 +391,14 @@ public class LLMSVendorInfo {
         Objects.equals(this.name, llMSVendorInfo.name) &&
         Objects.equals(this.webSite, llMSVendorInfo.webSite) &&
         Objects.equals(this.acquireKeyUrl, llMSVendorInfo.acquireKeyUrl) &&
-        Objects.equals(this.apiKeySecretContext, llMSVendorInfo.apiKeySecretContext);
+        Objects.equals(this.apiKeySecretContext, llMSVendorInfo.apiKeySecretContext) &&
+        Objects.equals(this.minContextWindow, llMSVendorInfo.minContextWindow) &&
+        Objects.equals(this.supportsAutoconfig, llMSVendorInfo.supportsAutoconfig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vendorId, requiresCustomUrl, defaultCustomUrl, requiresApiKey, secretType, authProvider, description, name, webSite, acquireKeyUrl, apiKeySecretContext);
+    return Objects.hash(vendorId, requiresCustomUrl, defaultCustomUrl, requiresApiKey, secretType, authProvider, description, name, webSite, acquireKeyUrl, apiKeySecretContext, minContextWindow, supportsAutoconfig);
   }
 
 
@@ -374,6 +418,8 @@ public class LLMSVendorInfo {
     sb.append("    webSite: ").append(toIndentedString(webSite)).append("\n");
     sb.append("    acquireKeyUrl: ").append(toIndentedString(acquireKeyUrl)).append("\n");
     sb.append("    apiKeySecretContext: ").append(toIndentedString(apiKeySecretContext)).append("\n");
+    sb.append("    minContextWindow: ").append(toIndentedString(minContextWindow)).append("\n");
+    sb.append("    supportsAutoconfig: ").append(toIndentedString(supportsAutoconfig)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -4,11 +4,56 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**createLLMByAutoconfigure**](GeboFastLlmsSetupControllerApi.md#createLLMByAutoconfigure) | **POST** /api/admin/GeboFastLLMSSetupController/createLLMByAutoconfigure | 
 [**createLLMCredentials**](GeboFastLlmsSetupControllerApi.md#createLLMCredentials) | **POST** /api/admin/GeboFastLLMSSetupController/createLLMCredentials | 
 [**createLLMS**](GeboFastLlmsSetupControllerApi.md#createLLMS) | **POST** /api/admin/GeboFastLLMSSetupController/createLLMS | 
 [**getActualLLMSConfiguration**](GeboFastLlmsSetupControllerApi.md#getActualLLMSConfiguration) | **GET** /api/admin/GeboFastLLMSSetupController/getActualLLMSConfiguration | 
 [**getLLMSSetupStatus**](GeboFastLlmsSetupControllerApi.md#getLLMSSetupStatus) | **GET** /api/admin/GeboFastLLMSSetupController/getLLMSSetupStatus | 
 [**verifyCredentialsAndDownloadModels**](GeboFastLlmsSetupControllerApi.md#verifyCredentialsAndDownloadModels) | **POST** /api/admin/GeboFastLLMSSetupController/verifyCredentialsAndDownloadModels | 
+[**verifyVendorCredentialsAndDownloadModels**](GeboFastLlmsSetupControllerApi.md#verifyVendorCredentialsAndDownloadModels) | **POST** /api/admin/GeboFastLLMSSetupController/verifyVendorCredentialsAndDownloadModels | 
+
+<a name="createLLMByAutoconfigure"></a>
+# **createLLMByAutoconfigure**
+> OperationStatusList createLLMByAutoconfigure(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboFastLlmsSetupControllerApi;
+
+
+GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
+LLMAutoconfigureCreationData body = new LLMAutoconfigureCreationData(); // LLMAutoconfigureCreationData | 
+try {
+    OperationStatusList result = apiInstance.createLLMByAutoconfigure(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboFastLlmsSetupControllerApi#createLLMByAutoconfigure");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**LLMAutoconfigureCreationData**](LLMAutoconfigureCreationData.md)|  |
+
+### Return type
+
+[**OperationStatusList**](OperationStatusList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="createLLMCredentials"></a>
 # **createLLMCredentials**
@@ -203,6 +248,49 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**LLMModelsLookupParameter**](LLMModelsLookupParameter.md)|  |
+
+### Return type
+
+[**OperationStatusListGBaseModelChoice**](OperationStatusListGBaseModelChoice.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="verifyVendorCredentialsAndDownloadModels"></a>
+# **verifyVendorCredentialsAndDownloadModels**
+> OperationStatusListGBaseModelChoice verifyVendorCredentialsAndDownloadModels(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboFastLlmsSetupControllerApi;
+
+
+GeboFastLlmsSetupControllerApi apiInstance = new GeboFastLlmsSetupControllerApi();
+LLMCredentialsVerificationData body = new LLMCredentialsVerificationData(); // LLMCredentialsVerificationData | 
+try {
+    OperationStatusListGBaseModelChoice result = apiInstance.verifyVendorCredentialsAndDownloadModels(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboFastLlmsSetupControllerApi#verifyVendorCredentialsAndDownloadModels");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**LLMCredentialsVerificationData**](LLMCredentialsVerificationData.md)|  |
 
 ### Return type
 

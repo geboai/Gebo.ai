@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **Long** |  |  [optional]
 **totalPages** | **Integer** |  |  [optional]
+**totalElements** | **Long** |  |  [optional]
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;UsersGroup&gt;**](UsersGroup.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]

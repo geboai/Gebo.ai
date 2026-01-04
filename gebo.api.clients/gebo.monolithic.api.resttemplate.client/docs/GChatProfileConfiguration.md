@@ -24,3 +24,4 @@ Name | Type | Description | Notes
 **forcedRequestDocumentsReadonly** | **Boolean** |  |  [optional]
 **disableMultiHopRag** | **Boolean** |  |  [optional]
 **otherSearchSimilarityThreshold** | **Double** |  |  [optional]
+**manualThreasholdsConfiguration** | **Boolean** |  |  [optional]

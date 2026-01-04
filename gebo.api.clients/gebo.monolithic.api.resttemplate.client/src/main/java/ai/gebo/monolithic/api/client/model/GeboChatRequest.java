@@ -27,7 +27,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -62,6 +62,9 @@ public class GeboChatRequest {
 
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
+
+  @JsonProperty("deepSearchDataSources")
+  private List<String> deepSearchDataSources = null;
 
   public GeboChatRequest id(String id) {
     this.id = id;
@@ -285,6 +288,32 @@ public class GeboChatRequest {
     this.userUploadedContents = userUploadedContents;
   }
 
+  public GeboChatRequest deepSearchDataSources(List<String> deepSearchDataSources) {
+    this.deepSearchDataSources = deepSearchDataSources;
+    return this;
+  }
+
+  public GeboChatRequest addDeepSearchDataSourcesItem(String deepSearchDataSourcesItem) {
+    if (this.deepSearchDataSources == null) {
+      this.deepSearchDataSources = new ArrayList<>();
+    }
+    this.deepSearchDataSources.add(deepSearchDataSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get deepSearchDataSources
+   * @return deepSearchDataSources
+  **/
+  @Schema(description = "")
+  public List<String> getDeepSearchDataSources() {
+    return deepSearchDataSources;
+  }
+
+  public void setDeepSearchDataSources(List<String> deepSearchDataSources) {
+    this.deepSearchDataSources = deepSearchDataSources;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -305,12 +334,13 @@ public class GeboChatRequest {
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
         Objects.equals(this.documents, geboChatRequest.documents) &&
-        Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents);
+        Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
+        Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, forcedRequestDocuments, documents, userUploadedContents);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, forcedRequestDocuments, documents, userUploadedContents, deepSearchDataSources);
   }
 
 
@@ -330,6 +360,7 @@ public class GeboChatRequest {
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
     sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
+    sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("}");
     return sb.toString();
   }
