@@ -25,7 +25,6 @@ import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContent;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContentItem;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContentsList;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSearchPageResponseSearchResult;
-import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSearchPageResponseSearchResult.OnPremiseConfluenceSearchResult;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSpacesListItem;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseFullContent;
 import ai.gebo.restintegration.abstraction.layer.GeboNotFoundException;
@@ -299,9 +298,11 @@ public class OnPremiseConfluenceContentApi {
 	 */
 	public OnPremiseConfluenceSearchPageResponseSearchResult searchByCql(String cql, Integer limit)
 			throws GeboRestIntegrationException {
-		String relative = "/rest/api/search?cql=" + URLEncoder.encode(cql) + "&start=0"
-				+ (limit != null ? "&limit=" + limit : "") + "&expand=ancestors,space";
+
+		String relative = "/rest/api/search?cql=" + cql + "&start=0" + (limit != null ? "&limit=" + limit : "")
+				+ "&expand=ancestors,space";
 		String url = api.getBaseUrl() + relative;
+
 		HttpEntity requestEntity = new HttpEntity<OnPremiseConfluenceSearchPageResponseSearchResult>(
 				api.createHeaders());
 		Class responseType = OnPremiseConfluenceSearchPageResponseSearchResult.class;
@@ -321,6 +322,7 @@ public class OnPremiseConfluenceContentApi {
 	public OnPremiseConfluenceSearchPageResponseSearchResult searchFullText(String text, Integer limit)
 			throws GeboRestIntegrationException {
 		String cql = "type IN (page, blogpost, comment, attachment) AND text ~ \"" + text + "\"";
+		// String cql = "text ~ \"" + text + "\"";
 		return searchByCql(cql, limit);
 	}
 
