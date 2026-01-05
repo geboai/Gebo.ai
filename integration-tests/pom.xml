@@ -20,5 +20,6 @@
 		<module>sharepoint-integration-tests</module>
 
 		<module>atlassian-jira-integration-tests</module>
+		<module>full-setup-and-use-integration-tests</module>
 	</modules>
 </project>

@@ -8,6 +8,12 @@
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
 
         <div class="grid">
+            <div class="col-9" *ngIf="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
+                <gebo-ai-field id="baseUrl1" label="Base api url" help="Provider Base url for api services"
+                    [required]="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
+                    <input pInputText type="text" gebo-ai-field-element formControlName="baseUrl">
+                </gebo-ai-field>
+            </div>
             <div class="col-3" *ngIf="vendorConfiguration?.parentModel?.requiresApiKey!==true">
                 <gebo-ai-field id="requireApiKeyAniway" label="The provider requires credentials"
                     help="The provider/server application is configured for authenticated access via api key or other credentials">
@@ -15,51 +21,13 @@
                         [trueValue]="true" [falseValue]="false"></p-checkbox>
                 </gebo-ai-field>
             </div>
-            <div class="col-9" *ngIf="vendorConfiguration?.parentModel?.requiresApiKey!==true">
+            <div class="col-12" >
+                <gebo-ai-api-key-component formControlName="selectedSecret" [contextCode]="vendorConfiguration?.parentModel?.apiKeySecretContext" [apiKeyDescription]="vendorConfiguration?.parentModel?.vendorId+ ' credentials'" [backendValidation]="doBackendCredentialsValidation" [backendValidationOnChange]="true">
 
+                </gebo-ai-api-key-component>
             </div>
-            <div class="col-3" *ngIf="existingOrNewShow">
-                <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
-                    help="Use existing or create new credentials for this provider">
-                    <p-selectbutton [options]="useExistingOrNewOptions" optionLabel="label" optionValue="value"
-                        formControlName="useExistingOrNew" />
-                </gebo-ai-field>
-            </div>
-            <div class="col-9" *ngIf="secretFormGroup.controls['useExistingOrNew'].value==='EXISTING'">
-                <gebo-ai-field id="ExistingApiKey" label="Api key/credentials"
-                    help="Choose api key or credentials for this provider">
-                    <geboai-editable-listbox-component formControlName="selectedSecret" [data]="secrets"
-                        gebo-ai-field-element></geboai-editable-listbox-component>
-                </gebo-ai-field>
-
-            </div>
-            <div class="col-9 grid" *ngIf="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
-                <div class="col-3">
-                    <gebo-ai-field id="NewUserName" label="User name" help="User name used to access provider services"
-                        [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
-                        <input pInputText type="text" gebo-ai-field-element formControlName="newUserName">
-                    </gebo-ai-field>
-                </div>
-                <div class="col-8">
-                    <gebo-ai-field id="NewApiKey" label="New api key"
-                        help="Insert a new api key to be used with this provider"
-                        [required]="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
-                        <input pInputText type="text" gebo-ai-field-element formControlName="newApiSecret">
-                    </gebo-ai-field>
-                </div>
-                <div class="col-1" style="vertical-align: middle;">
-                    <gebo-ai-field id="PiSave" label="Save" help="">
-                        <p-button icon="pi pi-save" [outlined]="true" gebo-ai-field-element
-                            [disabled]="saveDisabled" (onClick)="createCredentials()"></p-button>
-                    </gebo-ai-field>
-                </div>
-            </div>
-            <div class="col-12" *ngIf="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
-                <gebo-ai-field id="baseUrl1" label="Base api url" help="Provider Base url for api services"
-                    [required]="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
-                    <input pInputText type="text" gebo-ai-field-element formControlName="baseUrl">
-                </gebo-ai-field>
-            </div>
+            
+            
         </div>
     </p-fieldset>
     <p-fieldset id="ModelsChoices" legend="Models choices" gebo-ai-label

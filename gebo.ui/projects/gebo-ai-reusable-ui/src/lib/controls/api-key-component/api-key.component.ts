@@ -44,8 +44,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         selectedSecret: new FormControl(),
         newSecretDescription: new FormControl(),
         newApiSecret: new FormControl(),
-        newUserName: new FormControl(),
-        baseUrl: new FormControl()
+        newUserName: new FormControl()
     });
     protected messages?: GUserMessage[] = [];
     protected view: "COMPACT" | "FULL" = "COMPACT";
@@ -61,20 +60,22 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     protected secretId?: string;
     protected useExistingOrNew: "EXISTING" | "NEW" = "NEW";
     protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
+    protected enabled:boolean=true;
     constructor(private secretController: SecretsControllerService) {
         this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
             next: (value) => {
-
                 if (value === true) {
                     this.secretFormGroup.controls["useExistingOrNew"].enable();
                     this.secretFormGroup.controls["selectedSecret"].enable();
                     this.secretFormGroup.controls["newApiSecret"].enable();
                     this.secretFormGroup.controls["newUserName"].enable();
+                    this.secretFormGroup.controls["newSecretDescription"].enable();
                 } else {
                     this.secretFormGroup.controls["useExistingOrNew"].disable();
                     this.secretFormGroup.controls["selectedSecret"].disable();
                     this.secretFormGroup.controls["newApiSecret"].disable();
                     this.secretFormGroup.controls["newUserName"].disable();
+                    this.secretFormGroup.controls["newSecretDescription"].disable();
                 }
                 this.secretFormGroup.updateValueAndValidity();
             }
@@ -82,6 +83,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
         this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
             next: (value) => {
+                if (this.enabled!==true) return;
                 const allCtrls = ["selectedSecret", "newApiSecret", "newUserName", "newSecretDescription"];
                 this.switchControlsRequired(allCtrls, false);
                 this.useExistingOrNew = value;
@@ -97,6 +99,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         });
         this.secretFormGroup.controls["selectedSecret"].valueChanges.subscribe({
             next: (secretId) => {
+                if (this.enabled!==true) return;
                 if (this.secretId != secretId) {
                     if (this.backendValidationOnChange === true && secretId) {
                         const credential = this.secrets.find(x => x.code === secretId);
@@ -211,7 +214,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["contextCode"]) {
             const resetValue: ApiKeyInternalFG = {
-                requireApiKeyAniway: true,
+                requireApiKeyAniway: this.enabled,
                 newApiSecret: undefined,
                 newUserName: undefined,
                 selectedSecret: undefined,
@@ -241,7 +244,7 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
                         }
                         this.secretId = secrets && secrets.length ? secrets[0].code : undefined;
                         const newValue: ApiKeyInternalFG = {
-                            requireApiKeyAniway: true,
+                            requireApiKeyAniway: this.enabled,
                             newApiSecret: undefined,
                             newUserName: undefined,
                             selectedSecret: this.secretId,
@@ -278,6 +281,11 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         this.onTouch = fn;
     }
     setDisabledState?(isDisabled: boolean): void {
+        this.enabled=!isDisabled;
         this.secretFormGroup.controls["requireApiKeyAniway"].setValue(!isDisabled);
+        if (this.enabled) {
+            const secretsOrNew=this.secretFormGroup.controls["useExistingOrNew"].value;
+            this.secretFormGroup.controls["useExistingOrNew"].setValue(secretsOrNew);
+        }
     }
 }
