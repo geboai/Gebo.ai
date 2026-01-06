@@ -43,4 +43,6 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
 
+	public String getQueriesExtractionPrompt();
+
 }

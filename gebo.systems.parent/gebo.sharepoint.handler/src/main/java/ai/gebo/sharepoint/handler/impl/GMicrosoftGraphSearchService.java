@@ -9,9 +9,11 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.CleanQueryUtil;
 import ai.gebo.sharepoint.handler.GSharepointContentManagementSystem;
 import ai.gebo.sharepoint.handler.GSharepointProjectEndpoint;
 import ai.gebo.sharepoint.handler.IGMicrosoftGraphVirtualFilesystemConsumingService;
+import ai.gebo.sharepoint.handler.config.MicrosoftSharepointHandlerConfig;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNativePositionObject;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
@@ -22,12 +24,15 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchS
 public class GMicrosoftGraphSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService> {
 	final GMicrosoftGraphClientFactory msGraphConnectionFactory;
+	final MicrosoftSharepointHandlerConfig config;
 
 	public GMicrosoftGraphSearchService(GMicrosoftGraphClientFactory msGraphConnectionFactory,
 			GMicrosoftGraphVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			GSharepointContentManagementSystemHandlerImpl contentManagementSystemHandler) {
+			GSharepointContentManagementSystemHandlerImpl contentManagementSystemHandler,
+			MicrosoftSharepointHandlerConfig config) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
 		this.msGraphConnectionFactory = msGraphConnectionFactory;
+		this.config = config;
 	}
 
 	@Override
@@ -39,10 +44,11 @@ public class GMicrosoftGraphSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		query=CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GSharepointContentManagementSystem spSystem) {
 
 			boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
-			
+
 		}
 		return List.of();
 	}
@@ -59,6 +65,12 @@ public class GMicrosoftGraphSearchService extends
 		MicrosoftResultsExtractionData data = new MicrosoftResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
 		return data;
+	}
+
+	@Override
+	public String getQueriesExtractionPrompt() {
+
+		return config.getQueryExtractionPrompt();
 	}
 
 }

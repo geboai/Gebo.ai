@@ -43,6 +43,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "   - update the list of evidence fragment ids (de-duplicated).\r\n"
 			+ "3. Keep the report concise and avoid repeating the same points.\r\n"
 			+ "4. The report must directly answer the user question as best as possible with the available information.\r\n";
+
 	static final String defaultSearchQueryExtractionPrompt = "You are “QuerySynth”, an expert at turning an information need into high-quality search queries for {dataSourceDescription}.\r\n"
 			+ "\r\n" + "Your job:\r\n"
 			+ "Given a user goal/question, generate a set of meaningful search queries to deepen the investigation. "
@@ -72,6 +73,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "If inputs are missing or vague:\r\n" + "- Infer reasonable intents from userGoal.\r\n"
 			+ "- Keep filters null and include broader queries + fallbackQueries.\r\n"
 			+ "\r\nUSER:\r\nUser question:\r\n\r\n{question}\r\n";
+
 	private String searchQueryExtractionPrompt = null;
 	private int maxExternalSourcesSearchResults = 8;
 	private boolean externalSourcesEnabled = false;

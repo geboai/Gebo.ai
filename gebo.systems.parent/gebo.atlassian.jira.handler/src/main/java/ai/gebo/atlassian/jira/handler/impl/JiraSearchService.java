@@ -9,9 +9,11 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.CleanQueryUtil;
 import ai.gebo.atlassian.jira.handler.GJiraProjectEndpoint;
 import ai.gebo.atlassian.jira.handler.GJiraSystem;
 import ai.gebo.atlassian.jira.handler.IGJiraVirtualFilesystemConsumingService;
+import ai.gebo.atlassian.jira.handler.config.JiraHandlerConfig;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraNativePositionObject;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraNavigationCoordinates;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResourceReference;
@@ -22,12 +24,14 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchS
 public class JiraSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService> {
 	final JiraApiClientFactory jiraConnectionFactory;
+	final JiraHandlerConfig config;
 
 	public JiraSearchService(JiraApiClientFactory jiraConnectionFactory,
 			GJiraRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			JiraContentManagementHandlerImpl contentManagementSystemHandler) {
+			JiraContentManagementHandlerImpl contentManagementSystemHandler, JiraHandlerConfig config) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
 		this.jiraConnectionFactory = jiraConnectionFactory;
+		this.config = config;
 	}
 
 	@Override
@@ -39,6 +43,7 @@ public class JiraSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		query=CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GJiraSystem jiraSystem) {
 
 			boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
@@ -46,8 +51,6 @@ public class JiraSearchService extends
 		}
 		return List.of();
 	}
-
-	
 
 	@Override
 	public Class<JiraResultsExtractionData> getCustomResultsAggregationDataType() throws SearchServiceException {
@@ -61,6 +64,12 @@ public class JiraSearchService extends
 		JiraResultsExtractionData data = new JiraResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
 		return data;
+	}
+
+	@Override
+	public String getQueriesExtractionPrompt() {
+
+		return config.getQueryExtractionPrompt();
 	}
 
 }

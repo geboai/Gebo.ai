@@ -14,6 +14,7 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.CleanQueryUtil;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceConnection;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceContentApi;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceAttachmentItem;
@@ -24,6 +25,7 @@ import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageRespons
 import ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint;
 import ai.gebo.atlassian.confluence.handler.GConfluenceSystem;
 import ai.gebo.atlassian.confluence.handler.IGConfluenceVirtualFilesystemConsumingService;
+import ai.gebo.atlassian.confluence.handler.config.ConfluenceHandlerConfig;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNativePositionObject;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoordinates;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
@@ -45,13 +47,15 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchS
 public class ConfluenceSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService> {
 	final ConfluenceConnectionFactory confluenceConnectionFactory;
+	final ConfluenceHandlerConfig config;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceSearchService.class);
 
 	public ConfluenceSearchService(ConfluenceConnectionFactory confluenceConnectionFactory,
 			GConfluenceRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler) {
+			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler, ConfluenceHandlerConfig config) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
 		this.confluenceConnectionFactory = confluenceConnectionFactory;
+		this.config = config;
 	}
 
 	@Override
@@ -63,6 +67,7 @@ public class ConfluenceSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		query = CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GConfluenceSystem confluenceSystem) {
 
 			try {
@@ -114,9 +119,11 @@ public class ConfluenceSearchService extends
 					searchResult.getResultReference().setTitle(result.getContent().getTitle());
 					searchResult.getResultReference().setUri(result.getUrl());
 					searchResult.setNavigationReference(new VFilesystemReference());
-					searchResult.getNavigationReference().root = ConfluenceNavigationUtil.encodeSpace(
-							result.getContent().getSpace().getKey(), result.getContent().getSpace().getName(),
-							result.getContent().getSpace().get_expandable());
+					searchResult.getNavigationReference().root = result.getContent().getSpace() != null
+							? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
+									result.getContent().getSpace().getName(),
+									result.getContent().getSpace().get_expandable())
+							: null;
 					if (result.getContent().getType() != null) {
 						switch (result.getContent().getType()) {
 						case "attachment": {
@@ -171,6 +178,8 @@ public class ConfluenceSearchService extends
 					page);
 			searchResult.setResultReference(new SearchResultReference());
 			searchResult.getResultReference().setName(page.name);
+			searchResult.getResultReference().setContentType("text/html");
+			searchResult.getResultReference().setExtension(".html");
 			results.add(searchResult);
 		}
 		// ATTACHMENT WILL NOT BE LISTED BECAUSE CANNOT SELECT AND RETRIEVE THEM
@@ -186,6 +195,11 @@ public class ConfluenceSearchService extends
 						ConfluenceNavigationUtil.encodeAsAttachment(attach));
 				searchResult.setResultReference(new SearchResultReference());
 				searchResult.getResultReference().setName(attachment.name);
+				if (attach.getMetadata() != null && attach.getMetadata().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getMetadata().getMediaType());
+				} else if (attach.getExtensions() != null && attach.getExtensions().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getExtensions().getMediaType());
+				}
 				results.add(searchResult);
 			}
 		}
@@ -201,6 +215,8 @@ public class ConfluenceSearchService extends
 						page);
 				searchResult.setResultReference(new SearchResultReference());
 				searchResult.getResultReference().setName(page.name);
+				searchResult.getResultReference().setContentType("text/html");
+				searchResult.getResultReference().setExtension(".html");
 				results.add(searchResult);
 			}
 		}
@@ -208,7 +224,8 @@ public class ConfluenceSearchService extends
 	}
 
 	private List<SearchResult> encodeCloudResults(CloudConfluenceSearchPageResponseSearchResult data,
-			CloudConfluenceConnection connection, CloudConfluenceContentApi contentApi) throws GeboRestIntegrationException {
+			CloudConfluenceConnection connection, CloudConfluenceContentApi contentApi)
+			throws GeboRestIntegrationException {
 		List<SearchResult> outList = new ArrayList<SearchResult>();
 		if (data != null && data.getResults() != null) {
 
@@ -263,7 +280,8 @@ public class ConfluenceSearchService extends
 	}
 
 	private Collection<? extends SearchResult> encodeCloudChilds(String parentContentId,
-			CloudConfluenceContentApi contentApi, VFilesystemReference vFilesystemReference) throws GeboRestIntegrationException {
+			CloudConfluenceContentApi contentApi, VFilesystemReference vFilesystemReference)
+			throws GeboRestIntegrationException {
 		CloudConfluenceFullContent fullContents = contentApi.getFullContent(parentContentId);
 		List<SearchResult> results = new ArrayList<SearchResult>();
 
@@ -325,6 +343,12 @@ public class ConfluenceSearchService extends
 		ConfluenceResultsExtractionData data = new ConfluenceResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
 		return data;
+	}
+
+	@Override
+	public String getQueriesExtractionPrompt() {
+
+		return config.getQueryExtractionPrompt();
 	}
 
 }

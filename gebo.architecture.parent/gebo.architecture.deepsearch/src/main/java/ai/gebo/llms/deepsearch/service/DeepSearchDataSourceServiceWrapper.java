@@ -160,7 +160,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	}
 
 	@Override
-	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request) throws IOException, SearchServiceException {
+	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
+			throws IOException, SearchServiceException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
@@ -179,15 +180,17 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected String createExtractSearchQueriesPrompt(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
-		String originalPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
 
-		return deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
+		String standardPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
+		String wrappedServicePrompt = searchService.getQueriesExtractionPrompt();
+
+		return wrappedServicePrompt != null && wrappedServicePrompt.trim().length() > 0 ? wrappedServicePrompt
+				: standardPrompt;
 	}
 
 	@Override
-	protected List<SearchWithResults> cleanAndRemoveDuplicated(
-			List<SearchWithResults> queryResults) {
-		
+	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
+
 		return searchService.cleanAndRemoveDuplicated(queryResults);
 	}
 

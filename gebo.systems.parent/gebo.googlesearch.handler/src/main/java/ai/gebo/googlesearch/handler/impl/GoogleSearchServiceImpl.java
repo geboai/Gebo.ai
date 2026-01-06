@@ -37,6 +37,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.LinkTypeGuesser;
 import ai.gebo.architecture.search.service.TypedInputStream;
+import ai.gebo.googlesearch.handler.config.GoogleSearchHandlerConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultItem;
@@ -53,6 +54,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 	private static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
+	private final GoogleSearchHandlerConfig config;
 	private final RestTemplateWrapperService restTemplateWrapper;
 	private static final GBaseObject SYSTEMTYPE = new GBaseObject();
 	private static final GBaseObject SYSTEM = new GBaseObject();
@@ -74,7 +76,6 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		SYSTEM_METADATA.setSystemConfigurationReference(SYSTEM);
 	}
 
-	
 	@Override
 	public boolean isEnabled() {
 
@@ -278,6 +279,12 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 			}
 		}
 		return outList;
+	}
+
+	@Override
+	public String getQueriesExtractionPrompt() {
+
+		return config.getQueryExtractionPrompt();
 	}
 
 }
