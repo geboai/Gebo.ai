@@ -26,6 +26,7 @@ public class JiraHandlerConfig {
 			+ "- keep domain-specific terms as they are (product names, system names, company names)\r\n"
 			+ "- include synonyms or alternative phrasings as separate search strings if useful.\r\n" + "\r\n"
 			+ "INPUT\r\n" + "The user question is:\r\n" + "\r\n" + "<<<\r\n" + "{question}\r\n" + ">>>\r\n" + "\r\n"
+			+ "CONTEXT:\r\n" + "The actual consolidated knowledge (eventually blank) is:\r\n{consolidated}\r\n"
 			+ "OUTPUT FORMAT\r\n" + "{format}\r\n" + "Rules for \"search_queries\":\r\n" + "- 1 to 8 items\r\n"
 			+ "- no duplicates\r\n"
 			+ "- each item respects ALL the constraints above (only letters, digits, spaces; no operators; no special characters).\r\n"

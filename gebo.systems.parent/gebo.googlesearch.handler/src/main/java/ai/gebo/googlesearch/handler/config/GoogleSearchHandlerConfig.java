@@ -58,6 +58,7 @@ public class GoogleSearchHandlerConfig {
 			+ "{question}\r\n"
 			+ ">>>\r\n"
 			+ "\r\n"
+			+ "CONTEXT:\r\n" + "The actual consolidated knowledge (eventually blank) is:\r\n{consolidated}\r\n"
 			+ "OUTPUT FORMAT\r\n"
 			+"{format}\r\n"
 			+ "\r\n"
