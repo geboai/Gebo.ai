@@ -94,7 +94,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
 			DeepSearchConfig deepSearchConfig) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin dataSourcesNextStep(....)");
+		}
 		AbstractDeepSearchEvent nextStepValue = null;
 		// if already CurrentDataSourceHandlerRunning is initialized continue processing
 		// next step
@@ -103,17 +105,28 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					.filter(x -> x.getHandlerId().equals(state.getCurrentDataSourceHandlerRunning())).findFirst();
 
 			if (handler.isPresent()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Evaluating next step for external data source handler:"
+							+ state.getCurrentDataSourceHandlerRunning());
+				}
 				IGDeepSearchDataSourceService businessLogic = handler.get();
 				nextStepValue = businessLogic.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
 						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state.getConsolidatedResult());
 
 			}
 		} else {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Checking first  external data source handler to evaluate");
+			}
 			// find next data source to evaluate end execute
 			for (IGDeepSearchDataSourceService handler : handlers) {
 				if (!state.getDataSourcesStatus().containsKey(handler.getHandlerId())
 						&& handler.isEnabled(chatModel, deepSearchConfig, request)) {
 					state.setCurrentDataSourceHandlerRunning(handler.getHandlerId());
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Evaluating first found not yet executed external data source handler step:"
+								+ state.getCurrentDataSourceHandlerRunning());
+					}
 					Object initialState = handler.createInitialState(chatModel, deepSearchConfig, request);
 					state.getDataSourcesStatus().put(handler.getHandlerId(), initialState);
 					nextStepValue = handler.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
@@ -121,15 +134,18 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				}
 			}
 		}
+
 		if (nextStepValue != null) {
 			// if next step is final one for datasource reset actual
 			// CurrentDataSourceHandlerRunning
 			if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent) {
 				state.setCurrentDataSourceHandlerRunning(null);
 			}
-			return nextStepValue;
 		}
-		return null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End dataSourcesNextStep(....) returning " + nextStepValue);
+		}
+		return nextStepValue;
 	}
 
 	private AbstractDeepSearchEvent knowledgeBaseDeepSearchNextStep(DeepSearchRequest request,
@@ -203,7 +219,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
 			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel)
 			throws LLMConfigException {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin nextStep(....)");
+		}
 		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
 				|| request.getKnowledgeBases().isEmpty()) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
@@ -212,10 +230,14 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				.getDynamicDeepSearchServices();
 		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
-		if (chatModel != null && request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+		if (chatModel != null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Actual phase:" + state.getPhase());
+			}
 			switch (state.getPhase()) {
 			case BEFORE_KNOWLEDGE_BASE_SEARCH: {
 				if (externalSourcesEnabled) {
+
 					// Streaming search steps from handlers before knowledge base search
 					List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 							.findByExecutionTime(DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH);
@@ -238,7 +260,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 							processedDataSource.getOutputData().setDeepsearchCode(request.getCode());
 							processedDataSource.getOutputData()
 									.setErrorMessage(GUserMessage.errorMessage("Exception in deep search", e));
-							processedDataSource.setProcessPercentage(100);
+							processedDataSource.setProcessPercentage(50);
 							nextStepValue = processedDataSource;
 						}
 						if (nextStepValue != null) {
@@ -263,22 +285,27 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			case KNOWLEDGE_BASE_SEARCH: {
 				// Streaming search steps from knowledge base search
 				state.setPhase(DeepSearchPhase.KNOWLEDGE_BASE_SEARCH);
-				if (state.getDocumentSearchResults() == null) {
-
-					RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration,
-							userInfos, embeddingModels);
-					state.setDocumentSearchResults(consolidatedDaoResult);
-					state.setFragmentsCount(consolidatedDaoResult.countFragments());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Actual phase:" + state.getPhase());
 				}
+				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+					if (state.getDocumentSearchResults() == null) {
 
-				AbstractDeepSearchEvent nextStepValue = knowledgeBaseDeepSearchNextStep(request, dataSourcesResults,
-						history, state, configuration, userInfos, chatModel);
-				if (nextStepValue != null)
-					return nextStepValue;
-				else {
-					String consolidatedResult = this.consolidateResult(chatModel, history, request, state,
-							configuration);
-					state.setConsolidatedResult(consolidatedResult);
+						RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration,
+								userInfos, embeddingModels);
+						state.setDocumentSearchResults(consolidatedDaoResult);
+						state.setFragmentsCount(consolidatedDaoResult.countFragments());
+					}
+
+					AbstractDeepSearchEvent nextStepValue = knowledgeBaseDeepSearchNextStep(request, dataSourcesResults,
+							history, state, configuration, userInfos, chatModel);
+					if (nextStepValue != null)
+						return nextStepValue;
+					else {
+						String consolidatedResult = this.consolidateResult(chatModel, history, request, state,
+								configuration);
+						state.setConsolidatedResult(consolidatedResult);
+					}
 				}
 
 			}
@@ -287,6 +314,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				// Streaming search steps after knowledge base search
 				if (externalSourcesEnabled) {
 					state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Actual phase:" + state.getPhase());
+					}
 					List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 							.findByExecutionTime(DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH);
 					handlers = new ArrayList<IGDeepSearchDataSourceService>(handlers);
@@ -331,10 +361,14 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			}
 
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Consolidate final result");
+		}
 		DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
 		consolidatedResult.setInputData(request);
 		consolidatedResult.setOutputData(new DeepSearchResponse());
 		consolidatedResult.getOutputData().setResponse(state.getConsolidatedResult());
+		consolidatedResult.setProcessPercentage(100);
 		boolean knowledgeBaseSearchesHaveResults = state.getDocumentSearchResults() != null
 				&& state.getDocumentSearchResults().getDocumentItems().size() > 0;
 		boolean otherDataSourceHaveResults = dataSourcesResults.size() > 0;

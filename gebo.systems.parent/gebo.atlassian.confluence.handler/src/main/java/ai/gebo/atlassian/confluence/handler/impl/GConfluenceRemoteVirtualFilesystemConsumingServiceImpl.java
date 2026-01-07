@@ -139,6 +139,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		obj.attachmentTitle = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_TITLE_METAINFO, metainfos);
 		obj.parentPageId = getId(ConfluenceNativePositionObject.CONFLUENCE_CONTENT_PARENT_METAINFO, metainfos);
 		obj.attachmentId = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_ID_METAINFO, metainfos);
+		obj.downloadUrl = getId(ConfluenceNativePositionObject.CONFLUENCE_DOWNLOAD_RELATIVE_URL, metainfos);
 		return obj;
 	}
 
@@ -162,6 +163,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		String attachmentId = reference.attachmentId;
 		String attachmentTitle = reference.attachmentTitle;
 		String parentPageId = reference.parentPageId;
+		String downloadUrl = reference.downloadUrl;
 		if (resourceType == null) {
 			final String msg = "Reference=>" + reference + " has no resource type";
 			LOGGER.error(msg);
@@ -188,6 +190,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		try {
 			switch (type) {
 			case PAGE: {
+
 				if (pageId == null) {
 					throw new GeboContentHandlerSystemException(
 							"Resource=>" + reference + " is a PAGE but has no pageId");
@@ -214,17 +217,28 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 				;
 				break;
 			case ATTACHMENT: {
-				if (parentPageId == null || attachmentTitle == null) {
-					throw new GeboContentHandlerSystemException(
-							"Resource=>" + reference + " is an ATTACHMENT but has no parentPageId or attachmentTitle");
-				}
+
 				if (confluenceBrowser instanceof CloudConfluenceConnection) {
 					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
 					CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
 					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
 				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
 					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
 					OnPremiseConfluenceAttachmentApi attachmentApi = new OnPremiseConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
 					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
 				}
 			}
@@ -697,6 +711,29 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		return environment;
 	}
 
+	protected Map<String, Object> createEnvironment(GConfluenceSystem system,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+		Map<String, Object> environment = new HashMap<String, Object>();
+		environment.put(VERSION_ID, system.getConfluenceVersion());
+		try {
+			switch (system.getConfluenceVersion()) {
+			case CLOUD: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getCloudConnection(system));
+
+			}
+				break;
+			case ONPREMISE7X: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getOnPremiseConnection(system));
+			}
+				break;
+			}
+		} catch (Throwable th) {
+			LOGGER.error("Cannot allocate confluence connection", th);
+			throw new GeboContentHandlerSystemException(th.getMessage(), th);
+		}
+		return environment;
+	}
+
 	/**
 	 * Clears the environment map.
 	 * 
@@ -805,13 +842,15 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	protected List<ConfluenceNativePositionObject> toNativeCoordinates(ConfluenceNavigationCoordinates position,
 			GConfluenceSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		List<ConfluenceNativePositionObject> natives = new ArrayList<ConfluenceNativePositionObject>();
-		try {
-			ConfluenceNativePositionObject _root = loadRoot(position.getRoot(), system, environment);
-			if (_root == null)
-				return natives;
-			natives.add(_root);
-		} catch (GeboRestIntegrationException e) {
-			throw new GeboContentHandlerSystemException("Cannot load this item", e);
+		if (position.getRoot() != null) {
+			try {
+				ConfluenceNativePositionObject _root = loadRoot(position.getRoot(), system, environment);
+				if (_root == null)
+					return natives;
+				natives.add(_root);
+			} catch (GeboRestIntegrationException e) {
+				throw new GeboContentHandlerSystemException("Cannot load this item", e);
+			}
 		}
 		try {
 			if (position.getBrowsingStepsCustom() != null) {
@@ -856,6 +895,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 				CloudConfluenceAttachmentItem attachent = attachmentApi.getAttachment(customitem.id);
 				nativeObject.setCloudConfluenceAttachment(attachent);
 			}
+				break;
 
 			case SPACE: {
 				CloudConfluenceSpaceApi spaceApi = new CloudConfluenceSpaceApi(connection);
@@ -887,8 +927,11 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 			}
 				break;
 			case ATTACHMENT: {
-				throw new MethodNotFoundException("Attachment " + customitem.id + " not yet loadable explicitely");
+				OnPremiseConfluenceAttachmentApi attachApi = new OnPremiseConfluenceAttachmentApi(connection);
+				OnPremiseConfluenceAttachmentItem attachment = attachApi.getAttachment(customitem.id);
+				nativeObject.setOnPremiseConfluenceAttachment(attachment);
 			}
+				break;
 			case SPACE: {
 				OnPremiseConfluenceSpacesList space = spaceApi.getSpace(customitem.id);
 				if (space != null && !space.getResults().isEmpty())
@@ -949,16 +992,108 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		obj.attachmentTitle = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_TITLE_METAINFO, metainfos);
 		obj.parentPageId = getId(ConfluenceNativePositionObject.CONFLUENCE_CONTENT_PARENT_METAINFO, metainfos);
 		obj.attachmentId = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_ID_METAINFO, metainfos);
+		obj.downloadUrl = getId(ConfluenceNativePositionObject.CONFLUENCE_DOWNLOAD_RELATIVE_URL, metainfos);
 		return obj;
 
 	}
 
-	
 	@Override
-	protected InputStream streamResource(GConfluenceSystem system, ConfluenceResourceReference remoteReference,
-			Map<String, Object> environment) {
-		// TODO Auto-generated method stub
-		return null;
+	protected InputStream streamResource(GConfluenceSystem system, ConfluenceResourceReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException {
+
+		String resourceType = reference.resourceType;
+		String pageId = reference.pageId;
+		String attachmentId = reference.attachmentId;
+		String attachmentTitle = reference.attachmentTitle;
+		String parentPageId = reference.parentPageId;
+		String downloadUrl = reference.downloadUrl;
+		if (resourceType == null) {
+			final String msg = "Reference=>" + reference + " has no resource type";
+			LOGGER.error(msg);
+			throw new GeboContentHandlerSystemException(msg);
+		}
+		ConfluencePathNodeType type = ConfluencePathNodeType.valueOf(resourceType);
+		if (!cache.containsKey(CONFLUENCE_CONNECTION)) {
+
+			Map<String, Object> environment = createEnvironment(system,
+					IGContentsAccessErrorConsumer.defaultImplementation());
+			cache.putAll(environment);
+		}
+		Object confluenceBrowser = null;
+		switch (system.getConfluenceVersion()) {
+		case CLOUD: {
+			confluenceBrowser = getCloudConnection(cache);
+		}
+			break;
+		case ONPREMISE7X: {
+			confluenceBrowser = getOnPremiseConnection(cache);
+		}
+			break;
+		}
+		try {
+			switch (type) {
+			case PAGE: {
+				if (pageId == null) {
+					throw new GeboContentHandlerSystemException(
+							"Resource=>" + reference + " is a PAGE but has no pageId");
+				}
+				if (confluenceBrowser instanceof CloudConfluenceConnection) {
+					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
+					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+					CloudConfluenceContent content = contentApi.getContent(pageId);
+					if (content.getBody() != null && content.getBody().getView() != null
+							&& content.getBody().getView().getValue() != null) {
+						return new ByteArrayInputStream(content.getBody().getView().getValue().getBytes());
+					}
+				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
+					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
+					OnPremiseConfluenceContentApi browser = new OnPremiseConfluenceContentApi(connection);
+					OnPremiseConfluenceContent content = browser.getContent(pageId);
+					if (content.getBody() != null && content.getBody().getView() != null
+							&& content.getBody().getView().getValue() != null) {
+						return new ByteArrayInputStream(content.getBody().getView().getValue().getBytes());
+					}
+				}
+
+			}
+				;
+				break;
+			case ATTACHMENT: {
+
+				if (confluenceBrowser instanceof CloudConfluenceConnection) {
+					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
+					CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
+					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
+				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
+					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
+					OnPremiseConfluenceAttachmentApi attachmentApi = new OnPremiseConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
+					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
+				}
+			}
+
+			}
+
+		} catch (GeboRestIntegrationException e) {
+			throw new GeboContentHandlerSystemException("Rest Confluence comunication exception", e);
+		}
+		LOGGER.warn("Content:" + reference.toString() + " returning nullInputStream()");
+		return InputStream.nullInputStream();
 	}
 
 }

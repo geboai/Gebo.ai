@@ -104,6 +104,9 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected List<ConsolidationInput> loadDocumentFragments(SearchResult actualSearchResultToLoad,
 			DeepSearchRequest request, int maxTokens)
 			throws IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin loadDocumentFragments(..) for search result=>" + actualSearchResultToLoad);
+		}
 		if (actualSearchResultToLoad.getResultReference() == null) {
 			LOGGER.warn("Search result=>" + actualSearchResultToLoad.toString()
 					+ " does not have a resultReference and cannot be read");
@@ -115,45 +118,51 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 			boolean handledContentType = actualSearchResultToLoad.getResultReference().getContentType() != null
 					&& ingestionHandler
 							.isHandledContentType(actualSearchResultToLoad.getResultReference().getExtension());
-			if (handledExtension || handledContentType) {
-				InputStream is = null;
-				try {
-					TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
-					is = tInputStream.getInputStream();
-					String contentType = tInputStream.getContentType();
-					if (contentType == null) {
-						contentType = actualSearchResultToLoad.getResultReference().getContentType();
-					}
-					String extension = contentType != null ? "." + MimeTypes.getDefaultExt(contentType)
-							: actualSearchResultToLoad.getResultReference().getExtension();
-					GDocumentReference documentReference = documentReferenceFactory.createReference(
-							actualSearchResultToLoad.getResultReference().getUri(),
-							actualSearchResultToLoad.getResultReference().getName(), contentType, extension,
-							actualSearchResultToLoad.getResultReference().getSize());
-					IngestionHandlerData ingested = ingestionHandler.handleContent(documentReference, is);
-					if (ingested.isUnmanagedContent())
-						return List.of();
-					else {
-						return ingested.getStream().map(x -> {
 
-							ConsolidationInput data = new ConsolidationInput(
-									actualSearchResultToLoad.getResultReference().getName(),
-									actualSearchResultToLoad.getResultReference().getUri(),
-									actualSearchResultToLoad.getResultReference().getTitle(), x.getText());
+			InputStream is = null;
+			try {
+				if (actualSearchResultToLoad.getNavigationReference() != null
+						&& actualSearchResultToLoad.getNavigationReference().path != null
+						&& actualSearchResultToLoad.getNavigationReference().path.folder) {
+					return List.of();
+				}
+				TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
+				is = tInputStream.getInputStream();
+				String contentType = tInputStream.getContentType();
+				if (contentType == null) {
+					contentType = actualSearchResultToLoad.getResultReference().getContentType();
+				}
+				String extension = contentType != null ? "." + MimeTypes.getDefaultExt(contentType)
+						: actualSearchResultToLoad.getResultReference().getExtension();
+				GDocumentReference documentReference = documentReferenceFactory.createReference(
+						actualSearchResultToLoad.getResultReference().getUri(),
+						actualSearchResultToLoad.getResultReference().getName(), contentType, extension,
+						actualSearchResultToLoad.getResultReference().getSize());
+				IngestionHandlerData ingested = ingestionHandler.handleContent(documentReference, is);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End loadDocumentFragments(..)");
+				}
+				if (ingested.isUnmanagedContent())
+					return List.of();
+				else {
+					return ingested.getStream().map(x -> {
 
-							return data;
-						}).toList();
-					}
-				} finally {
-					if (is != null) {
-						try {
-							is.close();
-						} catch (Throwable th) {
-						}
+						ConsolidationInput data = new ConsolidationInput(
+								actualSearchResultToLoad.getResultReference().getName(),
+								actualSearchResultToLoad.getResultReference().getUri(),
+								actualSearchResultToLoad.getResultReference().getTitle(), x.getText());
+
+						return data;
+					}).toList();
+				}
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (Throwable th) {
 					}
 				}
-			} else
-				return List.of();
+			}
 
 		}
 
@@ -167,13 +176,19 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
 			List<SearchResult> searches = searchService.search(query, searchableSystemMetaData,
 					maxSearchesReturnedPerSystem);
-			searches.forEach(x -> {
-				x.setSystemHandlerId(searchService.getId());
-				x.setSystemConfigurationCode(searchableSystemMetaData.getCode());
-			});
+			assign(searches, searchService.getId(), searchableSystemMetaData.getCode());
 			results.addAll(searches);
 		}
+
 		return results;
+	}
+
+	private void assign(List<SearchResult> searches, String serviceId, String configCode) {
+		searches.forEach(x -> {
+			x.setSystemHandlerId(serviceId);
+			x.setSystemConfigurationCode(configCode);
+			assign(x.getChilds(), serviceId, configCode);
+		});
 	}
 
 	@Override

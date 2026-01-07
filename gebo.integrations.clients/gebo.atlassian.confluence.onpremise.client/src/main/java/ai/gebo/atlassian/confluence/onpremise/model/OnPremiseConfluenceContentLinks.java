@@ -6,35 +6,34 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.onpremise.model;
 
 import lombok.Data;
 
 /**
- * AI generated comments
- * Represents the links associated with an OnPremise Confluence content item.
- * This class uses Lombok's @Data annotation to automatically generate
- * boilerplate code such as getters, setters, and other utility methods.
+ * AI generated comments Represents the links associated with an OnPremise
+ * Confluence content item. This class uses Lombok's @Data annotation to
+ * automatically generate boilerplate code such as getters, setters, and other
+ * utility methods.
  */
 @Data
 public class OnPremiseConfluenceContentLinks {
 
-    /**
-     * The URL for viewing the content item in the web user interface.
-     */
-    String webui = null;
+	/**
+	 * The URL for viewing the content item in the web user interface.
+	 */
+	String webui = null;
 
-    /**
-     * The URL for editing the content item.
-     */
-    String edit = null;
+	/**
+	 * The URL for editing the content item.
+	 */
+	String edit = null;
 
-    /**
-     * The URL for accessing the content item programmatically.
-     */
-    String self = null;
+	/**
+	 * The URL for accessing the content item programmatically.
+	 */
+	String self = null;
+
+	String download = null;
 }

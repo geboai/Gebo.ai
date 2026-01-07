@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
@@ -34,7 +37,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
 		IGDeepSearchDataSourceService<DeepSearchDataSourceStandardState, SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractDeepSearchDataSourceService.class);
 	final Class<CustomContentExtractionType> customContentExtractionType;
 	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
 	private static final int MAX_NESTING_LEVEL = 2;
@@ -57,8 +60,11 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	@Override
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchDataSourceStandardState state, String previusConsolidatedResult)
-			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+			DeepSearchDataSourceStandardState state, String previusConsolidatedResult) throws LLMConfigException,
+			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin nextStep(....) handler=" + getHandlerId());
+		}
 		if (state.getExtractedSearchQueries() == null) {
 			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
 					pastSystemsResponses, deepSearchConfig, chatModel, previusConsolidatedResult);
@@ -77,13 +83,17 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			}
 			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 			for (SearchQuery query : searchQueries.getSearchQuery()) {
-				List<SearchResult> results = executeSearch(query, request);
-				if (results.isEmpty())
-					continue;
-				SearchWithResults sr = new SearchWithResults();
-				sr.setResults(results);
-				sr.setSearchQuery(query);
-				queryResults.add(sr);
+				try {
+					List<SearchResult> results = executeSearch(query, request);
+					if (results.isEmpty())
+						continue;
+					SearchWithResults sr = new SearchWithResults();
+					sr.setResults(flattenResults(results));
+					sr.setSearchQuery(query);
+					queryResults.add(sr);
+				} catch (Throwable th) {
+					LOGGER.error("Handler:" + getHandlerId() + " fails running query:" + query, th);
+				}
 			}
 			state.setQueryResults(cleanAndRemoveDuplicated(queryResults));
 		}
@@ -173,18 +183,31 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				}
 				state.getCumulatedAnalisys().add(analyzedEvent.getOutputData());
 			}
-
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning " + analyzedEvent);
+			}
 			return analyzedEvent;
 
 		}
 
 		DeepSearchDataSourceProcessedEvent returned = consolidate(state.getCumulatedAnalisys(), request,
 				deepSearchConfig, chatModel);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning " + returned);
+		}
 		return returned;
 	}
 
-	protected abstract List<SearchWithResults> cleanAndRemoveDuplicated(
-			List<SearchWithResults> queryResults);
+	protected List<SearchResult> flattenResults(List<SearchResult> results) {
+		List<SearchResult> flattened = new ArrayList<SearchResult>();
+		for (SearchResult entry : results) {
+			flattened.add(entry);
+			flattened.addAll(flattenResults(entry.getChilds()));
+		}
+		return flattened;
+	}
+
+	protected abstract List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
 
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
@@ -244,12 +267,25 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel, String consolidatedText) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin extractSearchQueries(...) handler:" + getHandlerId());
+		}
 		String prompt = createExtractSearchQueriesPrompt(request, pastSystemsResponses, deepSearchConfig, chatModel);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Extracting queries with prompt:" + prompt);
+		}
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
-		additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel, deepSearchConfig, request));
-		return super.callLLMWithConsolidationStructuredReturn(chatModel, prompt, request.getQuery(),
-				consolidatedText != null ? consolidatedText : "", additionalVariables,
+		// With latest specialized prompt for each data source the following is not
+		// needed
+		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
+		// deepSearchConfig, request));
+		DeepSearchDataSourceExtractedSearchQueries searches = super.callLLMWithConsolidationStructuredReturn(chatModel,
+				prompt, request.getQuery(), consolidatedText != null ? consolidatedText : "", additionalVariables,
 				DeepSearchDataSourceExtractedSearchQueries.class);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End extractSearchQueries(...) handler:" + getHandlerId() + " returning " + searches);
+		}
+		return searches;
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,

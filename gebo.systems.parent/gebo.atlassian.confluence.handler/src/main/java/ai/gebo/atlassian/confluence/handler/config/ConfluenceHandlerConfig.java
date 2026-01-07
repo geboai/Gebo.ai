@@ -17,7 +17,7 @@ public class ConfluenceHandlerConfig {
 			+ "- without Boolean operators (NO AND, OR, NOT, &&, ||, !, etc.)\r\n"
 			+ "- without any advanced query syntax (NO site:, filetype:, inurl:, etc.)\r\n"
 			+ "- without quotation marks or apostrophes (NO \"  NO ' )\r\n"
-			+ "- without other special characters (NO +, -, *, ?, ~, :, ;, ,, ., /, \\, (), [], {}, @, #, $, %, ^, &, =, <, >)\r\n"
+			+ "- without other special characters (NO +, -, *, ?, ~, :, ;, ,, ., /, \\, (), [], \\{\\}, @, #, $, %, ^, &, =, <, >)\r\n"
 			+ "- composed ONLY of:\r\n" + "  - letters (a-z, A-Z, including accented letters if needed),\r\n"
 			+ "  - digits (0-9),\r\n" + "  - spaces between words.\r\n" + "\r\n" + "You should:\r\n"
 			+ "- extract the essential concepts, entities, technical terms, product names, and keywords from the question\r\n"

@@ -30,6 +30,7 @@ import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNativePositionO
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoordinates;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResultsExtractionData;
+import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceAttachmentApi;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceContentApi;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceAttachmentItem;
@@ -46,6 +47,8 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchS
 @Service
 public class ConfluenceSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService> {
+	private static final String HTML = ".html";
+	private static final String TEXT_HTML = "text/html";
 	final ConfluenceConnectionFactory confluenceConnectionFactory;
 	final ConfluenceHandlerConfig config;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceSearchService.class);
@@ -119,23 +122,28 @@ public class ConfluenceSearchService extends
 					searchResult.getResultReference().setTitle(result.getContent().getTitle());
 					searchResult.getResultReference().setUri(result.getUrl());
 					searchResult.setNavigationReference(new VFilesystemReference());
-					searchResult.getNavigationReference().root = result.getContent().getSpace() != null
-							? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
-									result.getContent().getSpace().getName(),
-									result.getContent().getSpace().get_expandable())
-							: null;
+					searchResult.getNavigationReference().root = result.getContent() != null
+							&& result.getContent().getSpace() != null
+									? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
+											result.getContent().getSpace().getName(),
+											result.getContent().getSpace().get_expandable())
+									: null;
 					if (result.getContent().getType() != null) {
 						switch (result.getContent().getType()) {
 						case "attachment": {
 							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
 									.encodeAsAttachment(result.getContent().getId(), result.getContent().getTitle());
 							outList.add(searchResult);
+							//Loading attachment meta data to add content type and other meta informations
+							
 
 						}
 							break;
 						case "page": {
 							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
 									.encodeAsFolder(result.getContent());
+							searchResult.getResultReference().setContentType(TEXT_HTML);
+							searchResult.getResultReference().setExtension(HTML);
 							outList.add(searchResult);
 							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
 									contentApi, searchResult.getNavigationReference()));
@@ -145,6 +153,8 @@ public class ConfluenceSearchService extends
 							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
 									.encodeAsFolder(result.getContent());
 							outList.add(searchResult);
+							searchResult.getResultReference().setContentType(TEXT_HTML);
+							searchResult.getResultReference().setExtension(HTML);
 							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
 									contentApi, searchResult.getNavigationReference()));
 
@@ -178,8 +188,8 @@ public class ConfluenceSearchService extends
 					page);
 			searchResult.setResultReference(new SearchResultReference());
 			searchResult.getResultReference().setName(page.name);
-			searchResult.getResultReference().setContentType("text/html");
-			searchResult.getResultReference().setExtension(".html");
+			searchResult.getResultReference().setContentType(TEXT_HTML);
+			searchResult.getResultReference().setExtension(HTML);
 			results.add(searchResult);
 		}
 		// ATTACHMENT WILL NOT BE LISTED BECAUSE CANNOT SELECT AND RETRIEVE THEM
@@ -215,8 +225,8 @@ public class ConfluenceSearchService extends
 						page);
 				searchResult.setResultReference(new SearchResultReference());
 				searchResult.getResultReference().setName(page.name);
-				searchResult.getResultReference().setContentType("text/html");
-				searchResult.getResultReference().setExtension(".html");
+				searchResult.getResultReference().setContentType(TEXT_HTML);
+				searchResult.getResultReference().setExtension(HTML);
 				results.add(searchResult);
 			}
 		}
@@ -238,9 +248,12 @@ public class ConfluenceSearchService extends
 					searchResult.getResultReference().setTitle(result.getContent().getTitle());
 					searchResult.getResultReference().setUri(result.getUrl());
 					searchResult.setNavigationReference(new VFilesystemReference());
-					searchResult.getNavigationReference().root = ConfluenceNavigationUtil.encodeSpace(
-							result.getContent().getSpace().getKey(), result.getContent().getSpace().getName(),
-							result.getContent().getSpace().get_expandable());
+					searchResult.getNavigationReference().root = result.getContent() != null
+							&& result.getContent().getSpace() != null
+									? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
+											result.getContent().getSpace().getName(),
+											result.getContent().getSpace().get_expandable())
+									: null;
 					if (result.getContent().getType() != null) {
 						switch (result.getContent().getType()) {
 						case "attachment": {
@@ -295,6 +308,8 @@ public class ConfluenceSearchService extends
 					page);
 			searchResult.setResultReference(new SearchResultReference());
 			searchResult.getResultReference().setName(page.name);
+			searchResult.getResultReference().setContentType(TEXT_HTML);
+			searchResult.getResultReference().setExtension(HTML);
 			results.add(searchResult);
 		}
 		// ATTACHMENT WILL NOT BE LISTED BECAUSE CANNOT SELECT AND RETRIEVE THEM
@@ -310,6 +325,11 @@ public class ConfluenceSearchService extends
 						ConfluenceNavigationUtil.encodeAsAttachment(attach));
 				searchResult.setResultReference(new SearchResultReference());
 				searchResult.getResultReference().setName(attachment.name);
+				if (attach.getMetadata() != null && attach.getMetadata().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getMetadata().getMediaType());
+				} else if (attach.getExtensions() != null && attach.getExtensions().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getExtensions().getMediaType());
+				}
 				results.add(searchResult);
 			}
 		}
@@ -325,6 +345,8 @@ public class ConfluenceSearchService extends
 						page);
 				searchResult.setResultReference(new SearchResultReference());
 				searchResult.getResultReference().setName(page.name);
+				searchResult.getResultReference().setContentType(TEXT_HTML);
+				searchResult.getResultReference().setExtension(HTML);
 				results.add(searchResult);
 			}
 		}

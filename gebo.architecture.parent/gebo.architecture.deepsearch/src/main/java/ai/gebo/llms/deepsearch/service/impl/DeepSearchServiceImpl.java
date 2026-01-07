@@ -15,11 +15,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -80,7 +82,8 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-@Service
+@Component
+@Scope("singleton")
 
 public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService {
 

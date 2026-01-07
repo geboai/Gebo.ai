@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -52,13 +49,13 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	private CloudConfluenceListItem cloudConfluencePage = null;
 	private CloudConfluenceAttachmentItem cloudConfluenceAttachment = null;
 	private CloudConfluenceSpacesListItem cloudConfluenceSpace = null;
-	
+
 	// On-Premise Confluence object references
 	private OnPremiseConfluenceListItem onPremiseConfluenceListItemChildrens = null;
 	private OnPremiseConfluenceListItem onPremiseConfluencePage = null;
 	private OnPremiseConfluenceAttachmentItem onPremiseConfluenceAttachment = null;
 	private OnPremiseConfluenceSpacesListItem onPremiseConfluenceSpace = null;
-	
+
 	// Metadata constants used to store information about Confluence objects
 	public static final String CONFLUENCE_ATTACHMENT_TITLE_METAINFO = "CONFLUENCE_ATTACHMENT_TITLE_METAINFO";
 	public static final String CONFLUENCE_BROWSER_CACHE_ENTRY = "confluenceBrowser";
@@ -73,6 +70,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	public static final String CONFLUENCE_RESOURCE_METAINFO = "CONFLUENCE_RESOURCE_METAINFO";
 	public static final String CONFLUENCE_RESOURCE_METAINFO_PAGE = "PAGE";
 	public static final String CONFLUENCE_RESOURCE_METAINFO_ATTACHMENT = "ATTACHMENT";
+	public static final String CONFLUENCE_DOWNLOAD_RELATIVE_URL = "DOWNLOAD_RELATIVE_URL";
 
 	/**
 	 * Converts an OffsetDateTime to a Date object
@@ -127,7 +125,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	}
 
 	/**
-	 * Determines if this object is a folder/container that can contain other resources
+	 * Determines if this object is a folder/container that can contain other
+	 * resources
 	 * 
 	 * @return true if this is a folder, false otherwise
 	 */
@@ -203,7 +202,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	/**
 	 * Sets this object as an On-Premise Confluence container with children
 	 * 
-	 * @param onPremiseConfluenceListItemChildrens The On-Premise Confluence children
+	 * @param onPremiseConfluenceListItemChildrens The On-Premise Confluence
+	 *                                             children
 	 */
 	public void setOnPremiseConfluenceListItemChildrens(
 			OnPremiseConfluenceListItem onPremiseConfluenceListItemChildrens) {
@@ -302,6 +302,11 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_ID_METAINFO, cloudConfluenceAttachment.getId());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_TITLE_METAINFO, cloudConfluenceAttachment.getTitle());
+		if (cloudConfluenceAttachment.get_links() != null
+				&& cloudConfluenceAttachment.get_links().getDownload() != null) {
+			this.resourceReferenceMetaInfos.put(CONFLUENCE_DOWNLOAD_RELATIVE_URL,
+					cloudConfluenceAttachment.get_links().getDownload());
+		}
 		this.folder = false;
 		this.resource = true;
 		this.code = this.cloudConfluenceAttachment.getId();
@@ -342,6 +347,11 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_TITLE_METAINFO,
 				onPremiseConfluenceAttachment.getTitle());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
+		if (onPremiseConfluenceAttachment.get_links() != null
+				&& onPremiseConfluenceAttachment.get_links().getDownload() != null) {
+			this.resourceReferenceMetaInfos.put(CONFLUENCE_DOWNLOAD_RELATIVE_URL,
+					onPremiseConfluenceAttachment.get_links().getDownload());
+		}
 		this.folder = false;
 		this.resource = true;
 		this.code = this.onPremiseConfluenceAttachment.getId();
@@ -473,7 +483,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	}
 
 	/**
-	 * Determines if this object is a Confluence super page (container for other pages)
+	 * Determines if this object is a Confluence super page (container for other
+	 * pages)
 	 * 
 	 * @return true if this is a Confluence super page, false otherwise
 	 */
