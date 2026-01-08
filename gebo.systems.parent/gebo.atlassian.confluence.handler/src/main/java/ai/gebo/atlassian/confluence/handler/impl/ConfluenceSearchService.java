@@ -134,8 +134,7 @@ public class ConfluenceSearchService extends
 							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
 									.encodeAsAttachment(result.getContent().getId(), result.getContent().getTitle());
 							outList.add(searchResult);
-							//Loading attachment meta data to add content type and other meta informations
-							
+							// Loading attachment meta data to add content type and other meta informations
 
 						}
 							break;
@@ -364,6 +363,7 @@ public class ConfluenceSearchService extends
 			ConfluenceResultsExtractionData consolidated) {
 		ConfluenceResultsExtractionData data = new ConfluenceResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
+		data.setContentIsRelevant(consolidated.getContentIsRelevant());
 		return data;
 	}
 

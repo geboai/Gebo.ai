@@ -124,6 +124,10 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 				if (actualSearchResultToLoad.getNavigationReference() != null
 						&& actualSearchResultToLoad.getNavigationReference().path != null
 						&& actualSearchResultToLoad.getNavigationReference().path.folder) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("The endpoint:" + actualSearchResultToLoad.getNavigationReference()
+								+ " rappresents a virtual folder, so no content is involved");
+					}
 					return List.of();
 				}
 				TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);

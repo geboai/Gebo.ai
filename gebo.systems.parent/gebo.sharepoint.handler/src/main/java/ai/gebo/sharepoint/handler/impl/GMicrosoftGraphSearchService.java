@@ -64,6 +64,7 @@ public class GMicrosoftGraphSearchService extends
 			MicrosoftResultsExtractionData consolidated) {
 		MicrosoftResultsExtractionData data = new MicrosoftResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
+		data.setContentIsRelevant(consolidated.getContentIsRelevant());
 		return data;
 	}
 

@@ -33,6 +33,8 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
@@ -57,6 +59,41 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		return state;
 	}
 
+	@Getter
+	@AllArgsConstructor
+	static class SearchResultsStepInfo {
+		final SearchResult actualSearchResult;
+		final SearchWithResults actualResult;
+
+		boolean isEmpty() {
+			return actualResult == null || actualSearchResult == null;
+		}
+	}
+
+	protected SearchResultsStepInfo popSearchResult(DeepSearchDataSourceStandardState state) {
+		SearchResult actualSearchResultToLoad = null;
+		SearchWithResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
+		if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
+			actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
+			int index = state.getQueryResultsReferenceIndex() + 1;
+			state.setQueryResultsReferenceIndex(index);
+
+		} else {
+			int nextIndex = state.getQueryResultsIndex() + 1;
+			state.setQueryResultsIndex(nextIndex);
+			state.setQueryResultsReferenceIndex(0);
+			if (nextIndex < state.getQueryResults().size()) {
+				actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
+				if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
+					actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
+					int index = state.getQueryResultsReferenceIndex() + 1;
+					state.setQueryResultsReferenceIndex(index);
+				}
+			}
+		}
+		return new SearchResultsStepInfo(actualSearchResultToLoad, actualResult);
+	}
+
 	@Override
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
@@ -65,6 +102,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....) handler=" + getHandlerId());
 		}
+		DeepSearchDataSourceDocumentResultEvent analyzedEvent = null;
 		if (state.getExtractedSearchQueries() == null) {
 			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
 					pastSystemsResponses, deepSearchConfig, chatModel, previusConsolidatedResult);
@@ -95,7 +133,15 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					LOGGER.error("Handler:" + getHandlerId() + " fails running query:" + query, th);
 				}
 			}
-			state.setQueryResults(cleanAndRemoveDuplicated(queryResults));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Queries results=>" + queryResults);
+			}
+			queryResults = cleanAndRemoveDuplicated(queryResults);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Cleaned Queries results=>" + queryResults);
+			}
+			state.setQueryResults(queryResults);
+
 		}
 		if (state.getQueryResults() == null || state.getQueryResults().isEmpty()) {
 			DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
@@ -112,88 +158,67 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		}
 
 		if (state.getQueryResultsIndex() < state.getQueryResults().size()) {
-			SearchResult actualSearchResultToLoad = null;
-			SearchWithResults actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
-			if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
-				actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
-				int index = state.getQueryResultsReferenceIndex() + 1;
-				state.setQueryResultsReferenceIndex(index);
+			SearchResultsStepInfo actualSearchResultRef = null;
 
-			} else {
-				int nextIndex = state.getQueryResultsIndex() + 1;
-				state.setQueryResultsIndex(nextIndex);
-				state.setQueryResultsReferenceIndex(0);
-				if (nextIndex < state.getQueryResults().size()) {
-					actualResult = state.getQueryResults().get(state.getQueryResultsIndex());
-					if (state.getQueryResultsReferenceIndex() < actualResult.getResults().size()) {
-						actualSearchResultToLoad = actualResult.getResults().get(state.getQueryResultsReferenceIndex());
-						int index = state.getQueryResultsReferenceIndex() + 1;
-						state.setQueryResultsReferenceIndex(index);
-					}
-				}
-			}
-			List<CustomContentExtractionType> analyzed = new ArrayList();
-			if (actualSearchResultToLoad != null) {
-				int maxTokens = MAX_DOCUMENT_TOKENS_SIZE_CONTEXT_MOLTIPLICATOR * chatModel.getContextLength();
-				List<ConsolidationInput> inputs = this.loadDocumentFragments(actualSearchResultToLoad, request,
-						maxTokens);
-				String prompt = deepSearchConfig.getAnalisysPrompt();
-				BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
-						CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
-					return this.customStructureConsolidation(actualData, currentConsolidation);
-				};
-				CustomContentExtractionType returned = super.callLLMConsolidateStructuredReturn(chatModel, prompt,
-						request.getQuery(), previusConsolidatedResult, this.customContentExtractionType, aggregator,
-						inputs);
-				if (returned != null) {
-					analyzed.add(returned);
-				}
-				if (actualSearchResultToLoad.getNestingLevel() < MAX_NESTING_LEVEL) {
-					List<SearchResult> additionalResults = this.extractAdditionalReferencesToScan(returned, state);
-					// Enqueue other references to visit after the actual visit
-					if (additionalResults != null && !additionalResults.isEmpty()) {
-						for (SearchResult r : additionalResults) {
-							r.setNestingLevel(actualSearchResultToLoad.getNestingLevel() + 1);
+			int maxTokens = MAX_DOCUMENT_TOKENS_SIZE_CONTEXT_MOLTIPLICATOR * chatModel.getContextLength();
+			List<ConsolidationInput> inputs = null;
+			CustomContentExtractionType actualContribute = null;
+			boolean currentIsInError = false;
+			do {
+				currentIsInError = false;
+				actualSearchResultRef = popSearchResult(state);
+
+				try {
+					inputs = this.loadDocumentFragments(actualSearchResultRef.actualSearchResult, request, maxTokens);
+					if (inputs != null && !inputs.isEmpty()) {
+						String prompt = deepSearchConfig.getAnalisysPrompt();
+						BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
+								CustomContentExtractionType actualData,
+								CustomContentExtractionType currentConsolidation) -> {
+							return this.customStructureConsolidation(actualData, currentConsolidation);
+						};
+						CustomContentExtractionType returned = super.callLLMConsolidateStructuredReturn(chatModel,
+								prompt, request.getQuery(), previusConsolidatedResult, this.customContentExtractionType,
+								aggregator, inputs);
+						if (returned != null && returned.getContentIsRelevant() != null
+								&& returned.getContentIsRelevant()) {
+							actualContribute = returned;
 						}
-						SearchWithResults sr = new SearchWithResults();
-						sr.setResults(additionalResults);
-						state.getQueryResults().set(state.getQueryResultsIndex() + 1, sr);
 					}
+				} catch (Throwable exception) {
+					currentIsInError = true;
+					LOGGER.error("Errors loading=>" + actualSearchResultRef.actualSearchResult, exception);
 				}
-			}
-			DeepSearchDataSourceDocumentResultEvent analyzedEvent = new DeepSearchDataSourceDocumentResultEvent();
-			analyzedEvent.setInputData(actualSearchResultToLoad);
-			analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
-			analyzedEvent.getOutputData().setEmptyResult(analyzed.isEmpty());
-			analyzedEvent.getOutputData().setHandlerId(getHandlerId());
-			analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
-			analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
-			analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-			analyzedEvent.getOutputData().setDocumentIndex(state.getQueryResultsReferenceIndex());
+			} while (!actualSearchResultRef.isEmpty()
+					&& (currentIsInError || (inputs == null || inputs.isEmpty() || actualContribute == null)));
+			if (actualContribute != null && !actualSearchResultRef.isEmpty()) {
 
-			analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-			if (!analyzed.isEmpty()) {
-				if (analyzed.size() == 1) {
-					analyzedEvent.getOutputData().setAnalyzedResult(analyzed.get(0).getExtractedRelevantContent());
-				} else {
-					String analyzedResult = consolidateReferenceResults(analyzed, request, deepSearchConfig, chatModel);
-					analyzedEvent.getOutputData().setAnalyzedResult(analyzedResult);
+				analyzedEvent = new DeepSearchDataSourceDocumentResultEvent();
+				analyzedEvent.setInputData(actualSearchResultRef.actualSearchResult);
+				analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
+				analyzedEvent.getOutputData().setEmptyResult(false);
+				analyzedEvent.getOutputData().setHandlerId(getHandlerId());
+				analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
+				analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultRef.actualSearchResult);
+				analyzedEvent.getOutputData()
+						.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+				analyzedEvent.getOutputData().setDocumentIndex(state.getQueryResultsReferenceIndex());
+
+				analyzedEvent.getOutputData()
+						.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+
+				analyzedEvent.getOutputData().setAnalyzedResult(actualContribute.getExtractedRelevantContent());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning " + analyzedEvent);
 				}
-				state.getCumulatedAnalisys().add(analyzedEvent.getOutputData());
+				return analyzedEvent;
 			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning " + analyzedEvent);
-			}
-			return analyzedEvent;
-
 		}
 
 		DeepSearchDataSourceProcessedEvent returned = consolidate(state.getCumulatedAnalisys(), request,
 				deepSearchConfig, chatModel);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning " + returned);
+			LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning data source consolidation=> " + returned);
 		}
 		return returned;
 	}

@@ -43,7 +43,7 @@ public class GoogleDriveSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
-		query=CleanQueryUtil.cleanQuery(query);
+		query = CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GGoogleDriveSystem googleDriveSystem) {
 
 			boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
@@ -63,6 +63,7 @@ public class GoogleDriveSearchService extends
 			GoogleDriveResultsExtractionData consolidated) {
 		GoogleDriveResultsExtractionData data = new GoogleDriveResultsExtractionData();
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
+		data.setContentIsRelevant(consolidated.getContentIsRelevant());
 		return data;
 	}
 
