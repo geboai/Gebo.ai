@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.CleanQueryUtil;
@@ -71,6 +72,13 @@ public class JiraSearchService extends
 	public String getQueriesExtractionPrompt() {
 
 		return config.getQueryExtractionPrompt();
+	}
+
+	@Override
+	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
+			JiraResultsExtractionData extractedData) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

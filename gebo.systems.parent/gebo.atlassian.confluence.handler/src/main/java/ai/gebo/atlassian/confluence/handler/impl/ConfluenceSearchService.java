@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -371,6 +372,13 @@ public class ConfluenceSearchService extends
 	public String getQueriesExtractionPrompt() {
 
 		return config.getQueryExtractionPrompt();
+	}
+
+	@Override
+	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
+			ConfluenceResultsExtractionData extractedData) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

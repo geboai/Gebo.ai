@@ -31,6 +31,7 @@ import org.springframework.web.client.RestClientException;
 
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -43,6 +44,7 @@ import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultItem;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData;
+import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
@@ -248,6 +250,8 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		newResult.setContentIsRelevant(cumulated.getContentIsRelevant());
 		newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
 		newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
+		newResult.getExtractedRelatedSearches().addAll(oldConsolidated.getExtractedRelatedSearches());
+		newResult.getExtractedRelatedSearches().addAll(cumulated.getExtractedRelatedSearches());
 		return newResult;
 	}
 
@@ -286,6 +290,32 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 	public String getQueriesExtractionPrompt() {
 
 		return config.getQueryExtractionPrompt();
+	}
+
+	@Override
+	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
+			GoogleSearchResultsExtractionData extractedData) {
+		List<SearchResult> results = new ArrayList<SearchResult>();
+		if (extractedData.getExtractedRelevantLinks() != null) {
+			for (RelevantLink item : extractedData.getExtractedRelevantLinks()) {
+				String link = item.getUrl();
+				String title = item.getTitle();
+				String name = item.getDisplayText();
+				SearchResult result = new SearchResult();
+				result.setDescriptiveText(title);
+				result.setResultReference(new SearchResultReference());
+				result.getResultReference().setId(link);
+				result.getResultReference().setUri(link);
+				result.getResultReference().setName(name);
+				result.getResultReference().setTitle(title);
+				result.getResultReference().setExtension(tryArgueExtension(link));
+				result.getResultReference().setContentType(tryArgueContentType(link));
+				result.setSystemConfigurationCode(GOOGLE_SEARCH_SERVICE);
+				result.setSystemHandlerId(GOOGLE_SEARCH_SERVICE);
+				results.add(result);
+			}			
+		}
+		return new SearchResultAnalisysOutcome(extractedData.getExtractedRelatedSearches(), results);
 	}
 
 }

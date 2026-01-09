@@ -3,6 +3,7 @@ package ai.gebo.llms.deepsearch.datasources.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import lombok.Data;
 
@@ -14,5 +15,6 @@ public class DeepSearchDataSourceStandardState {
 	private int queryResultsReferenceIndex = 0;
 	private int dataSourceIndex = 0;
 	private List<DeepSearchDataSourceDocumentResult> cumulatedAnalisys = new ArrayList<DeepSearchDataSourceDocumentResult>();
+	private List<SearchResult> navigatedResults = new ArrayList<SearchResult>();
 
 }

@@ -13,6 +13,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -29,6 +30,7 @@ import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
@@ -211,6 +213,16 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
 
 		return searchService.cleanAndRemoveDuplicated(queryResults);
+	}
+
+	@Override
+	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,
+			CustomSearchResultExtractionDataType returned, DeepSearchConfig deepSearchConfig,
+			IGConfigurableChatModel chatModel) {
+		return searchService.extractRelatedAnalisysReferences(
+				actualSearchResultRef.getActualSearchResult().getSystemHandlerId() + "<-->"
+						+ actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
+				returned);
 	}
 
 }

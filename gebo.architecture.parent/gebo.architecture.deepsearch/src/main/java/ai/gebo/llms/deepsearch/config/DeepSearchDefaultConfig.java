@@ -19,10 +19,10 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "Document batch (each fragment has an id and text):\r\n" + "{documents}\"\r\n" + "\r\n" + "TASK:\r\n"
 			+ "1. Read the question and the document fragments.\r\n"
 			+ "2. Extract ONLY the information that is clearly relevant to the question.\r\n"
-			+ "3. Organize the extracted information into:\r\n" + "   - a short natural-language summary,\r\n"
-			+ "   - a list of key bullet points,\r\n"
-			+ "   - a list of ids of the fragments that support the information.\r\n"
-			+ "4. If this batch is completely irrelevant, say so.\r\n" + "\r\n";
+			+ "3. You can choose to organize the extracted information into:\r\n"
+			+ "   - a list of key bullet points with a list of document references including hypertext links (if provided) that support the information\r\n"
+			+ "   - or an organic and detailed text splitted in paragraphs, reporting detailed informations with a list of document references including hypertext links (if provided) used as sources "
+			+ ".\r\n" + "4. If this batch is completely irrelevant, say so.\r\n" + "\r\n";
 	static final String consolidationDefaultPrompt = "SYSTEM:\r\n"
 			+ "You are an assistant that maintains a consolidated report answering a user question.\r\n"
 			+ "At each step you receive:\r\n" + "- the user question,\r\n"
@@ -42,7 +42,10 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "   - refine or correct previous points if the new contribution has better or more precise information,\r\n"
 			+ "   - update the list of evidence fragment ids (de-duplicated).\r\n"
 			+ "3. Keep the report concise and avoid repeating the same points.\r\n"
-			+ "4. The report must directly answer the user question as best as possible with the available information.\r\n";
+			+ "4. The report must directly answer the user question as best as possible with the available information.\r\n"
+			+ "5. You can choose to organize the extracted information into:\r\n"
+			+ "   - a list of key bullet points with a list of document references including hypertext links (if provided) that support the information\r\n"
+			+ "   - or an organic and detailed text splitted in paragraphs, reporting detailed informations with a list of document references including hypertext links (if provided) used as sources ";
 
 	static final String defaultSearchQueryExtractionPrompt = "You are “QuerySynth”, an expert at turning an information need into high-quality search queries for {dataSourceDescription}.\r\n"
 			+ "\r\n" + "Your job:\r\n"

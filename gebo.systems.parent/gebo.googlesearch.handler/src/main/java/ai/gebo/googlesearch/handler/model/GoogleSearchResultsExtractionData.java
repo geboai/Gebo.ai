@@ -3,7 +3,10 @@ package ai.gebo.googlesearch.handler.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+import ai.gebo.architecture.search.model.SearchQuery;
 import lombok.Data;
 
 @Data
@@ -15,5 +18,8 @@ public class GoogleSearchResultsExtractionData extends BaseSearchResultsExtracti
 		String displayText = null;
 	}
 
+	@JsonPropertyDescription("Relevant links to analyze exported from the page content")
 	private List<RelevantLink> extractedRelevantLinks = new ArrayList();
+	@JsonPropertyDescription("Further analisable search query to add more details to actual informations")
+	private List<SearchQuery> extractedRelatedSearches = new ArrayList<SearchQuery>();
 }

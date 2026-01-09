@@ -6,6 +6,7 @@ import java.util.List;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -44,5 +45,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
 
 	public String getQueriesExtractionPrompt();
+
+	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
+			CustomSearchResultExtractionDataType extractedData);
 
 }
