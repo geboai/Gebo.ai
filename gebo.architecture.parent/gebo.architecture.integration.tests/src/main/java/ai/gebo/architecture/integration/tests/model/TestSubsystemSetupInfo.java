@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProductSetupInfo {
+public class TestSubsystemSetupInfo {
 	public static enum Product {
 		GOOGLE_SEARCH, CONFLUENCE_ONPREMISE, CONFLUENCE_CLOUD, SHAREPOINT, GOOGLE_WORKSPACE, JIRA_CLOUD
 	};

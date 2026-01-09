@@ -3,21 +3,36 @@ package ai.gebo.architecture.integration.tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import ai.gebo.architecture.integration.tests.model.ProductSetupInfo;
-import ai.gebo.architecture.integration.tests.model.ProductSetupInfo.Product;
+import ai.gebo.architecture.integration.tests.model.IntegrationTestSetup;
+import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
+import ai.gebo.architecture.integration.tests.model.TestLLMSetup;
+import ai.gebo.architecture.integration.tests.model.TestSubsystemSetupInfo;
+import ai.gebo.architecture.integration.tests.model.TestSubsystemSetupInfo.Product;
+import ai.gebo.architecture.integration.tests.model.TestSystemSetup;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
@@ -69,16 +84,70 @@ import ai.gebo.monolithic.api.client.model.SecurityHeaderData;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+
+/****************************************************************************************
+ * Base for llm multivendor integration tests, taking admin account, llm vendor
+ * presettings,subsystems integrations setup from a secret (in json format)
+ */
 
 public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegrationTests {
-	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
-	static boolean qdrantStartedUp = false;
-	Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
+	protected static boolean qdrantStartedUp = false;
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected static final String FULL_SETUP_ENVIRONMENT_JSON_STRING = "FullSetupSecret";
+	protected static ObjectMapper objectMapper = new ObjectMapper();
+	static {
+		// Supporto per java.time.*
+		objectMapper.registerModule(new JavaTimeModule());
+		// Date -> ISO-8601 (string), non timestamp numerico
+		objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		// Date parsing ISO-8601 robusto (accetta anche offset/Z)
+		objectMapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+		// Timezone coerente (scegli UTC per evitare sorprese tra ambienti)
+		objectMapper.setTimeZone(TimeZone.getTimeZone("UTC"));
+		// Opzionali ma spesso utili
+		objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	}
 	@Autowired
-	GeboVectorStoreConfigurationService vectorStoreConfigurationService;
+	protected GeboVectorStoreConfigurationService vectorStoreConfigurationService;
+	@Autowired
+	protected Environment environment;
 
-	public AbstractVendorSetupAndUseTest() {
+	protected ApiClient createApiClient(String host, int port, SecurityHeaderData header) {
+		RestTemplate restTemplate = createRestTemplate();
 
+		ApiClient geboClient = new ApiClient(restTemplate);
+		geboClient.setBasePath("http://" + host + ":" + port);
+		if (header != null) {
+			geboClient.setApiKey(header.getToken());
+		}
+		return geboClient;
+	}
+
+	protected RestTemplate createRestTemplate() {
+		RestTemplate rt = new RestTemplate();
+
+		// Rimuovi eventuali converter Jackson predefiniti
+		List<HttpMessageConverter<?>> converters = new ArrayList<>(rt.getMessageConverters());
+		converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
+
+		// Crea il converter Jackson con il tuo mapper
+		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter(objectMapper);
+
+		// (Opzionale) aggiungi anche text/plain se alcuni endpoint rispondono JSON con
+		// content-type sbagliato
+		List<MediaType> mediaTypes = new ArrayList<>(jackson.getSupportedMediaTypes());
+		mediaTypes.add(MediaType.TEXT_PLAIN);
+		jackson.setSupportedMediaTypes(mediaTypes);
+
+		// Metti il converter Jackson in testa (priorità)
+		converters.add(0, jackson);
+		rt.setMessageConverters(converters);
+		return rt;
 	}
 
 	@BeforeEach
@@ -107,10 +176,15 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 
 	}
 
+	protected SecurityHeaderData executingPredefinedSystemSetup(@NotNull @Valid TestSystemSetup setup) {
+		return executingPredefinedSystemSetup(setup.getUsername(), setup.getPassword(), setup.getVendorId(),
+				setup.getVendorUser(), setup.getVendorApiKey(), setup.getHost(), setup.getPort(), setup.getModels());
+	}
+
 	protected SecurityHeaderData executingPredefinedSystemSetup(String username, String password, String vendorId,
-			String vendorUser, String vendorApiKey, String host, int port) {
+			String vendorUser, String vendorApiKey, String host, int port, List<TestLLMSetup> models) {
 		LOGGER.info("Begin executingPredefinedSystemSetup(...)");
-		ApiClient geboClient = new ApiClient();
+		ApiClient geboClient = createApiClient(host, port, null);
 		geboClient.setBasePath("http://" + host + ":" + port);
 		LOGGER.info("Running initial admin registration setup");
 		GeboFastInstallationSetupControllerApi fastInstallationSetup = new GeboFastInstallationSetupControllerApi(
@@ -162,21 +236,45 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		LLMAutoconfigureCreationData autoConfigureData = new LLMAutoconfigureCreationData();
 		autoConfigureData.setVendorId(vendorId);
 		autoConfigureData.setSecretId(secretInfo.getCode());
-		List<LLMModelPresetChoice> chatModelChoices = chatPresets.getChoices();
-		List<LLMModelPresetChoice> embeddingChoices = embeddingPresets.getChoices();
-		for (LLMModelPresetChoice chatChoice : chatModelChoices) {
-			if (chatChoice.isDefaultChoice() != null && chatChoice.isDefaultChoice()) {
-				autoConfigureData.setDefaultChatModel(chatChoice.getCode());
+		if (models == null || models.isEmpty()) {
+			List<LLMModelPresetChoice> chatModelChoices = chatPresets.getChoices();
+			List<LLMModelPresetChoice> embeddingChoices = embeddingPresets.getChoices();
+			for (LLMModelPresetChoice chatChoice : chatModelChoices) {
+				if (chatChoice.isDefaultChoice() != null && chatChoice.isDefaultChoice()) {
+					autoConfigureData.setDefaultChatModel(chatChoice.getCode());
+				}
+				if (chatChoice.getUses() != null
+						&& chatChoice.getUses().contains(LLMModelPresetChoice.UsesEnum.INTERNAL_SERVICES)) {
+					autoConfigureData.setInternalServicesModel(chatChoice.getCode());
+				}
 			}
-			if (chatChoice.getUses() != null && chatChoice.getUses().contains(UsesEnum.INTERNAL_SERVICES)) {
-				autoConfigureData.setInternalServicesModel(chatChoice.getCode());
+			for (LLMModelPresetChoice embedChoice : embeddingChoices) {
+				if (embedChoice.isDefaultChoice() != null && embedChoice.isDefaultChoice()) {
+					autoConfigureData.setEmbeddingModel(embedChoice.getCode());
+				}
+			}
+		} else {
+			for (TestLLMSetup model : models) {
+				switch (model.getRole()) {
+				case DEFAULT_CHAT: {
+					autoConfigureData.setDefaultChatModel(model.getModelCode());
+				}
+					break;
+				case DEFAULT_EMBEDDING: {
+					autoConfigureData.setEmbeddingModel(model.getModelCode());
+				}
+					break;
+				case INTERNAL_SERVICES: {
+					autoConfigureData.setInternalServicesModel(model.getModelCode());
+				}
+					break;
+				}
 			}
 		}
-		for (LLMModelPresetChoice embedChoice : embeddingChoices) {
-			if (embedChoice.isDefaultChoice() != null && embedChoice.isDefaultChoice()) {
-				autoConfigureData.setEmbeddingModel(embedChoice.getCode());
-			}
-		}
+		assertFalse(
+				autoConfigureData.getDefaultChatModel() == null || autoConfigureData.getEmbeddingModel() == null
+						|| autoConfigureData.getInternalServicesModel() == null,
+				"Setup defaultChatModel,embeddingModel,internalServicesModel have to be not null");
 		OperationStatusList llmCreationInfos = llmSetupApi.createLLMByAutoconfigure(autoConfigureData);
 		printMessages(llmCreationInfos.getMessages());
 		assertFalse(llmCreationInfos.isHasErrorMessages(),
@@ -187,21 +285,16 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		return securityHeader;
 	}
 
-	protected SecurityHeaderData renew(SecurityHeaderData securityHeader, String host, int port) {
-		ApiClient geboClient = new ApiClient();
-		geboClient.setBasePath("http://" + host + ":" + port);
-		geboClient.setApiKey(securityHeader.getToken());
+	protected SecurityHeaderData renew(@NotNull @Valid SecurityHeaderData securityHeader, String host, int port) {
+		ApiClient geboClient = createApiClient(host, port, securityHeader);
 		TokenRenewControllerApi tokenRenewApi = new TokenRenewControllerApi(geboClient);
 		return tokenRenewApi.renew();
-
 	}
 
-	protected void setupProducts(List<ProductSetupInfo> setupInfos, SecurityHeaderData securityHeader, String host,
-			int port) {
-		ApiClient geboClient = new ApiClient();
-		geboClient.setBasePath("http://" + host + ":" + port);
-		geboClient.setApiKey(securityHeader.getToken());
-		for (ProductSetupInfo productSetupInfo : setupInfos) {
+	protected void setupProducts(@NotNull @Valid List<TestSubsystemSetupInfo> setupInfos,
+			SecurityHeaderData securityHeader, String host, int port) {
+		ApiClient geboClient = createApiClient(host, port, securityHeader);
+		for (TestSubsystemSetupInfo productSetupInfo : setupInfos) {
 			switch (productSetupInfo.getProduct()) {
 			case GOOGLE_SEARCH: {
 				GoogleSearchConfigurationControllerApi api = new GoogleSearchConfigurationControllerApi(geboClient);
@@ -296,6 +389,26 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				}
 			}
 		}
-
 	}
+
+	protected TestGeboSystemInfo executingSystemSetup(@NotNull @Valid IntegrationTestSetup setup) {
+		SecurityHeaderData header = executingPredefinedSystemSetup(setup.getSystemSetup());
+		if (setup.getSubsystems() != null && !setup.getSubsystems().isEmpty()) {
+			setupProducts(setup.getSubsystems(), header, setup.getSystemSetup().getHost(),
+					setup.getSystemSetup().getPort());
+		}
+		header = renew(header, setup.getSystemSetup().getHost(), setup.getSystemSetup().getPort());
+		return new TestGeboSystemInfo(setup.getSystemSetup().getHost(), setup.getSystemSetup().getPort(),
+				setup.getSystemSetup().getUsername(), setup.getSystemSetup().getPassword(), header);
+	}
+
+	protected TestGeboSystemInfo executeSystemSetupBySecret() throws JsonMappingException, JsonProcessingException {
+		String jsonSetup = environment.getProperty(FULL_SETUP_ENVIRONMENT_JSON_STRING);
+		assertFalse(jsonSetup == null || jsonSetup.trim().length() == 0, "The environment property "
+				+ FULL_SETUP_ENVIRONMENT_JSON_STRING + " must contain a valid json setup configuration");
+		ObjectMapper objectMapper = new ObjectMapper();
+		IntegrationTestSetup setup = objectMapper.readValue(jsonSetup, IntegrationTestSetup.class);
+		return executingSystemSetup(setup);
+	}
+
 }
