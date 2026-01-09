@@ -51,7 +51,7 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResultsExtractionData> {
-	private static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
+	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
 	private final GoogleSearchHandlerConfig config;
@@ -245,6 +245,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 			return cumulated;
 		GoogleSearchResultsExtractionData newResult = new GoogleSearchResultsExtractionData();
 		newResult.setExtractedRelevantContent(cumulated.getExtractedRelevantContent());
+		newResult.setContentIsRelevant(cumulated.getContentIsRelevant());
 		newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
 		newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
 		return newResult;

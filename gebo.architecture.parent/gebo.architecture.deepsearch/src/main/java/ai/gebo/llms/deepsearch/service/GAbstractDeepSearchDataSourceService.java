@@ -167,27 +167,43 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			do {
 				currentIsInError = false;
 				actualSearchResultRef = popSearchResult(state);
-
-				try {
-					inputs = this.loadDocumentFragments(actualSearchResultRef.actualSearchResult, request, maxTokens);
-					if (inputs != null && !inputs.isEmpty()) {
-						String prompt = deepSearchConfig.getAnalisysPrompt();
-						BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
-								CustomContentExtractionType actualData,
-								CustomContentExtractionType currentConsolidation) -> {
-							return this.customStructureConsolidation(actualData, currentConsolidation);
-						};
-						CustomContentExtractionType returned = super.callLLMConsolidateStructuredReturn(chatModel,
-								prompt, request.getQuery(), previusConsolidatedResult, this.customContentExtractionType,
-								aggregator, inputs);
-						if (returned != null && returned.getContentIsRelevant() != null
-								&& returned.getContentIsRelevant()) {
-							actualContribute = returned;
+				if (!actualSearchResultRef.isEmpty()) {
+					try {
+						inputs = this.loadDocumentFragments(actualSearchResultRef.actualSearchResult, request,
+								maxTokens);
+						if (inputs != null && !inputs.isEmpty()) {
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Sending to llm for structure consolidation content:"
+										+ actualSearchResultRef.actualSearchResult);
+							}
+							String prompt = deepSearchConfig.getAnalisysPrompt();
+							BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
+									CustomContentExtractionType actualData,
+									CustomContentExtractionType currentConsolidation) -> {
+								return this.customStructureConsolidation(actualData, currentConsolidation);
+							};
+							CustomContentExtractionType returned = super.callLLMConsolidateStructuredReturn(chatModel,
+									prompt, request.getQuery(), previusConsolidatedResult,
+									this.customContentExtractionType, aggregator, inputs);
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("Consolidated structured output:" + returned);
+							}
+							if (returned != null && returned.getContentIsRelevant() != null
+									&& returned.getContentIsRelevant()) {
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.debug("Actual content contribute is considered");
+								}
+								actualContribute = returned;
+							} else {
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.warn("Actual content contribute is NOT considered!");
+								}
+							}
 						}
+					} catch (Throwable exception) {
+						currentIsInError = true;
+						LOGGER.error("Errors loading=>" + actualSearchResultRef.actualSearchResult, exception);
 					}
-				} catch (Throwable exception) {
-					currentIsInError = true;
-					LOGGER.error("Errors loading=>" + actualSearchResultRef.actualSearchResult, exception);
 				}
 			} while (!actualSearchResultRef.isEmpty()
 					&& (currentIsInError || (inputs == null || inputs.isEmpty() || actualContribute == null)));
@@ -218,7 +234,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		DeepSearchDataSourceProcessedEvent returned = consolidate(state.getCumulatedAnalisys(), request,
 				deepSearchConfig, chatModel);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning data source consolidation=> " + returned);
+			LOGGER.debug("End nextStep(....) handler=" + getHandlerId() + " returning data source consolidation=> "
+					+ returned);
 		}
 		return returned;
 	}

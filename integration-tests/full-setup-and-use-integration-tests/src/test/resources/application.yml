@@ -267,4 +267,6 @@ ai.gebo.core.config:
 #            modelCode: mxbai-embed-large:latest
 #            defaultModel: true                       
              
-                     
+ai.gebo.deepsearch:
+       externalSourcesEnabled: true
+       deepSearchUIAllowChooseSources: true                     

@@ -222,9 +222,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....)");
 		}
-		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
-				|| request.getKnowledgeBases().isEmpty()) {
-			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
+		if (request.getQuery() == null || request.getQuery().trim().length() == 0
+				|| request.getKnowledgeBases() == null) {
+			throw new IllegalStateException("Cannot run a deepsearch with no query or null knowledge bases list");
 		}
 		List<IGDeepSearchDataSourceService> providedDeepSearchSourceService = this.dataSourcesProvider
 				.getDynamicDeepSearchServices();

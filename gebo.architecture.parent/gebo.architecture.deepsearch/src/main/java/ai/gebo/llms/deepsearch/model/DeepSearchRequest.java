@@ -19,7 +19,7 @@ public class DeepSearchRequest extends GBaseObject {
 	@NotNull
 	String query = null;
 	@NotNull
-	@NotEmpty
+
 	List<String> knowledgeBases = new ArrayList<String>();
 	@GObjectReference(referencedType = GUserChatContext.class)
 	String userChatContextCode = null;
