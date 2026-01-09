@@ -9,6 +9,6 @@ import lombok.Getter;
 public class DeepSearchStep {
 	final GResponseDocumentRef documentRef;
 	final String analisysPortion;
-	final double completionPercent;
+	final double processPercentage;
 
 }

@@ -10,6 +10,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
@@ -53,7 +54,7 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @param request
 	 * @param pastSystemsResponses
 	 * @param state
-	 * @param previusConsolidatedResult TODO
+	 * @param deepSearchSharedState TODO
 	 * @param history
 	 * 
 	 * @return
@@ -64,6 +65,6 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @throws SearchServiceException 
 	 */
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, StateType state, String previusConsolidatedResult) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
+			List<IDeepSearchResult> pastSystemsResponses, StateType state, DeepSearchState deepSearchSharedState) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
 
 }

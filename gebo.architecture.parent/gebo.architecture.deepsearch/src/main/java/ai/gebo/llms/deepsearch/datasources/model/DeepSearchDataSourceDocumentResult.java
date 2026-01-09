@@ -26,7 +26,7 @@ public class DeepSearchDataSourceDocumentResult extends GBaseObject {
 	private String dataSourceDescription = null;
 	@NotNull
 	private SearchResult analyzedSearchResult=null;
-
+	private double processPercentage=0.0;
 	public DeepSearchDataSourceDocumentResult() {
 		setCode(UUID.randomUUID().toString());
 	}

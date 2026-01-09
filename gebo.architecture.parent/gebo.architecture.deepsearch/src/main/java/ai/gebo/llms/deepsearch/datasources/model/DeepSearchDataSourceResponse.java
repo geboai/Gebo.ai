@@ -31,7 +31,7 @@ public class DeepSearchDataSourceResponse extends GBaseObject implements IDeepSe
 	private Integer dataSourceIndex = null;
 	@NotNull
 	private String dataSourceDescription = null;
-
+	private double processPercentage=0.0;
 	public DeepSearchDataSourceResponse() {
 		this.setCode(UUID.randomUUID().toString());
 	}

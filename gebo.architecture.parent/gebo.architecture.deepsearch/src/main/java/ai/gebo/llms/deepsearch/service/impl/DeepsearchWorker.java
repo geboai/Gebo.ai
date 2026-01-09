@@ -35,6 +35,7 @@ import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -111,7 +112,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				}
 				IGDeepSearchDataSourceService businessLogic = handler.get();
 				nextStepValue = businessLogic.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
-						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state.getConsolidatedResult());
+						state.getDataSourcesStatus().get(businessLogic.getHandlerId()), state);
 
 			}
 		} else {
@@ -130,7 +131,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					Object initialState = handler.createInitialState(chatModel, deepSearchConfig, request);
 					state.getDataSourcesStatus().put(handler.getHandlerId(), initialState);
 					nextStepValue = handler.nextStep(chatModel, deepSearchConfig, request, dataSourcesResults,
-							initialState, state.getConsolidatedResult());
+							initialState, state);
 				}
 			}
 		}
@@ -138,8 +139,12 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (nextStepValue != null) {
 			// if next step is final one for datasource reset actual
 			// CurrentDataSourceHandlerRunning
-			if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent) {
+			if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessed) {
+				dataSourceProcessed.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 				state.setCurrentDataSourceHandlerRunning(null);
+			}
+			if (nextStepValue instanceof DeepSearchDataSourceDocumentResultEvent dataSourceDocumentResult) {
+				dataSourceDocumentResult.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
@@ -194,7 +199,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					resultStep.setDocumentCode(documentCode);
 					resultStep.setFragmentsCodes(currentProcessedFragments.stream().map(x -> x.getId()).toList());
 					DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
-					event.setProcessPercentage(state.calculateProcessedPercent());
+					resultStep.setProcessPercentage(state.calculateProcessedPercent());
 					event.setInputData(docdata.get());
 					event.setOutputData(resultStep);
 
@@ -260,7 +265,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 							processedDataSource.getOutputData().setDeepsearchCode(request.getCode());
 							processedDataSource.getOutputData()
 									.setErrorMessage(GUserMessage.errorMessage("Exception in deep search", e));
-							processedDataSource.setProcessPercentage(50);
+							processedDataSource.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 							nextStepValue = processedDataSource;
 						}
 						if (nextStepValue != null) {
@@ -274,7 +279,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 											state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
 									state.setConsolidatedResult(_consolidatedResult);
 								}
+								processedDataSource.getOutputData()
+										.setProcessPercentage(state.calculateProcessedPercent());
 							}
+
 							return nextStepValue;
 						}
 					}
@@ -299,9 +307,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 					AbstractDeepSearchEvent nextStepValue = knowledgeBaseDeepSearchNextStep(request, dataSourcesResults,
 							history, state, configuration, userInfos, chatModel);
-					if (nextStepValue != null)
+					if (nextStepValue != null) {
+
 						return nextStepValue;
-					else {
+					} else {
 						String consolidatedResult = this.consolidateResult(chatModel, history, request, state,
 								configuration);
 						state.setConsolidatedResult(consolidatedResult);
@@ -338,7 +347,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 							processedDataSource.getOutputData().setDeepsearchCode(request.getCode());
 							processedDataSource.getOutputData()
 									.setErrorMessage(GUserMessage.errorMessage("Exception in deep search", e));
-							processedDataSource.setProcessPercentage(100);
+							processedDataSource.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 							nextStepValue = processedDataSource;
 						}
 						if (nextStepValue != null) {
@@ -368,7 +377,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		consolidatedResult.setInputData(request);
 		consolidatedResult.setOutputData(new DeepSearchResponse());
 		consolidatedResult.getOutputData().setResponse(state.getConsolidatedResult());
-		consolidatedResult.setProcessPercentage(100);
+		consolidatedResult.getOutputData().setProcessPercentage(100);
 		boolean knowledgeBaseSearchesHaveResults = state.getDocumentSearchResults() != null
 				&& state.getDocumentSearchResults().getDocumentItems().size() > 0;
 		boolean otherDataSourceHaveResults = dataSourcesResults.size() > 0;

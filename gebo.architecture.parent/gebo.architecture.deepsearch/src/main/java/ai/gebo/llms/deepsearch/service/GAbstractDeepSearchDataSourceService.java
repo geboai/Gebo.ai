@@ -31,6 +31,7 @@ import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocu
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
@@ -85,11 +86,12 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	@Override
 	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchDataSourceStandardState state, String previusConsolidatedResult) throws LLMConfigException,
+			DeepSearchDataSourceStandardState state, DeepSearchState deepSearchSharedState) throws LLMConfigException,
 			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....) handler=" + getHandlerId());
 		}
+		String previusConsolidatedResult = deepSearchSharedState.getConsolidatedResult();
 		DeepSearchDataSourceDocumentResultEvent analyzedEvent = null;
 		if (state.getExtractedSearchQueries() == null) {
 			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
@@ -129,6 +131,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				LOGGER.debug("Cleaned Queries results=>" + queryResults);
 			}
 			state.setQueryResults(queryResults);
+			int totalSteps = state.totalStepsCount();
+			int actualStep = state.actualStepsCount();
+			deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
+			deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
 
 		}
 		if (state.getQueryResults() == null || state.getQueryResults().isEmpty()) {
@@ -141,7 +147,6 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			returned.getOutputData().setDataSourceIndex(state.getDataSourceIndex());
 			returned.getOutputData().setDeepsearchCode(request.getCode());
 			state.setDataSourceIndex(state.getDataSourceIndex() + 1);
-
 			return returned;
 		}
 
@@ -155,6 +160,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			do {
 				currentIsInError = false;
 				actualSearchResultRef = popSearchResult(state);
+				int totalSteps = state.totalStepsCount();
+				int actualStep = state.actualStepsCount();
+				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
+				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
 				if (!actualSearchResultRef.isEmpty()) {
 					try {
 						boolean NotYetVisited = this.checkNotYetVisited(actualSearchResultRef.getActualSearchResult(),
@@ -201,6 +210,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 										List<SearchWithResults> searchWithResults = new ArrayList<SearchWithResults>();
 										if (deepStepAnalisys != null && deepStepAnalisys.getSearchQueries() != null
 												&& !deepStepAnalisys.getSearchQueries().isEmpty()) {
+											// TODO: add new queries extraction processing to the queue of data source
+											// process
 											/*
 											 * for (SearchQuery searchQuery : deepStepAnalisys.getSearchQueries()) {
 											 * List<SearchResult> thisStepResults = executeSearch(searchQuery, request);
@@ -222,8 +233,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 																+ 1);
 											}
 											// enqueue the further step of extracted results to the list of being
-											// analyzed
-											// in the actual scan
+											// analyzed in the actual scan
 											actualSearchResultRef.getActualResult().getResults()
 													.addAll(deepStepAnalisys.getRelatedResults());
 										}
@@ -249,6 +259,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			} while (!actualSearchResultRef.isEmpty()
 					&& (currentIsInError || (inputs == null || inputs.isEmpty() || actualContribute == null)));
 			if (actualContribute != null && !actualSearchResultRef.isEmpty()) {
+				int totalSteps = state.totalStepsCount();
+				int actualStep = state.actualStepsCount();
+				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
+				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
 				analyzedEvent = new DeepSearchDataSourceDocumentResultEvent();
 				analyzedEvent.setInputData(actualSearchResultRef.getActualSearchResult());
 				analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
@@ -270,7 +284,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				return analyzedEvent;
 			}
 		}
-
+		int totalSteps = state.totalStepsCount();
+		int actualStep = state.actualStepsCount();
+		deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
+		deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
 		DeepSearchDataSourceProcessedEvent returned = consolidate(state.getCumulatedAnalisys(), request,
 				deepSearchConfig, chatModel);
 		if (LOGGER.isDebugEnabled()) {

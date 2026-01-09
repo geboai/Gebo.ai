@@ -113,7 +113,7 @@ public class GeboDeepSearchController {
 
 	@GetMapping(value = "getDeepSearchDataSources", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getDeepSearchDataSources() {
-		
+
 		return this.deepSearchService.getDeepSearchActiveHandlers();
 	}
 
@@ -136,7 +136,8 @@ public class GeboDeepSearchController {
 			if (entry instanceof DeepSearchDocumentEvent documentEvent) {
 				_envelope = new GeboChatMessageEnvelope(
 						new DeepSearchStep(new GResponseDocumentRef(documentEvent.getInputData()),
-								documentEvent.getOutputData().getFragment(), documentEvent.getProcessPercentage()));
+								documentEvent.getOutputData().getFragment(),
+								documentEvent.getOutputData().getProcessPercentage()));
 			} else if (entry instanceof DeepSearchProcessedEvent processedEvent) {
 				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(processedEvent.getOutputData());
 				_envelope = envelop;

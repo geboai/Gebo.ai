@@ -117,9 +117,9 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                     case "DeepSearchStep": {
                         this.clearEventsDisplay();
                         this.analisysStep = msg.content;
-                        if (msg.content?.completionPercent) {
+                        if (msg.content?.processPercentage) {
 
-                            this.completionPercent = Math.round(msg.content?.completionPercent);
+                            this.completionPercent = Math.round(msg.content?.processPercentage);
                         }
                     } break;
                     case "DeepSearchResponse": {
@@ -131,10 +131,18 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                     case "DeepSearchDataSourceDocumentResult": {
                         this.clearEventsDisplay();
                         this.deepSearchDataSourceDocumentResult = msg.content;
+                        if (msg.content?.processPercentage) {
+
+                            this.completionPercent = Math.round(msg.content?.processPercentage);
+                        }
                     } break;
                     case "DeepSearchDataSourceResponse": {
                         this.clearEventsDisplay();
                         this.deepSearchDataSourceResponse = msg.content;
+                        if (msg.content?.processPercentage) {
+
+                            this.completionPercent = Math.round(msg.content?.processPercentage);
+                        }
                     } break;
                     case "GUserMessage": {
                         this.clearEventsDisplay();

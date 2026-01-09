@@ -20,7 +20,7 @@ public class DeepSearchResponse extends GBaseObject implements IDeepSearchResult
 	@NotNull
 	String response = null;
 	Boolean searchResultsEmpty = null;
-
+	private double processPercentage=0.0;
 	public DeepSearchResponse() {
 		this.setCode(UUID.randomUUID().toString());
 	}

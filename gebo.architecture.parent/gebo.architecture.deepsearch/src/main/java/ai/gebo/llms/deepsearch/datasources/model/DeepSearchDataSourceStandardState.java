@@ -17,4 +17,20 @@ public class DeepSearchDataSourceStandardState {
 	private List<DeepSearchDataSourceDocumentResult> cumulatedAnalisys = new ArrayList<DeepSearchDataSourceDocumentResult>();
 	private List<SearchResult> navigatedResults = new ArrayList<SearchResult>();
 
+	public Integer totalStepsCount() {
+		int total = 0;
+		for (SearchWithResults qr : queryResults) {
+			total += qr.getResults().size();
+		}
+		return total;
+	}
+
+	public Integer actualStepsCount() {
+		int position = queryResultsReferenceIndex;
+		for (int i = 0; i < queryResultsIndex; i++) {
+			SearchWithResults qr = queryResults.get(i);
+			position += qr.getResults().size();
+		}
+		return position;
+	}
 }

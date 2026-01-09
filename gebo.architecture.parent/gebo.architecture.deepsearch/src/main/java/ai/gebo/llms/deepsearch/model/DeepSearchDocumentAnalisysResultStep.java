@@ -28,5 +28,5 @@ public class DeepSearchDocumentAnalisysResultStep extends GBaseObject {
 	@NotNull
 	@NotEmpty
 	List<String> fragmentsCodes = new ArrayList<String>();
-
+	private double processPercentage=0.0;
 }
