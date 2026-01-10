@@ -1,6 +1,8 @@
 package ai.gebo.llms.deepsearch.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import lombok.Data;
@@ -19,7 +21,7 @@ public class DeepSearchState {
 	private HashMap<String, Integer> dataSourcesStatusDoneSteps = new HashMap<String, Integer>();
 	private String consolidatedResult = null;
 	private int dataSourceAlreadyConsolidatedIndex = 0;
-
+	
 	public double calculateProcessedPercent() {
 		double total = fragmentsCount;
 		double processed = elaboratedFragmentsCount;

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,10 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
+import ai.gebo.llms.deepsearch.model.DeepSearchKnowledgebasesResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
@@ -140,6 +143,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			// if next step is final one for datasource reset actual
 			// CurrentDataSourceHandlerRunning
 			if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessed) {
+
 				dataSourceProcessed.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 				state.setCurrentDataSourceHandlerRunning(null);
 			}
@@ -273,11 +277,15 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 								if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
 										|| !processedDataSource.getOutputData().getSearchResultsEmpty()) {
 									dataSourcesResults.add(processedDataSource.getOutputData());
+									// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
+									// SIMPLY GET THE DATASOURCE RESULTING TEXT
+
 									String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
 											configuration.getConsolidationPrompt(),
 											processedDataSource.getOutputData().getResponse(), request.getQuery(),
 											state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
 									state.setConsolidatedResult(_consolidatedResult);
+
 								}
 								processedDataSource.getOutputData()
 										.setProcessPercentage(state.calculateProcessedPercent());
@@ -311,10 +319,32 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 						return nextStepValue;
 					} else {
-						String consolidatedResult = this.consolidateResult(chatModel, history, request, state,
-								configuration);
-						state.setConsolidatedResult(consolidatedResult);
+						String consolidatedResult = null;
+						if (state.getDocumentSearchResults().getDocumentItems().size() > 0) {
+							// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
+							// SIMPLY GET THE DATASOURCE RESULTING TEXT (CHECK)
+							consolidatedResult = this.consolidateKnowledgeBaseResult(chatModel, history, request, state,
+									configuration);
+							state.setConsolidatedResult(consolidatedResult);
+						}
+						// Here i have to return the new
+						DeepSearchKnowledgeBasesProcessedEvent event = new DeepSearchKnowledgeBasesProcessedEvent();
+						event.setInputData(request);
+						event.setOutputData(new DeepSearchKnowledgebasesResultStep());
+						event.getOutputData().setCode(UUID.randomUUID().toString());
+						event.getOutputData().setDeepsearchCode(request.getCode());
+						event.getOutputData().setResponse(consolidatedResult);
+						event.getOutputData()
+								.setSearchResultsEmpty(state.getDocumentSearchResults().getDocumentItems().isEmpty());
+						event.getOutputData().setDataSourceDescription(
+								"RAG/GRAPHRAG Knowledge bases " + request.getKnowledgeBases());
+						event.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
+						state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
+						dataSourcesResults.add(event.getOutputData());
+						return event;
 					}
+				} else {
+					state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
 				}
 
 			}
@@ -355,6 +385,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 								if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
 										|| !processedDataSource.getOutputData().getSearchResultsEmpty())
 									dataSourcesResults.add(processedDataSource.getOutputData());
+								// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
+								// SIMPLY GET THE DATASOURCE RESULTING TEXT
 								String consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
 										configuration.getConsolidationPrompt(),
 										processedDataSource.getOutputData().getResponse(), request.getQuery(),
@@ -448,7 +480,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return consolidatedDaoResult;
 	}
 
-	private String consolidateResult(IGConfigurableChatModel chatModel, List<AbstractDeepSearchEvent> history,
+	private String consolidateKnowledgeBaseResult(IGConfigurableChatModel chatModel, List<AbstractDeepSearchEvent> history,
 			DeepSearchRequest request, DeepSearchState state, DeepSearchConfig configuration) {
 		final int tokensBudget = chatModel.getContextLength();
 		int tokens = 0;
