@@ -276,15 +276,18 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 							if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent processedDataSource) {
 								if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
 										|| !processedDataSource.getOutputData().getSearchResultsEmpty()) {
+									boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 									dataSourcesResults.add(processedDataSource.getOutputData());
-									// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
-									// SIMPLY GET THE DATASOURCE RESULTING TEXT
 
-									String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
-											configuration.getConsolidationPrompt(),
-											processedDataSource.getOutputData().getResponse(), request.getQuery(),
-											state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
-									state.setConsolidatedResult(_consolidatedResult);
+									if (!singleSource) {
+										String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
+												configuration.getConsolidationPrompt(),
+												processedDataSource.getOutputData().getResponse(), request.getQuery(),
+												state.getConsolidatedResult() != null ? state.getConsolidatedResult()
+														: "");
+										state.setConsolidatedResult(_consolidatedResult);
+									} else
+										state.setConsolidatedResult(processedDataSource.getOutputData().getResponse());
 
 								}
 								processedDataSource.getOutputData()
@@ -319,6 +322,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 						return nextStepValue;
 					} else {
+						boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 						String consolidatedResult = null;
 						if (state.getDocumentSearchResults().getDocumentItems().size() > 0) {
 							// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
@@ -383,24 +387,34 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						if (nextStepValue != null) {
 							if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent processedDataSource) {
 								if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
-										|| !processedDataSource.getOutputData().getSearchResultsEmpty())
+										|| !processedDataSource.getOutputData().getSearchResultsEmpty()) {
+									boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 									dataSourcesResults.add(processedDataSource.getOutputData());
-								// TODO: CONSOLIDATION NOT CALLED IF ONLY 1 NOT EMPTY DATA SOURCE RESULT BUT
-								// SIMPLY GET THE DATASOURCE RESULTING TEXT
-								String consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
-										configuration.getConsolidationPrompt(),
-										processedDataSource.getOutputData().getResponse(), request.getQuery(),
-										state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
-								state.setConsolidatedResult(consolidatedResult);
+
+									if (!singleSource) {
+										String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
+												configuration.getConsolidationPrompt(),
+												processedDataSource.getOutputData().getResponse(), request.getQuery(),
+												state.getConsolidatedResult() != null ? state.getConsolidatedResult()
+														: "");
+										state.setConsolidatedResult(_consolidatedResult);
+									} else
+										state.setConsolidatedResult(processedDataSource.getOutputData().getResponse());
+
+								}
+								processedDataSource.getOutputData()
+										.setProcessPercentage(state.calculateProcessedPercent());
 							}
+
 							return nextStepValue;
+
 						}
 					}
+
 				}
-			}
 
 			}
-
+			}
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Consolidate final result");
@@ -417,6 +431,13 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				.setSearchResultsEmpty(!(knowledgeBaseSearchesHaveResults || otherDataSourceHaveResults));
 		return consolidatedResult;
 
+	}
+
+	private boolean thereAreNotEmpty(List<IDeepSearchResult> dataSourcesResults) {
+		if (dataSourcesResults == null || dataSourcesResults.isEmpty())
+			return false;
+		return dataSourcesResults.stream().filter(x -> x.getSearchResultsEmpty() == null || !x.getSearchResultsEmpty())
+				.count() > 0;
 	}
 
 	private RagDocumentsCachedDaoResult getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
@@ -480,8 +501,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return consolidatedDaoResult;
 	}
 
-	private String consolidateKnowledgeBaseResult(IGConfigurableChatModel chatModel, List<AbstractDeepSearchEvent> history,
-			DeepSearchRequest request, DeepSearchState state, DeepSearchConfig configuration) {
+	private String consolidateKnowledgeBaseResult(IGConfigurableChatModel chatModel,
+			List<AbstractDeepSearchEvent> history, DeepSearchRequest request, DeepSearchState state,
+			DeepSearchConfig configuration) {
 		final int tokensBudget = chatModel.getContextLength();
 		int tokens = 0;
 		String consolidated = state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "";

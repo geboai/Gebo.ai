@@ -46,14 +46,14 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 				"Do a research on the actual Ucraine war situation in begin of 2026 and forecasts regarding its end");
 		long time = System.currentTimeMillis();
 		DeepSearchResponse deepSearchResult = deepSearchApi.doDeepSearch(deepSearchRequest);
-		long timeExecuted=System.currentTimeMillis();
-		
+		long timeExecuted = System.currentTimeMillis();
+
 		assertFalse(deepSearchResult == null || deepSearchResult.getResponse() == null
 				|| deepSearchResult.getResponse().trim().length() == 0, "The deep search must give a result");
-		LOGGER.info("TIMING!! Deep search executed in "+(timeExecuted-time)+" msec");
+		LOGGER.info("TIMING!! Deep search executed in " + (timeExecuted - time) + " msec");
 		LOGGER.info(deepSearchResult.getResponse());
-		Path path = Files.createFile(Path.of("deep-search-result.md"));
-		Files.write(path,deepSearchResult.getResponse().getBytes(),StandardOpenOption.TRUNCATE_EXISTING);
+		Path path = Path.of("deep-search-result.md");
+		Files.write(path, deepSearchResult.getResponse().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 
 	}
 }
