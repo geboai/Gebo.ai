@@ -53,7 +53,7 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 		LOGGER.info("TIMING!! Deep search executed in " + (timeExecuted - time) + " msec");
 		LOGGER.info(deepSearchResult.getResponse());
 		Path path = Path.of("deep-search-result.md");
-		Files.write(path, deepSearchResult.getResponse().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+		Files.write(path, deepSearchResult.getResponse().getBytes(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING,StandardOpenOption.CREATE_NEW);
 
 	}
 }
