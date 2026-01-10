@@ -114,7 +114,7 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		// Create a document reference for the file using the reference factory
 		GDocumentReference document = docreferenceFactory.createReference(file,
 				"runSinglePDFContentsReadingAndEmbedding", null, null, endpoint, folder,
-				TestConstants.TEST_CONTENT_SYSTEM_MODULE);
+				TestConstants.TEST_CONTENT_SYSTEM_MODULE, TestConstants.TEST_CONTENT_SYSTEM_MODULE);
 		endpoint.getTestDocumentReferences().add(document);
 		persistentObjectManager.update(endpoint);
 		// Execute the ingestion synchronously and obtain job status

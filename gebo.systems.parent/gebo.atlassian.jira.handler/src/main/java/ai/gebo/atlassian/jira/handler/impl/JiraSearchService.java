@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -73,7 +74,10 @@ public class JiraSearchService extends
 
 		return config.getQueryExtractionPrompt();
 	}
-
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.ATLASSIAN_JIRA_MODULE;
+	}
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			JiraResultsExtractionData extractedData) {

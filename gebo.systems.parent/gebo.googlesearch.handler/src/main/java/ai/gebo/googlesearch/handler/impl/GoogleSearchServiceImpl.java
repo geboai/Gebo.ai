@@ -29,6 +29,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -141,7 +142,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 					result.getResultReference().setExtension(tryArgueExtension(link));
 					result.getResultReference().setContentType(tryArgueContentType(link));
 					result.setSystemConfigurationCode(GOOGLE_SEARCH_SERVICE);
-					result.setSystemHandlerId(GOOGLE_SEARCH_SERVICE);
+					setOriginOn(result);
 					out.add(result);
 				}
 			}
@@ -311,11 +312,17 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 				result.getResultReference().setExtension(tryArgueExtension(link));
 				result.getResultReference().setContentType(tryArgueContentType(link));
 				result.setSystemConfigurationCode(GOOGLE_SEARCH_SERVICE);
-				result.setSystemHandlerId(GOOGLE_SEARCH_SERVICE);
+				setOriginOn(result);
 				results.add(result);
-			}			
+			}
 		}
 		return new SearchResultAnalisysOutcome(extractedData.getExtractedRelatedSearches(), results);
+	}
+
+	@Override
+	public String getMessagingModuleId() {
+
+		return "google-search-module";
 	}
 
 }

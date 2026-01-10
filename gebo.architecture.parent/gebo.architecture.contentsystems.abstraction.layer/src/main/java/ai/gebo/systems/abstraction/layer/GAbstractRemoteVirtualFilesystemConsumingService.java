@@ -95,7 +95,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	@Override
 	public final void consumeAll(SystemType system, EndpointType endpoint, GVirtualFolder root,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
-			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+			IGContentsAccessErrorConsumer errorConsumer, String messageModuleId, String messageSystemId)
+			throws GeboContentHandlerSystemException {
 		logInfoStep("Accessing for listing resources " + describeSystem(system), "Start accessing remote system",
 				messagesConsumer);
 		Map<String, Object> environment = createEnvironment(system, endpoint, errorConsumer);
@@ -139,7 +140,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 							GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(nativeCoordinates, position,
 									system, endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
 							consumeChilds(nativeCoordinates, position, system, endpoint, parentNode, consumer,
-									messagesConsumer, errorConsumer, environment);
+									messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
 						} else if (resource.isResource()) {
 							logInfoStep(
 									"Listing resource  "
@@ -149,7 +150,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 									position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
 									environment);
 							createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
-									parentNode, consumer, messagesConsumer, errorConsumer, environment);
+									parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
+									messageSystemId);
 						} else
 							throw new GeboContentHandlerSystemException(
 									"The node=>" + resource.toString() + " is not a resource nor a folder");
@@ -185,13 +187,16 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param messagesConsumer         The user messages consumer
 	 * @param errorConsumer            Consumer for access errors
 	 * @param environment              The operating environment
+	 * @param messageModuleId          TODO
+	 * @param messageSystemId          TODO
 	 * @return A GDocumentReference representing the consumed document reference
 	 */
 	protected final GDocumentReference createAndConsumeDocumentReference(
 			List<ImplementativePositionObjectType> previusFolderCoordinates, ImplementativePositionObjectType resource,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
-			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+			Map<String, Object> environment, String messageModuleId, String messageSystemId)
+			throws GeboContentHandlerSystemException {
 		GVirtualFolder spaceFolder = root;
 		GProjectEndpoint projectEndpoint = endpoint;
 		String code = resource.getCode();
@@ -201,9 +206,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		Date modificationTimestamp = resource.getResourceModificationTime();
 		HashMap<String, Object> meta = resource.getResourceReferenceMetaInfos();
 		Long size = resource.getResourceFileSize();
-		String moduleId = getMessagingModuleId();
+
 		GDocumentReference dr = this.documentFactory.createWebDocumentReference(spaceFolder, projectEndpoint, code,
-				name, contentType, url, modificationTimestamp, meta, moduleId);
+				name, contentType, url, modificationTimestamp, meta, messageModuleId, messageSystemId);
 		dr.setFileSize(size);
 		consumer.accept(dr);
 		return dr;
@@ -244,12 +249,14 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param messagesConsumer  User messages consumer
 	 * @param errorConsumer     Consumer for access errors
 	 * @param environment       Operating environment
+	 * @param messageModuleId   TODO
+	 * @param messageSystemId   TODO
 	 */
 	protected final void consumeChilds(List<ImplementativePositionObjectType> nativeCoordinates,
 			PositionsCoordinateType position, SystemType system, EndpointType endpoint, GVirtualFolder parentNode,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
-			IGContentsAccessErrorConsumer errorConsumer, Map<String, Object> environment)
-			throws GeboContentHandlerSystemException {
+			IGContentsAccessErrorConsumer errorConsumer, Map<String, Object> environment, String messageModuleId,
+			String messageSystemId) throws GeboContentHandlerSystemException {
 		List<NativeCoordinatePointer> childs = null;
 		try {
 			childs = this.retrieveChilds(nativeCoordinates, position, system, endpoint, messagesConsumer, environment);
@@ -273,7 +280,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				if (nativeCoordinatePointer.child.isResource()) {
 					GDocumentReference docreference = createAndConsumeDocumentReference(
 							nativeCoordinatePointer.parentCoordinates, nativeCoordinatePointer.child, system, endpoint,
-							parentNode, consumer, messagesConsumer, errorConsumer, environment);
+							parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
+							messageSystemId);
 					if (LOGGER.isDebugEnabled() && docreference != null) {
 						final String msg = "Document reference generated=>" + docreference.getCode();
 						LOGGER.debug(msg);
@@ -288,7 +296,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 					}
 					PositionsCoordinateType childPosition = getPositionCoordinate(completeCoordinates);
 					consumeChilds(completeCoordinates, childPosition, system, endpoint, childFolder, consumer,
-							messagesConsumer, errorConsumer, environment);
+							messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
 				} else {
 					final String msg = "The node=>" + nativeCoordinatePointer.child.toString()
 							+ " is not a resource nor a folder";

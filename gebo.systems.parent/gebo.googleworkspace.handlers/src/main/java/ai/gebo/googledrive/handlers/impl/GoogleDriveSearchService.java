@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -79,6 +80,10 @@ public class GoogleDriveSearchService extends
 			GoogleDriveResultsExtractionData extractedData) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.GOOGLE_DRIVE_MODULE;
 	}
 
 }

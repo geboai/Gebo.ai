@@ -64,11 +64,13 @@ public interface IGRemoteVirtualFilesystemConsumingService<SystemType extends GC
 	 * @param messagesConsumer The consumer responsible for handling user-facing
 	 *                         messages.
 	 * @param errorConsumer    The consumer responsible for handling access errors during processing.
+	 * @param messageModuleId TODO
+	 * @param messageSystemId TODO
 	 * @throws GeboContentHandlerSystemException if any exception occurs during
 	 *                                           resource consumption.
 	 */
 	public void consumeAll(SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException;
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer, String messageModuleId, String messageSystemId) throws GeboContentHandlerSystemException;
 
 	/**
 	 * Retrieves a reference (handle) to a particular resource in the remote virtual

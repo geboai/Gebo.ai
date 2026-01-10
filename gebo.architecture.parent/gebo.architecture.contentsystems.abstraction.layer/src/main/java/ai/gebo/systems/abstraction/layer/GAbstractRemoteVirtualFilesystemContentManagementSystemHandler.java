@@ -112,7 +112,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 		consumer.accept(root);
 
 		// Delegate further consumption to the consuming service
-		consumingService.consumeAll(contentManagementConfig, endpoint, root, consumer, messagesConsumer, errorConsumer);
+		consumingService.consumeAll(contentManagementConfig, endpoint, root, consumer, messagesConsumer, errorConsumer,
+				getMessagingModuleId(), getMessagingSystemId());
 	}
 
 	// Constant keys used for caching

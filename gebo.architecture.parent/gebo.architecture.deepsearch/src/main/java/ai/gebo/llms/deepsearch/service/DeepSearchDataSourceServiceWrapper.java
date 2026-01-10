@@ -31,6 +31,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
+import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
@@ -43,6 +44,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
 	protected final DeepSearchDefaultConfig deepSearchDefaultConfig;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchDataSourceServiceWrapper.class);
+	protected final GeboComponentInfo serviceOriginComponent;
 
 	public DeepSearchDataSourceServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
@@ -56,6 +58,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		this.documentReferenceFactory = documentReferenceFactory;
 		this.ingestionHandler = ingestionHandler;
 		this.deepSearchDefaultConfig = deepSearchDefaultConfig;
+		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
+				searchService.getMessagingSystemId());
 	}
 
 	@Override
@@ -143,7 +147,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 				GDocumentReference documentReference = documentReferenceFactory.createReference(
 						actualSearchResultToLoad.getResultReference().getUri(),
 						actualSearchResultToLoad.getResultReference().getName(), contentType, extension,
-						actualSearchResultToLoad.getResultReference().getSize());
+						actualSearchResultToLoad.getResultReference().getSize(), searchService.getMessagingModuleId(),
+						searchService.getMessagingSystemId());
 				IngestionHandlerData ingested = ingestionHandler.handleContent(documentReference, is);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End loadDocumentFragments(..)");
@@ -182,18 +187,18 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
 			List<SearchResult> searches = searchService.search(query, searchableSystemMetaData,
 					maxSearchesReturnedPerSystem);
-			assign(searches, searchService.getId(), searchableSystemMetaData.getCode());
+			assign(searches, serviceOriginComponent, searchableSystemMetaData.getCode());
 			results.addAll(searches);
 		}
 
 		return results;
 	}
 
-	private void assign(List<SearchResult> searches, String serviceId, String configCode) {
+	private void assign(List<SearchResult> searches, GeboComponentInfo origin, String configCode) {
 		searches.forEach(x -> {
-			x.setSystemHandlerId(serviceId);
+			x.setOriginComponent(origin);
 			x.setSystemConfigurationCode(configCode);
-			assign(x.getChilds(), serviceId, configCode);
+			assign(x.getChilds(), origin, configCode);
 		});
 	}
 
@@ -219,10 +224,11 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,
 			CustomSearchResultExtractionDataType returned, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
-		return searchService.extractRelatedAnalisysReferences(
-				actualSearchResultRef.getActualSearchResult().getSystemHandlerId() + "<-->"
-						+ actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
-				returned);
+		return searchService
+				.extractRelatedAnalisysReferences(
+						actualSearchResultRef.getActualSearchResult().getOriginComponent().getCompleteComponentId()
+								+ "<-->" + actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
+						returned);
 	}
 
 }

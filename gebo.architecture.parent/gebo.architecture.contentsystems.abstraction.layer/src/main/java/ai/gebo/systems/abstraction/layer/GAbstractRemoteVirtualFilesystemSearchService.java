@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionResultDataType extends BaseSearchResultsExtractionDataType, SystemType extends GContentManagementSystem, EndpointType extends GVirtualFilesystemProjectEndpoint, ImplementativePositionObjectType extends AbstractNativePositionObject, PositionsCoordinateType extends AbstractNavigationCoordinates, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ResourceReferenceType>>
 		implements ISearchService<ExtractionResultDataType> {
-	private static final String SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR = "<->";
+
 	protected final GAbstractRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ImplementativePositionObjectType, PositionsCoordinateType, ResourceReferenceType> virtualFileSystemConsumingService;
 	protected final GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemType, EndpointType, ResourceReferenceType, ConsumingServiceType> contentManagementSystemHandler;
 
@@ -38,7 +38,8 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 		List<SystemType> configs = contentManagementSystemHandler.getConfigurations();
 		if (configs != null && !configs.isEmpty()) {
 			GContentManagementSystemType ctype = contentManagementSystemHandler.getHandledSystemType();
-			final String prologue = ctype.getCode() + SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
+			final String prologue = getMessagingModuleId() + "." + getMessagingSystemId()
+					+ SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
 			Optional<SystemType> found = configs.stream().filter(x -> (prologue + x.getCode()).equals(systemId))
 					.findFirst();
 			if (found.isEmpty())
@@ -92,7 +93,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 		PositionsCoordinateType navigationPosition;
 		try {
 			navigationPosition = virtualFileSystemConsumingService.toNavigationPosition(navigationReference);
-			SearchableSystemMetaData system = findSystemById(result.getSystemConfigurationCode());
+			SearchableSystemMetaData system = findSystemBySearchResult(result);
 			SystemType actualSystem = (SystemType) system.getSystemConfigurationReference();
 			Map<String, Object> environment = virtualFileSystemConsumingService.createEnvironment(actualSystem);
 			List<ImplementativePositionObjectType> nativeCoordinates = virtualFileSystemConsumingService

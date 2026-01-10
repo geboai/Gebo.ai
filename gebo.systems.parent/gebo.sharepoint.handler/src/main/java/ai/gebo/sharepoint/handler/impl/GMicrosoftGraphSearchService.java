@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -45,7 +46,7 @@ public class GMicrosoftGraphSearchService extends
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
-		query=CleanQueryUtil.cleanQuery(query);
+		query = CleanQueryUtil.cleanQuery(query);
 		if (system.getSystemConfigurationReference() instanceof GSharepointContentManagementSystem spSystem) {
 
 			boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
@@ -67,6 +68,11 @@ public class GMicrosoftGraphSearchService extends
 		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
 		data.setContentIsRelevant(consolidated.getContentIsRelevant());
 		return data;
+	}
+
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.SHAREPOINT_MODULE;
 	}
 
 	@Override

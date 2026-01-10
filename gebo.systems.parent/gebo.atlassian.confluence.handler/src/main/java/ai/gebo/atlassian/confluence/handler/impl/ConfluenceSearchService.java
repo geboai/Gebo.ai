@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -67,7 +68,10 @@ public class ConfluenceSearchService extends
 
 		return "Confluence Search";
 	}
-
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.ATLASSIAN_CONFLUENCE_MODULE;
+	}
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
@@ -85,7 +89,9 @@ public class ConfluenceSearchService extends
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
 							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
 
-					return encodeCloudResults(data, connection, contentApi);
+					List<SearchResult> list = encodeCloudResults(data, connection, contentApi);
+					setOriginOn(list);
+					return list;
 
 				}
 				case ONPREMISE7X: {
@@ -95,7 +101,9 @@ public class ConfluenceSearchService extends
 					OnPremiseConfluenceSearchPageResponseSearchResult data = isCql
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
 							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
-					return encodeOnPremiseResults(data, connection, contentApi);
+					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi);
+					setOriginOn(list);
+					return list;
 				}
 				}
 			} catch (GeboCryptSecretException e) {

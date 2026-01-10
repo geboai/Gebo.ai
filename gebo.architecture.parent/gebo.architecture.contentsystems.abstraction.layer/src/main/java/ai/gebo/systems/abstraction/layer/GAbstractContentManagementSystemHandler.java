@@ -150,7 +150,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		try {
 			GDocumentReference document = contentHandler.createReference(file, hierarchy.getCode(), hierarchy.getUri(),
-					null, endpoint, hierarchy, getMessagingModuleId());
+					null, endpoint, hierarchy, getMessagingModuleId(), getMessagingSystemId());
 			document.setParentVirtualFolderCode(hierarchy.getCode());
 			boolean manageArchive = endpoint.getOpenZips() != null && endpoint.getOpenZips();
 
@@ -322,7 +322,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 						"Analyzing archive:" + zipFile.getName() + " entry: " + entry.getName(),
 						"Trying opening archive and read contents"));
 				GDocumentReference document = contentHandler.createArchiveReference(originalFile, zipFile, entry,
-						baseFolder.getCode(), endpoint, baseFolder, getMessagingModuleId());
+						baseFolder.getCode(), endpoint, baseFolder, getMessagingModuleId(), getMessagingSystemId());
 				document.setParentVirtualFolderCode(baseFolder.getCode());
 				consumer.accept(document);
 				messagesConsumer.accept(GUserMessage.successMessage(
@@ -356,7 +356,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		try {
 			GDocumentReference document = contentHandler.createDeletedReference(file, hierarchy.getCode(),
-					hierarchy.getUri(), null, endpoint, getMessagingModuleId());
+					hierarchy.getUri(), null, endpoint, getMessagingModuleId(), getMessagingSystemId());
 			document.setParentVirtualFolderCode(hierarchy.getCode());
 
 			if (LOGGER.isDebugEnabled()) {

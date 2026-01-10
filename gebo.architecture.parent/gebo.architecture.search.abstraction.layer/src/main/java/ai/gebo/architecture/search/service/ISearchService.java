@@ -2,6 +2,7 @@ package ai.gebo.architecture.search.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchQuery;
@@ -10,11 +11,41 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.model.base.GeboComponentInfo;
 
 public interface ISearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType> {
+	public static final String SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR = "<->";
+
 	public boolean isEnabled() throws SearchServiceException;
 
+	public default SearchableSystemMetaData findSystemBySearchResult(SearchResult result)
+			throws SearchServiceException {
+		final String prologue = getMessagingModuleId() + "." + getMessagingSystemId()
+				+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
+		final String systemId = getMessagingModuleId() + "." + getMessagingSystemId()
+				+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR + result.getSystemConfigurationCode();
+		List<SearchableSystemMetaData> systems = getSearchableSystems();
+		if (systems == null || systems.isEmpty()) {
+			return null;
+		}
+		Optional<SearchableSystemMetaData> found = systems.stream()
+				.filter(x -> (prologue + x.getCode()).equals(systemId)).findFirst();
+		if (found.isEmpty()) {
+			return null;
+		} else {
+			found.get();
+		}
+		return null;
+
+	}
+
 	public SearchableSystemMetaData findSystemById(String systemId) throws SearchServiceException;
+
+	public String getMessagingModuleId();
+
+	public default String getMessagingSystemId() {
+		return getId();
+	}
 
 	public String getId();
 
@@ -48,5 +79,18 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			CustomSearchResultExtractionDataType extractedData);
+
+	public default void setOriginOn(SearchResult sr) {
+		if (sr != null) {
+			sr.setOriginComponent(new GeboComponentInfo(getMessagingModuleId(), getDescription()));
+			setOriginOn(sr.getChilds());
+		}
+	}
+
+	public default void setOriginOn(List<SearchResult> sr) {
+		if (sr != null) {
+			sr.forEach(this::setOriginOn);
+		}
+	}
 
 }
