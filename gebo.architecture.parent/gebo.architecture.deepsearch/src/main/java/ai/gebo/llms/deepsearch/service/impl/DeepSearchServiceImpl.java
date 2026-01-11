@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -102,6 +103,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	protected final IGRagChatService ragChatService;
 	protected final IGChatService chatService;
 	protected final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	protected final IGeboThreadManager threadManager;
 
 	final ChatProfilesRepository chatProfilesRepository;
 
@@ -119,7 +121,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
 			DeepSearchDataSourceDocumentResultRepository dataSourceDocumentResultRepository,
 			DeepSearchDataSourceResponseRepository dataSourceResponseRepository,
-			ChatProfilesRepository chatProfilesRepository) {
+			ChatProfilesRepository chatProfilesRepository, IGeboThreadManager threadManager) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.chatProfilesRepository = chatProfilesRepository;
@@ -136,27 +138,11 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		this.ragChatService = ragChatService;
 		this.dataSourceResponseRepository = dataSourceResponseRepository;
 		this.dataSourceDocumentResultRepository = dataSourceDocumentResultRepository;
-		int core = 4;
-		int max = 8;
-		int queueSize = 200;
+		this.threadManager = threadManager;
 
-		ThreadFactory tf = new ThreadFactory() {
-			final AtomicInteger n = new AtomicInteger(1);
+		this.deepSearchExecutor = threadManager.getExecutorService();
 
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread t = new Thread(r, "deep-search-" + n.getAndIncrement());
-				t.setDaemon(true);
-				return t;
-			}
-		};
-
-		this.deepSearchExecutor = new ThreadPoolExecutor(core, max, 60L, TimeUnit.SECONDS,
-				new ArrayBlockingQueue<>(queueSize), tf,
-				// Se la coda è piena: o rifiuti (fail-fast) oppure "caller runs"
-				new ThreadPoolExecutor.AbortPolicy());
-
-		this.deepSearchScheduler = Schedulers.fromExecutorService(deepSearchExecutor);
+		this.deepSearchScheduler = threadManager.getScheduler();
 	}
 
 	@PreDestroy

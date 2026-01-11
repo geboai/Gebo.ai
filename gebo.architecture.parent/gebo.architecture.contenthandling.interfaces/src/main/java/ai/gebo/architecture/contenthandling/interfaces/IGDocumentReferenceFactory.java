@@ -104,5 +104,7 @@ public interface IGDocumentReferenceFactory {
 
 	public GDocumentReference createReference(String uri, String name, String contentType, String extension, Long size, String messageModuleId, String messagingComponentId)
 			throws GeboContentHandlerSystemException;
+	
+	
 
 }

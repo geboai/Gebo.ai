@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkType;
@@ -32,12 +33,16 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
@@ -55,6 +60,7 @@ public class DocumentsChunkServiceImpl
 	private final IGGeboConfigService configService;
 	private final IGAIDocumentMetaDataEnricher metaDataEnricher;
 	private final IGDocumentReferenceIngestionHandler ingestionHandler;
+	private final IGDocumentReferenceFactory docReferenceFactory;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceImpl.class);
@@ -62,19 +68,22 @@ public class DocumentsChunkServiceImpl
 
 	public DocumentsChunkServiceImpl(IDocumentsCacheService cacheService, IGGeboConfigService configService,
 			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
-			IGDocumentReferenceIngestionHandler ingestionHandler, IGPersistentObjectManager persistentObjectManager) {
+			IGDocumentReferenceIngestionHandler ingestionHandler, IGDocumentReferenceFactory docReferenceFactory,
+			IGPersistentObjectManager persistentObjectManager) {
 		super(chunkOperationRepository, ttlCacheIt);
 		this.cacheService = cacheService;
 		this.configService = configService;
 		this.ingestionHandler = ingestionHandler;
 		this.persistentObjectManager = persistentObjectManager;
 		this.metaDataEnricher = metaDataEnricher;
+		this.docReferenceFactory = docReferenceFactory;
 	}
 
 	@Override
-	public DocumentChunkingResponse getChunkSet(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData, long tokensPerChunkSet) throws DocumentCacheAccessException, IOException,
-			GeboContentHandlerSystemException, GeboIngestionException {
+	public DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
+			GeboIngestionException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getChunk(" + document.getCode() + ",...)");
 		}
@@ -143,12 +152,28 @@ public class DocumentsChunkServiceImpl
 		final JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 		response.setEmpty(true);
 		// We ask the cacheService to stream the document
-		try (InputStream is = this.cacheService.streamDocument(document)) {
-			if (is != null) {
+		TypedInputStream is = null;
+		try {
+			is = this.cacheService.streamDocument(document);
+
+			if (is != null && is.getInputStream() != null) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Doing raw ingestion");
 				}
-				IngestionHandlerData content = ingestionHandler.handleContent(document, is);
+
+				IngestionHandlerData content = null;
+				if (document instanceof GDocumentReference dr) {
+					content = ingestionHandler.handleContent(dr, is.getInputStream());
+				} else if (document instanceof SearchResult searchResult) {
+
+					GDocumentReference fakeDr = docReferenceFactory.createReference(searchResult.getCode(),
+							searchResult.getCode(), is.getContentType(), is.getExtension(), null,
+							document.getOriginComponent().getMessagingModuleId(),
+							document.getOriginComponent().getMessagingComponentId());
+					content = ingestionHandler.handleContent(fakeDr, is.getInputStream());
+				} else
+					throw new RuntimeException("Unknown reference object type");
+
 				if (!content.isUnmanagedContent()) {
 					// if we have an handled content from the ingestion layer we proceed
 					Stream<Document> docsStream = content.getStream();
@@ -170,22 +195,23 @@ public class DocumentsChunkServiceImpl
 							MetaDataHeaderInfos metaDataHeader = null;
 							// We calculate metaDataHeader if enrichWithMetaData is true (it will be the
 							// same metadata for all other chunks)
-							if (enrichWithMetaData && metaDataHeader == null && doc.isText()) {
+							if (enrichWithMetaData && metaDataHeader == null && doc.isText()
+									&& document instanceof GDocumentReference dr) {
 								try {
-									GProject project = document.getParentProjectCode() != null
+									GProject project = dr.getParentProjectCode() != null
 											? persistentObjectManager.findById(GProject.class,
-													document.getParentProjectCode())
+													dr.getParentProjectCode())
 											: null;
-									GKnowledgeBase knowledgeBase = document.getRootKnowledgebaseCode() != null
+									GKnowledgeBase knowledgeBase = dr.getRootKnowledgebaseCode() != null
 											? persistentObjectManager.findById(GKnowledgeBase.class,
-													document.getRootKnowledgebaseCode())
+													dr.getRootKnowledgebaseCode())
 											: null;
-									GProjectEndpoint endpoint = document.getProjectEndpointReference() != null
-											? persistentObjectManager.findByReference(
-													document.getProjectEndpointReference(), GProjectEndpoint.class)
+									GProjectEndpoint endpoint = dr.getProjectEndpointReference() != null
+											? persistentObjectManager.findByReference(dr.getProjectEndpointReference(),
+													GProjectEndpoint.class)
 											: null;
 
-									metaDataHeader = this.metaDataEnricher.createMetaDataHeader(List.of(doc), document,
+									metaDataHeader = this.metaDataEnricher.createMetaDataHeader(List.of(doc), dr,
 											knowledgeBase, project, endpoint);
 								} catch (GeboPersistenceException e) {
 									exceptions.add(e);
@@ -299,6 +325,11 @@ public class DocumentsChunkServiceImpl
 
 				}
 			}
+		} finally {
+			try {
+				is.getInputStream().close();
+			} catch (Throwable t) {
+			}
 		}
 		if (LOGGER.isDebugEnabled())
 
@@ -310,8 +341,8 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getNextChunkSet(GDocumentReference document, String chunkRequestId, String chunkId)
-			throws DocumentCacheAccessException, IOException {
+	public DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
+			String chunkId) throws DocumentCacheAccessException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
 		}
@@ -370,10 +401,10 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse prepareChunks(GDocumentReference document,
+	public DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException {
+			GeboIngestionException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
@@ -386,8 +417,9 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getCachedChunkSet(GDocumentReference document) throws DocumentCacheAccessException,
-			IOException, GeboContentHandlerSystemException, GeboIngestionException {
+	public DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document)
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
+			GeboIngestionException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
 		}

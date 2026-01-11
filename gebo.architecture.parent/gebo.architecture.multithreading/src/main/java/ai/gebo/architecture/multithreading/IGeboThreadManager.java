@@ -6,44 +6,57 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.multithreading;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+
+import reactor.core.scheduler.Scheduler;
 
 /**
- * {@code IGeboThreadManager} is an interface for managing the execution of runnable tasks.
- * It provides methods to execute tasks and to monitor running tasks.
+ * {@code IGeboThreadManager} is an interface for managing the execution of
+ * runnable tasks. It provides methods to execute tasks and to monitor running
+ * tasks.
  * 
  * Gebo.ai comment agent
  */
 public interface IGeboThreadManager {
 
-    /**
-     * Executes the given runnable task.
-     *
-     * @param runnable An instance of {@code IGRunnable} to be executed.
-     */
-    public void run(IGRunnable runnable);
+	/**
+	 * Executes the given runnable task.
+	 *
+	 * @param runnable An instance of {@code IGRunnable} to be executed.
+	 */
+	public void run(IGRunnable runnable);
 
-    /**
-     * Executes the given runnable task with a specified callback which is called 
-     * after the task execution ends.
-     *
-     * @param <RunnableType> The type of runnable task that extends {@code IGRunnable}.
-     * @param runnable The runnable task to be executed.
-     * @param callback The callback to be executed at the end of the runnable.
-     */
-    public <RunnableType extends IGRunnable> void run(RunnableType runnable,
-            IGEndOfRunningCallback<RunnableType> callback);
+	/**
+	 * Executes the given runnable task with a specified callback which is called
+	 * after the task execution ends.
+	 *
+	 * @param <RunnableType> The type of runnable task that extends
+	 *                       {@code IGRunnable}.
+	 * @param runnable       The runnable task to be executed.
+	 * @param callback       The callback to be executed at the end of the runnable.
+	 */
+	public <RunnableType extends IGRunnable> void run(RunnableType runnable,
+			IGEndOfRunningCallback<RunnableType> callback);
 
-    /**
-     * Retrieves a list of currently running monitorable tasks.
-     *
-     * @return A list of {@code IGUserMonitorableRunnable} that are currently being executed.
-     */
-    public List<IGUserMonitorableRunnable> getRunningMonitorableTask();
+	/**
+	 * Retrieves a list of currently running monitorable tasks.
+	 *
+	 * @return A list of {@code IGUserMonitorableRunnable} that are currently being
+	 *         executed.
+	 */
+	public List<IGUserMonitorableRunnable> getRunningMonitorableTask();
+	/*******************************************************************
+	 * Reactor scheduler for IO or blocking executions
+	 * @return
+	 */
+	public Scheduler getBoundedElastic();
+	
+	public ExecutorService getExecutorService();
+	
+	public Scheduler getScheduler();
+
 }

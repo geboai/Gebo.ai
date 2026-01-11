@@ -6,13 +6,15 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.multithreading.config;
 
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import ai.gebo.architecture.multithreading.GeboThreadManagerImpl;
 import ai.gebo.architecture.multithreading.IGThreadPoolConsumer;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Configuration class for setting up a thread pool executor.
@@ -51,6 +55,12 @@ public class ThreadPoolConfig {
 
 	// Capacity of the task queue
 	Integer queueCapacity = 50;
+
+	int boundedElasticSize = 10;
+
+	int boundedElasticMaxQueue = 10000;
+
+	int executionServiceCore = 8, executionServiceMax = 16, executionServiceQueueSize = 2000;
 
 	/**
 	 * Bean for creating a singleton instance of the thread manager.
@@ -108,7 +118,26 @@ public class ThreadPoolConfig {
 		executor.initialize(); // Initializes the thread pool
 
 		LOGGER.info("End threading pool configuration");
-		return new GeboThreadManagerImpl(executor);
+		Scheduler boundedElastic = Schedulers.newBoundedElastic(boundedElasticSize, // max thread
+				boundedElasticMaxQueue, // max task in coda
+				"blocking-io-bounded-elastic");
+		ThreadFactory tf = new ThreadFactory() {
+			final AtomicInteger n = new AtomicInteger(1);
+
+			@Override
+			public Thread newThread(Runnable r) {
+				Thread t = new Thread(r, "deep-search-" + n.getAndIncrement());
+				t.setDaemon(true);
+				return t;
+			}
+		};
+
+		ThreadPoolExecutor executorService = new ThreadPoolExecutor(executionServiceCore, executionServiceMax, 60L,
+				TimeUnit.SECONDS, new ArrayBlockingQueue<>(executionServiceQueueSize), tf,
+				new ThreadPoolExecutor.AbortPolicy() // meglio in reactive
+		);
+		Scheduler scheduler = Schedulers.fromExecutorService(executorService);
+		return new GeboThreadManagerImpl(executor, boundedElastic, executorService, scheduler);
 	}
 
 	/**

@@ -10,5 +10,7 @@ public class DocumentCacheEntry extends AbstractCachedEntry {
 
 	private String jsonGeboDocumentName = null;
 	private String binaryDocumentName = null;
+	private String extension = null;
+	private String contentType = null;
 
 }

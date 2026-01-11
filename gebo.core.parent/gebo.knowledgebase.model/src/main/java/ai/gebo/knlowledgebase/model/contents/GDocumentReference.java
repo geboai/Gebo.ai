@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.model.base.GeboComponentInfo;
-import ai.gebo.model.base.IGComponentOriginatedData;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -24,7 +24,7 @@ import lombok.Data;
  */
 @Document
 @Data
-public class GDocumentReference extends GAbstractVirtualFilesystemObject implements IGComponentOriginatedData {
+public class GDocumentReference extends GAbstractVirtualFilesystemObject implements IGComponentOriginatedDocument {
 
 	/**
 	 * Serial version UID for serialization.

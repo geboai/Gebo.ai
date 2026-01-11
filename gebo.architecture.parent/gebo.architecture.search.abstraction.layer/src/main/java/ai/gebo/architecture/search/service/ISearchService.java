@@ -12,6 +12,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.model.base.TypedInputStream;
 
 public interface ISearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType> {
 	public static final String SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR = "<->";

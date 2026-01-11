@@ -6,21 +6,22 @@ import java.util.List;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
 public interface IDocumentsChunkService {
-	DocumentChunkingResponse prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+	DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document, List<AbstractChunkingSpecs> chunkingSpecs,
 			boolean enrichWithMetaData, long tokensPerChunkSet)
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException, SearchServiceException;
+
+	DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
-	DocumentChunkingResponse getCachedChunkSet(GDocumentReference document)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
-
-	DocumentChunkingResponse getChunkSet(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+	DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document, List<AbstractChunkingSpecs> chunkingSpecs,
 			boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException, SearchServiceException;
 
-	DocumentChunkingResponse getNextChunkSet(GDocumentReference document, String chunkRequestId, String nextChunkId)
+	DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId, String nextChunkId)
 			throws DocumentCacheAccessException, IOException;
 }

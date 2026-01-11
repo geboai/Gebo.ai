@@ -17,10 +17,10 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
-import ai.gebo.architecture.search.service.TypedInputStream;
 import ai.gebo.knlowledgebase.model.projects.GVirtualFilesystemProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 import ai.gebo.systems.abstraction.layer.model.AbstractNavigationCoordinates;
@@ -106,7 +106,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			final InputStream stream = virtualFileSystemConsumingService.streamResource(actualSystem, remoteReference,
 					environment);
 			final TypedInputStream outStream = TypedInputStream.of(stream,
-					nativeReference != null ? nativeReference.getResourceContentType() : null);
+					nativeReference != null ? nativeReference.getResourceContentType() : null, null);
 			return outStream;
 		} catch (GeboContentHandlerSystemException e) {
 			throw new SearchServiceException("Exception in loadSearchResult(..)", e);
