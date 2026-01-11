@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.documents.cache.config;
 
@@ -21,34 +18,37 @@ import lombok.Data;
 /**
  * AI generated comments
  * 
- * Configuration class for the Gebo document cache and chunking system.
- * This class defines properties that control the behavior of the vectorization process,
- * including message size limits and receiver configurations.
+ * Configuration class for the Gebo document cache and chunking system. This
+ * class defines properties that control the behavior of the vectorization
+ * process, including message size limits and receiver configurations.
  */
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.vectorizator.config")
 @Data
 public class GeboDocumentsCacheConfig {
-	/** Maximum cumulative size of messages in bytes before processing (default: 1MB) */
+	/**
+	 * Maximum cumulative size of messages in bytes before processing (default: 1MB)
+	 */
 	long maximumMessagesCumulatedBytesThreshold = 1024 * 1024;
-	
-	
-	
-	/** Configuration for the vectorization message receiver with timeout capabilities */
+	int reactiveDocumentsConcurrency = 4;
+
+	/**
+	 * Configuration for the vectorization message receiver with timeout
+	 * capabilities
+	 */
 	TimedOutMessageReceiverFactoryConfig documentChunkerReceiverConfig = new TimedOutMessageReceiverFactoryConfig();
 
 	/**
-	 * Default constructor that initializes the configuration objects with default values.
-	 * Sets up pool cardinality, threading behavior, timeout values, and flush thresholds.
+	 * Default constructor that initializes the configuration objects with default
+	 * values. Sets up pool cardinality, threading behavior, timeout values, and
+	 * flush thresholds.
 	 */
 	public GeboDocumentsCacheConfig() {
-		
+
 		documentChunkerReceiverConfig.setPoolCardinality(1);
 		documentChunkerReceiverConfig.setUseSenderThread(true);
 		documentChunkerReceiverConfig.setTimeout(5000l);
 		documentChunkerReceiverConfig.setFlushThreshold(10);
 	}
-
-	
 
 }

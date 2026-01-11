@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
+import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkType;
@@ -31,6 +32,7 @@ import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.search.model.SearchResult;
@@ -49,6 +51,10 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 import jakarta.el.MethodNotFoundException;
+import reactor.core.Exceptions;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 @Service
 
@@ -56,20 +62,24 @@ public class DocumentsChunkServiceImpl
 		extends AbstractCacheEntryCleanupService<DocumentChunkOperation, DocumentChunkOperationRepository>
 		implements IDocumentsChunkService {
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
+	private final GeboDocumentsCacheConfig cacheConfig;
 	private final IDocumentsCacheService cacheService;
 	private final IGGeboConfigService configService;
 	private final IGAIDocumentMetaDataEnricher metaDataEnricher;
 	private final IGDocumentReferenceIngestionHandler ingestionHandler;
 	private final IGDocumentReferenceFactory docReferenceFactory;
 	private final IGPersistentObjectManager persistentObjectManager;
+	private final IGeboThreadManager geboThreadManager;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceImpl.class);
 	private final static long ttlCacheIt = 10 * 60 * 1000;// tokenizing request has 5 minute validity
+	private final Scheduler chunkingScheduler;
 
 	public DocumentsChunkServiceImpl(IDocumentsCacheService cacheService, IGGeboConfigService configService,
 			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
 			IGDocumentReferenceIngestionHandler ingestionHandler, IGDocumentReferenceFactory docReferenceFactory,
-			IGPersistentObjectManager persistentObjectManager) {
+			IGeboThreadManager geboThreadManager, IGPersistentObjectManager persistentObjectManager,
+			GeboDocumentsCacheConfig cacheConfig) {
 		super(chunkOperationRepository, ttlCacheIt);
 		this.cacheService = cacheService;
 		this.configService = configService;
@@ -77,13 +87,16 @@ public class DocumentsChunkServiceImpl
 		this.persistentObjectManager = persistentObjectManager;
 		this.metaDataEnricher = metaDataEnricher;
 		this.docReferenceFactory = docReferenceFactory;
+		this.geboThreadManager = geboThreadManager;
+		this.chunkingScheduler = geboThreadManager.getBoundedElastic();
+		this.cacheConfig = cacheConfig;
 	}
 
 	@Override
 	public DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException, SearchServiceException {
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
+			SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getChunk(" + document.getCode() + ",...)");
 		}
@@ -403,8 +416,8 @@ public class DocumentsChunkServiceImpl
 	@Override
 	public DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
-			GeboIngestionException, SearchServiceException {
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
+			SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
@@ -435,6 +448,49 @@ public class DocumentsChunkServiceImpl
 		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");
 
 		throw new DocumentCacheAccessException("No existing cached chunks");
+	}
+
+	public Flux<DocumentChunk> streamChunks(IGComponentOriginatedDocument document,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+		return this.streamChunksSingle(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet);
+	}
+
+	private Flux<DocumentChunk> streamChunksSingle(IGComponentOriginatedDocument document,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+		return Mono.fromCallable(
+				() -> unchecked(() -> prepareChunks(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet)))
+				.subscribeOn(chunkingScheduler).flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
+					String nextId = resp.getNextChunkSetId();
+					if (nextId == null)
+						return Mono.empty();
+
+					return Mono.fromCallable(() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId)))
+							.subscribeOn(chunkingScheduler);
+				}).concatMap(resp -> {
+					var set = resp.getCurrentChunkSet();
+					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
+					return Flux.fromIterable(chunks);
+				}));
+	}
+
+	public Flux<DocumentChunk> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
+		return Flux.fromIterable(documents).flatMap(
+				doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet), docConcurrency);
+	}
+
+	@FunctionalInterface
+	private interface CheckedSupplier<T> {
+		T get() throws Exception;
+	}
+
+	private static <T> T unchecked(CheckedSupplier<T> s) {
+		try {
+			return s.get();
+		} catch (Exception e) {
+			throw Exceptions.propagate(e);
+		}
 	}
 
 }

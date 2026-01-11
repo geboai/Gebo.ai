@@ -14,12 +14,21 @@ import java.util.UUID;
 
 import org.apache.commons.io.file.PathUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.env.Environment;
 
+import ai.gebo.architecture.documents.cache.model.DocumentChunk;
+import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
+import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.integration.tests.AbstractVendorSetupAndUseTest;
 import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.googlesearch.handler.impl.GoogleSearchServiceImpl;
 import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
@@ -27,15 +36,24 @@ import ai.gebo.monolithic.api.client.model.DeepSearchRequest;
 import ai.gebo.monolithic.api.client.model.DeepSearchResponse;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
+import reactor.core.publisher.Flux;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
-
+	@Autowired IGRuntimeBinder runtimeBinder;
 	@Test
 	public void runDeepSearchTest() throws IOException {
 		TestGeboSystemInfo systemInfo = executeSystemSetupBySecret();
 		ApiClient apiClient = createApiClient(systemInfo.getHost(), systemInfo.getPort(),
 				systemInfo.getSecurityHeader());
+		
+		//GoogleSearchServiceImpl googleSearch = runtimeBinder.getImplementationOf(GoogleSearchServiceImpl.class);
+		//SearchableSystemMetaData system = googleSearch.getSearchableSystems().get(0);
+		//SearchQuery searchQuery=new SearchQuery();
+		//searchQuery.setQueryText("Latest on ukraine war");
+		//List<SearchResult> entries = googleSearch.search(searchQuery, system, 10);
+		//IDocumentsChunkService cacheChunkService=runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
+		
 		GeboDeepSearchControllerApi deepSearchApi = new GeboDeepSearchControllerApi(apiClient);
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 
