@@ -28,6 +28,7 @@ import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkType;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.model.DocumentChunksSet;
+import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
@@ -88,7 +89,7 @@ public class DocumentsChunkServiceImpl
 		this.metaDataEnricher = metaDataEnricher;
 		this.docReferenceFactory = docReferenceFactory;
 		this.geboThreadManager = geboThreadManager;
-		this.chunkingScheduler = geboThreadManager.getBoundedElastic();
+		this.chunkingScheduler = geboThreadManager.getScheduler();
 		this.cacheConfig = cacheConfig;
 	}
 
@@ -450,12 +451,12 @@ public class DocumentsChunkServiceImpl
 		throw new DocumentCacheAccessException("No existing cached chunks");
 	}
 
-	public Flux<DocumentChunk> streamChunks(IGComponentOriginatedDocument document,
+	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
 		return this.streamChunksSingle(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet);
 	}
 
-	private Flux<DocumentChunk> streamChunksSingle(IGComponentOriginatedDocument document,
+	private Flux<IDocumentChunkWithRef> streamChunksSingle(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
 		return Mono.fromCallable(
 				() -> unchecked(() -> prepareChunks(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet)))
@@ -469,15 +470,18 @@ public class DocumentsChunkServiceImpl
 				}).concatMap(resp -> {
 					var set = resp.getCurrentChunkSet();
 					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
-					return Flux.fromIterable(chunks);
+					var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
+					return Flux.fromIterable(mapped);
 				}));
 	}
 
-	public Flux<DocumentChunk> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+	public Flux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
 		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
-		return Flux.fromIterable(documents).flatMap(
-				doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet), docConcurrency);
+		return Flux.fromIterable(documents)
+				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet),
+						docConcurrency)
+				.subscribeOn(chunkingScheduler);
 	}
 
 	@FunctionalInterface

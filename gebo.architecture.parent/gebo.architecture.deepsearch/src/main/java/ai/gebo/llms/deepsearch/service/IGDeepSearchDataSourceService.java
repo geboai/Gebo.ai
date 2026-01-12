@@ -14,6 +14,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import reactor.core.publisher.Flux;
 
 public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
 	public DataSourceExecutionTime getExecutionTime();
@@ -29,16 +30,18 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * Returns true if this handler is enabled for the actual request
 	 * 
 	 * @return
-	 * @throws SearchServiceException 
+	 * @throws SearchServiceException
 	 */
-	public boolean isEnabled(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request) throws SearchServiceException;
+	public boolean isEnabled(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
+			DeepSearchRequest request) throws SearchServiceException;
 
 	/******************************************************************
 	 * Returns a description of the data source
 	 * 
 	 * @return
 	 */
-	public String getDescription(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request);
+	public String getDescription(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
+			DeepSearchRequest request);
 
 	/****************************************************************
 	 * Creates an initial state for iterative process steps
@@ -46,11 +49,13 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @param request
 	 * @return
 	 */
-	public StateType createInitialState(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request);
+	public StateType createInitialState(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
+			DeepSearchRequest request);
 
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
+	 * 
 	 * @param request
 	 * @param pastSystemsResponses
 	 * @param state
@@ -58,13 +63,15 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @param history
 	 * 
 	 * @return
-	 * @throws LLMConfigException 
-	 * @throws IOException 
-	 * @throws GeboContentHandlerSystemException 
-	 * @throws GeboIngestionException 
-	 * @throws SearchServiceException 
+	 * @throws LLMConfigException
+	 * @throws IOException
+	 * @throws GeboContentHandlerSystemException
+	 * @throws GeboIngestionException
+	 * @throws SearchServiceException
 	 */
-	public AbstractDeepSearchEvent nextStep(IGConfigurableChatModel chatModel,DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, StateType state, DeepSearchState deepSearchSharedState) throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
+	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
+			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, StateType state,
+			DeepSearchState deepSearchSharedState) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException;
 
 }

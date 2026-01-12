@@ -19,12 +19,12 @@ import ai.gebo.model.base.GBaseObject;
 import reactor.core.publisher.Flux;
 
 public interface IGDeepSearchService {
-	public Flux<AbstractDeepSearchEvent> searchAsync(DeepSearchRequest request) throws LLMConfigException;
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException;
 
-	public Flux<AbstractDeepSearchEvent> searchAsync(GeboChatRequest request) throws LLMConfigException;
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request) throws LLMConfigException;
 
 	public default DeepSearchResponse search(DeepSearchRequest request) throws LLMConfigException {
-		AbstractDeepSearchEvent last = this.searchAsync(request).blockLast();
+		AbstractDeepSearchEvent last = this.streamDeepSearch(request).blockLast();
 		if (last instanceof DeepSearchProcessedEvent result) {
 			return result.getOutputData();
 		} else

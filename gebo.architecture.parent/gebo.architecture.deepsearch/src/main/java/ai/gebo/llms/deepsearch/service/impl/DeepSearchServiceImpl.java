@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Flow;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -151,24 +152,23 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	}
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> searchAsync(DeepSearchRequest request) throws LLMConfigException {
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return Flux.defer(() -> {
+
+		return Mono.fromCallable(() -> {
+			// Questa lambda gira sul deepSearchScheduler (subscribeOn sotto),
+			// quindi se qui usi SecurityContextHolder va bene (thread "tuo")
+			var sc = SecurityContextHolder.createEmptyContext();
+			sc.setAuthentication(auth);
+			SecurityContextHolder.setContext(sc);
 
 			try {
-
-				var sc = SecurityContextHolder.createEmptyContext();
-				sc.setAuthentication(auth);
-				SecurityContextHolder.setContext(sc);
 				final UserInfos userInfos = securityService.getCurrentUser();
 				request.setUsername(userInfos.getUsername());
-
-				// NB: qui sei ancora in blocking code (ok, ma verrà eseguito sul
-				// deepSearchScheduler grazie a subscribeOn)
 				requestsRepository.save(request);
 
-				final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
-				final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
+				final DeepSearchConfig stored = configRepository.findByDefaultConfig(true);
+				final DeepSearchConfig configuration = stored != null ? stored : defaultDeepsearchConfig;
 
 				final List<GKnowledgeBase> knowledgeBases = knowledgeBaseRepository
 						.findAllById(request.getKnowledgeBases());
@@ -176,96 +176,99 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				final List<IGConfigurableEmbeddingModel> embeddingModels = getEmbeddingModelsListByKnowledgeBases(
 						knowledgeBases);
 
-				final GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
-				IGConfigurableChatModel finalChatModel;
+				final IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
 
-				finalChatModel = getChatModel(chatModelReference);
-
-				if (finalChatModel == null) {
-					DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
-					errorEvent.setInputData(request);
-					errorEvent.setOutputData(GUserMessage.errorMessage("No chat model defined",
+				if (chatModel == null) {
+					return Prepared.error(request, GUserMessage.errorMessage("No chat model defined",
 							"No chat model configured for deep search nor default chat model is configured"));
-					return Flux.just(errorEvent);
 				}
 
-				final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
-				final DeepSearchState state = new DeepSearchState();
-				final List<AbstractDeepSearchEvent> history = new ArrayList<>();
-				final AtomicBoolean cancelled = new AtomicBoolean(false);
+				return Prepared.ok(request, configuration, userInfos, embeddingModels, chatModel);
 
-				return Flux.<AbstractDeepSearchEvent>create(sink -> {
-					sink.onCancel(() -> cancelled.set(true));
-					sink.onDispose(() -> cancelled.set(true));
-
-					try {
-						AbstractDeepSearchEvent step;
-						while (!cancelled.get()) {
-
-							step = worker.nextStep(request, history, state, configuration, userInfos, embeddingModels,
-									finalChatModel);
-
-							if (step == null) {
-								sink.complete();
-								return;
-							}
-
-							sink.next(step);
-							if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
-								if (dsDocumentEvent.getOutputData() != null
-										&& dsDocumentEvent.getOutputData().getAnalyzedResult() != null
-										&& dsDocumentEvent.getOutputData().getAnalyzedResult().trim().length() > 0
-										&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
-												|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
-									dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
-
-								}
-							}
-							if (step instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessedEvent) {
-								if (dataSourceProcessedEvent.getOutputData() != null
-										&& dataSourceProcessedEvent.getOutputData().getResponse() != null
-										&& dataSourceProcessedEvent.getOutputData().getResponse().trim().length() > 0
-										&& (dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty() == null
-												|| !dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty())) {
-									dataSourceResponseRepository.save(dataSourceProcessedEvent.getOutputData());
-
-								}
-							}
-							if (step instanceof DeepSearchDocumentEvent documentEvent) {
-								history.add(step);
-								stepsRepository.save(documentEvent.getOutputData());
-							}
-							if (step instanceof DeepSearchProcessedEvent doneEvent) {
-								responseRepository.save(doneEvent.getOutputData());
-							}
-							if (step instanceof DeepSearchProcessedEvent || step instanceof DeepSearchErrorEvent) {
-								sink.complete();
-								return;
-							}
-						}
-
-						// se cancellato: chiudi “pulito” (niente interrupt, niente error)
-						sink.complete();
-
-					} catch (Throwable t) {
-						// Se vuoi: qui puoi “declassare” eccezioni da interrupt a complete() (ma con
-						// questa versione non dovrebbero più arrivare)
-						LOGGER.error("Error in searchAsync(...)", t);
-						sink.error(t);
-					}
-				}, OverflowStrategy.BUFFER);
-			} catch (Throwable th) {
-				LOGGER.error("Error in searchAsync(...) main loop", th);
-				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
-				errorEvent.setInputData(request);
-				errorEvent.setOutputData(GUserMessage.errorMessage("Exception executing Deep search", th));
-				return Flux.just(errorEvent);
 			} finally {
 				SecurityContextHolder.clearContext();
 			}
-		})
+		}).subscribeOn(deepSearchScheduler) // tutta la preparazione è blocking => fuori dall'event-loop
+				.flatMapMany(prep -> {
+					if (prep.errorEvent != null)
+						return Flux.just(prep.errorEvent);
 
-				.subscribeOn(deepSearchScheduler);
+					final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+
+					Flux<AbstractDeepSearchEvent> flow;
+					try {
+						flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
+								prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,deepSearchScheduler);
+					} catch (Throwable e) {
+						DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
+						errorEvent.setInputData(request);
+						errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
+						flow = Flux.just(errorEvent);
+					}
+
+					// IMPORTANTISSIMO: i tuoi repository.save(...) sono blocking.
+					// Quindi forziamo che i doOnNext girino sul deepSearchScheduler
+					return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+							.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
+				});
+	}
+
+	private void persistSideEffects(AbstractDeepSearchEvent step) {
+		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
+			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalyzedResult() != null
+					&& !dsDocumentEvent.getOutputData().getAnalyzedResult().trim().isEmpty()
+					&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
+							|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
+				dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
+			}
+		}
+		if (step instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessedEvent) {
+			if (dataSourceProcessedEvent.getOutputData() != null
+					&& dataSourceProcessedEvent.getOutputData().getResponse() != null
+					&& !dataSourceProcessedEvent.getOutputData().getResponse().trim().isEmpty()
+					&& (dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty() == null
+							|| !dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty())) {
+				dataSourceResponseRepository.save(dataSourceProcessedEvent.getOutputData());
+			}
+		}
+		if (step instanceof DeepSearchDocumentEvent documentEvent) {
+			stepsRepository.save(documentEvent.getOutputData());
+		}
+		if (step instanceof DeepSearchProcessedEvent doneEvent) {
+			responseRepository.save(doneEvent.getOutputData());
+		}
+	}
+
+	private static final class Prepared {
+		final DeepSearchRequest request;
+		final DeepSearchConfig configuration;
+		final UserInfos userInfos;
+		final List<IGConfigurableEmbeddingModel> embeddingModels;
+		final IGConfigurableChatModel chatModel;
+		final AbstractDeepSearchEvent errorEvent;
+
+		private Prepared(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
+				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+				AbstractDeepSearchEvent errorEvent) {
+			this.request = request;
+			this.configuration = configuration;
+			this.userInfos = userInfos;
+			this.embeddingModels = embeddingModels;
+			this.chatModel = chatModel;
+			this.errorEvent = errorEvent;
+		}
+
+		static Prepared ok(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
+				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel) {
+			return new Prepared(request, configuration, userInfos, embeddingModels, chatModel, null);
+		}
+
+		static Prepared error(DeepSearchRequest request, GUserMessage msg) {
+			DeepSearchErrorEvent e = new DeepSearchErrorEvent();
+			e.setInputData(request);
+			e.setOutputData(msg);
+			return new Prepared(request, null, null, null, null, e);
+		}
 	}
 
 	@Override
@@ -320,7 +323,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	}
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> searchAsync(GeboChatRequest request) throws LLMConfigException {
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request) throws LLMConfigException {
 		if (request.getId() == null) {
 			request.setId(UUID.randomUUID().toString());
 		}
@@ -380,7 +383,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			responseEvent.setOutputData(response);
 			return responseEvent;
 		});
-		return searchAsync(deepSearchRequest).map(x -> {
+		return streamDeepSearch(deepSearchRequest).map(x -> {
 			if (x instanceof DeepSearchDocumentEvent documentEvent) {
 				// for each document add a reference here
 				GDocumentReference currentDocument = documentEvent.getInputData();

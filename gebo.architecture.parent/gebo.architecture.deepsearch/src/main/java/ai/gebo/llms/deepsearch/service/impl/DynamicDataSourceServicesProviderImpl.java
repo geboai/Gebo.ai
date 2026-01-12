@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -31,7 +33,9 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
+	final IDocumentsChunkService chunkingService;
 	final DeepSearchDefaultConfig deepSearchDefaultConfig;
+	final IGeboThreadManager threadManager;
 	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceServicesProviderImpl.class);
 
 	@Override
@@ -51,7 +55,7 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 			try {
 				wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
 						iSearchService.getCustomResultsAggregationDataType(), iSearchService, documentReferenceFactory,
-						ingestionHandler, deepSearchDefaultConfig);
+						ingestionHandler, deepSearchDefaultConfig, chunkingService, threadManager);
 				wrappers.add(wrapper);
 			} catch (Throwable e) {
 				LOGGER.error("Exception in getDynamicDeepSearchServices()", e);

@@ -7,6 +7,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
+import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.system.ingestion.GeboIngestionException;
@@ -29,8 +30,9 @@ public interface IDocumentsChunkService {
 	DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
 			String nextChunkId) throws DocumentCacheAccessException, IOException;
 
-	public Flux<DocumentChunk> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+	public Flux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
-	public Flux<DocumentChunk> streamChunks(IGComponentOriginatedDocument document,
+
+	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
 }
