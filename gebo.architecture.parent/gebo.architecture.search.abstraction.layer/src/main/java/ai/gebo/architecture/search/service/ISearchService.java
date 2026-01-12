@@ -83,7 +83,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public default void setOriginOn(SearchResult sr) {
 		if (sr != null) {
-			sr.setOriginComponent(new GeboComponentInfo(getMessagingModuleId(), getDescription()));
+			sr.setOriginComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 			setOriginOn(sr.getChilds());
 		}
 	}

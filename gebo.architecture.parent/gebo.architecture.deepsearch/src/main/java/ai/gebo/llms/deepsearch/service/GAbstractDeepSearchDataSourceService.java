@@ -208,23 +208,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 										}
 
 										List<SearchWithResults> searchWithResults = new ArrayList<SearchWithResults>();
-										if (deepStepAnalisys != null && deepStepAnalisys.getSearchQueries() != null
-												&& !deepStepAnalisys.getSearchQueries().isEmpty()) {
-											// TODO: add new queries extraction processing to the queue of data source
-											// process
-											/*
-											 * for (SearchQuery searchQuery : deepStepAnalisys.getSearchQueries()) {
-											 * List<SearchResult> thisStepResults = executeSearch(searchQuery, request);
-											 * thisStepResults = flattenResults(thisStepResults); for (SearchResult r :
-											 * thisStepResults) {
-											 * r.setNestingLevel(actualSearchResultRef.getActualSearchResult()
-											 * .getNestingLevel() + 1); } SearchWithResults swr = new
-											 * SearchWithResults(); swr.setSearchQuery(searchQuery);
-											 * swr.setResults(thisStepResults); searchWithResults.add(swr); }
-											 * searchWithResults = cleanAndRemoveDuplicated(searchWithResults);
-											 * state.getQueryResults().addAll(searchWithResults);
-											 */
-										}
+										
 										if (deepStepAnalisys != null && deepStepAnalisys.getRelatedResults() != null
 												&& !deepStepAnalisys.getRelatedResults().isEmpty()) {
 											for (SearchResult r : deepStepAnalisys.getRelatedResults()) {
