@@ -224,8 +224,12 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		return encoding;
 	}
 
+	static final int SocketTimeout = 20000;
+	static final int ConnectTimeout = 10000;
+
 	private CloseableHttpClient createClient() {
-		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH).build();
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
+				.setSocketTimeout(SocketTimeout).setConnectTimeout(ConnectTimeout).build();
 		CookieStore cookieStore = new BasicCookieStore();
 		HttpClientContext context = HttpClientContext.create();
 		context.setCookieStore(cookieStore);

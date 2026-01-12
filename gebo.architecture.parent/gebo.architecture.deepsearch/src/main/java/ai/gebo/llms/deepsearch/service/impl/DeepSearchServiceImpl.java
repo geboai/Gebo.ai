@@ -143,7 +143,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 		this.deepSearchExecutor = threadManager.getExecutorService();
 
-		this.deepSearchScheduler = threadManager.getScheduler();
+		this.deepSearchScheduler = threadManager.getBoundedElastic();
 	}
 
 	@PreDestroy
@@ -188,7 +188,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			} finally {
 				SecurityContextHolder.clearContext();
 			}
-		}).subscribeOn(deepSearchScheduler) // tutta la preparazione è blocking => fuori dall'event-loop
+		}).subscribeOn(deepSearchScheduler) 
 				.flatMapMany(prep -> {
 					if (prep.errorEvent != null)
 						return Flux.just(prep.errorEvent);
@@ -206,8 +206,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 						flow = Flux.just(errorEvent);
 					}
 
-					// IMPORTANTISSIMO: i tuoi repository.save(...) sono blocking.
-					// Quindi forziamo che i doOnNext girino sul deepSearchScheduler
+					
 					return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
 							.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 				});

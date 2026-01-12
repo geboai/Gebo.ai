@@ -319,7 +319,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 							// SIMPLY GET THE DATASOURCE RESULTING TEXT (CHECK)
 							consolidatedResult = this.consolidateKnowledgeBaseResult(chatModel, history, request, state,
 									configuration);
-							state.setConsolidatedResult(consolidatedResult);
+
 						}
 						// Here i have to return the new
 						DeepSearchKnowledgeBasesProcessedEvent event = new DeepSearchKnowledgeBasesProcessedEvent();
@@ -423,16 +423,6 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Consolidate final result");
 		}
-		DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
-		consolidatedResult.setInputData(request);
-		consolidatedResult.setOutputData(new DeepSearchResponse());
-		consolidatedResult.getOutputData().setResponse(state.getConsolidatedResult());
-		consolidatedResult.getOutputData().setProcessPercentage(100);
-		boolean knowledgeBaseSearchesHaveResults = state.getDocumentSearchResults() != null
-				&& state.getDocumentSearchResults().getDocumentItems().size() > 0;
-		boolean otherDataSourceHaveResults = dataSourcesResults.size() > 0;
-		consolidatedResult.getOutputData()
-				.setSearchResultsEmpty(!(knowledgeBaseSearchesHaveResults || otherDataSourceHaveResults));
 
 		return enqueueDeepSearchProcessedEvent(composedFlux, request, history, state, configuration, userInfos,
 				embeddingModels, chatModel);
@@ -554,7 +544,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			DeepSearchConfig configuration) {
 		final int tokensBudget = chatModel.getContextLength();
 		int tokens = 0;
-		String consolidated = state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "";
+		String consolidated = "";
 
 		if (!history.isEmpty()) {
 			StringBuffer fragments = new StringBuffer();

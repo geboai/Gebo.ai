@@ -19,7 +19,7 @@ public class DeepSearchState {
 	private HashMap<String, Object> dataSourcesStatus = new HashMap<String, Object>();
 	private HashMap<String, Integer> dataSourcesStatusTotalSteps = new HashMap<String, Integer>();
 	private HashMap<String, Integer> dataSourcesStatusDoneSteps = new HashMap<String, Integer>();
-	private String consolidatedResult = null;
+
 	private int dataSourceAlreadyConsolidatedIndex = 0;
 	
 	public double calculateProcessedPercent() {

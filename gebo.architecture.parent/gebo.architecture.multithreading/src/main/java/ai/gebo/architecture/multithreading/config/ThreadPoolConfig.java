@@ -126,7 +126,7 @@ public class ThreadPoolConfig {
 
 			@Override
 			public Thread newThread(Runnable r) {
-				Thread t = new Thread(r, "deep-search-" + n.getAndIncrement());
+				Thread t = new Thread(r, "executor-service-" + n.getAndIncrement());
 				t.setDaemon(true);
 				return t;
 			}

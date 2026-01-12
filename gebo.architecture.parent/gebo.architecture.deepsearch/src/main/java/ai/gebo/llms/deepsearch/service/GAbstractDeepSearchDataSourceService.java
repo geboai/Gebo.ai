@@ -1,16 +1,14 @@
 package ai.gebo.llms.deepsearch.service;
 
-import static org.assertj.core.api.Assertions.in;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,6 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
-import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -35,7 +32,6 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService.ConsolidationInput;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
@@ -54,6 +50,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.ParallelFlux;
 
 public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
@@ -120,15 +117,15 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
 			DeepSearchDataSourceStandardState state, DeepSearchState deepSearchSharedState) throws LLMConfigException,
 			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
 		}
-		String previusConsolidatedResult = deepSearchSharedState.getConsolidatedResult();
 
 		final List<SearchResult> actualResultsSnapshots = new ArrayList<SearchResult>();
 		if (state.getExtractedSearchQueries() == null) {
 			DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
-					pastSystemsResponses, deepSearchConfig, chatModel, previusConsolidatedResult);
+					pastSystemsResponses, deepSearchConfig, chatModel, "");
 			state.setExtractedSearchQueries(searchQueries);
 			if (searchQueries.getSearchIsUnnecessary() != null && searchQueries.getSearchIsUnnecessary()) {
 				DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
@@ -195,9 +192,19 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			return this.customStructureConsolidation(actualData, currentConsolidation);
 		};
-		final Function<List<SearchResult>, Flux<IDocumentChunkWithRef>> chunksLoadFunction = (list) -> chunkingService
-				.streamChunks(list, specs, false, tokensBudget * 10).subscribeOn(threadManager.getScheduler());
-		Flux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(actualResultsSnapshots);
+		final Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (list) -> {
+			List<SearchResult> cleanList = new ArrayList<SearchResult>();
+			if (list != null && !list.isEmpty()) {
+				cleanList = list.stream().filter(x -> {
+					boolean whasNotIn = !avoidMultipleAccess.containsKey(x.getCode());
+					avoidMultipleAccess.put(x.getCode(), true);
+					return whasNotIn;
+				}).toList();
+
+			}
+			return chunkingService.streamChunks(cleanList, specs, false, tokensBudget * 10);
+		};
+		ParallelFlux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(actualResultsSnapshots);
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {
 
 			SearchResult actualSearchResultToLoad = (SearchResult) docWithRef.getDocumentRef();
@@ -207,6 +214,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			List<ConsolidationInput> inputs = List.of(cInput);
 			CustomContentExtractionType returned;
 			try {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Thread=>" + Thread.currentThread().getName() + " calling llm for content of:"
+							+ actualSearchResultToLoad.getCode());
+				}
 				returned = super.callLLMConsolidateStructuredReturn(chatModel, analisysPrompt, request.getQuery(), "",
 						this.customContentExtractionType, aggregator, inputs);
 			} catch (Throwable th) {
@@ -247,12 +258,12 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					docWithRef, deepStepAnalisys, _analyzedEvent);
 			return out;
 		};
-		Flux<LLMCallStep<CustomContentExtractionType>> relevantContents = loadedChunks.map(llmElaborate)
-				.filter(x -> x != null && x.getReturned().getContentIsRelevant() != null
+		ParallelFlux<LLMCallStep<CustomContentExtractionType>> relevantContents = loadedChunks.map(llmElaborate)
+				.filter(x -> x != null && x.getReturned() != null && x.getReturned().getContentIsRelevant() != null
 						&& x.getReturned().getContentIsRelevant());
 		final Vector<AbstractDeepSearchEvent> listedEvents = new Vector<AbstractDeepSearchEvent>();
 		final Vector<SearchResultAnalisysOutcome> furtherAnalisys = new Vector<SearchResultAnalisysOutcome>();
-		Flux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
+		ParallelFlux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
 			AbstractDeepSearchEvent event = x.getEvent();
 			listedEvents.add(event);
 			if (x.getAnalisysDeepRefs() != null) {
@@ -260,45 +271,55 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			}
 			return event;
 		});
-		Flux<AbstractDeepSearchEvent> additionalAnalisys = additionalAnalisys(chunksLoadFunction, request, chatModel,
-				deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents);
-		Flux<AbstractDeepSearchEvent> trail = consolidateAsFlux(request, chatModel, deepSearchConfig, listedEvents);
+		ParallelFlux<AbstractDeepSearchEvent> additionalAnalisys = additionalAnalisys(chunksLoadFunction, request,
+				chatModel, deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents);
+		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request, chatModel,
+				deepSearchConfig, listedEvents);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamSearch(....) handler=" + getHandlerId());
 		}
-		return Flux.concat(outFlux, additionalAnalisys, trail);
+
+		return Flux.concat(outFlux, additionalAnalisys, trail).subscribeOn(threadManager.getBoundedElastic(), true);
 	}
 
-	private Flux<AbstractDeepSearchEvent> additionalAnalisys(
-			Function<List<SearchResult>, Flux<IDocumentChunkWithRef>> chunksLoadFunction, DeepSearchRequest request,
-			IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
+	private ParallelFlux<AbstractDeepSearchEvent> additionalAnalisys(
+			Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction,
+			DeepSearchRequest request, IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			Vector<SearchResultAnalisysOutcome> furtherAnalisys,
 			Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate,
 			Vector<AbstractDeepSearchEvent> listedEvents) {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin additionalAnalisys(....)");
+		}
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
 		for (SearchResultAnalisysOutcome o : furtherAnalisys) {
 			if (o.getRelatedResults() != null) {
 				searchResults.addAll(o.getRelatedResults());
 			}
 		}
-		Flux<IDocumentChunkWithRef> flux = chunksLoadFunction.apply(searchResults);
-		Flux<LLMCallStep<CustomContentExtractionType>> intermediate = flux.map(llmElaborate)
-				.filter(x -> x.returned != null && x.returned.getContentIsRelevant() != null
+		ParallelFlux<IDocumentChunkWithRef> flux = chunksLoadFunction.apply(searchResults);
+		ParallelFlux<LLMCallStep<CustomContentExtractionType>> intermediate = flux.map(llmElaborate)
+				.filter(x -> x != null && x.returned != null && x.returned.getContentIsRelevant() != null
 						&& x.returned.getContentIsRelevant());
-		Flux<AbstractDeepSearchEvent> outValue = intermediate.map(y -> {
+		ParallelFlux<AbstractDeepSearchEvent> outValue = intermediate.map(y -> {
 			if (y.getEvent() != null && y.getEvent() instanceof DeepSearchDataSourceDocumentResultEvent docResult) {
 				listedEvents.add(docResult);
 			}
 			return y.getEvent();
 		});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End additionalAnalisys(....)");
+		}
 		return outValue;
 	}
 
-	private Flux<AbstractDeepSearchEvent> consolidateAsFlux(DeepSearchRequest request,
+	private Flux<AbstractDeepSearchEvent> consolidateDeepSearchDataSourceProcessedEvent(DeepSearchRequest request,
 			IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			Vector<AbstractDeepSearchEvent> listedEvents) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin consolidateDeepSearchDataSourceProcessedEvent(....)");
+		}
 		DeepSearchDataSourceProcessedEvent processed = new DeepSearchDataSourceProcessedEvent();
 		processed.setInputData(request);
 		processed.setOutputData(new DeepSearchDataSourceResponse());
@@ -334,9 +355,22 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				input.add(data);
 			}
 		}
-		processed.getOutputData().setResponse(callLLMConsolidateText(chatModel,
-				deepSearchConfig.getConsolidationPrompt(), request.getQuery(), "", input));
-		return Flux.just(processed);
+		Flux<AbstractDeepSearchEvent> out = null;
+		try {
+			processed.getOutputData().setResponse(callLLMConsolidateText(chatModel,
+					deepSearchConfig.getConsolidationPrompt(), request.getQuery(), "", input));
+			out = Flux.just(processed);
+		} catch (Throwable th) {
+			LOGGER.error("Error in trail operation", th);
+			DeepSearchErrorEvent deepSourceError = new DeepSearchErrorEvent();
+			deepSourceError.setInputData(request);
+			deepSourceError.setOutputData(GUserMessage.errorMessage("Error in the final report writing", th));
+			out = Flux.just(deepSourceError);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End consolidateDeepSearchDataSourceProcessedEvent(....)");
+		}
+		return out;
 	}
 
 	protected abstract SearchResultAnalisysOutcome extractRelatedAnalisysReferences(
@@ -398,21 +432,6 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			event.getOutputData().setResponse(data);
 		}
 		return event;
-	}
-
-	private String consolidateReferenceResults(List<CustomContentExtractionType> analyzed, DeepSearchRequest request,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
-		List<ConsolidationInput> inputs = analyzed.stream().filter(
-				x -> x.getExtractedRelevantContent() != null && x.getExtractedRelevantContent().trim().length() > 0)
-				.map(x -> {
-					ConsolidationInput entry = new ConsolidationInput(null, null, null,
-							x.getExtractedRelevantContent());
-					return entry;
-				}).toList();
-		if (inputs.isEmpty())
-			return "";
-		return callLLMConsolidateText(chatModel, deepSearchConfig.getAnalisysPrompt(), request.getQuery(), null,
-				inputs);
 	}
 
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned,

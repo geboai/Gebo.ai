@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -55,6 +56,7 @@ import jakarta.el.MethodNotFoundException;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Scheduler;
 
 @Service
@@ -458,30 +460,36 @@ public class DocumentsChunkServiceImpl
 
 	private Flux<IDocumentChunkWithRef> streamChunksSingle(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
-		return Mono.fromCallable(
-				() -> unchecked(() -> prepareChunks(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet)))
-				.subscribeOn(chunkingScheduler).flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
-					String nextId = resp.getNextChunkSetId();
-					if (nextId == null)
-						return Mono.empty();
+		return Mono.fromCallable(() -> unchecked(() -> {
+			try {
+				DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, enrichWithMetaData,
+						tokensPerChunkSet);
+				return response;
+			} catch (Throwable th) {
+				LOGGER.error("Error in call to prepareChunks(...)", th);
+				return null;
+			}
+		})).subscribeOn(chunkingScheduler).flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
+			String nextId = resp.getNextChunkSetId();
+			if (nextId == null)
+				return Mono.empty();
 
-					return Mono.fromCallable(() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId)))
-							.subscribeOn(chunkingScheduler);
-				}).concatMap(resp -> {
-					var set = resp.getCurrentChunkSet();
-					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
-					var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
-					return Flux.fromIterable(mapped);
-				}));
+			return Mono.fromCallable(() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId)))
+					.subscribeOn(chunkingScheduler);
+		}).concatMap(resp -> {
+			var set = resp.getCurrentChunkSet();
+			var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
+			var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
+			return Flux.fromIterable(mapped);
+		}));
 	}
 
-	public Flux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
 		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
-		return Flux.fromIterable(documents)
-				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet),
-						docConcurrency)
-				.subscribeOn(chunkingScheduler);
+		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler)
+				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet));
+
 	}
 
 	@FunctionalInterface

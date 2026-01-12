@@ -12,6 +12,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.ParallelFlux;
 
 public interface IDocumentsChunkService {
 	DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
@@ -30,7 +31,7 @@ public interface IDocumentsChunkService {
 	DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
 			String nextChunkId) throws DocumentCacheAccessException, IOException;
 
-	public Flux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
