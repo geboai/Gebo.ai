@@ -54,19 +54,7 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 		ApiClient apiClient = createApiClient(systemInfo.getHost(), systemInfo.getPort(),
 				systemInfo.getSecurityHeader());
 
-//		GoogleSearchServiceImpl googleSearch = runtimeBinder.getImplementationOf(GoogleSearchServiceImpl.class);
-//		SearchableSystemMetaData system = googleSearch.getSearchableSystems().get(0);
-//		SearchQuery searchQuery = new SearchQuery();
-//		searchQuery.setQueryText("Latest on ukraine war");
-//		List<SearchResult> entries = googleSearch.search(searchQuery, system, 10);
-//		IDocumentsChunkService cacheChunkService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
-//		Flux<DocumentChunk> flux = cacheChunkService.streamChunks(entries, List.of(TextChunkingSpecs.of(16000)), qdrantStartedUp, 16000 * 4);
-//		flux
-//		  .doOnSubscribe(s -> LOGGER.info("Subscribed"))
-//		  .doOnNext(x -> LOGGER.info("{} data:{}", x.getId(), x.getChunkData()))
-//		  .doOnError(e -> LOGGER.error("ERROR", e))
-//		  .doOnComplete(() -> LOGGER.info("COMPLETE"))
-//		  .subscribe();
+
 		GeboDeepSearchControllerApi deepSearchApi = new GeboDeepSearchControllerApi(apiClient);
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 
@@ -85,7 +73,7 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 		LOGGER.info(deepSearchResult.getResponse());
 		Path path = Path.of("deep-search-result.md");
 		Files.write(path, deepSearchResult.getResponse().getBytes(), StandardOpenOption.CREATE,
-				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW);
+				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
 
 	}
 }

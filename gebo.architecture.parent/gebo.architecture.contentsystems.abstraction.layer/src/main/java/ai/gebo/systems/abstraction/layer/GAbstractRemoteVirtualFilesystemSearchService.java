@@ -114,20 +114,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 
 	}
 
-	@Override
-	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
-
-		final Map<String, Boolean> dupCheck = new HashMap<String, Boolean>();
-		List<SearchWithResults> out = new ArrayList<SearchWithResults>();
-		for (SearchWithResults searchWithResults : queryResults) {
-			SearchWithResults cloned = new SearchWithResults();
-			cloned.setSearchQuery(searchWithResults.getSearchQuery());
-			cloned.setResults(cloneUnique(searchWithResults.getResults(), dupCheck));
-			if (!cloned.getResults().isEmpty())
-				out.add(cloned);
-		}
-		return out;
-	}
+	
 
 	private List<SearchResult> cloneUnique(List<SearchResult> results, Map<String, Boolean> dupCheck) {
 		List<SearchResult> out = new ArrayList<SearchResult>();

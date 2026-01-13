@@ -145,11 +145,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 				: standardPrompt;
 	}
 
-	@Override
-	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
-
-		return searchService.cleanAndRemoveDuplicated(queryResults);
-	}
+	
 
 	@Override
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,

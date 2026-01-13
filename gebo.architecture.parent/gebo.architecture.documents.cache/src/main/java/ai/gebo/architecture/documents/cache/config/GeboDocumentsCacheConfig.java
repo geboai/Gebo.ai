@@ -30,7 +30,7 @@ public class GeboDocumentsCacheConfig {
 	 * Maximum cumulative size of messages in bytes before processing (default: 1MB)
 	 */
 	long maximumMessagesCumulatedBytesThreshold = 1024 * 1024;
-	int reactiveDocumentsConcurrency = 4;
+	int reactiveDocumentsConcurrency = 2;
 
 	/**
 	 * Configuration for the vectorization message receiver with timeout

@@ -74,7 +74,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
 			CustomSearchResultExtractionDataType consolidated);
 
-	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
+	
 
 	public String getQueriesExtractionPrompt();
 

@@ -1,7 +1,8 @@
-package ai.gebo.architecture.documents.cache.service.impl;
+package ai.gebo.architecture.documents.cache.service.impl.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import ai.gebo.architecture.documents.cache.service.impl.AbstractCachedEntry;
 import lombok.Data;
 
 @Document

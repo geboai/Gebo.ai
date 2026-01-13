@@ -36,4 +36,8 @@ public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	public static TextChunkingSpecs of(int chunkingSize) {
 		return of(chunkingSize, 20, MAX_CHUNKS_NUMBERS);
 	}
+
+	public static TextChunkingSpecs maximizedLength(int chunkingSize) {
+		return of(chunkingSize, chunkingSize / 4, MAX_CHUNKS_NUMBERS);
+	}
 }

@@ -272,29 +272,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		return getRequest;
 	}
 
-	@Override
-	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
-
-		final Map<String, Boolean> unique = new HashMap<String, Boolean>();
-		List<SearchWithResults> outList = new ArrayList<SearchWithResults>();
-		for (SearchWithResults searchWithResults : queryResults) {
-			final SearchWithResults newCopy = new SearchWithResults();
-			newCopy.setSearchQuery(searchWithResults.getSearchQuery());
-			newCopy.setResults(new ArrayList<SearchResult>());
-			searchWithResults.getResults().forEach(x -> {
-				if (x.getResultReference() != null && x.getResultReference().getUri() != null) {
-					if (!unique.containsKey(x.getResultReference().getUri())) {
-						newCopy.getResults().add(x);
-						unique.put(x.getResultReference().getUri(), true);
-					}
-				}
-			});
-			if (!newCopy.getResults().isEmpty()) {
-				outList.add(newCopy);
-			}
-		}
-		return outList;
-	}
+	
 
 	@Override
 	public String getQueriesExtractionPrompt() {

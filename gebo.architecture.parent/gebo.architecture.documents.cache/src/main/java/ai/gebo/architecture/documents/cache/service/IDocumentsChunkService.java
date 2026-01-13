@@ -2,6 +2,7 @@ package ai.gebo.architecture.documents.cache.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Flow.Publisher;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
@@ -32,6 +33,10 @@ public interface IDocumentsChunkService {
 			String nextChunkId) throws DocumentCacheAccessException, IOException;
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
+
+	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
+			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,

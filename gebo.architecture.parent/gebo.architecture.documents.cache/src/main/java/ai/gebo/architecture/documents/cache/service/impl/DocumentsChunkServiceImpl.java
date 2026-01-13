@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Flow.Publisher;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -31,9 +34,11 @@ import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.model.DocumentChunksSet;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
+import ai.gebo.architecture.documents.cache.repository.DocumentChunkOperationRepository;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.documents.cache.service.impl.model.DocumentChunkOperation;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -73,6 +78,7 @@ public class DocumentsChunkServiceImpl
 	private final IGDocumentReferenceFactory docReferenceFactory;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboThreadManager geboThreadManager;
+	private final static JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceImpl.class);
 	private final static long ttlCacheIt = 10 * 60 * 1000;// tokenizing request has 5 minute validity
@@ -165,7 +171,7 @@ public class DocumentsChunkServiceImpl
 					textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(), textSpecs.isKeepSeparator());
 		}
 		final TokenTextSplitter usedSplitter = tokensplitter;
-		final JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
+
 		response.setEmpty(true);
 		// We ask the cacheService to stream the document
 		TypedInputStream is = null;
@@ -205,6 +211,8 @@ public class DocumentsChunkServiceImpl
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Start looping contents stream");
 					}
+
+					final AtomicLong atomicLong = new AtomicLong(0l);
 					docsStream.forEach(doc -> {
 
 						try {
@@ -248,7 +256,7 @@ public class DocumentsChunkServiceImpl
 								}
 
 								response.setEmpty(outContents.isEmpty());
-								long chunkPosition = 1;
+
 								for (Document _document : outContents) {
 
 									int bytesSize = _document.getText() != null ? _document.getText().length() * 2 : 0;
@@ -260,8 +268,8 @@ public class DocumentsChunkServiceImpl
 									response.setEmpty(false);
 									DocumentChunk chunk = DocumentChunk.ofText(document.getCode(), _document.getText(),
 											_document.getMetadata());
-									chunk.setChunkPosition(chunkPosition);
-									chunkPosition++;
+									chunk.setChunkPosition(atomicLong.incrementAndGet());
+									;
 									chunk.setBytesSize((long) bytesSize);
 									chunk.setTokensSize((long) tokensSize);
 									chunkOperation
@@ -460,6 +468,9 @@ public class DocumentsChunkServiceImpl
 
 	private Flux<IDocumentChunkWithRef> streamChunksSingle(IGComponentOriginatedDocument document,
 			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Running streamChunksSingle(" + document.getCode() + ",.....)");
+		}
 		return Mono.fromCallable(() -> unchecked(() -> {
 			try {
 				DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, enrichWithMetaData,
@@ -503,6 +514,17 @@ public class DocumentsChunkServiceImpl
 		} catch (Exception e) {
 			throw Exceptions.propagate(e);
 		}
+	}
+
+	@Override
+	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
+			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
+		ParallelFlux<IDocumentChunkWithRef> out = Flux.from(documentsPublisher).flatMapIterable(list -> list)
+				.parallel(docConcurrency).runOn(chunkingScheduler).flatMap(doc -> Flux
+						.defer(() -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet)));
+		return out;
 	}
 
 }

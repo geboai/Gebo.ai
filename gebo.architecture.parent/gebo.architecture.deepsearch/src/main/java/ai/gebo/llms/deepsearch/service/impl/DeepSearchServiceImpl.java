@@ -70,6 +70,7 @@ import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRe
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.llms.deepsearch.service.ReactiveMonitor;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -156,8 +157,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		return Mono.fromCallable(() -> {
-			// Questa lambda gira sul deepSearchScheduler (subscribeOn sotto),
-			// quindi se qui usi SecurityContextHolder va bene (thread "tuo")
+			
 			var sc = SecurityContextHolder.createEmptyContext();
 			sc.setAuthentication(auth);
 			SecurityContextHolder.setContext(sc);
@@ -188,28 +188,29 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			} finally {
 				SecurityContextHolder.clearContext();
 			}
-		}).subscribeOn(deepSearchScheduler) 
-				.flatMapMany(prep -> {
-					if (prep.errorEvent != null)
-						return Flux.just(prep.errorEvent);
+		}).subscribeOn(deepSearchScheduler).flatMapMany(prep -> {
+			if (prep.errorEvent != null)
+				return Flux.just(prep.errorEvent);
 
-					final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+			final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
 
-					Flux<AbstractDeepSearchEvent> flow;
-					try {
-						flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
-								prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,deepSearchScheduler);
-					} catch (Throwable e) {
-						DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
-						errorEvent.setInputData(request);
-						errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
-						flow = Flux.just(errorEvent);
-					}
+			Flux<AbstractDeepSearchEvent> flow;
+			try {
+				flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
+						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, deepSearchScheduler);
+				if (flow != null) {
+					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
+				}
+			} catch (Throwable e) {
+				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
+				errorEvent.setInputData(request);
+				errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
+				flow = Flux.just(errorEvent);
+			}
 
-					
-					return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
-							.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
-				});
+			return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+					.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
+		});
 	}
 
 	private void persistSideEffects(AbstractDeepSearchEvent step) {

@@ -1,4 +1,4 @@
-package ai.gebo.architecture.documents.cache.service.impl;
+package ai.gebo.architecture.documents.cache.service.impl.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
+import ai.gebo.architecture.documents.cache.service.impl.AbstractCachedEntry;
 import lombok.Data;
 
 @Document
