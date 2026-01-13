@@ -23,7 +23,8 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	private boolean enrichWithMetaData = false;
 	private long totalBytesSize = 0l, totalTokensSize = 0l;
 	private int totalChunks = 0;
-
+	@HashIndexed
+	private String chunkingSessionId = null;
 	public DocumentChunkOperation() {
 		id = UUID.randomUUID().toString();
 	}

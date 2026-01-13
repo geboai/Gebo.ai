@@ -17,28 +17,37 @@ import reactor.core.publisher.ParallelFlux;
 
 public interface IDocumentsChunkService {
 	DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet, String chunkingSessionId)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
 			SearchServiceException;
 
-	DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document)
+	DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document, String chunkSessionId)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
 	DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
-			SearchServiceException;
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
+			GeboIngestionException, SearchServiceException;
 
 	DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
-			String nextChunkId) throws DocumentCacheAccessException, IOException;
+			String nextChunkId, String chunkSessionId) throws DocumentCacheAccessException, IOException;
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId);
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
 			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId);
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet);
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId);
+
+	public String createChunkingSession(String reference) ;
+
+	public String retrieveChunkingSession(String reference);
+
+	public void disposeChunkingSession(String chunkSessionId);
 }

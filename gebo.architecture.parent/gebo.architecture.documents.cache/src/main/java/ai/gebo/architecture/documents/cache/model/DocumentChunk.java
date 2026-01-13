@@ -17,6 +17,7 @@ public class DocumentChunk {
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 	private Long tokensSize = null, bytesSize = null;
 	private Long chunkPosition = null;
+	private String chunkingSessionId = null;
 
 	public static DocumentChunk ofText(String originalDocumentCode, String id, String mimeType, String text,
 			Map<String, Object> metaData) {

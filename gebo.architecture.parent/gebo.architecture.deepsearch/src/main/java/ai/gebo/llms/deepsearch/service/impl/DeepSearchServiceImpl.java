@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -157,7 +158,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		return Mono.fromCallable(() -> {
-			
+
 			var sc = SecurityContextHolder.createEmptyContext();
 			sc.setAuthentication(auth);
 			SecurityContextHolder.setContext(sc);
@@ -191,13 +192,15 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		}).subscribeOn(deepSearchScheduler).flatMapMany(prep -> {
 			if (prep.errorEvent != null)
 				return Flux.just(prep.errorEvent);
-
+			final IDocumentsChunkService chunkService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
+			final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getCode());
 			final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
 
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
 				flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
-						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, deepSearchScheduler);
+						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, deepSearchScheduler,
+						chunkSessionId);
 				if (flow != null) {
 					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
 				}
@@ -207,7 +210,19 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
 				flow = Flux.just(errorEvent);
 			}
-
+			if (chunkSessionId != null && flow != null) {
+				Runnable deleteChunkingSessionRunnable = new Runnable() {
+					@Override
+					public void run() {
+						try {
+							chunkService.disposeChunkingSession(chunkSessionId);
+						} catch (Throwable th) {
+							LOGGER.error("Exception disposing", th);
+						}
+					}
+				};
+				flow.doAfterTerminate(deleteChunkingSessionRunnable);
+			}
 			return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
 					.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 		});

@@ -54,9 +54,14 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 
 			DocumentChunkingResponse processed = null;
 			try {
+				String chunkingSessionId = chunkingService.retrieveChunkingSession("job:" + payload.getJobId());
+				if (chunkingSessionId == null) {
+					chunkingSessionId = chunkingService.createChunkingSession("job:" + payload.getJobId());
+				}
+
 				ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
 				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
-						params.isEnrichWithMetaData(), params.getTokensPerChunkSet());
+						params.isEnrichWithMetaData(), params.getTokensPerChunkSet(), chunkingSessionId);
 
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());

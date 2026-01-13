@@ -55,11 +55,11 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
-	 * 
 	 * @param request
 	 * @param pastSystemsResponses
 	 * @param state
 	 * @param deepSearchSharedState TODO
+	 * @param chunkingSessionId TODO
 	 * @param history
 	 * 
 	 * @return
@@ -71,7 +71,7 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 */
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, StateType state,
-			DeepSearchState deepSearchSharedState) throws LLMConfigException, IOException, GeboIngestionException,
+			DeepSearchState deepSearchSharedState, String chunkingSessionId) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

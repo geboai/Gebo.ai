@@ -3,11 +3,14 @@ package ai.gebo.llms.deepsearch.service.impl;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Vector;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
@@ -46,6 +50,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -58,6 +63,7 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -102,8 +108,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private Flux<AbstractDeepSearchEvent> dataSourcesNextStep(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
 			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
-			DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler) throws LLMConfigException, IOException,
-			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+			DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler, String chunkingSessionId)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
+			SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin dataSourcesNextStep(....)");
 		}
@@ -124,7 +131,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				Object initialState = handler.createInitialState(chatModel, deepSearchConfig, request);
 				state.getDataSourcesStatus().put(handler.getHandlerId(), initialState);
 				nextStepValue = handler.streamSearch(chatModel, deepSearchConfig, request, dataSourcesResults,
-						initialState, state);
+						initialState, state, chunkingSessionId);
 				nextStepValue.subscribeOn(deepSearchScheduler);
 				if (dataSourcesFlux == null) {
 					dataSourcesFlux = nextStepValue;
@@ -142,60 +149,87 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 	private Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearchNextStep(DeepSearchRequest request,
 			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
-			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel) {
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels) {
+		RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
+				embeddingModels);
+		final String analisysPrompt = configuration.getAnalisysPrompt();
 
-		if (state.getDocumentSearchResults() != null
-				&& state.getRagDocumentsPointer() < state.getDocumentSearchResults().getDocumentItems().size()) {
-			int tokensBudget = chatModel.getContextLength();
-			RagDocumentReferenceItem foundDocument = state.getDocumentSearchResults().getDocumentItems()
-					.get(state.getRagDocumentsPointer());
-			String documentCode = foundDocument.getCode();
-			Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
-			if (docdata.isPresent()) {
-				List<Document> currentProcessedFragments = new ArrayList<Document>();
+		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
 
-				int initialFragmentPointer = state.getRagDocumentFragmentPointer();
-				boolean lastFragmentReached = false;
-				if (initialFragmentPointer < foundDocument.getFragments().size()) {
-					boolean stopCycling = false;
-					for (int i = initialFragmentPointer; !stopCycling && i < foundDocument.getFragments().size(); i++) {
-						RagDocumentFragment fragment = foundDocument.getFragments().get(i);
-						stopCycling = tokensBudget < fragment.getNTokens();
-						if (!stopCycling) {
-							state.setRagDocumentsPointer(i);
-							tokensBudget -= fragment.getNTokens();
-							lastFragmentReached = i == foundDocument.getFragments().size() - 1;
-							currentProcessedFragments.add(fragment.toAIDocument());
-							state.setRagDocumentFragmentPointer(i);
+		Flux<AbstractDeepSearchEvent> body = Flux.fromIterable(consolidatedDaoResult.getDocumentItems())
+				.map((refItem) -> {
+					String documentCode = refItem.getCode();
+					Optional<GDocumentReference> docdata = documentRepo.findById(refItem.getCode());
+					if (docdata.isPresent()) {
+						List<RagDocumentFragment> fragments = refItem.getFragments();
+
+						List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
+						for (RagDocumentFragment f : fragments) {
+							Map<String, Object> meta = f.getMetaData();
+							String docReference = meta != null ? (String) meta.get(DocumentMetaInfos.GEBO_FILE_NAME)
+									: null;
+							String url = meta != null ? (String) meta.get(DocumentMetaInfos.CONTENT_ORIGINAL_URL)
+									: null;
+							String title = meta != null ? (String) meta.get(DocumentMetaInfos.TITLE) : null;
+							if (title == null)
+								title = docReference;
+							ConsolidationInput cInput = new ConsolidationInput(docReference, url, title,
+									f.getDocumentContent());
+							inputs.add(cInput);
 						}
-					}
-					if (lastFragmentReached) {
-						state.setRagDocumentsPointer(state.getRagDocumentsPointer() + 1);
-						state.setRagDocumentFragmentPointer(0);
-					}
+						try {
+							String result = callLLMConsolidateText(chatModel, analisysPrompt, request.getQuery(), "",
+									inputs);
+							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
+							resultStep.setDeepsearchCode(request.getCode());
+							resultStep.setFragment(result);
+							resultStep.setIndex(history.size());
+							resultStep.setDocumentCode(documentCode);
+							resultStep.setFragmentsCodes(fragments.stream().map(x -> x.getCode()).toList());
+							DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
+							resultStep.setProcessPercentage(state.calculateProcessedPercent());
+							event.setInputData(docdata.get());
+							event.setOutputData(resultStep);
+							ConsolidationInput input = new ConsolidationInput(event.getInputData().getName(),
+									event.getInputData().getUri(), event.getInputData().getName(), result);
+							results.add(input);
+							return (AbstractDeepSearchEvent) event;
+						} catch (Throwable th) {
+							LOGGER.error("Error calling llm", th);
+							DeepSearchErrorEvent event = new DeepSearchErrorEvent();
+							event.setInputData(request);
+							event.setOutputData(GUserMessage.errorMessage("Error calling llm", th));
+							return (AbstractDeepSearchEvent) event;
+						}
+					} else
+						return null;
+				}).filter(Objects::nonNull);
+		Flux<AbstractDeepSearchEvent> trail = Flux.defer(() -> {
+			AbstractDeepSearchEvent evt = null;
+			DeepSearchKnowledgeBasesProcessedEvent event = new DeepSearchKnowledgeBasesProcessedEvent();
+			event.setInputData(request);
+			event.setOutputData(new DeepSearchKnowledgebasesResultStep());
+			event.getOutputData().setDataSourceDescription("Knowledge bases");
+			event.getOutputData().setDeepsearchCode(request.getCode());
+			event.getOutputData().setSearchResultsEmpty(results.isEmpty());
+			try {
+				if (!results.isEmpty()) {
+					String result = callLLMConsolidateText(chatModel, configuration.getConsolidationPrompt(),
+							request.getQuery(), "", new ArrayList(results));
+					event.getOutputData().setResponse(result);
 				}
-				if (!currentProcessedFragments.isEmpty()) {
-					state.setElaboratedFragmentsCount(
-							state.getElaboratedFragmentsCount() + currentProcessedFragments.size());
-					String result = callLLMWithDocuments(chatModel, configuration.getAnalisysPrompt(),
-							currentProcessedFragments, request.getQuery());
-					DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
-					resultStep.setDeepsearchCode(request.getCode());
-					resultStep.setFragment(result);
-					resultStep.setIndex(history.size());
-					resultStep.setDocumentCode(documentCode);
-					resultStep.setFragmentsCodes(currentProcessedFragments.stream().map(x -> x.getId()).toList());
-					DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
-					resultStep.setProcessPercentage(state.calculateProcessedPercent());
-					event.setInputData(docdata.get());
-					event.setOutputData(resultStep);
-
-					return null;
-				}
+				evt = event;
+			} catch (Throwable th) {
+				LOGGER.error("Error calling llm to consolidate", th);
+				DeepSearchErrorEvent eevent = new DeepSearchErrorEvent();
+				eevent.setInputData(request);
+				eevent.setOutputData(GUserMessage.errorMessage("Error calling llm", th));
+				evt = eevent;
 			}
-
-		}
-		return null;
+			return Flux.just(evt);
+		});
+		return Flux.concat(body, trail);
 	}
 
 	private List<IGDeepSearchDataSourceService> filterChoosed(List<IGDeepSearchDataSourceService> handlers,
@@ -210,7 +244,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
-			Scheduler deepSearchScheduler) throws LLMConfigException {
+			Scheduler deepSearchScheduler, String chunkingSessionId) throws LLMConfigException {
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....)");
 		}
@@ -223,7 +258,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		Flux<AbstractDeepSearchEvent> composedFlux = null;
+
 		if (chatModel != null) {
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Actual phase:" + state.getPhase());
 			}
@@ -243,7 +280,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						Flux<AbstractDeepSearchEvent> nextStepValue = null;
 						try {
 							nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults, state, handlers,
-									chatModel, configuration, deepSearchScheduler);
+									chatModel, configuration, deepSearchScheduler, chunkingSessionId);
 
 						} catch (Throwable e) {
 							LOGGER.error("Exception accessing deep search data source", e);
@@ -265,28 +302,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 								composedFlux = Flux.concat(composedFlux, nextStepValue);
 							}
 						}
-						/*
-						 * if (nextStepValue != null) { if (nextStepValue instanceof
-						 * DeepSearchDataSourceProcessedEvent processedDataSource) { if
-						 * (processedDataSource.getOutputData().getSearchResultsEmpty() == null ||
-						 * !processedDataSource.getOutputData().getSearchResultsEmpty()) { boolean
-						 * singleSource = !thereAreNotEmpty(dataSourcesResults);
-						 * dataSourcesResults.add(processedDataSource.getOutputData());
-						 * 
-						 * if (!singleSource) { String _consolidatedResult =
-						 * callLLMWithDocumentsAndConsolidation(chatModel,
-						 * configuration.getConsolidationPrompt(),
-						 * processedDataSource.getOutputData().getResponse(), request.getQuery(),
-						 * state.getConsolidatedResult() != null ? state.getConsolidatedResult() : "");
-						 * state.setConsolidatedResult(_consolidatedResult); } else
-						 * state.setConsolidatedResult(processedDataSource.getOutputData().getResponse()
-						 * );
-						 * 
-						 * } processedDataSource.getOutputData()
-						 * .setProcessPercentage(state.calculateProcessedPercent()); }
-						 * 
-						 * return nextStepValue; }
-						 */
+
 					}
 				}
 
@@ -299,19 +315,11 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					LOGGER.debug("Actual phase:" + state.getPhase());
 				}
 				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
-					if (state.getDocumentSearchResults() == null) {
-
-						RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration,
-								userInfos, embeddingModels);
-						state.setDocumentSearchResults(consolidatedDaoResult);
-						state.setFragmentsCount(consolidatedDaoResult.countFragments());
-					}
 
 					Flux<AbstractDeepSearchEvent> nextStepValue = knowledgeBaseDeepSearchNextStep(request,
-							dataSourcesResults, history, state, configuration, userInfos, chatModel);
-					if (nextStepValue != null) {
-
-					} else {
+							dataSourcesResults, history, state, configuration, userInfos, chatModel, chunkingSessionId,
+							embeddingModels);
+					if (nextStepValue == null) {
 						boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 						String consolidatedResult = null;
 						if (state.getDocumentSearchResults().getDocumentItems().size() > 0) {
@@ -368,7 +376,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						Flux<AbstractDeepSearchEvent> nextStepValue = null;
 						try {
 							nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults, state, handlers,
-									chatModel, configuration, deepSearchScheduler);
+									chatModel, configuration, deepSearchScheduler, chunkingSessionId);
 						} catch (Throwable e) {
 							LOGGER.error("Exception accessing deep search data source", e);
 							DeepSearchDataSourceProcessedEvent processedDataSource = new DeepSearchDataSourceProcessedEvent();
@@ -388,44 +396,25 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 								composedFlux = Flux.concat(composedFlux, nextStepValue);
 							}
 						}
-//						if (nextStepValue != null) {
-//							if (nextStepValue instanceof DeepSearchDataSourceProcessedEvent processedDataSource) {
-//								if (processedDataSource.getOutputData().getSearchResultsEmpty() == null
-//										|| !processedDataSource.getOutputData().getSearchResultsEmpty()) {
-//									boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
-//									dataSourcesResults.add(processedDataSource.getOutputData());
-//
-//									if (!singleSource) {
-//										String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
-//												configuration.getConsolidationPrompt(),
-//												processedDataSource.getOutputData().getResponse(), request.getQuery(),
-//												state.getConsolidatedResult() != null ? state.getConsolidatedResult()
-//														: "");
-//										state.setConsolidatedResult(_consolidatedResult);
-//									} else
-//										state.setConsolidatedResult(processedDataSource.getOutputData().getResponse());
-//
-//								}
-//								processedDataSource.getOutputData()
-//										.setProcessPercentage(state.calculateProcessedPercent());
-//							}
-//
-//							return nextStepValue;
-//
-//						}
+
 					}
 
 				}
 
 			}
 			}
+		} else {
+
+			throw new RuntimeException("Cannot run deep search without a chat model");
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Consolidate final result");
 		}
 
-		return enqueueDeepSearchProcessedEvent(composedFlux, request, history, state, configuration, userInfos,
-				embeddingModels, chatModel);
+		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request, history, state,
+				configuration, userInfos, embeddingModels, chatModel);
+
+		return outFlux;
 
 	}
 

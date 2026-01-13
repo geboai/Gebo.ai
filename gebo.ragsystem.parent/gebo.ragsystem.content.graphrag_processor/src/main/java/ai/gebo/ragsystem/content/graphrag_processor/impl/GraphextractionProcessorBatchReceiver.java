@@ -107,7 +107,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 					try {
 						// get the first cached chunks group
 						DocumentChunkingResponse current = chunkingService
-								.getCachedChunkSet(payload.getDocumentReference());
+								.getCachedChunkSet(payload.getDocumentReference(), null);
 
 						while (current != null && !current.isEmpty()) {
 							// Stream the chunks in this group
@@ -168,7 +168,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 							// Fetch next group of chunks
 							if (current.getNextChunkSetId() != null) {
 								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
-										current.getId(), current.getNextChunkSetId());
+										current.getId(), current.getNextChunkSetId(), null);
 							} else {
 								current = null;
 							}

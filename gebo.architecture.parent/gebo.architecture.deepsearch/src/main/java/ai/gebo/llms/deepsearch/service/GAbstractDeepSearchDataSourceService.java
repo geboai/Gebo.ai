@@ -119,8 +119,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
 			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchDataSourceStandardState state, DeepSearchState deepSearchSharedState) throws LLMConfigException,
-			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+			DeepSearchDataSourceStandardState state, DeepSearchState deepSearchSharedState, String chunkingSessionId)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
+			SearchServiceException {
 		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
@@ -208,7 +209,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					LOGGER.info("List of unique contents:" + contentsCodes);
 				}
 			}
-			return chunkingService.streamChunks(cleanList, specs, false, tokensBudget * 10);
+			return chunkingService.streamChunks(cleanList, specs, false, tokensBudget * 10, chunkingSessionId);
 		};
 		ParallelFlux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(staticSupplier);
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {
@@ -281,7 +282,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			return event;
 		});
 		Flux<AbstractDeepSearchEvent> additionalAnalisys = additionalAnalisys(chunksLoadFunction, request, chatModel,
-				deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents);
+				deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents, avoidMultipleAccess);
 		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request, chatModel,
 				deepSearchConfig, listedEvents);
 
@@ -297,7 +298,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			DeepSearchRequest request, IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			Vector<SearchResultAnalisysOutcome> furtherAnalisys,
 			Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate,
-			Vector<AbstractDeepSearchEvent> listedEvents) {
+			Vector<AbstractDeepSearchEvent> listedEvents, Map<String, Boolean> avoidMultipleAccess) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin additionalAnalisys(....)");
 		}
@@ -308,7 +309,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					searchResults.addAll(o.getRelatedResults());
 				}
 			}
-			return searchResults;
+			return cleanAndRemoveDuplicatedResults(searchResults, avoidMultipleAccess);
 		};
 		Flux<AbstractDeepSearchEvent> outValue = Flux.defer(() -> {
 			if (LOGGER.isDebugEnabled()) {
@@ -431,8 +432,13 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			if (!nodups.containsKey(searchResult.getCode())) {
 				try {
 					SearchResult cloned = (SearchResult) searchResult.clone();
-					cloned.setChilds(cleanAndRemoveDuplicatedResults(searchResult.getChilds(), nodups));
-					out.add(cloned);
+					if ((cloned.getResultReference() != null && cloned.getResultReference().getUri() != null)
+							|| (cloned.getNavigationReference() != null)) {
+						cloned.setChilds(cleanAndRemoveDuplicatedResults(searchResult.getChilds(), nodups));
+						out.add(cloned);
+					} else {
+						LOGGER.warn("Removing result:" + cloned.getCode());
+					}
 				} catch (CloneNotSupportedException e) {
 					LOGGER.error("Clone not supported!!", e);
 				}

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
@@ -34,10 +35,12 @@ import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.model.DocumentChunksSet;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
+import ai.gebo.architecture.documents.cache.repository.ChunkingSessionRepository;
 import ai.gebo.architecture.documents.cache.repository.DocumentChunkOperationRepository;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.documents.cache.service.impl.model.ChunkingSession;
 import ai.gebo.architecture.documents.cache.service.impl.model.DocumentChunkOperation;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -69,6 +72,8 @@ import reactor.core.scheduler.Scheduler;
 public class DocumentsChunkServiceImpl
 		extends AbstractCacheEntryCleanupService<DocumentChunkOperation, DocumentChunkOperationRepository>
 		implements IDocumentsChunkService {
+
+	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
 	private final GeboDocumentsCacheConfig cacheConfig;
 	private final IDocumentsCacheService cacheService;
@@ -78,6 +83,7 @@ public class DocumentsChunkServiceImpl
 	private final IGDocumentReferenceFactory docReferenceFactory;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboThreadManager geboThreadManager;
+	private final ChunkingSessionRepository chunkingSessionRepo;
 	private final static JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceImpl.class);
@@ -88,7 +94,8 @@ public class DocumentsChunkServiceImpl
 			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
 			IGDocumentReferenceIngestionHandler ingestionHandler, IGDocumentReferenceFactory docReferenceFactory,
 			IGeboThreadManager geboThreadManager, IGPersistentObjectManager persistentObjectManager,
-			GeboDocumentsCacheConfig cacheConfig) {
+			GeboDocumentsCacheConfig cacheConfig, ChunkingSessionRepository chunkingSessionRepo,
+			DocumentChunkOperationRepository documentChunkOperationRepository) {
 		super(chunkOperationRepository, ttlCacheIt);
 		this.cacheService = cacheService;
 		this.configService = configService;
@@ -99,13 +106,16 @@ public class DocumentsChunkServiceImpl
 		this.geboThreadManager = geboThreadManager;
 		this.chunkingScheduler = geboThreadManager.getScheduler();
 		this.cacheConfig = cacheConfig;
+		this.chunkingSessionRepo = chunkingSessionRepo;
+		this.documentChunkOperationRepository = documentChunkOperationRepository;
 	}
 
 	@Override
 	public DocumentChunkingResponse getChunkSet(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
-			SearchServiceException {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
+			GeboIngestionException, SearchServiceException {
+		checkExistence(chunkSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getChunk(" + document.getCode() + ",...)");
 		}
@@ -157,7 +167,8 @@ public class DocumentsChunkServiceImpl
 			}
 			// returning the first chunk as 0 index id
 			DocumentChunkOperation operationData = matchingOperation.get();
-			return getNextChunkSet(document, operationData.getId(), operationData.getChunkSetsList().get(0));
+			return getNextChunkSet(document, operationData.getId(), operationData.getChunkSetsList().get(0),
+					chunkSessionId);
 		}
 		// We have to calculate chunking from scratch
 		Optional<AbstractChunkingSpecs> textConfig = chunkingSpecs.stream()
@@ -208,6 +219,7 @@ public class DocumentsChunkServiceImpl
 					chunkOperation.setEnrichWithMetaData(enrichWithMetaData);
 					chunkOperation.setChunkingSpecs(chunkingSpecs);
 					chunkOperation.setOriginalDocumentCode(document.getCode());
+					chunkOperation.setChunkingSessionId(chunkSessionId);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Start looping contents stream");
 					}
@@ -269,9 +281,10 @@ public class DocumentsChunkServiceImpl
 									DocumentChunk chunk = DocumentChunk.ofText(document.getCode(), _document.getText(),
 											_document.getMetadata());
 									chunk.setChunkPosition(atomicLong.incrementAndGet());
-									;
+
 									chunk.setBytesSize((long) bytesSize);
 									chunk.setTokensSize((long) tokensSize);
+									chunk.setChunkingSessionId(chunkSessionId);
 									chunkOperation
 											.setTotalBytesSize(chunkOperation.getTotalBytesSize() + ((long) bytesSize));
 									chunkOperation.setTotalTokensSize(
@@ -280,6 +293,7 @@ public class DocumentsChunkServiceImpl
 									DocumentChunksSet currentChunkSet = null;
 									if (chunkSets.isEmpty()) {
 										currentChunkSet = new DocumentChunksSet();
+										currentChunkSet.setChunkingSessionId(chunkSessionId);
 										chunkSets.add(currentChunkSet);
 										chunkOperation.getChunkSetsList().add(currentChunkSet.getId());
 									} else {
@@ -333,9 +347,11 @@ public class DocumentsChunkServiceImpl
 					if (!chunkOperation.getChunkSetsList().isEmpty()) {
 						response.setId(chunkOperation.getId());
 						chunkOperation.setLastAccessed(new Date());
+
 						response.setTotalBytesSize(chunkOperation.getTotalBytesSize());
 						response.setTotalTokensSize(chunkOperation.getTotalTokensSize());
 						response.setTotalChunksNumber(chunkOperation.getTotalChunks());
+						response.setChunkingSessionId(chunkSessionId);
 						repository.insert(chunkOperation);
 						int index = chunkOperation.getChunkSetsList().indexOf(response.getCurrentChunkSet().getId());
 						if (chunkOperation.getChunkSetsList().size() > index + 1) {
@@ -366,7 +382,8 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public DocumentChunkingResponse getNextChunkSet(IGComponentOriginatedDocument document, String chunkRequestId,
-			String chunkId) throws DocumentCacheAccessException, IOException {
+			String chunkId, String chunkSessionId) throws DocumentCacheAccessException, IOException {
+		checkExistence(chunkSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
 		}
@@ -386,6 +403,7 @@ public class DocumentsChunkServiceImpl
 			response.setTotalChunksNumber(operation.getTotalChunks());
 			response.setTotalBytesSize(operation.getTotalBytesSize());
 			response.setTotalTokensSize(operation.getTotalTokensSize());
+			response.setChunkingSessionId(chunkSessionId);
 			if (index < operation.getChunkSetsList().size() - 1) {
 				String nextChunk = operation.getChunkSetsList().get(index + 1);
 				response.setNextChunkSetId(nextChunk);
@@ -411,6 +429,9 @@ public class DocumentsChunkServiceImpl
 			try {
 				Path path = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, fileName);
 				if (Files.exists(path)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Deleting path:" + path);
+					}
 					Files.delete(path);
 				} else {
 					LOGGER.warn("File " + path.toString() + " not found");
@@ -426,14 +447,15 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public DocumentChunkingResponse prepareChunks(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
-			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException,
-			SearchServiceException {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkingSessionId) throws DocumentCacheAccessException, IOException,
+			GeboContentHandlerSystemException, GeboIngestionException, SearchServiceException {
+		checkExistence(chunkingSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
 		DocumentChunkingResponse firstChunk = getChunkSet(document, chunkingSpecs, enrichWithMetaData,
-				tokensPerChunkSet);
+				tokensPerChunkSet, chunkingSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareChunks(" + document.getCode() + "..)");
 		}
@@ -441,9 +463,10 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document)
+	public DocumentChunkingResponse getCachedChunkSet(IGComponentOriginatedDocument document, String chunkSessionId)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
 			GeboIngestionException {
+		checkExistence(chunkSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
 		}
@@ -453,7 +476,7 @@ public class DocumentsChunkServiceImpl
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk");
 			}
-			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0));
+			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0), chunkSessionId);
 		}
 
 		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");
@@ -462,19 +485,23 @@ public class DocumentsChunkServiceImpl
 	}
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
-		return this.streamChunksSingle(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet);
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId) {
+		checkExistence(chunkSessionId);
+		return this.streamChunksSingle(document, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet, chunkSessionId);
 	}
 
 	private Flux<IDocumentChunkWithRef> streamChunksSingle(IGComponentOriginatedDocument document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkingSessionId) {
+		checkExistence(chunkingSessionId);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Running streamChunksSingle(" + document.getCode() + ",.....)");
 		}
 		return Mono.fromCallable(() -> unchecked(() -> {
 			try {
 				DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, enrichWithMetaData,
-						tokensPerChunkSet);
+						tokensPerChunkSet, chunkingSessionId);
 				return response;
 			} catch (Throwable th) {
 				LOGGER.error("Error in call to prepareChunks(...)", th);
@@ -485,7 +512,9 @@ public class DocumentsChunkServiceImpl
 			if (nextId == null)
 				return Mono.empty();
 
-			return Mono.fromCallable(() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId)))
+			return Mono
+					.fromCallable(
+							() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId, chunkingSessionId)))
 					.subscribeOn(chunkingScheduler);
 		}).concatMap(resp -> {
 			var set = resp.getCurrentChunkSet();
@@ -496,10 +525,12 @@ public class DocumentsChunkServiceImpl
 	}
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId) {
+		checkExistence(chunkSessionId);
 		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
-		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler)
-				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet));
+		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler).flatMap(
+				doc -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet, chunkSessionId));
 
 	}
 
@@ -519,12 +550,65 @@ public class DocumentsChunkServiceImpl
 	@Override
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
 			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet) {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet,
+			String chunkSessionId) {
+		checkExistence(chunkSessionId);
 		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
 		ParallelFlux<IDocumentChunkWithRef> out = Flux.from(documentsPublisher).flatMapIterable(list -> list)
-				.parallel(docConcurrency).runOn(chunkingScheduler).flatMap(doc -> Flux
-						.defer(() -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData, tokensPerChunkSet)));
+				.parallel(docConcurrency).runOn(chunkingScheduler)
+				.flatMap(doc -> Flux.defer(() -> streamChunksSingle(doc, chunkingSpecs, enrichWithMetaData,
+						tokensPerChunkSet, chunkSessionId)));
 		return out;
+	}
+
+	@Override
+	public String createChunkingSession(String reference) {
+		if (retrieveChunkingSession(reference) != null)
+			throw new IllegalStateException("The chunking session with reference " + reference + " already exists");
+		ChunkingSession session = new ChunkingSession();
+		session.setCode(UUID.randomUUID().toString());
+		session.setChunkingReference(reference);
+		session.setDateCreated(new Date());
+		session.setDateModified(new Date());
+		chunkingSessionRepo.insert(session);
+		return session.getCode();
+	}
+
+	private boolean exists(String chunkingSessionId) {
+		Optional<ChunkingSession> opt = chunkingSessionRepo.findById(chunkingSessionId);
+		return opt.isPresent();
+	}
+
+	private void checkExistence(String chunkingSessionId) {
+		if (chunkingSessionId != null) {
+			if (!exists(chunkingSessionId))
+				throw new IllegalStateException("chunkSessionId=" + chunkingSessionId + " does not exist");
+		}
+	}
+
+	@Override
+	public String retrieveChunkingSession(String reference) {
+		List<ChunkingSession> data = chunkingSessionRepo.findByChunkingReference(reference);
+		if (data.isEmpty())
+			return null;
+		else
+			return data.get(0).getCode();
+	}
+
+	@Override
+	public void disposeChunkingSession(String chunkSessionId) {
+		checkExistence(chunkSessionId);
+		Stream<DocumentChunkOperation> stream = documentChunkOperationRepository
+				.findByChunkingSessionId(chunkSessionId);
+		stream.forEach(op -> {
+			try {
+				cleanupResources(op);
+			} catch (Throwable th) {
+			}
+		});
+		documentChunkOperationRepository.deleteByChunkingSessionId(chunkSessionId);
+		chunkingSessionRepo.deleteById(chunkSessionId);
+
 	}
 
 }
