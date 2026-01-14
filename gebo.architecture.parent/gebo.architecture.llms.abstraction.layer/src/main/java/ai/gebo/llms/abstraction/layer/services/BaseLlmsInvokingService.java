@@ -476,22 +476,20 @@ public class BaseLlmsInvokingService {
 	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
 			Map<String, Object> additionalParams, Supplier<Document> input) {
 		final int contextWindow = chatModel.getContextLength();
-		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
+
 		Document currentInput = null;
 		final int promptLength = tokensEstimation.estimate(prompt);
 		StringBuffer outBuffer = new StringBuffer();
 		// Following 2 variables have to be updated once a consolidation is re-run
 
 		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
 		do {
+
 			currentInput = input.get();
 			if (currentInput != null && currentInput.isText() && currentInput.getText().trim().length() > 0) {
 
-				final int textTokensLength = currentInput.getMetadata() != null
-						&& currentInput.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
-								? ((Number) currentInput.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH))
-										.intValue()
-								: tokensEstimation.estimate(currentInput.getText());
+				final int textTokensLength = tokensEstimation.estimate(currentInput.toString());
 
 				if (textTokensLength > fragmentBudget) {
 					// splits will be loaded in currentBatchesQueue
@@ -503,7 +501,7 @@ public class BaseLlmsInvokingService {
 						ConsolidationDocuments batchItem = new ConsolidationDocuments();
 						batchItem.inputs.add(x);
 
-						batchItem.totaltokens = tokensEstimation.estimate(x.getText());
+						batchItem.totaltokens = tokensEstimation.estimate(x.toString());
 						x.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, batchItem.totaltokens);
 						return batchItem;
 					}).toList();
@@ -534,7 +532,7 @@ public class BaseLlmsInvokingService {
 					}
 				}
 			}
-
+			List<ConsolidationDocuments> unmanaged = new ArrayList<BaseLlmsInvokingService.ConsolidationDocuments>();
 			for (ConsolidationDocuments consolidationInputBatch : currentBatchesQueue) {
 				// if this batch is complete or we are at the end of contents
 				if (consolidationInputBatch.complete || currentInput == null) {
@@ -545,8 +543,11 @@ public class BaseLlmsInvokingService {
 						outBuffer.append(NEWLINE);
 					}
 					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+				} else {
+					unmanaged.add(consolidationInputBatch);
 				}
 			}
+			currentBatchesQueue = unmanaged;
 		} while (currentInput != null);
 		return outBuffer.isEmpty() ? null : outBuffer.toString();
 	}

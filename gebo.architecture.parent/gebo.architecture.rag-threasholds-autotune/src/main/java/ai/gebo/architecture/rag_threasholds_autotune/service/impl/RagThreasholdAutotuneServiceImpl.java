@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -122,13 +123,13 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		return _expression;
 	}
 
-	@Scheduled(initialDelay = 10000, fixedRate = 120 * 60000)
+	@Scheduled(initialDelay = 10000, fixedRate = 240 * 60000)
 	public void onTick() {
 		if (runningTuning)
 			return;
 		try {
 			synchronized (this) {
-				runningTuning=true;
+				runningTuning = true;
 			}
 			List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
 					.toList();
@@ -137,7 +138,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 		} finally {
 			synchronized (this) {
-				runningTuning=false;
+				runningTuning = false;
 			}
 		}
 	}
@@ -188,7 +189,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			} else {
 				LOGGER.info("Running tuning with module:" + serviceChatModel.getCode());
 			}
-			String csvResult = callLLMWithDocuments(serviceChatModel, IN_TOPIC_PROMPT, sampled, "");
+			String csvResult = callLLMConcatenateText(serviceChatModel, IN_TOPIC_PROMPT, "", null, sampled.stream());
 			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
 			while (questions.size() > MAXQUESTIONS) {
 				questions.remove(questions.size() - 1);
@@ -296,7 +297,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 				rateOrderedOptimizationThreasholds.put(evaluateThreasholdMid.rating, new ArrayList());
 			}
 			rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
-			return rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
+			return this.selectResult(rateOrderedOptimizationThreasholds);
 		}
 		LOGGER.info("maximizeInTreeSequence scanning between: " + lowerBound + "," + midStep + "," + upperBound);
 
@@ -320,7 +321,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 		rateOrderedOptimizationThreasholds.get(evaluateThreasholdMid.rating).add(evaluateThreasholdMid);
 		AutoTuneRatedThreashold maxevaluation = null;
 		if ((midStep - lowerBound) <= fineIncrement || (upperBound - midStep) <= fineIncrement) {
-			maxevaluation = rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
+			maxevaluation = this.selectResult(rateOrderedOptimizationThreasholds);
 
 		} else {
 			if (evaluateThresholdLeft.rating < evaluateThreasholdMid.rating) {
@@ -335,6 +336,28 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			}
 		}
 		return maxevaluation;
+	}
+
+	private AutoTuneRatedThreashold selectResult(
+			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
+		if (rateOrderedOptimizationThreasholds.size() > 2) {
+			List<AutoTuneRatedThreashold> values = new ArrayList<AutoTuneRatedThreashold>();
+			List<List<AutoTuneRatedThreashold>> inorder = new ArrayList<List<AutoTuneRatedThreashold>>();
+			for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
+				inorder.add(items);
+			}
+			final int last3 = inorder.size() - 3;
+			for (int i = inorder.size() - 1; i >= last3 && i >= 0; i--) {
+				values.addAll(inorder.get(i));
+			}
+			TreeMap<Double, AutoTuneRatedThreashold> byquestionAnswered = new TreeMap<Double, AutoTuneRatedThreashold>();
+			for (AutoTuneRatedThreashold item : values) {
+				byquestionAnswered.put(item.answeredQuestions, item);
+			}
+			return byquestionAnswered.lastEntry().getValue();
+
+		} else
+			return rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
 	}
 
 	private static final String EVALUATE_RATING_PROMPT = "You are a strict RAG retrieval judge.\r\n" + "\r\n"
