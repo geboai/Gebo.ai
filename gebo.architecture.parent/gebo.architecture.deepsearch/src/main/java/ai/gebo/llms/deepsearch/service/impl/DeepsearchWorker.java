@@ -404,9 +404,16 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Consolidate final result");
 		}
-
+		final Vector<IDeepSearchResult> intermediates = new Vector<IDeepSearchResult>();
+		composedFlux = composedFlux.map(event -> {
+			if (event != null && event.getOutputData() != null
+					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult) {
+				intermediates.add(intermediateResult);
+			}
+			return event;
+		});
 		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request, history, state,
-				configuration, userInfos, embeddingModels, chatModel);
+				configuration, userInfos, embeddingModels, chatModel, intermediates);
 
 		return outFlux;
 
@@ -415,44 +422,36 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private Flux<AbstractDeepSearchEvent> enqueueDeepSearchProcessedEvent(Flux<AbstractDeepSearchEvent> composedFlux,
 			DeepSearchRequest request, List<AbstractDeepSearchEvent> history, DeepSearchState state,
 			DeepSearchConfig configuration, UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels,
-			IGConfigurableChatModel chatModel) {
-		List<IDeepSearchResult> dataSourcesResults = null;
-		final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
-		consolidatedResult.setInputData(request);
-		consolidatedResult.setOutputData(new DeepSearchResponse());
-		if (composedFlux != null) {
-			final Flux<IDeepSearchResult> sourcesFlux = composedFlux.map(AbstractDeepSearchEvent::getOutputData)
-					.filter(Objects::nonNull)
-					.filter(x -> x instanceof IDeepSearchResult sr
-							&& (sr.getSearchResultsEmpty() == null || !sr.getSearchResultsEmpty()))
-					.cast(IDeepSearchResult.class);
-			final Flux<ConsolidationInput> mapped = sourcesFlux.map(x -> {
-				ConsolidationInput consolidated = new ConsolidationInput(x.getDataSourceDescription(), null, null,
-						x.getResponse());
-				return consolidated;
-			});
-			Mono<List<ConsolidationInput>> monoList = mapped.collectList();
-			String consolidatedText = callLLMConsolidateText(chatModel, configuration.getConsolidationPrompt(),
-					request.getQuery(), "", monoList.block());
-			consolidatedResult.getOutputData().setResponse(consolidatedText);
-			consolidatedResult.getOutputData().setProcessPercentage(100);
-			boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
+			IGConfigurableChatModel chatModel, Vector<IDeepSearchResult> intermediates) {
+		Mono<AbstractDeepSearchEvent> deferred = Mono.fromCallable(() -> {
+			final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
+			consolidatedResult.setInputData(request);
+			consolidatedResult.setOutputData(new DeepSearchResponse());
+			consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
+			if (intermediates != null && !intermediates.isEmpty()) {
+				List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
+				for (IDeepSearchResult x : intermediates) {
+					ConsolidationInput consolidated = new ConsolidationInput(x.getDataSourceDescription(), null, null,
+							x.getResponse());
+					inputs.add(consolidated);
+				}
+				String consolidatedText = callLLMConsolidateText(chatModel, configuration.getConsolidationPrompt(),
+						request.getQuery(), "", inputs);
+				consolidatedResult.getOutputData().setResponse(consolidatedText);
+				consolidatedResult.getOutputData().setProcessPercentage(100);
+				boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
+				consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
+				consolidatedResult.getOutputData().setProcessPercentage(100);
 
-			consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
-			consolidatedResult.getOutputData().setProcessPercentage(100);
-			composedFlux = Flux.concat(composedFlux, Flux.just(consolidatedResult));
-			return composedFlux;
-		} else {
+			} else {
+				consolidatedResult.getOutputData().setResponse(null);
+				consolidatedResult.getOutputData().setProcessPercentage(100);
+				consolidatedResult.getOutputData().setSearchResultsEmpty(true);
 
-			consolidatedResult.getOutputData().setResponse(null);
-			consolidatedResult.getOutputData().setProcessPercentage(100);
-			boolean knowledgeBaseSearchesHaveResults = state.getDocumentSearchResults() != null
-					&& state.getDocumentSearchResults().getDocumentItems().size() > 0;
-
-			consolidatedResult.getOutputData().setSearchResultsEmpty(true);
-			return Flux.just(consolidatedResult);
-		}
-
+			}
+			return consolidatedResult;
+		});
+		return Flux.concat(composedFlux, deferred);
 	}
 
 	private boolean thereAreNotEmpty(List<IDeepSearchResult> dataSourcesResults) {

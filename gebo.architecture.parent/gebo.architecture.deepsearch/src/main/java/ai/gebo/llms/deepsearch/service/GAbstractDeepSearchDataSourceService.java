@@ -321,6 +321,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			processed.setOutputData(new DeepSearchDataSourceResponse());
 			processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
 			processed.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			processed.getOutputData().setDeepsearchCode(request.getCode());
 			List<ConsolidationInput> input = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
 			for (AbstractDeepSearchEvent ev : listedEvents) {
 				if (ev instanceof DeepSearchDataSourceDocumentResultEvent evds) {

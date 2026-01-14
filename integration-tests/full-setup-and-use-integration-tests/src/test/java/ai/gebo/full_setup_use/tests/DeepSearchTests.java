@@ -33,6 +33,10 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.googlesearch.handler.impl.GoogleSearchServiceImpl;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.repository.DeepSearchDataSourceDocumentResultRepository;
+import ai.gebo.llms.deepsearch.repository.DeepSearchDataSourceResponseRepository;
 import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.DeepSearchRequest;
@@ -40,6 +44,7 @@ import ai.gebo.monolithic.api.client.model.DeepSearchResponse;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import jakarta.validation.constraints.AssertFalse;
 import reactor.core.publisher.Flux;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -53,7 +58,6 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 		TestGeboSystemInfo systemInfo = executeSystemSetupBySecret();
 		ApiClient apiClient = createApiClient(systemInfo.getHost(), systemInfo.getPort(),
 				systemInfo.getSecurityHeader());
-
 
 		GeboDeepSearchControllerApi deepSearchApi = new GeboDeepSearchControllerApi(apiClient);
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
@@ -74,6 +78,22 @@ public class DeepSearchTests extends AbstractVendorSetupAndUseTest {
 		Path path = Path.of("deep-search-result.md");
 		Files.write(path, deepSearchResult.getResponse().getBytes(), StandardOpenOption.CREATE,
 				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+		DeepSearchDataSourceDocumentResultRepository dataSourceResultsRepo = runtimeBinder
+				.getImplementationOf(DeepSearchDataSourceDocumentResultRepository.class);
+		DeepSearchDataSourceResponseRepository responsesRepo = runtimeBinder
+				.getImplementationOf(DeepSearchDataSourceResponseRepository.class);
+		List<DeepSearchDataSourceDocumentResult> data = dataSourceResultsRepo
+				.findByDeepsearchCode(deepSearchRequest.getCode());
+		for (DeepSearchDataSourceDocumentResult deepSearchDataSourceDocumentResult : data) {
+			LOGGER.info("Data source document result: " + deepSearchDataSourceDocumentResult);
+		}
+		List<DeepSearchDataSourceResponse> responses = responsesRepo.findByDeepsearchCode(deepSearchRequest.getCode());
+		for (DeepSearchDataSourceResponse deepSearchDataSourceResponse : responses) {
+			LOGGER.info("Data source consolidated result:" + deepSearchDataSourceResponse);
+		}
+		assertFalse(data.isEmpty(), "List of produced documents analisys cannot be empty");
+
+		assertFalse(responses.isEmpty(), "List of produced data source result cannot be empty");
 
 	}
 }
