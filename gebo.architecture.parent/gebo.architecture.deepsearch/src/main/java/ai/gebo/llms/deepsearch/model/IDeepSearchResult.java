@@ -11,5 +11,6 @@ public interface IDeepSearchResult {
 	public String getDataSourceDescription();
 
 	public double getProcessPercentage();
+	public void setProcessPercentage(double p);
 
 }

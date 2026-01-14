@@ -1,9 +1,6 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,18 +8,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
-import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
@@ -31,7 +25,6 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
@@ -43,16 +36,10 @@ import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
-import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
-import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchKnowledgebasesResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
@@ -60,6 +47,11 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
@@ -120,18 +112,20 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		Flux<AbstractDeepSearchEvent> dataSourcesFlux = null;
 		// find next data source to evaluate end execute
 		for (IGDeepSearchDataSourceService handler : handlers) {
-			if (!state.getDataSourcesStatus().containsKey(handler.getHandlerId())
-					&& handler.isEnabled(chatModel, deepSearchConfig, request)) {
+			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
 				Flux<AbstractDeepSearchEvent> nextStepValue = null;
 				state.setCurrentDataSourceHandlerRunning(handler.getHandlerId());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Evaluating first found not yet executed external data source handler step:"
 							+ state.getCurrentDataSourceHandlerRunning());
 				}
-				Object initialState = handler.createInitialState(chatModel, deepSearchConfig, request);
-				state.getDataSourcesStatus().put(handler.getHandlerId(), initialState);
+				AtomicInteger totalSteps = new AtomicInteger(0);
+				AtomicInteger doneSteps = new AtomicInteger(0);
+				state.getDataSourcesStatusTotalSteps().put(handler.getHandlerId(), totalSteps);
+				state.getDataSourcesStatusDoneSteps().put(handler.getHandlerId(), doneSteps);
+
 				nextStepValue = handler.streamSearch(chatModel, deepSearchConfig, request, dataSourcesResults,
-						initialState, state, chunkingSessionId);
+						chunkingSessionId, totalSteps, doneSteps, state);
 				nextStepValue.subscribeOn(deepSearchScheduler);
 				if (dataSourcesFlux == null) {
 					dataSourcesFlux = nextStepValue;
@@ -445,6 +439,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 			boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
 
 			consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
+			consolidatedResult.getOutputData().setProcessPercentage(100);
 			composedFlux = Flux.concat(composedFlux, Flux.just(consolidatedResult));
 			return composedFlux;
 		} else {

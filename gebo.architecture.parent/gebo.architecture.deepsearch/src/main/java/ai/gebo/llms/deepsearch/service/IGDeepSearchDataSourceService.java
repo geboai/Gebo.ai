@@ -2,6 +2,7 @@ package ai.gebo.llms.deepsearch.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -16,7 +17,7 @@ import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 
-public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
+public interface IGDeepSearchDataSourceService< InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
 	public DataSourceExecutionTime getExecutionTime();
 
 	/**************************************************************************
@@ -43,25 +44,18 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	public String getDescription(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			DeepSearchRequest request);
 
-	/****************************************************************
-	 * Creates an initial state for iterative process steps
-	 * 
-	 * @param request
-	 * @return
-	 */
-	public StateType createInitialState(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request);
+	
 
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
 	 * @param request
 	 * @param pastSystemsResponses
-	 * @param state
-	 * @param deepSearchSharedState TODO
 	 * @param chunkingSessionId TODO
+	 * @param totalSteps TODO
+	 * @param doneSteps TODO
+	 * @param deepSearchState TODO
 	 * @param history
-	 * 
 	 * @return
 	 * @throws LLMConfigException
 	 * @throws IOException
@@ -70,8 +64,7 @@ public interface IGDeepSearchDataSourceService<StateType, InputType, OutputType,
 	 * @throws SearchServiceException
 	 */
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, StateType state,
-			DeepSearchState deepSearchSharedState, String chunkingSessionId) throws LLMConfigException, IOException, GeboIngestionException,
+			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

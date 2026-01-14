@@ -3,6 +3,7 @@ package ai.gebo.llms.deepsearch.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import lombok.Data;
@@ -16,19 +17,19 @@ public class DeepSearchState {
 	private int ragDocumentFragmentPointer = 0;
 	private int fragmentsCount = 0;
 	private int elaboratedFragmentsCount = 0;
-	private HashMap<String, Object> dataSourcesStatus = new HashMap<String, Object>();
-	private HashMap<String, Integer> dataSourcesStatusTotalSteps = new HashMap<String, Integer>();
-	private HashMap<String, Integer> dataSourcesStatusDoneSteps = new HashMap<String, Integer>();
+
+	private HashMap<String, AtomicInteger> dataSourcesStatusTotalSteps = new HashMap<String, AtomicInteger>();
+	private HashMap<String, AtomicInteger> dataSourcesStatusDoneSteps = new HashMap<String, AtomicInteger>();
 
 	private int dataSourceAlreadyConsolidatedIndex = 0;
-	
+
 	public double calculateProcessedPercent() {
 		double total = fragmentsCount;
 		double processed = elaboratedFragmentsCount;
-		for (Number nr : dataSourcesStatusTotalSteps.values()) {
+		for (AtomicInteger nr : dataSourcesStatusTotalSteps.values()) {
 			total += nr.doubleValue();
 		}
-		for (Number nr : dataSourcesStatusDoneSteps.values()) {
+		for (AtomicInteger nr : dataSourcesStatusDoneSteps.values()) {
 			processed += nr.doubleValue();
 		}
 		return total == 0.0 ? 0.0 : processed / total * 100.0;
