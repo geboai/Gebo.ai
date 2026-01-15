@@ -17,9 +17,10 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
+import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
-import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
+
 import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
@@ -60,8 +61,8 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				}
 
 				ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
-				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
-						params.isEnrichWithMetaData(), params.getTokensPerChunkSet(), chunkingSessionId);
+				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params,
+						chunkingSessionId);
 
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());

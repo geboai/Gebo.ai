@@ -18,6 +18,8 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
+import ai.gebo.architecture.documents.cache.model.ChinkingPolicy;
+import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -34,6 +36,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
@@ -47,9 +50,11 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
+import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -62,6 +67,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected final Class<CustomContentExtractionType> customContentExtractionType;
 	protected final IDocumentsChunkService chunkingService;
 	protected final IGeboThreadManager threadManager;
+	protected final SearchResultsRankingService rankingService;
+	protected final DeepSearchDefaultConfig deepSearchDefaultConfig;
 	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
 	private static final int MAX_NESTING_LEVEL = 2;
 	private static final JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -69,11 +76,14 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 
 	protected GAbstractDeepSearchDataSourceService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IDocumentsChunkService chunkingService,
-			Class<CustomContentExtractionType> customContentExtractionType, IGeboThreadManager threadManager) {
+			Class<CustomContentExtractionType> customContentExtractionType, IGeboThreadManager threadManager,
+			SearchResultsRankingService rankingService, DeepSearchDefaultConfig deepSearchDefaultConfig) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.customContentExtractionType = customContentExtractionType;
 		this.chunkingService = chunkingService;
 		this.threadManager = threadManager;
+		this.rankingService = rankingService;
+		this.deepSearchDefaultConfig = deepSearchDefaultConfig;
 	}
 
 	@AllArgsConstructor
@@ -85,6 +95,13 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		final AbstractDeepSearchEvent event;
 	}
 
+	private final static int NCONTEXT_WINDOW_LENGTH_THREASHOLD = 2;
+
+	@Data
+	public final static class KeywordsList {
+		private List<String> keywords = new ArrayList<String>();
+	};
+
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
 			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses,
@@ -95,7 +112,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
 		}
-
+		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
 		final List<SearchResult> actualResultsSnapshots = new ArrayList<SearchResult>();
 
 		DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
@@ -157,6 +174,12 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		final int tokensBudget = (int) Math.round(tokensTotalExactBudget * 0.7);
 		final java.util.function.Supplier<List<SearchResult>> staticSupplier = () -> actualResultsSnapshots;
 		final List<AbstractChunkingSpecs> specs = List.of(TextChunkingSpecs.maximizedLength(tokensBudget));
+		KeywordsList chunkingKeywordsMatching = callLLMStructuredReturn(chatModel,
+				deepSearchConfig.getKeywordGenerationPrompt(), request.getQuery(), Map.of("context", ""),
+				KeywordsList.class);
+		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
+				chatModel.getContextLength() * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
+				chunkingKeywordsMatching.getKeywords(), specs, false, chatModel.getContextLength() * 50);
 		final BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			return this.customStructureConsolidation(actualData, currentConsolidation);
@@ -166,14 +189,34 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			List<SearchResult> list = supplier.get();
 			List<SearchResult> cleanList = new ArrayList<SearchResult>();
 			if (list != null && !list.isEmpty()) {
-				cleanList = cleanAndRemoveDuplicatedResults(actualResultsSnapshots, avoidMultipleAccess);
+				cleanList = cleanAndRemoveDuplicatedResults(list, avoidMultipleAccess);
 				if (LOGGER.isDebugEnabled()) {
 					List<String> contentsCodes = cleanList.stream().map(x -> x.getCode()).toList();
 					LOGGER.info("List of unique contents:" + contentsCodes);
 				}
 			}
-			totalSteps.addAndGet(cleanList.size());
-			return chunkingService.streamChunks(cleanList, specs, false, tokensBudget * 10, chunkingSessionId);
+			List<SearchResult> nextList = new ArrayList<SearchResult>();
+			try {
+				rankingService.rateReferences(chatModel, deepSearchConfig, list, request, sharedRatingStructure);
+				int delta = deepSearchDefaultConfig.getPerDataSourceMaxVisited() - doneSteps.intValue();
+				int nExtract = delta;
+				Math.min(delta, deepSearchDefaultConfig.getMaxExternalSourcesSearchResults());
+				for (int i = 0; i < delta; i++) {
+					SearchResult toVisit = sharedRatingStructure.popHigherRanked();
+					if (toVisit != null) {
+						nextList.add(toVisit);
+					} else {
+						break;
+					}
+				}
+			} catch (Throwable e) {
+				nextList = cleanList;
+			}
+			int nTotal = totalSteps.addAndGet(nextList.size());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Total steps incremented to:" + nTotal);
+			}
+			return chunkingService.streamChunks(nextList, params, chunkingSessionId);
 		};
 		ParallelFlux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(staticSupplier);
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {

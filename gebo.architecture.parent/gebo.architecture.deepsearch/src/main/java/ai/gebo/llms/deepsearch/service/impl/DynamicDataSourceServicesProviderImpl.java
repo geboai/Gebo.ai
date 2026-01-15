@@ -19,6 +19,7 @@ import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.service.DeepSearchDataSourceServiceWrapper;
 import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
+import ai.gebo.llms.deepsearch.service.SearchResultsRankingService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import lombok.AllArgsConstructor;
 
@@ -34,6 +35,7 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 	final IDocumentsChunkService chunkingService;
 	final DeepSearchDefaultConfig deepSearchDefaultConfig;
 	final IGeboThreadManager threadManager;
+	final SearchResultsRankingService rankingService;
 	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceServicesProviderImpl.class);
 
 	@Override
@@ -53,7 +55,7 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 			try {
 				wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
 						iSearchService.getCustomResultsAggregationDataType(), iSearchService, documentReferenceFactory,
-						ingestionHandler, deepSearchDefaultConfig, chunkingService, threadManager);
+						ingestionHandler, deepSearchDefaultConfig, chunkingService, threadManager, rankingService);
 				wrappers.add(wrapper);
 			} catch (Throwable e) {
 				LOGGER.error("Exception in getDynamicDeepSearchServices()", e);

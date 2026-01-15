@@ -35,7 +35,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 	protected final int maxSearchesReturnedPerSystem;
 	protected final IGDocumentReferenceFactory documentReferenceFactory;
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
-	protected final DeepSearchDefaultConfig deepSearchDefaultConfig;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
 
@@ -44,13 +44,15 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 			Class<CustomSearchResultExtractionDataType> customContentExtractionType,
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
-			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService, IGeboThreadManager threadManager) {
-		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType, threadManager);
+			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
+			IGeboThreadManager threadManager, SearchResultsRankingService rankingService) {
+		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
+				threadManager, rankingService, deepSearchDefaultConfig);
 		this.searchService = searchService;
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
 		this.ingestionHandler = ingestionHandler;
-		this.deepSearchDefaultConfig = deepSearchDefaultConfig;
+		
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
 	}
@@ -98,8 +100,6 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		return List.of();
 	}
 
-	
-
 	@Override
 	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
 			throws IOException, SearchServiceException {
@@ -134,8 +134,6 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 		return wrappedServicePrompt != null && wrappedServicePrompt.trim().length() > 0 ? wrappedServicePrompt
 				: standardPrompt;
 	}
-
-	
 
 	@Override
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,

@@ -182,7 +182,21 @@ public class BaseLlmsInvokingService {
 		}
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
+	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question,  Map<String, Object> additionalVariables, Class<T> type)
+			throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+	
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			String prompt, Object documents, String question, Object consolidated, Class<T> type)
 			throws LLMConfigException {

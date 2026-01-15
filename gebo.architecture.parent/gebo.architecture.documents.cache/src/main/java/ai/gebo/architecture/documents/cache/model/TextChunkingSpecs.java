@@ -15,7 +15,7 @@ public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	// Discard chunks shorter than this
 	int minChunkLengthToEmbed = 5;
 	// The maximum number of chunks to generate from a text
-	int maxNumChunks = 10000;
+	int maxNumChunks = MAX_CHUNKS_NUMBERS;
 	boolean keepSeparator = true;
 
 	public TextChunkingSpecs() {
@@ -38,6 +38,6 @@ public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	}
 
 	public static TextChunkingSpecs maximizedLength(int chunkingSize) {
-		return of(chunkingSize, chunkingSize / 4, MAX_CHUNKS_NUMBERS);
+		return of(chunkingSize, chunkingSize / 2, MAX_CHUNKS_NUMBERS);
 	}
 }
