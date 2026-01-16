@@ -145,6 +145,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 			}
 		}
+		out.setInteractions(history);
 		_history.setValue(out);
 		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
 		return _history;
@@ -602,6 +603,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 				}
 			}
 		}
+		out.setInteractions(history);
 		_history.setValue(out);
 		_history.setNToken(nhistoryTokens);
 		return _history;
