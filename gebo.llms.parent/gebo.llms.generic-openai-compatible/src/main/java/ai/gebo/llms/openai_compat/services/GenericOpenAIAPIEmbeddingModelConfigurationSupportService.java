@@ -220,8 +220,9 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
-		if (providerConfig.getBasePath() == null)
+		if (providerConfig.getBasePath() != null && providerConfig.getBasePath() .trim().length()>0) {
 			providerConfig.setBasePath(type.getBaseUrl());
+		}
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
 					GenericOpenAIAPIEmbeddingModelChoice.class, type);

@@ -174,12 +174,17 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		final int tokensBudget = (int) Math.round(tokensTotalExactBudget * 0.7);
 		final java.util.function.Supplier<List<SearchResult>> staticSupplier = () -> actualResultsSnapshots;
 		final List<AbstractChunkingSpecs> specs = List.of(TextChunkingSpecs.maximizedLength(tokensBudget));
+
 		KeywordsList chunkingKeywordsMatching = callLLMStructuredReturn(chatModel,
 				deepSearchConfig.getKeywordGenerationPrompt(), request.getQuery(), Map.of("context", ""),
 				KeywordsList.class);
+
 		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
 				chatModel.getContextLength() * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
 				chunkingKeywordsMatching.getKeywords(), specs, false, chatModel.getContextLength() * 50);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("chunkingParams=" + params);
+		}
 		final BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			return this.customStructureConsolidation(actualData, currentConsolidation);

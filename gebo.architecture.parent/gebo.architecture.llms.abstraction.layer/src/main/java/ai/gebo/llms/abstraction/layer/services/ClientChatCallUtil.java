@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
@@ -23,9 +24,12 @@ public class ClientChatCallUtil {
 	private static final String END_DOCUMENTS = "END DOCUMENTS";
 	private static final String BEGIN_DOCUMENTS = "BEGIN DOCUMENTS";
 	private static final String NEWLINE = "\r\n";
-	public static String createPromptAndContext(Prompt prompt, IChatContext chatContext) {
+
+	public static SystemMessage createPromptAndContext(Prompt prompt, IChatContext chatContext) {
+		;
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(prompt.toString());
+		buffer.append(prompt.getContents());
+		buffer.append(NEWLINE);
 		List<Document> documents = chatContext.getDocuments();
 		if (documents != null && documents.size() > 0) {
 			buffer.append(BEGIN_DOCUMENTS);
@@ -34,7 +38,7 @@ public class ClientChatCallUtil {
 				String text = renderDocument(document);
 				buffer.append(text);
 			}
-	
+
 			buffer.append(END_DOCUMENTS);
 			buffer.append(NEWLINE);
 		}
@@ -44,7 +48,7 @@ public class ClientChatCallUtil {
 			buffer.append(consolidated);
 			buffer.append(NEWLINE);
 		}
-		return buffer.toString();
+		return new SystemMessage(buffer.toString());
 	}
 
 	public static List<Message> getChatHistory(IChatContext chatContext) {
@@ -58,7 +62,7 @@ public class ClientChatCallUtil {
 					UserMessage _request = new UserMessage(request);
 					message_list.add(_request);
 				}
-	
+
 				if (assistant != null) {
 					AssistantMessage _response = new AssistantMessage(assistant);
 					message_list.add(_response);
@@ -84,7 +88,7 @@ public class ClientChatCallUtil {
 			String metadata = (String) document.getMetadata().get(DocumentMetaInfos.GEBO_EMBEDDING_METADATA);
 			String code = (String) document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
 			Object page = document.getMetadata().get(DocumentMetaInfos.CONTENT_PAGE);
-	
+
 			Map<String, Object> meta = new LinkedHashMap<>();
 			if (id != null)
 				meta.put("fragment-id", id); // Always useful
@@ -98,7 +102,7 @@ public class ClientChatCallUtil {
 				meta.put("tags", metadata);
 			if (page != null)
 				meta.put("page_hint", page);
-	
+
 			// Emit a block that starts with ===META=== and ends with ===ENDMETA===.
 			if (!meta.isEmpty()) {
 				data.append(META_BLOCK);
@@ -123,7 +127,5 @@ public class ClientChatCallUtil {
 	}
 
 	private static final String CONVERSATION_SUMMARY_SO_FAR = "Conversation summary so far:";
-
-	
 
 }
