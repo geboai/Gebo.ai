@@ -10,6 +10,7 @@ interface IModelChoice {
     choosedModel?: string;
 };
 interface IProviderAccess {
+    requireApiKeyAniway?:boolean;
     selectedSecret?: string;
     baseUrl?: string;
 }
@@ -117,10 +118,17 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         
     }
     private handleSelectedSecretEnabled(baseUrlValueStatus: FormControlStatus, baseUrl: string | null, requireApiKeyAniway: boolean) {
-        let requiresApiKey = this.vendorConfiguration?.parentModel.requiresApiKey === true || requireApiKeyAniway === true;
+        let usableBaseUrl:string|undefined=undefined;
+        let usableSecretId:string|undefined;
+        let doLookupModels:boolean=false;
+        const requiresApiKey = this.vendorConfiguration?.parentModel.requiresApiKey === true || requireApiKeyAniway === true;
         let knownUrl: boolean = this.vendorConfiguration?.parentModel.requiresCustomUrl !== true;
+        let apiKeyOk:boolean=false;
         if (this.vendorConfiguration?.parentModel.requiresCustomUrl === true) {
             knownUrl = baseUrlValueStatus === "VALID" && (baseUrl!==null && baseUrl.length>0);
+            if (knownUrl) {
+                usableBaseUrl=baseUrl?baseUrl:undefined;
+            }
         }
         const selectedSecretEnabled: boolean = requiresApiKey && knownUrl;
         this.secretFormGroup.controls["selectedSecret"].clearValidators();
@@ -131,6 +139,17 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         } else {
             this.secretFormGroup.controls["selectedSecret"].disable();
         }
+       const actualParams:IProviderAccess=this.secretFormGroup.value;
+       if (requiresApiKey) {
+            usableSecretId=actualParams?.selectedSecret;
+            apiKeyOk=usableSecretId?true:false;
+       }else {
+            apiKeyOk=true;
+       }
+       doLookupModels=apiKeyOk && knownUrl;
+       if (doLookupModels===true) {
+            this.loadModels(usableSecretId,usableBaseUrl);
+       }
         
     }
 
