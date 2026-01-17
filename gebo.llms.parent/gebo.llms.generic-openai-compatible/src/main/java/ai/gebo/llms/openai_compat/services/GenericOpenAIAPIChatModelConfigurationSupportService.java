@@ -258,6 +258,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			} else
 				return super.prepareCall(prompt, userQuestion, chatContext, documents);
 		}
+
+		@Override
+		public boolean isApplyThinkingMarkupHandling() {
+
+			return GenericOpenAIAPIChatModelConfigurationSupportService.this.type.isApplyThinkingMarkupHandling();
+		}
 	};
 
 	/**

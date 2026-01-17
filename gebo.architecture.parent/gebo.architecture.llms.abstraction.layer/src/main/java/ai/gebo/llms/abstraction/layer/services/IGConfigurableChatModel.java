@@ -143,4 +143,8 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 
 	public <ResponseType> ResponseType structuredResponse(Prompt prompt, String query, IChatContext chatContext,
 			List<Document> docs, Class<ResponseType> rt) throws LLMConfigException;
+
+	public default boolean isApplyThinkingMarkupHandling() {
+		return false;
+	}
 }

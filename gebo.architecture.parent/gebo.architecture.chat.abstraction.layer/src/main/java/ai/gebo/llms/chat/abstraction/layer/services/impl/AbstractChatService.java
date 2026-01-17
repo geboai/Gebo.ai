@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatContext;
 import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -318,7 +320,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, request.getQuery(), chatContext,
 					docs);
 			return composeFlux(res, context, request, response, userContext, toolsContext, chatHistoryConsolidation,
-					historySizeTarget);
+					historySizeTarget,configurableChatModel);
 		} catch (Throwable th) {
 			LOGGER.error("", th);
 			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", th);
@@ -340,11 +342,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param toolsContext             Context for tools involved in chat
 	 * @param historySizeTarget
 	 * @param chatHistoryConsolidation
+	 * @param configurableChatModel 
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
 	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final GUserChatContext userContext,
-			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget) {
+			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
@@ -353,6 +356,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				: List.of();
 		final Map<String, ToolCall> toolCalls = new HashMap<>();
 		final StringBuffer buffer = new StringBuffer();
+		final boolean skipThinkingMarkup=configurableChatModel.isApplyThinkingMarkupHandling();
+		
 		Mono<GeboChatMessageEnvelope> startFlux = Mono.fromSupplier(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a GeboChatResponse opening content");
@@ -399,11 +404,18 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					}
 				}
 			}
+			String thisText=contentSegment.toString();
+			buffer.append(thisText);
+			if (!skipThinkingMarkup) {
+				envelope.setContent(thisText);
+			}else if (ClientChatCallUtil.isAfterThinking(buffer.toString())){
+				envelope.setContent(thisText);
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Sending a String content:" + contentSegment.toString());
 			}
-			envelope.setContent(contentSegment.toString());
-			buffer.append(envelope.getContent());
+			
+			
 			return returned;
 		}).onErrorResume(exc -> {
 			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
@@ -419,7 +431,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				LOGGER.debug("Sending a GeboChatResponse trailing content with lastMessage: true");
 			}
 			String responseText = buffer.toString();
-			response.setQueryResponse(responseText);
+			response.setThinkingOutputs(ClientChatCallUtil.extractThinking(responseText));
+			response.setQueryResponse(ClientChatCallUtil.removeThinking(responseText));
 			List<CalledFunction> calls = context.getCalledFunctions();
 			if (calls == null || calls.isEmpty()) {
 				calls = new ArrayList<>(toCalledFunctions(toolCalls.values()));

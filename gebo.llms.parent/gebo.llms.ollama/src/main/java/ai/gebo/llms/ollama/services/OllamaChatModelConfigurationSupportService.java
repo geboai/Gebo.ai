@@ -152,6 +152,11 @@ public class OllamaChatModelConfigurationSupportService
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
+		@Override
+		public boolean isApplyThinkingMarkupHandling() {
+			
+			return true;
+		}
 	};
 
 	/**

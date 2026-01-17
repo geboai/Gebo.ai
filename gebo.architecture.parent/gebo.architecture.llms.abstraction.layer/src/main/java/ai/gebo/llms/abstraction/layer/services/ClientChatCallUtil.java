@@ -17,8 +17,14 @@ import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
 import ai.gebo.model.DocumentMetaInfos;
 
 public class ClientChatCallUtil {
+	private static final String ASSISTANT_TURN_END_ESCAPED = "< < <END_ASSISTANT> > >";
+	private static final String USER_TURN_END_ESCAPED = "< < <END_USER> > >";
+	private static final String ASSISTANT_TURN_START_ESCAPED = "< < <ASSISTANT> > >";
+	private static final String USER_TURN_START_ESCAPED = "< < <USER> > >";
 	private static final String THINK_TAG_END = "</think>";
 	private static final String THINK_TAG_START = "<think>";
+	private static final String THINKING_TAG_END = "</thinking>";
+	private static final String THINKING_TAG_START = "<thinking>";
 	private static final String ASSISTANT_TURN_END = "<<<END_ASSISTANT>>>";
 	private static final String ASSISTANT_TURN_START = "<<<ASSISTANT>>>";
 	private static final String USER_TURN_END = "<<<END_USER>>>";
@@ -30,6 +36,176 @@ public class ClientChatCallUtil {
 	private static final String END_DOCUMENTS = "END DOCUMENTS";
 	private static final String BEGIN_DOCUMENTS = "BEGIN DOCUMENTS";
 	private static final String NEWLINE = "\r\n";
+
+	public static String removeThinking(String data) {
+		String lower = data.toLowerCase();
+		int startTag = lower.indexOf(THINK_TAG_START);
+		int endTag = lower.indexOf(THINK_TAG_END);
+		if (endTag > startTag && startTag >= 0) {
+			return data.substring(endTag + THINK_TAG_END.length());
+		} else {
+			startTag = lower.indexOf(THINKING_TAG_START);
+			endTag = lower.indexOf(THINKING_TAG_END);
+			if (endTag > startTag && startTag >= 0) {
+				return data.substring(endTag + THINKING_TAG_START.length());
+			}
+			return data;
+		}
+	}
+
+	public static boolean isInsideThinking(String data) {
+		String lower = data.toLowerCase();
+		int endTag = lower.indexOf(THINK_TAG_END);
+		if (endTag >= 0)
+			return false;
+		int startTag = lower.indexOf(THINK_TAG_START);
+		endTag = lower.indexOf(THINKING_TAG_END);
+		if (endTag >= 0)
+			return false;
+
+		if (startTag >= 0)
+			return true;
+		startTag = lower.indexOf(THINKING_TAG_START);
+		if (startTag >= 0)
+			return true;
+		return false;
+	}
+
+	public static boolean isAfterThinking(String data) {
+		String lower = data.toLowerCase();
+		int endTag = lower.indexOf(THINK_TAG_END);
+		if (endTag >= 0)
+			return true;
+		int startTag = lower.indexOf(THINK_TAG_START);
+		endTag = lower.indexOf(THINKING_TAG_END);
+		if (endTag >= 0)
+			return true;
+		return false;
+	}
+
+	public static boolean isWithThinking(String data) {
+		String lower = data.toLowerCase();
+		return lower.contains(THINKING_TAG_START) || lower.contains(THINK_TAG_START);
+	}
+
+	public static boolean isNonThinkingOutput(String data) {
+		if (isWithThinking(data))
+			return isAfterThinking(data);
+		else
+			return true;
+	}
+
+	public static List<String> extractThinking(String data) {
+		if (data == null || data.isEmpty()) {
+			return null;
+		}
+
+		final String lower = data.toLowerCase();
+
+		// Find first occurrence of any marker; if none -> null
+		int firstThink = lower.indexOf(THINK_TAG_START);
+		int firstThinking = lower.indexOf(THINKING_TAG_START);
+		if (firstThink < 0 && firstThinking < 0) {
+			return null;
+		}
+
+		List<String> steps = new java.util.ArrayList<>();
+
+		// Scan left-to-right and extract each <think>...</think> and
+		// <thinking>...</thinking> block
+		int i = 0;
+		while (i < data.length()) {
+			int sThink = lower.indexOf(THINK_TAG_START, i);
+			int sThinking = lower.indexOf(THINKING_TAG_START, i);
+
+			// Pick nearest start tag
+			int start;
+			String startTag;
+			String endTag;
+			if (sThink >= 0 && (sThinking < 0 || sThink <= sThinking)) {
+				start = sThink;
+				startTag = THINK_TAG_START;
+				endTag = THINK_TAG_END;
+			} else if (sThinking >= 0) {
+				start = sThinking;
+				startTag = THINKING_TAG_START;
+				endTag = THINKING_TAG_END;
+			} else {
+				break;
+			}
+
+			int contentStart = start + startTag.length();
+			int end = lower.indexOf(endTag, contentStart);
+			if (end < 0) {
+				// Unclosed tag: stop scanning to avoid infinite loop
+				break;
+			}
+
+			String chunk = data.substring(contentStart, end);
+
+			// Split into "steps": prefer paragraph-like boundaries, otherwise
+			// newline-based.
+			// - If it contains <p>...</p>, extract each <p> block.
+			// - Else split by blank lines / line breaks.
+			String chunkLower = chunk.toLowerCase();
+			if (chunkLower.contains("<p>")) {
+				int p = 0;
+				while (p < chunk.length()) {
+					int pStart = chunkLower.indexOf("<p>", p);
+					if (pStart < 0)
+						break;
+					int pContentStart = pStart + 3;
+					int pEnd = chunkLower.indexOf("</p>", pContentStart);
+					if (pEnd < 0)
+						break;
+					String pText = chunk.substring(pContentStart, pEnd).trim();
+					if (!pText.isEmpty())
+						steps.add(pText);
+					p = pEnd + 4;
+				}
+				// If there were <p> but nothing extracted (malformed), fallback
+				if (steps.isEmpty()) {
+					addStepsByNewlines(steps, chunk);
+				}
+			} else {
+				addStepsByNewlines(steps, chunk);
+			}
+
+			i = end + endTag.length();
+		}
+
+		return steps.isEmpty() ? null : steps;
+	}
+
+	/**
+	 * Helper: split a thinking block into steps using blank lines / line breaks.
+	 */
+	private static void addStepsByNewlines(List<String> out, String text) {
+		if (text == null)
+			return;
+		// Normalize newlines
+		String normalized = text.replace("\r\n", "\n").replace('\r', '\n');
+
+		// First split by blank lines (paragraphs)
+		String[] paras = normalized.split("\\n\\s*\\n+");
+		for (String para : paras) {
+			String t = para.trim();
+			if (t.isEmpty())
+				continue;
+
+			// If still multi-line, split by single newline as secondary granularity
+			if (t.indexOf('\n') >= 0) {
+				String[] lines = t.split("\\n+");
+				for (String line : lines) {
+					String l = line.trim();
+					if (!l.isEmpty())
+						out.add(l);
+				}
+			} else {
+				out.add(t);
+			}
+		}
+	}
 
 	public static SystemMessage createPromptAndContext(Prompt prompt, IChatContext chatContext) {
 		StringBuffer buffer = new StringBuffer();
@@ -146,8 +322,9 @@ public class ClientChatCallUtil {
 
 	private static String escapeDelimiters(String s) {
 		// evita che contenuti utente “fingano” i tag
-		return s.replace(USER_TURN_START, "< < <USER> > >").replace(ASSISTANT_TURN_START, "< < <ASSISTANT> > >")
-				.replace(USER_TURN_END, "< < <END_USER> > >").replace(ASSISTANT_TURN_END, "< < <END_ASSISTANT> > >");
+		return s.replace(USER_TURN_START, USER_TURN_START_ESCAPED)
+				.replace(ASSISTANT_TURN_START, ASSISTANT_TURN_START_ESCAPED)
+				.replace(USER_TURN_END, USER_TURN_END_ESCAPED).replace(ASSISTANT_TURN_END, ASSISTANT_TURN_END_ESCAPED);
 	}
 
 	public static String createPromptContextHistory(Prompt prompt, IChatContext chatContext) {
@@ -196,14 +373,4 @@ public class ClientChatCallUtil {
 
 	private static final String CONVERSATION_SUMMARY_SO_FAR = "Conversation summary so far:";
 
-	public static String removeThinking(String data) {
-		String lower = data.toLowerCase();
-		int startTag = lower.indexOf(THINK_TAG_START);
-		int endTag = lower.indexOf(THINK_TAG_END);
-		if (endTag > startTag && startTag >= 0) {
-			return data.substring(startTag + THINK_TAG_START.length(), endTag);
-		} else {
-			return data;
-		}
-	}
 }
