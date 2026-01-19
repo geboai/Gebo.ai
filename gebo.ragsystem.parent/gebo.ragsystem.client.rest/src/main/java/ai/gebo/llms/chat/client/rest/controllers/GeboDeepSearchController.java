@@ -120,7 +120,7 @@ public class GeboDeepSearchController {
 	@PostMapping(value = "streamDeepSearch", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearch(@Valid @NotNull @RequestBody DeepSearchRequest request)
 			throws LLMConfigException {
-		Flux<AbstractDeepSearchEvent> flux = deepSearchService.searchAsync(request);
+		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchProcessedEvent.class);
 	}
 
@@ -167,7 +167,7 @@ public class GeboDeepSearchController {
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearchWithChatContext(
 			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException {
-		Flux<AbstractDeepSearchEvent> flux = deepSearchService.searchAsync(request);
+		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchChatResponseEvent.class);
 	}
 }

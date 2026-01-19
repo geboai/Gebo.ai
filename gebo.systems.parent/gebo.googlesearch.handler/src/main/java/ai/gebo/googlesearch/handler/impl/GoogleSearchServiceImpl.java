@@ -38,7 +38,6 @@ import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.LinkTypeGuesser;
-import ai.gebo.architecture.search.service.TypedInputStream;
 import ai.gebo.googlesearch.handler.config.GoogleSearchHandlerConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
@@ -48,6 +47,7 @@ import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import lombok.AllArgsConstructor;
 
@@ -191,13 +191,18 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 			}
 			encoding = "UTF-8";
 
-			return TypedInputStream.of(response.getEntity().getContent(), contentType);
+			return TypedInputStream.of(response.getEntity().getContent(), contentType, tryArgueExtension(result));
 
 		} else {
-			return TypedInputStream.of(InputStream.nullInputStream(), "text/html");
+			return TypedInputStream.of(InputStream.nullInputStream(), "text/html", ".html");
 
 		}
 
+	}
+
+	private String tryArgueExtension(SearchResult result) {
+		String url = result.getResultReference() != null ? result.getResultReference().getUri() : null;
+		return url == null ? null : tryArgueExtension(url);
 	}
 
 	private String getEncoding(HttpResponse response) {
@@ -219,8 +224,12 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		return encoding;
 	}
 
+	static final int SocketTimeout = 20000;
+	static final int ConnectTimeout = 10000;
+
 	private CloseableHttpClient createClient() {
-		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH).build();
+		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
+				.setSocketTimeout(SocketTimeout).setConnectTimeout(ConnectTimeout).build();
 		CookieStore cookieStore = new BasicCookieStore();
 		HttpClientContext context = HttpClientContext.create();
 		context.setCookieStore(cookieStore);
@@ -263,29 +272,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		return getRequest;
 	}
 
-	@Override
-	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
-
-		final Map<String, Boolean> unique = new HashMap<String, Boolean>();
-		List<SearchWithResults> outList = new ArrayList<SearchWithResults>();
-		for (SearchWithResults searchWithResults : queryResults) {
-			final SearchWithResults newCopy = new SearchWithResults();
-			newCopy.setSearchQuery(searchWithResults.getSearchQuery());
-			newCopy.setResults(new ArrayList<SearchResult>());
-			searchWithResults.getResults().forEach(x -> {
-				if (x.getResultReference() != null && x.getResultReference().getUri() != null) {
-					if (!unique.containsKey(x.getResultReference().getUri())) {
-						newCopy.getResults().add(x);
-						unique.put(x.getResultReference().getUri(), true);
-					}
-				}
-			});
-			if (!newCopy.getResults().isEmpty()) {
-				outList.add(newCopy);
-			}
-		}
-		return outList;
-	}
+	
 
 	@Override
 	public String getQueriesExtractionPrompt() {

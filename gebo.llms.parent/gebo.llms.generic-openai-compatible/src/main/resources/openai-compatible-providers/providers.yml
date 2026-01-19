@@ -28,6 +28,7 @@ ai.gebo.llms.generic.config:
     - code: chatmodel-vllm
       providerId: vllm
       description: VLLM hosted chat model
+      applyThinkingMarkupHandling: true
       baseUrl:
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services

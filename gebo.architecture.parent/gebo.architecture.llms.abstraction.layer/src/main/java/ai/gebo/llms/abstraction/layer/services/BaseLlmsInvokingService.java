@@ -182,7 +182,21 @@ public class BaseLlmsInvokingService {
 		}
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
+	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question,  Map<String, Object> additionalVariables, Class<T> type)
+			throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+	
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			String prompt, Object documents, String question, Object consolidated, Class<T> type)
 			throws LLMConfigException {
@@ -233,7 +247,7 @@ public class BaseLlmsInvokingService {
 		boolean complete = false;
 	}
 
-	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.8;
+	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.7;
 
 	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
 		double consolidationLength = tokensEstimation.estimate(consolidated);
@@ -246,6 +260,13 @@ public class BaseLlmsInvokingService {
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
 			Supplier<ConsolidationInput> input) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
+				input, false);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			Supplier<ConsolidationInput> input, boolean alreadySplitted) throws LLMConfigException, IOException {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLlmsInvokingService.ConsolidationInputBatch>();
 		ConsolidationInput currentInput = null;
@@ -256,6 +277,7 @@ public class BaseLlmsInvokingService {
 		int fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow);
 		do {
 			currentInput = input.get();
+
 			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
 				StringBuffer metaInfos = new StringBuffer();
 				if (currentInput.documentReference != null) {
@@ -275,12 +297,8 @@ public class BaseLlmsInvokingService {
 				final String fullTextWithMetaData = metaData + currentInput.text;
 				fragmentBudget -= metaDataTokens;
 				final int textTokensLength = tokensEstimation.estimate(fullTextWithMetaData);
-				// final PromptTemplate promptTemplate = new PromptTemplate(prompt);
-				// promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-				// promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
-				// if text token is too big for the residual i consolidate inside the single
-				// text
-				if (textTokensLength > fragmentBudget) {
+
+				if (!alreadySplitted && textTokensLength > fragmentBudget) {
 					// splits will be loaded in currentBatchesQueue
 					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
 							fragmentBudget, true);
@@ -472,22 +490,20 @@ public class BaseLlmsInvokingService {
 	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
 			Map<String, Object> additionalParams, Supplier<Document> input) {
 		final int contextWindow = chatModel.getContextLength();
-		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
+
 		Document currentInput = null;
 		final int promptLength = tokensEstimation.estimate(prompt);
 		StringBuffer outBuffer = new StringBuffer();
 		// Following 2 variables have to be updated once a consolidation is re-run
 
 		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
 		do {
+
 			currentInput = input.get();
 			if (currentInput != null && currentInput.isText() && currentInput.getText().trim().length() > 0) {
 
-				final int textTokensLength = currentInput.getMetadata() != null
-						&& currentInput.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
-								? ((Number) currentInput.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH))
-										.intValue()
-								: tokensEstimation.estimate(currentInput.getText());
+				final int textTokensLength = tokensEstimation.estimate(currentInput.toString());
 
 				if (textTokensLength > fragmentBudget) {
 					// splits will be loaded in currentBatchesQueue
@@ -499,7 +515,7 @@ public class BaseLlmsInvokingService {
 						ConsolidationDocuments batchItem = new ConsolidationDocuments();
 						batchItem.inputs.add(x);
 
-						batchItem.totaltokens = tokensEstimation.estimate(x.getText());
+						batchItem.totaltokens = tokensEstimation.estimate(x.toString());
 						x.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, batchItem.totaltokens);
 						return batchItem;
 					}).toList();
@@ -530,7 +546,7 @@ public class BaseLlmsInvokingService {
 					}
 				}
 			}
-
+			List<ConsolidationDocuments> unmanaged = new ArrayList<BaseLlmsInvokingService.ConsolidationDocuments>();
 			for (ConsolidationDocuments consolidationInputBatch : currentBatchesQueue) {
 				// if this batch is complete or we are at the end of contents
 				if (consolidationInputBatch.complete || currentInput == null) {
@@ -541,8 +557,11 @@ public class BaseLlmsInvokingService {
 						outBuffer.append(NEWLINE);
 					}
 					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+				} else {
+					unmanaged.add(consolidationInputBatch);
 				}
 			}
+			currentBatchesQueue = unmanaged;
 		} while (currentInput != null);
 		return outBuffer.isEmpty() ? null : outBuffer.toString();
 	}
@@ -560,13 +579,20 @@ public class BaseLlmsInvokingService {
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
 			List<ConsolidationInput> input) throws LLMConfigException, IOException {
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
+				input, false);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			List<ConsolidationInput> input, boolean alreadySplitted) throws LLMConfigException, IOException {
 		Iterator<ConsolidationInput> iterator = input.iterator();
 		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
 				() -> {
 					if (iterator.hasNext())
 						return iterator.next();
 					return null;
-				});
+				}, alreadySplitted);
 	}
 
 	public static final char CSV_COLUMN_SEPARATOR = ';';

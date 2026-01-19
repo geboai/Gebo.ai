@@ -145,6 +145,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 			}
 		}
+		out.setInteractions(history);
 		_history.setValue(out);
 		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
 		return _history;
@@ -198,7 +199,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		RagChatModelLimitedRequest lrequest = new RagChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		int contextWindowNToken = getContextLength(chatHandler);
+		final int rawContextNTokens=getContextLength(chatHandler);
+		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
 		OptimizedThreashold lastOptimizedThreasholds = threasholdAutotuneService
 				.findByEmbeddingModelCode(embeddingHandler.getCode());
 		// retrieve percentage of allocations settings and optimizations
@@ -602,6 +604,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 				}
 			}
 		}
+		out.setInteractions(history);
 		_history.setValue(out);
 		_history.setNToken(nhistoryTokens);
 		return _history;
@@ -641,7 +644,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		ChatModelLimitedRequest lrequest = new ChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		int contextWindowNToken = getContextLength(chatHandler);
+		final int rawContextNTokens=getContextLength(chatHandler);
+		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
 
 		// retrieve percentage of allocations settings and optimizations
 		ContextWindowLengthRangeSettings settings = findOptimizationSettings(contextWindowNToken);

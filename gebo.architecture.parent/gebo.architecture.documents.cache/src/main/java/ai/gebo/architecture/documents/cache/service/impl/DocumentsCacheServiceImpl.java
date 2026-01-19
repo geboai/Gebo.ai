@@ -16,14 +16,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.documents.cache.repository.DocumentCacheEntryRepository;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
+import ai.gebo.architecture.documents.cache.service.impl.model.DocumentCacheEntry;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 
@@ -32,6 +41,7 @@ public class DocumentsCacheServiceImpl
 		extends AbstractCacheEntryCleanupService<DocumentCacheEntry, DocumentCacheEntryRepository>
 		implements IDocumentsCacheService {
 	private final IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern;
+	private final ISearchServiceRepositoryPattern searchServicesRepository;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGGeboConfigService configService;
 	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsCacheServiceImpl.class);
@@ -39,12 +49,13 @@ public class DocumentsCacheServiceImpl
 
 	public DocumentsCacheServiceImpl(
 			IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern,
-			IGPersistentObjectManager persistentObjectManager, IGGeboConfigService configService,
-			DocumentCacheEntryRepository repository) {
+			ISearchServiceRepositoryPattern searchServicesRepository, IGPersistentObjectManager persistentObjectManager,
+			IGGeboConfigService configService, DocumentCacheEntryRepository repository) {
 		super(repository, 5 * 60 * 1000);
 		this.configService = configService;
 		this.persistentObjectManager = persistentObjectManager;
 		this.contentManagementSystemHandlerRepositoryPattern = contentManagementSystemHandlerRepositoryPattern;
+		this.searchServicesRepository = searchServicesRepository;
 	}
 
 	private IGContentManagementSystemHandler retrieveHandler(GDocumentReference reference)
@@ -67,27 +78,46 @@ public class DocumentsCacheServiceImpl
 	}
 
 	@Override
-	public InputStream streamDocument(GDocumentReference reference)
-			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamDocument(IGComponentOriginatedDocument reference) throws DocumentCacheAccessException,
+			GeboContentHandlerSystemException, SearchServiceException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ");");
 		}
-		IGContentManagementSystemHandler handler = retrieveHandler(reference);
-		if (handler.isContentsOnLocalFilesystem()) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming from local filesystem");
+		if (reference instanceof GDocumentReference docreference) {
+			IGContentManagementSystemHandler handler = retrieveHandler(docreference);
+			if (handler.isContentsOnLocalFilesystem()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming from local filesystem");
+				}
+				return TypedInputStream.of(handler.streamContent(docreference, new HashMap()),
+						docreference.getContentType(), docreference.getExtension());
 			}
-			return handler.streamContent(reference, new HashMap());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming and cache remote system");
+			}
+			SupplierWithException isSupplier = () -> {
+
+				return TypedInputStream.of(handler.streamContent(docreference, new HashMap()),
+						docreference.getContentType(), docreference.getExtension());
+
+			};
+			return streamDocumentWithLocalCache(isSupplier, reference);
 		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming and cache remote system");
+		if (reference instanceof SearchResult searchResult) {
+			GeboComponentInfo originComponent = searchResult.getOriginComponent();
+			ISearchService searchService = searchServicesRepository.findByOriginComponent(originComponent);
+			SupplierWithException isSupplier = () -> {
+				return searchService.loadSearchResult(searchResult);
+			};
+
+			return streamDocumentWithLocalCache(isSupplier, reference);
 		}
-		return streamDocumentWithLocalCache(reference, handler);
+		throw new RuntimeException("Object of type " + reference != null ? reference.getClass().getName() : "Unkown");
 	}
 
-	private InputStream streamDocumentWithLocalCache(GDocumentReference reference,
-			IGContentManagementSystemHandler handler)
-			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
+	private TypedInputStream streamDocumentWithLocalCache(SupplierWithException typedInputStreamSupplier,
+			IGComponentOriginatedDocument reference)
+			throws IOException, DocumentCacheAccessException, GeboContentHandlerSystemException, SearchServiceException {
 		Optional<DocumentCacheEntry> inCacheCopy = repository.findById(reference.getCode());
 		boolean loadAndCache = true;
 		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
@@ -105,7 +135,8 @@ public class DocumentsCacheServiceImpl
 					DocumentCacheEntry cacheEntry = inCacheCopy.get();
 					cacheEntry.setLastAccessed(new Date());
 					repository.save(cacheEntry);
-					return Files.newInputStream(filePath, StandardOpenOption.READ);
+					InputStream is = Files.newInputStream(filePath, StandardOpenOption.READ);
+					return TypedInputStream.of(is, cacheEntry.getContentType(), cacheEntry.getExtension());
 				}
 			}
 			repository.delete(inCacheCopy.get());
@@ -119,9 +150,19 @@ public class DocumentsCacheServiceImpl
 		Files.createDirectories(cacheFolder);
 		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
 				cacheEntry.getBinaryDocumentName());
-		Files.copy(handler.streamContent(reference, new HashMap()), filePath);
-		repository.save(cacheEntry);
-		return Files.newInputStream(filePath, StandardOpenOption.READ);
+		TypedInputStream tis = typedInputStreamSupplier.get();
+		if (tis != null) {
+			Files.copy(tis.getInputStream(), filePath);
+			try {
+				tis.getInputStream().close();
+			} catch (Throwable t) {
+			}
+			cacheEntry.setContentType(tis.getContentType());
+			repository.save(cacheEntry);
+			return TypedInputStream.of(Files.newInputStream(filePath, StandardOpenOption.READ), tis.getContentType(),
+					tis.getExtension());
+		}
+		return null;
 	}
 
 	@Override

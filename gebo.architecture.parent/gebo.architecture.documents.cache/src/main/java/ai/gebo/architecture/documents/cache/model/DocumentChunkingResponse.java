@@ -12,6 +12,7 @@ public class DocumentChunkingResponse {
 	private int totalChunksNumber = 0;
 	private DocumentChunksSet currentChunkSet = null;
 	private String nextChunkSetId = null;
+	private String chunkingSessionId = null;
 	private boolean empty;
 
 }

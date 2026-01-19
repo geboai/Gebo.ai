@@ -34,6 +34,7 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -80,8 +81,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
 			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-			IGChatRequestResourcesUsePolicy requestResourceUsePolicy,			
-			ChatHistoryConsolidationService historyConsolidationService, IGKnowledgebaseVisibilityService knowledgeBaseSecurityService) {
+			IGChatRequestResourcesUsePolicy requestResourceUsePolicy,
+			ChatHistoryConsolidationService historyConsolidationService,
+			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
 				generatedResourceRepository, historyConsolidationService, knowledgeBaseSecurityService);
@@ -445,8 +447,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
 					String content = handler.getChatClient().prompt(prompt.getPrompt())
 							.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
-					data.setDescription(content);
-					context.setDescription(content);
+					String pureText = ClientChatCallUtil.removeThinking(content);
+					data.setDescription(pureText);
+					context.setDescription(pureText);
 					this.userContextRepository.save(context);
 					return data;
 				}

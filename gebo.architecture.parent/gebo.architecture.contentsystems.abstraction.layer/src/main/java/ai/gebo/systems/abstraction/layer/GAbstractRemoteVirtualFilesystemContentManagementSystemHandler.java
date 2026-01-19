@@ -23,7 +23,6 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.search.service.TypedInputStream;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
@@ -31,6 +30,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GVirtualFilesystemProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 
 /**

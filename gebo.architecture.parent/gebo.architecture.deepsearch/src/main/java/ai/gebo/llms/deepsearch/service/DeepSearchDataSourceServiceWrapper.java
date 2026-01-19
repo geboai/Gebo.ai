@@ -15,10 +15,8 @@ import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
-import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
-import ai.gebo.architecture.search.service.TypedInputStream;
 import ai.gebo.architecture.utils.MimeTypes;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -136,7 +134,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 					}
 					return List.of();
 				}
-				TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
+				ai.gebo.model.base.TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
 				is = tInputStream.getInputStream();
 				String contentType = tInputStream.getContentType();
 				if (contentType == null) {
@@ -214,11 +212,7 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 				: standardPrompt;
 	}
 
-	@Override
-	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
-
-		return searchService.cleanAndRemoveDuplicated(queryResults);
-	}
+	
 
 	@Override
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,

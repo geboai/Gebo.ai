@@ -10,6 +10,7 @@ import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
+import ai.gebo.model.base.GeboComponentInfo;
 
 @Component
 @Scope("singleton")
@@ -25,6 +26,21 @@ public class SearchServiceRepositoryPatternImpl extends GAbstractImplementations
 	public String getCodeValue(ISearchService x) {
 
 		return x.getId();
+	}
+
+	@Override
+	public ISearchService findByOriginComponent(GeboComponentInfo originComponent) {
+		if (originComponent == null)
+			return null;
+		final String msgModuleId = originComponent.getMessagingModuleId();
+		final String msgComponentId = originComponent.getMessagingComponentId();
+		return findImplementation(x -> {
+			boolean found = x.getMessagingModuleId() != null && x.getMessagingSystemId() != null && msgModuleId != null
+					&& msgComponentId != null && msgModuleId.equals(x.getMessagingModuleId())
+					&& msgComponentId.equals(x.getMessagingSystemId());
+			return found;
+
+		});
 	}
 
 }

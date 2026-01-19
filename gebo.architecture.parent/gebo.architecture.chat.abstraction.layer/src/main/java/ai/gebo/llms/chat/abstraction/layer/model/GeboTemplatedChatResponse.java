@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
@@ -21,37 +18,48 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFun
 import ai.gebo.model.GUserMessage;
 
 /**
- * AI generated comments
- * GeboTemplatedChatResponse is a class representing the response of a chat-based interaction.
- * It holds various details about the chat interaction such as the context, chat model information,
- * user messages, document references, and other related metadata.
+ * AI generated comments GeboTemplatedChatResponse is a class representing the
+ * response of a chat-based interaction. It holds various details about the chat
+ * interaction such as the context, chat model information, user messages,
+ * document references, and other related metadata.
  *
  * @param <ResponseType> The type of the query response.
  */
 public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
-	protected String id=null;
+	protected String id = null;
 	protected String userChatContextCode = null; // Context code for user chat session
 	protected String usedChatModelCode = null; // Code of the chat model used in the response
 	protected String usedChatModelProvider = null; // Provider of the chat model used
 	protected ResponseType queryResponse = null; // The response to the chat query
-	protected GeboWorkingMemoryWindowOccupation windowOccupation = null; // Occupation details of the working memory window
+	protected GeboWorkingMemoryWindowOccupation windowOccupation = null; // Occupation details of the working memory
+																			// window
 	protected String query = null; // The query string for which this response is generated
-	protected List<GUserMessage> backendMessages = new ArrayList<GUserMessage>(); // List of backend messages related to the query
-	protected List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>(); // Forced document references
+	protected List<String> thinkingOutputs = null;
+	protected List<GUserMessage> backendMessages = new ArrayList<GUserMessage>(); // List of backend messages related to
+																					// the query
+	protected List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>(); // Forced document
+																										// references
 	protected List<GResponseDocumentRef> documentsRef = new ArrayList<GResponseDocumentRef>(); // Document references
-	protected List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>(); // List of functions called during the interaction
+	protected List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>(); // List
+																														// of
+																														// functions
+																														// called
+																														// during
+																														// the
+																														// interaction
 	protected ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
-	protected List<LLMGeneratedResource> generatedResources=new ArrayList<>();
+	protected List<LLMGeneratedResource> generatedResources = new ArrayList<>();
+
 	/**
 	 * Default constructor for GeboTemplatedChatResponse.
 	 */
 	public GeboTemplatedChatResponse() {
 
 	}
-	
+
 	/**
-	 * Copy constructor for GeboTemplatedChatResponse.
-	 * Initializes a new response by copying properties from an existing response.
+	 * Copy constructor for GeboTemplatedChatResponse. Initializes a new response by
+	 * copying properties from an existing response.
 	 *
 	 * @param r The existing response to copy.
 	 */
@@ -289,6 +297,14 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 
 	public void setGeneratedResources(List<LLMGeneratedResource> generatedResources) {
 		this.generatedResources = generatedResources;
+	}
+
+	public List<String> getThinkingOutputs() {
+		return thinkingOutputs;
+	}
+
+	public void setThinkingOutputs(List<String> thinkingOutputs) {
+		this.thinkingOutputs = thinkingOutputs;
 	}
 
 }

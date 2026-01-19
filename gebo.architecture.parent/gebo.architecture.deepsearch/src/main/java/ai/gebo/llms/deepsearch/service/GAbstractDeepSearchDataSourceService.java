@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 import org.slf4j.Logger;
@@ -133,8 +134,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			state.setQueryResults(queryResults);
 			int totalSteps = state.totalStepsCount();
 			int actualStep = state.actualStepsCount();
-			deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
-			deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
+			deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), new AtomicInteger(totalSteps));
+			deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), new AtomicInteger(actualStep));
 
 		}
 		if (state.getQueryResults() == null || state.getQueryResults().isEmpty()) {
@@ -162,8 +163,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				actualSearchResultRef = popSearchResult(state);
 				int totalSteps = state.totalStepsCount();
 				int actualStep = state.actualStepsCount();
-				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
-				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
+				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(),
+						new AtomicInteger(totalSteps));
+				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(),
+						new AtomicInteger(actualStep));
 				if (!actualSearchResultRef.isEmpty()) {
 					try {
 						boolean NotYetVisited = this.checkNotYetVisited(actualSearchResultRef.getActualSearchResult(),
@@ -261,8 +264,10 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			if (actualContribute != null && !actualSearchResultRef.isEmpty()) {
 				int totalSteps = state.totalStepsCount();
 				int actualStep = state.actualStepsCount();
-				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
-				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
+				deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(),
+						new AtomicInteger(totalSteps));
+				deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(),
+						new AtomicInteger(actualStep));
 				analyzedEvent = new DeepSearchDataSourceDocumentResultEvent();
 				analyzedEvent.setInputData(actualSearchResultRef.getActualSearchResult());
 				analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
@@ -286,8 +291,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		}
 		int totalSteps = state.totalStepsCount();
 		int actualStep = state.actualStepsCount();
-		deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), totalSteps);
-		deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), actualStep);
+		deepSearchSharedState.getDataSourcesStatusTotalSteps().put(getHandlerId(), new AtomicInteger(totalSteps));
+		deepSearchSharedState.getDataSourcesStatusDoneSteps().put(getHandlerId(), new AtomicInteger(actualStep));
 		DeepSearchDataSourceProcessedEvent returned = consolidate(state.getCumulatedAnalisys(), request,
 				deepSearchConfig, chatModel);
 		if (LOGGER.isDebugEnabled()) {
@@ -340,8 +345,6 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		}
 		return flattened;
 	}
-
-	protected abstract List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
 
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
@@ -441,4 +444,47 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel);
+
+	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {
+		return this.cleanAndRemoveDuplicated(queryResults, new HashMap());
+	}
+
+	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults,
+			Map<String, Boolean> nodups) {
+		List<SearchWithResults> outValue = new ArrayList<SearchWithResults>();
+		if (queryResults != null) {
+			for (SearchWithResults searchWithResults : queryResults) {
+				SearchWithResults copy = new SearchWithResults();
+				copy.setSearchQuery(searchWithResults.getSearchQuery());
+				copy.setResults(cleanAndRemoveDuplicatedResults(searchWithResults.getResults(), nodups));
+				if (!copy.getResults().isEmpty()) {
+					outValue.add(copy);
+				}
+			}
+		}
+		return outValue;
+	}
+
+	protected List<SearchResult> cleanAndRemoveDuplicatedResults(List<SearchResult> queryResults,
+			Map<String, Boolean> nodups) {
+		List<SearchResult> out = new ArrayList<SearchResult>();
+		for (SearchResult searchResult : queryResults) {
+			if (!nodups.containsKey(searchResult.getCode())) {
+				try {
+					SearchResult cloned = (SearchResult) searchResult.clone();
+					if ((cloned.getResultReference() != null && cloned.getResultReference().getUri() != null)
+							|| (cloned.getNavigationReference() != null)) {
+						cloned.setChilds(cleanAndRemoveDuplicatedResults(searchResult.getChilds(), nodups));
+						out.add(cloned);
+					} else {
+						LOGGER.warn("Removing result:" + cloned.getCode());
+					}
+				} catch (CloneNotSupportedException e) {
+					LOGGER.error("Clone not supported!!", e);
+				}
+				nodups.put(searchResult.getCode(), true);
+			}
+		}
+		return out;
+	}
 }

@@ -12,6 +12,7 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.model.base.TypedInputStream;
 
 public interface ISearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType> {
 	public static final String SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR = "<->";
@@ -73,7 +74,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
 			CustomSearchResultExtractionDataType consolidated);
 
-	public List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults);
+	
 
 	public String getQueriesExtractionPrompt();
 
@@ -82,7 +83,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public default void setOriginOn(SearchResult sr) {
 		if (sr != null) {
-			sr.setOriginComponent(new GeboComponentInfo(getMessagingModuleId(), getDescription()));
+			sr.setOriginComponent(new GeboComponentInfo(getMessagingModuleId(), getMessagingSystemId()));
 			setOriginOn(sr.getChilds());
 		}
 	}

@@ -4,32 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.tomcat.util.threads.ThreadPoolExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -46,6 +39,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
@@ -68,6 +62,7 @@ import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRe
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.llms.deepsearch.service.ReactiveMonitor;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -76,16 +71,16 @@ import ai.gebo.security.services.IGSecurityService;
 import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.FluxSink.OverflowStrategy;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 @Component
 @Scope("singleton")
 
 public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService {
+
+	private final DynamicDataSourceServicesProviderImpl dynamicDataSourceServicesProviderImpl;
 
 	static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
 	protected final DeepSearchDefaultConfig defaultDeepsearchConfig;
@@ -102,6 +97,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	protected final IGRagChatService ragChatService;
 	protected final IGChatService chatService;
 	protected final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	protected final IGeboThreadManager threadManager;
 
 	final ChatProfilesRepository chatProfilesRepository;
 
@@ -119,7 +115,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
 			DeepSearchDataSourceDocumentResultRepository dataSourceDocumentResultRepository,
 			DeepSearchDataSourceResponseRepository dataSourceResponseRepository,
-			ChatProfilesRepository chatProfilesRepository) {
+			ChatProfilesRepository chatProfilesRepository, IGeboThreadManager threadManager,
+			DynamicDataSourceServicesProviderImpl dynamicDataSourceServicesProviderImpl) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.chatProfilesRepository = chatProfilesRepository;
@@ -136,27 +133,13 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		this.ragChatService = ragChatService;
 		this.dataSourceResponseRepository = dataSourceResponseRepository;
 		this.dataSourceDocumentResultRepository = dataSourceDocumentResultRepository;
-		int core = 4;
-		int max = 8;
-		int queueSize = 200;
+		this.threadManager = threadManager;
 
-		ThreadFactory tf = new ThreadFactory() {
-			final AtomicInteger n = new AtomicInteger(1);
+		this.deepSearchExecutor = threadManager.getExecutorService();
 
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread t = new Thread(r, "deep-search-" + n.getAndIncrement());
-				t.setDaemon(true);
-				return t;
-			}
-		};
+		this.deepSearchScheduler = threadManager.getBoundedElastic();
 
-		this.deepSearchExecutor = new ThreadPoolExecutor(core, max, 60L, TimeUnit.SECONDS,
-				new ArrayBlockingQueue<>(queueSize), tf,
-				// Se la coda è piena: o rifiuti (fail-fast) oppure "caller runs"
-				new ThreadPoolExecutor.AbortPolicy());
-
-		this.deepSearchScheduler = Schedulers.fromExecutorService(deepSearchExecutor);
+		this.dynamicDataSourceServicesProviderImpl = dynamicDataSourceServicesProviderImpl;
 	}
 
 	@PreDestroy
@@ -164,8 +147,84 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchExecutor.shutdown();
 	}
 
-	@Override
-	public Flux<AbstractDeepSearchEvent> searchAsync(DeepSearchRequest request) throws LLMConfigException {
+	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(DeepSearchRequest request)
+			throws LLMConfigException {
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		return Mono.fromCallable(() -> {
+
+			var sc = SecurityContextHolder.createEmptyContext();
+			sc.setAuthentication(auth);
+			SecurityContextHolder.setContext(sc);
+
+			try {
+				final UserInfos userInfos = securityService.getCurrentUser();
+				request.setUsername(userInfos.getUsername());
+				requestsRepository.save(request);
+
+				final DeepSearchConfig stored = configRepository.findByDefaultConfig(true);
+				final DeepSearchConfig configuration = stored != null ? stored : defaultDeepsearchConfig;
+
+				final List<GKnowledgeBase> knowledgeBases = knowledgeBaseRepository
+						.findAllById(request.getKnowledgeBases());
+
+				final List<IGConfigurableEmbeddingModel> embeddingModels = getEmbeddingModelsListByKnowledgeBases(
+						knowledgeBases);
+
+				final IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
+
+				if (chatModel == null) {
+					return Prepared.error(request, GUserMessage.errorMessage("No chat model defined",
+							"No chat model configured for deep search nor default chat model is configured"));
+				}
+
+				return Prepared.ok(request, configuration, userInfos, embeddingModels, chatModel);
+
+			} finally {
+				SecurityContextHolder.clearContext();
+			}
+		}).subscribeOn(deepSearchScheduler).flatMapMany(prep -> {
+			if (prep.errorEvent != null)
+				return Flux.just(prep.errorEvent);
+			final IDocumentsChunkService chunkService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
+			final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getCode());
+			final FullReactiveDeepsearchWorker worker = runtimeBinder
+					.getImplementationOf(FullReactiveDeepsearchWorker.class);
+
+			Flux<AbstractDeepSearchEvent> flow;
+			try {
+				flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
+						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, deepSearchScheduler,
+						chunkSessionId);
+				if (flow != null) {
+					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
+				}
+			} catch (Throwable e) {
+				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
+				errorEvent.setInputData(request);
+				errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
+				flow = Flux.just(errorEvent);
+			}
+			if (chunkSessionId != null && flow != null) {
+				Runnable deleteChunkingSessionRunnable = new Runnable() {
+					@Override
+					public void run() {
+						try {
+							chunkService.disposeChunkingSession(chunkSessionId);
+						} catch (Throwable th) {
+							LOGGER.error("Exception disposing", th);
+						}
+					}
+				};
+				flow.doAfterTerminate(deleteChunkingSessionRunnable);
+			}
+			return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+					.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
+		});
+	}
+
+	protected Flux<AbstractDeepSearchEvent> singleThreadedStreamDeepSearch(DeepSearchRequest request)
+			throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return Flux.defer(() -> {
 
@@ -177,8 +236,6 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				final UserInfos userInfos = securityService.getCurrentUser();
 				request.setUsername(userInfos.getUsername());
 
-				// NB: qui sei ancora in blocking code (ok, ma verrà eseguito sul
-				// deepSearchScheduler grazie a subscribeOn)
 				requestsRepository.save(request);
 
 				final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
@@ -190,12 +247,9 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				final List<IGConfigurableEmbeddingModel> embeddingModels = getEmbeddingModelsListByKnowledgeBases(
 						knowledgeBases);
 
-				final GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
-				IGConfigurableChatModel finalChatModel;
+				final IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
 
-				finalChatModel = getChatModel(chatModelReference);
-
-				if (finalChatModel == null) {
+				if (chatModel == null) {
 					DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
 					errorEvent.setInputData(request);
 					errorEvent.setOutputData(GUserMessage.errorMessage("No chat model defined",
@@ -217,7 +271,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 						while (!cancelled.get()) {
 
 							step = worker.nextStep(request, history, state, configuration, userInfos, embeddingModels,
-									finalChatModel);
+									chatModel);
 
 							if (step == null) {
 								sink.complete();
@@ -283,6 +337,84 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	}
 
 	@Override
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException {
+		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
+				? defaultDeepsearchConfig.getUsedVariant()
+				: DeepSearchVariant.SINGLE_THREAD;
+		Flux<AbstractDeepSearchEvent> out = null;
+		switch (variant) {
+		case FULL_REACTIVE: {
+			out = this.fullReactivestreamDeepSearch(request);
+		}
+			break;
+
+		case SINGLE_THREAD: {
+			out = this.singleThreadedStreamDeepSearch(request);
+		}
+			break;
+		}
+		return out;
+	}
+
+	private void persistSideEffects(AbstractDeepSearchEvent step) {
+		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
+			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalyzedResult() != null
+					&& !dsDocumentEvent.getOutputData().getAnalyzedResult().trim().isEmpty()
+					&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
+							|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
+				dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
+			}
+		}
+		if (step instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessedEvent) {
+			if (dataSourceProcessedEvent.getOutputData() != null
+					&& dataSourceProcessedEvent.getOutputData().getResponse() != null
+					&& !dataSourceProcessedEvent.getOutputData().getResponse().trim().isEmpty()
+					&& (dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty() == null
+							|| !dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty())) {
+				dataSourceResponseRepository.save(dataSourceProcessedEvent.getOutputData());
+			}
+		}
+		if (step instanceof DeepSearchDocumentEvent documentEvent) {
+			stepsRepository.save(documentEvent.getOutputData());
+		}
+		if (step instanceof DeepSearchProcessedEvent doneEvent) {
+			responseRepository.save(doneEvent.getOutputData());
+		}
+	}
+
+	private static final class Prepared {
+		final DeepSearchRequest request;
+		final DeepSearchConfig configuration;
+		final UserInfos userInfos;
+		final List<IGConfigurableEmbeddingModel> embeddingModels;
+		final IGConfigurableChatModel chatModel;
+		final AbstractDeepSearchEvent errorEvent;
+
+		private Prepared(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
+				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+				AbstractDeepSearchEvent errorEvent) {
+			this.request = request;
+			this.configuration = configuration;
+			this.userInfos = userInfos;
+			this.embeddingModels = embeddingModels;
+			this.chatModel = chatModel;
+			this.errorEvent = errorEvent;
+		}
+
+		static Prepared ok(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
+				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel) {
+			return new Prepared(request, configuration, userInfos, embeddingModels, chatModel, null);
+		}
+
+		static Prepared error(DeepSearchRequest request, GUserMessage msg) {
+			DeepSearchErrorEvent e = new DeepSearchErrorEvent();
+			e.setInputData(request);
+			e.setOutputData(msg);
+			return new Prepared(request, null, null, null, null, e);
+		}
+	}
+
+	@Override
 	public Page<DeepSearchRequest> myDeepsearchPaged(Pageable pageable) {
 
 		return requestsRepository.findByUsername(securityService.getCurrentUser().getUsername(), pageable);
@@ -334,7 +466,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	}
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> searchAsync(GeboChatRequest request) throws LLMConfigException {
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request) throws LLMConfigException {
 		if (request.getId() == null) {
 			request.setId(UUID.randomUUID().toString());
 		}
@@ -387,14 +519,15 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
 		final GeboChatResponse response = cleanResponse;
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
-		response.setDocumentsRef(documents);
+
 		Mono<AbstractDeepSearchEvent> trailingFlux = Mono.fromSupplier(() -> {
+			response.setDocumentsRef(documents);
 			DeepSearchChatResponseEvent responseEvent = new DeepSearchChatResponseEvent();
 			responseEvent.setInputData(request);
 			responseEvent.setOutputData(response);
 			return responseEvent;
 		});
-		return searchAsync(deepSearchRequest).map(x -> {
+		return streamDeepSearch(deepSearchRequest).map(x -> {
 			if (x instanceof DeepSearchDocumentEvent documentEvent) {
 				// for each document add a reference here
 				GDocumentReference currentDocument = documentEvent.getInputData();
@@ -446,7 +579,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public List<GBaseObject> getDeepSearchActiveHandlers() {
 		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
 		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
-		final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+		final FullReactiveDeepsearchWorker worker = runtimeBinder
+				.getImplementationOf(FullReactiveDeepsearchWorker.class);
 		return worker.getDeepSearchActiveHandlers(configuration);
 	}
 

@@ -199,7 +199,8 @@ ai.gebo.chat:
         **Evidence from Knowledge Base**\n
         - Document: `<title>` (KB code: `<id>`): key point ... \n
         **Additional Insights from Training Knowledge**  \n
-        ... explanation, context, comparison, or optimization tips ..."""'
+        ... explanation, context, comparison, or optimization tips ...
+        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTION\n"""'
 
 ai.gebo.config:
   setupConfiguresWorkdir: false

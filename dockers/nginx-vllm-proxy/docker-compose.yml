@@ -1,0 +1,15 @@
+services:
+  llm-proxy:
+    image: openresty/openresty:alpine
+    container_name: llm-nginx-proxy
+    ports:
+      - "8089:8080"
+    # Per Linux: abilita host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./logs:/var/log/nginx
+    command: >
+      sh -c "mkdir -p /var/log/nginx && openresty -g 'daemon off;'"
+    restart: unless-stopped

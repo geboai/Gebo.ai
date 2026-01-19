@@ -19,7 +19,15 @@ package ai.gebo.llms.openai_compat.services;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -33,6 +41,8 @@ import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -123,6 +133,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
 
+		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
+
 		/**
 		 * Configures the OpenAI-compatible chat model with the provided configuration
 		 * 
@@ -186,10 +198,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			}
 
 			// Configure tool callbacks (functions)
-			List<ToolCallback> functionCallbacks = new ArrayList<ToolCallback>();
+
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				functionCallbacks.addAll(functions);
 				builder = builder.toolCallbacks(functions);
 				List<String> names = functions.stream().map(x -> {
 					return x.getToolDefinition().name();
@@ -200,9 +211,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (user != null) {
 				builder = builder.user(user);
 			}
-
 			OpenAiChatOptions options = builder.build();
-
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.create());
@@ -230,6 +239,31 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			return true;
 		}
 
+		protected ChatClientRequestSpec prepareCall(Prompt prompt, String userQuestion, IChatContext chatContext,
+				List<Document> documents) {
+			if (type.getCode().equals(CHATMODEL_VLLM)) {
+				ChatClient client = getChatClient();
+				// Here prompt, documents and consolidated history
+				String systemMessage = ClientChatCallUtil.createPromptContextHistory(prompt, chatContext);
+
+				ChatClientRequestSpec reqObject = client.prompt(systemMessage).user(userQuestion);
+				// chat histroy in user, assistant format
+				// reqObject = reqObject.messages(List.of(systemMessage));
+				// tools call environment
+				Map<String, Object> toolContext = chatContext.getToolsContext();
+				if (toolContext != null) {
+					reqObject = reqObject.toolContext(toolContext);
+				}
+				return reqObject;
+			} else
+				return super.prepareCall(prompt, userQuestion, chatContext, documents);
+		}
+
+		@Override
+		public boolean isApplyThinkingMarkupHandling() {
+
+			return GenericOpenAIAPIChatModelConfigurationSupportService.this.type.isApplyThinkingMarkupHandling();
+		}
 	};
 
 	/**

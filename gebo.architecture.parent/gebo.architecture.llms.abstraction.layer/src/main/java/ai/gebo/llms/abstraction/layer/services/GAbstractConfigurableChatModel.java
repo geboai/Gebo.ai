@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -42,7 +44,6 @@ import reactor.core.publisher.Flux;
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
 		implements IGConfigurableChatModel<ModelConfig> {
 
-	
 	// Configuration for the chat model
 	protected ModelConfig config = null;
 	// Type of the chat model
@@ -241,17 +242,17 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			List<Document> documents) {
 		ChatClient client = getChatClient();
 		// Here prompt, documents and consolidated history
-		String system = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);
-		List<Message> messages = ClientChatCallUtil.getChatHistory(chatContext);
-		ChatClientRequestSpec reqObject = client.prompt().system(system);
-		if (!messages.isEmpty()) {
-			// chat histroy in user, assistant format
-			reqObject = reqObject.messages(messages);
-		}
-		// user query
+		SystemMessage systemMessage = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);
+		List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
+		List<Message> messages = new ArrayList<Message>();
+		messages.add(systemMessage);
+		messages.addAll(history);
 		if (userQuestion != null) {
-			reqObject = reqObject.user(userQuestion);
+			messages.add(new UserMessage(userQuestion));
 		}
+		ChatClientRequestSpec reqObject = client.prompt();
+		// chat histroy in user, assistant format
+		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
 		if (toolContext != null) {
@@ -285,36 +286,4 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return res.entity(rt);
 	}
 
-//	protected List<Message> getMessages(IChatContext chatContext) {
-//		List<Message> message_list = new ArrayList<>();
-//		String consolidated = chatContext.getConsolidatedHistory();
-//		if (consolidated != null) {
-//			SystemMessage consolidatedMsg = new SystemMessage(CONVERSATION_SUMMARY_SO_FAR + consolidated + NEWLINE);
-//			message_list.add(consolidatedMsg);
-//		}
-//
-//		List<IQuestionAnswerEntry> interactions = chatContext.getInteractions();
-//		if (interactions != null) {
-//			for (IQuestionAnswerEntry chatInteraction : interactions) {
-//				String request = chatInteraction.getUser();
-//				String assistant = chatInteraction.getAssistant();
-//				if (request != null) {
-//					UserMessage _request = new UserMessage(request);
-//					message_list.add(_request);
-//				}
-//
-//				if (assistant != null) {
-//					AssistantMessage _response = new AssistantMessage(assistant);
-//					message_list.add(_response);
-//				}
-//			}
-//		}
-//		List<Document> docs = chatContext.getDocuments();
-//		if (docs != null) {
-//			for (Document document : docs) {
-//				message_list.add(new DocumentMessage(document));
-//			}
-//		}
-//		return message_list;
-//	}
 }

@@ -33,6 +33,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -574,8 +575,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
 					String content = handler.getChatClient().prompt(prompt.getPrompt())
 							.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
-					data.setDescription(content);
-					context.setDescription(content);
+					String pureText = ClientChatCallUtil.removeThinking(content);
+					data.setDescription(pureText);
+					context.setDescription(pureText);
+					
 					this.userContextRepository.save(context);
 					return data;
 				}
