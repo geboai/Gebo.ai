@@ -129,6 +129,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	private int perDataSourceMaxVisited = 25;
 	private int perDataSourceMaxInputTokens = 5000000;
 	private int perDataSourceMaxOutputTokens = 1000000;
+	private DeepSearchVariant usedVariant = DeepSearchVariant.FULL_REACTIVE;
 
 	public DeepSearchDefaultConfig() {
 		this.setDescription("Default deep search configuration");

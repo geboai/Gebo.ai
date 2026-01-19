@@ -17,7 +17,8 @@ public class DeepSearchState {
 	private int ragDocumentFragmentPointer = 0;
 	private int fragmentsCount = 0;
 	private int elaboratedFragmentsCount = 0;
-
+	private String consolidatedResult=null;
+    private HashMap<String, Object> dataSourcesStatus = new HashMap<String, Object>();
 	private HashMap<String, AtomicInteger> dataSourcesStatusTotalSteps = new HashMap<String, AtomicInteger>();
 	private HashMap<String, AtomicInteger> dataSourcesStatusDoneSteps = new HashMap<String, AtomicInteger>();
 

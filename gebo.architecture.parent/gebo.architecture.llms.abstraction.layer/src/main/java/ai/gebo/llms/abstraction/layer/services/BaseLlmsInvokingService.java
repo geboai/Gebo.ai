@@ -247,7 +247,7 @@ public class BaseLlmsInvokingService {
 		boolean complete = false;
 	}
 
-	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.8;
+	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.7;
 
 	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
 		double consolidationLength = tokensEstimation.estimate(consolidated);
