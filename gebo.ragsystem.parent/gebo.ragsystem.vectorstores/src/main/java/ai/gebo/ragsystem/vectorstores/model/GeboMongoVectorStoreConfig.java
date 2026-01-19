@@ -16,7 +16,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
-import ai.gebo.ragsystem.vectorstores.lucene.model.LuceneConfig;
 import ai.gebo.ragsystem.vectorstores.mongoatlas.model.MongoConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
@@ -45,8 +44,7 @@ public class GeboMongoVectorStoreConfig {
 	/** Configuration settings specific to Qdrant vector store */
 	QdrantConfig qdrantConfig = null;
 	
-	/** Configuration settings specific to Lucene vector store */
-	LuceneConfig luceneConfig=null;
+	
 	
 	/** Configuration settings specific to MongoDB Atlas vector store */
 	MongoConfig mongoConfig=null;
@@ -102,21 +100,7 @@ public class GeboMongoVectorStoreConfig {
 		this.id = id;
 	}
 
-	/**
-	 * Gets the Lucene-specific configuration
-	 * @return The Lucene configuration
-	 */
-	public LuceneConfig getLuceneConfig() {
-		return luceneConfig;
-	}
-
-	/**
-	 * Sets the Lucene-specific configuration
-	 * @param luceneConfig The Lucene configuration
-	 */
-	public void setLuceneConfig(LuceneConfig luceneConfig) {
-		this.luceneConfig = luceneConfig;
-	}
+	
 
 	/**
 	 * Gets the Redis-specific configuration

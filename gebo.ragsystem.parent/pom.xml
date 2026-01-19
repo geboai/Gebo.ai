@@ -19,6 +19,8 @@
 
 		<module>gebo.ragsystem.vectorstores.test.services</module>
 		<module>gebo.ragsystem.content.graphrag_processor</module>
+
+		<module>gebo.ragsystem.content.fulltext.processor</module>
 	</modules>
 	<dependencies>
 		<dependency>

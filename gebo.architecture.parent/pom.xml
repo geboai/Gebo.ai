@@ -20,7 +20,7 @@
   	<module>gebo.application.messaging</module>
   	<module>gebo.secrets.services</module>
   	<module>gebo.architecture.security.controllers</module>  	
-  	<module>gebo.architecture.lucene</module>
+  	
   	<module>gebo.architecture.multithreading</module>
   	<module>gebo.architecture.scheduling</module>
   	<module>gebo.multilanguage.support</module>
@@ -46,6 +46,8 @@
   	<module>gebo.architecture.deepsearch</module>
   	<module>gebo.architecture.hazelcast</module>
   	<module>gebo.architecture.search.abstraction.layer</module>
-  	<module>gebo.architecture.rag-threasholds-autotune</module>  	
+  	<module>gebo.architecture.rag-threasholds-autotune</module>
+  	<module>gebo.architecture.opensearch</module>
+  	<module>gebo.architecture.fulltext</module>
   </modules>
 </project>
