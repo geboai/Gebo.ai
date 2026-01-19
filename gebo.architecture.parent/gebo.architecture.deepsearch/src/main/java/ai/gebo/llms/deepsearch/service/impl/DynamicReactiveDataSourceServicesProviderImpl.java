@@ -16,9 +16,9 @@ import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
-import ai.gebo.llms.deepsearch.service.DeepSearchDataSourceServiceWrapper;
-import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
-import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
+import ai.gebo.llms.deepsearch.service.ReactiveDeepSearchDataSourceServiceWrapper;
+import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
+import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.SearchResultsRankingService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 @Component
 @Scope(value = "singleton")
 @AllArgsConstructor
-public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSourceServicesProvider {
+public class DynamicReactiveDataSourceServicesProviderImpl implements IGReactiveDynamicDataSourceServicesProvider {
 	final ISearchServiceRepositoryPattern searchServicesRepository;
 	final IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
@@ -36,10 +36,10 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 	final DeepSearchDefaultConfig deepSearchDefaultConfig;
 	final IGeboThreadManager threadManager;
 	final SearchResultsRankingService rankingService;
-	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceServicesProviderImpl.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicReactiveDataSourceServicesProviderImpl.class);
 
 	@Override
-	public List<IGDeepSearchDataSourceService> getDynamicDeepSearchServices() {
+	public List<IGReactiveDeepSearchDataSourceService> getDynamicDeepSearchServices() {
 		List<ISearchService> services = searchServicesRepository.findImplementations(x -> {
 			try {
 				return x.isEnabled();
@@ -49,11 +49,11 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 			}
 		});
 
-		List<IGDeepSearchDataSourceService> wrappers = new ArrayList<IGDeepSearchDataSourceService>();
+		List<IGReactiveDeepSearchDataSourceService> wrappers = new ArrayList<IGReactiveDeepSearchDataSourceService>();
 		for (ISearchService iSearchService : services) {
-			DeepSearchDataSourceServiceWrapper wrapper;
+			ReactiveDeepSearchDataSourceServiceWrapper wrapper;
 			try {
-				wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
+				wrapper = new ReactiveDeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
 						iSearchService.getCustomResultsAggregationDataType(), iSearchService, documentReferenceFactory,
 						ingestionHandler, deepSearchDefaultConfig, chunkingService, threadManager, rankingService);
 				wrappers.add(wrapper);

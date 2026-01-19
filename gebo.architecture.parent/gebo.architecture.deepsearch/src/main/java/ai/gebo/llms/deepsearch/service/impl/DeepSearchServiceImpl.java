@@ -179,7 +179,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				return Flux.just(prep.errorEvent);
 			final IDocumentsChunkService chunkService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
 			final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getCode());
-			final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+			final FullReactiveDeepsearchWorker worker = runtimeBinder.getImplementationOf(FullReactiveDeepsearchWorker.class);
 
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
@@ -436,7 +436,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public List<GBaseObject> getDeepSearchActiveHandlers() {
 		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
 		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
-		final DeepsearchWorker worker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
+		final FullReactiveDeepsearchWorker worker = runtimeBinder.getImplementationOf(FullReactiveDeepsearchWorker.class);
 		return worker.getDeepSearchActiveHandlers(configuration);
 	}
 

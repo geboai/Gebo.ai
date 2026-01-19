@@ -52,9 +52,9 @@ import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
-import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
-import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
-import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;
+import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
+import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
+import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
@@ -65,13 +65,13 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 @Service
-public class DeepsearchWorker extends BaseLlmsInvokingService {
+public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 	private static final String NEWLINE = "\r\n";
 	private static final String SEARCH_MODULE_NAME = "Search module name:";
 	private static final String END_DEEP_SEARCH_MODULE_RESULT = "[End Deep search module result]\r\n";
 	private static final String BEGIN_DEEP_SEARCH_MODULE_RESULT = "[Begin Deep search module result]\r\n";
-	private final static Logger LOGGER = LoggerFactory.getLogger(DeepsearchWorker.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FullReactiveDeepsearchWorker.class);
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
 	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
 	private static final String DOCUMENT_EXTRACTION_BEGIN = "[BEGIN DOCUMENT EXTRACTION]\r\n";
@@ -82,15 +82,15 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
 	@Autowired
-	private IGDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern;
+	private IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern;
 	@Autowired
-	private IDynamicDataSourceServicesProvider dataSourcesProvider;
+	private IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider;
 	@Autowired
 	private DeepSearchDefaultConfig defaultDeepsearchConfig;
 	@Autowired
 	private IRagThreasholdAutotuneService threasholdAutotuneService;
 
-	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
+	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 	}
@@ -99,7 +99,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 	private Flux<AbstractDeepSearchEvent> dataSourcesNextStep(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
-			List<IGDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
+			List<IGReactiveDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
 			DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler, String chunkingSessionId)
 			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
 			SearchServiceException {
@@ -111,7 +111,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		// next step
 		Flux<AbstractDeepSearchEvent> dataSourcesFlux = null;
 		// find next data source to evaluate end execute
-		for (IGDeepSearchDataSourceService handler : handlers) {
+		for (IGReactiveDeepSearchDataSourceService handler : handlers) {
 			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
 				Flux<AbstractDeepSearchEvent> nextStepValue = null;
 				state.setCurrentDataSourceHandlerRunning(handler.getHandlerId());
@@ -226,7 +226,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return Flux.concat(body, trail);
 	}
 
-	private List<IGDeepSearchDataSourceService> filterChoosed(List<IGDeepSearchDataSourceService> handlers,
+	private List<IGReactiveDeepSearchDataSourceService> filterChoosed(List<IGReactiveDeepSearchDataSourceService> handlers,
 			DeepSearchRequest request) {
 		if (request.getDeepSearchDataSources() == null)
 			return handlers;
@@ -247,7 +247,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				|| request.getKnowledgeBases() == null) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or null knowledge bases list");
 		}
-		List<IGDeepSearchDataSourceService> providedDeepSearchSourceService = this.dataSourcesProvider
+		List<IGReactiveDeepSearchDataSourceService> providedDeepSearchSourceService = this.dataSourcesProvider
 				.getDynamicDeepSearchServices();
 		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
@@ -263,9 +263,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				if (externalSourcesEnabled) {
 
 					// Streaming search steps from handlers before knowledge base search
-					List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
+					List<IGReactiveDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 							.findByExecutionTime(DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH);
-					handlers = new ArrayList<IGDeepSearchDataSourceService>(handlers);
+					handlers = new ArrayList<IGReactiveDeepSearchDataSourceService>(handlers);
 					handlers.addAll(providedDeepSearchSourceService.stream()
 							.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_BEFORE_DOCUMENTS_SEARCH)
 							.toList());
@@ -359,9 +359,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Actual phase:" + state.getPhase());
 					}
-					List<IGDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
+					List<IGReactiveDeepSearchDataSourceService> handlers = deepSearchDataSourcesRepositoryPattern
 							.findByExecutionTime(DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH);
-					handlers = new ArrayList<IGDeepSearchDataSourceService>(handlers);
+					handlers = new ArrayList<IGReactiveDeepSearchDataSourceService>(handlers);
 					handlers.addAll(providedDeepSearchSourceService.stream()
 							.filter(x -> x.getExecutionTime() == DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH)
 							.toList());
@@ -577,8 +577,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (chatModel == null)
 			return List.of();
 		final IGConfigurableChatModel fChatModel = chatModel;
-		List<IGDeepSearchDataSourceService> handlersFullList = new ArrayList<IGDeepSearchDataSourceService>();
-		List<IGDeepSearchDataSourceService> handlers = this.deepSearchDataSourcesRepositoryPattern
+		List<IGReactiveDeepSearchDataSourceService> handlersFullList = new ArrayList<IGReactiveDeepSearchDataSourceService>();
+		List<IGReactiveDeepSearchDataSourceService> handlers = this.deepSearchDataSourcesRepositoryPattern
 				.findImplementations(x -> {
 					try {
 						return x.isEnabled(fChatModel, configuration, null);
@@ -588,7 +588,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						return false;
 					}
 				});
-		List<IGDeepSearchDataSourceService> dynamicHandlers = this.dataSourcesProvider.getDynamicDeepSearchServices()
+		List<IGReactiveDeepSearchDataSourceService> dynamicHandlers = this.dataSourcesProvider.getDynamicDeepSearchServices()
 				.stream().filter(x -> {
 					try {
 						return x.isEnabled(fChatModel, configuration, null);

@@ -17,7 +17,7 @@ import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 
-public interface IGDeepSearchDataSourceService< InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
+public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
 	public DataSourceExecutionTime getExecutionTime();
 
 	/**************************************************************************

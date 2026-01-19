@@ -29,17 +29,17 @@ import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 
-public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType>
-		extends GAbstractDeepSearchDataSourceService<CustomSearchResultExtractionDataType> {
+public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType>
+		extends GAbstractReactiveDeepSearchDataSourceService<CustomSearchResultExtractionDataType> {
 	protected final ISearchService<CustomSearchResultExtractionDataType> searchService;
 	protected final int maxSearchesReturnedPerSystem;
 	protected final IGDocumentReferenceFactory documentReferenceFactory;
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchDataSourceServiceWrapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
 
-	public DeepSearchDataSourceServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
+	public ReactiveDeepSearchDataSourceServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
 			Class<CustomSearchResultExtractionDataType> customContentExtractionType,
 			ISearchService<CustomSearchResultExtractionDataType> searchService,

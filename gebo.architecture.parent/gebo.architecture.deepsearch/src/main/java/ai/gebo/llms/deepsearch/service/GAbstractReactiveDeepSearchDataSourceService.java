@@ -60,10 +60,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 
-public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
+public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLlmsInvokingService implements
-		IGDeepSearchDataSourceService<SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractDeepSearchDataSourceService.class);
+		IGReactiveDeepSearchDataSourceService<SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractReactiveDeepSearchDataSourceService.class);
 	protected final Class<CustomContentExtractionType> customContentExtractionType;
 	protected final IDocumentsChunkService chunkingService;
 	protected final IGeboThreadManager threadManager;
@@ -74,7 +74,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 	private static final JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 	private static final int MAX_DOCUMENT_TOKENS_SIZE_CONTEXT_MOLTIPLICATOR = 10;
 
-	protected GAbstractDeepSearchDataSourceService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
+	protected GAbstractReactiveDeepSearchDataSourceService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IDocumentsChunkService chunkingService,
 			Class<CustomContentExtractionType> customContentExtractionType, IGeboThreadManager threadManager,
 			SearchResultsRankingService rankingService, DeepSearchDefaultConfig deepSearchDefaultConfig) {
