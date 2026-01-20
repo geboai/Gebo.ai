@@ -7,23 +7,21 @@
 		<artifactId>gebo.ragsystem.parent</artifactId>
 		<version>1.0.1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
+	<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
 	<dependencies>
-
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.knowledgebase.model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-qdrant-store-spring-boot-starter</artifactId>
-			<version>${spring.ai.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.opensearch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			 <artifactId>gebo.architecture.fulltext</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -33,21 +31,8 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.application.messaging</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.system.ingestion</artifactId>
-			<version>${project.version}</version>
-		</dependency> -->
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.core.analisys</artifactId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
-
-
 </project>

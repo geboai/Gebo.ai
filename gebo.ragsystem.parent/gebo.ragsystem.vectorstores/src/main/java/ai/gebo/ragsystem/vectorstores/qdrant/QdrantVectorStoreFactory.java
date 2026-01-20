@@ -28,7 +28,6 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.qdrant.client.QdrantClient;
 import io.qdrant.client.QdrantGrpcClient;
-import io.qdrant.client.grpc.Points.PointId;
 
 /**
  * Factory for creating Qdrant vector store instances.

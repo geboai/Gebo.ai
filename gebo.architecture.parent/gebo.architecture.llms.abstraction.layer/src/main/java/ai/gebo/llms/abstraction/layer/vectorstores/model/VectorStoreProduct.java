@@ -26,8 +26,7 @@ public enum VectorStoreProduct {
     // Represents a Qdrant-based vector store
     QDRANT, 
     
-    // Represents a Lucene-based vector store
-    LUCENE, 
+    
     
     // Represents a Redis-based vector store
     REDIS,

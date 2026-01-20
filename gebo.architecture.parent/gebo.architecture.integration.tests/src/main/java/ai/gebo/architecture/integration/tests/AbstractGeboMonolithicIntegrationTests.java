@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.opensearch.testcontainers.OpenSearchContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.environment.EnvironmentHolder;
+import ai.gebo.architecture.opensearch.config.OpenSearchConfig;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -163,6 +165,16 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	@Container
 	private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
 			.withoutAuthentication(); // Disable password
+	@Container
+	private static OpenSearchContainer opensearch = new OpenSearchContainer("opensearchproject/opensearch:latest");
+	static {
+		//withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "dothesearch1973-Advanced").
+		//.withSecurityEnabled()
+		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node").withEnv("plugins.security.ssl.http.enabled", "false").withEnv("plugins.security.ssl.transport.enabled","true");
+			          
+		
+	}
+
 	/** ObjectMapper instance for JSON operations. */
 	protected static ObjectMapper mapper = new ObjectMapper();
 
@@ -175,8 +187,8 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	public static void containersProperties(DynamicPropertyRegistry registry) {
 		mongoDBContainer.start();
 		neo4jContainer.start();
+		opensearch.start();
 		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 		// ai.gebo.mongodb.enabled: true
 		// databaseName: gebo-ai-tests
@@ -186,6 +198,13 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 
 		String boltUrl = neo4jContainer.getBoltUrl();
 		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
+
+		registry.add("ai.gebo.opensearch.enabled", () -> true);
+		registry.add("ai.gebo.opensearch.protocol", () -> OpenSearchConfig.Protocol.http.name());
+		registry.add("ai.gebo.opensearch.host", opensearch::getHost);
+		registry.add("ai.gebo.opensearch.port", () -> opensearch.getMappedPort(9200));
+		registry.add("ai.gebo.opensearch.username", opensearch::getUsername);
+		registry.add("ai.gebo.opensearch.password", opensearch::getPassword);
 
 	}
 

@@ -16,6 +16,16 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
 			<artifactId>gebo.ragsystem.client.rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -24,11 +24,7 @@
 			<artifactId>gebo.architecture.ai</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.lucene</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-redis-store</artifactId>
