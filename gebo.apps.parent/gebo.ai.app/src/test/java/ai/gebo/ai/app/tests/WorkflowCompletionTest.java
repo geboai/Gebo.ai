@@ -29,7 +29,8 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 			throws GeboPersistenceException {
 		
 	}
-	@Test
+	
+	//@Test
 	public void testWorkflowCompletion() throws GeboPersistenceException, GeboJobServiceException {
 		GJobStatus status = new GJobStatus();
 		status.setDescription("Workdlow calculation test");

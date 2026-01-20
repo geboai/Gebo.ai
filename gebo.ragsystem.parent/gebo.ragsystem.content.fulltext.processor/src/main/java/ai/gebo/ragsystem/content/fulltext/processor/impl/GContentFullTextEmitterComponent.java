@@ -11,6 +11,7 @@ package ai.gebo.ragsystem.content.fulltext.processor.impl;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,11 @@ import ai.gebo.core.messages.GUserMessagePayload;
 /**
  * AI generated comments
  * 
- * Component responsible for emitting messages related to content vectorization.
+ * Component responsible for emitting messages related to content full text indexing.
  * It acts as a message emitter within the system's messaging architecture,
  * sending vectorization-related messages to the broker.
  */
+@ConditionalOnProperty(prefix = "ai.gebo.opensearch", name = "enabled", havingValue = "true")
 @Component
 @Scope("singleton")
 public class GContentFullTextEmitterComponent implements IGMessageEmitter {

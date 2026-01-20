@@ -9,7 +9,7 @@ import lombok.Data;
 @ConfigurationProperties(value = "ai.gebo.opensearch")
 @Data
 public class OpenSearchConfig {
-	private boolean enabled = true;
+	private boolean enabled = false;
 
 	public static enum Protocol {
 		http, https

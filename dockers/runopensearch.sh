@@ -1,0 +1,1 @@
+docker run -d --name opensearch    -p 9200:9200 -p 9600:9600    -e "discovery.type=single-node"    -e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced"    -e "plugins.security.ssl.http.enabled=true"    -e "plugins.security.ssl.transport.enabled=true"    opensearchproject/opensearch:latest

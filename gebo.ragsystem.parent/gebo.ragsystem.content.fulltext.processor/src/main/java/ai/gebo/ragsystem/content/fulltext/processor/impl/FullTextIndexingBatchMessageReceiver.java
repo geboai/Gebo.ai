@@ -1,5 +1,6 @@
 package ai.gebo.ragsystem.content.fulltext.processor.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,10 +26,12 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesReceiver {
+	private static final String KBSOURCE = "kbsource:";
 	protected final IGRuntimeBinder runtimeBinder;
 	protected static final Logger LOGGER = LoggerFactory.getLogger(FullTextIndexingBatchMessageReceiver.class);
 
@@ -44,8 +47,8 @@ public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesRece
 
 		for (int i = 0; i < payloads.size(); i++) {
 
-			IGMessagePayloadType payload = (IGMessagePayloadType) payloads.get(i);
-			if (payload instanceof GDocumentReferencePayload p) {
+			GMessageEnvelope singleMsg = (GMessageEnvelope) payloads.get(i);
+			if (singleMsg.getPayload() instanceof GDocumentReferencePayload p) {
 				GContentsProcessingStatusUpdatePayload status = new GContentsProcessingStatusUpdatePayload();
 				status.setBatchDocumentsInput(1l);
 				status.setJobId(p.getJobId());
@@ -58,16 +61,18 @@ public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesRece
 					String chunkingSession = chunkingService.retrieveChunkingSession("job:" + p.getJobId());
 					DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunkSet(docref, chunkingSession);
 					FullTextDocument ftDoc = new FullTextDocument();
-					ftDoc.setCode(docref.getCode());
+					ftDoc.setCode(KBSOURCE + docref.getCode());
 					ingestionService.deleteDocuments(List.of(ftDoc));
 					while (chunkResponse != null && !chunkResponse.isEmpty()) {
 						List<DocumentChunk> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks();
-						for (DocumentChunk f : fragmentsSet) {
-							tokensTotal += f.getTokensSize();
-						}
-						List<FullTextChunk> fragments = translateFragments(fragmentsSet, docref);
 
-						ingestionService.upsert(fragments);
+						if (!fragmentsSet.isEmpty()) {
+							for (DocumentChunk f : fragmentsSet) {
+								tokensTotal += f.getTokensSize();
+							}
+							List<FullTextChunk> fragments = translateFragments(fragmentsSet, docref);
+							ingestionService.upsert(fragments);
+						}
 						if (chunkResponse.getNextChunkSetId() != null) {
 							chunkResponse = chunkingService.getNextChunkSet(docref, chunkResponse.getId(),
 									chunkResponse.getNextChunkSetId(), chunkingSession);
@@ -97,8 +102,29 @@ public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesRece
 	}
 
 	private List<FullTextChunk> translateFragments(List<DocumentChunk> fragmentsSet, GDocumentReference docref) {
-		// TODO Auto-generated method stub
-		return null;
+		final FullTextDocument ftDoc = new FullTextDocument();
+		ftDoc.setCode(docref.getCode());
+		DocumentChunk c = fragmentsSet.get(0);
+		String title = (String) c.getMetaData().get(DocumentMetaInfos.TITLE);
+		String name = (String) c.getMetaData().get(DocumentMetaInfos.GEBO_FILE_NAME);
+		if (title != null) {
+			ftDoc.setTitle(title);
+		} else
+			ftDoc.setTitle(name);
+		ftDoc.setCode(KBSOURCE + docref.getCode());
+		List<FullTextChunk> out = fragmentsSet.stream().map(entry -> {
+			FullTextChunk f = new FullTextChunk();
+			f.setContent(entry.getChunkData());
+			f.setId(entry.getId());
+			f.setDocument(ftDoc);
+			f.setPosition(entry.getChunkPosition() != null ? entry.getChunkPosition().intValue() : 0);
+			f.setMetaData(entry.getMetaData());
+			f.setTokensLength(entry.getTokensSize() != null ? entry.getTokensSize().longValue() : 0);
+			f.setLang(
+					entry.getMetaData() != null ? (String) entry.getMetaData().get(DocumentMetaInfos.LANGUAGE) : null);
+			return f;
+		}).toList();
+		return out;
 	}
 
 }

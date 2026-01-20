@@ -12,6 +12,7 @@ package ai.gebo.ragsystem.content.fulltext.processor.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import ai.gebo.ragsystem.content.fulltext.processor.config.GeboFullTextProcessor
  * receivers. This singleton component handles the creation of message receivers
  * for vectorizing different types of content payloads within the RAG system.
  */
+@ConditionalOnProperty(prefix = "ai.gebo.opensearch", name = "enabled", havingValue = "true")
 @Component
 @Scope("singleton")
 public class GContentFullTextMessagesReceiverFactoryComponent extends GAbstractTimedOutMessageReceiverFactory {
