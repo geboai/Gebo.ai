@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
+
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.Data;
 

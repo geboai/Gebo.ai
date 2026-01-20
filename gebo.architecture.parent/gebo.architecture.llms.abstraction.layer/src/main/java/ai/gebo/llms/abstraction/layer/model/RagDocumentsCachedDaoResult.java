@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
+
 import ai.gebo.model.IJsonClonable;
 import lombok.Data;
 
