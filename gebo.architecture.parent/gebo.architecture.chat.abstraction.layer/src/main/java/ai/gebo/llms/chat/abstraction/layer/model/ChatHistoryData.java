@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class ChatHistoryData {
-	GUserChatConsolidationData consolidated = null;
-	List<ChatInteractions> interactions = null;
+	private GUserChatConsolidationData consolidated = null;
+	private List<ChatInteractions> interactions = null;
 }

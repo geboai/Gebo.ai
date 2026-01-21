@@ -42,6 +42,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -500,5 +501,20 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 
 		return data;
+	}
+
+	@Override
+	public GeboChatResponse execute(String ovveriddenPrompt, GeboChatRequest request, GUserChatContext context,
+			ChatSessionState sessionState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, GeboChatRequest request,
+			GUserChatContext context, ChatSessionState sessionState, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

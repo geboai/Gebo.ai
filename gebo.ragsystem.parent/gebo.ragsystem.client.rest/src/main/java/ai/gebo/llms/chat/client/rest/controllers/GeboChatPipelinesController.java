@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class GeboChatPipelinesController {
 	protected final IGSecurityService securityService;
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException {
+			throws ChatPipelineException, GeboPersistenceException, IOException {
 
 		return this.streamChatPipeline(null, request);
 	}
@@ -46,7 +47,7 @@ public class GeboChatPipelinesController {
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException {
+			throws ChatPipelineException, GeboPersistenceException, IOException {
 		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
 		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
 		GUserChatContext context = null;
@@ -72,14 +73,14 @@ public class GeboChatPipelinesController {
 	}
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException {
+			throws ChatPipelineException, GeboPersistenceException, IOException {
 		return this.executeChatPipeline(null, request);
 	}
 	@PostMapping(value = "executeChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException {
+			throws ChatPipelineException, GeboPersistenceException, IOException {
 		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
 		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
 		GUserChatContext context = null;

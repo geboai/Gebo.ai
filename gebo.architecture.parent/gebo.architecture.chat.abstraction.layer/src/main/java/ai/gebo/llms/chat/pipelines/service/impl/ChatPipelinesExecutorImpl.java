@@ -1,17 +1,20 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
-import ai.gebo.llms.chat.pipelines.model.AbstractContextEnrichingData;
+import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -28,19 +31,21 @@ import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.Routi
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
+
 @Component
 
 @AllArgsConstructor
 public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	protected final IChatPipelineStepServiceRepositoryPattern stepsServiceRepoPattern;
 	protected final ChatPipelinesConfiguration pipelinesConfiguration;
+	protected final IGChatSessionStateService sessionStateService;
 
 	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
 		runtimeData.getExecutedSteps().add(stepdata);
-		List<AbstractContextEnrichingData> enrichings = stepdata.getContextEnrichingContribution();
+		List<IStepContribution> enrichings = stepdata.getContextEnrichingContribution();
 		int budget = runtimeData.getRemainingTokens();
 		if (enrichings != null) {
-			for (AbstractContextEnrichingData abstractContextEnrichingData : enrichings) {
+			for (IStepContribution abstractContextEnrichingData : enrichings) {
 				budget -= abstractContextEnrichingData.getRenderedTokensLength() != null
 						? abstractContextEnrichingData.getRenderedTokensLength().intValue()
 						: 0;
@@ -52,12 +57,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode,
-			boolean streaming) throws ChatPipelineException {
+			boolean streaming) throws ChatPipelineException, IOException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
+		ChatSessionState sessionState = sessionStateService.extractState(request, context);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), request, context, streaming);
+				chatModel.getContextLength(), request, context, sessionState, streaming);
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
 			add(runtimeData, data);
@@ -93,7 +99,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException {
+			throws ChatPipelineException, IOException {
 		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
 				pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
@@ -118,7 +124,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	@Override
 	public GeboChatResponse execute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException {
+			throws ChatPipelineException, IOException {
 		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
 				pipelineCode, false);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);

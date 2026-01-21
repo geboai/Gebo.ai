@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IChatPipelineStepRuntimeData {
 	public String getStepId();
-	public List<AbstractContextEnrichingData> getContextEnrichingContribution();
+	public List<IStepContribution> getContextEnrichingContribution();
 }

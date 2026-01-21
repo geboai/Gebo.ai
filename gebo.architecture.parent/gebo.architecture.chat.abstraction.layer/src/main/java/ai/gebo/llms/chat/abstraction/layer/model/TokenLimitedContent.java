@@ -6,60 +6,28 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * Gebo.ai comment agent
- * Represents a content holder with a token limit, managing both a generic value
- * and its associated token count.
+ * Gebo.ai comment agent Represents a content holder with a token limit,
+ * managing both a generic value and its associated token count.
  * 
  * @param <T> The type of the value being stored.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenLimitedContent<T> {
 
-    // The value being stored of generic type T.
-    private T value = null;
+	// The value being stored of generic type T.
+	private T value = null;
 
-    // The number of tokens associated with the stored value.
-    private int NToken = 0;
+	// The number of tokens associated with the stored value.
+	private int NToken = 0;
 
-    /**
-     * Retrieves the stored value.
-     * 
-     * @return the current value of type T.
-     */
-    public T getValue() {
-        return value;
-    }
-
-    /**
-     * Sets a new value to be stored.
-     * 
-     * @param value The new value to store of type T.
-     */
-    public void setValue(T value) {
-        this.value = value;
-    }
-
-    /**
-     * Retrieves the number of tokens for the stored value.
-     * 
-     * @return the current token count.
-     */
-    public int getNToken() {
-        return NToken;
-    }
-
-    /**
-     * Sets a new token count for the stored value.
-     * 
-     * @param nToken The new token count.
-     */
-    public void setNToken(int nToken) {
-        NToken = nToken;
-    }
 }

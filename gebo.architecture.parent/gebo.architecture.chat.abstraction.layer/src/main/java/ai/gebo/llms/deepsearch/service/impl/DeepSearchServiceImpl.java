@@ -29,14 +29,18 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatProcessor;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
@@ -78,7 +82,7 @@ import reactor.core.scheduler.Scheduler;
 @Component
 @Scope("singleton")
 
-public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService {
+public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService  {
 
 	private final DynamicDataSourceServicesProviderImpl dynamicDataSourceServicesProviderImpl;
 
@@ -588,6 +592,21 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public DeepSearchUISettings getDeepSearchUISettings() {
 
 		return DeepSearchUISettings.of(defaultDeepsearchConfig);
+	}
+
+	@Override
+	public GeboChatResponse execute(String ovveriddenPrompt, GeboChatRequest request, GUserChatContext context,
+			ChatSessionState sessionState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, GeboChatRequest request,
+			GUserChatContext context, ChatSessionState sessionState, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -43,6 +43,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
@@ -655,5 +656,20 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			return allVisibles;
 		}
 
+	}
+
+	@Override
+	public GeboChatResponse execute(String ovveriddenPrompt, GeboChatRequest request, GUserChatContext context,
+			ChatSessionState sessionState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, GeboChatRequest request,
+			GUserChatContext context, ChatSessionState sessionState, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

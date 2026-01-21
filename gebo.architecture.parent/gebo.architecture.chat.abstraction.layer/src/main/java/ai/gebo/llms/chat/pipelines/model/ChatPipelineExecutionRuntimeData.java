@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.pipelines.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
@@ -14,9 +15,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChatPipelineExecutionRuntimeData {
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
-			GeboChatRequest chatRequest, GUserChatContext userChatContext, boolean streamingOutput) {
+			GeboChatRequest chatRequest, GUserChatContext userChatContext, ChatSessionState actualSessionState,
+			boolean streamingOutput) {
 		this(configuration, contextWindowSize, contextWindowSize, chatRequest, userChatContext, new ArrayList(), null,
-				new ArrayList(), streamingOutput);
+				new ArrayList(), streamingOutput, actualSessionState);
 	}
 
 	private final ChatPipelineConfiguration configuration;
@@ -28,4 +30,5 @@ public class ChatPipelineExecutionRuntimeData {
 	private GeboChatResponse chatResponse = null;
 	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
 	private final boolean streamingOutput;
+	private final ChatSessionState actualSessionState;
 }
