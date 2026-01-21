@@ -49,6 +49,9 @@
   	<module>gebo.architecture.rag-threasholds-autotune</module>
   	<module>gebo.architecture.opensearch</module>
   	<module>gebo.architecture.fulltext</module>
-  	
+
+  	<module>
+  		gebo.architecture.chat.pipelines.abstraction.layer
+  	</module>
   </modules>
 </project>

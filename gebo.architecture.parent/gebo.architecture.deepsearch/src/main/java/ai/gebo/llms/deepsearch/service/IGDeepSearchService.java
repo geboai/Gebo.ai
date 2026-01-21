@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -30,7 +31,7 @@ public interface IGDeepSearchService {
 		} else
 			return null;
 	}
-
+	
 	public Page<DeepSearchRequest> myDeepsearchPaged(Pageable pageable);
 
 	public List<DeepSearchRequest> allMyDeepsearches();

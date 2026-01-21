@@ -1,0 +1,177 @@
+package ai.gebo.llms.chat.pipelines.service.impl;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
+import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
+import ai.gebo.llms.chat.pipelines.model.AbstractContextEnrichingData;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfosMessageEnvelope;
+import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelinesExecutor;
+import ai.gebo.llms.chat.pipelines.service.IInputChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IIntermediateProcessingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IOutputChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.RoutingDecision;
+import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import lombok.AllArgsConstructor;
+import reactor.core.publisher.Flux;
+@Component
+
+@AllArgsConstructor
+public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
+	protected final IChatPipelineStepServiceRepositoryPattern stepsServiceRepoPattern;
+	protected final ChatPipelinesConfiguration pipelinesConfiguration;
+
+	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
+		runtimeData.getExecutedSteps().add(stepdata);
+		List<AbstractContextEnrichingData> enrichings = stepdata.getContextEnrichingContribution();
+		int budget = runtimeData.getRemainingTokens();
+		if (enrichings != null) {
+			for (AbstractContextEnrichingData abstractContextEnrichingData : enrichings) {
+				budget -= abstractContextEnrichingData.getRenderedTokensLength() != null
+						? abstractContextEnrichingData.getRenderedTokensLength().intValue()
+						: 0;
+
+			}
+			runtimeData.setRemainingTokens(budget);
+		}
+	}
+
+	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GUserChatContext context,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode,
+			boolean streaming) throws ChatPipelineException {
+		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
+		IChatPipelineStepService firstService = getStep(config.getStepInputId());
+		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
+		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
+				chatModel.getContextLength(), request, context, streaming);
+		if (firstService instanceof IInputChatPipelineStepService inputService) {
+			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
+			add(runtimeData, data);
+		} else
+			throw new ChatPipelineException("The step service " + firstService.getStepId() + " is not an input one");
+		if (routerService instanceof IRoutingChatPipelineStepService routing) {
+			RoutingDecision routeData = routing.execute(runtimeData, chatModel, serviceModel);
+			add(runtimeData, routeData.getProcessedOutput());
+			runtimeData.getRoutingDecisions().add(routeData);
+		} else
+			throw new ChatPipelineException("The step service " + firstService.getStepId() + " is not a routing one");
+		IChatPipelineStepService nextService = null;
+		do {
+			nextService = getNextStep(runtimeData);
+			if (nextService.getStepType() != IChatPipelineStepService.StepType.OUTPUT) {
+				if (nextService instanceof IRoutingChatPipelineStepService router) {
+					RoutingDecision routeData = router.execute(runtimeData, chatModel, serviceModel);
+					add(runtimeData, routeData.getProcessedOutput());
+					runtimeData.getRoutingDecisions().add(routeData);
+				} else if (nextService instanceof IIntermediateProcessingChatPipelineStepService intermediateStep) {
+					IChatPipelineStepRuntimeData data = intermediateStep.execute(runtimeData, chatModel, serviceModel);
+					add(runtimeData, data);
+
+				} else {
+					throw new ChatPipelineException(
+							"The step service " + nextService.getStepId() + " is not an intermediate service");
+				}
+			}
+		} while (nextService != null && nextService.getStepType() != IChatPipelineStepService.StepType.OUTPUT);
+		return null;
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatContext context,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
+			throws ChatPipelineException {
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
+				pipelineCode, true);
+		IChatPipelineStepService nextStep = getNextStep(runtimeData);
+		if (nextStep instanceof IStreamingOutputChatPipelineService streamingOutputService) {
+			Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(runtimeData));
+			Flux<GeboChatMessageEnvelope> out = streamingOutputService.execute(runtimeData, chatModel, serviceModel);
+			return Flux.concat(first, out);
+		}
+		throw new ChatPipelineException("The step service " + nextStep.getStepId() + " is not a streaming one");
+	}
+
+	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData) {
+		PipelineRoutingInfosMessageEnvelope data = new PipelineRoutingInfosMessageEnvelope();
+		runtimeData.getRoutingDecisions().forEach(x -> {
+			x.getFutureRoute().forEach(stepId -> {
+				data.getContent().getStepIds().add(stepId);
+			});
+		});
+		return data;
+	}
+
+	@Override
+	public GeboChatResponse execute(GeboChatRequest request, GUserChatContext context,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
+			throws ChatPipelineException {
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
+				pipelineCode, false);
+		IChatPipelineStepService nextStep = getNextStep(runtimeData);
+		if (nextStep instanceof IOutputChatPipelineService outputService) {
+			return outputService.execute(runtimeData, chatModel, serviceModel);
+		}
+		throw new ChatPipelineException(
+				"The step service " + nextStep.getStepId() + " is not an IOutputChatPipelineService");
+	}
+
+	private IChatPipelineStepService getStep(String id) throws ChatPipelineException {
+		IChatPipelineStepService service = this.stepsServiceRepoPattern.findByCode(id);
+		if (service == null)
+			throw new ChatPipelineException("The step service " + id + " does not exist");
+		return service;
+	}
+
+	private IChatPipelineStepService getNextStep(ChatPipelineExecutionRuntimeData runtimeData)
+			throws ChatPipelineException {
+		if (runtimeData.getRoutingDecisions() == null || runtimeData.getRoutingDecisions().isEmpty())
+			throw new ChatPipelineException("No routing informations in this pipeline");
+		List<IChatPipelineStepRuntimeData> stepsDone = runtimeData.getExecutedSteps();
+		IChatPipelineStepRuntimeData lastStep = stepsDone != null && !stepsDone.isEmpty()
+				? stepsDone.get(stepsDone.size() - 1)
+				: null;
+		if (lastStep == null)
+			throw new ChatPipelineException("executing with no steps done in the runtime infos");
+		RoutingDecision lastRoutingThread = runtimeData.getRoutingDecisions()
+				.get(runtimeData.getRoutingDecisions().size() - 1);
+		String stepId = lastStep.getStepId();
+		int index = lastRoutingThread.getFutureRoute().indexOf(stepId);
+		if (index < 0)
+			throw new ChatPipelineException(
+					"The actual executed step " + stepId + " is not in the actual routing perspective");
+		if (index + 1 >= lastRoutingThread.getFutureRoute().size())
+			throw new ChatPipelineException("No remaining execution step to execute");
+		return getStep(lastRoutingThread.getFutureRoute().get(index + 1));
+	}
+
+	private ChatPipelineConfiguration getCfgOrDefault(String code) throws ChatPipelineException {
+		if (code != null) {
+			Optional<ChatPipelineConfiguration> matching = pipelinesConfiguration.getPipelines().stream()
+					.filter(x -> x.getCode() != null && x.getCode().equals(code)).findFirst();
+			if (matching.isPresent())
+				return matching.get();
+			throw new ChatPipelineException("cannot find chat pipeline config with code=" + code);
+		} else {
+			Optional<ChatPipelineConfiguration> matching = pipelinesConfiguration.getPipelines().stream()
+					.filter(x -> x.isDefaultPipeline()).findFirst();
+			if (matching.isPresent())
+				return matching.get();
+			throw new ChatPipelineException("cannot find default chat pipeline config");
+		}
+	}
+
+}
