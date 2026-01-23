@@ -332,4 +332,17 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		return null;
 	}
 
+	@Override
+	public List<Document> getIngestedContentsOf(LLMGeneratedResource generated)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException {
+		InputStream is = streamContent(generated);
+		if (is == null)
+			return List.of();
+		GDocumentReference doc = documentReferenceFactory.createReference(Path.of(generated.getFileName()));
+		IngestionHandlerData ingested = ingestionHandler.handleContent(doc, is);
+		if (ingested.isUnmanagedContent())
+			return List.of();
+		return ingested.getStream().toList();
+	}
+
 }

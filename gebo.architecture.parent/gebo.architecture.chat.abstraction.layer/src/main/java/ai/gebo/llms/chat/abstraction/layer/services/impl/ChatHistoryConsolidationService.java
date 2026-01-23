@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -19,7 +20,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatConsolidationData;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ import lombok.AllArgsConstructor;
  */
 @Service
 @AllArgsConstructor
-public class ChatHistoryConsolidationService {
+public class ChatHistoryConsolidationService{
 
 	private final GeboChatPromptsConfigs chatPromptsConfig;
 	private final IGChatProfileManagementService chatProfileManagementService;
@@ -74,7 +75,7 @@ public class ChatHistoryConsolidationService {
 				promptTemplate.add(HISTORY_SIZE_TARGET, "" + historySizeTarget);
 				StringBuffer existing_summary = new StringBuffer();
 				StringBuffer new_messages = new StringBuffer();
-				GUserChatConsolidationData data = context.getConsolidation();
+				GUserChatInteractionsConsolidationData data = context.getConsolidation();
 				int minimumInteractionIndex = 0;
 				if (data != null) {
 					existing_summary.append(data.getConsolidationText());
@@ -108,7 +109,7 @@ public class ChatHistoryConsolidationService {
 				if (result != null && result.getOutput() != null) {
 					String historyConsolidatinText = result.getOutput().getText();
 					if (historyConsolidatinText != null && historyConsolidatinText.trim().length() > 0) {
-						GUserChatConsolidationData newConsolidation = new GUserChatConsolidationData();
+						GUserChatInteractionsConsolidationData newConsolidation = new GUserChatInteractionsConsolidationData();
 						newConsolidation.setConsolidationText(historyConsolidatinText);
 						newConsolidation.setLastInteractionPointer(lastIndex);
 						newConsolidation.setTokensSize(tokenCountEstimator.estimate(historyConsolidatinText));

@@ -40,6 +40,7 @@ public class GeboChatPromptsConfigs {
 	private GPromptConfig summarizeChatDescriptionPrompt = new GPromptConfig();
 
 	private GPromptConfig historyConsolidationPrompt = new GPromptConfig();
+	private GPromptConfig historyDocumentsConsolidationPrompt = new GPromptConfig();
 	private int leaveLastInteractionsOnHistoryConsolidation = 4;
 
 	/**
@@ -91,6 +92,45 @@ public class GeboChatPromptsConfigs {
 				+ "- Do NOT include headings, labels, JSON, bullet points, or any extra commentary.\r\n"
 				+ "- Just return the updated summary text.\r\n" + "- Generate a maximum of {historySizeTarget} tokens"
 				+ "");
+		historyDocumentsConsolidationPrompt.setPrompt(
+				"You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n" + "TASK\r\n"
+						+ "Given:\r\n"   
+						+ "(A) last user↔assistant turns (most recent first),\r\n" + "\r\n"
+						+ "(B) one or more documents (text extracted from a file or retrieved via RAG/deep search) with its metadata,\r\n"
+						+ "(C) chat history consolidated to illustrate the global meaning\r\n"
+						+ "produce ONE JSON object of type CSSRelevantShrinkedDocument for each input documents that contains:\r\n"
+						+ "\r\n" + "a faithful, compact summary of the document,\r\n" + "\r\n"
+						+ "a relevancy score (Float) measuring how relevant the document is to the last 3 turns,\r\n"
+						+ "\r\n" + "an estimated token length for the produced summary.\r\n" + "\r\n"
+						+ "OUTPUT RULES (STRICT)\r\n" + "\r\n"
+						+ "Output ONLY a single valid JSON object. No markdown. No extra keys. No comments.\r\n"
+						+ "OUTPUT FORMAT\r\n{format}\r\n"
+						+ "\r\n"
+						+ "Use these exact keys: documentReference, documentName, documentTitle, summarizedContent, relevancyRate, tokensLength.\r\n"
+						+ "\r\n"
+						+ "Keep summarizedContent concise but information-dense. Prefer factual bullet-like sentences separated by \"\\n\".\r\n"
+						+ "\r\n"
+						+ "Do NOT invent facts. If documents do not contain enough information, say so explicitly in the summary.\r\n"
+						+ "\r\n" + "If some metadata fields are missing, set them to null.\r\n" + "\r\n"
+						+ "relevancyRate must be a Float in [0.0, 1.0].\r\n" + "\r\n"
+						+ "tokensLength must be an Integer estimating tokens of summarizedContent only.\r\n" + "\r\n"
+						+ "Language of summarizedContent: same as the user’s language detected in last turns (default to English).\r\n"
+						+ "\r\n" + "HOW TO SCORE RELEVANCY (relevancyRate)\r\n"
+						+ "Compute relevance ONLY against the last 3 turns.\r\n" + "Use this rubric:\r\n" + "\r\n"
+						+ "0.00–0.10: unrelated / generic\r\n" + "\r\n"
+						+ "0.11–0.30: weakly related (shares broad topic only)\r\n" + "\r\n"
+						+ "0.31–0.60: moderately useful (some direct overlap)\r\n" + "\r\n"
+						+ "0.61–0.85: strongly useful (directly answers/grounds key parts)\r\n" + "\r\n"
+						+ "0.86–1.00: critical (contains necessary details, constraints, or authoritative facts)\r\n"
+						+ "\r\n" + "HOW TO SUMMARIZE (summarizedContent)\r\n" + "\r\n"
+						+ "Capture: key claims, definitions, procedures, requirements, constraints, numbers, identifiers, and any “actionable” details.\r\n"
+						+ "\r\n" + "Preserve important terminology and acronyms as-is.\r\n" + "\r\n"
+						+ "If the document is long, prioritize parts most relevant to the last 3 turns.\r\n" + "\r\n"
+						+ "If the document contains multiple sections, reflect that structure in the summary.\r\n"
+						
+						+ "\r\n" + "A: LAST_TURNS:\r\n" + "{question}\r\n"
+						+"B: INPUT DOCUMENTS\r\n{documents}\r\n"
+						+"C: CONSOLIDATED HISTORY:\r\n{consolidated}\r\n");
 	}
 
 }

@@ -10,10 +10,11 @@
 package ai.gebo.llms.abstraction.layer.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
-
 
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.Data;
@@ -89,7 +90,6 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 		this.NBytes = 0l;
 	}
 
-	
 	/**
 	 * Streams the child elements (fragments) of the document reference.
 	 *
@@ -100,7 +100,6 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 		return fragments != null ? fragments.stream().map(x -> x) : Stream.of();
 	}
 
-	
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
@@ -131,6 +130,28 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	public int countFragments() {
 		int i = fragments.size();
 		return i;
+	}
+
+	public static RagDocumentReferenceItem join(RagDocumentReferenceItem... docs) {
+		RagDocumentReferenceItem outDoc = new RagDocumentReferenceItem();
+		if (docs != null && docs.length > 0) {
+			try {
+				outDoc = (RagDocumentReferenceItem) docs[0].clone();
+
+				Map<String, RagDocumentFragment> fragmentsMap = new HashMap<String, RagDocumentFragment>();
+				for (RagDocumentReferenceItem doc : docs) {
+					doc.fragments.forEach(x -> {
+						fragmentsMap.put(x.getCode(), x);
+					});
+				}
+				outDoc.fragments = new ArrayList<RagDocumentFragment>(fragmentsMap.values());
+				outDoc.reorderFragmentsByPosition();
+				outDoc.recalculateSize();
+			} catch (CloneNotSupportedException e) {
+				throw new RuntimeException("Clone not supported...", e);
+			}
+		}
+		return outDoc;
 	}
 
 }

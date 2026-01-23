@@ -95,4 +95,7 @@ public interface IGChatStorageAreaService {
 
 	public InputStream streamContent(LLMGeneratedResource generated) throws IOException;
 
+	public List<Document> getIngestedContentsOf(LLMGeneratedResource uploaded)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
+
 }

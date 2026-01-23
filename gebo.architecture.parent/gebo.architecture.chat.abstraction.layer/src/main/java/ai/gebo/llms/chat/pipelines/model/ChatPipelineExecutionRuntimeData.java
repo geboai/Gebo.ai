@@ -3,10 +3,10 @@ package ai.gebo.llms.chat.pipelines.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.llms.chat.abstraction.layer.model.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatSessionState;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.RoutingDecision;
 import lombok.AllArgsConstructor;
 import lombok.Data;

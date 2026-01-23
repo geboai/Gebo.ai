@@ -49,7 +49,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatConsolidationData;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
@@ -116,7 +116,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
 		int nhistoryTokens = 0;
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
@@ -568,7 +568,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
 
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;

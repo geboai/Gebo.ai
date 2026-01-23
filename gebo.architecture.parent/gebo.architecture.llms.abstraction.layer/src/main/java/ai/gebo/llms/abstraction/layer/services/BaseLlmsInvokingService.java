@@ -36,6 +36,9 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 public class BaseLlmsInvokingService {
+	public static final String DOCUMENT_TITLE = "DOCUMENT-TITLE:";
+	public static final String DOCUMENT_URL = "DOCUMENT-URL:";
+	public static final String DOCUMENT_REFERENCE = "DOCUMENT-REFERENCE:";
 	private static final String NEWLINE = "\r\n";
 	protected final IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
 	protected final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
@@ -182,21 +185,22 @@ public class BaseLlmsInvokingService {
 		}
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
-	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
-			String question,  Map<String, Object> additionalVariables, Class<T> type)
-			throws LLMConfigException {
+
+	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalVariables, Class<T> type) throws LLMConfigException {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
 		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
-	
+
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
 			promptTemplate.add(entry.getKey(), entry.getValue());
 		}
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
+
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			String prompt, Object documents, String question, Object consolidated, Class<T> type)
 			throws LLMConfigException {
@@ -207,6 +211,22 @@ public class BaseLlmsInvokingService {
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			String prompt, Object documents, String question, Object consolidated, Map<String, Object> additionalParams,
+			Class<T> type) throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalParams.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
 		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
 	}
 
@@ -249,24 +269,37 @@ public class BaseLlmsInvokingService {
 
 	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.7;
 
-	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
+	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength,
+			Map<String, Object> additionalParams) {
 		double consolidationLength = tokensEstimation.estimate(consolidated);
 		double contextWindowD = contextWindowLength;
 		double promptLengthD = promptLength;
+		if (additionalParams != null) {
+			for (Object entry : additionalParams.values()) {
+				if (entry != null) {
+					contextWindowD -= tokensEstimation.estimate(entry.toString());
+				}
+			}
+		}
 		return (int) Math
 				.round((contextWindowD - (consolidationLength + promptLengthD)) * ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 	}
 
-	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
-			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
-			Supplier<ConsolidationInput> input) throws LLMConfigException, IOException {
-		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
-				input, false);
+	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
+		return computeFragmentBudget(consolidated, promptLength, contextWindowLength, Map.of());
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
-			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
-			Supplier<ConsolidationInput> input, boolean alreadySplitted) throws LLMConfigException, IOException {
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, Supplier<ConsolidationInput> input) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, input, false);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, Supplier<ConsolidationInput> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLlmsInvokingService.ConsolidationInputBatch>();
 		ConsolidationInput currentInput = null;
@@ -274,22 +307,22 @@ public class BaseLlmsInvokingService {
 		T consolidated = null;
 		String _consolidated = pastConsolidation;
 
-		int fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow);
+		int fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow, additionalParams);
 		do {
 			currentInput = input.get();
 
 			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
 				StringBuffer metaInfos = new StringBuffer();
 				if (currentInput.documentReference != null) {
-					metaInfos.append("DOCUMENT-REFERENCE:" + currentInput.documentReference);
+					metaInfos.append(DOCUMENT_REFERENCE + currentInput.documentReference);
 					metaInfos.append(NEWLINE);
 				}
 				if (currentInput.documentUrl != null) {
-					metaInfos.append("DOCUMENT-URL:" + currentInput.documentUrl);
+					metaInfos.append(DOCUMENT_URL + currentInput.documentUrl);
 					metaInfos.append(NEWLINE);
 				}
 				if (currentInput.title != null) {
-					metaInfos.append("DOCUMENT-TITLE:" + currentInput.title);
+					metaInfos.append(DOCUMENT_TITLE + currentInput.title);
 					metaInfos.append(NEWLINE);
 				}
 				String metaData = metaInfos.toString();
@@ -362,7 +395,7 @@ public class BaseLlmsInvokingService {
 					}
 					T oldConsolidated = consolidated;
 					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
-							currentText.toString(), question, _consolidated, type);
+							currentText.toString(), question, _consolidated, additionalParams, type);
 					// eventual handling of consolidation programmable aggregation
 					if (aggregator != null) {
 						consolidated = aggregator.apply(oldConsolidated, consolidated);
@@ -390,15 +423,15 @@ public class BaseLlmsInvokingService {
 			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
 				StringBuffer metaInfos = new StringBuffer();
 				if (currentInput.documentReference != null) {
-					metaInfos.append("DOCUMENT-REFERENCE:" + currentInput.documentReference);
+					metaInfos.append(DOCUMENT_REFERENCE + currentInput.documentReference);
 					metaInfos.append(NEWLINE);
 				}
 				if (currentInput.documentUrl != null) {
-					metaInfos.append("DOCUMENT-URL:" + currentInput.documentUrl);
+					metaInfos.append(DOCUMENT_URL + currentInput.documentUrl);
 					metaInfos.append(NEWLINE);
 				}
 				if (currentInput.title != null) {
-					metaInfos.append("DOCUMENT-TITLE:" + currentInput.title);
+					metaInfos.append(DOCUMENT_TITLE + currentInput.title);
 					metaInfos.append(NEWLINE);
 				}
 				String metaData = metaInfos.toString();
@@ -579,16 +612,31 @@ public class BaseLlmsInvokingService {
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
 			List<ConsolidationInput> input) throws LLMConfigException, IOException {
-		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
-				input, false);
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
+				aggregator, input);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, List<ConsolidationInput> input) throws LLMConfigException, IOException {
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, input, false);
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
 			List<ConsolidationInput> input, boolean alreadySplitted) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
+				aggregator, input);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, List<ConsolidationInput> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
 		Iterator<ConsolidationInput> iterator = input.iterator();
-		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, type, aggregator,
-				() -> {
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, () -> {
 					if (iterator.hasNext())
 						return iterator.next();
 					return null;
