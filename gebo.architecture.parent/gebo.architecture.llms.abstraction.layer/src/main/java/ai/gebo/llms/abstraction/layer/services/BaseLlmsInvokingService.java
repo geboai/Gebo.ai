@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -141,11 +141,21 @@ public class BaseLlmsInvokingService {
 
 	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
 			Object documents, String question, String consolidated) {
+		return this.callLLMWithDocumentsAndConsolidation(chatModel, prompt, documents, question, consolidated,
+				Map.of());
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, String consolidated, Map<String, Object> additionalParams) {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-
+		if (additionalParams != null) {
+			for (Entry<String, Object> entry : additionalParams.entrySet()) {
+				promptTemplate.add(entry.getKey(), entry.getValue());
+			}
+		}
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 		String result = response.getResult().getOutput().getText();
 		return result;
@@ -409,7 +419,7 @@ public class BaseLlmsInvokingService {
 	}
 
 	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
-			String pastConsolidation, Supplier<ConsolidationInput> input) {
+			String pastConsolidation, Map<String, Object> additionalParams, Supplier<ConsolidationInput> input) {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLlmsInvokingService.ConsolidationInputBatch>();
 		ConsolidationInput currentInput = null;
@@ -507,8 +517,8 @@ public class BaseLlmsInvokingService {
 						currentText.append(NEWLINE);
 					}
 					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
-							question, consolidated);
-					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow);
+							question, consolidated, additionalParams);
+					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow,additionalParams);
 				}
 			}
 		} while (currentInput != null);
@@ -601,8 +611,13 @@ public class BaseLlmsInvokingService {
 
 	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
 			String pastConsolidation, List<ConsolidationInput> input) {
+		return this.callLLMConsolidateText(chatModel, prompt, question, pastConsolidation, Map.of(), input);
+	}
+
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			String pastConsolidation, Map<String, Object> additionalParams, List<ConsolidationInput> input) {
 		Iterator<ConsolidationInput> iterator = input.iterator();
-		return callLLMConsolidateText(chatModel, prompt, question, pastConsolidation, () -> {
+		return callLLMConsolidateText(chatModel, prompt, question, pastConsolidation, additionalParams, () -> {
 			if (iterator.hasNext())
 				return iterator.next();
 			return null;

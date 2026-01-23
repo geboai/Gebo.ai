@@ -82,20 +82,20 @@ public class GeboChatPromptsConfigs {
 				+ "- Write in a concise, neutral, third-person style (e.g., \"The user is building...\", \"The assistant suggested...\").\r\n"
 				+ "- Organize the text into 1–3 short paragraphs.\r\n"
 				+ "- The summary must be self-contained and understandable without seeing the raw chat.\r\n"
-				+ "- Aim to keep the length brief but complete (ideally under 400–500 words).\r\n" + "\r\n"
-				+ "Input format:\r\n" + "[EXISTING_SUMMARY]\r\n" + "{existing_summary}\r\n" + "[/EXISTING_SUMMARY]\r\n"
-				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{new_messages}\r\n" + "[/NEW_MESSAGES]\r\n" + "\r\n" + "Where:\r\n"
-				+ "- EXISTING_SUMMARY is the current stored summary text (possibly empty).\r\n"
+				+ "- Aim to keep the length brief but complete (ideally under {historySizeTarget} tokens).\r\n" + "\r\n"
+				+ "Input format:\r\n" + "[EXISTING_SUMMARY]\r\n" + "{consolidated}\r\n" + "[/EXISTING_SUMMARY]\r\n"
+				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{documents}\r\n" 
+				+ "{question}\r\n[/NEW_MESSAGES]\r\n" + "\r\n"
+				+ "Where:\r\n" + "- EXISTING_SUMMARY is the current stored summary text (possibly empty).\r\n"
 				+ "- NEW_MESSAGES is the new dialogue turns formatted as lines like:\r\n" + "  user: ...\r\n"
 				+ "  assistant: ...\r\n" + "  user: ...\r\n" + "  ...\r\n" + "\r\n" + "Your output:\r\n"
 				+ "- Produce ONLY the new consolidated session summary as plain text.\r\n"
 				+ "- Do NOT include headings, labels, JSON, bullet points, or any extra commentary.\r\n"
 				+ "- Just return the updated summary text.\r\n" + "- Generate a maximum of {historySizeTarget} tokens"
 				+ "");
-		historyDocumentsConsolidationPrompt.setPrompt(
-				"You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n" + "TASK\r\n"
-						+ "Given:\r\n"   
-						+ "(A) last user↔assistant turns (most recent first),\r\n" + "\r\n"
+		historyDocumentsConsolidationPrompt
+				.setPrompt("You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n"
+						+ "TASK\r\n" + "Given:\r\n" + "(A) last user↔assistant turns (most recent first),\r\n" + "\r\n"
 						+ "(B) one or more documents (text extracted from a file or retrieved via RAG/deep search) with its metadata,\r\n"
 						+ "(C) chat history consolidated to illustrate the global meaning\r\n"
 						+ "produce ONE JSON object of type CSSRelevantShrinkedDocument for each input documents that contains:\r\n"
@@ -104,8 +104,7 @@ public class GeboChatPromptsConfigs {
 						+ "\r\n" + "an estimated token length for the produced summary.\r\n" + "\r\n"
 						+ "OUTPUT RULES (STRICT)\r\n" + "\r\n"
 						+ "Output ONLY a single valid JSON object. No markdown. No extra keys. No comments.\r\n"
-						+ "OUTPUT FORMAT\r\n{format}\r\n"
-						+ "\r\n"
+						+ "OUTPUT FORMAT\r\n{format}\r\n" + "\r\n"
 						+ "Use these exact keys: documentReference, documentName, documentTitle, summarizedContent, relevancyRate, tokensLength.\r\n"
 						+ "\r\n"
 						+ "Keep summarizedContent concise but information-dense. Prefer factual bullet-like sentences separated by \"\\n\".\r\n"
@@ -127,10 +126,9 @@ public class GeboChatPromptsConfigs {
 						+ "\r\n" + "Preserve important terminology and acronyms as-is.\r\n" + "\r\n"
 						+ "If the document is long, prioritize parts most relevant to the last 3 turns.\r\n" + "\r\n"
 						+ "If the document contains multiple sections, reflect that structure in the summary.\r\n"
-						
-						+ "\r\n" + "A: LAST_TURNS:\r\n" + "{question}\r\n"
-						+"B: INPUT DOCUMENTS\r\n{documents}\r\n"
-						+"C: CONSOLIDATED HISTORY:\r\n{consolidated}\r\n");
+
+						+ "\r\n" + "A: LAST_TURNS:\r\n" + "{question}\r\n" + "B: INPUT DOCUMENTS\r\n{documents}\r\n"
+						+ "C: CONSOLIDATED HISTORY:\r\n{consolidated}\r\n");
 	}
 
 }

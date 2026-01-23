@@ -1,9 +1,13 @@
 package ai.gebo.ollama.integration.tests;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +18,7 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.web.client.RestClientException;
 import org.testcontainers.qdrant.QdrantContainer;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -41,6 +46,7 @@ import ai.gebo.monolithic.api.client.api.AuthControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsLookupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
+import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.GChatModelType;
@@ -50,6 +56,7 @@ import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.LoginRequest;
 import ai.gebo.monolithic.api.client.model.OperationStatusAuthResponse;
+import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
@@ -105,8 +112,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 	}
 
 	@Test
-	public void ollamaChatHistoryConsolidationTest()
-			throws InterruptedException, StreamReadException, DatabindException, IOException, GeboPersistenceException {
+	public void ollamaChatHistoryConsolidationTest() throws InterruptedException, StreamReadException,
+			DatabindException, IOException, GeboPersistenceException, RestClientException, URISyntaxException {
 		Thread.currentThread().sleep(60000);
 		ApiClient apiClient = new ApiClient();
 		AuthControllerApi controllerApi = new AuthControllerApi(apiClient);
@@ -147,23 +154,49 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			_interactions.add(interaction);
 		}
 		data.setInteractions(_interactions);
-		TokenRenewControllerApi tokenRenewApi=new TokenRenewControllerApi(authApiClient);
-		String newToken=tokenRenewApi.renew().getToken();
+		TokenRenewControllerApi tokenRenewApi = new TokenRenewControllerApi(authApiClient);
+		String newToken = tokenRenewApi.renew().getToken();
 		authApiClient.setApiKey(newToken);
 		persistentObjectManager.update(data);
+
+		/*URL url1 = getClass().getClassLoader().getResource("chat-sessions/gebo-ai-manual-tech-configuration.pdf");
+		URL url2 = getClass().getClassLoader().getResource("chat-sessions/maven-modules-guide1.0.pdf");
+		GeboUserChatUploadsControllerApi uploadsControllerApi = new GeboUserChatUploadsControllerApi(authApiClient);
+		OperationStatusListUserUploadedContent rv = uploadsControllerApi.chatSessionUpload(data.getCode(), List.of(
+				new File(
+						"C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\gebo-ai-manual-tech-configuration.pdf"),
+				new File(
+						"C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\maven-modules-guide1.0.pdf")));
+		assertFalse("Uploads cannot have error messages", rv.isHasErrorMessages());*/
 		for (int i = _interactions.size() - 3; i < _interactions.size(); i++) {
 			ai.gebo.monolithic.api.client.model.GeboChatRequest request = new ai.gebo.monolithic.api.client.model.GeboChatRequest();
 			request.setStreamResponse(false);
 			request.setQuery(_interactions.get(i).getRequest().getQuery());
 			request.setUserChatContextCode(cleanChat.getCode());
 			request.setId(UUID.randomUUID().toString());
+			//request.setUserUploadedContents(rv.getResult());
 			GeboChatResponse response = chatControllerApi.chat(request);
 			LOGGER.info("Chat response:" + response.getQueryResponse());
-			newToken=tokenRenewApi.renew().getToken();
+			newToken = tokenRenewApi.renew().getToken();
 			authApiClient.setApiKey(newToken);
 			Thread.currentThread().sleep(10000);
 		}
-
+		int loopIndex = 0;
+		do {
+			GUserChatContext updatedState = persistentObjectManager.findById(GUserChatContext.class, data.getCode());
+			if (updatedState.getShrinkedState() != null)
+				break;
+			Thread.currentThread().sleep(10000);
+		} while (loopIndex < 10);
+		GUserChatContext updatedState = persistentObjectManager.findById(GUserChatContext.class, data.getCode());
+		assertNotNull(updatedState.getShrinkedState(), "Shrinked state must be already being calculated");
+		assertNotNull(updatedState.getConsolidation(), "Consolidated chat must alread being calculated");
+		if (updatedState.getConsolidation() != null) {
+			LOGGER.info("Consolidated text:" + updatedState.getConsolidation().getConsolidationText());
+		}
+		if (updatedState.getShrinkedState() != null) {
+			LOGGER.info("Shrinked state:" + updatedState.getShrinkedState());
+		}
 	}
 
 }

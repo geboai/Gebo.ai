@@ -5,14 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.UUID;
 
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
@@ -21,7 +18,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
@@ -35,13 +31,10 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinker;
 import ai.gebo.model.DocumentMetaInfos;
-import lombok.AllArgsConstructor;
 
 @Service
-
 public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService implements IGChatSessionStateShrinker {
 	private static final String NEWLINE = "\r\n";
-	final ChatHistoryConsolidationService historyConsolidationService;
 	final GeboChatPromptsConfigs chatPromptsConfig;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
@@ -52,9 +45,8 @@ public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService imple
 
 	public GChatSessionStateShrinkerImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
-			ChatHistoryConsolidationService historyConsolidationService, GeboChatPromptsConfigs chatPromptsConfig) {
+			GeboChatPromptsConfigs chatPromptsConfig) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
-		this.historyConsolidationService = historyConsolidationService;
 		this.chatPromptsConfig = chatPromptsConfig;
 	}
 
@@ -128,20 +120,21 @@ public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService imple
 
 	private GUserChatInteractionsConsolidationData consolidateHistory(CSSSimplifiedChatHistory value,
 			int historySizeTarget, IGConfigurableChatModel usedChatModel) {
-		GPromptConfig prompt = chatPromptsConfig.getHistoryConsolidationPrompt();
-		PromptTemplate promptTemplate = new PromptTemplate(prompt.getPrompt());
-		promptTemplate.add(HISTORY_SIZE_TARGET, "" + historySizeTarget);
-		StringBuffer existing_summary = new StringBuffer();
-		StringBuffer new_messages = new StringBuffer();
+		List<ConsolidationInput> inputs = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
+		GPromptConfig _prompt = chatPromptsConfig.getHistoryConsolidationPrompt();
+		String prompt = _prompt.getPrompt();
+		
+		String existingSummary = "";
+
 		GUserChatInteractionsConsolidationData data = value.getConsolidation();
 		int minimumInteractionIndex = 0;
 		if (data != null) {
-			existing_summary.append(data.getConsolidationText());
+			existingSummary = data.getConsolidationText();
 			minimumInteractionIndex = data.getLastInteractionPointer() != null
 					? data.getLastInteractionPointer().intValue()
 					: 0;
 		}
-		promptTemplate.add(EXISTING_SUMMARY, existing_summary.toString());
+
 		int leaveLastInteractionsOnHistoryConsolidation = this.chatPromptsConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
 		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
@@ -152,6 +145,7 @@ public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService imple
 			}
 		}
 		for (int i = minimumInteractionIndex; i < lastIndex; i++) {
+			StringBuffer new_messages = new StringBuffer();
 			CSSSimplefiedInteraction interaction = value.getInteractions().get(i);
 			if (interaction.getUser() != null) {
 				new_messages.append(USER_MSG + interaction.getUser() + NEWLINE);
@@ -159,12 +153,14 @@ public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService imple
 			if (interaction.getAssistant() != null) {
 				new_messages.append(ASSISTANT_MSG + interaction.getAssistant() + NEWLINE);
 			}
+			ConsolidationInput input = new ConsolidationInput(null, null, null, new_messages.toString());
+			inputs.add(input);
 		}
-
-		promptTemplate.add(NEW_MESSAGES, new_messages.toString());
-		Generation result = usedChatModel.getChatModel().call(promptTemplate.create()).getResult();
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
+		String consolidated = callLLMConsolidateText(usedChatModel, prompt, "", existingSummary,params, inputs);
 		GUserChatInteractionsConsolidationData newConsolidation = new GUserChatInteractionsConsolidationData();
-		newConsolidation.setConsolidationText(result.getOutput().getText());
+		newConsolidation.setConsolidationText(consolidated);
 		newConsolidation.setLastInteractionPointer(value.getInteractions().size());
 		newConsolidation.setTokensSize(tokensEstimator.estimate(newConsolidation.getConsolidationText()));
 		return newConsolidation;
@@ -178,6 +174,7 @@ public class GChatSessionStateShrinkerImpl extends BaseLlmsInvokingService imple
 
 		if (t2 != null) {
 			for (CSSRelevantShrinkedDocument t : t2) {
+				t.setId(UUID.randomUUID().toString());
 				if (t.getSummarizedContent() != null) {
 					t.setTokensSize(this.tokensEstimator.estimate(t.getSummarizedContent()));
 				}

@@ -151,7 +151,8 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			}
 		}
 		outState.getChatHistory().setNToken((int) historyTokens);
-		if (request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty()) {
+		if (request != null && request.getUserUploadedContents() != null
+				&& !request.getUserUploadedContents().isEmpty()) {
 			long tokens = 0l;
 			for (UserUploadedContent uploaded : request.getUserUploadedContents()) {
 				List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
