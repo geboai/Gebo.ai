@@ -241,7 +241,6 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 
 		@Override
 		protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
-			List<Document> documents = chatContext.getActualUserRequestDocuments();
 			String userQuestion = chatContext.getActualUserRequest();
 			if (type.getCode().equals(CHATMODEL_VLLM)) {
 				ChatClient client = getChatClient();

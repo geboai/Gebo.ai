@@ -10,11 +10,11 @@ public interface IChatRequestContext {
 
 	public List<IQuestionAnswerEntry> getInteractions();
 
-	public List<Document> getHistoricalDocuments();
+	public List<Document> getDocuments();
 
 	public String getActualUserRequest();
 
-	public List<Document> getActualUserRequestDocuments();
+	
 
 	public Map<String, Object> getToolsContext();
 }

@@ -211,7 +211,7 @@ public class ClientChatCallUtil {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(prompt.getContents());
 		buffer.append(NEWLINE);
-		List<Document> documents = chatContext.getHistoricalDocuments();
+		List<Document> documents = chatContext.getDocuments();
 		if (documents != null && documents.size() > 0) {
 			buffer.append(BEGIN_DOCUMENTS);
 			buffer.append(NEWLINE);
@@ -331,7 +331,7 @@ public class ClientChatCallUtil {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(prompt.getContents());
 		buffer.append(NEWLINE);
-		List<Document> documents = chatContext.getHistoricalDocuments();
+		List<Document> documents = chatContext.getDocuments();
 		if (documents != null && documents.size() > 0) {
 			buffer.append(BEGIN_DOCUMENTS);
 			buffer.append(NEWLINE);

@@ -239,7 +239,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
 		ChatClient client = getChatClient();
-		List<Document> documents = chatContext.getActualUserRequestDocuments();
 		String userQuestion = chatContext.getActualUserRequest();
 		// Here prompt, documents and consolidated history
 		SystemMessage systemMessage = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);

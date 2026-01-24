@@ -241,13 +241,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 
 			@Override
-			public List<Document> getHistoricalDocuments() {
-
-				return documents;
-			}
-
-			@Override
-			public List<Document> getActualUserRequestDocuments() {
+			public List<Document> getDocuments() {
 
 				return documents;
 			}
