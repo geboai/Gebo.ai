@@ -31,11 +31,11 @@ import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEnd
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;

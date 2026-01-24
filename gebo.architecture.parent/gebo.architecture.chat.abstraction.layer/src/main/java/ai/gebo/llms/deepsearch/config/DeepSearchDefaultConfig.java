@@ -3,8 +3,8 @@ package ai.gebo.llms.deepsearch.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import lombok.Data;
 

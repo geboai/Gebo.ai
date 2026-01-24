@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -30,6 +34,7 @@ import ai.gebo.llms.chat.pipelines.service.IOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -41,6 +46,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	protected final ChatPipelinesConfiguration pipelinesConfiguration;
 	protected final IGChatSessionStateService sessionStateService;
 	protected final IGChatRequestResourcesBuilder chatRequestResourcesBuilder;
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChatPipelinesExecutorImpl.class);
 
 	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
 		runtimeData.getExecutedSteps().add(stepdata);
@@ -65,8 +71,15 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
 		int tokensBudget = Math.min(serviceModel != null ? serviceModel.getContextLength() : Integer.MAX_VALUE,
 				chatModel != null ? chatModel.getContextLength() : Integer.MAX_VALUE) / 2;
-		LLMChatRequestResources resources = chatRequestResourcesBuilder.buildRequestResources(request, context,
-				tokensBudget);
+		LLMChatRequestResources resources = null;
+		try {
+			resources = chatRequestResourcesBuilder.buildRequestResources(request, context, tokensBudget);
+		} catch (IOException | GeboPersistenceException | GeboContentHandlerSystemException
+				| GeboIngestionException e) {
+			final String msg = "Exception while building request resources";
+			LOGGER.error(msg, e);
+			throw new ChatPipelineException(msg, e);
+		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
 				chatModel.getContextLength(), resources, streaming);
 		if (firstService instanceof IInputChatPipelineStepService inputService) {

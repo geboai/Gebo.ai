@@ -50,7 +50,7 @@ import lombok.AllArgsConstructor;
  */
 @Service
 @AllArgsConstructor
-class AIDocumentsCacheService {
+public class AIDocumentsCacheService {
 
 	// Inject dependencies
 	final IGPersistentObjectManager persistentObject;
@@ -74,7 +74,7 @@ class AIDocumentsCacheService {
 	 * @throws IOException
 	 * @throws GeboIngestionException
 	 */
-	void addCachedOrRetrieve(GObjectRef<GProjectEndpoint> objectRef, List<GDocumentReference> docList,
+	public void addCachedOrRetrieve(GObjectRef<GProjectEndpoint> objectRef, List<GDocumentReference> docList,
 			AIDocumentsSet result)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
 		// Retrieve the project endpoint
@@ -91,6 +91,15 @@ class AIDocumentsCacheService {
 		}
 	}
 
+	public AIDocumentReferenceItem retrieve(GDocumentReference document)
+			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
+		AIDocumentsSet set = new AIDocumentsSet();
+		addCachedOrRetrieve(document.getProjectEndpointReference(), List.of(document), set);
+		if (!set.getDocumentItems().isEmpty())
+			return set.getDocumentItems().get(0);
+		return null;
+	}
+
 	/**
 	 * Checks if a document is in cache or needs to be loaded and cached.
 	 * 
@@ -104,7 +113,7 @@ class AIDocumentsCacheService {
 	 * @throws GeboIngestionException
 	 * @throws GeboPersistenceException
 	 */
-	void addCacheOrRetrieve(GDocumentReference document, IGContentManagementSystemHandler handler,
+	public void addCacheOrRetrieve(GDocumentReference document, IGContentManagementSystemHandler handler,
 			GProjectEndpoint endpoint, AIDocumentsSet result, Map handlerWorkCache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException {
 		// Check if the document is already in cache
@@ -132,7 +141,7 @@ class AIDocumentsCacheService {
 	 * @param document  Document reference
 	 * @param result    Result object to store retrieved document information
 	 */
-	void addToRetrieved(AIDocumentCacheItem cacheItem, GDocumentReference document, AIDocumentsSet result) {
+	public void addToRetrieved(AIDocumentCacheItem cacheItem, GDocumentReference document, AIDocumentsSet result) {
 		// Add metadata to result
 		if (cacheItem.getTokensSize() != null) {
 			cacheItem.getMetaData().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, cacheItem.getTokensSize());
@@ -170,7 +179,7 @@ class AIDocumentsCacheService {
 	 * @throws GeboIngestionException
 	 * @throws GeboPersistenceException
 	 */
-	void loadAddCacheAndAddToRetrieved(GDocumentReference document, IGContentManagementSystemHandler handler,
+	public void loadAddCacheAndAddToRetrieved(GDocumentReference document, IGContentManagementSystemHandler handler,
 			GProjectEndpoint endpoint, AIDocumentsSet result, Map handlerWorkCache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException {
 		// Stream content of the document

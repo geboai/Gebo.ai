@@ -13,16 +13,21 @@ import lombok.Data;
 @Data
 public class ChatFullSessionState {
 	protected String userChatContextCode = null;
+
 	public ChatFullSessionState() {
 		getChatHistory().setValue(new CSSSimplifiedChatHistory());
 		getRagResultsHistory().setValue(new CSSReferredContentList<GDocumentReference>());
 		getUploadsHistory().setValue(new CSSReferredContentList<UserUploadedContent>());
 		getGeneratedArtifacts().setValue(new CSSReferredContentList<LLMGeneratedResource>());
+		getCurrentRequestChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
+		
 	}
+
 	private TokensContainer<CSSSimplifiedChatHistory> chatHistory = new TokensContainer<CSSSimplifiedChatHistory>();
 	private TokensContainer<CSSReferredContentList<GDocumentReference>> ragResultsHistory = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
 	private TokensContainer<CSSReferredContentList<UserUploadedContent>> uploadsHistory = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
 	private TokensContainer<CSSReferredContentList<UserUploadedContent>> currentRequestUploads = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> currentRequestChatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
 	private TokensContainer<CSSReferredContentList<LLMGeneratedResource>> generatedArtifacts = new TokensContainer<CSSReferredContentList<LLMGeneratedResource>>();
 	private int totalTokensSize = 0;
 }

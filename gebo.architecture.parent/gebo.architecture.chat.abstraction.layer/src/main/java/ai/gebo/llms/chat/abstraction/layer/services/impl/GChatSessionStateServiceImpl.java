@@ -13,9 +13,11 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -41,6 +43,7 @@ import lombok.AllArgsConstructor;
 public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 	final IGChatStorageAreaService storageAreaService;
 	final DocumentReferenceRepository documentsRepository;
+	final AIDocumentsCacheService documentsCacheService;
 	final static Logger LOGGER = LoggerFactory.getLogger(GChatSessionStateServiceImpl.class);
 
 	@AllArgsConstructor
@@ -51,7 +54,8 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 	}
 
 	@Override
-	public ChatFullSessionState extractState(GeboChatRequest request, GUserChatContext context) throws IOException {
+	public ChatFullSessionState extractState(GeboChatRequest request, GUserChatContext context)
+			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
 		ChatFullSessionState outState = new ChatFullSessionState();
 		outState.setUserChatContextCode(context.getCode());
 		GUserChatInteractionsConsolidationData consolidation = null;
@@ -176,9 +180,27 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 					outState.getCurrentRequestUploads().setNToken((int) tokens);
 				}
 			}
+			List<String> chatWithDocumentsList = request.getForcedRequestDocuments();
+			if (chatWithDocumentsList != null && !chatWithDocumentsList.isEmpty()) {
+				List<GDocumentReference> documents = documentsRepository.findAllById(chatWithDocumentsList);
+				Map<String, AIDocumentReferenceItem> data = new HashMap();
+				int ntokens = 0;
+				for (GDocumentReference gDocumentReference : documents) {
+					AIDocumentReferenceItem ingested = documentsCacheService.retrieve(gDocumentReference);
+					ingested.recalculateSize();
+					ntokens += ingested.getTokensSize();
+					data.put(ingested.getCode(), ingested);
+					outState.getCurrentRequestChatWithDocuments().getValue()
+							.add(new CSSInteractionReferredContent<GDocumentReference>(
+									interactions != null ? interactions.size() : 0, ingested, gDocumentReference));
+				}
+				outState.getCurrentRequestChatWithDocuments().setNToken(ntokens);
+
+			}
 
 		}
 		int totalTokens = outState.getChatHistory().getNToken() + outState.getCurrentRequestUploads().getNToken()
+				+ outState.getCurrentRequestChatWithDocuments().getNToken()
 				+ outState.getRagResultsHistory().getNToken() + outState.getGeneratedArtifacts().getNToken()
 				+ outState.getUploadsHistory().getNToken();
 		outState.setTotalTokensSize(totalTokens);

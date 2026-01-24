@@ -54,7 +54,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
-import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -200,9 +200,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					? messages.getConsolidated().getConsolidationText()
 					: null;
 			final List<Document> documents = docs != null ? docs : List.of();
-			final List<IQuestionAnswerEntry> msgs = messages.getInteractions() != null
+			final List<IChatSessionEntry> msgs = messages.getInteractions() != null
 					? messages.getInteractions().stream().map(x -> {
-						final IQuestionAnswerEntry entry = new IQuestionAnswerEntry() {
+						final IChatSessionEntry entry = new IChatSessionEntry() {
 
 							@Override
 							public String getUser() {
@@ -229,7 +229,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 
 			@Override
-			public List<IQuestionAnswerEntry> getInteractions() {
+			public List<IChatSessionEntry> getInteractions() {
 
 				return msgs;
 			}

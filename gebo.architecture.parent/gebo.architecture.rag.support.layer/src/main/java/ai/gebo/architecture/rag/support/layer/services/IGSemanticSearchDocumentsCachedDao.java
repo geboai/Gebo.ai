@@ -15,7 +15,7 @@ package ai.gebo.architecture.rag.support.layer.services;
 import java.util.List;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 

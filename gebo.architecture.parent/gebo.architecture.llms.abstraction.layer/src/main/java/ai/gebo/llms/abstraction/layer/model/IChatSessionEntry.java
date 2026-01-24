@@ -1,6 +1,6 @@
 package ai.gebo.llms.abstraction.layer.model;
 
-public interface IQuestionAnswerEntry {
+public interface IChatSessionEntry {
 	public String getUser();
 
 	public String getAssistant();

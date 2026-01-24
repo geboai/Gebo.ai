@@ -11,7 +11,7 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
-import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,7 @@ import lombok.Getter;
 @Getter
 public class LLMChatRequestResources implements ITokensCountable, IChatRequestContext {
 	private static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
+	private final AIDocumentsSet chatWithDocsContents;
 	private final AIDocumentsSet ragRetrivedDocuments;
 	private final AIDocumentsSet uploadedDocuments;
 	private final AIDocumentsSet llmGeneratedDocuments;
@@ -28,7 +29,7 @@ public class LLMChatRequestResources implements ITokensCountable, IChatRequestCo
 	private final GeboChatRequest lastRequest;
 
 	@AllArgsConstructor
-	static final class InteractionWrapper implements IQuestionAnswerEntry {
+	static final class InteractionWrapper implements IChatSessionEntry {
 		ChatInteractions interaction = null;
 
 		@Override
@@ -50,7 +51,7 @@ public class LLMChatRequestResources implements ITokensCountable, IChatRequestCo
 		if (lastRequest != null && lastRequest.getQuery() != null) {
 			size += tokensEstimator.estimate(lastRequest.getQuery());
 		}
-		size += tokensSize(ragRetrivedDocuments, uploadedDocuments, llmGeneratedDocuments);
+		size += tokensSize(ragRetrivedDocuments, uploadedDocuments, llmGeneratedDocuments,chatWithDocsContents);
 		size += tokensSize(lastInteractions);
 		return size;
 	}
@@ -62,8 +63,8 @@ public class LLMChatRequestResources implements ITokensCountable, IChatRequestCo
 	}
 
 	@Override
-	public List<IQuestionAnswerEntry> getInteractions() {
-		List<IQuestionAnswerEntry> entries = new ArrayList<IQuestionAnswerEntry>();
+	public List<IChatSessionEntry> getInteractions() {
+		List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
 		if (lastInteractions != null) {
 			for (ChatInteractions i : lastInteractions) {
 				entries.add(new InteractionWrapper(i));
@@ -83,6 +84,9 @@ public class LLMChatRequestResources implements ITokensCountable, IChatRequestCo
 		}
 		if (llmGeneratedDocuments != null) {
 			data.addAll(llmGeneratedDocuments.aiDocumentsList());
+		}
+		if (chatWithDocsContents!=null) {
+			data.addAll(chatWithDocsContents.aiDocumentsList());
 		}
 		return data;
 	}

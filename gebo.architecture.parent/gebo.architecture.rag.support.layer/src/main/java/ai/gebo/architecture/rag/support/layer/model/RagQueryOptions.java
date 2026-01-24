@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.llms.abstraction.layer.model;
+package ai.gebo.architecture.rag.support.layer.model;
 
 import lombok.ToString;
 

@@ -1,7 +1,7 @@
 package ai.gebo.llms.deepsearch.model;
 
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;

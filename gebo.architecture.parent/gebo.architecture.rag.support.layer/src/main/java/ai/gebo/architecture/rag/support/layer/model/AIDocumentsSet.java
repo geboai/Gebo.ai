@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.model.IJsonClonable;
 import lombok.Data;
 
@@ -175,6 +176,24 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 			});
 		});
 		return documents;
+	}
+
+	public static AIDocumentsSet from(List<Document> documents) {
+
+		Map<String, AIDocumentReferenceItem> data = new HashMap<String, AIDocumentReferenceItem>();
+		for (Document document : documents) {
+			AIDocumentFragment fragment = new AIDocumentFragment(document,
+					ExtractedDocumentMetaData.of(document.getMetadata()));
+			data.computeIfAbsent(fragment.getCode(), (code) -> {
+				AIDocumentReferenceItem item = new AIDocumentReferenceItem(
+						ExtractedDocumentMetaData.of(document.getMetadata()));
+				item.setCode(code);
+				return item;
+			});
+			data.get(fragment.getCode()).getFragments().add(fragment);
+			data.get(fragment.getCode()).recalculateSize();
+		}
+		return createDocumentsDaoResultFromMap(data);
 	}
 
 }
