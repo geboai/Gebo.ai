@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import lombok.Data;
 
 @Data

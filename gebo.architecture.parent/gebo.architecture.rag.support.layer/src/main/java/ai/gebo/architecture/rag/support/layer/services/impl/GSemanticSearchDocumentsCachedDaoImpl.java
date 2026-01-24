@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.abstraction.layer.services.impl;
+package ai.gebo.architecture.rag.support.layer.services.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,20 +25,20 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.repository.RagDocumentCacheItemRepository;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
-import ai.gebo.llms.abstraction.layer.repositories.RagDocumentCacheItemRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.IGVectorSearchRestrictingFilterExpressionFactory;
-import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
+
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -55,8 +55,8 @@ import jakarta.el.MethodNotFoundException;
  */
 @Component
 @Scope("singleton")
-public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GRagDocumentsCachedDaoImpl.class);
+public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDocumentsCachedDao {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GSemanticSearchDocumentsCachedDaoImpl.class);
 
 	@Autowired
 	IGGeboConfigService geboConfigService;
@@ -79,16 +79,14 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	@Autowired
 	AIDocumentsCacheService cacheService;
 
-	@Autowired
-	VectorizedContentRepository vectorizedContentRepository;
-
+	
 	@Autowired
 	SimilaritySearchService searchService;
 
 	@Autowired(required = false)
 	List<IGVectorSearchRestrictingFilterExpressionFactory> vectorSearchRestrictingFactories;
 
-	public GRagDocumentsCachedDaoImpl() {
+	public GSemanticSearchDocumentsCachedDaoImpl() {
 
 	}
 

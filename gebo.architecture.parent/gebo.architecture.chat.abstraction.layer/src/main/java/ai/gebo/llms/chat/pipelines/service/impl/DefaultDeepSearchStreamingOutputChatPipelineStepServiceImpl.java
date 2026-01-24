@@ -3,7 +3,6 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -35,9 +34,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
-		return deepSearchService
-				.streamingExecute(null, runtimeData.getRequestResources(), chatModel,
-						serviceModel)
+		return deepSearchService.streamingExecute(null, runtimeData.getRequestResources(), chatModel, serviceModel)
 				.map(x -> new GeboChatMessageEnvelope(x));
 
 	}

@@ -36,9 +36,9 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInD
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;

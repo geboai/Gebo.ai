@@ -3,7 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.model.session;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ai.gebo.llms.abstraction.layer.model.ITokensCountable;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 
 public class CSSfRelevantShrinkedDocumentList extends ArrayList<CSSRelevantShrinkedDocument>
 		implements ITokensCountable {

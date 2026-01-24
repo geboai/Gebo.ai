@@ -9,17 +9,14 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
-import java.util.List;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.document.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
-import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import reactor.core.publisher.Flux;
 
 /**
@@ -117,30 +114,24 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	 * requirement
 	 * 
 	 * @param prompt
-	 * @param userQuestion
 	 * @param chatContext
-	 * @param documents
 	 * @return
 	 * @throws LLMConfigException
 	 */
-	public Flux<ChatResponse> streamResponse(Prompt prompt, String userQuestion, IChatContext chatContext,
-			List<Document> documents) throws LLMConfigException;
+	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
 
 	/***********************************************************************************************
 	 * Adaptes response to specific infrastructure element calling requirement
 	 * 
 	 * @param prompt
-	 * @param userQuestion
 	 * @param chatContext
-	 * @param documents
 	 * @return
 	 * @throws LLMConfigException
 	 */
-	public ChatResponse response(Prompt prompt, String userQuestion, IChatContext chatContext, List<Document> documents)
+	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext)
 			throws LLMConfigException;
 
-	public <ResponseType> ResponseType structuredResponse(Prompt prompt, String query, IChatContext chatContext,
-			List<Document> docs, Class<ResponseType> rt) throws LLMConfigException;
+	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext, Class<ResponseType> rt) throws LLMConfigException;
 
 	public default boolean isApplyThinkingMarkupHandling() {
 		return false;

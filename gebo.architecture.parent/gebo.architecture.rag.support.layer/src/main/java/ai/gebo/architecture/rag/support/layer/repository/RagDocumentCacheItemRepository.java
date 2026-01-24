@@ -10,10 +10,10 @@
  
  
 
-package ai.gebo.llms.abstraction.layer.repositories;
+package ai.gebo.architecture.rag.support.layer.repository;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentCacheItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentCacheItem;
 
 /**
  * Gebo.ai comment agent

@@ -41,7 +41,7 @@ import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
-import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -239,8 +239,10 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			return true;
 		}
 
-		protected ChatClientRequestSpec prepareCall(Prompt prompt, String userQuestion, IChatContext chatContext,
-				List<Document> documents) {
+		@Override
+		protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
+			List<Document> documents = chatContext.getActualUserRequestDocuments();
+			String userQuestion = chatContext.getActualUserRequest();
 			if (type.getCode().equals(CHATMODEL_VLLM)) {
 				ChatClient client = getChatClient();
 				// Here prompt, documents and consolidated history
@@ -256,7 +258,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				}
 				return reqObject;
 			} else
-				return super.prepareCall(prompt, userQuestion, chatContext, documents);
+				return super.prepareCall(prompt, chatContext);
 		}
 
 		@Override

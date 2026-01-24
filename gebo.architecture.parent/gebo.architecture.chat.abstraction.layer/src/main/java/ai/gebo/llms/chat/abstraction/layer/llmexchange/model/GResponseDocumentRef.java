@@ -16,8 +16,8 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
 

@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,18 +29,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTests;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.monolithic.api.client.api.AuthControllerApi;
@@ -71,7 +74,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 	static final ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	GeboVectorStoreConfigurationService vectorStoreConfigurationService;
-
+	@Autowired
+	ShrinkedChatSessionStateRepository shrinkedRepo;
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
 	JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
@@ -159,22 +163,27 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		authApiClient.setApiKey(newToken);
 		persistentObjectManager.update(data);
 
-		/*URL url1 = getClass().getClassLoader().getResource("chat-sessions/gebo-ai-manual-tech-configuration.pdf");
-		URL url2 = getClass().getClassLoader().getResource("chat-sessions/maven-modules-guide1.0.pdf");
-		GeboUserChatUploadsControllerApi uploadsControllerApi = new GeboUserChatUploadsControllerApi(authApiClient);
-		OperationStatusListUserUploadedContent rv = uploadsControllerApi.chatSessionUpload(data.getCode(), List.of(
-				new File(
-						"C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\gebo-ai-manual-tech-configuration.pdf"),
-				new File(
-						"C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\maven-modules-guide1.0.pdf")));
-		assertFalse("Uploads cannot have error messages", rv.isHasErrorMessages());*/
+		/*
+		 * URL url1 = getClass().getClassLoader().getResource(
+		 * "chat-sessions/gebo-ai-manual-tech-configuration.pdf"); URL url2 =
+		 * getClass().getClassLoader().getResource(
+		 * "chat-sessions/maven-modules-guide1.0.pdf"); GeboUserChatUploadsControllerApi
+		 * uploadsControllerApi = new GeboUserChatUploadsControllerApi(authApiClient);
+		 * OperationStatusListUserUploadedContent rv =
+		 * uploadsControllerApi.chatSessionUpload(data.getCode(), List.of( new File(
+		 * "C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\gebo-ai-manual-tech-configuration.pdf"
+		 * ), new File(
+		 * "C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\maven-modules-guide1.0.pdf"
+		 * ))); assertFalse("Uploads cannot have error messages",
+		 * rv.isHasErrorMessages());
+		 */
 		for (int i = _interactions.size() - 3; i < _interactions.size(); i++) {
 			ai.gebo.monolithic.api.client.model.GeboChatRequest request = new ai.gebo.monolithic.api.client.model.GeboChatRequest();
 			request.setStreamResponse(false);
 			request.setQuery(_interactions.get(i).getRequest().getQuery());
 			request.setUserChatContextCode(cleanChat.getCode());
 			request.setId(UUID.randomUUID().toString());
-			//request.setUserUploadedContents(rv.getResult());
+			// request.setUserUploadedContents(rv.getResult());
 			GeboChatResponse response = chatControllerApi.chat(request);
 			LOGGER.info("Chat response:" + response.getQueryResponse());
 			newToken = tokenRenewApi.renew().getToken();
@@ -182,21 +191,24 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			Thread.currentThread().sleep(10000);
 		}
 		int loopIndex = 0;
+		ShrinkedChatSessionState shrinkedState = null;
+		Optional<ShrinkedChatSessionState> opt = null;
 		do {
-			GUserChatContext updatedState = persistentObjectManager.findById(GUserChatContext.class, data.getCode());
-			if (updatedState.getShrinkedState() != null)
+			opt = shrinkedRepo.findById(data.getCode());
+			if (opt.isPresent())
 				break;
 			Thread.currentThread().sleep(10000);
 		} while (loopIndex < 10);
-		GUserChatContext updatedState = persistentObjectManager.findById(GUserChatContext.class, data.getCode());
-		assertNotNull(updatedState.getShrinkedState(), "Shrinked state must be already being calculated");
-		assertNotNull(updatedState.getConsolidation(), "Consolidated chat must alread being calculated");
-		if (updatedState.getConsolidation() != null) {
-			LOGGER.info("Consolidated text:" + updatedState.getConsolidation().getConsolidationText());
+		opt = shrinkedRepo.findById(data.getCode());
+
+		assertNotNull(opt.isEmpty(), "Shrinked state must be already being calculated");
+		shrinkedState = opt.get();
+		if (shrinkedState.getConsolidatedInteractions() != null) {
+			LOGGER.info("Consolidated text:" + shrinkedState.getConsolidatedInteractions().getConsolidationText());
 		}
-		if (updatedState.getShrinkedState() != null) {
-			LOGGER.info("Shrinked state:" + updatedState.getShrinkedState());
-		}
+
+		LOGGER.info("Shrinked state:" + shrinkedState);
+
 	}
 
 }

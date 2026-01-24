@@ -47,6 +47,7 @@
   	<module>gebo.architecture.search.abstraction.layer</module>
   	<module>gebo.architecture.rag-threasholds-autotune</module>
   	<module>gebo.architecture.opensearch</module>
-  	<module>gebo.architecture.fulltext</module>  
+  	<module>gebo.architecture.fulltext</module>
+  	<module>gebo.architecture.rag.support.layer</module>
   </modules>
 </project>

@@ -27,7 +27,7 @@ import org.springframework.ai.document.Document;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
-import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import reactor.core.publisher.Flux;
 
 /**
@@ -237,9 +237,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return chatClient;
 	}
 
-	protected ChatClientRequestSpec prepareCall(Prompt prompt, String userQuestion, IChatContext chatContext,
-			List<Document> documents) {
+	protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
 		ChatClient client = getChatClient();
+		List<Document> documents = chatContext.getActualUserRequestDocuments();
+		String userQuestion = chatContext.getActualUserRequest();
 		// Here prompt, documents and consolidated history
 		SystemMessage systemMessage = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);
 		List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
@@ -261,26 +262,24 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	@Override
-	public Flux<ChatResponse> streamResponse(Prompt prompt, String userQuestion, IChatContext chatContext,
-			List<Document> documents) throws LLMConfigException {
-		ChatClientRequestSpec reqObject = prepareCall(prompt, userQuestion, chatContext, documents);
+	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
 		Flux<ChatResponse> res = reqObject.stream().chatResponse();
 		return res;
 	}
 
 	@Override
-	public ChatResponse response(Prompt prompt, String userQuestion, IChatContext chatContext, List<Document> documents)
-			throws LLMConfigException {
-		ChatClientRequestSpec reqObject = prepareCall(prompt, userQuestion, chatContext, documents);
+	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
 		CallResponseSpec res = reqObject.call();
 		return res.chatResponse();
 	}
 
 	@Override
-	public <ResponseType> ResponseType structuredResponse(Prompt prompt, String userQuestion, IChatContext chatContext,
-			List<Document> documents, Class<ResponseType> rt) throws LLMConfigException {
+	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
+			Class<ResponseType> rt) throws LLMConfigException {
 		ChatClient client = getChatClient();
-		ChatClientRequestSpec reqObject = prepareCall(prompt, userQuestion, chatContext, documents);
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
 		CallResponseSpec res = reqObject.call();
 		return res.entity(rt);
 	}

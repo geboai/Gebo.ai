@@ -5,7 +5,7 @@ import java.util.List;
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 public interface IKnowledgeGraphSearchService {

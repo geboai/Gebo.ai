@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.abstraction.layer.model;
+package ai.gebo.architecture.rag.support.layer.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

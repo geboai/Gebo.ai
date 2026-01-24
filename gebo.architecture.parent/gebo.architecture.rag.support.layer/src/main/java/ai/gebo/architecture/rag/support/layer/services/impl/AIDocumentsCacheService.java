@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.abstraction.layer.services.impl;
+package ai.gebo.architecture.rag.support.layer.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,14 +23,14 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentCacheItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.repository.RagDocumentCacheItemRepository;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentCacheItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
-import ai.gebo.llms.abstraction.layer.repositories.RagDocumentCacheItemRepository;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.model.base.GObjectRef;

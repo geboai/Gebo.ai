@@ -1,4 +1,4 @@
-package ai.gebo.llms.abstraction.layer.services.impl;
+package ai.gebo.architecture.rag.support.layer.services.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,17 +13,17 @@ import ai.gebo.architecture.fulltext.model.MetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.fulltext.service.IGFullTextIngestionService;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
-import ai.gebo.llms.abstraction.layer.services.IGFullTextRagDocumentsCachedDao;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.AllArgsConstructor;
 
 @ConditionalOnBean(value = IGFullTextSearchService.class)
 @Service
 @AllArgsConstructor
-public class FullTextRagDocumentsCachedDaoImpl implements IGFullTextRagDocumentsCachedDao {
+public class FullTextSearchDocumentsCachedDaoImpl implements IGFullTextSearchDocumentsCachedDao {
 	private final IGFullTextSearchService searchService;
 
 	@Override

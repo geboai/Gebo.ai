@@ -5,10 +5,16 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
-public interface IChatContext {
+public interface IChatRequestContext {
 	public String getConsolidatedHistory();
 
 	public List<IQuestionAnswerEntry> getInteractions();
-	public List<Document> getDocuments();
-	public  Map<String, Object> getToolsContext();
+
+	public List<Document> getHistoricalDocuments();
+
+	public String getActualUserRequest();
+
+	public List<Document> getActualUserRequestDocuments();
+
+	public Map<String, Object> getToolsContext();
 }

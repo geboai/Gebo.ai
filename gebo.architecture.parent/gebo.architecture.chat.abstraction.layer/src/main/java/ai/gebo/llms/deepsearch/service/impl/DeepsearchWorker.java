@@ -18,21 +18,21 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
@@ -74,7 +74,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	@Autowired(required = false)
 	private IKnowledgeGraphSearchService graphRagSearchService;
 	@Autowired
-	private IGRagDocumentsCachedDao ragDocumentsCachedDao;
+	private IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
 	@Autowired

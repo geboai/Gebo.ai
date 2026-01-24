@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
-import ai.gebo.llms.abstraction.layer.model.ITokensCountable;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -10,8 +10,8 @@ import java.util.UUID;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;

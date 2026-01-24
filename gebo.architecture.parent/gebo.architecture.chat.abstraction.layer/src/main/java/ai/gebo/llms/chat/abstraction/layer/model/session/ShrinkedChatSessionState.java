@@ -3,7 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.model.session;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import ai.gebo.llms.abstraction.layer.model.ITokensCountable;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import lombok.Data;
 

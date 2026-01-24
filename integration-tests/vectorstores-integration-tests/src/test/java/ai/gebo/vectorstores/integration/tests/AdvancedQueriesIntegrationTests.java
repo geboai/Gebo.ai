@@ -30,13 +30,13 @@ import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEnd
 import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEndpoint.TestEndpointType;
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
@@ -61,7 +61,7 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 	@Autowired
 	VectorizedContentRepository vectorizatedContents;
 	@Autowired
-	IGRagDocumentsCachedDao ragDocumentsCachedDao;
+	IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 
 	@Override
 	protected void beforeEachCallback() throws Exception {

@@ -28,17 +28,17 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.ContextWindowLengthRangeSettings;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
@@ -82,7 +82,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	private static final Logger LOGGER = LoggerFactory.getLogger(GChatRequestResourcesUsePolicyImpl.class);
 
 	@Autowired
-	protected IGRagDocumentsCachedDao ragDocumentsCachedDao;
+	protected IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 
 	@Autowired
 	protected GeboRagConfigs ragResourcesConfig;

@@ -12,7 +12,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
 
-import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
 import ai.gebo.model.DocumentMetaInfos;
 
@@ -207,11 +207,11 @@ public class ClientChatCallUtil {
 		}
 	}
 
-	public static SystemMessage createPromptAndContext(Prompt prompt, IChatContext chatContext) {
+	public static SystemMessage createPromptAndContext(Prompt prompt, IChatRequestContext chatContext) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(prompt.getContents());
 		buffer.append(NEWLINE);
-		List<Document> documents = chatContext.getDocuments();
+		List<Document> documents = chatContext.getHistoricalDocuments();
 		if (documents != null && documents.size() > 0) {
 			buffer.append(BEGIN_DOCUMENTS);
 			buffer.append(NEWLINE);
@@ -286,7 +286,7 @@ public class ClientChatCallUtil {
 		return data.toString();
 	}
 
-	public static String createHistoryFragment(IChatContext chatContext) {
+	public static String createHistoryFragment(IChatRequestContext chatContext) {
 		final String NL = "\n";
 		final String TURN_SEP = NL + "-----" + NL;
 		String consolidated = chatContext.getConsolidatedHistory();
@@ -327,11 +327,11 @@ public class ClientChatCallUtil {
 				.replace(USER_TURN_END, USER_TURN_END_ESCAPED).replace(ASSISTANT_TURN_END, ASSISTANT_TURN_END_ESCAPED);
 	}
 
-	public static String createPromptContextHistory(Prompt prompt, IChatContext chatContext) {
+	public static String createPromptContextHistory(Prompt prompt, IChatRequestContext chatContext) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(prompt.getContents());
 		buffer.append(NEWLINE);
-		List<Document> documents = chatContext.getDocuments();
+		List<Document> documents = chatContext.getHistoricalDocuments();
 		if (documents != null && documents.size() > 0) {
 			buffer.append(BEGIN_DOCUMENTS);
 			buffer.append(NEWLINE);
@@ -350,7 +350,7 @@ public class ClientChatCallUtil {
 		return buffer.toString();
 	}
 
-	public static List<Message> getChatHistory(IChatContext chatContext) {
+	public static List<Message> getChatHistory(IChatRequestContext chatContext) {
 		List<Message> message_list = new ArrayList<>();
 		List<IQuestionAnswerEntry> interactions = chatContext.getInteractions();
 		if (interactions != null) {

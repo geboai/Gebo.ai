@@ -7,16 +7,21 @@
 		<artifactId>gebo.architecture.parent</artifactId>
 		<version>1.0.1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.architecture.rag-threasholds-autotune</artifactId>
+	<artifactId>gebo.architecture.rag.support.layer</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<artifactId>gebo.architecture.fulltext</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.rag.support.layer</artifactId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
