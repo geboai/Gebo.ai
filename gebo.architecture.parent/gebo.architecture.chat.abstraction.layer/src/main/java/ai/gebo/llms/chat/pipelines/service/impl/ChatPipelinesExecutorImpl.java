@@ -7,17 +7,18 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.model.session.ChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
-import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfosMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
@@ -39,6 +40,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	protected final IChatPipelineStepServiceRepositoryPattern stepsServiceRepoPattern;
 	protected final ChatPipelinesConfiguration pipelinesConfiguration;
 	protected final IGChatSessionStateService sessionStateService;
+	protected final IGChatRequestResourcesBuilder chatRequestResourcesBuilder;
 
 	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
 		runtimeData.getExecutedSteps().add(stepdata);
@@ -61,9 +63,12 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
-		ChatSessionState sessionState = sessionStateService.extractState(request, context);
+		int tokensBudget = Math.min(serviceModel != null ? serviceModel.getContextLength() : Integer.MAX_VALUE,
+				chatModel != null ? chatModel.getContextLength() : Integer.MAX_VALUE) / 2;
+		LLMChatRequestResources resources = chatRequestResourcesBuilder.buildRequestResources(request, context,
+				tokensBudget);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), request, context, sessionState, streaming);
+				chatModel.getContextLength(), resources, streaming);
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
 			add(runtimeData, data);

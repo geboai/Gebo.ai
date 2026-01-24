@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
-import ai.gebo.llms.chat.abstraction.layer.model.session.ITokensCountable;
+import ai.gebo.llms.abstraction.layer.model.ITokensCountable;
 import lombok.Data;
 
 @Data

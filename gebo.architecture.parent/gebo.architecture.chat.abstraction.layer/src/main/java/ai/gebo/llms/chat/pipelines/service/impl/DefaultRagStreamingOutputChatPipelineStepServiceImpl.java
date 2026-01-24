@@ -3,14 +3,10 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
-import ai.gebo.llms.chat.pipelines.service.IEnrichingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -37,8 +33,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
-		return ragChatService.streamingExecute(null, runtimeData.getChatRequest(), runtimeData.getUserChatContext(),
-				runtimeData.getActualSessionState(), chatModel, serviceModel);
+		return ragChatService.streamingExecute(null, runtimeData.getRequestResources(), chatModel,
+				serviceModel);
 
 	}
 

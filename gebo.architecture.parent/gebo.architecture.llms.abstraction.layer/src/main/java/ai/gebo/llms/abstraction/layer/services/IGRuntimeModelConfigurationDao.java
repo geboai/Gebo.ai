@@ -12,7 +12,6 @@ package ai.gebo.llms.abstraction.layer.services;
 import java.util.List;
 
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.model.base.GObjectRef;
 

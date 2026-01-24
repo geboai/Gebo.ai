@@ -24,8 +24,8 @@ import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutot
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -145,7 +145,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
 			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
 			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels) {
-		RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
+		AIDocumentsSet consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
 				embeddingModels);
 		final String analisysPrompt = configuration.getAnalisysPrompt();
 
@@ -156,10 +156,10 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 					String documentCode = refItem.getCode();
 					Optional<GDocumentReference> docdata = documentRepo.findById(refItem.getCode());
 					if (docdata.isPresent()) {
-						List<RagDocumentFragment> fragments = refItem.getFragments();
+						List<AIDocumentFragment> fragments = refItem.getFragments();
 
 						List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
-						for (RagDocumentFragment f : fragments) {
+						for (AIDocumentFragment f : fragments) {
 							Map<String, Object> meta = f.getMetaData();
 							String docReference = meta != null ? (String) meta.get(DocumentMetaInfos.GEBO_FILE_NAME)
 									: null;
@@ -461,13 +461,13 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 				.count() > 0;
 	}
 
-	private RagDocumentsCachedDaoResult getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
+	private AIDocumentsSet getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels) {
-		RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
+		AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
 			OptimizedThreashold optimizedSetting = this.threasholdAutotuneService
 					.findByEmbeddingModelCode(embeddingModel.getCode());
-			RagDocumentsCachedDaoResult semanticDaoResult = new RagDocumentsCachedDaoResult();
+			AIDocumentsSet semanticDaoResult = new AIDocumentsSet();
 			SearchType searchType = configuration.getSearchType();
 			if (searchType == null) {
 				searchType = SearchType.MULTI_HOP;
@@ -503,7 +503,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 				break;
 			}
 
-			consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
+			consolidatedDaoResult = AIDocumentsSet.join(semanticDaoResult, consolidatedDaoResult);
 		}
 
 		if (graphRagSearchService != null && graphRagSearchService.isConfigured(null)) {
@@ -511,9 +511,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 				List<KnowledgeGraphSearchResult> graphRagResult = graphRagSearchService.knowledgeGraphSearch(
 						request.getQuery(), request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
-				RagDocumentsCachedDaoResult graphragDocumentsResult = graphRagSearchService
+				AIDocumentsSet graphragDocumentsResult = graphRagSearchService
 						.toRagDocumentsCachedDaoResult(graphRagResult);
-				consolidatedDaoResult = RagDocumentsCachedDaoResult.join(consolidatedDaoResult,
+				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult,
 						graphragDocumentsResult);
 			} catch (LLMConfigException e) {
 				LOGGER.error("Error calling the graphrag logic", e);

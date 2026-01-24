@@ -7,14 +7,15 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboRagRequestCustomConfig;
 import lombok.Data;
 
 /**
@@ -56,7 +57,7 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	/** List of documents that are forcibly requested */
 	protected List<String> forcedRequestDocuments = new ArrayList<String>();
 	/** documents retrieved on rag or "chat with document" **/
-	protected RagDocumentsCachedDaoResult documents = null;
+	protected AIDocumentsSet documents = null;
 	protected List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	protected List<String> deepSearchDataSources = null;
 

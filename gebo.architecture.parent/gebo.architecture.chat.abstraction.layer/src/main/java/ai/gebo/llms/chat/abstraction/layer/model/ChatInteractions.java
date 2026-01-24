@@ -1,5 +1,8 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
+import ai.gebo.llms.abstraction.layer.model.ITokensCountable;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import lombok.Data;
 
 /**
@@ -7,11 +10,11 @@ import lombok.Data;
  * both the request and response aspects of a chat interaction.
  */
 @Data
-public class ChatInteractions {
-	private  GeboChatRequest request = null; // Stores the chat request
-	private  Integer requestNTokens = null; // Number of tokens in the request
-	private  GeboTemplatedChatResponse response = null; // Stores the chat response
-	private  Integer responseNTokens = null; // Number of tokens in the response
+public class ChatInteractions implements ITokensCountable {
+	private GeboChatRequest request = null; // Stores the chat request
+	private Integer requestNTokens = null; // Number of tokens in the request
+	private GeboTemplatedChatResponse response = null; // Stores the chat response
+	private Integer responseNTokens = null; // Number of tokens in the response
 
 	public ChatInteractions clientClone() throws CloneNotSupportedException {
 		GeboChatRequest clonedrequest = request != null ? (GeboChatRequest) request.clone() : null;
@@ -23,4 +26,12 @@ public class ChatInteractions {
 		cloned.responseNTokens = (responseNTokens);
 		return cloned;
 	}
+
+	@Override
+	public int getTokensSize() {
+
+		return (requestNTokens != null ? requestNTokens.intValue() : 0)
+				+ (responseNTokens != null ? responseNTokens.intValue() : 0);
+	}
+
 }

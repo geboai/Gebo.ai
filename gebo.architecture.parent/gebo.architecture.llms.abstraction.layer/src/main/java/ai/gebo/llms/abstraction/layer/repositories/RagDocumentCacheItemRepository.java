@@ -13,23 +13,23 @@
 package ai.gebo.llms.abstraction.layer.repositories;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentCacheItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentCacheItem;
 
 /**
  * Gebo.ai comment agent
- * Repository interface for managing {@link RagDocumentCacheItem} entities.
+ * Repository interface for managing {@link AIDocumentCacheItem} entities.
  * Extends the generic {@link IGBaseMongoDBRepository} interface for MongoDB operations.
  */
-public interface RagDocumentCacheItemRepository extends IGBaseMongoDBRepository<RagDocumentCacheItem> {
+public interface RagDocumentCacheItemRepository extends IGBaseMongoDBRepository<AIDocumentCacheItem> {
 
     /**
      * Returns the class type managed by this repository.
-     * This override specifies that the managed type is {@link RagDocumentCacheItem}.
+     * This override specifies that the managed type is {@link AIDocumentCacheItem}.
      *
      * @return the class of the managed entity.
      */
     @Override
-    default Class<RagDocumentCacheItem> getManagedType() {
-        return RagDocumentCacheItem.class;
+    default Class<AIDocumentCacheItem> getManagedType() {
+        return AIDocumentCacheItem.class;
     }
 }

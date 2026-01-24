@@ -32,7 +32,7 @@ import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationT
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -134,13 +134,13 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		List<GVectorizedContent> vectorizated = vectorizatedStream.toList();
 		assertFalse("Vectorizated list cannot be empty", vectorizated.isEmpty());
 		LOGGER.info("Vectorized infos " + mapper.writeValueAsString(vectorizated));
-		RagDocumentsCachedDaoResult results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
+		AIDocumentsSet results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
 				openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti", results.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getNTokens() == 0);
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
-		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
+		AIDocumentsSet results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
 				knowledgeBases, openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti",
 				results1.getDocumentItems().isEmpty());

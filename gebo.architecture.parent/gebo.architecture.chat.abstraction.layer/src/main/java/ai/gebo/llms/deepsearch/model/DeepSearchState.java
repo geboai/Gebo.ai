@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import lombok.Data;
 
 @Data
 public class DeepSearchState {
 	private DeepSearchPhase phase = DeepSearchPhase.BEFORE_KNOWLEDGE_BASE_SEARCH;
-	private RagDocumentsCachedDaoResult documentSearchResults = null;
+	private AIDocumentsSet documentSearchResults = null;
 	private String currentDataSourceHandlerRunning = null;
 	private int ragDocumentsPointer = 0;
 	private int ragDocumentFragmentPointer = 0;

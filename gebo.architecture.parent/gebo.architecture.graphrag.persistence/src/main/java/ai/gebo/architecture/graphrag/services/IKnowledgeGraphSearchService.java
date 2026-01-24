@@ -5,7 +5,7 @@ import java.util.List;
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 public interface IKnowledgeGraphSearchService {
@@ -17,7 +17,7 @@ public interface IKnowledgeGraphSearchService {
 	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(String query, List<String> knowledgeBases, int topK)
 			throws LLMConfigException;
 
-	public RagDocumentsCachedDaoResult toRagDocumentsCachedDaoResult(List<KnowledgeGraphSearchResult> data);
+	public AIDocumentsSet toRagDocumentsCachedDaoResult(List<KnowledgeGraphSearchResult> data);
 
 	public boolean isConfigured(WorkflowContext context);
 }

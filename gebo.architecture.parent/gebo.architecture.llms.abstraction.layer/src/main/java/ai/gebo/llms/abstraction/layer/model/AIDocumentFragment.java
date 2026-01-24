@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
-
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.Data;
 
@@ -28,10 +27,10 @@ import lombok.Data;
  * @author AI generated comments
  */
 @Data
-public class RagDocumentFragment implements IRagContent, Cloneable {
+public class AIDocumentFragment implements IAIContent, Cloneable {
 
 	// Number of tokens in the document fragment
-	private long NTokens;
+	private int tokensSize;
 
 	// Number of bytes in the document fragment
 	private long NBytes;
@@ -61,7 +60,7 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 	private String origin = null;
 	private Long chunkPosition = null;
 
-	public RagDocumentFragment() {
+	public AIDocumentFragment() {
 
 	}
 
@@ -72,7 +71,7 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 	 * @param x        the Document associated with this fragment.
 	 * @param metaData the meta-data extracted related to this document.
 	 */
-	public RagDocumentFragment(Document x, ExtractedDocumentMetaData metaData) {
+	public AIDocumentFragment(Document x, ExtractedDocumentMetaData metaData) {
 		this.documentId = x.getId();
 		this.documentContent = x.getText();
 		this.metaData = x.getMetadata();
@@ -80,7 +79,7 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 		this.parentProjectCode = metaData.getParentProjectCode();
 		this.rootKnowledgebaseCode = metaData.getRootKnowledgebaseCode();
 		this.NBytes = metaData.getBytesLength() != null ? metaData.getBytesLength().longValue() : 0l;
-		this.NTokens = metaData.getTokenLength() != null ? metaData.getTokenLength().longValue() : 0l;
+		this.tokensSize = metaData.getTokenLength() != null ? metaData.getTokenLength().intValue() : 0;
 		this.chunkPosition = metaData.getChunkPosition() != null ? metaData.getChunkPosition().longValue() : null;
 	}
 
@@ -107,7 +106,7 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 	 * @return an empty stream of IRagContent elements.
 	 */
 	@Override
-	public Stream<IRagContent> streamChilds() {
+	public Stream<IAIContent> streamChilds() {
 		return Stream.of();
 	}
 

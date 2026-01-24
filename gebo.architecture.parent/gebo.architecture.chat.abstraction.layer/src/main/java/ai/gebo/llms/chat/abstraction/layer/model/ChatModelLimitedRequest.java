@@ -2,7 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.List;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import lombok.Data;
 
 @Data
@@ -13,10 +13,10 @@ public class ChatModelLimitedRequest {
 	private boolean historyConsolidationRequired = false;
 	private int historySizeTarget = 0;
 	/** The chat history limited by tokens */
-	private TokenLimitedContent<ChatHistoryData> history;
+	private TokensContainer<ChatHistoryData> history;
 	/** The query string limited by tokens */
-	private TokenLimitedContent<String> query;
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> uploadedDocuments;
+	private TokensContainer<String> query;
+	private TokensContainer<AIDocumentsSet> uploadedDocuments;
 	/** The remaining token space available */
 	private int residualTokenSpace;
 

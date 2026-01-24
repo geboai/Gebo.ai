@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenLimitedContent<T> {
+public class TokensContainer<T> {
 
 	// The value being stored of generic type T.
 	private T value = null;

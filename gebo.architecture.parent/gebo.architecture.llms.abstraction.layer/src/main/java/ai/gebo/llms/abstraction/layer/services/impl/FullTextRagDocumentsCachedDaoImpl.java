@@ -13,9 +13,9 @@ import ai.gebo.architecture.fulltext.model.MetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.fulltext.service.IGFullTextIngestionService;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGFullTextRagDocumentsCachedDao;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.AllArgsConstructor;
@@ -27,20 +27,20 @@ public class FullTextRagDocumentsCachedDaoImpl implements IGFullTextRagDocuments
 	private final IGFullTextSearchService searchService;
 
 	@Override
-	public RagDocumentsCachedDaoResult search(List<String> q, int topK, MetaDataFilter filter)
+	public AIDocumentsSet search(List<String> q, int topK, MetaDataFilter filter)
 			throws FullTextException {
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
 	}
 
 	@Override
-	public RagDocumentsCachedDaoResult search(String q, int topK, MetaDataFilter filter) throws FullTextException {
+	public AIDocumentsSet search(String q, int topK, MetaDataFilter filter) throws FullTextException {
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
 	}
 
-	private RagDocumentsCachedDaoResult toRagDocumentCachedDaoResult(List<FullTextChunkSearchHit> data) {
-		Map<String, RagDocumentReferenceItem> docsMap = new HashMap<String, RagDocumentReferenceItem>();
+	private AIDocumentsSet toRagDocumentCachedDaoResult(List<FullTextChunkSearchHit> data) {
+		Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
 		for (FullTextChunkSearchHit chunk : data) {
 			ExtractedDocumentMetaData extractedMeta = ExtractedDocumentMetaData.of(chunk.getChunk().getMetaData());
 			Document document = new Document(chunk.getChunk().getId(), chunk.getChunk().getContent(),
@@ -49,16 +49,16 @@ public class FullTextRagDocumentsCachedDaoImpl implements IGFullTextRagDocuments
 			if (documentCode.startsWith(IGFullTextIngestionService.KBSOURCE)) {
 				documentCode = documentCode.substring(IGFullTextIngestionService.KBSOURCE.length());
 			}
-			RagDocumentFragment fragment = new RagDocumentFragment(document, extractedMeta);
+			AIDocumentFragment fragment = new AIDocumentFragment(document, extractedMeta);
 			fragment.setChunkPosition((long) chunk.getChunk().getPosition());
 			if (!docsMap.containsKey(documentCode)) {
-				RagDocumentReferenceItem rItem = new RagDocumentReferenceItem(extractedMeta);
+				AIDocumentReferenceItem rItem = new AIDocumentReferenceItem(extractedMeta);
 				docsMap.put(documentCode, rItem);
 			}
 			docsMap.get(documentCode).getFragments().add(fragment);
 			docsMap.get(documentCode).recalculateSize();
 		}
-		RagDocumentsCachedDaoResult out = RagDocumentsCachedDaoResult.createDocumentsDaoResultFromMap(docsMap);
+		AIDocumentsSet out = AIDocumentsSet.createDocumentsDaoResultFromMap(docsMap);
 		out.recalculateSize();
 		return out;
 	}

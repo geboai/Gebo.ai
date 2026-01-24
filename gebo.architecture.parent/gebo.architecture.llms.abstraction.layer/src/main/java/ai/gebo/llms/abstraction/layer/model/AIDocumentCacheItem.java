@@ -31,12 +31,12 @@ import lombok.Data;
  */
 @org.springframework.data.mongodb.core.mapping.Document
 @Data
-public class RagDocumentCacheItem extends GBaseObject {
+public class AIDocumentCacheItem extends GBaseObject {
     // Stores the actual textual content of the document
     private String text = null;
 	
     // Stores the estimated count of tokens in the text
-    private Long tokenSize = null;
+    private Long tokensSize = null;
     
     // Stores the size of the document in bytes
     private Long bytesSize = null;
@@ -55,8 +55,8 @@ public class RagDocumentCacheItem extends GBaseObject {
      * @param documents a stream of Document objects
      * @return a populated RagDocumentCacheItem instance
      */
-    public static RagDocumentCacheItem of(Stream<Document> documents) {
-        final RagDocumentCacheItem item = new RagDocumentCacheItem();
+    public static AIDocumentCacheItem of(Stream<Document> documents) {
+        final AIDocumentCacheItem item = new AIDocumentCacheItem();
         final StringBuffer buffer = new StringBuffer();
         documents.forEach(x -> {
             if (item.metaData.isEmpty()) {
@@ -71,7 +71,7 @@ public class RagDocumentCacheItem extends GBaseObject {
         item.text = buffer.toString();
         TokenCountEstimator estimator = new JTokkitTokenCountEstimator();
         int tokenCount = estimator.estimate(item.text); // Estimates the token count
-        item.tokenSize = Long.valueOf(tokenCount);
+        item.tokensSize = Long.valueOf(tokenCount);
         item.bytesSize = Long.valueOf(item.text.length() * 2); // Estimates the byte size assuming 2 bytes per character
         return item;
     }

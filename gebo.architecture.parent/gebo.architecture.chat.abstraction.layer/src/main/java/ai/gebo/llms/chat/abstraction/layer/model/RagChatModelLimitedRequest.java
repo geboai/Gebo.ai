@@ -11,7 +11,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.List;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import lombok.Data;
 
 /**
@@ -26,18 +26,18 @@ public class RagChatModelLimitedRequest {
 	private int contextWindowNToken;
 
 	/** The chat history limited by tokens */
-	private TokenLimitedContent<ChatHistoryData> history;
+	private TokensContainer<ChatHistoryData> history;
 
 	/** The cached documents limited by tokens */
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> documents;
+	private TokensContainer<AIDocumentsSet> documents;
 	/**
 	 * The cached documents found on paste and actual interactions limited by tokens
 	 */
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> contextDocuments;
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> uploadedDocuments;
+	private TokensContainer<AIDocumentsSet> contextDocuments;
+	private TokensContainer<AIDocumentsSet> uploadedDocuments;
 
 	/** The query string limited by tokens */
-	private TokenLimitedContent<String> query;
+	private TokensContainer<String> query;
 
 	/** The remaining token space available */
 	private int residualTokenSpace;

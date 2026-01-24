@@ -18,14 +18,9 @@ import java.util.stream.Stream;
  * Interface representing content with methods to manage token and byte counts,
  * and recalculate size based on child content.
  */
-public interface IRagContent  {
+public interface IAIContent extends ITokensCountable {
 
-	/**
-	 * Gets the number of tokens.
-	 * 
-	 * @return the number of tokens
-	 */
-	public long getNTokens();
+	
 
 	/**
 	 * Gets the number of bytes.
@@ -39,7 +34,7 @@ public interface IRagContent  {
 	 * 
 	 * @param n the number of tokens to set
 	 */
-	public void setNTokens(long n);
+	public void setTokensSize(int n);
 
 	/**
 	 * Sets the number of bytes.
@@ -52,8 +47,8 @@ public interface IRagContent  {
 	 * A Consumer implementation that calculates the total number of tokens and
 	 * bytes by iterating over a collection of IRagContent objects.
 	 */
-	class CounterConsumer implements Consumer<IRagContent> {
-		long nTokenTotal = 0, nBytesTotal = 0;
+	class CounterConsumer implements Consumer<IAIContent> {
+		int nTokenTotal = 0, nBytesTotal = 0;
 
 		/**
 		 * Accepts an IRagContent instance, recalculates its size, and accumulates the
@@ -62,9 +57,9 @@ public interface IRagContent  {
 		 * @param t the IRagContent instance
 		 */
 		@Override
-		public void accept(IRagContent t) {
+		public void accept(IAIContent t) {
 			t.recalculateSize();
-			nTokenTotal += t.getNTokens();
+			nTokenTotal += t.getTokensSize();
 			nBytesTotal += t.getNBytes();
 		}
 	}
@@ -74,7 +69,7 @@ public interface IRagContent  {
 	 * 
 	 * @return a Stream of IRagContent child objects
 	 */
-	Stream<IRagContent> streamChilds();
+	Stream<IAIContent> streamChilds();
 
 	/**
 	 * Recalculates the size of the content by iterating through its children with a
@@ -82,11 +77,11 @@ public interface IRagContent  {
 	 */
 	public default void recalculateSize() {
 		CounterConsumer consumer = new CounterConsumer();
-		Stream<IRagContent> childs = streamChilds();
+		Stream<IAIContent> childs = streamChilds();
 		// For each child, apply the consumer to calculate totals
 		childs.forEach(consumer);
 		setNBytes(consumer.nBytesTotal);
-		setNTokens(consumer.nTokenTotal);
+		setTokensSize(consumer.nTokenTotal);
 	}
 
 }

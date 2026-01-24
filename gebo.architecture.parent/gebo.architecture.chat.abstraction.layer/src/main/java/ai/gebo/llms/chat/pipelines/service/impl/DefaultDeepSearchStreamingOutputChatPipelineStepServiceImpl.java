@@ -36,8 +36,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
 		return deepSearchService
-				.streamingExecute(null, runtimeData.getChatRequest(), runtimeData.getUserChatContext(),
-						runtimeData.getActualSessionState(), chatModel, serviceModel)
+				.streamingExecute(null, runtimeData.getRequestResources(), chatModel,
+						serviceModel)
 				.map(x -> new GeboChatMessageEnvelope(x));
 
 	}

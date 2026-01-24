@@ -41,10 +41,7 @@ public class GUserChatContext extends GBaseObject {
 	private String chatMemoryId = null; // Identifier for chat memory
 	private List<ChatInteractions> interactions = null; // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
-	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
-
-	private GUserChatInteractionsConsolidationData consolidation = null;
-	private ShrinkedChatSessionState shrinkedState = null;
+	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
 
 	/** Default constructor for GUserChatContext */
 	public GUserChatContext() {

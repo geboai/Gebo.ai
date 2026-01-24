@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.util.UUID;
 

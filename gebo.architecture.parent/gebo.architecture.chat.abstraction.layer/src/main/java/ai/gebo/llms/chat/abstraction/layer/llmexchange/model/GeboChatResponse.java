@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 /**
  * Gebo.ai comment agent

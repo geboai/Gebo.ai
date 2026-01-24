@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Map;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
 
@@ -157,16 +157,16 @@ public class GResponseDocumentRef implements Serializable {
 	 * @param extractedDocuments the result containing extracted document data
 	 * @return a list of GResponseDocumentRef objects
 	 */
-	public static List<GResponseDocumentRef> from(RagDocumentsCachedDaoResult extractedDocuments) {
+	public static List<GResponseDocumentRef> from(AIDocumentsSet extractedDocuments) {
 		final List<GResponseDocumentRef> out = new ArrayList<GResponseDocumentRef>();
 		extractedDocuments.getDocumentItems().forEach(x -> {
 			if (!x.getFragments().isEmpty()) {
 				GResponseDocumentRef documentRef = new GResponseDocumentRef(x.getFragments().get(0).toAIDocument());
 				out.add(documentRef);
-				documentRef.setNTokensRelevant(x.getNTokens());
+				documentRef.setNTokensRelevant(x.getTokensSize());
 				documentRef.setNTotalContentTokens(x.getTotalFileNTokens());
 				if (documentRef.getNTotalContentTokens() > 0) {
-					double percent = 100.0 * ((double) x.getNTokens()) / ((double) x.getTotalFileNTokens());
+					double percent = 100.0 * ((double) x.getTokensSize()) / ((double) x.getTotalFileNTokens());
 					if (percent > 100.0)
 						percent = 100.0;
 					documentRef.loadPercentage = percent;

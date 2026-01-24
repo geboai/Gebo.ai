@@ -23,9 +23,9 @@ import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutot
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -164,7 +164,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		if (state.getDocumentSearchResults() != null
 				&& state.getRagDocumentsPointer() < state.getDocumentSearchResults().getDocumentItems().size()) {
 			int tokensBudget = chatModel.getContextLength();
-			RagDocumentReferenceItem foundDocument = state.getDocumentSearchResults().getDocumentItems()
+			AIDocumentReferenceItem foundDocument = state.getDocumentSearchResults().getDocumentItems()
 					.get(state.getRagDocumentsPointer());
 			String documentCode = foundDocument.getCode();
 			Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
@@ -176,11 +176,11 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				if (initialFragmentPointer < foundDocument.getFragments().size()) {
 					boolean stopCycling = false;
 					for (int i = initialFragmentPointer; !stopCycling && i < foundDocument.getFragments().size(); i++) {
-						RagDocumentFragment fragment = foundDocument.getFragments().get(i);
-						stopCycling = tokensBudget < fragment.getNTokens();
+						AIDocumentFragment fragment = foundDocument.getFragments().get(i);
+						stopCycling = tokensBudget < fragment.getTokensSize();
 						if (!stopCycling) {
 							state.setRagDocumentsPointer(i);
-							tokensBudget -= fragment.getNTokens();
+							tokensBudget -= fragment.getTokensSize();
 							lastFragmentReached = i == foundDocument.getFragments().size() - 1;
 							currentProcessedFragments.add(fragment.toAIDocument());
 							state.setRagDocumentFragmentPointer(i);
@@ -310,7 +310,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
 					if (state.getDocumentSearchResults() == null) {
 
-						RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration,
+						AIDocumentsSet consolidatedDaoResult = getSearchResults(request, configuration,
 								userInfos, embeddingModels);
 						state.setDocumentSearchResults(consolidatedDaoResult);
 						state.setFragmentsCount(consolidatedDaoResult.countFragments());
@@ -440,13 +440,13 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				.count() > 0;
 	}
 
-	private RagDocumentsCachedDaoResult getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
+	private AIDocumentsSet getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels) {
-		RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
+		AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
 			OptimizedThreashold optimizedSetting = this.threasholdAutotuneService
 					.findByEmbeddingModelCode(embeddingModel.getCode());
-			RagDocumentsCachedDaoResult semanticDaoResult = new RagDocumentsCachedDaoResult();
+			AIDocumentsSet semanticDaoResult = new AIDocumentsSet();
 			SearchType searchType = configuration.getSearchType();
 			if (searchType == null) {
 				searchType = SearchType.MULTI_HOP;
@@ -482,7 +482,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				break;
 			}
 
-			consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
+			consolidatedDaoResult = AIDocumentsSet.join(semanticDaoResult, consolidatedDaoResult);
 		}
 
 		if (graphRagSearchService != null && graphRagSearchService.isConfigured(null)) {
@@ -490,9 +490,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 				List<KnowledgeGraphSearchResult> graphRagResult = graphRagSearchService.knowledgeGraphSearch(
 						request.getQuery(), request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
-				RagDocumentsCachedDaoResult graphragDocumentsResult = graphRagSearchService
+				AIDocumentsSet graphragDocumentsResult = graphRagSearchService
 						.toRagDocumentsCachedDaoResult(graphRagResult);
-				consolidatedDaoResult = RagDocumentsCachedDaoResult.join(consolidatedDaoResult,
+				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult,
 						graphragDocumentsResult);
 			} catch (LLMConfigException e) {
 				LOGGER.error("Error calling the graphrag logic", e);

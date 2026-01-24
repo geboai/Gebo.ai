@@ -14,7 +14,7 @@ package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.List;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
@@ -37,7 +37,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user TODO
      * @return The result of the documents search.
      */
-    public RagDocumentsCachedDaoResult chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
+    public AIDocumentsSet chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
             List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
@@ -51,7 +51,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user TODO
      * @return The result of the semantic search.
      */
-    public RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, RagQueryOptions options,
+    public AIDocumentsSet semanticSearchOnDocumentsList(String query, RagQueryOptions options,
             List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
@@ -64,7 +64,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user TODO
      * @return The result of the semantic search.
      */
-    public default RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, List<String> codes,
+    public default AIDocumentsSet semanticSearchOnDocumentsList(String query, List<String> codes,
             List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
         return this.semanticSearchOnDocumentsList(query, RagQueryOptions.defaultOptions, codes, knowledgeBases,
                 embeddingModel, user);
@@ -82,7 +82,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user TODO
      * @return The result of the multi-hop semantic search.
      */
-    public RagDocumentsCachedDaoResult multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
+    public AIDocumentsSet multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
             List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold, UserInfos user);
 
     /**
@@ -95,7 +95,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user TODO
      * @return The result of the semantic search.
      */
-    public RagDocumentsCachedDaoResult semanticSearch(String query, RagQueryOptions options,
+    public AIDocumentsSet semanticSearch(String query, RagQueryOptions options,
             List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
@@ -107,7 +107,7 @@ public interface IGRagDocumentsCachedDao {
      * @param user 
      * @return The result of the semantic search.
      */
-    public default RagDocumentsCachedDaoResult semanticSearch(String query, List<String> knowledgeBases,
+    public default AIDocumentsSet semanticSearch(String query, List<String> knowledgeBases,
             IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
         return this.semanticSearch(query, RagQueryOptions.defaultOptions, knowledgeBases, embeddingModel, user);
     }

@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.model.session;
 
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CSSInteractionReferredContent<T> {
 	private int interactionIndex = 0;
-	private RagDocumentReferenceItem data = null;
+	private AIDocumentReferenceItem data = null;
 	private T contentObject = null;
 }

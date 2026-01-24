@@ -11,9 +11,9 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import jakarta.validation.constraints.NotNull;
@@ -52,7 +52,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 
 		return DEFAULT_ROUTING_STEP;
 	}
-	
+
 	@Override
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
@@ -63,7 +63,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 		Map<String, Object> templateParams = new HashMap<String, Object>();
 		try {
 			RoutingDecisionResponse llmRoutingDecision = callLLMStructuredReturn(serviceModel, prompt,
-					runtimeData.getChatRequest().getQuery(), templateParams, RoutingDecisionResponse.class);
+					runtimeData.getRequestResources().getLastRequest().getQuery(), templateParams,
+					RoutingDecisionResponse.class);
 			List<String> routes = futureRoutes(llmRoutingDecision.getResponseRouting(),
 					RespondingWith.PURE_LLM_RESPONSE, runtimeData.isStreamingOutput());
 			final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {
@@ -77,7 +78,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				@Override
 				public List<IStepContribution> getContextEnrichingContribution() {
 
-					return nextStepContribution(llmRoutingDecision,runtimeData,chatModel,serviceModel);
+					return nextStepContribution(llmRoutingDecision, runtimeData, chatModel, serviceModel);
 				}
 			};
 			RoutingDecision rd = new RoutingDecision(routes, routingEntry);

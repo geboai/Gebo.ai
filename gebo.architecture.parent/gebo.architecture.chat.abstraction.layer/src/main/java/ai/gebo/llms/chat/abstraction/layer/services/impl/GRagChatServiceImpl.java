@@ -32,29 +32,29 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.session.ChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
@@ -203,7 +203,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				// Retrieves historical interactions and document results
 				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
-				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
+				AIDocumentsSet extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
@@ -518,9 +518,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 					response.setUsedChatModelProvider(chatHandler.getType().getCode());
 				}
 				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
-				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
-				RagDocumentsCachedDaoResult contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
-				RagDocumentsCachedDaoResult uploadedDocuments = limitedResourcesRequest.getUploadedDocuments()
+				AIDocumentsSet extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
+				AIDocumentsSet contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
+				AIDocumentsSet uploadedDocuments = limitedResourcesRequest.getUploadedDocuments()
 						.getValue();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				List<Document> contextdocs = contextDocuments != null ? contextDocuments.aiDocumentsList() : List.of();
@@ -659,16 +659,15 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	}
 
 	@Override
-	public GeboChatResponse execute(String ovveriddenPrompt, GeboChatRequest request, GUserChatContext context,
-			ChatSessionState sessionState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+	public GeboChatResponse execute(String ovveriddenPrompt, LLMChatRequestResources requestResources, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, GeboChatRequest request,
-			GUserChatContext context, ChatSessionState sessionState, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) {
+	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, LLMChatRequestResources requestResources,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}

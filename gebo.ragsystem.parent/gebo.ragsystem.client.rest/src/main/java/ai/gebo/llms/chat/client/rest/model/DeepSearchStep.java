@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.client.rest.model;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

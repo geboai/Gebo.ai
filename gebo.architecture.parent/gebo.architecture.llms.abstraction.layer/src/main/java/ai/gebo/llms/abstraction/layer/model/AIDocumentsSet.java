@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
-
 import ai.gebo.model.IJsonClonable;
 import lombok.Data;
 
@@ -30,13 +29,13 @@ import lombok.Data;
  * document references, and recalculating their size and weight.
  */
 @Data
-public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<RagDocumentsCachedDaoResult>, Cloneable {
+public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>, Cloneable {
 	// Number of tokens in the document
-	private long NTokens;
+	private int tokensSize;
 	// Number of bytes in the document
 	private long NBytes;
 	// List of document reference items
-	private List<RagDocumentReferenceItem> documentItems = new ArrayList<RagDocumentReferenceItem>();
+	private List<AIDocumentReferenceItem> documentItems = new ArrayList<AIDocumentReferenceItem>();
 
 	/**
 	 * Streams the child elements of this RAG content.
@@ -44,7 +43,7 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 	 * @return a stream of child RAG contents
 	 */
 	@Override
-	public Stream<IRagContent> streamChilds() {
+	public Stream<IAIContent> streamChilds() {
 		return documentItems != null ? documentItems.stream().map(x -> x) : Stream.of();
 	}
 
@@ -54,18 +53,18 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 	 */
 	@Override
 	public void recalculateSize() {
-		IRagContent.super.recalculateSize();
-		if (NTokens > 0l) {
-			double globalWeight = NTokens;
+		IAIContent.super.recalculateSize();
+		if (tokensSize > 0) {
+			double globalWeight = tokensSize;
 			if (documentItems != null) {
-				for (RagDocumentReferenceItem item : documentItems) {
-					if (item.getNTokens() > 0l) {
-						double documentSize = item.getNTokens();
+				for (AIDocumentReferenceItem item : documentItems) {
+					if (item.getTokensSize() > 0l) {
+						double documentSize = item.getTokensSize();
 						item.setWeightedResultsRanking(100.0 * documentSize / globalWeight);
 						if (item.getFragments() != null) {
-							for (RagDocumentFragment f : item.getFragments()) {
-								if (f.getNTokens() > 0l) {
-									f.setWeightedResultsRanking(100.0 * ((double) f.getNTokens()) / globalWeight);
+							for (AIDocumentFragment f : item.getFragments()) {
+								if (f.getTokensSize() > 0l) {
+									f.setWeightedResultsRanking(100.0 * ((double) f.getTokensSize()) / globalWeight);
 								}
 							}
 						}
@@ -87,22 +86,22 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 	 */
 	public void orderByDocumentWeight() {
 		this.recalculateSize();
-		final TreeMap<Double, List<RagDocumentReferenceItem>> ordered = new TreeMap<Double, List<RagDocumentReferenceItem>>();
+		final TreeMap<Double, List<AIDocumentReferenceItem>> ordered = new TreeMap<Double, List<AIDocumentReferenceItem>>();
 		if (documentItems != null) {
 			boolean allAreWeighted = true;
-			for (RagDocumentReferenceItem x : documentItems) {
+			for (AIDocumentReferenceItem x : documentItems) {
 				allAreWeighted = allAreWeighted && x.getWeightedResultsRanking() > 0.0;
 				Double key = x.getWeightedResultsRanking();
 				if (!ordered.containsKey(key)) {
-					ordered.put(key, new ArrayList<RagDocumentReferenceItem>());
+					ordered.put(key, new ArrayList<AIDocumentReferenceItem>());
 				}
 				ordered.get(key).add(x);
 			}
 			if (allAreWeighted) {
-				List<RagDocumentReferenceItem> newList = new ArrayList<RagDocumentReferenceItem>();
-				for (Entry<Double, List<RagDocumentReferenceItem>> entry : ordered.entrySet()) {
+				List<AIDocumentReferenceItem> newList = new ArrayList<AIDocumentReferenceItem>();
+				for (Entry<Double, List<AIDocumentReferenceItem>> entry : ordered.entrySet()) {
 					Double key = entry.getKey();
-					List<RagDocumentReferenceItem> val = entry.getValue();
+					List<AIDocumentReferenceItem> val = entry.getValue();
 					newList.addAll(val);
 				}
 				documentItems = newList;
@@ -110,36 +109,35 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 		}
 	}
 
-	public static RagDocumentsCachedDaoResult join(RagDocumentsCachedDaoResult... result) {
-		Map<String, RagDocumentReferenceItem> docsMap = new HashMap<String, RagDocumentReferenceItem>();
-		for (RagDocumentsCachedDaoResult ragDocumentsCachedDaoResult : result) {
+	public static AIDocumentsSet join(AIDocumentsSet... result) {
+		Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
+		for (AIDocumentsSet ragDocumentsCachedDaoResult : result) {
 			joinMap(ragDocumentsCachedDaoResult, docsMap);
 		}
 		return createDocumentsDaoResultFromMap(docsMap);
 	}
 
-	public static RagDocumentsCachedDaoResult createDocumentsDaoResultFromMap(
-			Map<String, RagDocumentReferenceItem> docsMap) {
-		RagDocumentsCachedDaoResult results = new RagDocumentsCachedDaoResult();
+	public static AIDocumentsSet createDocumentsDaoResultFromMap(Map<String, AIDocumentReferenceItem> docsMap) {
+		AIDocumentsSet results = new AIDocumentsSet();
 		docsMap.values().forEach(x -> results.getDocumentItems().add(x));
 		results.recalculateSize();
 		return results;
 	}
 
-	public static void joinMap(RagDocumentsCachedDaoResult result, Map<String, RagDocumentReferenceItem> docsMap) {
+	public static void joinMap(AIDocumentsSet result, Map<String, AIDocumentReferenceItem> docsMap) {
 		result.documentItems.forEach(doc -> {
 			if (!docsMap.containsKey(doc.getCode())) {
 				try {
-					docsMap.put(doc.getCode(), (RagDocumentReferenceItem) doc.clone());
+					docsMap.put(doc.getCode(), (AIDocumentReferenceItem) doc.clone());
 				} catch (CloneNotSupportedException e) {
 					LOGGER.error("Error cloning", e);
 				}
 			} else {
-				RagDocumentReferenceItem docCopy = docsMap.get(doc.getCode());
-				for (RagDocumentFragment fragment : doc.getFragments()) {
+				AIDocumentReferenceItem docCopy = docsMap.get(doc.getCode());
+				for (AIDocumentFragment fragment : doc.getFragments()) {
 					if (!docCopy.getFragments().stream().anyMatch(x -> x.getCode().equals(fragment.getCode()))) {
 						try {
-							docCopy.getFragments().add((RagDocumentFragment) fragment.clone());
+							docCopy.getFragments().add((AIDocumentFragment) fragment.clone());
 						} catch (CloneNotSupportedException e) {
 							LOGGER.error("Error cloning", e);
 						}
@@ -152,7 +150,7 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 
 	public int countFragments() {
 		int i = 0;
-		for (RagDocumentReferenceItem ragDocumentReferenceItem : documentItems) {
+		for (AIDocumentReferenceItem ragDocumentReferenceItem : documentItems) {
 			i += ragDocumentReferenceItem.countFragments();
 		}
 		return i;

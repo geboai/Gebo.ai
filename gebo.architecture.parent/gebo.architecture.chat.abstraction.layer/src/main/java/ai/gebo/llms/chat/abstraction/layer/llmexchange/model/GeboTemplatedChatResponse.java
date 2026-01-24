@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ import java.util.List;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboWorkingMemoryWindowOccupation;
 import ai.gebo.model.GUserMessage;
 
 /**

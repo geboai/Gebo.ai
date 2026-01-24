@@ -26,9 +26,9 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReferenceSnapshot;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.model.ExtractedDocumentMetaData;
 
@@ -47,7 +47,7 @@ class SimilaritySearchService {
      * A helper class to store results of similarity search.
      */
 	class ResultsMaps {
-		final List<RagDocumentReferenceItem> docinfos = new ArrayList<RagDocumentReferenceItem>();
+		final List<AIDocumentReferenceItem> docinfos = new ArrayList<AIDocumentReferenceItem>();
 		final Map<String, Boolean> knowledgeBases = new HashMap<String, Boolean>();
 	}
 
@@ -68,15 +68,15 @@ class SimilaritySearchService {
 		for (Document x : documents) {
 			ExtractedDocumentMetaData metaData = ExtractedDocumentMetaData.of(x.getMetadata());
 			// Find existing document reference item by code, if it exists
-			Optional<RagDocumentReferenceItem> optionalItem = result.docinfos.stream()
+			Optional<AIDocumentReferenceItem> optionalItem = result.docinfos.stream()
 					.filter(y -> y.getCode().equals(metaData.getCode())).findFirst();
-			RagDocumentReferenceItem item = optionalItem.isPresent() ? optionalItem.get() : null;
+			AIDocumentReferenceItem item = optionalItem.isPresent() ? optionalItem.get() : null;
 			if (item == null) {
 				item = fromExtracted(metaData); // Create new reference item if not found
 				result.docinfos.add(item);
 			}
 			result.knowledgeBases.put(metaData.getRootKnowledgebaseCode(), true);
-			RagDocumentFragment fragment = new RagDocumentFragment(x, metaData);
+			AIDocumentFragment fragment = new AIDocumentFragment(x, metaData);
 			fragment.setRankIndex(index); // Assign a rank index to the fragment
 			item.getFragments().add(fragment);
 			index++;
@@ -85,7 +85,7 @@ class SimilaritySearchService {
 		List<String> docCodes = result.docinfos.stream().map(x -> x.getCode()).toList();
 		List<GDocumentReferenceSnapshot> shares = documentSnapshotRepository.findAllById(docCodes);
 		shares.forEach(x -> {
-			Optional<RagDocumentReferenceItem> optionalItem = result.docinfos.stream()
+			Optional<AIDocumentReferenceItem> optionalItem = result.docinfos.stream()
 					.filter(y -> y.getCode().equals(x.getCode())).findFirst();
 			if (optionalItem.isPresent()) {
 				optionalItem.get()
@@ -100,8 +100,8 @@ class SimilaritySearchService {
      * @param metaData Metadata extracted from document
      * @return A new instance of RagDocumentReferenceItem
      */
-	private RagDocumentReferenceItem fromExtracted(ExtractedDocumentMetaData metaData) {
-		RagDocumentReferenceItem item = new RagDocumentReferenceItem(metaData);
+	private AIDocumentReferenceItem fromExtracted(ExtractedDocumentMetaData metaData) {
+		AIDocumentReferenceItem item = new AIDocumentReferenceItem(metaData);
 
 		return item;
 	}
@@ -112,13 +112,13 @@ class SimilaritySearchService {
      * @param embeddingModel The embedding model to use for the search
      * @return Result containing the cached DAO of the search operation
      */
-	RagDocumentsCachedDaoResult executeSearch(SearchRequest searchRequest,
+	AIDocumentsSet executeSearch(SearchRequest searchRequest,
 			IGConfigurableEmbeddingModel<?> embeddingModel) {
 		VectorStore vectorStore = embeddingModel.getVectorStore();
 		List<Document> documents = vectorStore.similaritySearch(searchRequest);
 		ResultsMaps cumulated = cumulateResults(documents);
-		RagDocumentsCachedDaoResult result = new RagDocumentsCachedDaoResult();
-		result.setDocumentItems(new ArrayList<RagDocumentReferenceItem>(cumulated.docinfos));
+		AIDocumentsSet result = new AIDocumentsSet();
+		result.setDocumentItems(new ArrayList<AIDocumentReferenceItem>(cumulated.docinfos));
 		result.recalculateSize(); // Recalculate size of the result
 		return result;
 	}

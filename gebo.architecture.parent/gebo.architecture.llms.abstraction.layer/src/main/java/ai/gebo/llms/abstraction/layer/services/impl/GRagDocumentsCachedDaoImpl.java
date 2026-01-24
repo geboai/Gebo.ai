@@ -29,9 +29,9 @@ import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.repositories.RagDocumentCacheItemRepository;
@@ -77,7 +77,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	DocumentReferenceSnapshotRepository documentSnapshotRepository;
 
 	@Autowired
-	FullDocumentsCacheService cacheService;
+	AIDocumentsCacheService cacheService;
 
 	@Autowired
 	VectorizedContentRepository vectorizedContentRepository;
@@ -151,11 +151,11 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	}
 
 	@Override
-	public RagDocumentsCachedDaoResult chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
+	public AIDocumentsSet chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
 			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
 			UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
-			return new RagDocumentsCachedDaoResult();
+			return new AIDocumentsSet();
 		if (ragQueryOptions.getMaxTokens() > 0) {
 
 			return loadDocumentsWithTokenBudget(query, ragQueryOptions, codes, knowledgeBases, embeddingModel, user);
@@ -172,10 +172,10 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param user
 	 * @return The result containing full document contents.
 	 */
-	private RagDocumentsCachedDaoResult loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases,
+	private AIDocumentsSet loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases,
 			UserInfos user) {
 		try {
-			RagDocumentsCachedDaoResult result = new RagDocumentsCachedDaoResult();
+			AIDocumentsSet result = new AIDocumentsSet();
 			final Map<String, GObjectRef<GProjectEndpoint>> endpointsCache = new HashMap<String, GObjectRef<GProjectEndpoint>>();
 			final Map<String, List<GDocumentReference>> documentsCache = new HashMap<String, List<GDocumentReference>>();
 			List<GDocumentReference> documents = persistentObject.findAllByIds(GDocumentReference.class, codes);
@@ -214,11 +214,11 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	}
 
 	@Override
-	public RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, RagQueryOptions options,
+	public AIDocumentsSet semanticSearchOnDocumentsList(String query, RagQueryOptions options,
 			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
 			UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
-			return new RagDocumentsCachedDaoResult();
+			return new AIDocumentsSet();
 		String condition = filteringConditions(query, user, knowledgeBases, codes);
 		SearchRequest searchRequest = null;
 		switch (options.getCompleteness()) {
@@ -232,9 +232,9 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			searchRequest = createSimilarityQuery(options, query, condition);
 		}
 		}
-		RagDocumentsCachedDaoResult result = searchService.executeSearch(searchRequest, embeddingModel);
+		AIDocumentsSet result = searchService.executeSearch(searchRequest, embeddingModel);
 		if (options.getMaxTokens() > 0) {
-			if (result.getNTokens() > options.getMaxTokens()) {
+			if (result.getTokensSize() > options.getMaxTokens()) {
 				return decreaseSemanticSearchResultWithBudget(query, result, options, knowledgeBases, embeddingModel);
 			}
 		}
@@ -272,14 +272,14 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	}
 
 	@Override
-	public RagDocumentsCachedDaoResult semanticSearch(String query, RagQueryOptions options,
+	public AIDocumentsSet semanticSearch(String query, RagQueryOptions options,
 			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin semanticSearch({" + query.length() + " chars}, " + options + ", " + knowledgeBases
 					+ ",...)");
 		}
 		if (knowledgeBases == null || knowledgeBases.isEmpty())
-			return new RagDocumentsCachedDaoResult();
+			return new AIDocumentsSet();
 		String condition = filteringConditions(query, user, knowledgeBases, null);
 		SearchRequest searchRequest = null;
 		searchRequest = createSimilarityQuery(options, query, condition);
@@ -287,7 +287,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 		if (completeness == null) {
 			completeness = CompletenessLevel.STRICT_QUERY_RELATED;
 		}
-		RagDocumentsCachedDaoResult result = searchService.executeSearch(searchRequest, embeddingModel);
+		AIDocumentsSet result = searchService.executeSearch(searchRequest, embeddingModel);
 		switch (completeness) {
 		case STRICT_QUERY_RELATED: {
 
@@ -304,7 +304,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			if (options.getMaxTokens() <= 0)
 				throw new RuntimeException(
 						"Running a semanticSearch with MAX_TOKEN and no specified tokens budget makes no sense");
-			if (options.getMaxTokens() >= result.getNTokens()) {
+			if (options.getMaxTokens() >= result.getTokensSize()) {
 				// return result;
 			} else {
 				result = decreaseSemanticSearchResultWithBudget(query, result, options, knowledgeBases, embeddingModel);
@@ -334,17 +334,17 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param embeddingModel The embedding model to use.
 	 * @return The adjusted result that fits within the token budget.
 	 */
-	private RagDocumentsCachedDaoResult decreaseSemanticSearchResultWithBudget(String query,
-			RagDocumentsCachedDaoResult result, RagQueryOptions options, List<String> knowledgeBases,
+	private AIDocumentsSet decreaseSemanticSearchResultWithBudget(String query,
+			AIDocumentsSet result, RagQueryOptions options, List<String> knowledgeBases,
 			IGConfigurableEmbeddingModel<?> embeddingModel) {
 		result.recalculateSize();
-		boolean continueRemoving = result.getNTokens() > options.getMaxTokens();
+		boolean continueRemoving = result.getTokensSize() > options.getMaxTokens();
 		for (int i = result.getDocumentItems().size() - 1; continueRemoving && i >= 0; i--) {
-			RagDocumentReferenceItem docreference = result.getDocumentItems().get(i);
+			AIDocumentReferenceItem docreference = result.getDocumentItems().get(i);
 			for (int w = docreference.getFragments().size() - 1; continueRemoving && w >= 0; w--) {
 				docreference.getFragments().remove(w);
 				result.recalculateSize();
-				continueRemoving = result.getNTokens() > options.getMaxTokens();
+				continueRemoving = result.getTokensSize() > options.getMaxTokens();
 			}
 			if (continueRemoving) {
 				result.getDocumentItems().remove(i);
@@ -364,14 +364,14 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param user
 	 * @return The result containing tokens that fit within the budget.
 	 */
-	private RagDocumentsCachedDaoResult loadDocumentsWithTokenBudget(String query, RagQueryOptions options,
+	private AIDocumentsSet loadDocumentsWithTokenBudget(String query, RagQueryOptions options,
 			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
 			UserInfos user) {
-		RagDocumentsCachedDaoResult result = loadDocumentsFullContents(codes, knowledgeBases, user);
+		AIDocumentsSet result = loadDocumentsFullContents(codes, knowledgeBases, user);
 
 		// if token budget is set and loaded documents are too heavy
-		if (options.getMaxTokens() > 0 && result.getNTokens() > options.getMaxTokens()) {
-			final Map<String, RagDocumentReferenceItem> perCodeFullContents = new HashMap<String, RagDocumentReferenceItem>();
+		if (options.getMaxTokens() > 0 && result.getTokensSize() > options.getMaxTokens()) {
+			final Map<String, AIDocumentReferenceItem> perCodeFullContents = new HashMap<String, AIDocumentReferenceItem>();
 			result.getDocumentItems().forEach(x -> {
 				perCodeFullContents.put(x.getCode(), x);
 			});
@@ -382,28 +382,28 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			restrictOptions.setTopK(4 * codes.size());
 			// Running a search on the documents base
 			searchRequest = createSimilarityQuery(restrictOptions, query, condition);
-			final RagDocumentsCachedDaoResult partializedResults = searchService.executeSearch(searchRequest,
+			final AIDocumentsSet partializedResults = searchService.executeSearch(searchRequest,
 					embeddingModel);
 			// Ordering by token weight in results which is the most significant document
 			// if this ordering fails at least document fragments will be organized with
 			// most relevant document's fragment on top so it is pretty coherent
 			// in a "per relevance" order
 			partializedResults.orderByDocumentWeight();
-			result = new RagDocumentsCachedDaoResult();
+			result = new AIDocumentsSet();
 
 			final long tokensBudget = options.getMaxTokens();
 			for (int i = 0; i < partializedResults.getDocumentItems().size(); i++) {
-				RagDocumentReferenceItem document = partializedResults.getDocumentItems().get(i);
-				RagDocumentReferenceItem fullVersion = perCodeFullContents.get(document.getCode());
+				AIDocumentReferenceItem document = partializedResults.getDocumentItems().get(i);
+				AIDocumentReferenceItem fullVersion = perCodeFullContents.get(document.getCode());
 				if (fullVersion == null) {
 					LOGGER.warn("Full content for:" + document.getCode() + " has not been loaded");
 					result.getDocumentItems().add(document);
 					result.recalculateSize();
 				} else {
-					if (tokensBudget > (result.getNTokens() + fullVersion.getNTokens())) {
+					if (tokensBudget > (result.getTokensSize() + fullVersion.getTokensSize())) {
 						result.getDocumentItems().add(fullVersion);
 						result.recalculateSize();
-					} else if (tokensBudget > (result.getNTokens() + document.getNTokens())) {
+					} else if (tokensBudget > (result.getTokensSize() + document.getTokensSize())) {
 						result.getDocumentItems().add(document);
 						result.recalculateSize();
 					}
@@ -427,7 +427,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param otherSearchThreshold The threshold for subsequent hops.
 	 * @return The final search result after multiple hops.
 	 */
-	public RagDocumentsCachedDaoResult multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
+	public AIDocumentsSet multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
 			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold,
 			Double otherSearchThreshold, UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
@@ -441,12 +441,12 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			options.setSimilarityThreashold(firstSearchThreshold);
 		}
 		// First hop: retrieve fragments most similar to the initial query
-		RagDocumentsCachedDaoResult result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel,
+		AIDocumentsSet result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel,
 				user);
 
 		// If there are tokens remaining, use the retrieved content as a basis for a
 		// second query
-		long tokensFirstHop = result.getNTokens();
+		long tokensFirstHop = result.getTokensSize();
 		long remainingTokens = options.getMaxTokens() - tokensFirstHop;
 		List<Document> newContextSlices = result.aiDocumentsList();
 		if (remainingTokens > 100 && newContextSlices.size() < options.getTopK()) { // leave a minimum buffer
@@ -460,10 +460,10 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 							secondHopOptions.setSimilarityThreashold(otherSearchThreshold);
 						}
 						secondHopOptions.setMaxTokens(remainingTokens);
-						RagDocumentsCachedDaoResult secondHop = semanticSearch(refinedQuery, secondHopOptions,
+						AIDocumentsSet secondHop = semanticSearch(refinedQuery, secondHopOptions,
 								knowledgeBases, embeddingModel, user);
 						result = mergeResults(result, secondHop, options.getMaxTokens());
-						long tokensTotal = result.getNTokens();
+						long tokensTotal = result.getTokensSize();
 						remainingTokens = options.getMaxTokens() - tokensTotal;
 						if (result.aiDocumentsList().size() >= options.getTopK()) {
 							break;
@@ -488,14 +488,14 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param result The result to be printed.
 	 * @return A string representation of the result summary.
 	 */
-	String print(RagDocumentsCachedDaoResult result) {
+	String print(AIDocumentsSet result) {
 		String s = "{";
 		int nSegments = 0;
-		for (RagDocumentReferenceItem item : result.getDocumentItems()) {
-			s += item.getCode() + ": " + item.getNTokens() + ",";
+		for (AIDocumentReferenceItem item : result.getDocumentItems()) {
+			s += item.getCode() + ": " + item.getTokensSize() + ",";
 			nSegments += item.getFragments().size();
 		}
-		s += ",totalTokens: " + result.getNTokens() + ",totalSegments: " + nSegments + "}";
+		s += ",totalTokens: " + result.getTokensSize() + ",totalSegments: " + nSegments + "}";
 		return s;
 	}
 
@@ -508,13 +508,13 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param maxTokens The maximum allowable number of tokens.
 	 * @return The merged result.
 	 */
-	private RagDocumentsCachedDaoResult mergeResults(RagDocumentsCachedDaoResult r1, RagDocumentsCachedDaoResult r2,
+	private AIDocumentsSet mergeResults(AIDocumentsSet r1, AIDocumentsSet r2,
 			long maxTokens) {
-		RagDocumentsCachedDaoResult merged = new RagDocumentsCachedDaoResult();
-		Map<String, RagDocumentReferenceItem> map = new HashMap<>();
-		for (RagDocumentReferenceItem item : r1.getDocumentItems()) {
+		AIDocumentsSet merged = new AIDocumentsSet();
+		Map<String, AIDocumentReferenceItem> map = new HashMap<>();
+		for (AIDocumentReferenceItem item : r1.getDocumentItems()) {
 			if (!map.containsKey(item.getCode())) {
-				if (merged.getNTokens() + item.getNTokens() <= maxTokens) {
+				if (merged.getTokensSize() + item.getTokensSize() <= maxTokens) {
 					merged.getDocumentItems().add(item);
 					merged.recalculateSize();
 					map.put(item.getCode(), item);
@@ -522,20 +522,20 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 					return merged;
 
 			} else {
-				RagDocumentReferenceItem alreadyIn = map.get(item.getCode());
+				AIDocumentReferenceItem alreadyIn = map.get(item.getCode());
 				tryMerge(alreadyIn, item, merged, maxTokens);
 			}
 		}
-		for (RagDocumentReferenceItem item : r2.getDocumentItems()) {
+		for (AIDocumentReferenceItem item : r2.getDocumentItems()) {
 			if (!map.containsKey(item.getCode())) {
-				if (merged.getNTokens() + item.getNTokens() <= maxTokens) {
+				if (merged.getTokensSize() + item.getTokensSize() <= maxTokens) {
 					merged.getDocumentItems().add(item);
 					merged.recalculateSize();
 					map.put(item.getCode(), item);
 				} else
 					return merged;
 			} else {
-				RagDocumentReferenceItem alreadyIn = map.get(item.getCode());
+				AIDocumentReferenceItem alreadyIn = map.get(item.getCode());
 				tryMerge(alreadyIn, item, merged, maxTokens);
 			}
 		}
@@ -551,15 +551,15 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * @param result    The result object into which merging is done.
 	 * @param maxTokens The maximum allowable number of tokens.
 	 */
-	private void tryMerge(RagDocumentReferenceItem alreadyIn, RagDocumentReferenceItem item,
-			RagDocumentsCachedDaoResult result, long maxTokens) {
-		Map<String, RagDocumentFragment> fragmentsMap = new HashMap<>();
-		for (RagDocumentFragment frag : alreadyIn.getFragments()) {
+	private void tryMerge(AIDocumentReferenceItem alreadyIn, AIDocumentReferenceItem item,
+			AIDocumentsSet result, long maxTokens) {
+		Map<String, AIDocumentFragment> fragmentsMap = new HashMap<>();
+		for (AIDocumentFragment frag : alreadyIn.getFragments()) {
 			fragmentsMap.put(frag.toAIDocument().getId(), frag);
 		}
-		for (RagDocumentFragment nested : item.getFragments()) {
+		for (AIDocumentFragment nested : item.getFragments()) {
 			if (!fragmentsMap.containsKey(nested.toAIDocument().getId())) {
-				if (result.getNTokens() + nested.getNTokens() <= maxTokens) {
+				if (result.getTokensSize() + nested.getTokensSize() <= maxTokens) {
 					alreadyIn.getFragments().add(nested);
 					result.recalculateSize();
 				} else
@@ -574,10 +574,10 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * 
 	 * @param result The result to be cleaned.
 	 */
-	private void cleanWithoutSegments(RagDocumentsCachedDaoResult result) {
-		List<RagDocumentReferenceItem> items2remove = result.getDocumentItems().stream()
+	private void cleanWithoutSegments(AIDocumentsSet result) {
+		List<AIDocumentReferenceItem> items2remove = result.getDocumentItems().stream()
 				.filter(x -> x.getFragments().isEmpty()).toList();
-		for (RagDocumentReferenceItem toremove : items2remove) {
+		for (AIDocumentReferenceItem toremove : items2remove) {
 			result.getDocumentItems().remove(toremove);
 		}
 	}

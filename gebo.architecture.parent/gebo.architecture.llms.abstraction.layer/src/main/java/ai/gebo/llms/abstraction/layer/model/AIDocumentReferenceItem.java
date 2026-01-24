@@ -25,10 +25,10 @@ import lombok.Data;
  * document fragments.
  */
 @Data
-public class RagDocumentReferenceItem implements IRagContent, Cloneable {
+public class AIDocumentReferenceItem implements IAIContent, Cloneable {
 
 	// Number of tokens in the document.
-	private long NTokens;
+	private int tokensSize;
 
 	// Total number of tokens for the entire file.
 	private long totalFileNTokens = 0l;
@@ -49,7 +49,7 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	private String parentProjectCode = null;
 
 	// List of document fragments associated with this document reference.
-	private List<RagDocumentFragment> fragments = new ArrayList<RagDocumentFragment>();
+	private List<AIDocumentFragment> fragments = new ArrayList<AIDocumentFragment>();
 
 	// MIME type of the document content.
 	private String contentType;
@@ -69,7 +69,7 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	/**
 	 * Default constructor for creating an empty RagDocumentReferenceItem.
 	 */
-	public RagDocumentReferenceItem() {
+	public AIDocumentReferenceItem() {
 		// Default constructor
 	}
 
@@ -78,7 +78,7 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	 *
 	 * @param metadata The metadata extracted from the document.
 	 */
-	public RagDocumentReferenceItem(ExtractedDocumentMetaData metadata) {
+	public AIDocumentReferenceItem(ExtractedDocumentMetaData metadata) {
 		this.code = metadata.getCode();
 		this.name = metadata.getName();
 		this.contentType = metadata.getContentType();
@@ -86,7 +86,7 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 		this.parentProjectCode = metadata.getParentProjectCode();
 		this.rootKnowledgebaseCode = metadata.getRootKnowledgebaseCode();
 		this.originalUrl = metadata.getOriginalUrl();
-		this.NTokens = 0l;
+		this.tokensSize = 0;
 		this.NBytes = 0l;
 	}
 
@@ -96,7 +96,7 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	 * @return A stream of IRagContent elements.
 	 */
 	@Override
-	public Stream<IRagContent> streamChilds() {
+	public Stream<IAIContent> streamChilds() {
 		return fragments != null ? fragments.stream().map(x -> x) : Stream.of();
 	}
 
@@ -105,20 +105,20 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 	}
 
 	public void reorderFragmentsByPosition() {
-		TreeMap<Long, List<RagDocumentFragment>> order = new TreeMap<Long, List<RagDocumentFragment>>();
+		TreeMap<Long, List<AIDocumentFragment>> order = new TreeMap<Long, List<AIDocumentFragment>>();
 		if (this.fragments != null) {
-			List<RagDocumentFragment> unpositioned = new ArrayList<RagDocumentFragment>();
+			List<AIDocumentFragment> unpositioned = new ArrayList<AIDocumentFragment>();
 			this.fragments.forEach(x -> {
 				if (x.getChunkPosition() == null) {
 					unpositioned.add(x);
 				} else {
 					if (!order.containsKey(x.getChunkPosition())) {
-						order.put(x.getChunkPosition(), new ArrayList<RagDocumentFragment>());
+						order.put(x.getChunkPosition(), new ArrayList<AIDocumentFragment>());
 					}
 					order.get(x.getChunkPosition()).add(x);
 				}
 			});
-			List<RagDocumentFragment> newSegmentsList = new ArrayList<RagDocumentFragment>();
+			List<AIDocumentFragment> newSegmentsList = new ArrayList<AIDocumentFragment>();
 			order.values().forEach(vector -> {
 				newSegmentsList.addAll(vector);
 			});
@@ -132,19 +132,19 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 		return i;
 	}
 
-	public static RagDocumentReferenceItem join(RagDocumentReferenceItem... docs) {
-		RagDocumentReferenceItem outDoc = new RagDocumentReferenceItem();
+	public static AIDocumentReferenceItem join(AIDocumentReferenceItem... docs) {
+		AIDocumentReferenceItem outDoc = new AIDocumentReferenceItem();
 		if (docs != null && docs.length > 0) {
 			try {
-				outDoc = (RagDocumentReferenceItem) docs[0].clone();
+				outDoc = (AIDocumentReferenceItem) docs[0].clone();
 
-				Map<String, RagDocumentFragment> fragmentsMap = new HashMap<String, RagDocumentFragment>();
-				for (RagDocumentReferenceItem doc : docs) {
+				Map<String, AIDocumentFragment> fragmentsMap = new HashMap<String, AIDocumentFragment>();
+				for (AIDocumentReferenceItem doc : docs) {
 					doc.fragments.forEach(x -> {
 						fragmentsMap.put(x.getCode(), x);
 					});
 				}
-				outDoc.fragments = new ArrayList<RagDocumentFragment>(fragmentsMap.values());
+				outDoc.fragments = new ArrayList<AIDocumentFragment>(fragmentsMap.values());
 				outDoc.reorderFragmentsByPosition();
 				outDoc.recalculateSize();
 			} catch (CloneNotSupportedException e) {

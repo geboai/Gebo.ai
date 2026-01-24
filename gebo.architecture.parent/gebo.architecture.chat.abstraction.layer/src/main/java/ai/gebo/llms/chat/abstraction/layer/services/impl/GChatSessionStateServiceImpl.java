@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.AIDocumentsSet;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.session.ChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
@@ -45,19 +45,18 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 
 	@AllArgsConstructor
 	static class PosHigher {
-		RagDocumentReferenceItem document = null;
+		AIDocumentReferenceItem document = null;
 		GDocumentReference original = null;
 		int position = 0;
 	}
 
 	@Override
-	public ChatSessionState extractState(GeboChatRequest request, GUserChatContext context) throws IOException {
-		ChatSessionState outState = new ChatSessionState();
-		GUserChatInteractionsConsolidationData consolidation = context.getConsolidation();
+	public ChatFullSessionState extractState(GeboChatRequest request, GUserChatContext context) throws IOException {
+		ChatFullSessionState outState = new ChatFullSessionState();
+		outState.setUserChatContextCode(context.getCode());
+		GUserChatInteractionsConsolidationData consolidation = null;
 		List<ChatInteractions> interactions = context.getInteractions();
 		long historyTokens = consolidation != null ? consolidation.getTokensSize() : 0;
-		outState.getChatHistory().getValue().setConsolidation(consolidation);
-
 		// Map used to join fragment of the same document in the higher position it
 		// appears and to search Original elements
 
@@ -86,14 +85,14 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 							byCode.put(uploaded.getCode(), uploaded);
 							List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
 							if (documents != null && !documents.isEmpty()) {
-								RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+								AIDocumentReferenceItem data = new AIDocumentReferenceItem();
 								data.setCode(uploaded.getCode());
 								data.setContentType(uploaded.getContentType());
 								data.setExtension(uploaded.getExtension());
 								data.setName(uploaded.getFileName());
-								List<RagDocumentFragment> fragments = new ArrayList<>();
+								List<AIDocumentFragment> fragments = new ArrayList<>();
 								for (Document document : documents) {
-									RagDocumentFragment fragment = new RagDocumentFragment(document,
+									AIDocumentFragment fragment = new AIDocumentFragment(document,
 											ExtractedDocumentMetaData.of(document.getMetadata()));
 									fragment.recalculateSize();
 								}
@@ -124,17 +123,17 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 						try {
 							List<Document> ingested = storageAreaService.getIngestedContentsOf(generated);
 							if (!ingested.isEmpty()) {
-								RagDocumentReferenceItem reference = new RagDocumentReferenceItem(
+								AIDocumentReferenceItem reference = new AIDocumentReferenceItem(
 										ExtractedDocumentMetaData.of(ingested.get(0).getMetadata()));
 								for (Document document : ingested) {
-									reference.getFragments().add(new RagDocumentFragment(document,
+									reference.getFragments().add(new AIDocumentFragment(document,
 											ExtractedDocumentMetaData.of(document.getMetadata())));
 								}
 								reference.recalculateSize();
 								CSSInteractionReferredContent<LLMGeneratedResource> entry = new CSSInteractionReferredContent<LLMGeneratedResource>(
 										index, reference, generated);
 								outState.getGeneratedArtifacts().getValue().add(entry);
-								generatedTotalTokenSize += reference.getNTokens();
+								generatedTotalTokenSize += reference.getTokensSize();
 							}
 						} catch (IOException | GeboContentHandlerSystemException | GeboIngestionException e) {
 							LOGGER.error("Exception while ingsting the generated content : " + generated, e);
@@ -157,14 +156,14 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			for (UserUploadedContent uploaded : request.getUserUploadedContents()) {
 				List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
 				if (documents != null && !documents.isEmpty()) {
-					RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+					AIDocumentReferenceItem data = new AIDocumentReferenceItem();
 					data.setCode(uploaded.getCode());
 					data.setContentType(uploaded.getContentType());
 					data.setExtension(uploaded.getExtension());
 					data.setName(uploaded.getFileName());
-					List<RagDocumentFragment> fragments = new ArrayList<>();
+					List<AIDocumentFragment> fragments = new ArrayList<>();
 					for (Document document : documents) {
-						RagDocumentFragment fragment = new RagDocumentFragment(document,
+						AIDocumentFragment fragment = new AIDocumentFragment(document,
 								ExtractedDocumentMetaData.of(document.getMetadata()));
 						fragment.recalculateSize();
 					}
@@ -186,7 +185,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 		return outState;
 	}
 
-	private TokenLimitedContent<CSSReferredContentList<GDocumentReference>> higherPositionShifted(
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> higherPositionShifted(
 			List<ChatInteractions> interactions) {
 		Map<String, PosHigher> higherPositionMap = createHigherPositionMap(interactions);
 		TreeMap<Integer, List<PosHigher>> byLine = new TreeMap<Integer, List<PosHigher>>();
@@ -206,10 +205,10 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 				CSSInteractionReferredContent<GDocumentReference> entry = new CSSInteractionReferredContent<GDocumentReference>(
 						posh.position, posh.document, posh.original);
 				out.add(entry);
-				tokensTotal += entry.getData().getNTokens();
+				tokensTotal += entry.getData().getTokensSize();
 			}
 		}
-		TokenLimitedContent<CSSReferredContentList<GDocumentReference>> tl = new TokenLimitedContent<CSSReferredContentList<GDocumentReference>>(
+		TokensContainer<CSSReferredContentList<GDocumentReference>> tl = new TokensContainer<CSSReferredContentList<GDocumentReference>>(
 				out, tokensTotal);
 		return tl;
 	}
@@ -219,14 +218,14 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 		int index = 0;
 		for (ChatInteractions inter : interactions) {
 			if (inter.getRequest() != null) {
-				RagDocumentsCachedDaoResult docs = inter.getRequest().getDocuments();
+				AIDocumentsSet docs = inter.getRequest().getDocuments();
 				if (docs != null) {
-					for (RagDocumentReferenceItem d : docs.getDocumentItems()) {
+					for (AIDocumentReferenceItem d : docs.getDocumentItems()) {
 						PosHigher pos = out.get(d.getCode());
 						if (pos == null) {
 							out.put(d.getCode(), pos = new PosHigher(d, null, index));
 						} else {
-							pos.document = RagDocumentReferenceItem.join(pos.document, d);
+							pos.document = AIDocumentReferenceItem.join(pos.document, d);
 							pos.position = index;
 						}
 					}
