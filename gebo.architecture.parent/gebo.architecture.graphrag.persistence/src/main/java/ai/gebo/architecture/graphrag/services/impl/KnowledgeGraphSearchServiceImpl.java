@@ -260,7 +260,7 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 			existingDoc.recalculateSize();
 
 		});
-		return AIDocumentsSet.createDocumentsDaoResultFromMap(alreadyExisting);
+		return AIDocumentsSet.fromMap(alreadyExisting);
 	}
 
 }

@@ -147,7 +147,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		out.setInteractions(history);
 		_history.setValue(out);
-		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
+		_history.setTokensSize(nhistoryTokens + consolidatedTokensSize);
 		return _history;
 	}
 
@@ -220,8 +220,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		// compute query tokens size
 		lrequest.setQuery(new TokensContainer<String>());
 		lrequest.getQuery().setValue(request.getQuery());
-		lrequest.getQuery().setNToken(tokenEstimator.estimate(request.getQuery()));
-		int requestSize = lrequest.getQuery().getNToken();
+		lrequest.getQuery().setTokensSize(tokenEstimator.estimate(request.getQuery()));
+		int requestSize = lrequest.getQuery().getTokensSize();
 		// adding history history and the
 		// available tokens for documents will be already decreased from this allocation
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
@@ -229,7 +229,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		int availableTokensForDocuments = 0;
 
 		// compute actual history size
-		int historySizeTarget = lrequest.getHistory().getNToken();
+		int historySizeTarget = lrequest.getHistory().getTokensSize();
 		boolean historyToBeShrinked = false;
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
@@ -256,7 +256,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		// first add explicitly uploaded documents
 		lrequest.setUploadedDocuments(
 				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
-		availableTokensForDocuments -= lrequest.getUploadedDocuments().getNToken();
+		availableTokensForDocuments -= lrequest.getUploadedDocuments().getTokensSize();
 		AIDocumentsSet extractedDocuments = null;
 		RagQueryOptions ragQueryOptions = null;
 		ragQueryOptions = new RagQueryOptions();
@@ -306,24 +306,24 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}));
 		lrequest.setDocuments(new TokensContainer<AIDocumentsSet>());
 		lrequest.getDocuments().setValue(extractedDocuments);
-		lrequest.getDocuments().setNToken((int) extractedDocuments.getTokensSize());
+		lrequest.getDocuments().setTokensSize((int) extractedDocuments.getTokensSize());
 		if (!forcedChatWithDocuments && this.knowledgeGraphSearch != null) {
 			// Run graph rag after semantic rag to provide context on more
 			// factual/entity/events based approach
-			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
+			if (availableTokensForDocuments > lrequest.getDocuments().getTokensSize()
 					&& this.knowledgeGraphSearch.isConfigured(null)) {
 				try {
 					List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
 							.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
 					mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);
-					lrequest.getDocuments().setNToken((int) extractedDocuments.getTokensSize());
+					lrequest.getDocuments().setTokensSize((int) extractedDocuments.getTokensSize());
 				} catch (Throwable throwable) {
 					LOGGER.error("Error invoking graphrag", throwable);
 				}
 			}
 
 		}
-		int historicDocumentsBudget = availableTokensForDocuments - lrequest.getDocuments().getNToken();
+		int historicDocumentsBudget = availableTokensForDocuments - lrequest.getDocuments().getTokensSize();
 		// i add all documents from the history untill fitting the maximum docs size
 		if (historicDocumentsBudget > 0) {
 			lrequest.setContextDocuments(new TokensContainer<AIDocumentsSet>());
@@ -429,7 +429,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			}
 		}
 		outValue.setValue(value);
-		outValue.setNToken((int) value.getTokensSize());
+		outValue.setTokensSize((int) value.getTokensSize());
 		return outValue;
 	}
 
@@ -522,7 +522,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			boolean fragmentAlreadyFound = existingDoc != null && existingDoc.getFragments().stream()
 					.anyMatch(f -> f.getCode() != null && f.getCode().equals(fragment.getCode()));
 			if ((!fragmentAlreadyFound)
-					&& (documents.getNToken() + fragment.getTokensSize()) <= availableTokensForDocuments) {
+					&& (documents.getTokensSize() + fragment.getTokensSize()) <= availableTokensForDocuments) {
 				if (existingDoc == null) {
 					existingDoc = new AIDocumentReferenceItem(x.getExtractedDocumentMetaData());
 					alreadyExisting.put(documentCode, existingDoc);
@@ -606,7 +606,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		out.setInteractions(history);
 		_history.setValue(out);
-		_history.setNToken(nhistoryTokens);
+		_history.setTokensSize(nhistoryTokens);
 		return _history;
 	}
 
@@ -664,8 +664,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		// compute query tokens size
 		lrequest.setQuery(new TokensContainer<String>());
 		lrequest.getQuery().setValue(request.getQuery());
-		lrequest.getQuery().setNToken(tokenEstimator.estimate(request.getQuery()));
-		int requestSize = lrequest.getQuery().getNToken();
+		lrequest.getQuery().setTokensSize(tokenEstimator.estimate(request.getQuery()));
+		int requestSize = lrequest.getQuery().getTokensSize();
 		// adding history history and the
 		// available tokens for documents will be already decreased from this allocation
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
@@ -674,7 +674,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 		// compute actual history size
 		boolean historyToBeShrinked = false;
-		int historySizeTarget = lrequest.getHistory().getNToken();
+		int historySizeTarget = lrequest.getHistory().getTokensSize();
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
 			// maximum available tokens for documents theorizing to shring the history to

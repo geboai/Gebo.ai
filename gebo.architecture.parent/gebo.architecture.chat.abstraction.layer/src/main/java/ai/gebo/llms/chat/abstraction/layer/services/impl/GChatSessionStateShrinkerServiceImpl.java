@@ -11,6 +11,7 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -33,7 +34,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerSe
 import ai.gebo.model.DocumentMetaInfos;
 
 @Service
-public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService implements IGChatSessionStateShrinkerService {
+public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
+		implements IGChatSessionStateShrinkerService {
 	private static final String NEWLINE = "\r\n";
 	final GeboChatPromptsConfigs chatPromptsConfig;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
@@ -62,39 +64,25 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		out.setConsolidatedInteractions(
 				consolidateHistory(fullSessionState.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
 
-		out.setRelevantRagRetrievedDocuments(shrinkDocumentList(fullSessionState.getRagResultsHistory(),
+		out.setRelevantRagRetrievedDocuments(shrinkDocumentList(fullSessionState.getHistoricallyRetrievedDocuments(),
 				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget / 4,
 				usedChatModel));
-		out.setRelevantUploadedDocuments(
-				shrinkDocumentList(fullSessionState.getUploadsHistory(), fullSessionState.getChatHistory().getValue(),
-						out.getConsolidatedInteractions(), tokensBudget / 4, usedChatModel));
-		out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(fullSessionState.getGeneratedArtifacts(),
+		out.setRelevantUploadedDocuments(shrinkDocumentList(fullSessionState.getHistoricallyUploadedDocuments(),
+				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget / 4,
+				usedChatModel));
+		out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(fullSessionState.getLlmGeneratedDocuments(),
 				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget / 4,
 				usedChatModel));
 		return out;
 	}
 
-	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(
-			TokensContainer<? extends CSSReferredContentList> docs, CSSSimplifiedChatHistory chatHistory,
-			GUserChatInteractionsConsolidationData consolidated, int tokensBudget,
+	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(TokensContainer<? extends CSSReferredContentList> docs,
+			CSSSimplifiedChatHistory chatHistory, GUserChatInteractionsConsolidationData consolidated, int tokensBudget,
 			IGConfigurableChatModel usedChatModel) throws LLMConfigException, IOException {
 		CSSfRelevantShrinkedDocumentList outList = new CSSfRelevantShrinkedDocumentList();
+
 		if (docs != null && docs.getValue() != null && !docs.getValue().isEmpty()) {
-			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
-			for (int i = 0; i < docs.getValue().size(); i++) {
-				CSSInteractionReferredContent content = (CSSInteractionReferredContent) docs.getValue().get(i);
-				StringBuffer buffer = new StringBuffer();
-				for (AIDocumentFragment fragment : content.getData().getFragments()) {
-					buffer.append(fragment.getDocumentContent());
-				}
-				if (!buffer.isEmpty()) {
-					ConsolidationInput input = new ConsolidationInput(content.getData().getCode(),
-							content.getData().getOriginalUrl(),
-							(String) content.getData().getFragments().get(0).getMetaData().get(DocumentMetaInfos.TITLE),
-							buffer.toString());
-					toBeConsolidated.add(input);
-				}
-			}
+			Map<String, AIDocumentReferenceItem> refsMap = new HashMap<String, AIDocumentReferenceItem>();
 			StringBuffer lastTurns = new StringBuffer();
 			int leaveLastInteractionsOnHistoryConsolidation = this.chatPromptsConfig
 					.getLeaveLastInteractionsOnHistoryConsolidation();
@@ -115,11 +103,43 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			String prompt = this.chatPromptsConfig.getHistoryDocumentsConsolidationPrompt().getPrompt();
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
-
-			CSSfRelevantShrinkedDocumentList _consolidated = callLLMConsolidateStructuredReturn(usedChatModel, prompt,
-					question, pastConsolidation, CSSfRelevantShrinkedDocumentList.class, this::joiner,
-					toBeConsolidated);
-			outList.addAll(_consolidated);
+			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
+			for (int i = 0; i < docs.getValue().size(); i++) {
+				CSSInteractionReferredContent content = (CSSInteractionReferredContent) docs.getValue().get(i);
+				if (content.getData().getFragments().isEmpty())
+					continue;
+				refsMap.put(content.getData().getCode(), content.getData());
+				StringBuffer buffer = new StringBuffer();
+				for (AIDocumentFragment fragment : content.getData().getFragments()) {
+					buffer.append(fragment.getDocumentContent());
+				}
+				if (!buffer.isEmpty()) {
+					ConsolidationInput input = new ConsolidationInput(content.getData().getCode(),
+							content.getData().getOriginalUrl(),
+							(String) content.getData().getFragments().get(0).getMetaData().get(DocumentMetaInfos.TITLE),
+							buffer.toString());
+					toBeConsolidated.add(input);
+				}
+			}
+			if (!toBeConsolidated.isEmpty()) {
+				CSSfRelevantShrinkedDocumentList _consolidated = callLLMConsolidateStructuredReturn(usedChatModel,
+						prompt, question, pastConsolidation, CSSfRelevantShrinkedDocumentList.class, this::joiner,
+						toBeConsolidated);
+				outList.addAll(_consolidated);
+			}
+			for (CSSRelevantShrinkedDocument cssRelevantShrinkedDocument : outList) {
+				cssRelevantShrinkedDocument.setId(UUID.randomUUID().toString());
+				cssRelevantShrinkedDocument
+						.setTokensSize(tokensEstimator.estimate(cssRelevantShrinkedDocument.getSummarizedContent()));
+				if (cssRelevantShrinkedDocument.getDocumentReference() != null) {
+					AIDocumentReferenceItem doc = refsMap.get(cssRelevantShrinkedDocument.getDocumentReference());
+					if (doc != null) {
+						AIDocumentFragment fragment = doc.getFragments().get(0);
+						cssRelevantShrinkedDocument.setMetaData(new HashMap<String, Object>(fragment.getMetaData()));
+						cssRelevantShrinkedDocument.getMetaData().remove(DocumentMetaInfos.CONTENT_PAGE);
+					}
+				}
+			}
 		}
 		return outList;
 	}

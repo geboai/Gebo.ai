@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+
 /**
  * Gebo.ai comment agent
  *
@@ -16,10 +18,16 @@ package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
  * templated chat requests. This class extends the functionality of the
  * GeboTemplatedChatRequest for a specific type of data (String).
  */
-public class GeboChatRequest extends GeboTemplatedChatRequest<String> implements Cloneable {
+public class GeboChatRequest extends GeboTemplatedChatRequest<String> implements Cloneable, ITokensCountable {
 	// No additional fields or methods are currently defined for this class,
 	// it simply specializes the base class for use with String-type data.
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+
+	@Override
+	public int getTokensSize() {
+
+		return getQuery() == null ? 0 : tokensEstimator.estimate(getQuery());
 	}
 }

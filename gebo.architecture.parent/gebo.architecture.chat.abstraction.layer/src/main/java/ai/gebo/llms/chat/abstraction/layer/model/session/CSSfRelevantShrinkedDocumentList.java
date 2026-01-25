@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.model.session;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 
 public class CSSfRelevantShrinkedDocumentList extends ArrayList<CSSRelevantShrinkedDocument>
@@ -30,6 +31,14 @@ public class CSSfRelevantShrinkedDocumentList extends ArrayList<CSSRelevantShrin
 			}
 		}
 		return tokens;
+	}
+
+	public AIDocumentsSet toAIDocumentsSet() {
+		AIDocumentsSet outset = new AIDocumentsSet();
+		for (CSSRelevantShrinkedDocument doc : this) {
+			outset.getDocumentItems().add(doc.toAIDocumentReferenceItem());
+		}
+		return outset;
 	}
 
 }

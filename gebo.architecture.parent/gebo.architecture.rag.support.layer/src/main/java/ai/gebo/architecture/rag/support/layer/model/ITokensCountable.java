@@ -2,7 +2,11 @@ package ai.gebo.architecture.rag.support.layer.model;
 
 import java.util.List;
 
+import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
+
 public interface ITokensCountable {
+	public static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
+
 	public int getTokensSize();
 
 	public default int tokensSize(ITokensCountable... data) {

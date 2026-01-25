@@ -13,35 +13,46 @@ import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LLMChatRequestResources implements ITokensCountable, IChatRequestContext {
+public class LLMChatRequestResources implements ITokensCountable {
 	private static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
-	private final AIDocumentsSet chatWithDocsContents;
-	private final AIDocumentsSet ragRetrivedDocuments;
-	private final AIDocumentsSet uploadedDocuments;
+	// documents that are inherently choosed to chat with from the user or in the
+	// last not consolidated turns
+	private final AIDocumentsSet latestRequestsChatWithDocuments;
+	// retrieved documents in the last request
+	private final AIDocumentsSet retrievedDocuments;
+	// documents specifically uploaded from the user in the last not consolidated
+	// turns
+	private final AIDocumentsSet latestRequestsUploadedDocuments;
+	// Rag retrieved contents storically or in the current request
+	private final AIDocumentsSet historicallyRetrievedDocuments;
+	// Uploaded historical contents
+	private final AIDocumentsSet historicallyUploadedDocuments;
+	// LLM Generated artifacts/documents
 	private final AIDocumentsSet llmGeneratedDocuments;
 	private final String chatConsolidation;
-	private final List<ChatInteractions> lastInteractions;
+	private final List<CSSSimplefiedInteraction> lastInteractions;
 	private final GeboChatRequest lastRequest;
 
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
-		ChatInteractions interaction = null;
+		CSSSimplefiedInteraction interaction = null;
 
 		@Override
 		public String getUser() {
 
-			return interaction.getRequest() != null ? interaction.getRequest().getQuery() : "";
+			return interaction.getUser() != null ? interaction.getUser() : "";
 		}
 
 		@Override
 		public String getAssistant() {
 
-			return interaction.getResponse() != null ? interaction.getResponse().getQueryResponse().toString() : "";
+			return interaction.getAssistant() != null ? interaction.getAssistant() : "";
 		}
 	}
 
@@ -51,56 +62,53 @@ public class LLMChatRequestResources implements ITokensCountable, IChatRequestCo
 		if (lastRequest != null && lastRequest.getQuery() != null) {
 			size += tokensEstimator.estimate(lastRequest.getQuery());
 		}
-		size += tokensSize(ragRetrivedDocuments, uploadedDocuments, llmGeneratedDocuments,chatWithDocsContents);
+		size += tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments,
+				latestRequestsChatWithDocuments, latestRequestsUploadedDocuments);
 		size += tokensSize(lastInteractions);
 		return size;
 	}
 
-	@Override
-	public String getConsolidatedHistory() {
+	final class NestedChatRequestContext implements IChatRequestContext {
 
-		return chatConsolidation != null ? chatConsolidation : "";
-	}
+		@Override
+		public String getConsolidatedHistory() {
 
-	@Override
-	public List<IChatSessionEntry> getInteractions() {
-		List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
-		if (lastInteractions != null) {
-			for (ChatInteractions i : lastInteractions) {
-				entries.add(new InteractionWrapper(i));
+			return chatConsolidation != null ? chatConsolidation : "";
+		}
+
+		@Override
+		public List<IChatSessionEntry> getInteractions() {
+			List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
+			if (lastInteractions != null) {
+				for (CSSSimplefiedInteraction i : lastInteractions) {
+					entries.add(new InteractionWrapper(i));
+				}
 			}
+			return entries;
 		}
-		return entries;
+
+		@Override
+		public List<Document> getDocuments() {
+
+			return AIDocumentsSet.join(historicallyRetrievedDocuments, historicallyUploadedDocuments,
+					llmGeneratedDocuments, latestRequestsChatWithDocuments, latestRequestsUploadedDocuments)
+					.aiDocumentsList();
+		}
+
+		@Override
+		public String getActualUserRequest() {
+
+			return lastRequest.getQuery();
+		}
+
+		@Override
+		public Map<String, Object> getToolsContext() {
+
+			return new HashMap<String, Object>();
+		}
 	}
 
-	@Override
-	public List<Document> getDocuments() {
-		List<Document> data = new ArrayList<Document>();
-		if (ragRetrivedDocuments != null) {
-			data.addAll(ragRetrivedDocuments.aiDocumentsList());
-		}
-		if (uploadedDocuments != null) {
-			data.addAll(uploadedDocuments.aiDocumentsList());
-		}
-		if (llmGeneratedDocuments != null) {
-			data.addAll(llmGeneratedDocuments.aiDocumentsList());
-		}
-		if (chatWithDocsContents!=null) {
-			data.addAll(chatWithDocsContents.aiDocumentsList());
-		}
-		return data;
+	public IChatRequestContext createChatRequestContext() {
+		return new NestedChatRequestContext();
 	}
-
-	@Override
-	public String getActualUserRequest() {
-
-		return lastRequest.getQuery();
-	}
-
-	@Override
-	public Map<String, Object> getToolsContext() {
-
-		return new HashMap<String, Object>();
-	}
-
 }

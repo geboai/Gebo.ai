@@ -20,6 +20,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
@@ -44,6 +45,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 	final IGChatStorageAreaService storageAreaService;
 	final DocumentReferenceRepository documentsRepository;
 	final AIDocumentsCacheService documentsCacheService;
+	final GeboChatPromptsConfigs promptsConfig;
 	final static Logger LOGGER = LoggerFactory.getLogger(GChatSessionStateServiceImpl.class);
 
 	@AllArgsConstructor
@@ -58,18 +60,19 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
 		ChatFullSessionState outState = new ChatFullSessionState();
 		outState.setUserChatContextCode(context.getCode());
-		GUserChatInteractionsConsolidationData consolidation = null;
+		final int lastInteractionsOnLatest = this.promptsConfig.getLeaveLastInteractionsOnHistoryConsolidation();
 		List<ChatInteractions> interactions = context.getInteractions();
-		long historyTokens = consolidation != null ? consolidation.getTokensSize() : 0;
+		Map<String, Integer> latestChatWithDocuments = new HashMap<String, Integer>();
+		long historyTokens = 0;
 		// Map used to join fragment of the same document in the higher position it
 		// appears and to search Original elements
 
 		if (interactions != null) {
+			final int latestContainersThreashold = lastInteractionsOnLatest > interactions.size() ? 0
+					: interactions.size() - lastInteractionsOnLatest;
+			outState.setHistoricallyRetrievedDocuments(higherPositionShifted(interactions));
 
-			outState.setRagResultsHistory(higherPositionShifted(interactions));
-			final int startIndex = consolidation != null ? consolidation.getLastInteractionPointer() : 0;
-
-			for (int index = startIndex; index < interactions.size(); index++) {
+			for (int index = 0; index < interactions.size(); index++) {
 				ChatInteractions i = interactions.get(index);
 				String user = null;
 				Integer userTokens = null;
@@ -102,13 +105,16 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 								}
 								data.setFragments(fragments);
 								data.recalculateSize();
+
 								CSSInteractionReferredContent<UserUploadedContent> entry = new CSSInteractionReferredContent<UserUploadedContent>(
 										index, data, uploaded);
-								outState.getUploadsHistory().getValue().add(entry);
+								if (latestContainersThreashold > index)
+									outState.getHistoricallyUploadedDocuments().getValue().add(entry);
+								else
+									outState.getLatestRequestsUploadedDocuments().getValue().add(entry);
 							}
 
 						}
-
 					}
 				}
 				if (i.getResponse() != null && i.getResponse().getQueryResponse() != null) {
@@ -136,7 +142,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 								reference.recalculateSize();
 								CSSInteractionReferredContent<LLMGeneratedResource> entry = new CSSInteractionReferredContent<LLMGeneratedResource>(
 										index, reference, generated);
-								outState.getGeneratedArtifacts().getValue().add(entry);
+								outState.getLlmGeneratedDocuments().getValue().add(entry);
 								generatedTotalTokenSize += reference.getTokensSize();
 							}
 						} catch (IOException | GeboContentHandlerSystemException | GeboIngestionException e) {
@@ -144,16 +150,38 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 						}
 
 					}
-					outState.getGeneratedArtifacts().setNToken(generatedTotalTokenSize);
+					outState.getLlmGeneratedDocuments().setTokensSize(generatedTotalTokenSize);
+				}
+				if (i.getRequest() != null && i.getRequest().getForcedRequestDocuments() != null
+						&& index >= lastInteractionsOnLatest) {
+					for (String key : i.getRequest().getForcedRequestDocuments()) {
+						latestChatWithDocuments.put(key, new Integer(index));
+					}
 				}
 				CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction(user, userTokens, assistant,
 						assistantTokens);
 				outState.getChatHistory().getValue().getInteractions().add(interaction);
-				outState.getChatHistory().setNToken((int) historyTokens);
+				outState.getChatHistory().setTokensSize((int) historyTokens);
 				index++;
 			}
 		}
-		outState.getChatHistory().setNToken((int) historyTokens);
+		outState.getChatHistory().setTokensSize((int) historyTokens);
+		if (request != null && request.getDocuments() != null && !request.getDocuments().getDocumentItems().isEmpty()) {
+			Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
+			for (AIDocumentReferenceItem doc : request.getDocuments().getDocumentItems()) {
+				docsMap.put(doc.getCode(), doc);
+			}
+			List<GDocumentReference> docsList = documentsRepository.findAllById(docsMap.keySet());
+			for (GDocumentReference doc : docsList) {
+				AIDocumentReferenceItem aiDoc = docsMap.get(doc.getCode());
+				if (aiDoc != null) {
+
+					CSSInteractionReferredContent<GDocumentReference> entry = new CSSInteractionReferredContent<GDocumentReference>(
+							interactions.size(), aiDoc, doc);
+					outState.getRetrievedDocuments().getValue().add(entry);
+				}
+			}
+		}
 		if (request != null && request.getUserUploadedContents() != null
 				&& !request.getUserUploadedContents().isEmpty()) {
 			long tokens = 0l;
@@ -176,34 +204,35 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 					tokens += data.getTotalFileNTokens();
 					CSSInteractionReferredContent<UserUploadedContent> entry = new CSSInteractionReferredContent<UserUploadedContent>(
 							interactions != null ? interactions.size() : 0, data, uploaded);
-					outState.getCurrentRequestUploads().getValue().add(entry);
-					outState.getCurrentRequestUploads().setNToken((int) tokens);
+					outState.getLatestRequestsUploadedDocuments().getValue().add(entry);
+					outState.getLatestRequestsUploadedDocuments().setTokensSize((int) tokens);
 				}
-			}
-			List<String> chatWithDocumentsList = request.getForcedRequestDocuments();
-			if (chatWithDocumentsList != null && !chatWithDocumentsList.isEmpty()) {
-				List<GDocumentReference> documents = documentsRepository.findAllById(chatWithDocumentsList);
-				Map<String, AIDocumentReferenceItem> data = new HashMap();
-				int ntokens = 0;
-				for (GDocumentReference gDocumentReference : documents) {
-					AIDocumentReferenceItem ingested = documentsCacheService.retrieve(gDocumentReference);
-					ingested.recalculateSize();
-					ntokens += ingested.getTokensSize();
-					data.put(ingested.getCode(), ingested);
-					outState.getCurrentRequestChatWithDocuments().getValue()
-							.add(new CSSInteractionReferredContent<GDocumentReference>(
-									interactions != null ? interactions.size() : 0, ingested, gDocumentReference));
-				}
-				outState.getCurrentRequestChatWithDocuments().setNToken(ntokens);
-
 			}
 
 		}
-		int totalTokens = outState.getChatHistory().getNToken() + outState.getCurrentRequestUploads().getNToken()
-				+ outState.getCurrentRequestChatWithDocuments().getNToken()
-				+ outState.getRagResultsHistory().getNToken() + outState.getGeneratedArtifacts().getNToken()
-				+ outState.getUploadsHistory().getNToken();
-		outState.setTotalTokensSize(totalTokens);
+		if (request.getForcedRequestDocuments() != null) {
+			request.getForcedRequestDocuments().stream().forEach(key -> {
+				latestChatWithDocuments.put(key, new Integer(interactions.size()));
+			});
+		}
+		if (latestChatWithDocuments != null && !latestChatWithDocuments.isEmpty()) {
+			List<GDocumentReference> documents = documentsRepository.findAllById(latestChatWithDocuments.keySet());
+			Map<String, AIDocumentReferenceItem> data = new HashMap();
+			int ntokens = 0;
+			for (GDocumentReference gDocumentReference : documents) {
+				AIDocumentReferenceItem ingested = documentsCacheService.retrieve(gDocumentReference);
+				ingested.recalculateSize();
+				ntokens += ingested.getTokensSize();
+				Integer position = latestChatWithDocuments.get(gDocumentReference.getCode());
+				data.put(ingested.getCode(), ingested);
+				outState.getLatestRequestsChatWithDocuments().getValue()
+						.add(new CSSInteractionReferredContent<GDocumentReference>(position.intValue(), ingested,
+								gDocumentReference));
+			}
+			outState.getLatestRequestsChatWithDocuments().setTokensSize(ntokens);
+		}
+
+		
 		return outState;
 	}
 

@@ -113,12 +113,13 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 	public static AIDocumentsSet join(AIDocumentsSet... result) {
 		Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
 		for (AIDocumentsSet ragDocumentsCachedDaoResult : result) {
-			joinMap(ragDocumentsCachedDaoResult, docsMap);
+			if (ragDocumentsCachedDaoResult != null)
+				joinMap(ragDocumentsCachedDaoResult, docsMap);
 		}
-		return createDocumentsDaoResultFromMap(docsMap);
+		return fromMap(docsMap);
 	}
 
-	public static AIDocumentsSet createDocumentsDaoResultFromMap(Map<String, AIDocumentReferenceItem> docsMap) {
+	public static AIDocumentsSet fromMap(Map<String, AIDocumentReferenceItem> docsMap) {
 		AIDocumentsSet results = new AIDocumentsSet();
 		docsMap.values().forEach(x -> results.getDocumentItems().add(x));
 		results.recalculateSize();
@@ -193,7 +194,7 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 			data.get(fragment.getCode()).getFragments().add(fragment);
 			data.get(fragment.getCode()).recalculateSize();
 		}
-		return createDocumentsDaoResultFromMap(data);
+		return fromMap(data);
 	}
 
 }

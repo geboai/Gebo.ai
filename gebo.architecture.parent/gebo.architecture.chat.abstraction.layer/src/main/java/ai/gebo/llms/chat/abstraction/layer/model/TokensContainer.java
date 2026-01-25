@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokensContainer<T> {
+public class TokensContainer<T> implements ITokensCountable {
 
 	// The value being stored of generic type T.
 	private T value = null;
 
 	// The number of tokens associated with the stored value.
-	private int NToken = 0;
+	private int tokensSize = 0;
+
+	public int getTokensSize() {
+		if (value != null && value instanceof ITokensCountable countable) {
+			return countable.getTokensSize();
+		}
+		return tokensSize;
+	}
 
 }

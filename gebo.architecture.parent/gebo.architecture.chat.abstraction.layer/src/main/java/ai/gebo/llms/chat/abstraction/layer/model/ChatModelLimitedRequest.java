@@ -25,9 +25,9 @@ public class ChatModelLimitedRequest {
 		ChatModelRequestContextWindowStats stats = new ChatModelRequestContextWindowStats();
 		stats.contextWindowLengthNTokens = contextWindowNToken;
 		stats.documentsNTokens = 0;
-		stats.historyNTokens = history != null ? history.getNToken() : 0;
-		stats.queryNTokens = query != null ? query.getNToken() : 0;
-		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getNToken() : 0;
+		stats.historyNTokens = history != null ? history.getTokensSize() : 0;
+		stats.queryNTokens = query != null ? query.getTokensSize() : 0;
+		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getTokensSize() : 0;
 		stats.contextDocumentsNTokens = 0;
 		if (stats.contextWindowLengthNTokens > 0.0) {
 			// Calculate available tokens and percentage shares for each component

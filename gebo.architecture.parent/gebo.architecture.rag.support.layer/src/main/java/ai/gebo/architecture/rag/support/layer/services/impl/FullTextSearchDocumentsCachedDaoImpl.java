@@ -58,7 +58,7 @@ public class FullTextSearchDocumentsCachedDaoImpl implements IGFullTextSearchDoc
 			docsMap.get(documentCode).getFragments().add(fragment);
 			docsMap.get(documentCode).recalculateSize();
 		}
-		AIDocumentsSet out = AIDocumentsSet.createDocumentsDaoResultFromMap(docsMap);
+		AIDocumentsSet out = AIDocumentsSet.fromMap(docsMap);
 		out.recalculateSize();
 		return out;
 	}
