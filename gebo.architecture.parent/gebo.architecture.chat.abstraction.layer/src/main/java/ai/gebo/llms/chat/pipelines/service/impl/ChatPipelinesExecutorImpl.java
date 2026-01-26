@@ -25,6 +25,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfosMessageEnvelope;
+import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
@@ -33,7 +34,6 @@ import ai.gebo.llms.chat.pipelines.service.IInputChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IIntermediateProcessingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
-import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
@@ -89,7 +89,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		} else
 			throw new ChatPipelineException("The step service " + firstService.getStepId() + " is not an input one");
 		if (routerService instanceof IRoutingChatPipelineStepService routing) {
-			RoutingDecision routeData = routing.execute(runtimeData, chatModel, serviceModel);
+			ai.gebo.llms.chat.pipelines.model.RoutingDecision routeData = routing.execute(runtimeData, chatModel, serviceModel);
 			add(runtimeData, routeData.getProcessedOutput());
 			runtimeData.getRoutingDecisions().add(routeData);
 		} else

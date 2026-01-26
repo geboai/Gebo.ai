@@ -7,7 +7,6 @@ import java.util.Map;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService.RoutingDecision;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -25,7 +24,7 @@ public class ChatPipelineExecutionRuntimeData {
 	private int remainingTokens = 0;
 	private List<IChatPipelineStepRuntimeData> executedSteps = new ArrayList<IChatPipelineStepRuntimeData>();
 	private GeboChatResponse chatResponse = null;
-	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
+	private List<ai.gebo.llms.chat.pipelines.model.RoutingDecision> routingDecisions = new ArrayList<ai.gebo.llms.chat.pipelines.model.RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
 	private final Map<String, Object> sharedProcessingState = new HashMap<String, Object>();

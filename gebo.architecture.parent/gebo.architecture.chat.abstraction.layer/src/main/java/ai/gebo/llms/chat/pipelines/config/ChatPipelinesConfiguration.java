@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.service.impl.DefaultInputChatPipelineStepServiceImpl;
 import ai.gebo.llms.chat.pipelines.service.impl.DefaultRoutingChatPipelineStepServiceImpl;
@@ -22,8 +23,9 @@ public class ChatPipelinesConfiguration {
 		defaultPipeline.setStepInputId(DefaultInputChatPipelineStepServiceImpl.DEFAULT_INPUT_STEP);
 		defaultPipeline.setStepRouterId(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP);
 		this.pipelines.add(defaultPipeline);
+		this.defaultPipelineRoutingDecisionPrompt = new GPromptConfig();
 	}
 
 	private List<ChatPipelineConfiguration> pipelines = new ArrayList<ChatPipelineConfiguration>();
-	private String defaultPipelineRoutingDecisionPrompt = null;
+	private GPromptConfig defaultPipelineRoutingDecisionPrompt = null;
 }

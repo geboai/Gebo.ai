@@ -17,10 +17,11 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
+import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
+import ai.gebo.llms.chat.pipelines.model.defaultrouting.RespondingWith;
+import ai.gebo.llms.chat.pipelines.model.defaultrouting.RoutingDecisionResponse;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 @Component
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingService
@@ -37,16 +38,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	}
 
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
-
-	public static enum RespondingWith {
-		PURE_LLM_RESPONSE, RAG_LLM_RESPONSE, DEEP_SEARCH_RESPONSE, TOOLS_USE_RESPONSE
-	}
-
-	@Data
-	public static class RoutingDecisionResponse {
-		@NotNull
-		private RespondingWith responseRouting = null;
-	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -66,7 +57,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 		String candidateOutput = runtimeData.isStreamingOutput()
 				? DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT
 				: DefaultOutputChatPipelineServiceImpl.DEFAULT_OUTPUT_STEP;
-		String prompt = chatPipelinesConfig.getDefaultPipelineRoutingDecisionPrompt();
+		String prompt = chatPipelinesConfig.getDefaultPipelineRoutingDecisionPrompt().getPrompt();
 
 		RoutingDecision rd = null;
 		if (runtimeData.getRequestResources().getLastRequest() != null

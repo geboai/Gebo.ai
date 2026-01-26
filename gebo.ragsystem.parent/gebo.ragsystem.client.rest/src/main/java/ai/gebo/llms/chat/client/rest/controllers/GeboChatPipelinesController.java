@@ -16,6 +16,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -39,7 +40,7 @@ public class GeboChatPipelinesController {
 	protected final IGSecurityService securityService;
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException {
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
 
 		return this.streamChatPipeline(null, request);
 	}
@@ -47,7 +48,7 @@ public class GeboChatPipelinesController {
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException {
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
 		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
 		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
 		GUserChatContext context = null;
@@ -73,14 +74,14 @@ public class GeboChatPipelinesController {
 	}
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException {
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
 		return this.executeChatPipeline(null, request);
 	}
 	@PostMapping(value = "executeChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException {
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
 		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
 		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
 		GUserChatContext context = null;
