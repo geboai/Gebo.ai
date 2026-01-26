@@ -53,7 +53,7 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 
 	/** List of knowledge bases selected for the request */
 	private List<String> choosedKnowledgeBases = null;
-
+	private String chatPipelineProcessId = null;
 	/** List of documents that are forcibly requested */
 	protected List<String> forcedRequestDocuments = new ArrayList<String>();
 	/** documents retrieved on rag or "chat with document" **/

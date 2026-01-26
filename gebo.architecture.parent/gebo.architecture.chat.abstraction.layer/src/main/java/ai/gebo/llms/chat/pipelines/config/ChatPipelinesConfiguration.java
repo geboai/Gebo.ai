@@ -25,4 +25,5 @@ public class ChatPipelinesConfiguration {
 	}
 
 	private List<ChatPipelineConfiguration> pipelines = new ArrayList<ChatPipelineConfiguration>();
+	private String defaultPipelineRoutingDecisionPrompt = null;
 }

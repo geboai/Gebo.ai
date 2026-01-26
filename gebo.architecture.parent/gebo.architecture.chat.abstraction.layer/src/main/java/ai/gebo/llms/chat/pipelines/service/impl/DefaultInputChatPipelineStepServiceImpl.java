@@ -16,7 +16,7 @@ public class DefaultInputChatPipelineStepServiceImpl implements IInputChatPipeli
 	public IChatPipelineStepRuntimeData execute(ChatPipelineExecutionRuntimeData input,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		
-		return null;
+		return IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_INPUT_STEP);
 	}
 
 	@Override

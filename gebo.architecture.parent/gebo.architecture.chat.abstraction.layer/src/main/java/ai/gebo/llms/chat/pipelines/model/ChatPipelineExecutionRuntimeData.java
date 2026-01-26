@@ -1,7 +1,9 @@
 package ai.gebo.llms.chat.pipelines.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -26,5 +28,6 @@ public class ChatPipelineExecutionRuntimeData {
 	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
+	private final Map<String, Object> sharedProcessingState = new HashMap<String, Object>();
 
 }
