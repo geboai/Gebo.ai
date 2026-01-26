@@ -30,7 +30,7 @@ import reactor.core.publisher.Flux;
  * AI generated comments Interface defining the general contract for a generic
  * chat service.
  */
-public interface IGGenericalChatService extends IGChatProcessor {
+public interface IGGenericalChatService {
 
 	/**
 	 * Represents the capabilities of a model provider.

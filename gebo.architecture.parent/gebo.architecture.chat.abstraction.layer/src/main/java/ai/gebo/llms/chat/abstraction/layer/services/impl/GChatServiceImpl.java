@@ -501,18 +501,5 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		return data;
 	}
 
-	@Override
-	public GeboChatResponse execute(String ovveriddenPrompt, LLMChatRequestResources requestResources,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt,
-			LLMChatRequestResources requestResources, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

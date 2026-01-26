@@ -645,18 +645,5 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	}
 
-	@Override
-	public GeboChatResponse execute(String ovveriddenPrompt, LLMChatRequestResources requestResources,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt,
-			LLMChatRequestResources requestResources, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

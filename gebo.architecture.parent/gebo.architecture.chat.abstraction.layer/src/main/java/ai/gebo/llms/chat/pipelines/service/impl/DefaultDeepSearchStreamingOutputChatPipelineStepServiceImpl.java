@@ -34,8 +34,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
-		return deepSearchService.streamingExecute(null, runtimeData.getRequestResources(), chatModel, serviceModel)
-				.map(x -> new GeboChatMessageEnvelope(x));
+		return null;
 
 	}
 

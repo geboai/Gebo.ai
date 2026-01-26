@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -14,7 +13,7 @@ import reactor.core.publisher.Flux;
 @Component
 @AllArgsConstructor
 public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements IStreamingOutputChatPipelineService {
-	IGRagChatService ragChatService;
+
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
 
 	@Override
@@ -33,8 +32,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
-		return ragChatService.streamingExecute(null, runtimeData.getRequestResources(), chatModel,
-				serviceModel);
+		return null;
 
 	}
 
