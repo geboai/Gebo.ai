@@ -27,6 +27,6 @@ public class ChatPipelineExecutionRuntimeData {
 	private List<ai.gebo.llms.chat.pipelines.model.RoutingDecision> routingDecisions = new ArrayList<ai.gebo.llms.chat.pipelines.model.RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
-	private final Map<String, Object> sharedProcessingState = new HashMap<String, Object>();
+	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
 
 }

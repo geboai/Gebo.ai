@@ -85,12 +85,21 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				chatModel.getContextLength(), resources, streaming);
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
+			if (data.getEnvironmentContributions() != null) {
+				runtimeData.getSharedEnvironment().putAll(data.getEnvironmentContributions());
+			}
 			add(runtimeData, data);
 		} else
 			throw new ChatPipelineException("The step service " + firstService.getStepId() + " is not an input one");
 		if (routerService instanceof IRoutingChatPipelineStepService routing) {
-			ai.gebo.llms.chat.pipelines.model.RoutingDecision routeData = routing.execute(runtimeData, chatModel, serviceModel);
+			ai.gebo.llms.chat.pipelines.model.RoutingDecision routeData = routing.execute(runtimeData, chatModel,
+					serviceModel);
 			add(runtimeData, routeData.getProcessedOutput());
+			if (routeData.getProcessedOutput() != null
+					&& routeData.getProcessedOutput().getEnvironmentContributions() != null) {
+				runtimeData.getSharedEnvironment()
+						.putAll(routeData.getProcessedOutput().getEnvironmentContributions());
+			}
 			runtimeData.getRoutingDecisions().add(routeData);
 		} else
 			throw new ChatPipelineException("The step service " + firstService.getStepId() + " is not a routing one");
@@ -101,11 +110,18 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				if (nextService instanceof IRoutingChatPipelineStepService router) {
 					RoutingDecision routeData = router.execute(runtimeData, chatModel, serviceModel);
 					add(runtimeData, routeData.getProcessedOutput());
+					if (routeData.getProcessedOutput() != null
+							&& routeData.getProcessedOutput().getEnvironmentContributions() != null) {
+						runtimeData.getSharedEnvironment()
+								.putAll(routeData.getProcessedOutput().getEnvironmentContributions());
+					}
 					runtimeData.getRoutingDecisions().add(routeData);
 				} else if (nextService instanceof IIntermediateProcessingChatPipelineStepService intermediateStep) {
 					IChatPipelineStepRuntimeData data = intermediateStep.execute(runtimeData, chatModel, serviceModel);
 					add(runtimeData, data);
-
+					if (data.getEnvironmentContributions() != null) {
+						runtimeData.getSharedEnvironment().putAll(data.getEnvironmentContributions());
+					}
 				} else {
 					throw new ChatPipelineException(
 							"The step service " + nextService.getStepId() + " is not an intermediate service");

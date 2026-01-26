@@ -54,9 +54,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	@Override
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		String candidateOutput = runtimeData.isStreamingOutput()
-				? DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT
-				: DefaultOutputChatPipelineServiceImpl.DEFAULT_OUTPUT_STEP;
+		
 		String prompt = chatPipelinesConfig.getDefaultPipelineRoutingDecisionPrompt().getPrompt();
 
 		RoutingDecision rd = null;
@@ -72,7 +70,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				RoutingDecisionResponse llmRoutingDecision = callLLMStructuredReturn(serviceModel, prompt,
 						runtimeData.getRequestResources().getLastRequest().getQuery(), templateParams,
 						RoutingDecisionResponse.class);
-				List<String> routes = futureRoutes(llmRoutingDecision.getResponseRouting(),
+				List<String> routes = futureRoutes(llmRoutingDecision.getResponseRoutingDecision(),
 						RespondingWith.PURE_LLM_RESPONSE, runtimeData.isStreamingOutput());
 				final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {
 

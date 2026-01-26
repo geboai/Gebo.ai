@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 public class RoutingDecisionResponse {
 	@NotNull
-	private RespondingWith responseRouting = null;
+	private RespondingWith responseRoutingDecision = null;
+	private SearchRewritings queryRewritings = null;
 }
