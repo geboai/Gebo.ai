@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.ai.document.Document;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;

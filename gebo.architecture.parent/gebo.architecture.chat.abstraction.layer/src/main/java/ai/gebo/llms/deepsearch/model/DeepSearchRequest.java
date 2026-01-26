@@ -9,7 +9,6 @@ import com.drew.lang.annotations.NotNull;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data

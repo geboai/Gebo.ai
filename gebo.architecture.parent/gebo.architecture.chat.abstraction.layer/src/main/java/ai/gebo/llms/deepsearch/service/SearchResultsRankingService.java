@@ -7,11 +7,7 @@ import java.util.List;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import com.fasterxml.jackson.module.jsonSchema.factories.JsonSchemaFactory;
 
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;

@@ -33,7 +33,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilde
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
@@ -143,7 +142,7 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 		AIDocumentsSet latestRequestsUploadedDocuments = uploadedDocuments;
 		// Rag retrieved contents storically or in the current request
 		AIDocumentsSet historicallyRetrievedDocuments = toAIDocumentsSet(
-				shrinkedChatSessionState.getRelevantRagRetrievedDocuments());
+				shrinkedChatSessionState.getRelevantRetrievedDocuments());
 		// Uploaded historical contents
 		AIDocumentsSet historicallyUploadedDocuments = toAIDocumentsSet(
 				shrinkedChatSessionState.getRelevantUploadedDocuments());

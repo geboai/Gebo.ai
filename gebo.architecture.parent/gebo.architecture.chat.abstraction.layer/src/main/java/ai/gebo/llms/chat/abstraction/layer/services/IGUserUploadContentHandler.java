@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;

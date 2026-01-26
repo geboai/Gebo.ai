@@ -2,7 +2,6 @@ package ai.gebo.llms.deepsearch.model;
 
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

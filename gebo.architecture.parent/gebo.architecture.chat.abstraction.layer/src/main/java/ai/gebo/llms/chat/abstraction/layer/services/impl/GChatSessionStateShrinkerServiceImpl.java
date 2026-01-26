@@ -37,16 +37,13 @@ import ai.gebo.model.DocumentMetaInfos;
 @Service
 public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
 		implements IGChatSessionStateShrinkerService {
-	private static final String NEWLINE = "\r\n";
+	private static final String NEWLINE = "\r";
 	final GeboChatPromptsConfigs chatPromptsConfig;
 	final GeboChatConfigs chatConfig;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
-	public static final String NEW_MESSAGES = "new_messages";
-	public static final String EXISTING_SUMMARY = "existing_summary";
 	public static final String HISTORY_SIZE_TARGET = "historySizeTarget";
-
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatPromptsConfigs chatPromptsConfig,
 			GeboChatConfigs chatConfig) {
@@ -67,7 +64,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		out.setConsolidatedInteractions(
 				consolidateHistory(fullSessionState.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
 
-		out.setRelevantRagRetrievedDocuments(shrinkDocumentList(fullSessionState.getHistoricallyRetrievedDocuments(),
+		out.setRelevantRetrievedDocuments(shrinkDocumentList(fullSessionState.getHistoricallyRetrievedDocuments(),
 				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget / 4,
 				usedChatModel));
 		out.setRelevantUploadedDocuments(shrinkDocumentList(fullSessionState.getHistoricallyUploadedDocuments(),
@@ -163,10 +160,14 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			StringBuffer new_messages = new StringBuffer();
 			CSSSimplefiedInteraction interaction = value.getInteractions().get(i);
 			if (interaction.getUser() != null) {
-				new_messages.append(USER_MSG + interaction.getUser() + NEWLINE);
+				new_messages.append(USER_MSG);
+				new_messages.append(interaction.getUser());
+				new_messages.append(NEWLINE);
 			}
 			if (interaction.getAssistant() != null) {
-				new_messages.append(ASSISTANT_MSG + interaction.getAssistant() + NEWLINE);
+				new_messages.append(ASSISTANT_MSG);
+				new_messages.append(interaction.getAssistant());
+				new_messages.append(NEWLINE);
 			}
 			ConsolidationInput input = new ConsolidationInput(null, null, null, new_messages.toString());
 			inputs.add(input);

@@ -9,8 +9,6 @@
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
-import java.util.List;
-
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import lombok.Data;
 

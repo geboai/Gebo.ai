@@ -19,7 +19,6 @@ import java.util.function.Function;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
@@ -33,6 +32,7 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -44,9 +44,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
@@ -61,7 +59,8 @@ import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceReposi
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRagSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
@@ -85,7 +84,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	final protected IGChatProfileManagementService chatProfileManagementService;
-	final protected IGChatRequestResourcesUsePolicy requestLimitationPolicy;
+	final protected IGChatRagSearchService ragSearchService;
 
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
@@ -95,17 +94,18 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
-			IGChatRequestResourcesUsePolicy requestLimitationPolicy, IGChatStorageAreaService chatStorageAreaService,
-			LLMGeneratedResourceRepository generatedResourceRepository,
-			ChatHistoryConsolidationService historyConsolidationService) {
+			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
+			ChatHistoryConsolidationService historyConsolidationService,
+			IGChatRequestResourcesBuilder chatRequestBuilder, IGChatRagSearchService ragSearchService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, historyConsolidationService, knowledgeBaseVisibilityService);
+				generatedResourceRepository, historyConsolidationService, knowledgeBaseVisibilityService,
+				chatRequestBuilder);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.chatProfileManagementService = chatProfileManagementService;
-		this.requestLimitationPolicy = requestLimitationPolicy;
+		this.ragSearchService = ragSearchService;
 
 	}
 
@@ -197,21 +197,19 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			try {
 				// Generates a limited resources request based on policy
 				UserInfos user = securityService.getCurrentUser();
-				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(
-						chatProfile, userContext, user, request, embeddingHandler, chatHandler,
-						visibleKnowledgeBaseCodes);
-				response.setContextWindowStats(limitedResourcesRequest.getStats());
-				// Retrieves historical interactions and document results
-				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
-				AIDocumentsSet extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
+				// TODO: CALCULATE PROPER DOCUMENT TOKENS BUDGET
+				AIDocumentsSet extractedDocuments = ragSearchService.searchRelatedDocuments(request, userContext,
+						contextLength / 3);
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
-
+				request.setDocuments(extractedDocuments);
+				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
+						contextLength);
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
-				response = callTemplatedChatClient(chatHandler, prompt, context, request, response, history, docrefs,
-						documentsList, rt);
+				response = callTemplatedChatClient(chatHandler, prompt, context, request, response,
+						fullRequest.createChatRequestContext(), rt);
 
 				// Updates response with function calls and stores interaction records
 				response.setCalledFunctions(context.getCalledFunctions());
@@ -507,34 +505,23 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (embeddingHandler != null && chatHandler != null) {
 			try {
 
-				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(
-						chatProfile, userContext, user, request, embeddingHandler, chatHandler,
-						visibleKnowledgeBaseCodes);
-				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				if (chatHandler.getConfig() != null && chatHandler.getConfig().getChoosedModel() != null) {
 					response.setUsedChatModelCode(chatHandler.getConfig().getChoosedModel().getCode());
 				}
 				if (chatHandler.getType() != null) {
 					response.setUsedChatModelProvider(chatHandler.getType().getCode());
 				}
-				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
-				AIDocumentsSet extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
-				AIDocumentsSet contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
-				AIDocumentsSet uploadedDocuments = limitedResourcesRequest.getUploadedDocuments()
-						.getValue();
+				AIDocumentsSet extractedDocuments = ragSearchService.searchRelatedDocuments(request, userContext,
+						contextLength / 3);
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
-				List<Document> contextdocs = contextDocuments != null ? contextDocuments.aiDocumentsList() : List.of();
-				if (uploadedDocuments != null) {
-					List<Document> uploaded = uploadedDocuments.aiDocumentsList();
-					contextdocs = new ArrayList<>(contextdocs);
-					contextdocs.addAll(uploaded);
-				}
 				response.setDocumentsRef(docrefs);
 				request.setDocuments(extractedDocuments);
+				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
+						contextLength);
 				Prompt prompt = promptTemplate.create();
-				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history,
-						contextdocs, limitedResourcesRequest.isHistoryConsolidationRequired(),
-						limitedResourcesRequest.getHistorySizeTarget());
+				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
+				return streamChatClient(chatHandler, prompt, context, request, response, userContext,
+						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3);
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);
@@ -579,7 +566,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 					String pureText = ClientChatCallUtil.removeThinking(content);
 					data.setDescription(pureText);
 					context.setDescription(pureText);
-					
+
 					this.userContextRepository.save(context);
 					return data;
 				}
@@ -659,15 +646,16 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	}
 
 	@Override
-	public GeboChatResponse execute(String ovveriddenPrompt, LLMChatRequestResources requestResources, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) {
+	public GeboChatResponse execute(String ovveriddenPrompt, LLMChatRequestResources requestResources,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt, LLMChatRequestResources requestResources,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+	public Flux<GeboChatMessageEnvelope> streamingExecute(String ovveriddenPrompt,
+			LLMChatRequestResources requestResources, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -12,7 +12,6 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,11 +58,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 	@Override
 	public int getTokensSize() {
 		int size = 0;
-		if (lastRequest != null && lastRequest.getQuery() != null) {
-			size += tokensEstimator.estimate(lastRequest.getQuery());
-		}
 		size += tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments,
-				latestRequestsChatWithDocuments, latestRequestsUploadedDocuments);
+				latestRequestsChatWithDocuments, latestRequestsUploadedDocuments, retrievedDocuments, lastRequest);
 		size += tokensSize(lastInteractions);
 		return size;
 	}

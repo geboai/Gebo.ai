@@ -3,7 +3,6 @@ package ai.gebo.llms.deepsearch.repository;
 import java.util.List;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 
 public interface DeepSearchDataSourceResponseRepository extends IGBaseMongoDBRepository<DeepSearchDataSourceResponse> {

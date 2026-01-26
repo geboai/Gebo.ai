@@ -1,7 +1,5 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +39,6 @@ import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProc
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
-import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchKnowledgebasesResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
@@ -52,6 +46,10 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
+import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceServiceRepositoryPattern;

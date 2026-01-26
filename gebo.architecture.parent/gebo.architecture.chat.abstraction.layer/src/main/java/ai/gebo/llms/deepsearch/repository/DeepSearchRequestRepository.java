@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 
 public interface DeepSearchRequestRepository extends IGBaseMongoDBRepository<DeepSearchRequest> {

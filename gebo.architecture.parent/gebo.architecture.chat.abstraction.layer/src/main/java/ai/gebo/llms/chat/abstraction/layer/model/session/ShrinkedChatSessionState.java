@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Document
@@ -12,16 +13,17 @@ import lombok.Data;
 public class ShrinkedChatSessionState implements ITokensCountable {
 	/** Code representing the user's chat context */
 	@Id
-	protected String userChatContextCode = null;
-	private int tokensSize = 0;
+	@NotNull
+	private String userChatContextCode = null;
 	private CSSfRelevantShrinkedDocumentList relevantUploadedDocuments = new CSSfRelevantShrinkedDocumentList();
-	private CSSfRelevantShrinkedDocumentList relevantRagRetrievedDocuments = new CSSfRelevantShrinkedDocumentList();
+	private CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantLlmGeneratedDocuments = new CSSfRelevantShrinkedDocumentList();
+	@NotNull
 	private GUserChatInteractionsConsolidationData consolidatedInteractions = null;
 
 	@Override
 	public int getTokensSize() {
-		return tokensSize(relevantLlmGeneratedDocuments, relevantRagRetrievedDocuments, relevantUploadedDocuments,
+		return tokensSize(relevantLlmGeneratedDocuments, relevantRetrievedDocuments, relevantUploadedDocuments,
 				consolidatedInteractions);
 	}
 

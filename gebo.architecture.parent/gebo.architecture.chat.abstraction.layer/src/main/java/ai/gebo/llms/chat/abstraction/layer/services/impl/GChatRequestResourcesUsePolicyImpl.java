@@ -48,11 +48,11 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent
 import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
+import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -116,7 +116,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		TokensContainer<ChatHistoryData> _history = new TokensContainer<ChatHistoryData>();
 		int nhistoryTokens = 0;
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatInteractionsConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = null;/// userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
@@ -199,8 +199,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		RagChatModelLimitedRequest lrequest = new RagChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		final int rawContextNTokens=getContextLength(chatHandler);
-		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
+		final int rawContextNTokens = getContextLength(chatHandler);
+		final int contextWindowNToken = (int) Math.round(((double) rawContextNTokens) * 0.85);
 		OptimizedThreashold lastOptimizedThreasholds = threasholdAutotuneService
 				.findByEmbeddingModelCode(embeddingHandler.getCode());
 		// retrieve percentage of allocations settings and optimizations
@@ -348,8 +348,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		return lrequest;
 	}
 
-	private TokensContainer<AIDocumentsSet> createLimitedUploadedDocumentsOnRequests(
-			GUserChatContext userContext, GeboChatRequest request, int availableTokensForDocuments) throws IOException {
+	private TokensContainer<AIDocumentsSet> createLimitedUploadedDocumentsOnRequests(GUserChatContext userContext,
+			GeboChatRequest request, int availableTokensForDocuments) throws IOException {
 		int budget = availableTokensForDocuments;
 		TokensContainer<AIDocumentsSet> outValue = new TokensContainer<>();
 		AIDocumentsSet value = new AIDocumentsSet();
@@ -433,9 +433,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		return outValue;
 	}
 
-	private AIDocumentsSet createHistoricContextDocuments(GUserChatContext userContext,
-			AIDocumentsSet actualDocuments, int historicDocumentsBudget)
-			throws CloneNotSupportedException {
+	private AIDocumentsSet createHistoricContextDocuments(GUserChatContext userContext, AIDocumentsSet actualDocuments,
+			int historicDocumentsBudget) throws CloneNotSupportedException {
 		Map<String, Boolean> alreadyInFragments = new HashMap<>();
 		if (actualDocuments != null && actualDocuments.getDocumentItems() != null) {
 			List<Document> docs = actualDocuments.aiDocumentsList();
@@ -568,7 +567,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		TokensContainer<ChatHistoryData> _history = new TokensContainer<ChatHistoryData>();
 
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatInteractionsConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = null;// userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
@@ -644,8 +643,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		ChatModelLimitedRequest lrequest = new ChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		final int rawContextNTokens=getContextLength(chatHandler);
-		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
+		final int rawContextNTokens = getContextLength(chatHandler);
+		final int contextWindowNToken = (int) Math.round(((double) rawContextNTokens) * 0.85);
 
 		// retrieve percentage of allocations settings and optimizations
 		ContextWindowLengthRangeSettings settings = findOptimizationSettings(contextWindowNToken);
