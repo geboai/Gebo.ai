@@ -41,7 +41,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.ContextWindowLengthRangeSettings;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.HistoryStrategy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
@@ -85,7 +85,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	protected IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 
 	@Autowired
-	protected GeboRagConfigs ragResourcesConfig;
+	protected GeboChatConfigs ragResourcesConfig;
 
 	@Autowired
 	IGModelsLibraryDao modelsLibraryDao;

@@ -18,6 +18,8 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.Data;
+
 /**
  * Gebo.ai comment agent
  * 
@@ -27,8 +29,9 @@ import org.springframework.context.annotation.Configuration;
  * ConfigurationProperties annotations to map the properties.
  */
 @Configuration
-@ConfigurationProperties(value = "ai.gebo.ragchat")
-public class GeboRagConfigs {
+@ConfigurationProperties(value = "ai.gebo.chat")
+@Data
+public class GeboChatConfigs {
     
     // List of context window length range settings for different strategies
     private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
@@ -38,64 +41,20 @@ public class GeboRagConfigs {
     
     // Default similarity threshold for comparisons
     private double defaultSimilarityThreshold = 0.50;
+    private int leaveLastInteractionsOnHistoryConsolidation = 4;
+    private float historicDocumentRelevancyThreashold=0.4f;
 
     /**
      * Constructor initializes the context window length ranges with
      * predefined settings.
      */
-    public GeboRagConfigs() {
+    public GeboChatConfigs() {
         this.ranges.add(new ContextWindowLengthRangeSettings(0, 30.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
         this.ranges.add(new ContextWindowLengthRangeSettings(8192, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
         this.ranges.add(new ContextWindowLengthRangeSettings(16000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
         this.ranges.add(new ContextWindowLengthRangeSettings(128000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
     }
 
-    /**
-     * Gets the list of context window length range settings.
-     * @return list of context window ranges
-     */
-    public List<ContextWindowLengthRangeSettings> getRanges() {
-        return ranges;
-    }
-
-    /**
-     * Sets the list of context window length range settings.
-     * @param ranges list of ranges to set
-     */
-    public void setRanges(List<ContextWindowLengthRangeSettings> ranges) {
-        this.ranges = ranges; 
-    }
-
-    /**
-     * Gets the default number of top elements to be considered.
-     * @return default top K value
-     */
-    public int getDefaultTopK() {
-        return defaultTopK;
-    }
-
-    /**
-     * Sets the default number of top elements to be considered.
-     * @param defaultTopK new value for default top K
-     */
-    public void setDefaultTopK(int defaultTopK) {
-        this.defaultTopK = defaultTopK;
-    }
-
-    /**
-     * Gets the default similarity threshold for comparisons.
-     * @return default similarity threshold
-     */
-    public double getDefaultSimilarityThreshold() {
-        return defaultSimilarityThreshold;
-    }
-
-    /**
-     * Sets the default similarity threshold for comparisons.
-     * @param defaultSimilarityThreshold new similarity threshold value
-     */
-    public void setDefaultSimilarityThreshold(double defaultSimilarityThreshold) {
-        this.defaultSimilarityThreshold = defaultSimilarityThreshold;
-    }
+   
 
 }

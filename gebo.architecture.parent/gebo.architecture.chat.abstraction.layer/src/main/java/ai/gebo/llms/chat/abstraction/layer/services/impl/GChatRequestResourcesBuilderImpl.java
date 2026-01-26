@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,11 @@ import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheServ
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDocumentList;
@@ -37,6 +40,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesBuilder {
+
+	private final GeboChatConfigs geboChatConfigs;
 	private final ShrinkedChatSessionStateRepository shrinkedSessionStateRepository;
 	private final IGChatSessionStateService chatSessionStateService;
 	private final IGChatStorageAreaService chatStorageAreaService;
@@ -62,6 +67,7 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 				return fullState.toChatRequestResources();
 			} else {
 				ShrinkedChatSessionState shrinked = sessionShrinkerService.shrink(fullState, tokensBudget);
+				shrinkedSessionStateRepository.save(shrinked);
 				return buildFromShrinked(shrinked, lastRequest, actualContext, tokensBudget);
 			}
 		}
@@ -74,8 +80,38 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 		AIDocumentsSet chatWithDocsContents = new AIDocumentsSet();
 		AIDocumentsSet uploadedDocuments = new AIDocumentsSet();
 		// here add shrinked + actual request + chatWithDocsContents
-		List<UserUploadedContent> uploads = lastRequest != null ? lastRequest.getUserUploadedContents() : List.of();
-		List<String> chatWithDocumentsList = lastRequest != null ? lastRequest.getForcedRequestDocuments() : List.of();
+		List<UserUploadedContent> uploads = new ArrayList<UserUploadedContent>(
+				lastRequest != null ? lastRequest.getUserUploadedContents() : List.of());
+		List<String> chatWithDocumentsList = new ArrayList(
+				lastRequest != null ? lastRequest.getForcedRequestDocuments() : List.of());
+		final int shrinkedInteractionsIndex = shrinkedChatSessionState.getConsolidatedInteractions()
+				.getLastInteractionPointer();
+		List<ChatInteractions> latestInteractions = actualContext.getInteractions().subList(shrinkedInteractionsIndex,
+				actualContext.getInteractions().size() - 1);
+		List<CSSSimplefiedInteraction> lastInteractions = new ArrayList<CSSSimplefiedInteraction>();
+		for (ChatInteractions interaction : latestInteractions) {
+			List<UserUploadedContent> _uploads = interaction.getRequest() != null
+					? interaction.getRequest().getUserUploadedContents()
+					: List.of();
+			List<String> _chatWithDocuments = interaction.getRequest() != null
+					? interaction.getRequest().getForcedRequestDocuments()
+					: List.of();
+			String user = interaction.getRequest() != null ? interaction.getRequest().getQuery() : "";
+			int userTokenSize = interaction.getRequestNTokens() != null ? interaction.getRequestNTokens() : 0;
+			String assistant = interaction.getResponse() != null && interaction.getResponse().getQueryResponse() != null
+					? interaction.getResponse().getQueryResponse().toString()
+					: "";
+			int assistantTokenSize = interaction.getResponseNTokens() != null ? interaction.getResponseNTokens() : 0;
+			CSSSimplefiedInteraction semplified = new CSSSimplefiedInteraction(user, userTokenSize, assistant,
+					assistantTokenSize);
+			lastInteractions.add(semplified);
+			if (_uploads != null) {
+				uploads.addAll(uploads);
+			}
+			if (_chatWithDocuments != null) {
+				chatWithDocumentsList.addAll(_chatWithDocuments);
+			}
+		}
 		if (uploads != null && uploads.size() > 0) {
 			for (UserUploadedContent upload : uploads) {
 				List<Document> ingested = chatStorageAreaService.getIngestedContentsOf(upload);
@@ -86,7 +122,11 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 			}
 		}
 		if (chatWithDocumentsList != null && !chatWithDocumentsList.isEmpty()) {
-			List<GDocumentReference> documents = documentsRepository.findAllById(chatWithDocumentsList);
+			Map<String, Boolean> distincts = new HashMap<String, Boolean>();
+			chatWithDocumentsList.forEach(x -> {
+				distincts.put(x, true);
+			});
+			List<GDocumentReference> documents = documentsRepository.findAllById(distincts.keySet());
 			Map<String, AIDocumentReferenceItem> data = new HashMap();
 			for (GDocumentReference gDocumentReference : documents) {
 				AIDocumentReferenceItem ingested = documentsCacheService.retrieve(gDocumentReference);
@@ -95,12 +135,12 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 			AIDocumentsSet thisset = AIDocumentsSet.fromMap(data);
 			uploadedDocuments = AIDocumentsSet.join(uploadedDocuments, thisset);
 		}
-		AIDocumentsSet latestRequestsChatWithDocuments = new AIDocumentsSet();
+		AIDocumentsSet latestRequestsChatWithDocuments = chatWithDocsContents;
 		// retrieved documents in the last request
-		AIDocumentsSet retrievedDocuments = new AIDocumentsSet();
+		AIDocumentsSet retrievedDocuments = lastRequest != null ? lastRequest.getDocuments() : null;
 		// documents specifically uploaded from the user in the last not consolidated
 		// turns
-		AIDocumentsSet latestRequestsUploadedDocuments = new AIDocumentsSet();
+		AIDocumentsSet latestRequestsUploadedDocuments = uploadedDocuments;
 		// Rag retrieved contents storically or in the current request
 		AIDocumentsSet historicallyRetrievedDocuments = toAIDocumentsSet(
 				shrinkedChatSessionState.getRelevantRagRetrievedDocuments());
@@ -111,16 +151,17 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 		AIDocumentsSet llmGeneratedDocuments = toAIDocumentsSet(
 				shrinkedChatSessionState.getRelevantLlmGeneratedDocuments());
 		String chatConsolidation = shrinkedChatSessionState.getConsolidatedInteractions().getConsolidationText();
-		List<CSSSimplefiedInteraction> lastInteractions = null;
 
 		return new LLMChatRequestResources(latestRequestsChatWithDocuments, retrievedDocuments,
 				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				llmGeneratedDocuments, chatConsolidation, lastInteractions, lastRequest);
 	}
-
+	
 	private AIDocumentsSet toAIDocumentsSet(CSSfRelevantShrinkedDocumentList relevantRagRetrievedDocuments) {
 
-		return relevantRagRetrievedDocuments != null ? relevantRagRetrievedDocuments.toAIDocumentsSet()
+		return relevantRagRetrievedDocuments != null
+				? relevantRagRetrievedDocuments
+						.toAIDocumentsSet(geboChatConfigs.getHistoricDocumentRelevancyThreashold())
 				: new AIDocumentsSet();
 	}
 

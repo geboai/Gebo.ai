@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -65,7 +66,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode,
-			boolean streaming) throws ChatPipelineException, IOException {
+			boolean streaming) throws ChatPipelineException, IOException, LLMConfigException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
@@ -117,7 +118,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException, IOException {
+			throws ChatPipelineException, IOException, LLMConfigException {
 		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
 				pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
@@ -142,7 +143,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	@Override
 	public GeboChatResponse execute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException, IOException {
+			throws ChatPipelineException, IOException, LLMConfigException {
 		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
 				pipelineCode, false);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);

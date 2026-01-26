@@ -33,10 +33,11 @@ public class CSSfRelevantShrinkedDocumentList extends ArrayList<CSSRelevantShrin
 		return tokens;
 	}
 
-	public AIDocumentsSet toAIDocumentsSet() {
+	public AIDocumentsSet toAIDocumentsSet(float relevencyFilter) {
 		AIDocumentsSet outset = new AIDocumentsSet();
 		for (CSSRelevantShrinkedDocument doc : this) {
-			outset.getDocumentItems().add(doc.toAIDocumentReferenceItem());
+			if (doc.getRelevancyRate() == null || doc.getRelevancyRate().floatValue() >= relevencyFilter)
+				outset.getDocumentItems().add(doc.toAIDocumentReferenceItem());
 		}
 		return outset;
 	}

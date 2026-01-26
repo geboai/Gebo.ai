@@ -18,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
@@ -38,6 +39,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		implements IGChatSessionStateShrinkerService {
 	private static final String NEWLINE = "\r\n";
 	final GeboChatPromptsConfigs chatPromptsConfig;
+	final GeboChatConfigs chatConfig;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
@@ -46,10 +48,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	public static final String HISTORY_SIZE_TARGET = "historySizeTarget";
 
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
-			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
-			GeboChatPromptsConfigs chatPromptsConfig) {
+			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatPromptsConfigs chatPromptsConfig,
+			GeboChatConfigs chatConfig) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.chatPromptsConfig = chatPromptsConfig;
+		this.chatConfig = chatConfig;
 	}
 
 	@Override
@@ -84,7 +87,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		if (docs != null && docs.getValue() != null && !docs.getValue().isEmpty()) {
 			Map<String, AIDocumentReferenceItem> refsMap = new HashMap<String, AIDocumentReferenceItem>();
 			StringBuffer lastTurns = new StringBuffer();
-			int leaveLastInteractionsOnHistoryConsolidation = this.chatPromptsConfig
+			int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 					.getLeaveLastInteractionsOnHistoryConsolidation();
 			for (int i = chatHistory.getInteractions().size() - 1; i >= 0
 					&& i >= chatHistory.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation; i++) {
@@ -152,7 +155,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 
 		String existingSummary = "";
 
-		int leaveLastInteractionsOnHistoryConsolidation = this.chatPromptsConfig
+		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
 		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
 

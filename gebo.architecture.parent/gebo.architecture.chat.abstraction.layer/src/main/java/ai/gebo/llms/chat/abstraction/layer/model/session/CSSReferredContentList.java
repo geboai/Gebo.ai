@@ -16,6 +16,8 @@ public class CSSReferredContentList<T> extends ArrayList<CSSInteractionReferredC
 		return tokensSize(new ArrayList<ITokensCountable>(this));
 	}
 
+	
+
 	public AIDocumentsSet toAIDocumentsSet() {
 		Map<String, AIDocumentReferenceItem> map = new HashMap<String, AIDocumentReferenceItem>();
 		List<AIDocumentReferenceItem> docs = this.stream().map(x -> x.getData()).toList();

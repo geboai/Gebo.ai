@@ -20,6 +20,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
@@ -45,7 +46,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 	final IGChatStorageAreaService storageAreaService;
 	final DocumentReferenceRepository documentsRepository;
 	final AIDocumentsCacheService documentsCacheService;
-	final GeboChatPromptsConfigs promptsConfig;
+	final GeboChatConfigs chatConfig;
 	final static Logger LOGGER = LoggerFactory.getLogger(GChatSessionStateServiceImpl.class);
 
 	@AllArgsConstructor
@@ -60,7 +61,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
 		ChatFullSessionState outState = new ChatFullSessionState();
 		outState.setUserChatContextCode(context.getCode());
-		final int lastInteractionsOnLatest = this.promptsConfig.getLeaveLastInteractionsOnHistoryConsolidation();
+		final int lastInteractionsOnLatest = this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation();
 		List<ChatInteractions> interactions = context.getInteractions();
 		Map<String, Integer> latestChatWithDocuments = new HashMap<String, Integer>();
 		long historyTokens = 0;

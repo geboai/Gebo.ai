@@ -41,7 +41,7 @@ public class GeboChatPromptsConfigs {
 
 	private GPromptConfig historyConsolidationPrompt = new GPromptConfig();
 	private GPromptConfig historyDocumentsConsolidationPrompt = new GPromptConfig();
-	private int leaveLastInteractionsOnHistoryConsolidation = 4;
+	
 
 	/**
 	 * Constructor for GeboChatPromptsConfigs. Initializes the default prompt
