@@ -18,11 +18,10 @@ export interface FastVectorStoreSetupData {
     redisConfig?: RedisConfig;
 }
 export namespace FastVectorStoreSetupData {
-    export type ProductEnum = 'MONGO' | 'QDRANT' | 'LUCENE' | 'REDIS' | 'TEST';
+    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'TEST';
     export const ProductEnum = {
         MONGO: 'MONGO' as ProductEnum,
         QDRANT: 'QDRANT' as ProductEnum,
-        LUCENE: 'LUCENE' as ProductEnum,
         REDIS: 'REDIS' as ProductEnum,
         TEST: 'TEST' as ProductEnum
     };

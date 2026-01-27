@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeboComponentInfo } from './geboComponentInfo';
 import { SearchResultReference } from './searchResultReference';
 import { VFilesystemReference } from './vFilesystemReference';
 
@@ -18,7 +19,9 @@ export interface SearchResult {
     navigationReference: VFilesystemReference;
     descriptiveText: string;
     nestingLevel?: number;
-    systemHandlerId: string;
-    systemConfigurationCode: string;
+    modificationDate?: Date;
     childs?: Array<SearchResult>;
+    originComponent: GeboComponentInfo;
+    systemConfigurationCode: string;
+    code: string;
 }

@@ -30,6 +30,7 @@ import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotun
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
+import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
@@ -125,6 +126,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboAdvancedSetupStatusControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
+    GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
     GeboCoreAnalisysControllerService,
     GeboDeepSearchAdminControllerService,

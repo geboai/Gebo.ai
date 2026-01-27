@@ -10,16 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface DeepSearchResponse { 
-    code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    deepsearchCode?: string;
-    response?: string;
-    searchResultsEmpty?: boolean;
-    processPercentage?: number;
-    dataSourceDescription?: string;
+export interface GeboComponentInfo { 
+    messagingModuleId: string;
+    messagingComponentId: string;
+    completeComponentId?: string;
 }

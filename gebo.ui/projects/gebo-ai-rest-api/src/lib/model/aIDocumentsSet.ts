@@ -9,17 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AIDocumentReferenceItem } from './aIDocumentReferenceItem';
 
-export interface DeepSearchResponse { 
-    code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    deepsearchCode?: string;
-    response?: string;
-    searchResultsEmpty?: boolean;
-    processPercentage?: number;
-    dataSourceDescription?: string;
+export interface AIDocumentsSet { 
+    tokensSize?: number;
+    documentItems?: Array<AIDocumentReferenceItem>;
+    nbytes?: number;
 }

@@ -25,6 +25,7 @@ export interface GeboTemplatedChatResponseRichResponse {
     queryResponse?: RichResponse;
     windowOccupation?: GeboWorkingMemoryWindowOccupation;
     query?: string;
+    thinkingOutputs?: Array<string>;
     backendMessages?: Array<GUserMessage>;
     forcedDocumentsRef?: Array<GResponseDocumentRef>;
     documentsRef?: Array<GResponseDocumentRef>;

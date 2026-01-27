@@ -27,4 +27,5 @@ export interface DeepSearchDataSourceResponse {
     handlerId?: string;
     dataSourceIndex?: number;
     dataSourceDescription?: string;
+    processPercentage?: number;
 }

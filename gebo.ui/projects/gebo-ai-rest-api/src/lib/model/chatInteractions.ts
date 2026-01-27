@@ -17,4 +17,5 @@ export interface ChatInteractions {
     requestNTokens?: number;
     response?: GeboTemplatedChatResponse;
     responseNTokens?: number;
+    tokensSize?: number;
 }

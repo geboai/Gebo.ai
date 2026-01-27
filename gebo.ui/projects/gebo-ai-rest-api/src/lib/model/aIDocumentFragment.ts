@@ -10,16 +10,16 @@
  * Do not edit the class manually.
  */
 
-export interface DeepSearchResponse { 
+export interface AIDocumentFragment { 
+    tokensSize?: number;
+    documentId?: string;
+    documentContent?: string;
     code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    deepsearchCode?: string;
-    response?: string;
-    searchResultsEmpty?: boolean;
-    processPercentage?: number;
-    dataSourceDescription?: string;
+    rootKnowledgebaseCode?: string;
+    parentProjectCode?: string;
+    rankIndex?: number;
+    weightedResultsRanking?: number;
+    origin?: string;
+    chunkPosition?: number;
+    nbytes?: number;
 }

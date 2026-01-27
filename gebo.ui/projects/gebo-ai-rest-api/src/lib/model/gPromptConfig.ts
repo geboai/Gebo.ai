@@ -19,6 +19,8 @@ export interface GPromptConfig {
     dateModified?: Date;
     dateCreated?: Date;
     prompt?: string;
+    langCode?: string;
+    promptUse?: string;
     modelProvider?: string;
     modelName?: string;
     promptCategory?: string;

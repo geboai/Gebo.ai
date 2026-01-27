@@ -25,4 +25,5 @@ export interface DeepSearchDataSourceDocumentResult {
     documentIndex?: number;
     dataSourceDescription: string;
     analyzedSearchResult: SearchResult;
+    processPercentage?: number;
 }

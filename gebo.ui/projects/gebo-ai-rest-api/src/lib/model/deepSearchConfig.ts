@@ -22,6 +22,8 @@ export interface DeepSearchConfig {
     searchType: DeepSearchConfig.SearchTypeEnum;
     consolidationPrompt?: string;
     analisysPrompt?: string;
+    ratingPrompt?: string;
+    keywordGenerationPrompt?: string;
     ragQueryOptions?: RagQueryOptions;
     firstHopSimilarityThreashold?: number;
     secondHopSimilarityThreashold?: number;
