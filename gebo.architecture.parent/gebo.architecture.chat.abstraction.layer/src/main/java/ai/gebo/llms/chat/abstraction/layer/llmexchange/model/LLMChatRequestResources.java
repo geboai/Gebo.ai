@@ -108,4 +108,9 @@ public class LLMChatRequestResources implements ITokensCountable {
 	public IChatRequestContext createChatRequestContext() {
 		return new NestedChatRequestContext();
 	}
+
+	public AIDocumentsSet getAllDocuments() {
+		return AIDocumentsSet.join(latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
+				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
+	}
 }

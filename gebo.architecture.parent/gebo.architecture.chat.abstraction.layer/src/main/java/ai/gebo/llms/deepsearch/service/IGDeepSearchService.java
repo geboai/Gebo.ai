@@ -34,7 +34,7 @@ public interface IGDeepSearchService {
 		} else
 			return null;
 	}
-	
+
 	public Page<DeepSearchRequest> myDeepsearchPaged(Pageable pageable);
 
 	public List<DeepSearchRequest> allMyDeepsearches();
@@ -59,6 +59,9 @@ public interface IGDeepSearchService {
 
 	public DeepSearchUISettings getDeepSearchUISettings();
 
-	public Flux<GeboChatMessageEnvelope> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatContext userChatContext);
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
+			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources) throws LLMConfigException;
+
+	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
+			Class<? extends AbstractDeepSearchEvent> trailingType);
 }

@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
@@ -11,7 +12,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRagSearchService;
-
+@Service
 public class GChatRagSearchServiceImpl implements IGChatRagSearchService {
 	@Autowired
 	protected IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;

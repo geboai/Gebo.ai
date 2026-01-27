@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.client.rest.model.DeepSearchStep;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -27,11 +24,8 @@ import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
-import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -131,37 +125,8 @@ public class GeboDeepSearchController {
 
 	private Flux<ServerSentEvent<String>> stream(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType) {
-		return flux.map(entry -> {
-			GeboChatMessageEnvelope _envelope = null;
-			if (entry instanceof DeepSearchDocumentEvent documentEvent) {
-				_envelope = new GeboChatMessageEnvelope(
-						new DeepSearchStep(new GResponseDocumentRef(documentEvent.getInputData()),
-								documentEvent.getOutputData().getFragment(),
-								documentEvent.getOutputData().getProcessPercentage()));
-			} else if (entry instanceof DeepSearchProcessedEvent processedEvent) {
-				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(processedEvent.getOutputData());
-				_envelope = envelop;
-
-			} else if (entry instanceof DeepSearchErrorEvent errorEvent) {
-				GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
-				exceptionEnvelope.setContent(errorEvent.getOutputData());
-				_envelope = exceptionEnvelope;
-			} else if (entry instanceof DeepSearchChatResponseEvent chatResponseEvent) {
-				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(chatResponseEvent.getOutputData());
-				_envelope = envelop;
-			} else {
-				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(entry.getOutputData());
-				_envelope = envelop;
-			}
-			_envelope.setLastMessage(trailingType.isAssignableFrom(entry.getClass()));
-			return _envelope;
-		}).onErrorResume(exc -> {
-			GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
-			GUserMessage userMessage = GUserMessage.errorMessage(ERROR_WHILE_RUNNING_DEEP_SEARCH, exc);
-			exceptionEnvelope.setContent(userMessage);
-			exceptionEnvelope.setLastMessage(true);
-			return Flux.just(exceptionEnvelope);
-		}).map(StreamUtil.mappingFunction).map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
+		return deepSearchService.mapToChatFlux(
+				flux, trailingType).map(StreamUtil.mappingFunction).map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

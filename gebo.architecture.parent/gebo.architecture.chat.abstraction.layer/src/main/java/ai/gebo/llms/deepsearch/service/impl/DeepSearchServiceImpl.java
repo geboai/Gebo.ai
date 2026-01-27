@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -79,7 +80,7 @@ import reactor.core.scheduler.Scheduler;
 @Component
 @Scope("singleton")
 
-public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService  {
+public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService {
 
 	private final DynamicDataSourceServicesProviderImpl dynamicDataSourceServicesProviderImpl;
 
@@ -99,7 +100,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	protected final IGChatService chatService;
 	protected final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	protected final IGeboThreadManager threadManager;
-
+	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
 	final ChatProfilesRepository chatProfilesRepository;
 
 	private final Scheduler deepSearchScheduler;
@@ -148,8 +149,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchExecutor.shutdown();
 	}
 
-	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(DeepSearchRequest request)
-			throws LLMConfigException {
+	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(DeepSearchRequest request,
+			AIDocumentsSet allDocuments) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		return Mono.fromCallable(() -> {
@@ -224,8 +225,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		});
 	}
 
-	protected Flux<AbstractDeepSearchEvent> singleThreadedStreamDeepSearch(DeepSearchRequest request)
-			throws LLMConfigException {
+	protected Flux<AbstractDeepSearchEvent> singleThreadedStreamDeepSearch(DeepSearchRequest request,
+			AIDocumentsSet allDocuments) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return Flux.defer(() -> {
 
@@ -345,12 +346,12 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		Flux<AbstractDeepSearchEvent> out = null;
 		switch (variant) {
 		case FULL_REACTIVE: {
-			out = this.fullReactivestreamDeepSearch(request);
+			out = this.fullReactivestreamDeepSearch(request, new AIDocumentsSet());
 		}
 			break;
 
 		case SINGLE_THREAD: {
-			out = this.singleThreadedStreamDeepSearch(request);
+			out = this.singleThreadedStreamDeepSearch(request, new AIDocumentsSet());
 		}
 			break;
 		}
@@ -512,15 +513,29 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			cleanResponse.setQueryResponse("");
 			this.chatService.addChatInteractionToUserContext(request, cleanResponse, chatContext);
 		}
+		return doStream(request, cleanResponse, knowledgeBasesCodesList, chatContext);
+	}
+
+	private Flux<AbstractDeepSearchEvent> doStream(GeboChatRequest request, GeboChatResponse response,
+			List<String> knowledgeBasesCodesList, GUserChatContext chatContext) throws LLMConfigException {
+
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getId());
 		deepSearchRequest.setKnowledgeBases(knowledgeBasesCodesList);
 		deepSearchRequest.setQuery(request.getQuery());
-		deepSearchRequest.setUserChatContextCode(userChatContextCode);
+		deepSearchRequest.setUserChatContextCode(chatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
-		final GeboChatResponse response = cleanResponse;
+
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 
+		Flux<AbstractDeepSearchEvent> flux = streamDeepSearch(deepSearchRequest);
+		return manageTrailingChatSessionEvents(flux, request, response, chatContext);
+	}
+
+	private Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
+			GeboChatRequest request, GeboChatResponse response, GUserChatContext chatContext) {
+		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
+		final boolean isRag = chatContext.getRagChat() != null && chatContext.getRagChat();
 		Mono<AbstractDeepSearchEvent> trailingFlux = Mono.fromSupplier(() -> {
 			response.setDocumentsRef(documents);
 			DeepSearchChatResponseEvent responseEvent = new DeepSearchChatResponseEvent();
@@ -528,7 +543,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			responseEvent.setOutputData(response);
 			return responseEvent;
 		});
-		return streamDeepSearch(deepSearchRequest).map(x -> {
+		return flux.map(x -> {
 			if (x instanceof DeepSearchDocumentEvent documentEvent) {
 				// for each document add a reference here
 				GDocumentReference currentDocument = documentEvent.getInputData();
@@ -592,12 +607,65 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatContext userChatContext) {
-		// TODO Auto-generated method stub
-		return null;
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
+			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources) throws LLMConfigException {
+		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
+				? defaultDeepsearchConfig.getUsedVariant()
+				: DeepSearchVariant.SINGLE_THREAD;
+		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
+		deepSearchRequest.setChatRequestCode(request.getLastRequest().getId());
+		deepSearchRequest.setKnowledgeBases(request.getLastRequest().getChoosedKnowledgeBases());
+		deepSearchRequest.setQuery(request.getLastRequest().getQuery());
+		deepSearchRequest.setUserChatContextCode(userChatContext.getCode());
+		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
+		AIDocumentsSet allDocuments = request.getAllDocuments();
+		Flux<AbstractDeepSearchEvent> out = null;
+		switch (variant) {
+		case FULL_REACTIVE: {
+			out = this.fullReactivestreamDeepSearch(deepSearchRequest, allDocuments);
+		}
+			break;
+
+		case SINGLE_THREAD: {
+			out = this.singleThreadedStreamDeepSearch(deepSearchRequest, allDocuments);
+		}
+			break;
+		}
+		return manageTrailingChatSessionEvents(out, request.getLastRequest(), chatResponse, userChatContext);
 	}
 
 	
+
+	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
+			Class<? extends AbstractDeepSearchEvent> trailingType) {
+		return flux.map(entry -> {
+			GeboChatMessageEnvelope _envelope = null;
+			if (entry instanceof DeepSearchDocumentEvent documentEvent) {
+				_envelope = new GeboChatMessageEnvelope(documentEvent.getOutputData());
+			} else if (entry instanceof DeepSearchProcessedEvent processedEvent) {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(processedEvent.getOutputData());
+				_envelope = envelop;
+
+			} else if (entry instanceof DeepSearchErrorEvent errorEvent) {
+				GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
+				exceptionEnvelope.setContent(errorEvent.getOutputData());
+				_envelope = exceptionEnvelope;
+			} else if (entry instanceof DeepSearchChatResponseEvent chatResponseEvent) {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(chatResponseEvent.getOutputData());
+				_envelope = envelop;
+			} else {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(entry.getOutputData());
+				_envelope = envelop;
+			}
+			_envelope.setLastMessage(trailingType.isAssignableFrom(entry.getClass()));
+			return _envelope;
+		}).onErrorResume(exc -> {
+			GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
+			GUserMessage userMessage = GUserMessage.errorMessage(ERROR_WHILE_RUNNING_DEEP_SEARCH, exc);
+			exceptionEnvelope.setContent(userMessage);
+			exceptionEnvelope.setLastMessage(true);
+			return Flux.just(exceptionEnvelope);
+		});
+	}
 
 }
