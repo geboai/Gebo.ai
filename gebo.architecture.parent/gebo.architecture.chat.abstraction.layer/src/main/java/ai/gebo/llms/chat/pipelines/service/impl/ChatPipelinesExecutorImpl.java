@@ -24,6 +24,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
+import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfos;
 import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfosMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -83,8 +84,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
 				chatModel.getContextLength(), resources, response, context, streaming);
+		// putting a sintetic routing decision for the first 2 steps to mantain the
+		// routing coherency
+		runtimeData.getRoutingDecisions()
+				.add(new RoutingDecision(List.of(config.getStepInputId(), config.getStepRouterId()), null));
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
+
 			if (data.getEnvironmentContributions() != null) {
 				runtimeData.getSharedEnvironment().putAll(data.getEnvironmentContributions());
 			}
@@ -127,7 +133,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				}
 			}
 		} while (nextService != null && nextService.getStepType() != IChatPipelineStepService.StepType.OUTPUT);
-		return null;
+		return runtimeData;
 	}
 
 	@Override
@@ -148,6 +154,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData) {
 		PipelineRoutingInfosMessageEnvelope data = new PipelineRoutingInfosMessageEnvelope();
+		data.setContent(new PipelineRoutingInfos());
 		runtimeData.getRoutingDecisions().forEach(x -> {
 			x.getFutureRoute().forEach(stepId -> {
 				data.getContent().getStepIds().add(stepId);
@@ -195,16 +202,37 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				: null;
 		if (lastStep == null)
 			throw new ChatPipelineException("executing with no steps done in the runtime infos");
-		RoutingDecision lastRoutingThread = runtimeData.getRoutingDecisions()
-				.get(runtimeData.getRoutingDecisions().size() - 1);
+
 		String stepId = lastStep.getStepId();
-		int index = lastRoutingThread.getFutureRoute().indexOf(stepId);
+		int routingDecisionIndex = 0;
+		RoutingDecision currentRoutingThread = null;
+		for (RoutingDecision r : runtimeData.getRoutingDecisions()) {
+			if (r.getFutureRoute().contains(stepId)) {
+				currentRoutingThread = r;
+				break;
+			} else {
+				routingDecisionIndex++;
+			}
+		}
+		if (currentRoutingThread == null)
+			throw new ChatPipelineException("The actual executed step " + stepId + " is not any routing perspective");
+		int index = currentRoutingThread.getFutureRoute().indexOf(stepId);
 		if (index < 0)
 			throw new ChatPipelineException(
 					"The actual executed step " + stepId + " is not in the actual routing perspective");
-		if (index + 1 >= lastRoutingThread.getFutureRoute().size())
-			throw new ChatPipelineException("No remaining execution step to execute");
-		return getStep(lastRoutingThread.getFutureRoute().get(index + 1));
+		if (index + 1 < currentRoutingThread.getFutureRoute().size()) {
+			return getStep(currentRoutingThread.getFutureRoute().get(index + 1));
+		} else {
+			routingDecisionIndex++;
+			index = 0;
+			if (routingDecisionIndex < runtimeData.getRoutingDecisions().size()) {
+				currentRoutingThread = runtimeData.getRoutingDecisions().get(routingDecisionIndex);
+				if (index < currentRoutingThread.getFutureRoute().size()) {
+					return getStep(currentRoutingThread.getFutureRoute().get(index));
+				}
+			}
+		}
+		throw new ChatPipelineException("Reaching out of execution line without any output stage");
 	}
 
 	private ChatPipelineConfiguration getCfgOrDefault(String code) throws ChatPipelineException {

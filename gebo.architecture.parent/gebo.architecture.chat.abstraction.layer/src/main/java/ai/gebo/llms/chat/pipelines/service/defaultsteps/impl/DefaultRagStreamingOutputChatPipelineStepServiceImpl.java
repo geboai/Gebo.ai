@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.model.SearchRewritings;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchRewritings;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 

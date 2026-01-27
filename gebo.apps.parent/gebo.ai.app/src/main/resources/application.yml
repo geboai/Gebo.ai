@@ -201,7 +201,7 @@ ai.gebo.chat:
         - Document: `<title>` (KB code: `<id>`): key point ... n
         **Additional Insights from Training Knowledge**  n
         ... explanation, context, comparison, or optimization tips ...
-        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTIONn"""'
+        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTION\n"""'
 
 ai.gebo.config:
   setupConfiguresWorkdir: false

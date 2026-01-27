@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +24,8 @@ import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.model.RespondingWith;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.model.RoutingDecisionResponse;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RoutingDecisionResponse;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GBaseObject;
@@ -104,6 +104,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				RoutingDecisionResponse llmRoutingDecision = callLLMStructuredReturn(serviceModel, prompt,
 						runtimeData.getRequestResources().getLastRequest().getQuery(), templateParams,
 						RoutingDecisionResponse.class);
+				LOGGER.info("Routing decision object:" + llmRoutingDecision);
 				List<String> routes = futureRoutes(llmRoutingDecision.getResponseRoutingDecision(),
 						RespondingWith.PURE_LLM_RESPONSE, runtimeData.isStreamingOutput());
 				final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {

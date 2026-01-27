@@ -22,7 +22,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, EventEmitter, forwardRef, HostListener, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
@@ -307,6 +307,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         private ragChatService: GeboRagChatControllerService,
         private reactiveChatService: ReactiveRagChatService,
         private geboAiTranslationService: GeboAITranslationService,
+        private geboChatPipelineService:GeboChatPipelinesControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -716,11 +717,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         }
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;
+        /*
         if (this.ragsystem === true) {
             this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
         } else {
             this.reactiveChatService.streamChat(r, messageCallback, errorCallBack);
         }
+            */
+        this.reactiveChatService.streamAgenticChat(r, messageCallback, errorCallBack);
 
     }
     onSumbit(): void {

@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import org.springframework.stereotype.Component;
 

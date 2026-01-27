@@ -58,6 +58,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
 		ChatFullSessionState outState = new ChatFullSessionState();
 		outState.setUserChatContextCode(context.getCode());
+		outState.getCurrentRequest().setValue(request);
 		final int lastInteractionsOnLatest = this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation();
 		List<ChatInteractions> interactions = context.getInteractions();
 		Map<String, Integer> latestChatWithDocuments = new HashMap<String, Integer>();

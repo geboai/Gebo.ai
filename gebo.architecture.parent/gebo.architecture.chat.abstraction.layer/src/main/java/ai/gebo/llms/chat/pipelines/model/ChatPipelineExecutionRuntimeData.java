@@ -26,7 +26,7 @@ public class ChatPipelineExecutionRuntimeData {
 	private int remainingTokens = 0;
 	private List<IChatPipelineStepRuntimeData> executedSteps = new ArrayList<IChatPipelineStepRuntimeData>();
 	private GeboChatResponse chatResponse = null;
-	private List<ai.gebo.llms.chat.pipelines.model.RoutingDecision> routingDecisions = new ArrayList<ai.gebo.llms.chat.pipelines.model.RoutingDecision>();
+	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
 	private final GUserChatContext userChatContext;

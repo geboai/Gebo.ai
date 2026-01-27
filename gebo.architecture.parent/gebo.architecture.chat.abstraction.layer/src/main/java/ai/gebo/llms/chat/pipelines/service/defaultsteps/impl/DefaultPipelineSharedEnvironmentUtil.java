@@ -1,9 +1,9 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.List;
 
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.model.SearchRewritings;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchRewritings;
 
 public class DefaultPipelineSharedEnvironmentUtil {
 
