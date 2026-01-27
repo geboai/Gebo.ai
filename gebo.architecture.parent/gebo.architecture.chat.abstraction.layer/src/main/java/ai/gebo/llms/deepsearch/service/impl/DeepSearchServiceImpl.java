@@ -32,8 +32,10 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
@@ -587,6 +589,13 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public DeepSearchUISettings getDeepSearchUISettings() {
 
 		return DeepSearchUISettings.of(defaultDeepsearchConfig);
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamDeepSearch(LLMChatRequestResources request,
+			GeboChatResponse chatResponse, GUserChatContext userChatContext) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

@@ -460,6 +460,11 @@ public class DocumentsChunkServiceImpl
 			String workDirectory = configService.getGeboWorkDirectory();
 			Path fileToRead = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkId);
 			DocumentChunksSet chunkSet = objectMapper.readValue(fileToRead.toFile(), DocumentChunksSet.class);
+			if (chunkSet.getChunks() != null) {
+				for (DocumentChunk chunk : chunkSet.getChunks()) {
+					chunk.setChunksCount((long) operation.getTotalChunks());
+				}
+			}
 			response.setCurrentChunkSet(chunkSet);
 			response.setId(chunkRequestId);
 			response.setTotalChunksNumber(operation.getTotalChunks());

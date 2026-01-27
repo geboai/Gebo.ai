@@ -13,7 +13,7 @@ public class CSSReferredContentList<T> extends ArrayList<CSSInteractionReferredC
 	@Override
 	public int getTokensSize() {
 
-		return tokensSize(new ArrayList<ITokensCountable>(this));
+		return ITokensCountable.tokensSize(new ArrayList<ITokensCountable>(this));
 	}
 
 	

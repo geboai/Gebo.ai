@@ -7,6 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -54,4 +58,7 @@ public interface IGDeepSearchService {
 	public void deleteDeepSearchByUserContextCode(String userContextCode);
 
 	public DeepSearchUISettings getDeepSearchUISettings();
+
+	public Flux<GeboChatMessageEnvelope> streamDeepSearch(LLMChatRequestResources request,
+			GeboChatResponse chatResponse, GUserChatContext userChatContext);
 }

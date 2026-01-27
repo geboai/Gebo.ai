@@ -58,9 +58,10 @@ public class LLMChatRequestResources implements ITokensCountable {
 	@Override
 	public int getTokensSize() {
 		int size = 0;
-		size += tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments,
-				latestRequestsChatWithDocuments, latestRequestsUploadedDocuments, retrievedDocuments, lastRequest);
-		size += tokensSize(lastInteractions);
+		size += ITokensCountable.tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments,
+				llmGeneratedDocuments, latestRequestsChatWithDocuments, latestRequestsUploadedDocuments,
+				retrievedDocuments, lastRequest);
+		size += ITokensCountable.tokensSize(lastInteractions);
 		return size;
 	}
 

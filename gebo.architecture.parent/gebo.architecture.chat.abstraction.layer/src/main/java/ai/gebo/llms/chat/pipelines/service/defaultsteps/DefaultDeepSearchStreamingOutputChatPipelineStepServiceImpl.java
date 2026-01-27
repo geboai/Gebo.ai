@@ -1,8 +1,9 @@
-package ai.gebo.llms.chat.pipelines.service.impl;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps;
 
 import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -13,9 +14,9 @@ import reactor.core.publisher.Flux;
 
 @Component
 @AllArgsConstructor
-public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
+public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends BaseOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
-	IGDeepSearchService deepSearchService;
+	private final IGDeepSearchService deepSearchService;
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
 
 	@Override
@@ -33,8 +34,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-
-		return null;
+		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData);
+		return deepSearchService.streamDeepSearch(request,runtimeData.getChatResponse(),runtimeData.getUserChatContext());
 
 	}
 

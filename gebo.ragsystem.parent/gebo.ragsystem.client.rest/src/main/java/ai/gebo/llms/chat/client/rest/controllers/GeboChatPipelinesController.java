@@ -23,6 +23,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelinesExecutor;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.Valid;
@@ -34,75 +35,34 @@ import reactor.core.publisher.Flux;
 @RequestMapping(path = "api/users/GeboChatPipelinesController")
 @AllArgsConstructor
 public class GeboChatPipelinesController {
-	protected final IChatPipelinesExecutor executor;
-	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
-	protected final IGPersistentObjectManager persistentObjectManager;
-	protected final IGSecurityService securityService;
+	protected final IChatPipelineService chatPipelineService;
+
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
 			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
 
-		return this.streamChatPipeline(null, request);
+		return chatPipelineService.streamingChat(request);
 	}
+
 	@PostMapping(value = "streamChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
-		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
-		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
-		GUserChatContext context = null;
-		if (request.getUserChatContextCode() != null) {
-			context = persistentObjectManager.findById(GUserChatContext.class, request.getUserChatContextCode());
-			if (context == null) {
-				throw new ChatPipelineException("Referred context is not found");
-			}
-			securityService.checkBeingCreator(context);
-		} else {
-			context = new GUserChatContext();
-			context.setUsername(securityService.getCurrentUser().getUsername());
-			context.setChatProfileCode(request.getChatProfileCode());
-			context.setChatModelCode(request.getChatModelCode());
-			context.setRagChat(
-					request.getChatProfileCode() != null && request.getChatProfileCode().trim().length() > 0);
-			context.setCode(UUID.randomUUID().toString());
-			context.setDescription("New chat");
-			context = persistentObjectManager.insert(context);
+			@RequestBody @NotNull @Valid GeboChatRequest request) throws ChatPipelineException {
 
-		}
-		return executor.streamingExecute(request, context, chatModel, serviceModel, pipelineCode);
+		return chatPipelineService.streamingChat(pipelineCode, request);
 	}
+
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
-		return this.executeChatPipeline(null, request);
+			throws ChatPipelineException {
+		return chatPipelineService.chat(request);
 	}
+
 	@PostMapping(value = "executeChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid GeboChatRequest request)
 			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException {
-		IGConfigurableChatModel chatModel = chatModelsDao.defaultHandler();
-		IGConfigurableChatModel serviceModel = chatModelsDao.findByUses(ChatModelsUses.INTERNAL_SERVICES);
-		GUserChatContext context = null;
-		if (request.getUserChatContextCode() != null) {
-			context = persistentObjectManager.findById(GUserChatContext.class, request.getUserChatContextCode());
-			if (context == null) {
-				throw new ChatPipelineException("Referred context is not found");
-			}
-			securityService.checkBeingCreator(context);
-		} else {
-			context = new GUserChatContext();
-			context.setUsername(securityService.getCurrentUser().getUsername());
-			context.setChatProfileCode(request.getChatProfileCode());
-			context.setChatModelCode(request.getChatModelCode());
-			context.setRagChat(
-					request.getChatProfileCode() != null && request.getChatProfileCode().trim().length() > 0);
-			context.setCode(UUID.randomUUID().toString());
-			context.setDescription("New chat");
-			context = persistentObjectManager.insert(context);
-
-		}
-		return executor.execute(request, context, chatModel, serviceModel, pipelineCode);
+		return chatPipelineService.chat(pipelineCode, request);
 	}
 }

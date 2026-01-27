@@ -47,6 +47,7 @@ public class DocumentMetaInfos {
 	public static final String GEBO_EMBEDDING_METADATA = "GEBO_EMBEDDING_METADATA";
 	public static final String GEBO_REFERENCE_TYPE = "GEBO_REFERENCE_TYPE";
 	public static final String GEBO_CHUNK_POSITION = "GEBO_CHUNK_POSITION";
+	public static final String GEBO_CHUNKS_COUNT = "GEBO_CHUNKS_COUNT";
 	/**
 	 * A list of all attribute constants defined in this class. This list provides
 	 * an easy way to access and iterate over all available metadata attributes.
@@ -56,6 +57,6 @@ public class DocumentMetaInfos {
 			CONTENT_DESCRIPTION, GEBO_FILE_NAME, GEBO_FILE_TREAT_AS, GEBO_FILE_TYPE_DESCRIPTION, GEBO_FILE_TYPE_ID,
 			GEBO_FILE_FULLPATH, GEBO_ARCHIVE_FULLPATH, GEBO_ARCHIVE_INTERNALPATH, GEBO_FILE_ARCHETYPEID,
 			GEBO_FILE_RELATIVE_PATH, GEBO_TOKEN_LENGTH, GEBO_BYTES_LENGTH, GEBO_EMBEDDING_METADATA, GEBO_REFERENCE_TYPE,
-			GEBO_CHUNK_POSITION, LANGUAGE, LANGUAGE_CONFIDENCE);
+			GEBO_CHUNK_POSITION, LANGUAGE, LANGUAGE_CONFIDENCE, GEBO_CHUNKS_COUNT);
 
 }

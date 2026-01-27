@@ -64,9 +64,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		}
 	}
 
-	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GUserChatContext context,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode,
-			boolean streaming) throws ChatPipelineException, IOException, LLMConfigException {
+	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GeboChatResponse response,
+			GUserChatContext context, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String pipelineCode, boolean streaming) throws ChatPipelineException, IOException, LLMConfigException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
@@ -82,7 +82,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			throw new ChatPipelineException(msg, e);
 		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), resources, streaming);
+				chatModel.getContextLength(), resources, response, context, streaming);
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
 			if (data.getEnvironmentContributions() != null) {
@@ -97,8 +97,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			add(runtimeData, routeData.getProcessedOutput());
 			if (routeData.getProcessedOutput() != null
 					&& routeData.getProcessedOutput().getEnvironmentContributions() != null) {
-				runtimeData.getSharedEnvironment()
-						.putAll(routeData.getProcessedOutput().getEnvironmentContributions());
+				runtimeData.getSharedEnvironment().putAll(routeData.getProcessedOutput().getEnvironmentContributions());
 			}
 			runtimeData.getRoutingDecisions().add(routeData);
 		} else
@@ -135,8 +134,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException {
-		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
-				pipelineCode, true);
+		GeboChatResponse response = createResponse(request, context);
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, context, chatModel,
+				serviceModel, pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IStreamingOutputChatPipelineService streamingOutputService) {
 			Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(runtimeData));
@@ -160,14 +160,22 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	public GeboChatResponse execute(GeboChatRequest request, GUserChatContext context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException {
-		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, context, chatModel, serviceModel,
-				pipelineCode, false);
+		GeboChatResponse response = createResponse(request, context);
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, context, chatModel,
+				serviceModel, pipelineCode, false);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IOutputChatPipelineService outputService) {
 			return outputService.execute(runtimeData, chatModel, serviceModel);
 		}
 		throw new ChatPipelineException(
 				"The step service " + nextStep.getStepId() + " is not an IOutputChatPipelineService");
+	}
+
+	protected GeboChatResponse createResponse(GeboChatRequest request, GUserChatContext context) {
+		GeboChatResponse response = new GeboChatResponse();
+		response.setQuery(request.getQuery());
+		response.setUserChatContextCode(context.getCode());
+		return response;
 	}
 
 	private IChatPipelineStepService getStep(String id) throws ChatPipelineException {

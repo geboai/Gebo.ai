@@ -17,6 +17,7 @@ public class DocumentChunk {
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 	private Long tokensSize = null, bytesSize = null;
 	private Long chunkPosition = null;
+	private Long chunksCount = null;
 	private String chunkingSessionId = null;
 
 	public static DocumentChunk ofText(String originalDocumentCode, String id, String mimeType, String text,
@@ -40,6 +41,13 @@ public class DocumentChunk {
 		this.chunkPosition = chunkPosition;
 		if (metaData != null && chunkPosition != null) {
 			metaData.put(DocumentMetaInfos.GEBO_CHUNK_POSITION, chunkPosition);
+		}
+	}
+
+	public void setChunksCount(Long chunksCount) {
+		this.chunksCount = chunksCount;
+		if (metaData != null && chunksCount != null) {
+			metaData.put(DocumentMetaInfos.GEBO_CHUNKS_COUNT, chunksCount);
 		}
 	}
 }

@@ -38,7 +38,7 @@ public class ChatFullSessionState implements ITokensCountable {
 	private TokensContainer<CSSReferredContentList<GDocumentReference>> retrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
 
 	public int getTokensSize() {
-		return tokensSize(chatHistory, historicallyRetrievedDocuments, historicallyUploadedDocuments,
+		return ITokensCountable.tokensSize(chatHistory, historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				latestRequestsUploadedDocuments, latestRequestsChatWithDocuments, llmGeneratedDocuments,
 				retrievedDocuments, currentRequest);
 	}

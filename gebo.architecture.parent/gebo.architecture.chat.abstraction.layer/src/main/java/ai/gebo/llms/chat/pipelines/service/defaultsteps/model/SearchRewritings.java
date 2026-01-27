@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.model.defaultrouting;
+package ai.gebo.llms.chat.pipelines.service.defaultsteps.model;
 
 import java.util.ArrayList;
 import java.util.List;

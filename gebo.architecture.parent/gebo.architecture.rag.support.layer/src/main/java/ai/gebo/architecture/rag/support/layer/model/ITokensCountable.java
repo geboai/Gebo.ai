@@ -9,7 +9,7 @@ public interface ITokensCountable {
 
 	public int getTokensSize();
 
-	public default int tokensSize(ITokensCountable... data) {
+	public static int tokensSize(ITokensCountable... data) {
 		int toks = 0;
 		if (data != null) {
 			for (ITokensCountable iTokensCountable : data) {
@@ -21,7 +21,7 @@ public interface ITokensCountable {
 		return toks;
 	}
 
-	public default int tokensSize(List<? extends ITokensCountable> data) {
+	public static int tokensSize(List<? extends ITokensCountable> data) {
 		int toks = 0;
 		if (data != null) {
 			for (ITokensCountable iTokensCountable : data) {
@@ -31,5 +31,18 @@ public interface ITokensCountable {
 			}
 		}
 		return toks;
+	}
+
+	public static int stringsTokensSize(String... contents) {
+		if (contents != null)
+			return 0;
+		int totalTokens = 0;
+		for (int i = 0; i < contents.length; i++) {
+			String content = contents[i];
+			if (content != null) {
+				totalTokens += tokensEstimator.estimate(content);
+			}
+		}
+		return totalTokens;
 	}
 }

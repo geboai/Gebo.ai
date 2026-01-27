@@ -27,7 +27,6 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,6 +38,7 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFun
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -53,6 +53,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -170,13 +171,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		String responseText = callResponseObject.getText();
 		response.setQueryResponse(responseText);
 		response.setCalledFunctions(context.getCalledFunctions());
-		response.setDocumentsRef(createDocrefs(chatRequestContext.getDocuments()));
+		AIDocumentsSet docs = request.getDocuments();
+		response.setDocumentsRef(docs != null ? GResponseDocumentRef.from(docs) : List.of());
 		return response;
-	}
-
-	private List<GResponseDocumentRef> createDocrefs(List<Document> documents) {
-
-		return null;
 	}
 
 	/**
@@ -534,4 +531,27 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return this.knowledgeBaseSecurityService.allVisibleKnowledgebases();
 	}
 
+	@Override
+	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
+			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException {
+		KBContext kbcontext = new KBContext();
+		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
+				response, requestResources.createChatRequestContext());
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
+			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException {
+		KBContext kbcontext = new KBContext();
+		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
+		int tokensLength = requestResources.getTokensSize();
+		final int contextWindow = chatModel.getContextLength();
+		boolean shrink = tokensLength > contextWindow / 2;
+		int targetSize = shrink ? contextWindow / 3 : 0;
+		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
+				response, userChatContext, requestResources.createChatRequestContext(), shrink, targetSize);
+	}
 }

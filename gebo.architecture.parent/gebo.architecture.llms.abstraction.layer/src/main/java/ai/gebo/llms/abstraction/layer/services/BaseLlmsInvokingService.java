@@ -47,7 +47,7 @@ public class BaseLlmsInvokingService {
 	public static final String USER_QUESTION_TEMPLATE_VARIABLE = "question";
 	public static final String FORMAT_TEMPLATE_VARIABLE = "format";
 	private static final ObjectMapper objectMapper = new ObjectMapper();
-	private static final JTokkitTokenCountEstimator tokensEstimation = new JTokkitTokenCountEstimator();
+	protected static final JTokkitTokenCountEstimator tokensEstimation = new JTokkitTokenCountEstimator();
 
 	protected static final <T> Supplier<T> stream2supplier(Stream<T> stream) {
 		if (stream == null)
@@ -518,7 +518,7 @@ public class BaseLlmsInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
 							question, consolidated, additionalParams);
-					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow,additionalParams);
+					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
 				}
 			}
 		} while (currentInput != null);
@@ -697,6 +697,19 @@ public class BaseLlmsInvokingService {
 
 	protected <T> Stream<T> readCSVLines(String content, int nColumns, Function<String, T> reader) {
 		return filterCSVLines(content, nColumns).map(reader).filter(y -> y != null);
+	}
+
+	protected static int tokensLength(String... contents) {
+		if (contents != null)
+			return 0;
+		int totalTokens = 0;
+		for (int i = 0; i < contents.length; i++) {
+			String content = contents[i];
+			if (content != null) {
+				totalTokens += tokensEstimation.estimate(content);
+			}
+		}
+		return totalTokens;
 	}
 
 }

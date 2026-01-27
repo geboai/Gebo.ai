@@ -23,7 +23,7 @@ public class ShrinkedChatSessionState implements ITokensCountable {
 
 	@Override
 	public int getTokensSize() {
-		return tokensSize(relevantLlmGeneratedDocuments, relevantRetrievedDocuments, relevantUploadedDocuments,
+		return ITokensCountable.tokensSize(relevantLlmGeneratedDocuments, relevantRetrievedDocuments, relevantUploadedDocuments,
 				consolidatedInteractions);
 	}
 

@@ -31,34 +31,34 @@ import lombok.Data;
 public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 
 	/** Unique identifier for each chat request instance */
-	protected String id = UUID.randomUUID().toString();
+	private String id = UUID.randomUUID().toString();
 
 	/** Code representing the user's chat context */
-	protected String userChatContextCode = null;
+	private String userChatContextCode = null;
 
 	/** Code representing the chat profile used for the request */
-	protected String chatProfileCode = null;
+	private String chatProfileCode = null;
 
 	/** Code representing the chat model being used */
-	protected String chatModelCode = null;
+	private String chatModelCode = null;
 
 	/** Flag to determine whether responses should be streamed */
-	protected boolean streamResponse = false;
+	private boolean streamResponse = false;
 
 	/** The chat query, parameterized by RequestType */
-	protected RequestType query = null;
+	private RequestType query = null;
 
 	/** Custom configuration for RAG (Retrieval-Augmented Generation) requests */
-	protected GeboRagRequestCustomConfig customRagConfig = null;
+	private GeboRagRequestCustomConfig customRagConfig = null;
 
 	/** List of knowledge bases selected for the request */
 	private List<String> choosedKnowledgeBases = null;
 	private String chatPipelineProcessId = null;
 	/** List of documents that are forcibly requested */
-	protected List<String> forcedRequestDocuments = new ArrayList<String>();
+	private List<String> forcedRequestDocuments = new ArrayList<String>();
 	/** documents retrieved on rag or "chat with document" **/
-	protected AIDocumentsSet documents = null;
-	protected List<UserUploadedContent> userUploadedContents = new ArrayList<>();
-	protected List<String> deepSearchDataSources = null;
+	private AIDocumentsSet documents = null;
+	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
+	private List<String> deepSearchDataSources = null;
 
 }
