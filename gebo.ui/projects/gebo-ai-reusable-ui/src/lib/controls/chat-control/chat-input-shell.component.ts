@@ -144,6 +144,8 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
   }
   switchToStreamingEventsLoop(d: boolean):void {
       this.deepSearchComponent.switchToStreamingEventsLoop(d);
+      this.nextRequestMode=d===true?"deep-search":"standard-chat";
+      this.loadingChange.emit(true);
   }
   onNewSessionCreatedOnUploadInternal(evt: any) {
     this.newSessionCreatedOnUpload.emit(evt);
