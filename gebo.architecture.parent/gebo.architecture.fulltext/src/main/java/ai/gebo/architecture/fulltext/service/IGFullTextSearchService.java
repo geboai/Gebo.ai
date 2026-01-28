@@ -10,4 +10,5 @@ public interface IGFullTextSearchService {
 			throws FullTextException;
 
 	public List<FullTextChunkSearchHit> search(String q, int topK, MetaDataFilter filter) throws FullTextException;
+	
 }

@@ -3,19 +3,21 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.model.base.GBaseObject;
 
- final class RoutingPromptUtil {
+final class RoutingPromptUtil {
 
 	private static String documentRendering(AIDocumentReferenceItem doc, int maxTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
@@ -51,7 +53,7 @@ import ai.gebo.model.base.GBaseObject;
 			String text = fragment.getDocumentContent();
 			int tokensCount = fragment.getTokensSize();
 			if (tokensCount == 0 && text != null) {
-				tokensCount =  tokensLength(text);
+				tokensCount = tokensLength(text);
 			}
 			consideredSegments++;
 			if ((totalTokens + tokensCount) <= maxTokenBudget) {
@@ -77,7 +79,9 @@ import ai.gebo.model.base.GBaseObject;
 
 	static String documentsPromptPart(LLMChatRequestResources requestResources, int documentsTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
-		List<AIDocumentReferenceItem> docs = new ArrayList<AIDocumentReferenceItem>();
+
+		AIDocumentsSet lastDocs = addUntillBudgetLatestDocuments(requestResources, documentsTokenBudget);
+		List<AIDocumentReferenceItem> docs = lastDocs.getDocumentItems();
 		if (!docs.isEmpty()) {
 			buffer.append(DOCUMENTS_CATALOG);
 			buffer.append(NEWLINE);
@@ -93,6 +97,27 @@ import ai.gebo.model.base.GBaseObject;
 			buffer.append(NEWLINE);
 		}
 		return buffer.toString();
+	}
+
+	private static AIDocumentsSet addUntillBudgetLatestDocuments(LLMChatRequestResources requestResources,
+			int documentsTokenBudget) {
+		AtomicInteger tokensBudget = new AtomicInteger(documentsTokenBudget);
+		AIDocumentsSet result = new AIDocumentsSet();
+		result = tryAdd(result, requestResources.getRetrievedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getLatestRequestsChatWithDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getLatestRequestsUploadedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getHistoricallyRetrievedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getHistoricallyUploadedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getLlmGeneratedDocuments(), tokensBudget);
+		return result;
+	}
+
+	private static AIDocumentsSet tryAdd(AIDocumentsSet ds, AIDocumentsSet toBeAdd, AtomicInteger tokensBudget) {
+		if (toBeAdd != null && tokensBudget.get() >= toBeAdd.getTokensSize()) {
+			ds = AIDocumentsSet.join(ds, toBeAdd);
+			tokensBudget.addAndGet(-1 * toBeAdd.getTokensSize());
+		}
+		return ds;
 	}
 
 	private static String fullDocumentRendering(List<AIDocumentReferenceItem> docs) {
@@ -120,9 +145,11 @@ import ai.gebo.model.base.GBaseObject;
 		}
 		return buffer.toString();
 	}
-	private static int tokensLength(String ...values) {
+
+	private static int tokensLength(String... values) {
 		return ITokensCountable.stringsTokensSize(values);
 	}
+
 	private static final String DOC_BEGIN = "DOC_BEGIN";
 	private static final String DOC_END = "DOC_END";
 	private static final String DOCUMENT_CODE = "document-code: ";
@@ -134,12 +161,13 @@ import ai.gebo.model.base.GBaseObject;
 	private static final String NEWLINE = "\r\n";
 	private static final String CONTENT_BEGIN = "CONTENT_BEGIN";
 	private static final String CONTENT_END = "CONTENT_END";
+
 	static String toolsListPromptPart(List<ToolCategoriesTree> tools) {
 		StringBuffer buffer = new StringBuffer();
 		if (tools != null && !tools.isEmpty()) {
 			buffer.append(TOOLS_CATALOG);
 			buffer.append(NEWLINE);
-	
+
 			for (ToolCategoriesTree tree : tools) {
 				ToolsCategory category = tree.getCategory();
 				for (ToolReference tool : tree.getToolsReference()) {
@@ -167,14 +195,16 @@ import ai.gebo.model.base.GBaseObject;
 		}
 		return buffer.toString();
 	}
+
 	private static final String TOOL_BEGIN = "TOOL_BEGIN";
 	private static final String TOOL_CATEGORY_DESCRIPTION = "tool-category-description:";
 	private static final String TOOL_CODE = "code:";
 	private static final String TOOL_DESCRIPTION = "description:";
 	private static final String TOOL_END = "TOOL_END";
 	private static final String TOOLS_CATALOG = "TOOLS_CATALOG";
-	
+
 	private static final String END_TOOLS_CATALOG = "END_TOOLS_CATALOG";
+
 	static String latestInteractionsPromptPart(List<CSSSimplefiedInteraction> lastInteractions) {
 		StringBuffer buffer = new StringBuffer();
 		if (lastInteractions != null) {
@@ -194,8 +224,10 @@ import ai.gebo.model.base.GBaseObject;
 		}
 		return buffer.toString();
 	}
+
 	private static final String ASSISTANT = "ASSISTANT: ";
 	private static final String USER = "USER: ";
+
 	static String dataSourcesListPromptPart(List<GBaseObject> dataSources) {
 		StringBuffer buffer = new StringBuffer();
 		if (dataSources != null && !dataSources.isEmpty()) {
@@ -214,10 +246,10 @@ import ai.gebo.model.base.GBaseObject;
 		}
 		return buffer.toString();
 	}
+
 	private static final String CODE = "- code: ";
 	private static final String DESCRIPTION = "  description:";
 	private static final String DEEP_SEARCH_DATA_SOURCES_CATALOG = "DEEP_SEARCH_DATA_SOURCES_CATALOG";
 	private static final String END_DEEP_SEARCH_DATA_SOURCES_CATALOG = "END_DEEP_SEARCH_DATA_SOURCES_CATALOG";
-	
 
 }

@@ -20,6 +20,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements IStreamingOutputChatPipelineService {
+	private static final String TOOLS_LIST = "toolsList";
 	private final IGChatService chatService;
 	private final ChatPipelinesConfiguration configuration;
 	public static final String DEFAULT_TOOL_USING_STREAMING = "default-tool-using-streaming";
@@ -42,7 +43,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 		List<String> toolCallsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedToolsCallList(runtimeData);
 		PromptTemplate promptTemplate = new PromptTemplate(
 				configuration.getDefaultPipelineToolCallOutputPrompt().getPrompt());
-		promptTemplate.add("toolsList", toolCallsList != null ? toolCallsList : List.of());
+		promptTemplate.add(TOOLS_LIST, toolCallsList != null ? toolCallsList : List.of());
 		try {
 			return chatService.streamChat(promptTemplate.render(), runtimeData.getRequestResources(),
 					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);

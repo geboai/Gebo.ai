@@ -197,4 +197,27 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 		return fromMap(data);
 	}
 
+	public void removeAIDocumentReferenceByCode(String code) {
+		int index = 0;
+		boolean found = false;
+		for (AIDocumentReferenceItem aiDocumentReferenceItem : documentItems) {
+			if (found = (aiDocumentReferenceItem.getCode().equals(code))) {
+				break;
+			}
+			index++;
+		}
+		if (found) {
+			documentItems.remove(index);
+		}
+	}
+
+	public static void removeAIDocumentReferenceByCode(String code, AIDocumentsSet... set) {
+		if (set != null) {
+			for (AIDocumentsSet aiDocumentsSet : set) {
+				if (aiDocumentsSet != null) {
+					aiDocumentsSet.removeAIDocumentReferenceByCode(code);
+				}
+			}
+		}
+	}
 }

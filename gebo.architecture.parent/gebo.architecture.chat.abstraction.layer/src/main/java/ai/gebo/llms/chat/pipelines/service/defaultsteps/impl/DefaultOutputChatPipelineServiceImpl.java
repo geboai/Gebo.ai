@@ -2,9 +2,14 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
+import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IOutputChatPipelineService;
@@ -13,11 +18,16 @@ import ai.gebo.llms.chat.pipelines.service.IOutputChatPipelineService;
 public class DefaultOutputChatPipelineServiceImpl extends BaseOutputChatPipelineService
 		implements IOutputChatPipelineService {
 
+	public DefaultOutputChatPipelineServiceImpl(IGAIDocumentsCacheService documentsCacheService,
+			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
+			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo) {
+		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo);
+		
+	    }
+
 	public static final String DEFAULT_OUTPUT_STEP = "default-output-step";
 
-	public DefaultOutputChatPipelineServiceImpl() {
-		// TODO Auto-generated constructor stub
-	}
+	
 
 	@Override
 	public StepExecutorType getExecutorType() {

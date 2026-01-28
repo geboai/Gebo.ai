@@ -28,6 +28,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.repository.RagDocumentCacheItemRepository;
+import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
@@ -50,7 +51,7 @@ import lombok.AllArgsConstructor;
  */
 @Service
 @AllArgsConstructor
-public class AIDocumentsCacheService {
+public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 
 	// Inject dependencies
 	final IGPersistentObjectManager persistentObject;

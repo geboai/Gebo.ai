@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -87,9 +89,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public List<Document> getDocuments() {
 
-			return AIDocumentsSet.join(historicallyRetrievedDocuments, historicallyUploadedDocuments,
-					llmGeneratedDocuments, latestRequestsChatWithDocuments, latestRequestsUploadedDocuments)
-					.aiDocumentsList();
+			return getAllDocuments().aiDocumentsList();
 		}
 
 		@Override
@@ -112,5 +112,18 @@ public class LLMChatRequestResources implements ITokensCountable {
 	public AIDocumentsSet getAllDocuments() {
 		return AIDocumentsSet.join(latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
 				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
+	}
+
+	public AIDocumentReferenceItem findAIDocumentReferenceByCode(String docId) {
+		AIDocumentsSet allDocs = getAllDocuments();
+		Optional<AIDocumentReferenceItem> optdoc = allDocs.getDocumentItems().stream()
+				.filter(x -> x.getCode().equals(docId)).findFirst();
+		return optdoc.isPresent() ? optdoc.get() : null;
+	}
+
+	public void removeAIDocumentReferenceByCode(String docId) {
+		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, latestRequestsChatWithDocuments, retrievedDocuments,
+				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
+				llmGeneratedDocuments);
 	}
 }
