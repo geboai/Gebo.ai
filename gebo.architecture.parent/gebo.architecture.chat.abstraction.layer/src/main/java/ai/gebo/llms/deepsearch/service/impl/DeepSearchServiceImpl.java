@@ -615,7 +615,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				: DeepSearchVariant.SINGLE_THREAD;
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getLastRequest().getId());
-		deepSearchRequest.setKnowledgeBases(request.getLastRequest().getChoosedKnowledgeBases());
+		deepSearchRequest.setKnowledgeBases(createKnowledgeBasesList(request, userChatContext));
 		deepSearchRequest.setQuery(request.getLastRequest().getQuery());
 		deepSearchRequest.setUserChatContextCode(userChatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
@@ -633,6 +633,27 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			break;
 		}
 		return manageTrailingChatSessionEvents(out, request.getLastRequest(), chatResponse, userChatContext);
+	}
+
+	private List<String> createKnowledgeBasesList(LLMChatRequestResources request, GUserChatContext userChatContext) {
+		List<GKnowledgeBase> visibles = List.of();
+		if (userChatContext.getChatProfileCode() != null) {
+			Optional<GChatProfileConfiguration> chatProfileOpt = chatProfilesRepository
+					.findById(userChatContext.getChatProfileCode());
+
+			if (chatProfileOpt.isPresent()) {
+				if (chatProfileOpt.get().getUserChoosesKnowledgeBases() != null
+						&& chatProfileOpt.get().getUserChoosesKnowledgeBases()) {
+					visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
+				} else {
+					List<String> kbList = chatProfileOpt.get().getKnowledgeBaseCodes();
+					if (kbList != null && !kbList.isEmpty()) {
+						visibles = knowledgeBaseVisibilityService.visiblesAndChildKnowledgebases(kbList);
+					}
+				}
+			}
+		}
+		return visibles.stream().map(x -> x.getCode()).toList();
 	}
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
