@@ -34,6 +34,7 @@ import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { GeboAIDeepSearchComponent } from "../deep-search-control/deep-search.component";
+import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
@@ -230,7 +231,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     @Output() addedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
-    @ViewChild(GeboAIDeepSearchComponent) deepSearchComponent!: GeboAIDeepSearchComponent;
+    @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
     /**
      * Configuration options for Mermaid diagrams
      */
@@ -633,7 +634,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     recvd = msg as IGeboChatMessage;
                 }
                 if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                    this.deepSearchComponent.onMessage(recvd);
+                    this.chatInputShell.onDeepSearchMessage(recvd);
                 }
                 if (recvd.contentObjectType === "GUserMessage") {
                     const message = recvd.content as ToastMessageOptions;
@@ -646,8 +647,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
                     if (pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                        this.deepSearchComponent.switchToStreamingEventsLoop(true);
-                    }
+                        this.chatInputShell.switchToStreamingEventsLoop(true);
+                    } 
                 }
                 if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
@@ -729,8 +730,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
             if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                this.deepSearchComponent.onError(error);
-            }
+                this.chatInputShell.onDeepSearchError(error);
+            } 
         }
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;

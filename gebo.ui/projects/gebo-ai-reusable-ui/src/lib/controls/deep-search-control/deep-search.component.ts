@@ -107,7 +107,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected get isDisplayingDeepSearchProcess(): boolean {
         return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
     }
-    public switchToStreamingEventsLoop(streaming:true):void {
+    public switchToStreamingEventsLoop(streaming:boolean):void {
         this.clearEventsDisplay();
         this.streamingResponse=streaming;
     }

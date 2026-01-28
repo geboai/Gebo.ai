@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
 import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
 import { MenuItem } from 'primeng/api';
+import { IGeboChatMessage } from '@Gebo.ai/reusable-ui';
+import { GeboAIDeepSearchComponent } from '../deep-search-control/deep-search.component';
 
 @Component({
   selector: 'gebo-ai-chat-input-shell',
@@ -12,6 +14,7 @@ import { MenuItem } from 'primeng/api';
   standalone: false
 })
 export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
+ 
 
   @Input() interactions: any[] | null = null;
   @Input() formGroup!: FormGroup;
@@ -41,6 +44,7 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
   @Output() messageSend = new EventEmitter<void>();
   @Output() deepSearchChatRequest: EventEmitter<GeboChatRequest> = new EventEmitter();
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
+  @ViewChild(GeboAIDeepSearchComponent) deepSearchComponent!:GeboAIDeepSearchComponent;
   protected addBehaviorsMenu: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -132,7 +136,15 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
       this.messageSubmit.emit();
     }
   }
-
+ onDeepSearchError(error: any) {
+      this.deepSearchComponent.onError(error);
+  }
+  onDeepSearchMessage(recvd: IGeboChatMessage) {
+      this.deepSearchComponent.onMessage(recvd);
+  }
+  switchToStreamingEventsLoop(d: boolean):void {
+      this.deepSearchComponent.switchToStreamingEventsLoop(d);
+  }
   onNewSessionCreatedOnUploadInternal(evt: any) {
     this.newSessionCreatedOnUpload.emit(evt);
   }
