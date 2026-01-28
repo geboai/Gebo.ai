@@ -87,7 +87,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		// putting a sintetic routing decision for the first 2 steps to mantain the
 		// routing coherency
 		runtimeData.getRoutingDecisions()
-				.add(new RoutingDecision(List.of(config.getStepInputId(), config.getStepRouterId()), null));
+				.add(new RoutingDecision(List.of(config.getStepInputId(), config.getStepRouterId()), null, null));
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, chatModel, serviceModel);
 
@@ -100,6 +100,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		if (routerService instanceof IRoutingChatPipelineStepService routing) {
 			ai.gebo.llms.chat.pipelines.model.RoutingDecision routeData = routing.execute(runtimeData, chatModel,
 					serviceModel);
+			if (runtimeData.getChatResponse() != null) {
+				runtimeData.getChatResponse().setPipelineRouterDecisionCode(routeData.getPipelineRouterDecisionCode());
+			}
 			add(runtimeData, routeData.getProcessedOutput());
 			if (routeData.getProcessedOutput() != null
 					&& routeData.getProcessedOutput().getEnvironmentContributions() != null) {
@@ -114,6 +117,10 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			if (nextService.getStepType() != IChatPipelineStepService.StepType.OUTPUT) {
 				if (nextService instanceof IRoutingChatPipelineStepService router) {
 					RoutingDecision routeData = router.execute(runtimeData, chatModel, serviceModel);
+					if (runtimeData.getChatResponse() != null) {
+						runtimeData.getChatResponse()
+								.setPipelineRouterDecisionCode(routeData.getPipelineRouterDecisionCode());
+					}
 					add(runtimeData, routeData.getProcessedOutput());
 					if (routeData.getProcessedOutput() != null
 							&& routeData.getProcessedOutput().getEnvironmentContributions() != null) {
@@ -145,16 +152,19 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				serviceModel, pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IStreamingOutputChatPipelineService streamingOutputService) {
-			Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(runtimeData));
+			Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(runtimeData, response));
 			Flux<GeboChatMessageEnvelope> out = streamingOutputService.execute(runtimeData, chatModel, serviceModel);
 			return Flux.concat(first, out);
 		}
 		throw new ChatPipelineException("The step service " + nextStep.getStepId() + " is not a streaming one");
 	}
 
-	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData) {
+	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData,
+			GeboChatResponse response) {
 		PipelineRoutingInfosMessageEnvelope data = new PipelineRoutingInfosMessageEnvelope();
-		data.setContent(new PipelineRoutingInfos());
+		PipelineRoutingInfos content = new PipelineRoutingInfos();
+		content.setPipelineRouterDecisionCode(response.getPipelineRouterDecisionCode());
+		data.setContent(content);
 		runtimeData.getRoutingDecisions().forEach(x -> {
 			x.getFutureRoute().forEach(stepId -> {
 				data.getContent().getStepIds().add(stepId);

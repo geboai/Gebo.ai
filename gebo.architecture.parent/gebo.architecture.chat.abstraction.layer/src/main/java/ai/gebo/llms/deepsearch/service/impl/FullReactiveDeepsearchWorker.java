@@ -142,11 +142,18 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 	}
 
 	private Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearchNextStep(DeepSearchRequest request,
-			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
-			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels) {
-		AIDocumentsSet consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
-				embeddingModels);
+			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
+			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
+			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
+			List<IGConfigurableEmbeddingModel> embeddingModels) {
+		AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
+		if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+			AIDocumentsSet searchResult = getSearchResults(request, configuration, userInfos, embeddingModels);
+			consolidatedDaoResult = AIDocumentsSet.join(searchResult, consolidatedDaoResult);
+		}
+		if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
+			consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
+		}
 		final String analisysPrompt = configuration.getAnalisysPrompt();
 
 		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
@@ -226,8 +233,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		return Flux.concat(body, trail);
 	}
 
-	private List<IGReactiveDeepSearchDataSourceService> filterChoosed(List<IGReactiveDeepSearchDataSourceService> handlers,
-			DeepSearchRequest request) {
+	private List<IGReactiveDeepSearchDataSourceService> filterChoosed(
+			List<IGReactiveDeepSearchDataSourceService> handlers, DeepSearchRequest request) {
 		if (request.getDeepSearchDataSources() == null)
 			return handlers;
 		if (request.getDeepSearchDataSources().isEmpty())
@@ -235,7 +242,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
 	}
 
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request,
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, AIDocumentsSet sessionDocuments,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			Scheduler deepSearchScheduler, String chunkingSessionId) throws LLMConfigException {
@@ -308,11 +315,12 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Actual phase:" + state.getPhase());
 				}
-				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+				if ((request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty())
+						|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 					Flux<AbstractDeepSearchEvent> nextStepValue = knowledgeBaseDeepSearchNextStep(request,
-							dataSourcesResults, history, state, configuration, userInfos, chatModel, chunkingSessionId,
-							embeddingModels);
+							sessionDocuments, dataSourcesResults, history, state, configuration, userInfos, chatModel,
+							chunkingSessionId, embeddingModels);
 					if (nextStepValue == null) {
 						boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 						String consolidatedResult = null;
@@ -513,8 +521,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 						request.getQuery(), request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
 				AIDocumentsSet graphragDocumentsResult = graphRagSearchService
 						.toRagDocumentsCachedDaoResult(graphRagResult);
-				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult,
-						graphragDocumentsResult);
+				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult, graphragDocumentsResult);
 			} catch (LLMConfigException e) {
 				LOGGER.error("Error calling the graphrag logic", e);
 			}
@@ -588,8 +595,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 						return false;
 					}
 				});
-		List<IGReactiveDeepSearchDataSourceService> dynamicHandlers = this.dataSourcesProvider.getDynamicDeepSearchServices()
-				.stream().filter(x -> {
+		List<IGReactiveDeepSearchDataSourceService> dynamicHandlers = this.dataSourcesProvider
+				.getDynamicDeepSearchServices().stream().filter(x -> {
 					try {
 						return x.isEnabled(fChatModel, configuration, null);
 					} catch (Throwable e) {

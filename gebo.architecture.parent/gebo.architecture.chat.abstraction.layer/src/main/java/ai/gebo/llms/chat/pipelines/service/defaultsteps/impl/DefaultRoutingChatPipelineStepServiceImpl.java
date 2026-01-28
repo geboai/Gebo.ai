@@ -77,7 +77,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				&& runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId() != null) {
 			rd = new RoutingDecision(
 					List.of(runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId()),
-					IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP));
+					IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP),
+					runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId());
 
 		} else {
 			try {
@@ -127,12 +128,17 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 						return getEnvironmentContribution(llmRoutingDecision, RespondingWith.PURE_LLM_RESPONSE);
 					}
 				};
-				rd = new RoutingDecision(routes, routingEntry);
+				RespondingWith routingDecisionCode = llmRoutingDecision != null
+						&& llmRoutingDecision.getResponseRoutingDecision() != null
+								? llmRoutingDecision.getResponseRoutingDecision()
+								: RespondingWith.PURE_LLM_RESPONSE;
+				rd = new RoutingDecision(routes, routingEntry, routingDecisionCode.name());
 			} catch (Throwable th) {
 				LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
 				rd = new RoutingDecision(
 						List.of(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT),
-						IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP));
+						IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP),
+						RespondingWith.PURE_LLM_RESPONSE.name());
 			}
 		}
 		return rd;

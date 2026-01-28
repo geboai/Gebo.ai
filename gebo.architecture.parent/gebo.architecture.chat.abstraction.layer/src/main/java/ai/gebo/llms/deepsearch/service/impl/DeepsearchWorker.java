@@ -222,9 +222,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
 	}
 
-	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
-			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
-			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel)
+	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, AIDocumentsSet sessionDocuments,
+			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
+			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel)
 			throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....)");
@@ -305,13 +305,23 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Actual phase:" + state.getPhase());
 				}
-				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
-					if (state.getDocumentSearchResults() == null) {
+				if ((request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty())
+						|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
+					if (state.getDocumentSearchResults() == null
+							&& (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty())) {
 
-						AIDocumentsSet consolidatedDaoResult = getSearchResults(request, configuration,
-								userInfos, embeddingModels);
+						AIDocumentsSet consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
+								embeddingModels);
+						if (sessionDocuments != null) {
+							consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult, sessionDocuments);
+						}
 						state.setDocumentSearchResults(consolidatedDaoResult);
 						state.setFragmentsCount(consolidatedDaoResult.countFragments());
+					}
+					if (state.getDocumentSearchResults() == null
+							&& (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
+						state.setDocumentSearchResults(sessionDocuments);
+						state.setFragmentsCount(sessionDocuments.countFragments());
 					}
 
 					AbstractDeepSearchEvent nextStepValue = knowledgeBaseDeepSearchNextStep(request, dataSourcesResults,
@@ -490,8 +500,7 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 						request.getQuery(), request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
 				AIDocumentsSet graphragDocumentsResult = graphRagSearchService
 						.toRagDocumentsCachedDaoResult(graphRagResult);
-				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult,
-						graphragDocumentsResult);
+				consolidatedDaoResult = AIDocumentsSet.join(consolidatedDaoResult, graphragDocumentsResult);
 			} catch (LLMConfigException e) {
 				LOGGER.error("Error calling the graphrag logic", e);
 			}

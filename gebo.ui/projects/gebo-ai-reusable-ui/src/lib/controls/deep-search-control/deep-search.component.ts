@@ -104,11 +104,14 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected get inEventsLoop(): boolean {
         return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
     }
-    protected get isDieplayingDeepSearchProcess(): boolean {
+    protected get isDisplayingDeepSearchProcess(): boolean {
         return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
     }
-
-    private onMessage(msg: IGeboChatMessage | string) {
+    public switchToStreamingEventsLoop(streaming:true):void {
+        this.clearEventsDisplay();
+        this.streamingResponse=streaming;
+    }
+    public onMessage(msg: IGeboChatMessage | string) {
         if (typeof msg === "string") {
 
         } else {
@@ -168,7 +171,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             }
         }
     }
-    onError(err: any) {
+    public onError(err: any) {
         this.streamingResponse = false;
         this.errorOccurredEvent.emit(err);
     }

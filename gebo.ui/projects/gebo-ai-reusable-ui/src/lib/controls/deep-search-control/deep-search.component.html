@@ -12,7 +12,7 @@
                      [style]="{ height: '10px' }"></p-progressbar>
     </div>
     <div class="deep-search__label">
-    <span *ngIf="inEventsLoop && !isDieplayingDeepSearchProcess" class="deep-search__label" id="DeepSearchProcessingSearch"
+    <span *ngIf="inEventsLoop && !isDisplayingDeepSearchProcess" class="deep-search__label" id="DeepSearchProcessingSearch"
             gebo-ai-text>Searching relevant informations</span>
         <span class="deep-search__label" *ngIf="analisysStep"><span id="DeepSearchProcessingFile" gebo-ai-text>Analized
                 file</span>&nbsp;
@@ -39,35 +39,16 @@
         <span class="deep-search__label" *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
             Consolidating the final report
         </span>
-        <!-- 
-    
-      <span *ngIf="!analisysStep && !deepSearchResponse"
-            class="deep-search__label-item"
-            id="DeepSearchProcessingSearch"
-            gebo-ai-text>Searching relevant informations</span>
-      <span class="deep-search__label-item"
-            *ngIf="analisysStep && completionPercent<100"><span id="DeepSearchProcessingFile"
-              gebo-ai-text>Analized
-          file</span>
-        <span>{{analisysStep?.documentRef?.name}}</span></span>
-      <span class="deep-search__label-item"
-            *ngIf="completionPercent===100"
-            id="DeepSearchingConsolidating"
-            gebo-ai-text>
-        Consolidating the final report
-      </span> -->
+        
     </div>
   </div>
 
-  <!-- 
-        <p-blockUI [target]="deepSearchUI" [blocked]="loading" ></p-blockUI>
-        -->
 
 </p-panel>
   }
 
 <p-dialog [maximizable]="true" [visible]="showChooseDataSourceDialog" [modal]="true"
-    [style]="{width:'30%',height:'30%'}" [closable]="true" [showHeader]="true"
+    [style]="{width:'50%',height:'50%'}" [closable]="true" [showHeader]="true"
     (visibleChange)="skipDeepSearchOnDataSourceChoice()" header="Choose Deep search sources">
     <div class="grid" [formGroup]="chooseDeepSearchDataSourcesFormGroup">
         <div class="col-12"><b id="ChooseAtLeastMessage" gebo-ai-text>Choose at least one of the following options</b>

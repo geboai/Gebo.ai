@@ -36,18 +36,19 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private String usedChatModelProvider = null; // Provider of the chat model used
 	private ResponseType queryResponse = null; // The response to the chat query
 	private GeboWorkingMemoryWindowOccupation windowOccupation = null; // Occupation details of the working memory
-																			// window
+																		// window
 	private String query = null; // The query string for which this response is generated
 	private List<String> thinkingOutputs = null;
 	private List<GUserMessage> backendMessages = new ArrayList<GUserMessage>(); // List of backend messages related to
-																					// the query
+																				// the query
 	private List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>(); // Forced document
-																										// references
+																									// references
 	private List<GResponseDocumentRef> documentsRef = new ArrayList<GResponseDocumentRef>(); // Document references
-	// List of functions called during the	 interaction
-	private List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>(); 
+	// List of functions called during the interaction
+	private List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>();
 	private ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
 	private List<LLMGeneratedResource> generatedResources = new ArrayList<>();
+	private String pipelineRouterDecisionCode = null;
 
 	/**
 	 * Default constructor for GeboTemplatedChatResponse.
@@ -73,6 +74,5 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 		documentsRef = r.documentsRef;
 		calledFunctions = r.calledFunctions;
 	}
-
 
 }

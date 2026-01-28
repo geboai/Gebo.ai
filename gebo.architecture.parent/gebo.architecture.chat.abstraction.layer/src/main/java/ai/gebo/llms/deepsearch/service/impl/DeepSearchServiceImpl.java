@@ -195,7 +195,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
-				flow = worker.streamDeepSearch(prep.request, new ArrayList<>(), new DeepSearchState(),
+				flow = worker.streamDeepSearch(prep.request, allDocuments, new ArrayList<>(), new DeepSearchState(),
 						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, deepSearchScheduler,
 						chunkSessionId);
 				if (flow != null) {
@@ -272,8 +272,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 						AbstractDeepSearchEvent step;
 						while (!cancelled.get()) {
 
-							step = worker.nextStep(request, history, state, configuration, userInfos, embeddingModels,
-									chatModel);
+							step = worker.nextStep(request, allDocuments, history, state, configuration, userInfos,
+									embeddingModels, chatModel);
 
 							if (step == null) {
 								sink.complete();
@@ -608,7 +608,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources) throws LLMConfigException {
+			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources)
+			throws LLMConfigException {
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()
 				: DeepSearchVariant.SINGLE_THREAD;
@@ -633,8 +634,6 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		}
 		return manageTrailingChatSessionEvents(out, request.getLastRequest(), chatResponse, userChatContext);
 	}
-
-	
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType) {
