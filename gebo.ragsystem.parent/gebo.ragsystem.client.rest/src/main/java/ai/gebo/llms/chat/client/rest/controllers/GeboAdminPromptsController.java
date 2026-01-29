@@ -9,14 +9,11 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import lombok.AllArgsConstructor;
