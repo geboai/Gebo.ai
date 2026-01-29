@@ -34,13 +34,13 @@ public interface ITokensCountable {
 	}
 
 	public static int stringsTokensSize(String... contents) {
-		if (contents != null)
-			return 0;
 		int totalTokens = 0;
-		for (int i = 0; i < contents.length; i++) {
-			String content = contents[i];
-			if (content != null) {
-				totalTokens += tokensEstimator.estimate(content);
+		if (contents != null) {
+			for (int i = 0; i < contents.length; i++) {
+				String content = contents[i];
+				if (content != null) {
+					totalTokens += tokensEstimator.estimate(content);
+				}
 			}
 		}
 		return totalTokens;

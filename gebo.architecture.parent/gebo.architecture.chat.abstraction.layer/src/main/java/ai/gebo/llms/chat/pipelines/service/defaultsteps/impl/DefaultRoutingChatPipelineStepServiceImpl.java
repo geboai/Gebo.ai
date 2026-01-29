@@ -96,7 +96,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				templateParams.put(TOOLS_LIST, toolsList);
 				int usedTokens = tokensLength(prompt, latestInteractions, deepSearchDataSources, toolsList,
 						runtimeData.getRequestResources().getLastRequest().getQuery());
-				int remainingContext = serviceModel.getContextLength() - usedTokens;
+				int remainingContext =(int) (((double) (serviceModel.getContextLength() - usedTokens))*0.8d);
 				final int documentsTokenBudget = Math.min(remainingContext,
 						this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 				String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
