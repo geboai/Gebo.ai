@@ -137,7 +137,7 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 			return existing.get();
 		
 		// Retrieve or create default prompt configuration
-		GPromptConfig prompt = promptConfigDao.defaultPrompt(true);
+		GPromptConfig prompt = promptConfigDao.defaultChatPrompt(true);
 		if (prompt == null)
 			throw new LLMConfigException("Default prompt is not configured in this system");
 		

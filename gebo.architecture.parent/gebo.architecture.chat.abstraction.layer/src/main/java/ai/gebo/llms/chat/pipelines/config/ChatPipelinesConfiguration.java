@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultInputChatPipelineStepServiceImpl;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultRoutingChatPipelineStepServiceImpl;
@@ -16,7 +17,11 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chatpipes")
 @Data
-public class ChatPipelinesConfiguration {
+public class ChatPipelinesConfiguration implements IGStaticPromptsProvider {
+	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
+	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
+	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
+	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
 	private static final String DEFAULT_PIPELINE = "default-pipeline";
 
 	public ChatPipelinesConfiguration() {
@@ -27,6 +32,7 @@ public class ChatPipelinesConfiguration {
 		defaultPipeline.setStepRouterId(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP);
 		this.pipelines.add(defaultPipeline);
 		this.defaultPipelineRoutingDecisionPrompt = new GPromptConfig();
+		this.defaultPipelineRoutingDecisionPrompt.setPromptUse(DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		this.defaultPipelineRoutingDecisionPrompt.setPrompt(
 				"You are a chat pipeline routing manager. Your task is to output ONLY a single JSON object (no markdown, no extra text).\r\n"
 						+ "\r\n" + "You must set \"responseRoutingDecision\" to exactly one of:\r\n"
@@ -56,6 +62,7 @@ public class ChatPipelinesConfiguration {
 						+ "- If deep search data sources is empty and you would otherwise choose DEEP_SEARCH_RESPONSE, choose RAG_LLM_RESPONSE instead unless tools can satisfy it.\r\n"
 						+ "- If tools list is empty you cannot choose TOOLS_USE_RESPONSE."
 						+ "  OUTPUT FORMAT:\r\n{format}\r\n");
+		this.defaultPipelineOutputPrompt.setPromptUse(DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
 		this.defaultPipelineOutputPrompt
 				.setPrompt("You are an advanced Large Language Model acting as a personal assistant.n\r\n" + "\r\n"
 						+ "        ### Core Identityn\r\n"
@@ -93,6 +100,7 @@ public class ChatPipelinesConfiguration {
 						+ "        - Include code blocks for technical outputs.n\r\n"
 						+ "        - End responses with a short actionable next step or summary when useful.n\r\n"
 						+ "        - Use the same language of user question");
+		this.defaultPipelineRagOutputPrompt.setPromptUse(DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 		this.defaultPipelineRagOutputPrompt.setPrompt(
 				"You are an advanced Large Language Model acting as a Personal AI Assistant with direct access to:n\r\n"
 						+ "        A Retrieve-Augmented Generation (RAG) system that provides relevant company documents, chunks, and metadata.n\r\n"
@@ -147,53 +155,38 @@ public class ChatPipelinesConfiguration {
 						+ "        **Additional Insights from Training Knowledge**  n\r\n"
 						+ "        ... explanation, context, comparison, or optimization tips ...\r\n"
 						+ "        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTION");
-		this.defaultPipelineToolCallOutputPrompt.setPrompt("You are the TOOLS-USE answering agent in a chat pipeline.\r\n"
-				+ "\r\n"
-				+ "Your job:\r\n"
-				+ "- Produce the final user-facing answer by invoking one or more tools when the routing decision is TOOLS_USE_RESPONSE.\r\n"
-				+ "- You MUST use  the tools listed in the list of allowed tools. Never invent tools.\r\n"
-				+ "- Do NOT reveal tool internal outputs verbatim unless they are meant to be shown to the user.\r\n"
-				+ "- Do NOT output routing metadata. Do NOT output JSON. Output ONLY the final user-facing answer.\r\n"
-				+ "\r\n"
-				+ "INPUTS\r\n"
-				+ "TOOLS_CATALOG (allowed tools):\r\n"
-				+ "{toolsList}\r\n"
-				+ "\r\n"
-				
-				+ "\r\n"
-				+ "TOOL INVOCATION POLICY\r\n"
-				+ "1) Decide which tool(s) to call.\r\n"
-				+ "   - If \"toolsToUse\" exists in routing decision, start from that list in the given order.\r\n"
-				+ "   - If \"toolsToUse\" is missing, infer the minimum necessary tools from the tools catalog.\r\n"
-				+ "   - Minimize number of tool calls: call the smallest set of tools that can answer the question.\r\n"
-				+ "\r\n"
-				+ "2) Validate inputs for each chosen tool.\r\n"
-				+ "   - Extract required inputs from the user question, latest interactions, and documents.\r\n"
-				+ "   - If a required input is missing but can be reasonably inferred, infer it.\r\n"
-				+ "   - If a required input is missing and cannot be inferred, ask ONE concise clarification question (only one).\r\n"
-				+ "\r\n"
-				+ "3) Call tools.\r\n"
-				+ "   - Call tools sequentially unless the catalog explicitly supports safe parallel usage.\r\n"
-				+ "   - After each tool result, update your understanding and decide whether another tool call is still needed.\r\n"
-				+ "   - Stop as soon as you have enough information.\r\n"
-				+ "\r\n"
-				+ "4) Compose the final answer.\r\n"
-				+ "   - Provide a direct, user-friendly answer.\r\n"
-				+ "   - If results include sources/records, summarize the key findings.\r\n"
-				+ "   - If uncertainty remains, clearly state what could not be verified and why.\r\n"
-				+ "   - If the question contains multiple sub-questions, answer them in the same order as asked.\r\n"
-				+ "\r\n"
-				+ "SAFETY & COMPLIANCE\r\n"
-				+ "- Respect the tools’ constraints and access boundaries.\r\n"
-				+ "- Never fabricate tool outputs. If a tool fails or returns nothing, say so and proceed with the best available information.\r\n"
-				+ "- If the user asks to do something disallowed (e.g., illegal, harmful, privacy-violating), refuse and offer a safe alternative.\r\n"
-				+ "\r\n"
-				+ "OUTPUT FORMAT\r\n"
-				+ "- Output ONLY the final user-facing response text.\r\n"
-				+ "- No routing tags, no tool call traces, no JSON, markdown code is allowed.\r\n"
-				+ "\r\n"
-				+ "BEGIN\r\n"
-				+ "");
+		this.defaultPipelineToolCallOutputPrompt.setPromptUse(DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT);
+		this.defaultPipelineToolCallOutputPrompt
+				.setPrompt("You are the TOOLS-USE answering agent in a chat pipeline.\r\n" + "\r\n" + "Your job:\r\n"
+						+ "- Produce the final user-facing answer by invoking one or more tools when the routing decision is TOOLS_USE_RESPONSE.\r\n"
+						+ "- You MUST use  the tools listed in the list of allowed tools. Never invent tools.\r\n"
+						+ "- Do NOT reveal tool internal outputs verbatim unless they are meant to be shown to the user.\r\n"
+						+ "- Do NOT output routing metadata. Do NOT output JSON. Output ONLY the final user-facing answer.\r\n"
+						+ "\r\n" + "INPUTS\r\n" + "TOOLS_CATALOG (allowed tools):\r\n" + "{toolsList}\r\n" + "\r\n"
+
+						+ "\r\n" + "TOOL INVOCATION POLICY\r\n" + "1) Decide which tool(s) to call.\r\n"
+						+ "   - If \"toolsToUse\" exists in routing decision, start from that list in the given order.\r\n"
+						+ "   - If \"toolsToUse\" is missing, infer the minimum necessary tools from the tools catalog.\r\n"
+						+ "   - Minimize number of tool calls: call the smallest set of tools that can answer the question.\r\n"
+						+ "\r\n" + "2) Validate inputs for each chosen tool.\r\n"
+						+ "   - Extract required inputs from the user question, latest interactions, and documents.\r\n"
+						+ "   - If a required input is missing but can be reasonably inferred, infer it.\r\n"
+						+ "   - If a required input is missing and cannot be inferred, ask ONE concise clarification question (only one).\r\n"
+						+ "\r\n" + "3) Call tools.\r\n"
+						+ "   - Call tools sequentially unless the catalog explicitly supports safe parallel usage.\r\n"
+						+ "   - After each tool result, update your understanding and decide whether another tool call is still needed.\r\n"
+						+ "   - Stop as soon as you have enough information.\r\n" + "\r\n"
+						+ "4) Compose the final answer.\r\n" + "   - Provide a direct, user-friendly answer.\r\n"
+						+ "   - If results include sources/records, summarize the key findings.\r\n"
+						+ "   - If uncertainty remains, clearly state what could not be verified and why.\r\n"
+						+ "   - If the question contains multiple sub-questions, answer them in the same order as asked.\r\n"
+						+ "\r\n" + "SAFETY & COMPLIANCE\r\n"
+						+ "- Respect the tools’ constraints and access boundaries.\r\n"
+						+ "- Never fabricate tool outputs. If a tool fails or returns nothing, say so and proceed with the best available information.\r\n"
+						+ "- If the user asks to do something disallowed (e.g., illegal, harmful, privacy-violating), refuse and offer a safe alternative.\r\n"
+						+ "\r\n" + "OUTPUT FORMAT\r\n" + "- Output ONLY the final user-facing response text.\r\n"
+						+ "- No routing tags, no tool call traces, no JSON, markdown code is allowed.\r\n" + "\r\n"
+						+ "BEGIN\r\n" + "");
 	}
 
 	private List<ChatPipelineConfiguration> pipelines = new ArrayList<ChatPipelineConfiguration>();
@@ -203,5 +196,12 @@ public class ChatPipelinesConfiguration {
 	private GPromptConfig defaultPipelineToolCallOutputPrompt = new GPromptConfig();
 	private int maxRoutingDecisionDocumentsTokenBudget = 12000;
 	private int globalRagTopK = 20;
+
+	@Override
+	public List<GPromptConfig> promptsList() {
+
+		return List.of(defaultPipelineRoutingDecisionPrompt, defaultPipelineRagOutputPrompt,
+				defaultPipelineOutputPrompt, defaultPipelineToolCallOutputPrompt);
+	}
 
 }

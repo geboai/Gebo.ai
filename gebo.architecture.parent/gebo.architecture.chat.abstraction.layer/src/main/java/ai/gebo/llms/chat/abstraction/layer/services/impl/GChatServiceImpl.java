@@ -124,7 +124,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		gresponse.setUserChatContextCode(userContext.getCode());
 
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultPrompt((GBaseChatModelConfig) handler.getConfig(), false);
+		GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
 		ChatModelLimitedRequest limitedRequest = null;
 		// Check if prompt is configured
 		if (gprompt == null) {
@@ -405,7 +405,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			gresponse.setUserChatContextCode(userContext.getCode());
 
 			// Retrieve default prompt
-			GPromptConfig gprompt = promptsDao.defaultPrompt((GBaseChatModelConfig) handler.getConfig(), false);
+			GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
 			if (gprompt == null) {
 				throw new GeboChatException("The system has no default prompt configured");
 			} else {

@@ -75,7 +75,7 @@ public class PromptTemplatesController {
 	 */
 	@PostMapping(value = "getDefaultPromptForChatModel", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptConfig getDefaultPromptForChatModel(@RequestBody DefaultPromptForChatModelParam param) {
-		return promptConfigDao.defaultPrompt(param.chatModelConfig, param.ragPrompt);
+		return promptConfigDao.defaultChatPrompt(param.chatModelConfig, param.ragPrompt);
 	}
 
 	/**
@@ -102,9 +102,9 @@ public class PromptTemplatesController {
 		GBaseChatModelConfig chatModelConfig = persistentObjectManager.findByReference(param.chatModelConfigReference,
 				GBaseChatModelConfig.class);
 		if (chatModelConfig != null)
-			return promptConfigDao.defaultPrompt(chatModelConfig, param.ragPrompt);
+			return promptConfigDao.defaultChatPrompt(chatModelConfig, param.ragPrompt);
 		else
-			return promptConfigDao.defaultPrompt(param.ragPrompt);
+			return promptConfigDao.defaultChatPrompt(param.ragPrompt);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class PromptTemplatesController {
 	 */
 	@GetMapping(value = "getDefaultPrompt", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptConfig getDefaultPrompt(@RequestParam("ragPrompt") Boolean ragPrompt) {
-		return promptConfigDao.defaultPrompt(ragPrompt);
+		return promptConfigDao.defaultChatPrompt(ragPrompt);
 	}
 
 }

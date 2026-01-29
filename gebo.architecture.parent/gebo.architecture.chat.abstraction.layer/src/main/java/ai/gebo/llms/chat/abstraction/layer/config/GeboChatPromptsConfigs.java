@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import lombok.Data;
 
 /**
@@ -27,7 +28,15 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chat")
 @Data
-public class GeboChatPromptsConfigs {
+public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
+	private static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
+
+	private static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
+
+	private static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
+
+	private static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
+
 	// List of default prompt configurations
 	private List<GPromptConfig> promptDefaults = new ArrayList<GPromptConfig>();
 
@@ -41,7 +50,6 @@ public class GeboChatPromptsConfigs {
 
 	private GPromptConfig historyConsolidationPrompt = new GPromptConfig();
 	private GPromptConfig historyDocumentsConsolidationPrompt = new GPromptConfig();
-	
 
 	/**
 	 * Constructor for GeboChatPromptsConfigs. Initializes the default prompt
@@ -49,9 +57,9 @@ public class GeboChatPromptsConfigs {
 	 */
 	public GeboChatPromptsConfigs() {
 		// Initialize the default prompt template with a code and prompt message
-		defaultPromptTemplateWizardConfig.setCode("prompt-template-wizard-default");
+		defaultPromptTemplateWizardConfig.setPromptUse(PROMPT_TEMPLATE_WIZARD_DEFAULT);
 		defaultPromptTemplateWizardConfig.setPrompt("Write a chat prompt to assist the user on its tasks ");
-		summarizeChatDescriptionPrompt.setCode("summarize-chat-description");
+		summarizeChatDescriptionPrompt.setPromptUse(SUMMARIZE_CHAT_DESCRIPTION);
 		summarizeChatDescriptionPrompt.setPrompt("You are a summarization assistant.\n"
 				+ "Given a single user request sent to a chatbot, generate a short, meaningful description of the chat.\n"
 				+ "The description must capture the core intent of the user request, without adding details that are not explicitly stated.\n"
@@ -59,7 +67,7 @@ public class GeboChatPromptsConfigs {
 				+ "Avoid questions: produce a concise descriptive label.\n"
 				+ "Do not include any system or assistant messages.\n"
 				+ "Output only the final description, nothing else.");
-		historyConsolidationPrompt.setCode("history-consolidation-prompt");
+		historyConsolidationPrompt.setPromptUse(HISTORY_CONSOLIDATION_PROMPT);
 		historyConsolidationPrompt.setPrompt("You are a chat history consolidation system.\r\n" + "\r\n"
 				+ "Your task:\r\n"
 				+ "Given an existing summary of a chat session and a batch of new dialogue messages, produce an updated, concise summary that reflects the entire conversation so far.\r\n"
@@ -84,8 +92,7 @@ public class GeboChatPromptsConfigs {
 				+ "- The summary must be self-contained and understandable without seeing the raw chat.\r\n"
 				+ "- Aim to keep the length brief but complete (ideally under {historySizeTarget} tokens).\r\n" + "\r\n"
 				+ "Input format:\r\n" + "[EXISTING_SUMMARY]\r\n" + "{consolidated}\r\n" + "[/EXISTING_SUMMARY]\r\n"
-				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{documents}\r\n" 
-				+ "{question}\r\n[/NEW_MESSAGES]\r\n" + "\r\n"
+				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{documents}\r\n" + "{question}\r\n[/NEW_MESSAGES]\r\n" + "\r\n"
 				+ "Where:\r\n" + "- EXISTING_SUMMARY is the current stored summary text (possibly empty).\r\n"
 				+ "- NEW_MESSAGES is the new dialogue turns formatted as lines like:\r\n" + "  user: ...\r\n"
 				+ "  assistant: ...\r\n" + "  user: ...\r\n" + "  ...\r\n" + "\r\n" + "Your output:\r\n"
@@ -93,6 +100,7 @@ public class GeboChatPromptsConfigs {
 				+ "- Do NOT include headings, labels, JSON, bullet points, or any extra commentary.\r\n"
 				+ "- Just return the updated summary text.\r\n" + "- Generate a maximum of {historySizeTarget} tokens"
 				+ "");
+		historyDocumentsConsolidationPrompt.setPromptUse(CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
 		historyDocumentsConsolidationPrompt
 				.setPrompt("You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n"
 						+ "TASK\r\n" + "Given:\r\n" + "(A) last user↔assistant turns (most recent first),\r\n" + "\r\n"
@@ -129,6 +137,18 @@ public class GeboChatPromptsConfigs {
 
 						+ "\r\n" + "A: LAST_TURNS:\r\n" + "{question}\r\n" + "B: INPUT DOCUMENTS\r\n{documents}\r\n"
 						+ "C: CONSOLIDATED HISTORY:\r\n{consolidated}\r\n");
+	}
+
+	@Override
+	public List<GPromptConfig> promptsList() {
+		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
+		out.add(defaultPromptTemplateWizardConfig);
+		out.add(historyDocumentsConsolidationPrompt);
+		out.add(summarizeChatDescriptionPrompt);
+		out.add(historyConsolidationPrompt);
+		out.addAll(promptTemplateWizardConfigs);
+		out.addAll(promptDefaults);
+		return out;
 	}
 
 }

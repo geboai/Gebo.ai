@@ -14,6 +14,8 @@ package ai.gebo.llms.chat.abstraction.layer.repository;
 
 import java.util.List;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 
@@ -24,18 +26,9 @@ import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
  * Extends the {@link IGBaseMongoDBRepository} to provide basic MongoDB 
  * repository functionalities for GPromptConfig entities.
  */
-public interface PromptConfigRepository extends IGBaseMongoDBRepository<GPromptConfig> {
+public interface PromptConfigRepository extends MongoRepository<GPromptConfig,String> {
 
-    /**
-     * Returns the class type of the entity managed by this repository.
-     * This method overrides the default implementation in IGBaseMongoDBRepository.
-     *
-     * @return the class type of GPromptConfig.
-     */
-    @Override
-    default Class<GPromptConfig> getManagedType() {
-        return GPromptConfig.class;
-    }
+    
 
     /**
      * Finds a list of {@link GPromptConfig} by model configuration reference code 
