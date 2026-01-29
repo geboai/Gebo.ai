@@ -12,8 +12,6 @@
 
 package ai.gebo.llms.chat.abstraction.layer.repository;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -30,40 +28,7 @@ public interface PromptConfigRepository extends MongoRepository<GPromptConfig,St
 
     
 
-    /**
-     * Finds a list of {@link GPromptConfig} by model configuration reference code 
-     * and class name.
-     *
-     * @param code the model configuration reference code.
-     * @param className the model configuration reference class name.
-     * @return a list of GPromptConfig matching the specified criteria.
-     */
-    List<GPromptConfig> findByModelConfigurationReferenceCodeAndModelConfigurationReferenceClassName(String code,
-                                                                                                     String className);
+    
 
-    /**
-     * Finds a list of {@link GPromptConfig} by default prompt status.
-     *
-     * @param defaultPrompt the default prompt status indicator.
-     * @return a list of GPromptConfig that have the specified default prompt status.
-     */
-    List<GPromptConfig> findByDefaultPrompt(Boolean defaultPrompt);
-
-    /**
-     * Finds a list of {@link GPromptConfig} by RAG (retrieval-augmented generation) 
-     * prompt status.
-     *
-     * @param ragPrompt the RAG prompt status indicator.
-     * @return a list of GPromptConfig that have the specified RAG prompt status.
-     */
-    List<GPromptConfig> findByRagPrompt(Boolean ragPrompt);
-
-    /**
-     * Finds a list of {@link GPromptConfig} by both RAG prompt and default prompt status.
-     *
-     * @param ragPrompt the RAG prompt status indicator.
-     * @param defaultPrompt the default prompt status indicator.
-     * @return a list of GPromptConfig that match the specified RAG prompt and default prompt statuses.
-     */
-    List<GPromptConfig> findByRagPromptAndDefaultPrompt(Boolean ragPrompt, Boolean defaultPrompt);
+   
 }
