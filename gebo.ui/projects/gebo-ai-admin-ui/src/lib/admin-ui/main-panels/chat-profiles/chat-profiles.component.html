@@ -48,7 +48,7 @@
 <p-panel id="PromptsPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
     <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
         [outlined]="true"></p-button>
-    <p-table *ngIf="prompts?.content?.length" [value]="(prompts.content?prompts.content:[])">
+    <p-table *ngIf="prompts?.length" [value]="(prompts?prompts:[])">
         <ng-template pTemplate="header">
             <tr>
                 <th id="CodeHeader2" gebo-ai-text>Code</th>
@@ -67,8 +67,7 @@
             </tr>
         </ng-template>
     </p-table>
-    <p-paginator id="Paginator2" gebo-ai-label (onPageChange)="onPromptPageChange($event)" [first]="0" [rows]="promptsPage.pageSize"
-        *ngIf="prompts?.content?.length" [totalRecords]="prompts?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
+    
     
 
 </p-panel>

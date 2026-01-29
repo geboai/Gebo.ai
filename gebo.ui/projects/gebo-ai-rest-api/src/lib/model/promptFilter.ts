@@ -10,12 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface LuceneConfig { 
-    code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    documentsQueueMax?: number;
+export interface PromptFilter { 
+    modelUse?: string;
+    langCode?: string;
+    modelProvider?: string;
+    modelCode?: string;
 }

@@ -9,12 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Media } from './media';
+import { GPromptPlaceholderInfo } from './gPromptPlaceholderInfo';
 
-export interface Document { 
-    content?: string;
-    id?: string;
-    text?: string;
-    media?: Media;
-    score?: number;
+export interface GPromptUseInfo { 
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    placeholders?: Array<GPromptPlaceholderInfo>;
+    module: string;
 }

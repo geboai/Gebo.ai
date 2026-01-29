@@ -17,10 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { DataPage } from '../model/dataPage';
 import { GPromptConfig } from '../model/gPromptConfig';
-import { PageGPromptConfig } from '../model/pageGPromptConfig';
-import { PromptConfigByQbeParam } from '../model/promptConfigByQbeParam';
+import { PromptFilter } from '../model/promptFilter';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -154,100 +152,6 @@ export class GeboAdminPromptsControllerService {
     /**
      * 
      * 
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAllPromptConfig(body: DataPage, observe?: 'body', reportProgress?: boolean): Observable<PageGPromptConfig>;
-    public getAllPromptConfig(body: DataPage, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGPromptConfig>>;
-    public getAllPromptConfig(body: DataPage, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGPromptConfig>>;
-    public getAllPromptConfig(body: DataPage, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getAllPromptConfig.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<PageGPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/getAllPromptConfig`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAllPromptConfigByQbe(body: PromptConfigByQbeParam, observe?: 'body', reportProgress?: boolean): Observable<PageGPromptConfig>;
-    public getAllPromptConfigByQbe(body: PromptConfigByQbeParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageGPromptConfig>>;
-    public getAllPromptConfigByQbe(body: PromptConfigByQbeParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageGPromptConfig>>;
-    public getAllPromptConfigByQbe(body: PromptConfigByQbeParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getAllPromptConfigByQbe.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<PageGPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/getAllPromptConfigByQbe`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -273,6 +177,53 @@ export class GeboAdminPromptsControllerService {
 
         return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptCategories`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public getPromptConfigByFilter(body: PromptFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getPromptConfigByFilter.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptConfigByFilter`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -10,16 +10,11 @@
  * Do not edit the class manually.
  */
 
-export interface RagDocumentFragment { 
-    documentId?: string;
-    documentContent?: string;
+export interface GPromptPlaceholderInfo { 
     code?: string;
-    rootKnowledgebaseCode?: string;
-    parentProjectCode?: string;
-    rankIndex?: number;
-    weightedResultsRanking?: number;
-    origin?: string;
-    chunkPosition?: number;
-    nbytes?: number;
-    ntokens?: number;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
 }

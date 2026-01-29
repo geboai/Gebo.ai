@@ -31,4 +31,5 @@ export interface GeboChatResponse {
     calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;
+    pipelineRouterDecisionCode?: string;
 }
