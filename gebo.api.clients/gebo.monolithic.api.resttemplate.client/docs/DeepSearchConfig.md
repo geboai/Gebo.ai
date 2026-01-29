@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **searchType** | [**SearchTypeEnum**](#SearchTypeEnum) |  | 
 **consolidationPrompt** | **String** |  |  [optional]
 **analisysPrompt** | **String** |  |  [optional]
+**ratingPrompt** | **String** |  |  [optional]
+**keywordGenerationPrompt** | **String** |  |  [optional]
 **ragQueryOptions** | [**RagQueryOptions**](RagQueryOptions.md) |  |  [optional]
 **firstHopSimilarityThreashold** | **Double** |  |  [optional]
 **secondHopSimilarityThreashold** | **Double** |  |  [optional]

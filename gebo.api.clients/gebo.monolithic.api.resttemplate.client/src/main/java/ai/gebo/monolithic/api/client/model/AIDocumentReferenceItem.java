@@ -14,7 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.RagDocumentFragment;
+import ai.gebo.monolithic.api.client.model.AIDocumentFragment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -22,12 +22,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * RagDocumentReferenceItem
+ * AIDocumentReferenceItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
-public class RagDocumentReferenceItem {
+public class AIDocumentReferenceItem {
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
+
   @JsonProperty("totalFileNTokens")
   private Long totalFileNTokens = null;
 
@@ -44,7 +47,7 @@ public class RagDocumentReferenceItem {
   private String parentProjectCode = null;
 
   @JsonProperty("fragments")
-  private List<RagDocumentFragment> fragments = null;
+  private List<AIDocumentFragment> fragments = null;
 
   @JsonProperty("contentType")
   private String contentType = null;
@@ -64,10 +67,25 @@ public class RagDocumentReferenceItem {
   @JsonProperty("nbytes")
   private Long nbytes = null;
 
-  @JsonProperty("ntokens")
-  private Long ntokens = null;
+  public AIDocumentReferenceItem tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
 
-  public RagDocumentReferenceItem totalFileNTokens(Long totalFileNTokens) {
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
+  public AIDocumentReferenceItem totalFileNTokens(Long totalFileNTokens) {
     this.totalFileNTokens = totalFileNTokens;
     return this;
   }
@@ -85,7 +103,7 @@ public class RagDocumentReferenceItem {
     this.totalFileNTokens = totalFileNTokens;
   }
 
-  public RagDocumentReferenceItem complete(Boolean complete) {
+  public AIDocumentReferenceItem complete(Boolean complete) {
     this.complete = complete;
     return this;
   }
@@ -103,7 +121,7 @@ public class RagDocumentReferenceItem {
     this.complete = complete;
   }
 
-  public RagDocumentReferenceItem code(String code) {
+  public AIDocumentReferenceItem code(String code) {
     this.code = code;
     return this;
   }
@@ -121,7 +139,7 @@ public class RagDocumentReferenceItem {
     this.code = code;
   }
 
-  public RagDocumentReferenceItem rootKnowledgebaseCode(String rootKnowledgebaseCode) {
+  public AIDocumentReferenceItem rootKnowledgebaseCode(String rootKnowledgebaseCode) {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
     return this;
   }
@@ -139,7 +157,7 @@ public class RagDocumentReferenceItem {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
   }
 
-  public RagDocumentReferenceItem parentProjectCode(String parentProjectCode) {
+  public AIDocumentReferenceItem parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -157,12 +175,12 @@ public class RagDocumentReferenceItem {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public RagDocumentReferenceItem fragments(List<RagDocumentFragment> fragments) {
+  public AIDocumentReferenceItem fragments(List<AIDocumentFragment> fragments) {
     this.fragments = fragments;
     return this;
   }
 
-  public RagDocumentReferenceItem addFragmentsItem(RagDocumentFragment fragmentsItem) {
+  public AIDocumentReferenceItem addFragmentsItem(AIDocumentFragment fragmentsItem) {
     if (this.fragments == null) {
       this.fragments = new ArrayList<>();
     }
@@ -175,15 +193,15 @@ public class RagDocumentReferenceItem {
    * @return fragments
   **/
   @Schema(description = "")
-  public List<RagDocumentFragment> getFragments() {
+  public List<AIDocumentFragment> getFragments() {
     return fragments;
   }
 
-  public void setFragments(List<RagDocumentFragment> fragments) {
+  public void setFragments(List<AIDocumentFragment> fragments) {
     this.fragments = fragments;
   }
 
-  public RagDocumentReferenceItem contentType(String contentType) {
+  public AIDocumentReferenceItem contentType(String contentType) {
     this.contentType = contentType;
     return this;
   }
@@ -201,7 +219,7 @@ public class RagDocumentReferenceItem {
     this.contentType = contentType;
   }
 
-  public RagDocumentReferenceItem extension(String extension) {
+  public AIDocumentReferenceItem extension(String extension) {
     this.extension = extension;
     return this;
   }
@@ -219,7 +237,7 @@ public class RagDocumentReferenceItem {
     this.extension = extension;
   }
 
-  public RagDocumentReferenceItem name(String name) {
+  public AIDocumentReferenceItem name(String name) {
     this.name = name;
     return this;
   }
@@ -237,7 +255,7 @@ public class RagDocumentReferenceItem {
     this.name = name;
   }
 
-  public RagDocumentReferenceItem originalUrl(String originalUrl) {
+  public AIDocumentReferenceItem originalUrl(String originalUrl) {
     this.originalUrl = originalUrl;
     return this;
   }
@@ -255,7 +273,7 @@ public class RagDocumentReferenceItem {
     this.originalUrl = originalUrl;
   }
 
-  public RagDocumentReferenceItem weightedResultsRanking(Double weightedResultsRanking) {
+  public AIDocumentReferenceItem weightedResultsRanking(Double weightedResultsRanking) {
     this.weightedResultsRanking = weightedResultsRanking;
     return this;
   }
@@ -273,7 +291,7 @@ public class RagDocumentReferenceItem {
     this.weightedResultsRanking = weightedResultsRanking;
   }
 
-  public RagDocumentReferenceItem nbytes(Long nbytes) {
+  public AIDocumentReferenceItem nbytes(Long nbytes) {
     this.nbytes = nbytes;
     return this;
   }
@@ -291,24 +309,6 @@ public class RagDocumentReferenceItem {
     this.nbytes = nbytes;
   }
 
-  public RagDocumentReferenceItem ntokens(Long ntokens) {
-    this.ntokens = ntokens;
-    return this;
-  }
-
-   /**
-   * Get ntokens
-   * @return ntokens
-  **/
-  @Schema(description = "")
-  public Long getNtokens() {
-    return ntokens;
-  }
-
-  public void setNtokens(Long ntokens) {
-    this.ntokens = ntokens;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -318,33 +318,34 @@ public class RagDocumentReferenceItem {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RagDocumentReferenceItem ragDocumentReferenceItem = (RagDocumentReferenceItem) o;
-    return Objects.equals(this.totalFileNTokens, ragDocumentReferenceItem.totalFileNTokens) &&
-        Objects.equals(this.complete, ragDocumentReferenceItem.complete) &&
-        Objects.equals(this.code, ragDocumentReferenceItem.code) &&
-        Objects.equals(this.rootKnowledgebaseCode, ragDocumentReferenceItem.rootKnowledgebaseCode) &&
-        Objects.equals(this.parentProjectCode, ragDocumentReferenceItem.parentProjectCode) &&
-        Objects.equals(this.fragments, ragDocumentReferenceItem.fragments) &&
-        Objects.equals(this.contentType, ragDocumentReferenceItem.contentType) &&
-        Objects.equals(this.extension, ragDocumentReferenceItem.extension) &&
-        Objects.equals(this.name, ragDocumentReferenceItem.name) &&
-        Objects.equals(this.originalUrl, ragDocumentReferenceItem.originalUrl) &&
-        Objects.equals(this.weightedResultsRanking, ragDocumentReferenceItem.weightedResultsRanking) &&
-        Objects.equals(this.nbytes, ragDocumentReferenceItem.nbytes) &&
-        Objects.equals(this.ntokens, ragDocumentReferenceItem.ntokens);
+    AIDocumentReferenceItem aiDocumentReferenceItem = (AIDocumentReferenceItem) o;
+    return Objects.equals(this.tokensSize, aiDocumentReferenceItem.tokensSize) &&
+        Objects.equals(this.totalFileNTokens, aiDocumentReferenceItem.totalFileNTokens) &&
+        Objects.equals(this.complete, aiDocumentReferenceItem.complete) &&
+        Objects.equals(this.code, aiDocumentReferenceItem.code) &&
+        Objects.equals(this.rootKnowledgebaseCode, aiDocumentReferenceItem.rootKnowledgebaseCode) &&
+        Objects.equals(this.parentProjectCode, aiDocumentReferenceItem.parentProjectCode) &&
+        Objects.equals(this.fragments, aiDocumentReferenceItem.fragments) &&
+        Objects.equals(this.contentType, aiDocumentReferenceItem.contentType) &&
+        Objects.equals(this.extension, aiDocumentReferenceItem.extension) &&
+        Objects.equals(this.name, aiDocumentReferenceItem.name) &&
+        Objects.equals(this.originalUrl, aiDocumentReferenceItem.originalUrl) &&
+        Objects.equals(this.weightedResultsRanking, aiDocumentReferenceItem.weightedResultsRanking) &&
+        Objects.equals(this.nbytes, aiDocumentReferenceItem.nbytes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalFileNTokens, complete, code, rootKnowledgebaseCode, parentProjectCode, fragments, contentType, extension, name, originalUrl, weightedResultsRanking, nbytes, ntokens);
+    return Objects.hash(tokensSize, totalFileNTokens, complete, code, rootKnowledgebaseCode, parentProjectCode, fragments, contentType, extension, name, originalUrl, weightedResultsRanking, nbytes);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RagDocumentReferenceItem {\n");
+    sb.append("class AIDocumentReferenceItem {\n");
     
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("    totalFileNTokens: ").append(toIndentedString(totalFileNTokens)).append("\n");
     sb.append("    complete: ").append(toIndentedString(complete)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
@@ -357,7 +358,6 @@ public class RagDocumentReferenceItem {
     sb.append("    originalUrl: ").append(toIndentedString(originalUrl)).append("\n");
     sb.append("    weightedResultsRanking: ").append(toIndentedString(weightedResultsRanking)).append("\n");
     sb.append("    nbytes: ").append(toIndentedString(nbytes)).append("\n");
-    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

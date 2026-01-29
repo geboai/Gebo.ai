@@ -14,7 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.RagDocumentReferenceItem;
+import ai.gebo.monolithic.api.client.model.AIDocumentReferenceItem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -22,27 +22,45 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * RagDocumentsCachedDaoResult
+ * AIDocumentsSet
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
-public class RagDocumentsCachedDaoResult {
+public class AIDocumentsSet {
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
+
   @JsonProperty("documentItems")
-  private List<RagDocumentReferenceItem> documentItems = null;
+  private List<AIDocumentReferenceItem> documentItems = null;
 
   @JsonProperty("nbytes")
   private Long nbytes = null;
 
-  @JsonProperty("ntokens")
-  private Long ntokens = null;
+  public AIDocumentsSet tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
 
-  public RagDocumentsCachedDaoResult documentItems(List<RagDocumentReferenceItem> documentItems) {
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
+  public AIDocumentsSet documentItems(List<AIDocumentReferenceItem> documentItems) {
     this.documentItems = documentItems;
     return this;
   }
 
-  public RagDocumentsCachedDaoResult addDocumentItemsItem(RagDocumentReferenceItem documentItemsItem) {
+  public AIDocumentsSet addDocumentItemsItem(AIDocumentReferenceItem documentItemsItem) {
     if (this.documentItems == null) {
       this.documentItems = new ArrayList<>();
     }
@@ -55,15 +73,15 @@ public class RagDocumentsCachedDaoResult {
    * @return documentItems
   **/
   @Schema(description = "")
-  public List<RagDocumentReferenceItem> getDocumentItems() {
+  public List<AIDocumentReferenceItem> getDocumentItems() {
     return documentItems;
   }
 
-  public void setDocumentItems(List<RagDocumentReferenceItem> documentItems) {
+  public void setDocumentItems(List<AIDocumentReferenceItem> documentItems) {
     this.documentItems = documentItems;
   }
 
-  public RagDocumentsCachedDaoResult nbytes(Long nbytes) {
+  public AIDocumentsSet nbytes(Long nbytes) {
     this.nbytes = nbytes;
     return this;
   }
@@ -81,24 +99,6 @@ public class RagDocumentsCachedDaoResult {
     this.nbytes = nbytes;
   }
 
-  public RagDocumentsCachedDaoResult ntokens(Long ntokens) {
-    this.ntokens = ntokens;
-    return this;
-  }
-
-   /**
-   * Get ntokens
-   * @return ntokens
-  **/
-  @Schema(description = "")
-  public Long getNtokens() {
-    return ntokens;
-  }
-
-  public void setNtokens(Long ntokens) {
-    this.ntokens = ntokens;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -108,26 +108,26 @@ public class RagDocumentsCachedDaoResult {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RagDocumentsCachedDaoResult ragDocumentsCachedDaoResult = (RagDocumentsCachedDaoResult) o;
-    return Objects.equals(this.documentItems, ragDocumentsCachedDaoResult.documentItems) &&
-        Objects.equals(this.nbytes, ragDocumentsCachedDaoResult.nbytes) &&
-        Objects.equals(this.ntokens, ragDocumentsCachedDaoResult.ntokens);
+    AIDocumentsSet aiDocumentsSet = (AIDocumentsSet) o;
+    return Objects.equals(this.tokensSize, aiDocumentsSet.tokensSize) &&
+        Objects.equals(this.documentItems, aiDocumentsSet.documentItems) &&
+        Objects.equals(this.nbytes, aiDocumentsSet.nbytes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(documentItems, nbytes, ntokens);
+    return Objects.hash(tokensSize, documentItems, nbytes);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RagDocumentsCachedDaoResult {\n");
+    sb.append("class AIDocumentsSet {\n");
     
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("    documentItems: ").append(toIndentedString(documentItems)).append("\n");
     sb.append("    nbytes: ").append(toIndentedString(nbytes)).append("\n");
-    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -14,3 +14,4 @@ Name | Type | Description | Notes
 **documentCode** | **String** |  | 
 **index** | **Integer** |  | 
 **fragmentsCodes** | **List&lt;String&gt;** |  | 
+**processPercentage** | **Double** |  |  [optional]

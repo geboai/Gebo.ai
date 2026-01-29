@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatInteractions
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class ChatInteractions {
   @JsonProperty("request")
@@ -38,6 +38,9 @@ public class ChatInteractions {
 
   @JsonProperty("responseNTokens")
   private Integer responseNTokens = null;
+
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
 
   public ChatInteractions request(GeboChatRequest request) {
     this.request = request;
@@ -111,6 +114,24 @@ public class ChatInteractions {
     this.responseNTokens = responseNTokens;
   }
 
+  public ChatInteractions tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
+
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -124,12 +145,13 @@ public class ChatInteractions {
     return Objects.equals(this.request, chatInteractions.request) &&
         Objects.equals(this.requestNTokens, chatInteractions.requestNTokens) &&
         Objects.equals(this.response, chatInteractions.response) &&
-        Objects.equals(this.responseNTokens, chatInteractions.responseNTokens);
+        Objects.equals(this.responseNTokens, chatInteractions.responseNTokens) &&
+        Objects.equals(this.tokensSize, chatInteractions.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(request, requestNTokens, response, responseNTokens);
+    return Objects.hash(request, requestNTokens, response, responseNTokens, tokensSize);
   }
 
 
@@ -142,6 +164,7 @@ public class ChatInteractions {
     sb.append("    requestNTokens: ").append(toIndentedString(requestNTokens)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    responseNTokens: ").append(toIndentedString(responseNTokens)).append("\n");
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();
   }

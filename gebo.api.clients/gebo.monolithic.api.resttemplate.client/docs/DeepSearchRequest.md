@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **username** | **String** |  |  [optional]
 **query** | **String** |  |  [optional]
-**knowledgeBases** | **List&lt;String&gt;** |  | 
+**knowledgeBases** | **List&lt;String&gt;** |  |  [optional]
 **userChatContextCode** | **String** |  |  [optional]
 **chatRequestCode** | **String** |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]

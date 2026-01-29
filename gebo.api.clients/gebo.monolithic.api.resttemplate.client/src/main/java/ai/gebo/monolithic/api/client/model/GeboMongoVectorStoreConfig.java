@@ -14,7 +14,6 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.LuceneConfig;
 import ai.gebo.monolithic.api.client.model.MongoConfig;
 import ai.gebo.monolithic.api.client.model.QdrantConfig;
 import ai.gebo.monolithic.api.client.model.RedisConfig;
@@ -26,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboMongoVectorStoreConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GeboMongoVectorStoreConfig {
   @JsonProperty("id")
@@ -38,7 +37,6 @@ public class GeboMongoVectorStoreConfig {
   public enum ProductEnum {
     MONGO("MONGO"),
     QDRANT("QDRANT"),
-    LUCENE("LUCENE"),
     REDIS("REDIS"),
     TEST("TEST");
 
@@ -71,9 +69,6 @@ public class GeboMongoVectorStoreConfig {
 
   @JsonProperty("qdrantConfig")
   private QdrantConfig qdrantConfig = null;
-
-  @JsonProperty("luceneConfig")
-  private LuceneConfig luceneConfig = null;
 
   @JsonProperty("mongoConfig")
   private MongoConfig mongoConfig = null;
@@ -135,24 +130,6 @@ public class GeboMongoVectorStoreConfig {
     this.qdrantConfig = qdrantConfig;
   }
 
-  public GeboMongoVectorStoreConfig luceneConfig(LuceneConfig luceneConfig) {
-    this.luceneConfig = luceneConfig;
-    return this;
-  }
-
-   /**
-   * Get luceneConfig
-   * @return luceneConfig
-  **/
-  @Schema(description = "")
-  public LuceneConfig getLuceneConfig() {
-    return luceneConfig;
-  }
-
-  public void setLuceneConfig(LuceneConfig luceneConfig) {
-    this.luceneConfig = luceneConfig;
-  }
-
   public GeboMongoVectorStoreConfig mongoConfig(MongoConfig mongoConfig) {
     this.mongoConfig = mongoConfig;
     return this;
@@ -202,14 +179,13 @@ public class GeboMongoVectorStoreConfig {
     return Objects.equals(this.id, geboMongoVectorStoreConfig.id) &&
         Objects.equals(this.product, geboMongoVectorStoreConfig.product) &&
         Objects.equals(this.qdrantConfig, geboMongoVectorStoreConfig.qdrantConfig) &&
-        Objects.equals(this.luceneConfig, geboMongoVectorStoreConfig.luceneConfig) &&
         Objects.equals(this.mongoConfig, geboMongoVectorStoreConfig.mongoConfig) &&
         Objects.equals(this.redisConfig, geboMongoVectorStoreConfig.redisConfig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, product, qdrantConfig, luceneConfig, mongoConfig, redisConfig);
+    return Objects.hash(id, product, qdrantConfig, mongoConfig, redisConfig);
   }
 
 
@@ -221,7 +197,6 @@ public class GeboMongoVectorStoreConfig {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    product: ").append(toIndentedString(product)).append("\n");
     sb.append("    qdrantConfig: ").append(toIndentedString(qdrantConfig)).append("\n");
-    sb.append("    luceneConfig: ").append(toIndentedString(luceneConfig)).append("\n");
     sb.append("    mongoConfig: ").append(toIndentedString(mongoConfig)).append("\n");
     sb.append("    redisConfig: ").append(toIndentedString(redisConfig)).append("\n");
     sb.append("}");

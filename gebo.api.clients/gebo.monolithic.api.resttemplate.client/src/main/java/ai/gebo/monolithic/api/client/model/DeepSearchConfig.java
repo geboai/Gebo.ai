@@ -25,7 +25,7 @@ import java.util.Date;
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
@@ -85,6 +85,12 @@ public class DeepSearchConfig {
 
   @JsonProperty("analisysPrompt")
   private String analisysPrompt = null;
+
+  @JsonProperty("ratingPrompt")
+  private String ratingPrompt = null;
+
+  @JsonProperty("keywordGenerationPrompt")
+  private String keywordGenerationPrompt = null;
 
   @JsonProperty("ragQueryOptions")
   private RagQueryOptions ragQueryOptions = null;
@@ -275,6 +281,42 @@ public class DeepSearchConfig {
     this.analisysPrompt = analisysPrompt;
   }
 
+  public DeepSearchConfig ratingPrompt(String ratingPrompt) {
+    this.ratingPrompt = ratingPrompt;
+    return this;
+  }
+
+   /**
+   * Get ratingPrompt
+   * @return ratingPrompt
+  **/
+  @Schema(description = "")
+  public String getRatingPrompt() {
+    return ratingPrompt;
+  }
+
+  public void setRatingPrompt(String ratingPrompt) {
+    this.ratingPrompt = ratingPrompt;
+  }
+
+  public DeepSearchConfig keywordGenerationPrompt(String keywordGenerationPrompt) {
+    this.keywordGenerationPrompt = keywordGenerationPrompt;
+    return this;
+  }
+
+   /**
+   * Get keywordGenerationPrompt
+   * @return keywordGenerationPrompt
+  **/
+  @Schema(description = "")
+  public String getKeywordGenerationPrompt() {
+    return keywordGenerationPrompt;
+  }
+
+  public void setKeywordGenerationPrompt(String keywordGenerationPrompt) {
+    this.keywordGenerationPrompt = keywordGenerationPrompt;
+  }
+
   public DeepSearchConfig ragQueryOptions(RagQueryOptions ragQueryOptions) {
     this.ragQueryOptions = ragQueryOptions;
     return this;
@@ -456,6 +498,8 @@ public class DeepSearchConfig {
         Objects.equals(this.searchType, deepSearchConfig.searchType) &&
         Objects.equals(this.consolidationPrompt, deepSearchConfig.consolidationPrompt) &&
         Objects.equals(this.analisysPrompt, deepSearchConfig.analisysPrompt) &&
+        Objects.equals(this.ratingPrompt, deepSearchConfig.ratingPrompt) &&
+        Objects.equals(this.keywordGenerationPrompt, deepSearchConfig.keywordGenerationPrompt) &&
         Objects.equals(this.ragQueryOptions, deepSearchConfig.ragQueryOptions) &&
         Objects.equals(this.firstHopSimilarityThreashold, deepSearchConfig.firstHopSimilarityThreashold) &&
         Objects.equals(this.secondHopSimilarityThreashold, deepSearchConfig.secondHopSimilarityThreashold) &&
@@ -469,7 +513,7 @@ public class DeepSearchConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, consolidationPrompt, analisysPrompt, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, chatModelConfiguration, defaultConfig, chatProfileCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, consolidationPrompt, analisysPrompt, ratingPrompt, keywordGenerationPrompt, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, chatModelConfiguration, defaultConfig, chatProfileCode);
   }
 
 
@@ -487,6 +531,8 @@ public class DeepSearchConfig {
     sb.append("    searchType: ").append(toIndentedString(searchType)).append("\n");
     sb.append("    consolidationPrompt: ").append(toIndentedString(consolidationPrompt)).append("\n");
     sb.append("    analisysPrompt: ").append(toIndentedString(analisysPrompt)).append("\n");
+    sb.append("    ratingPrompt: ").append(toIndentedString(ratingPrompt)).append("\n");
+    sb.append("    keywordGenerationPrompt: ").append(toIndentedString(keywordGenerationPrompt)).append("\n");
     sb.append("    ragQueryOptions: ").append(toIndentedString(ragQueryOptions)).append("\n");
     sb.append("    firstHopSimilarityThreashold: ").append(toIndentedString(firstHopSimilarityThreashold)).append("\n");
     sb.append("    secondHopSimilarityThreashold: ").append(toIndentedString(secondHopSimilarityThreashold)).append("\n");

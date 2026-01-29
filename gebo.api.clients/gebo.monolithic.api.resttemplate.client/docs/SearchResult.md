@@ -8,6 +8,8 @@ Name | Type | Description | Notes
 **navigationReference** | [**VFilesystemReference**](VFilesystemReference.md) |  | 
 **descriptiveText** | **String** |  | 
 **nestingLevel** | **Integer** |  |  [optional]
-**systemHandlerId** | **String** |  | 
-**systemConfigurationCode** | **String** |  | 
+**modificationDate** | [**Date**](Date.md) |  |  [optional]
 **childs** | [**List&lt;SearchResult&gt;**](SearchResult.md) |  |  [optional]
+**originComponent** | [**GeboComponentInfo**](GeboComponentInfo.md) |  | 
+**systemConfigurationCode** | **String** |  | 
+**code** | **String** |  | 

@@ -13,6 +13,5 @@ Name | Value
 ---- | -----
 MONGO | &quot;MONGO&quot;
 QDRANT | &quot;QDRANT&quot;
-LUCENE | &quot;LUCENE&quot;
 REDIS | &quot;REDIS&quot;
 TEST | &quot;TEST&quot;

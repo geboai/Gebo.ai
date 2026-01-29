@@ -30,7 +30,7 @@ import java.util.List;
  * GeboTemplatedChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GeboTemplatedChatResponse {
   @JsonProperty("id")
@@ -54,6 +54,9 @@ public class GeboTemplatedChatResponse {
   @JsonProperty("query")
   private String query = null;
 
+  @JsonProperty("thinkingOutputs")
+  private List<String> thinkingOutputs = null;
+
   @JsonProperty("backendMessages")
   private List<GUserMessage> backendMessages = null;
 
@@ -71,6 +74,9 @@ public class GeboTemplatedChatResponse {
 
   @JsonProperty("generatedResources")
   private List<LLMGeneratedResource> generatedResources = null;
+
+  @JsonProperty("pipelineRouterDecisionCode")
+  private String pipelineRouterDecisionCode = null;
 
   public GeboTemplatedChatResponse id(String id) {
     this.id = id;
@@ -196,6 +202,32 @@ public class GeboTemplatedChatResponse {
 
   public void setQuery(String query) {
     this.query = query;
+  }
+
+  public GeboTemplatedChatResponse thinkingOutputs(List<String> thinkingOutputs) {
+    this.thinkingOutputs = thinkingOutputs;
+    return this;
+  }
+
+  public GeboTemplatedChatResponse addThinkingOutputsItem(String thinkingOutputsItem) {
+    if (this.thinkingOutputs == null) {
+      this.thinkingOutputs = new ArrayList<>();
+    }
+    this.thinkingOutputs.add(thinkingOutputsItem);
+    return this;
+  }
+
+   /**
+   * Get thinkingOutputs
+   * @return thinkingOutputs
+  **/
+  @Schema(description = "")
+  public List<String> getThinkingOutputs() {
+    return thinkingOutputs;
+  }
+
+  public void setThinkingOutputs(List<String> thinkingOutputs) {
+    this.thinkingOutputs = thinkingOutputs;
   }
 
   public GeboTemplatedChatResponse backendMessages(List<GUserMessage> backendMessages) {
@@ -346,6 +378,24 @@ public class GeboTemplatedChatResponse {
     this.generatedResources = generatedResources;
   }
 
+  public GeboTemplatedChatResponse pipelineRouterDecisionCode(String pipelineRouterDecisionCode) {
+    this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
+    return this;
+  }
+
+   /**
+   * Get pipelineRouterDecisionCode
+   * @return pipelineRouterDecisionCode
+  **/
+  @Schema(description = "")
+  public String getPipelineRouterDecisionCode() {
+    return pipelineRouterDecisionCode;
+  }
+
+  public void setPipelineRouterDecisionCode(String pipelineRouterDecisionCode) {
+    this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -363,17 +413,19 @@ public class GeboTemplatedChatResponse {
         Objects.equals(this.queryResponse, geboTemplatedChatResponse.queryResponse) &&
         Objects.equals(this.windowOccupation, geboTemplatedChatResponse.windowOccupation) &&
         Objects.equals(this.query, geboTemplatedChatResponse.query) &&
+        Objects.equals(this.thinkingOutputs, geboTemplatedChatResponse.thinkingOutputs) &&
         Objects.equals(this.backendMessages, geboTemplatedChatResponse.backendMessages) &&
         Objects.equals(this.forcedDocumentsRef, geboTemplatedChatResponse.forcedDocumentsRef) &&
         Objects.equals(this.documentsRef, geboTemplatedChatResponse.documentsRef) &&
         Objects.equals(this.calledFunctions, geboTemplatedChatResponse.calledFunctions) &&
         Objects.equals(this.contextWindowStats, geboTemplatedChatResponse.contextWindowStats) &&
-        Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources);
+        Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources) &&
+        Objects.equals(this.pipelineRouterDecisionCode, geboTemplatedChatResponse.pipelineRouterDecisionCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode);
   }
 
 
@@ -389,12 +441,14 @@ public class GeboTemplatedChatResponse {
     sb.append("    queryResponse: ").append(toIndentedString(queryResponse)).append("\n");
     sb.append("    windowOccupation: ").append(toIndentedString(windowOccupation)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    thinkingOutputs: ").append(toIndentedString(thinkingOutputs)).append("\n");
     sb.append("    backendMessages: ").append(toIndentedString(backendMessages)).append("\n");
     sb.append("    forcedDocumentsRef: ").append(toIndentedString(forcedDocumentsRef)).append("\n");
     sb.append("    documentsRef: ").append(toIndentedString(documentsRef)).append("\n");
     sb.append("    calledFunctions: ").append(toIndentedString(calledFunctions)).append("\n");
     sb.append("    contextWindowStats: ").append(toIndentedString(contextWindowStats)).append("\n");
     sb.append("    generatedResources: ").append(toIndentedString(generatedResources)).append("\n");
+    sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

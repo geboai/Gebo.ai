@@ -14,18 +14,21 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GPromptPlaceholderInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 /**
- * LuceneConfig
+ * GPromptUseInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
-public class LuceneConfig {
+public class GPromptUseInfo {
   @JsonProperty("code")
   private String code = null;
 
@@ -44,10 +47,13 @@ public class LuceneConfig {
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
 
-  @JsonProperty("documentsQueueMax")
-  private Integer documentsQueueMax = null;
+  @JsonProperty("placeholders")
+  private List<GPromptPlaceholderInfo> placeholders = null;
 
-  public LuceneConfig code(String code) {
+  @JsonProperty("module")
+  private String module = null;
+
+  public GPromptUseInfo code(String code) {
     this.code = code;
     return this;
   }
@@ -65,7 +71,7 @@ public class LuceneConfig {
     this.code = code;
   }
 
-  public LuceneConfig description(String description) {
+  public GPromptUseInfo description(String description) {
     this.description = description;
     return this;
   }
@@ -83,7 +89,7 @@ public class LuceneConfig {
     this.description = description;
   }
 
-  public LuceneConfig userModified(String userModified) {
+  public GPromptUseInfo userModified(String userModified) {
     this.userModified = userModified;
     return this;
   }
@@ -101,7 +107,7 @@ public class LuceneConfig {
     this.userModified = userModified;
   }
 
-  public LuceneConfig userCreated(String userCreated) {
+  public GPromptUseInfo userCreated(String userCreated) {
     this.userCreated = userCreated;
     return this;
   }
@@ -119,7 +125,7 @@ public class LuceneConfig {
     this.userCreated = userCreated;
   }
 
-  public LuceneConfig dateModified(Date dateModified) {
+  public GPromptUseInfo dateModified(Date dateModified) {
     this.dateModified = dateModified;
     return this;
   }
@@ -137,7 +143,7 @@ public class LuceneConfig {
     this.dateModified = dateModified;
   }
 
-  public LuceneConfig dateCreated(Date dateCreated) {
+  public GPromptUseInfo dateCreated(Date dateCreated) {
     this.dateCreated = dateCreated;
     return this;
   }
@@ -155,22 +161,48 @@ public class LuceneConfig {
     this.dateCreated = dateCreated;
   }
 
-  public LuceneConfig documentsQueueMax(Integer documentsQueueMax) {
-    this.documentsQueueMax = documentsQueueMax;
+  public GPromptUseInfo placeholders(List<GPromptPlaceholderInfo> placeholders) {
+    this.placeholders = placeholders;
+    return this;
+  }
+
+  public GPromptUseInfo addPlaceholdersItem(GPromptPlaceholderInfo placeholdersItem) {
+    if (this.placeholders == null) {
+      this.placeholders = new ArrayList<>();
+    }
+    this.placeholders.add(placeholdersItem);
     return this;
   }
 
    /**
-   * Get documentsQueueMax
-   * @return documentsQueueMax
+   * Get placeholders
+   * @return placeholders
   **/
   @Schema(description = "")
-  public Integer getDocumentsQueueMax() {
-    return documentsQueueMax;
+  public List<GPromptPlaceholderInfo> getPlaceholders() {
+    return placeholders;
   }
 
-  public void setDocumentsQueueMax(Integer documentsQueueMax) {
-    this.documentsQueueMax = documentsQueueMax;
+  public void setPlaceholders(List<GPromptPlaceholderInfo> placeholders) {
+    this.placeholders = placeholders;
+  }
+
+  public GPromptUseInfo module(String module) {
+    this.module = module;
+    return this;
+  }
+
+   /**
+   * Get module
+   * @return module
+  **/
+  @Schema(required = true, description = "")
+  public String getModule() {
+    return module;
+  }
+
+  public void setModule(String module) {
+    this.module = module;
   }
 
 
@@ -182,26 +214,27 @@ public class LuceneConfig {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LuceneConfig luceneConfig = (LuceneConfig) o;
-    return Objects.equals(this.code, luceneConfig.code) &&
-        Objects.equals(this.description, luceneConfig.description) &&
-        Objects.equals(this.userModified, luceneConfig.userModified) &&
-        Objects.equals(this.userCreated, luceneConfig.userCreated) &&
-        Objects.equals(this.dateModified, luceneConfig.dateModified) &&
-        Objects.equals(this.dateCreated, luceneConfig.dateCreated) &&
-        Objects.equals(this.documentsQueueMax, luceneConfig.documentsQueueMax);
+    GPromptUseInfo gpromptUseInfo = (GPromptUseInfo) o;
+    return Objects.equals(this.code, gpromptUseInfo.code) &&
+        Objects.equals(this.description, gpromptUseInfo.description) &&
+        Objects.equals(this.userModified, gpromptUseInfo.userModified) &&
+        Objects.equals(this.userCreated, gpromptUseInfo.userCreated) &&
+        Objects.equals(this.dateModified, gpromptUseInfo.dateModified) &&
+        Objects.equals(this.dateCreated, gpromptUseInfo.dateCreated) &&
+        Objects.equals(this.placeholders, gpromptUseInfo.placeholders) &&
+        Objects.equals(this.module, gpromptUseInfo.module);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, documentsQueueMax);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, placeholders, module);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LuceneConfig {\n");
+    sb.append("class GPromptUseInfo {\n");
     
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
@@ -209,7 +242,8 @@ public class LuceneConfig {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    documentsQueueMax: ").append(toIndentedString(documentsQueueMax)).append("\n");
+    sb.append("    placeholders: ").append(toIndentedString(placeholders)).append("\n");
+    sb.append("    module: ").append(toIndentedString(module)).append("\n");
     sb.append("}");
     return sb.toString();
   }

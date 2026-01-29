@@ -53,7 +53,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: */*
+ - **Accept**: application/json
 
 <a name="chatSessionUpload"></a>
 # **chatSessionUpload**
@@ -98,7 +98,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: */*
+ - **Accept**: application/json
 
 <a name="deleteSessionUploads"></a>
 # **deleteSessionUploads**
@@ -141,7 +141,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: multipart/form-data
+ - **Accept**: application/json
 
 <a name="ragChatSessionCreateWithUpload"></a>
 # **ragChatSessionCreateWithUpload**
@@ -186,7 +186,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: */*
+ - **Accept**: application/json
 
 <a name="serveContent"></a>
 # **serveContent**

@@ -24,7 +24,7 @@ import java.util.Date;
  * DeepSearchDataSourceDocumentResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class DeepSearchDataSourceDocumentResult {
   @JsonProperty("code")
@@ -65,6 +65,9 @@ public class DeepSearchDataSourceDocumentResult {
 
   @JsonProperty("analyzedSearchResult")
   private SearchResult analyzedSearchResult = null;
+
+  @JsonProperty("processPercentage")
+  private Double processPercentage = null;
 
   public DeepSearchDataSourceDocumentResult code(String code) {
     this.code = code;
@@ -300,6 +303,24 @@ public class DeepSearchDataSourceDocumentResult {
     this.analyzedSearchResult = analyzedSearchResult;
   }
 
+  public DeepSearchDataSourceDocumentResult processPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+    return this;
+  }
+
+   /**
+   * Get processPercentage
+   * @return processPercentage
+  **/
+  @Schema(description = "")
+  public Double getProcessPercentage() {
+    return processPercentage;
+  }
+
+  public void setProcessPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -322,12 +343,13 @@ public class DeepSearchDataSourceDocumentResult {
         Objects.equals(this.handlerId, deepSearchDataSourceDocumentResult.handlerId) &&
         Objects.equals(this.documentIndex, deepSearchDataSourceDocumentResult.documentIndex) &&
         Objects.equals(this.dataSourceDescription, deepSearchDataSourceDocumentResult.dataSourceDescription) &&
-        Objects.equals(this.analyzedSearchResult, deepSearchDataSourceDocumentResult.analyzedSearchResult);
+        Objects.equals(this.analyzedSearchResult, deepSearchDataSourceDocumentResult.analyzedSearchResult) &&
+        Objects.equals(this.processPercentage, deepSearchDataSourceDocumentResult.processPercentage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, emptyResult, analyzedResult, deepsearchCode, handlerId, documentIndex, dataSourceDescription, analyzedSearchResult);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, emptyResult, analyzedResult, deepsearchCode, handlerId, documentIndex, dataSourceDescription, analyzedSearchResult, processPercentage);
   }
 
 
@@ -349,6 +371,7 @@ public class DeepSearchDataSourceDocumentResult {
     sb.append("    documentIndex: ").append(toIndentedString(documentIndex)).append("\n");
     sb.append("    dataSourceDescription: ").append(toIndentedString(dataSourceDescription)).append("\n");
     sb.append("    analyzedSearchResult: ").append(toIndentedString(analyzedSearchResult)).append("\n");
+    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -84,7 +84,7 @@ public class GeboUserChatUploadsControllerApi {
             formParams.add("files[]", files);
 
         final String[] accepts = { 
-            "*/*"
+            "application/json"
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { 
@@ -137,7 +137,7 @@ public class GeboUserChatUploadsControllerApi {
             formParams.add("files[]", files);
 
         final String[] accepts = { 
-            "*/*"
+            "application/json"
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { 
@@ -186,7 +186,7 @@ public class GeboUserChatUploadsControllerApi {
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
 
         final String[] accepts = { 
-            "multipart/form-data"
+            "application/json"
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { 
@@ -239,7 +239,7 @@ public class GeboUserChatUploadsControllerApi {
             formParams.add("files[]", files);
 
         final String[] accepts = { 
-            "*/*"
+            "application/json"
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = { 

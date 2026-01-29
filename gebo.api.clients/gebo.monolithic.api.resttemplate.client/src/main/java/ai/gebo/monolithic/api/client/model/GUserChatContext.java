@@ -16,7 +16,6 @@ import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.ChatInteractions;
 import ai.gebo.monolithic.api.client.model.GObjectRefGBaseChatModelConfig;
-import ai.gebo.monolithic.api.client.model.GUserChatConsolidationData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -28,7 +27,7 @@ import java.util.List;
  * GUserChatContext
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GUserChatContext {
   @JsonProperty("code")
@@ -75,9 +74,6 @@ public class GUserChatContext {
 
   @JsonProperty("choosedKnowledgeBases")
   private List<String> choosedKnowledgeBases = null;
-
-  @JsonProperty("consolidation")
-  private GUserChatConsolidationData consolidation = null;
 
   public GUserChatContext code(String code) {
     this.code = code;
@@ -365,24 +361,6 @@ public class GUserChatContext {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
-  public GUserChatContext consolidation(GUserChatConsolidationData consolidation) {
-    this.consolidation = consolidation;
-    return this;
-  }
-
-   /**
-   * Get consolidation
-   * @return consolidation
-  **/
-  @Schema(description = "")
-  public GUserChatConsolidationData getConsolidation() {
-    return consolidation;
-  }
-
-  public void setConsolidation(GUserChatConsolidationData consolidation) {
-    this.consolidation = consolidation;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -407,13 +385,12 @@ public class GUserChatContext {
         Objects.equals(this.chatMemoryId, guserChatContext.chatMemoryId) &&
         Objects.equals(this.interactions, guserChatContext.interactions) &&
         Objects.equals(this.chatModelCode, guserChatContext.chatModelCode) &&
-        Objects.equals(this.choosedKnowledgeBases, guserChatContext.choosedKnowledgeBases) &&
-        Objects.equals(this.consolidation, guserChatContext.consolidation);
+        Objects.equals(this.choosedKnowledgeBases, guserChatContext.choosedKnowledgeBases);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, consolidation);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, chatProfileCode, modelReference, ragChat, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases);
   }
 
 
@@ -437,7 +414,6 @@ public class GUserChatContext {
     sb.append("    interactions: ").append(toIndentedString(interactions)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
-    sb.append("    consolidation: ").append(toIndentedString(consolidation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

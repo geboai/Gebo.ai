@@ -14,3 +14,4 @@ Name | Type | Description | Notes
 **modelsListProvider** | **String** |  |  [optional]
 **providerId** | **String** |  |  [optional]
 **optionalAuthentication** | **Boolean** |  |  [optional]
+**applyThinkingMarkupHandling** | **Boolean** |  |  [optional]

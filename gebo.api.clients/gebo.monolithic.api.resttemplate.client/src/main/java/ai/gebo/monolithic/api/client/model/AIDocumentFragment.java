@@ -19,12 +19,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
- * RagDocumentFragment
+ * AIDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
-public class RagDocumentFragment {
+public class AIDocumentFragment {
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
+
   @JsonProperty("documentId")
   private String documentId = null;
 
@@ -55,10 +58,25 @@ public class RagDocumentFragment {
   @JsonProperty("nbytes")
   private Long nbytes = null;
 
-  @JsonProperty("ntokens")
-  private Long ntokens = null;
+  public AIDocumentFragment tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
 
-  public RagDocumentFragment documentId(String documentId) {
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
+  public AIDocumentFragment documentId(String documentId) {
     this.documentId = documentId;
     return this;
   }
@@ -76,7 +94,7 @@ public class RagDocumentFragment {
     this.documentId = documentId;
   }
 
-  public RagDocumentFragment documentContent(String documentContent) {
+  public AIDocumentFragment documentContent(String documentContent) {
     this.documentContent = documentContent;
     return this;
   }
@@ -94,7 +112,7 @@ public class RagDocumentFragment {
     this.documentContent = documentContent;
   }
 
-  public RagDocumentFragment code(String code) {
+  public AIDocumentFragment code(String code) {
     this.code = code;
     return this;
   }
@@ -112,7 +130,7 @@ public class RagDocumentFragment {
     this.code = code;
   }
 
-  public RagDocumentFragment rootKnowledgebaseCode(String rootKnowledgebaseCode) {
+  public AIDocumentFragment rootKnowledgebaseCode(String rootKnowledgebaseCode) {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
     return this;
   }
@@ -130,7 +148,7 @@ public class RagDocumentFragment {
     this.rootKnowledgebaseCode = rootKnowledgebaseCode;
   }
 
-  public RagDocumentFragment parentProjectCode(String parentProjectCode) {
+  public AIDocumentFragment parentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
     return this;
   }
@@ -148,7 +166,7 @@ public class RagDocumentFragment {
     this.parentProjectCode = parentProjectCode;
   }
 
-  public RagDocumentFragment rankIndex(Integer rankIndex) {
+  public AIDocumentFragment rankIndex(Integer rankIndex) {
     this.rankIndex = rankIndex;
     return this;
   }
@@ -166,7 +184,7 @@ public class RagDocumentFragment {
     this.rankIndex = rankIndex;
   }
 
-  public RagDocumentFragment weightedResultsRanking(Double weightedResultsRanking) {
+  public AIDocumentFragment weightedResultsRanking(Double weightedResultsRanking) {
     this.weightedResultsRanking = weightedResultsRanking;
     return this;
   }
@@ -184,7 +202,7 @@ public class RagDocumentFragment {
     this.weightedResultsRanking = weightedResultsRanking;
   }
 
-  public RagDocumentFragment origin(String origin) {
+  public AIDocumentFragment origin(String origin) {
     this.origin = origin;
     return this;
   }
@@ -202,7 +220,7 @@ public class RagDocumentFragment {
     this.origin = origin;
   }
 
-  public RagDocumentFragment chunkPosition(Long chunkPosition) {
+  public AIDocumentFragment chunkPosition(Long chunkPosition) {
     this.chunkPosition = chunkPosition;
     return this;
   }
@@ -220,7 +238,7 @@ public class RagDocumentFragment {
     this.chunkPosition = chunkPosition;
   }
 
-  public RagDocumentFragment nbytes(Long nbytes) {
+  public AIDocumentFragment nbytes(Long nbytes) {
     this.nbytes = nbytes;
     return this;
   }
@@ -238,24 +256,6 @@ public class RagDocumentFragment {
     this.nbytes = nbytes;
   }
 
-  public RagDocumentFragment ntokens(Long ntokens) {
-    this.ntokens = ntokens;
-    return this;
-  }
-
-   /**
-   * Get ntokens
-   * @return ntokens
-  **/
-  @Schema(description = "")
-  public Long getNtokens() {
-    return ntokens;
-  }
-
-  public void setNtokens(Long ntokens) {
-    this.ntokens = ntokens;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -265,31 +265,32 @@ public class RagDocumentFragment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RagDocumentFragment ragDocumentFragment = (RagDocumentFragment) o;
-    return Objects.equals(this.documentId, ragDocumentFragment.documentId) &&
-        Objects.equals(this.documentContent, ragDocumentFragment.documentContent) &&
-        Objects.equals(this.code, ragDocumentFragment.code) &&
-        Objects.equals(this.rootKnowledgebaseCode, ragDocumentFragment.rootKnowledgebaseCode) &&
-        Objects.equals(this.parentProjectCode, ragDocumentFragment.parentProjectCode) &&
-        Objects.equals(this.rankIndex, ragDocumentFragment.rankIndex) &&
-        Objects.equals(this.weightedResultsRanking, ragDocumentFragment.weightedResultsRanking) &&
-        Objects.equals(this.origin, ragDocumentFragment.origin) &&
-        Objects.equals(this.chunkPosition, ragDocumentFragment.chunkPosition) &&
-        Objects.equals(this.nbytes, ragDocumentFragment.nbytes) &&
-        Objects.equals(this.ntokens, ragDocumentFragment.ntokens);
+    AIDocumentFragment aiDocumentFragment = (AIDocumentFragment) o;
+    return Objects.equals(this.tokensSize, aiDocumentFragment.tokensSize) &&
+        Objects.equals(this.documentId, aiDocumentFragment.documentId) &&
+        Objects.equals(this.documentContent, aiDocumentFragment.documentContent) &&
+        Objects.equals(this.code, aiDocumentFragment.code) &&
+        Objects.equals(this.rootKnowledgebaseCode, aiDocumentFragment.rootKnowledgebaseCode) &&
+        Objects.equals(this.parentProjectCode, aiDocumentFragment.parentProjectCode) &&
+        Objects.equals(this.rankIndex, aiDocumentFragment.rankIndex) &&
+        Objects.equals(this.weightedResultsRanking, aiDocumentFragment.weightedResultsRanking) &&
+        Objects.equals(this.origin, aiDocumentFragment.origin) &&
+        Objects.equals(this.chunkPosition, aiDocumentFragment.chunkPosition) &&
+        Objects.equals(this.nbytes, aiDocumentFragment.nbytes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(documentId, documentContent, code, rootKnowledgebaseCode, parentProjectCode, rankIndex, weightedResultsRanking, origin, chunkPosition, nbytes, ntokens);
+    return Objects.hash(tokensSize, documentId, documentContent, code, rootKnowledgebaseCode, parentProjectCode, rankIndex, weightedResultsRanking, origin, chunkPosition, nbytes);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RagDocumentFragment {\n");
+    sb.append("class AIDocumentFragment {\n");
     
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("    documentId: ").append(toIndentedString(documentId)).append("\n");
     sb.append("    documentContent: ").append(toIndentedString(documentContent)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
@@ -300,7 +301,6 @@ public class RagDocumentFragment {
     sb.append("    origin: ").append(toIndentedString(origin)).append("\n");
     sb.append("    chunkPosition: ").append(toIndentedString(chunkPosition)).append("\n");
     sb.append("    nbytes: ").append(toIndentedString(nbytes)).append("\n");
-    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }
