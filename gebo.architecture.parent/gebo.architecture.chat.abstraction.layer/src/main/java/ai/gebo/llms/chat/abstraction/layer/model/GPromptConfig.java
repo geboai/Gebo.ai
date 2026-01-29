@@ -19,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * AI generated comments GPromptConfig class represents the configuration for a
@@ -26,6 +27,7 @@ import lombok.Data;
  * characteristics of the prompt.
  */
 @Document
+@ToString
 public class GPromptConfig implements Cloneable {
 	public static final String DEFAULT_LANGUAGE = "en";
 	private static final String SEPARATOR = "-";
