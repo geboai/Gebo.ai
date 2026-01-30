@@ -75,7 +75,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 			List<GPromptConfig> prompts = provider.promptsList();
 			for (GPromptConfig p : prompts) {
 				if (p.getPromptUse() == null || p.getPromptUse().trim().length() == 0) {
-					throw new IllegalStateException("A prompt with no promptUse field value cannot be managed " + p);
+					throw new IllegalStateException("The provider:"+provider.getId()+" exposes a prompt with no promptUse field value cannot be managed " + p);
 				} else {
 					p = p.copy();
 					p.setConfigDeclarated(true);

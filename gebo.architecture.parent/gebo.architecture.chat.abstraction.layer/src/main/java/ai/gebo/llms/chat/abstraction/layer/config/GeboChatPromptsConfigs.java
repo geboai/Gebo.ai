@@ -101,18 +101,16 @@ public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
 				+ "- Just return the updated summary text.\r\n" + "- Generate a maximum of {historySizeTarget} tokens"
 				+ "");
 		historyDocumentsConsolidationPrompt.setPromptUse(CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
-		historyDocumentsConsolidationPrompt
-				.setPrompt("You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n"
-						+ "TASK\r\n" + "Given:\r\n" + "(A) last user↔assistant turns (most recent first),\r\n" + "\r\n"
-						+ "(B) one or more documents (text extracted from a file or retrieved via RAG/deep search) with its metadata,\r\n"
-						+ "(C) chat history consolidated to illustrate the global meaning\r\n"
+		historyDocumentsConsolidationPrompt.setPrompt(
+				"You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n" + "TASK\r\n"
+						+ "Given:\r\n" + "A) LAST_TURNS, user and assistant chat, latest first:\r\n" + "{question}\r\n"
+						+ "B) INPUT DOCUMENTS\r\n{documents}\r\n" + "C) CONSOLIDATED HISTORY:\r\n{consolidated}\r\n"
 						+ "produce ONE JSON object of type CSSRelevantShrinkedDocument for each input documents that contains:\r\n"
 						+ "\r\n" + "a faithful, compact summary of the document,\r\n" + "\r\n"
 						+ "a relevancy score (Float) measuring how relevant the document is to the last 3 turns,\r\n"
 						+ "\r\n" + "an estimated token length for the produced summary.\r\n" + "\r\n"
 						+ "OUTPUT RULES (STRICT)\r\n" + "\r\n"
 						+ "Output ONLY a single valid JSON object. No markdown. No extra keys. No comments.\r\n"
-						+ "OUTPUT FORMAT\r\n{format}\r\n" + "\r\n"
 						+ "Use these exact keys: documentReference, documentName, documentTitle, summarizedContent, relevancyRate, tokensLength.\r\n"
 						+ "\r\n"
 						+ "Keep summarizedContent concise but information-dense. Prefer factual bullet-like sentences separated by \"\\n\".\r\n"
@@ -134,9 +132,7 @@ public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
 						+ "\r\n" + "Preserve important terminology and acronyms as-is.\r\n" + "\r\n"
 						+ "If the document is long, prioritize parts most relevant to the last 3 turns.\r\n" + "\r\n"
 						+ "If the document contains multiple sections, reflect that structure in the summary.\r\n"
-
-						+ "\r\n" + "A: LAST_TURNS:\r\n" + "{question}\r\n" + "B: INPUT DOCUMENTS\r\n{documents}\r\n"
-						+ "C: CONSOLIDATED HISTORY:\r\n{consolidated}\r\n");
+						+ "OUTPUT FORMAT\r\n{format}\r\n" + "\r\n" + "\r\n");
 	}
 
 	@Override

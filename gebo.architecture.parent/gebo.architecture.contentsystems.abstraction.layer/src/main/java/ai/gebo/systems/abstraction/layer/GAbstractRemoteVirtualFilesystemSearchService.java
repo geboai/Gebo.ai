@@ -35,11 +35,11 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 
 	@Override
 	public SearchableSystemMetaData findSystemById(String systemId) {
+
 		List<SystemType> configs = contentManagementSystemHandler.getConfigurations();
 		if (configs != null && !configs.isEmpty()) {
 			GContentManagementSystemType ctype = contentManagementSystemHandler.getHandledSystemType();
-			final String prologue = getMessagingModuleId() + "." + getMessagingSystemId()
-					+ SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
+			final String prologue = ctype.getCode() + SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
 			Optional<SystemType> found = configs.stream().filter(x -> (prologue + x.getCode()).equals(systemId))
 					.findFirst();
 			if (found.isEmpty())
@@ -113,8 +113,6 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 		}
 
 	}
-
-	
 
 	private List<SearchResult> cloneUnique(List<SearchResult> results, Map<String, Boolean> dupCheck) {
 		List<SearchResult> out = new ArrayList<SearchResult>();

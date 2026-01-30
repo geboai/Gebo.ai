@@ -6,4 +6,8 @@ import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 
 public interface IGStaticPromptsProvider {
 	public List<GPromptConfig> promptsList();
+
+	public default String getId() {
+		return this.getClass().getName();
+	}
 }

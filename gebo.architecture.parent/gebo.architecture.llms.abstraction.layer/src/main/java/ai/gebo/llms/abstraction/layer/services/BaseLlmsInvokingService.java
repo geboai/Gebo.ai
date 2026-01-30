@@ -21,6 +21,7 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.core.convert.converter.Converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -125,17 +126,26 @@ public class BaseLlmsInvokingService {
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
 		return result;
 	}
 
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
 			String question, Map<String, Object> params) {
+		
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		loadParams(promptTemplate, params);
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
 		return result;
 	}
 
@@ -158,6 +168,10 @@ public class BaseLlmsInvokingService {
 		}
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
 		return result;
 	}
 
@@ -173,11 +187,11 @@ public class BaseLlmsInvokingService {
 			String question, Object consolidated, Class<T> type) throws LLMConfigException {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
@@ -186,14 +200,14 @@ public class BaseLlmsInvokingService {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
 			promptTemplate.add(entry.getKey(), entry.getValue());
 		}
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt, String question,
@@ -201,14 +215,14 @@ public class BaseLlmsInvokingService {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
 			promptTemplate.add(entry.getKey(), entry.getValue());
 		}
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
@@ -216,12 +230,12 @@ public class BaseLlmsInvokingService {
 			throws LLMConfigException {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
@@ -229,7 +243,7 @@ public class BaseLlmsInvokingService {
 			Class<T> type) throws LLMConfigException {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
@@ -237,18 +251,18 @@ public class BaseLlmsInvokingService {
 		for (Entry<String, Object> entry : additionalParams.entrySet()) {
 			promptTemplate.add(entry.getKey(), entry.getValue());
 		}
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	protected <T> T callLLMWithDocumentsStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			Object documents, String question, Class<T> type) throws LLMConfigException {
 		prompt = fixPromptWithFormat(prompt);
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(type);
+		return chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
 	}
 
 	@Getter
@@ -316,7 +330,9 @@ public class BaseLlmsInvokingService {
 		final int promptLength = tokensEstimation.estimate(prompt);
 		T consolidated = null;
 		String _consolidated = pastConsolidation;
-
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		final String formatSpecification = outputConverter.getFormat();
+		final int formatSpecificationLength = tokensEstimation.estimate(formatSpecification);
 		int fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow, additionalParams);
 		do {
 			currentInput = input.get();
@@ -336,9 +352,8 @@ public class BaseLlmsInvokingService {
 					metaInfos.append(NEWLINE);
 				}
 				String metaData = metaInfos.toString();
-				final int metaDataTokens = tokensEstimation.estimate(metaData);
 				final String fullTextWithMetaData = metaData + currentInput.text;
-				fragmentBudget -= metaDataTokens;
+				fragmentBudget -= formatSpecificationLength;
 				final int textTokensLength = tokensEstimation.estimate(fullTextWithMetaData);
 
 				if (!alreadySplitted && textTokensLength > fragmentBudget) {
@@ -359,7 +374,7 @@ public class BaseLlmsInvokingService {
 					List<ConsolidationInputBatch> newBatchesQueue = splitted.stream().map(x -> {
 						ConsolidationInputBatch d = new ConsolidationInputBatch();
 						d.inputs.add(x);
-						d.totaltokens = x.tokensCount;
+						d.totaltokens += x.tokensCount;
 						d.complete = true;
 						return d;
 					}).toList();
@@ -412,6 +427,7 @@ public class BaseLlmsInvokingService {
 					}
 					_consolidated = objectMapper.writeValueAsString(consolidated);
 					fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow);
+					fragmentBudget -= formatSpecificationLength;
 				}
 			}
 		} while (currentInput != null);
@@ -472,7 +488,7 @@ public class BaseLlmsInvokingService {
 					List<ConsolidationInputBatch> newBatchesQueue = splitted.stream().map(x -> {
 						ConsolidationInputBatch d = new ConsolidationInputBatch();
 						d.inputs.add(x);
-						d.totaltokens = x.tokensCount;
+						d.totaltokens += x.tokensCount;
 						d.complete = true;
 						return d;
 					}).toList();
@@ -595,6 +611,9 @@ public class BaseLlmsInvokingService {
 				if (consolidationInputBatch.complete || currentInput == null) {
 					String outValue = callLLMWithDocuments(chatModel, prompt, consolidationInputBatch.inputs, question,
 							additionalParams);
+
+					outValue = ClientChatCallUtil.removeThinking(outValue);
+
 					if (outValue != null) {
 						outBuffer.append(outValue);
 						outBuffer.append(NEWLINE);

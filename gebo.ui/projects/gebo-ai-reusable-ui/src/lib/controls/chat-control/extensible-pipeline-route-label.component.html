@@ -1,0 +1,17 @@
+@switch (pipelineRouterDecisionCode) {
+@case("WAITING"){
+<span id="Waiting" gebo-ai-text>Analyzing the best response plan..</span>
+}
+@case("DEEP_SEARCH_RESPONSE") {
+<span id="DeepSearchName" gebo-ai-text>Running deep search</span>
+}
+@case("PURE_LLM_RESPONSE") {
+<span id="PureLLMResponse" gebo-ai-text>Asking llm</span>
+}
+@case("RAG_LLM_RESPONSE") {
+<span id="RagLLMResponse" gebo-ai-text>Running retrieve augmented generation</span>
+}
+@case("TOOLS_USE_RESPONSE") {
+<span id="ToolsLLMResponse" gebo-ai-text>Running tools</span>
+}
+}

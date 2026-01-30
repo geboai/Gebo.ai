@@ -220,15 +220,14 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 				};
 				flow.doAfterTerminate(deleteChunkingSessionRunnable);
 			}
-			return flow.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
-					.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
+			return flow;
 		});
 	}
 
 	protected Flux<AbstractDeepSearchEvent> singleThreadedStreamDeepSearch(DeepSearchRequest request,
 			AIDocumentsSet allDocuments) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return Flux.defer(() -> {
+		Flux<AbstractDeepSearchEvent> flow = Flux.defer(() -> {
 
 			try {
 
@@ -336,6 +335,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		})
 
 				.subscribeOn(deepSearchScheduler);
+		return flow;
 	}
 
 	@Override
@@ -355,7 +355,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		}
 			break;
 		}
-		return out;
+		return out.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
 	private void persistSideEffects(AbstractDeepSearchEvent step) {
@@ -513,7 +514,9 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			cleanResponse.setQueryResponse("");
 			this.chatService.addChatInteractionToUserContext(request, cleanResponse, chatContext);
 		}
-		return doStream(request, cleanResponse, knowledgeBasesCodesList, chatContext);
+		Flux<AbstractDeepSearchEvent> outflux = doStream(request, cleanResponse, knowledgeBasesCodesList, chatContext);
+		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
 	private Flux<AbstractDeepSearchEvent> doStream(GeboChatRequest request, GeboChatResponse response,
@@ -610,6 +613,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources)
 			throws LLMConfigException {
+		
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()
 				: DeepSearchVariant.SINGLE_THREAD;
@@ -632,7 +636,10 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		}
 			break;
 		}
-		return manageTrailingChatSessionEvents(out, request.getLastRequest(), chatResponse, userChatContext);
+		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(out, request.getLastRequest(),
+				chatResponse, userChatContext);
+		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
 	private List<String> createKnowledgeBasesList(LLMChatRequestResources request, GUserChatContext userChatContext) {

@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,6 +191,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 	protected GeboChatResponse createResponse(GeboChatRequest request, GUserChatContext context) {
 		GeboChatResponse response = new GeboChatResponse();
+		response.setId(UUID.randomUUID().toString());
 		response.setQuery(request.getQuery());
 		response.setUserChatContextCode(context.getCode());
 		return response;

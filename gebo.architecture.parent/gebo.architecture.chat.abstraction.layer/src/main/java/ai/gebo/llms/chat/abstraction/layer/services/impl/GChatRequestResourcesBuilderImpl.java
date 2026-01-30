@@ -80,13 +80,17 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 		AIDocumentsSet uploadedDocuments = new AIDocumentsSet();
 		// here add shrinked + actual request + chatWithDocsContents
 		List<UserUploadedContent> uploads = new ArrayList<UserUploadedContent>(
-				lastRequest != null ? lastRequest.getUserUploadedContents() : List.of());
+				lastRequest != null && lastRequest.getUserUploadedContents() != null
+						? lastRequest.getUserUploadedContents()
+						: List.of());
 		List<String> chatWithDocumentsList = new ArrayList(
-				lastRequest != null ? lastRequest.getForcedRequestDocuments() : List.of());
+				lastRequest != null && lastRequest.getForcedRequestDocuments() != null
+						? lastRequest.getForcedRequestDocuments()
+						: List.of());
 		final int shrinkedInteractionsIndex = shrinkedChatSessionState.getConsolidatedInteractions()
 				.getLastInteractionPointer();
 		List<ChatInteractions> latestInteractions = actualContext.getInteractions().subList(shrinkedInteractionsIndex,
-				actualContext.getInteractions().size() - 1);
+				actualContext.getInteractions().size());
 		List<CSSSimplefiedInteraction> lastInteractions = new ArrayList<CSSSimplefiedInteraction>();
 		for (ChatInteractions interaction : latestInteractions) {
 			List<UserUploadedContent> _uploads = interaction.getRequest() != null
@@ -155,7 +159,7 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				llmGeneratedDocuments, chatConsolidation, lastInteractions, lastRequest);
 	}
-	
+
 	private AIDocumentsSet toAIDocumentsSet(CSSfRelevantShrinkedDocumentList relevantRagRetrievedDocuments) {
 
 		return relevantRagRetrievedDocuments != null

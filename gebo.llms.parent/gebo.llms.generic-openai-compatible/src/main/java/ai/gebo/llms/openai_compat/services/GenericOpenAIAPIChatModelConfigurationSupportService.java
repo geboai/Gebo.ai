@@ -27,6 +27,7 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -51,6 +52,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
@@ -216,6 +218,15 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.create());
 			return model;
+		}
+
+		@Override
+		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+			if (this.type.getCode().equals(CHATMODEL_VLLM)) {
+				return new ThinkTagSkippingOutputConverter<T>(type);
+			} else {
+				return super.createConverter(type);
+			}
 		}
 
 		/**

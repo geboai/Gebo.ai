@@ -158,7 +158,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService im
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.add(GregorianCalendar.DAY_OF_YEAR, -1 * config.getDayElapsedWithoutTuning());
 			Date dateThreashold = calendar.getTime();
-			runOptimization = lastEntry.getProcessedDateTime().before(dateThreashold);
+			runOptimization = lastEntry.getProcessedDateTime().after(dateThreashold);
 		}
 		if (!runOptimization && lastEntry != null && lastCardinality > 0l) {
 			double delta = Math.abs(count - lastCardinality);

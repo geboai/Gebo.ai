@@ -47,6 +47,7 @@ interface GeboChatInteraction {
     request: GeboChatRequest;
     response?: GeboChatTemplatedResponse;
     loading?: boolean;
+    pipelineRouterDecisionCode?: string;
 };
 
 /**
@@ -611,7 +612,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
-        this.currentPipelineRouterDecisionCode = undefined;
+        this.currentPipelineRouterDecisionCode = this.ragsystem === true?"WAITING":undefined;
         const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
         const interaction: GeboChatInteraction = {
             loading: true,
@@ -644,11 +645,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
                 if (recvd.contentObjectType === "PipelineRoutingInfos") {
                     const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
+                    interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
                     if (pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
                         this.chatInputShell.switchToStreamingEventsLoop(true);
-                    } 
+                    }
                 }
                 if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
@@ -666,7 +668,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             this.addedChatAction.emit(newContext);
                         }
                         if (recvd.lastMessage === true) {
-
+                            this.currentPipelineRouterDecisionCode = undefined;
+                            interaction.pipelineRouterDecisionCode = undefined;
                             if (suggestChatDescription === true) {
                                 if (response.userChatContextCode) {
                                     let newChatInfoObservable: Observable<GUserChatInfo>;
@@ -731,7 +734,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             console.error("Exception in receiving data", error);
             if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
                 this.chatInputShell.onDeepSearchError(error);
-            } 
+            }
         }
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;

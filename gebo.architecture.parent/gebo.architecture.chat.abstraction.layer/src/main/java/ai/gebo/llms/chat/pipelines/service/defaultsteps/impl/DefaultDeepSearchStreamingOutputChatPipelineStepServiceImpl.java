@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -27,16 +28,18 @@ import reactor.core.publisher.Flux;
 public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends BaseOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
 	private final IGDeepSearchService deepSearchService;
+	private final IGeboThreadManager threadManager;
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
+
 	public DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGDeepSearchService deepSearchService) {
+			IGDeepSearchService deepSearchService, IGeboThreadManager threadManager) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo);
 		this.deepSearchService = deepSearchService;
-	}
+		this.threadManager = threadManager;
 
-	
+	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -59,7 +62,10 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 		try {
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request,
 					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), aiChoosedDataSources);
-			return deepSearchService.mapToChatFlux(flux, DeepSearchChatResponseEvent.class);
+			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
+					DeepSearchChatResponseEvent.class);
+			mapped.subscribeOn(threadManager.getScheduler());
+			return mapped;
 		} catch (LLMConfigException e) {
 			throw new ChatPipelineException("Error executing deep search", e);
 		}

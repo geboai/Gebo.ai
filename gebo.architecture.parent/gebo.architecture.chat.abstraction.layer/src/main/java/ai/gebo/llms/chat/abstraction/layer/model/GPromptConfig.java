@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 
@@ -39,10 +40,12 @@ public class GPromptConfig implements Cloneable {
 	@Id
 	private String code = null;
 	private String description = null;
+	@NotNull
 	private String prompt = null;
 	@HashIndexed
 	private String langCode = DEFAULT_LANGUAGE;
 	@HashIndexed
+	@NotNull
 	private String promptUse = null;
 	// internal llm provider handler id
 	@HashIndexed

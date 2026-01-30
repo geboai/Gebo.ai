@@ -33,6 +33,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.model.DocumentMetaInfos;
+import lombok.Data;
 
 @Service
 public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
@@ -44,6 +45,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
 	public static final String HISTORY_SIZE_TARGET = "historySizeTarget";
+
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatPromptsConfigs chatPromptsConfig,
 			GeboChatConfigs chatConfig) {
@@ -76,6 +78,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		return out;
 	}
 
+	@Data
+	public static class CSSData {
+		private CSSfRelevantShrinkedDocumentList data = new CSSfRelevantShrinkedDocumentList();
+	}
+
 	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(TokensContainer<? extends CSSReferredContentList> docs,
 			CSSSimplifiedChatHistory chatHistory, GUserChatInteractionsConsolidationData consolidated, int tokensBudget,
 			IGConfigurableChatModel usedChatModel) throws LLMConfigException, IOException {
@@ -87,7 +94,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 					.getLeaveLastInteractionsOnHistoryConsolidation();
 			for (int i = chatHistory.getInteractions().size() - 1; i >= 0
-					&& i >= chatHistory.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation; i++) {
+					&& i >= (chatHistory.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation); i--) {
 				CSSSimplefiedInteraction interaction = chatHistory.getInteractions().get(i);
 				if (interaction.getUser() != null && interaction.getUser().trim().length() > 0) {
 					lastTurns.append(USER_MSG);
@@ -122,10 +129,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 				}
 			}
 			if (!toBeConsolidated.isEmpty()) {
-				CSSfRelevantShrinkedDocumentList _consolidated = callLLMConsolidateStructuredReturn(usedChatModel,
-						prompt, question, pastConsolidation, CSSfRelevantShrinkedDocumentList.class, this::joiner,
-						toBeConsolidated);
-				outList.addAll(_consolidated);
+				CSSData _consolidated = callLLMConsolidateStructuredReturn(usedChatModel, prompt, question,
+						pastConsolidation, CSSData.class, this::joiner, toBeConsolidated);
+				outList.addAll(
+						_consolidated != null && _consolidated.getData() != null ? _consolidated.getData() : List.of());
 			}
 			for (CSSRelevantShrinkedDocument cssRelevantShrinkedDocument : outList) {
 				cssRelevantShrinkedDocument.setId(UUID.randomUUID().toString());
@@ -182,22 +189,23 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		return newConsolidation;
 	}
 
-	private CSSfRelevantShrinkedDocumentList joiner(CSSfRelevantShrinkedDocumentList t1,
-			CSSfRelevantShrinkedDocumentList t2) {
+	private CSSData joiner(CSSData t1, CSSData t2) {
 		CSSfRelevantShrinkedDocumentList out = new CSSfRelevantShrinkedDocumentList();
-		if (t1 != null)
-			out.addAll(t1);
+		if (t1 != null && t1.getData() != null)
+			out.addAll(t1.getData());
 
-		if (t2 != null) {
-			for (CSSRelevantShrinkedDocument t : t2) {
+		if (t2 != null && t2.getData() != null) {
+			for (CSSRelevantShrinkedDocument t : t2.getData()) {
 				t.setId(UUID.randomUUID().toString());
 				if (t.getSummarizedContent() != null) {
 					t.setTokensSize(this.tokensEstimator.estimate(t.getSummarizedContent()));
 				}
 			}
-			out.addAll(t2);
+			out.addAll(t2.getData());
 		}
-		return out;
+		CSSData d = new CSSData();
+		d.setData(out);
+		return d;
 	}
 
 }

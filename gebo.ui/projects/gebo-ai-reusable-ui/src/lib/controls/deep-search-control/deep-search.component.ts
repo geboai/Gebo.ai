@@ -83,6 +83,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         deepSearchUIAllowChooseSources:false,
         externalSourcesEnabled:false
     }
+    protected programmaticStreaming:boolean=false;
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
         private deepSearchControllerService: GeboDeepSearchControllerService,
         private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
@@ -109,6 +110,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     }
     public switchToStreamingEventsLoop(streaming:boolean):void {
         this.clearEventsDisplay();
+        this.programmaticStreaming=streaming;
         this.streamingResponse=streaming;
     }
     public onMessage(msg: IGeboChatMessage | string) {
@@ -167,6 +169,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
 
             if (msg.lastMessage === true) {
                 this.streamingResponse = false;
+                this.programmaticStreaming=false;
                 this.skipDeepSearchEvent.emit(true);
             }
         }
@@ -176,7 +179,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.errorOccurredEvent.emit(err);
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search") {
+        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search" && !this.programmaticStreaming) {
             this.chooseDataSources();
         }
         if (changes["currentDeepSearchRequest"] && this.currentDeepSearchRequest) {

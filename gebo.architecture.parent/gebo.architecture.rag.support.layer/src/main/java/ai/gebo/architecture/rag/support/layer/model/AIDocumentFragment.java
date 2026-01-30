@@ -27,7 +27,7 @@ import lombok.Data;
  * @author AI generated comments
  */
 @Data
-public class AIDocumentFragment implements IAIContent, Cloneable {
+public class AIDocumentFragment implements IAIContent, Cloneable, ITokensCountable {
 
 	// Number of tokens in the document fragment
 	private int tokensSize;
@@ -73,7 +73,16 @@ public class AIDocumentFragment implements IAIContent, Cloneable {
 	 */
 	public AIDocumentFragment(Document x, ExtractedDocumentMetaData metaData) {
 		this.documentId = x.getId();
-		this.documentContent = x.getText();
+		if (metaData.getMetaInfoHeader() != null) {
+			String _data = x.getText();
+			if (_data != null) {
+				this.documentContent = _data.replace(metaData.getMetaInfoHeader(), "");
+				this.tokensSize = tokensEstimator.estimate(this.documentContent);
+			}
+		} else {
+			this.documentContent = x.getText();
+		}
+
 		this.metaData = x.getMetadata();
 		this.code = metaData.getCode();
 		this.parentProjectCode = metaData.getParentProjectCode();

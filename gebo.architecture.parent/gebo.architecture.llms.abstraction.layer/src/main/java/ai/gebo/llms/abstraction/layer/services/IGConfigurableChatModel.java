@@ -13,6 +13,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.converter.StructuredOutputConverter;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -128,12 +130,16 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	 * @return
 	 * @throws LLMConfigException
 	 */
-	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext)
-			throws LLMConfigException;
+	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
 
-	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext, Class<ResponseType> rt) throws LLMConfigException;
+	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
+			Class<ResponseType> rt) throws LLMConfigException;
 
 	public default boolean isApplyThinkingMarkupHandling() {
 		return false;
+	}
+
+	public default <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+		return new BeanOutputConverter<T>(type);
 	}
 }
