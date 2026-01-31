@@ -85,6 +85,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         externalSourcesEnabled:false
     }
     protected programmaticStreaming:boolean=false;
+    protected deepSearchStarting:boolean=false;
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
         private deepSearchControllerService: GeboDeepSearchControllerService,
         private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
@@ -103,19 +104,23 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.analisysStep = undefined;
         this.deepSearchResponse = undefined;
         this.deepSearchNotification=undefined;
+        this.chatResponse=undefined;
     }
     protected get inEventsLoop(): boolean {
         return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
     }
     protected get isDisplayingDeepSearchProcess(): boolean {
-        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
+        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse || !this.deepSearchNotification || !this.deepSearchResponse;
     }
     public switchToStreamingEventsLoop(streaming:boolean):void {
         this.clearEventsDisplay();
+        this.completionPercent=0;
         this.programmaticStreaming=streaming;
         this.streamingResponse=streaming;
+        this.deepSearchStarting=true;
     }
     public onMessage(msg: IGeboChatMessage | string) {
+        this.deepSearchStarting=false;
         if (typeof msg === "string") {
 
         } else {
@@ -163,7 +168,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             severity: msg.content?.severity
                         };
                         this.messageService.addMessage("GeboAIDeepSearchModule","GeboAIDeepSearchComponent",message);
-                        this.errorOccurredEvent.emit(msg.content);
+                        //this.errorOccurredEvent.emit(msg.content);
                     } break;
                     case "GeboChatResponse": {
                         this.clearEventsDisplay();

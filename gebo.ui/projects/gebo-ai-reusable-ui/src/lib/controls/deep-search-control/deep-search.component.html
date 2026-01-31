@@ -7,7 +7,7 @@
             <p-progressbar [value]="completionPercent" [style]="{ height: '10px' }"></p-progressbar>
         </div>
         <div class="deep-search__label">
-            <span *ngIf="inEventsLoop && !isDisplayingDeepSearchProcess" class="deep-search__label"
+            <span *ngIf="inEventsLoop && deepSearchStarting" class="deep-search__label"
                 id="DeepSearchProcessingSearch" gebo-ai-text>Searching relevant informations</span>
             <span class="deep-search__label" *ngIf="analisysStep"><span id="DeepSearchProcessingFile"
                     gebo-ai-text>Analized

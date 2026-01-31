@@ -612,11 +612,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
-        this.currentPipelineRouterDecisionCode = this.ragsystem === true?"WAITING":undefined;
+        this.currentPipelineRouterDecisionCode = (this.ragsystem === true?"WAITING":undefined);
         const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
         const interaction: GeboChatInteraction = {
             loading: true,
-            request: r
+            request: r,
+            pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
         const messageCallback = (msg: IGeboChatMessage | string) => {

@@ -139,6 +139,11 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				queryResults.add(sr);
 			} catch (Throwable th) {
 				LOGGER.error("Handler:" + getHandlerId() + " fails running query:" + query, th);
+				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
+				errorEvent.setInputData(request);
+				errorEvent.setOutputData(GUserMessage
+						.errorMessage("Error searching " + getDescription(chatModel, deepSearchConfig, request), th));
+				return Flux.just(errorEvent);
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
