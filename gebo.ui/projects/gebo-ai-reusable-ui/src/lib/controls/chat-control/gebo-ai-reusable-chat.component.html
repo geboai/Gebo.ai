@@ -11,8 +11,7 @@
 <gebo-ai-notifications [messages]="lastInteractionMessages"></gebo-ai-notifications>
 <div class="gebo-ai-reusable-chat">
   <div class="gebo-ai-reusable-chat__info">
-    <p-dialog [modal]="true"
-              [(visible)]="userInfoOverlayVisible">
+    <p-dialog [modal]="true" [(visible)]="userInfoOverlayVisible">
 
       <gebo-user-chat-info-component [data]="chatUserInfos"></gebo-user-chat-info-component>
 
@@ -28,45 +27,23 @@
       @if (chatInfo) {
       <div class="gebo-ai-reusable-chat__header-icons">
         <div class="gebo-ai-reusable-chat__header-icons-item">
-          <p-button icon="pi pi-info-circle"
-                    id="chatConfigInfosBtn"
-                    class="custom-blue-btn"
-                    [rounded]="true"
-                    [text]="true"
-                    gebo-ai-label
-                    title="Chat configuration infos"
-                    (onClick)="userInfoOverlayVisible=true"></p-button>
+          <p-button icon="pi pi-info-circle" id="chatConfigInfosBtn" class="custom-blue-btn" [rounded]="true"
+            [text]="true" gebo-ai-label title="Chat configuration infos"
+            (onClick)="userInfoOverlayVisible=true"></p-button>
         </div>
         <div class="gebo-ai-reusable-chat__header-icons-item">
-          <p-button id="chatNameChangeBtn"
-                    icon="pi pi-pencil"
-                    (onClick)="doChangeDescription();"
-                    gebo-ai-label
-                    title="Rename the chat session"
-                    [rounded]="true"
-                    [text]="true"
-                    [disabled]="!chatInfo.code"
-                    class="custom-blue-btn"></p-button>
+          <p-button id="chatNameChangeBtn" icon="pi pi-pencil" (onClick)="doChangeDescription();" gebo-ai-label
+            title="Rename the chat session" [rounded]="true" [text]="true" [disabled]="!chatInfo.code"
+            class="custom-blue-btn"></p-button>
         </div>
         <div class="gebo-ai-reusable-chat__header-icons-item">
-          <p-button id="chatReloadBtn"
-                    icon="pi pi-undo"
-                    class="custom-blue-btn"
-                    gebo-ai-label
-                    [disabled]="!(chatInfo.code && (chatStreaming!==true || isChatStreamingProbabilyFailing===true))"
-                    [text]="true"
-                    [rounded]="true"
-                    (onClick)="loadChatHistory()"></p-button>
+          <p-button id="chatReloadBtn" icon="pi pi-undo" class="custom-blue-btn" gebo-ai-label
+            [disabled]="!(chatInfo.code && (chatStreaming!==true || isChatStreamingProbabilyFailing===true))"
+            [text]="true" [rounded]="true" (onClick)="loadChatHistory()"></p-button>
         </div>
         <div class="gebo-ai-reusable-chat__header-icons-item">
-          <p-button id="chaDeleteBtn"
-                    icon="pi pi-trash"
-                    severity="danger"
-                    (onClick)="doDeleteChat()"
-                    [rounded]="true"
-                    gebo-ai-label
-                    title="Delete this chat session"
-                    [text]="true"></p-button>
+          <p-button id="chaDeleteBtn" icon="pi pi-trash" severity="danger" (onClick)="doDeleteChat()" [rounded]="true"
+            gebo-ai-label title="Delete this chat session" [text]="true"></p-button>
         </div>
       </div>
       }
@@ -83,9 +60,7 @@
       }
       @if(loadingSearchResult) {
       <div class="gebo-ai-reusable-chat__interaction-spinner">
-        <p-progressSpinner strokeWidth="6"
-                           fill="transparent"
-                           [style]="{ width: '30px', height: '30px' }" />
+        <p-progressSpinner strokeWidth="6" fill="transparent" [style]="{ width: '30px', height: '30px' }" />
       </div>
 
       }
@@ -97,8 +72,7 @@
       @if (interaction.request.userUploadedContents?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
-          <i class="pi pi-paperclip"
-             id="UploadedDocs"></i>
+          <i class="pi pi-paperclip" id="UploadedDocs"></i>
         </span>
         <span class="gebo-ai-reusable-chat__interaction-item-title">Uploaded docs</span>
 
@@ -112,30 +86,28 @@
 
       <div class="gebo-ai-reusable-chat__interaction-item">
         <div class="gebo-ai-reusable-chat__interaction-item-title">
-          {{interaction?.response?.usedChatModelCode || modelName}}
+          {{modelName || interaction?.response?.usedChatModelCode }}
         </div>
-
-        <markdown lineNumbers
-                  lineHighlight
-                  mermaid
-                  clipboard
-                  [mermaidOptions]="options"
-                  [data]="interaction?.response?.queryResponse"></markdown>
+        @if(interaction.pipelineRouterDecisionCode) {
+        <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route">
+           <gebo-ai-pipline-route-display [pipelineRouterDecisionCode]="interaction.pipelineRouterDecisionCode"></gebo-ai-pipline-route-display>
+        </div>
+        }
+        <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
+          [data]="interaction?.response?.queryResponse"></markdown>
       </div>
 
       @if(ragsystem && interaction?.response?.documentsRef?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
-          <i class="pi pi-paperclip"
-             id="FoundDocs"></i>
+          <i class="pi pi-paperclip" id="FoundDocs"></i>
         </span>
         <span class="gebo-ai-reusable-chat__interaction-item-title">Found docs</span>
 
         @for (document of getDocs(interaction); track document.uuid) {
         @if(document) {
-        <gebo-ai-chat-docref [ref]="document"
-                             [choosed]="isChoosed(document)"
-                             (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
+        <gebo-ai-chat-docref [ref]="document" [choosed]="isChoosed(document)"
+          (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
         }
         }
       </div>
@@ -144,8 +116,7 @@
       @if(interaction?.response?.calledFunctions?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
-          <i class="pi pi-microchip"
-             id="CalledFunction"></i>
+          <i class="pi pi-microchip" id="CalledFunction"></i>
         </span>
         <span class="gebo-ai-reusable-chat__interaction-item-title">AI Called functions</span>
         @for (calledFunction of interaction.response?.calledFunctions; track calledFunction.functionName) {
@@ -158,8 +129,7 @@
       @if(interaction?.response?.generatedResources?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
-          <i class="pi pi-microchip"
-             id="GeneratedResources"></i>
+          <i class="pi pi-microchip" id="GeneratedResources"></i>
         </span>
         <span class="gebo-ai-reusable-chat__interaction-item-title">AI generated files</span>
 
@@ -175,52 +145,29 @@
   </div>
   @if(chatInfo?.code && isChatStreamingProbabilyFailing) {
   <div class="gebo-ai-reusable-chat__error">
-    <p-button icon="pi pi-undo"
-              size="large"
-              [text]="true"
-              (onClick)="loadChatHistory()"
-              severity="danger"></p-button>
+    <p-button icon="pi pi-undo" size="large" [text]="true" (onClick)="loadChatHistory()" severity="danger"></p-button>
   </div>
   }
   <div class="gebo-ai-reusable-chat__scroll">
-    <p-button icon="pi pi-arrow-down"
-              rounded
-              *ngIf="showBottomButton"
-              severity="secondary"
-              (click)="scrollToBottom()">
+    <p-button icon="pi pi-arrow-down" rounded *ngIf="showBottomButton" severity="secondary" (click)="scrollToBottom()">
     </p-button>
-    <p-button icon="pi pi-arrow-up"
-              rounded
-              *ngIf="showTopButton"
-              severity="secondary"
-              (click)="scrollToTop()">
+    <p-button icon="pi pi-arrow-up" rounded *ngIf="showTopButton" severity="secondary" (click)="scrollToTop()">
     </p-button>
   </div>
   <div class="gebo-ai-reusable-chat__footer">
-    <gebo-ai-chat-input-shell [interactions]="interactions"
-                              [formGroup]="formGroup"
-                              [ragsystem]="ragsystem"
-                              [chatUserInfos]="chatUserInfos"
-                              [knowledgeBaseCodes]="knowledgeBaseCodes"
-                              [chatInfo]="chatInfo"
-                              [userChatContextCode]="userChatContextCode"
-                              [capabilities]="capabilities"
-                              [currentAudioTrack]="currentAudioTrack"
-                              [loading]="loading"
-                              [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"
-                              [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-                              (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"
-                              (speechEvent)="onSpeechEvent($event)"
-                              (messageSubmit)="onSumbit()"
-                              (messageSend)="sendMessage()"
-                              (loadingChange)="loadingChatResponse=$event"
-                              (deepSearchChatRequest)="onExternalModuleRequest($event)"
-                              (deepsearchChatResponse)="onExternalModuleResponse($event)">
+    <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
+      [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
+      [userChatContextCode]="userChatContextCode" [capabilities]="capabilities" [currentAudioTrack]="currentAudioTrack"
+      [loading]="loading" [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"
+      [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
+      (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)" (speechEvent)="onSpeechEvent($event)"
+      (messageSubmit)="onSumbit()" (messageSend)="sendMessage()" (loadingChange)="loadingChatResponse=$event"
+      (deepSearchChatRequest)="onExternalModuleRequest($event)"
+      (deepsearchChatResponse)="onExternalModuleResponse($event)">
     </gebo-ai-chat-input-shell>
 
-    <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup"
-                                     [visible]="changeDescriptionDialogOpened"
-                                     (cancelAction)="changeDescriptionDialogOpened=false"
-                                     (saveAction)="doSaveChangedDescription()"></gebo-ai-chat-change-description>
+    <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"
+      (cancelAction)="changeDescriptionDialogOpened=false"
+      (saveAction)="doSaveChangedDescription()"></gebo-ai-chat-change-description>
   </div>
 </div>

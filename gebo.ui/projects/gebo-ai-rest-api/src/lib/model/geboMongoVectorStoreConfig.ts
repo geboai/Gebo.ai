@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { LuceneConfig } from './luceneConfig';
 import { MongoConfig } from './mongoConfig';
 import { QdrantConfig } from './qdrantConfig';
 import { RedisConfig } from './redisConfig';
@@ -18,16 +17,14 @@ export interface GeboMongoVectorStoreConfig {
     id?: string;
     product: GeboMongoVectorStoreConfig.ProductEnum;
     qdrantConfig?: QdrantConfig;
-    luceneConfig?: LuceneConfig;
     mongoConfig?: MongoConfig;
     redisConfig?: RedisConfig;
 }
 export namespace GeboMongoVectorStoreConfig {
-    export type ProductEnum = 'MONGO' | 'QDRANT' | 'LUCENE' | 'REDIS' | 'TEST';
+    export type ProductEnum = 'MONGO' | 'QDRANT' | 'REDIS' | 'TEST';
     export const ProductEnum = {
         MONGO: 'MONGO' as ProductEnum,
         QDRANT: 'QDRANT' as ProductEnum,
-        LUCENE: 'LUCENE' as ProductEnum,
         REDIS: 'REDIS' as ProductEnum,
         TEST: 'TEST' as ProductEnum
     };

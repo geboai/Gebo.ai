@@ -17,3 +17,4 @@ Name | Type | Description | Notes
 **handlerId** | **String** |  |  [optional]
 **dataSourceIndex** | **Integer** |  |  [optional]
 **dataSourceDescription** | **String** |  |  [optional]
+**processPercentage** | **Double** |  |  [optional]

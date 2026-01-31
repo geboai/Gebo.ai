@@ -23,7 +23,7 @@ import java.util.Date;
  * DeepSearchResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class DeepSearchResponse {
   @JsonProperty("code")
@@ -52,6 +52,9 @@ public class DeepSearchResponse {
 
   @JsonProperty("searchResultsEmpty")
   private Boolean searchResultsEmpty = null;
+
+  @JsonProperty("processPercentage")
+  private Double processPercentage = null;
 
   @JsonProperty("dataSourceDescription")
   private String dataSourceDescription = null;
@@ -218,6 +221,24 @@ public class DeepSearchResponse {
     this.searchResultsEmpty = searchResultsEmpty;
   }
 
+  public DeepSearchResponse processPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+    return this;
+  }
+
+   /**
+   * Get processPercentage
+   * @return processPercentage
+  **/
+  @Schema(description = "")
+  public Double getProcessPercentage() {
+    return processPercentage;
+  }
+
+  public void setProcessPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+  }
+
   public DeepSearchResponse dataSourceDescription(String dataSourceDescription) {
     this.dataSourceDescription = dataSourceDescription;
     return this;
@@ -255,12 +276,13 @@ public class DeepSearchResponse {
         Objects.equals(this.deepsearchCode, deepSearchResponse.deepsearchCode) &&
         Objects.equals(this.response, deepSearchResponse.response) &&
         Objects.equals(this.searchResultsEmpty, deepSearchResponse.searchResultsEmpty) &&
+        Objects.equals(this.processPercentage, deepSearchResponse.processPercentage) &&
         Objects.equals(this.dataSourceDescription, deepSearchResponse.dataSourceDescription);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, response, searchResultsEmpty, dataSourceDescription);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, response, searchResultsEmpty, processPercentage, dataSourceDescription);
   }
 
 
@@ -278,6 +300,7 @@ public class DeepSearchResponse {
     sb.append("    deepsearchCode: ").append(toIndentedString(deepsearchCode)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    searchResultsEmpty: ").append(toIndentedString(searchResultsEmpty)).append("\n");
+    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("    dataSourceDescription: ").append(toIndentedString(dataSourceDescription)).append("\n");
     sb.append("}");
     return sb.toString();

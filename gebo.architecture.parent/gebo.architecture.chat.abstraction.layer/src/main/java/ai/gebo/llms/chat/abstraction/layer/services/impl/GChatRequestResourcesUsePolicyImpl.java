@@ -28,32 +28,32 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.ContextWindowLengthRangeSettings;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.HistoryStrategy;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
+import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
@@ -82,10 +82,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	private static final Logger LOGGER = LoggerFactory.getLogger(GChatRequestResourcesUsePolicyImpl.class);
 
 	@Autowired
-	protected IGRagDocumentsCachedDao ragDocumentsCachedDao;
+	protected IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 
 	@Autowired
-	protected GeboRagConfigs ragResourcesConfig;
+	protected GeboChatConfigs ragResourcesConfig;
 
 	@Autowired
 	IGModelsLibraryDao modelsLibraryDao;
@@ -111,12 +111,12 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @return A TokenLimitedContent object containing the chat history and
 	 *         corresponding token count.
 	 */
-	private TokenLimitedContent<ChatHistoryData> completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(
+	private TokensContainer<ChatHistoryData> completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(
 			GUserChatContext userContext) {
-		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
+		TokensContainer<ChatHistoryData> _history = new TokensContainer<ChatHistoryData>();
 		int nhistoryTokens = 0;
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = null;/// userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
@@ -147,7 +147,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		out.setInteractions(history);
 		_history.setValue(out);
-		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
+		_history.setTokensSize(nhistoryTokens + consolidatedTokensSize);
 		return _history;
 	}
 
@@ -199,8 +199,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		RagChatModelLimitedRequest lrequest = new RagChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		final int rawContextNTokens=getContextLength(chatHandler);
-		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
+		final int rawContextNTokens = getContextLength(chatHandler);
+		final int contextWindowNToken = (int) Math.round(((double) rawContextNTokens) * 0.85);
 		OptimizedThreashold lastOptimizedThreasholds = threasholdAutotuneService
 				.findByEmbeddingModelCode(embeddingHandler.getCode());
 		// retrieve percentage of allocations settings and optimizations
@@ -218,10 +218,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 					* (settings.minimumToolAvailablePercent / 100.0));
 		}
 		// compute query tokens size
-		lrequest.setQuery(new TokenLimitedContent<String>());
+		lrequest.setQuery(new TokensContainer<String>());
 		lrequest.getQuery().setValue(request.getQuery());
-		lrequest.getQuery().setNToken(tokenEstimator.estimate(request.getQuery()));
-		int requestSize = lrequest.getQuery().getNToken();
+		lrequest.getQuery().setTokensSize(tokenEstimator.estimate(request.getQuery()));
+		int requestSize = lrequest.getQuery().getTokensSize();
 		// adding history history and the
 		// available tokens for documents will be already decreased from this allocation
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
@@ -229,7 +229,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		int availableTokensForDocuments = 0;
 
 		// compute actual history size
-		int historySizeTarget = lrequest.getHistory().getNToken();
+		int historySizeTarget = lrequest.getHistory().getTokensSize();
 		boolean historyToBeShrinked = false;
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
@@ -256,8 +256,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		// first add explicitly uploaded documents
 		lrequest.setUploadedDocuments(
 				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
-		availableTokensForDocuments -= lrequest.getUploadedDocuments().getNToken();
-		RagDocumentsCachedDaoResult extractedDocuments = null;
+		availableTokensForDocuments -= lrequest.getUploadedDocuments().getTokensSize();
+		AIDocumentsSet extractedDocuments = null;
 		RagQueryOptions ragQueryOptions = null;
 		ragQueryOptions = new RagQueryOptions();
 		ragQueryOptions.setMaxTokens(availableTokensForDocuments);
@@ -304,29 +304,29 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		extractedDocuments.getDocumentItems().forEach(x -> x.getFragments().forEach(y -> {
 			y.setOrigin(SEMANTIC_RAG);
 		}));
-		lrequest.setDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
+		lrequest.setDocuments(new TokensContainer<AIDocumentsSet>());
 		lrequest.getDocuments().setValue(extractedDocuments);
-		lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+		lrequest.getDocuments().setTokensSize((int) extractedDocuments.getTokensSize());
 		if (!forcedChatWithDocuments && this.knowledgeGraphSearch != null) {
 			// Run graph rag after semantic rag to provide context on more
 			// factual/entity/events based approach
-			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
+			if (availableTokensForDocuments > lrequest.getDocuments().getTokensSize()
 					&& this.knowledgeGraphSearch.isConfigured(null)) {
 				try {
 					List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
 							.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
 					mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);
-					lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+					lrequest.getDocuments().setTokensSize((int) extractedDocuments.getTokensSize());
 				} catch (Throwable throwable) {
 					LOGGER.error("Error invoking graphrag", throwable);
 				}
 			}
 
 		}
-		int historicDocumentsBudget = availableTokensForDocuments - lrequest.getDocuments().getNToken();
+		int historicDocumentsBudget = availableTokensForDocuments - lrequest.getDocuments().getTokensSize();
 		// i add all documents from the history untill fitting the maximum docs size
 		if (historicDocumentsBudget > 0) {
-			lrequest.setContextDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
+			lrequest.setContextDocuments(new TokensContainer<AIDocumentsSet>());
 			try {
 				lrequest.getContextDocuments().setValue(
 						createHistoricContextDocuments(userContext, extractedDocuments, historicDocumentsBudget));
@@ -348,29 +348,29 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		return lrequest;
 	}
 
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> createLimitedUploadedDocumentsOnRequests(
-			GUserChatContext userContext, GeboChatRequest request, int availableTokensForDocuments) throws IOException {
+	private TokensContainer<AIDocumentsSet> createLimitedUploadedDocumentsOnRequests(GUserChatContext userContext,
+			GeboChatRequest request, int availableTokensForDocuments) throws IOException {
 		int budget = availableTokensForDocuments;
-		TokenLimitedContent<RagDocumentsCachedDaoResult> outValue = new TokenLimitedContent<>();
-		RagDocumentsCachedDaoResult value = new RagDocumentsCachedDaoResult();
+		TokensContainer<AIDocumentsSet> outValue = new TokensContainer<>();
+		AIDocumentsSet value = new AIDocumentsSet();
 		boolean reachedBudgetLimit = false;
 		if (request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty()) {
 			for (UserUploadedContent uploaded : request.getUserUploadedContents()) {
 				List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
 				if (documents != null && !documents.isEmpty()) {
-					RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+					AIDocumentReferenceItem data = new AIDocumentReferenceItem();
 					data.setCode(uploaded.getCode());
 					data.setContentType(uploaded.getContentType());
 					data.setExtension(uploaded.getExtension());
 					data.setName(uploaded.getFileName());
-					List<RagDocumentFragment> fragments = new ArrayList<>();
+					List<AIDocumentFragment> fragments = new ArrayList<>();
 					for (Document document : documents) {
-						RagDocumentFragment fragment = new RagDocumentFragment(document,
+						AIDocumentFragment fragment = new AIDocumentFragment(document,
 								ExtractedDocumentMetaData.of(document.getMetadata()));
 						fragment.recalculateSize();
-						if (fragment.getNTokens() <= budget) {
+						if (fragment.getTokensSize() <= budget) {
 							fragments.add(fragment);
-							budget -= fragment.getNTokens();
+							budget -= fragment.getTokensSize();
 						} else {
 							reachedBudgetLimit = true;
 							break;
@@ -396,19 +396,19 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 					for (UserUploadedContent uploaded : interaction.getRequest().getUserUploadedContents()) {
 						List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
 						if (documents != null && !documents.isEmpty()) {
-							RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+							AIDocumentReferenceItem data = new AIDocumentReferenceItem();
 							data.setCode(uploaded.getCode());
 							data.setContentType(uploaded.getContentType());
 							data.setExtension(uploaded.getExtension());
 							data.setName(uploaded.getFileName());
-							List<RagDocumentFragment> fragments = new ArrayList<>();
+							List<AIDocumentFragment> fragments = new ArrayList<>();
 							for (Document document : documents) {
-								RagDocumentFragment fragment = new RagDocumentFragment(document,
+								AIDocumentFragment fragment = new AIDocumentFragment(document,
 										ExtractedDocumentMetaData.of(document.getMetadata()));
 								fragment.recalculateSize();
-								if (fragment.getNTokens() <= budget) {
+								if (fragment.getTokensSize() <= budget) {
 									fragments.add(fragment);
-									budget -= fragment.getNTokens();
+									budget -= fragment.getTokensSize();
 								} else {
 									reachedBudgetLimit = true;
 									break;
@@ -429,13 +429,12 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			}
 		}
 		outValue.setValue(value);
-		outValue.setNToken((int) value.getNTokens());
+		outValue.setTokensSize((int) value.getTokensSize());
 		return outValue;
 	}
 
-	private RagDocumentsCachedDaoResult createHistoricContextDocuments(GUserChatContext userContext,
-			RagDocumentsCachedDaoResult actualDocuments, int historicDocumentsBudget)
-			throws CloneNotSupportedException {
+	private AIDocumentsSet createHistoricContextDocuments(GUserChatContext userContext, AIDocumentsSet actualDocuments,
+			int historicDocumentsBudget) throws CloneNotSupportedException {
 		Map<String, Boolean> alreadyInFragments = new HashMap<>();
 		if (actualDocuments != null && actualDocuments.getDocumentItems() != null) {
 			List<Document> docs = actualDocuments.aiDocumentsList();
@@ -444,7 +443,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			});
 		}
 		int budget = historicDocumentsBudget;
-		RagDocumentsCachedDaoResult delta = new RagDocumentsCachedDaoResult();
+		AIDocumentsSet delta = new AIDocumentsSet();
 		if (userContext.getInteractions() != null) {
 			List<ChatInteractions> interactionsList = userContext.getInteractions();
 			for (int i = interactionsList.size() - 1; i >= 0; i--) {
@@ -457,26 +456,26 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		return delta;
 	}
 
-	private int integrateDeltaContent(RagDocumentsCachedDaoResult delta, ChatInteractions interaction,
+	private int integrateDeltaContent(AIDocumentsSet delta, ChatInteractions interaction,
 			Map<String, Boolean> alreadyInFragments, int budget) throws CloneNotSupportedException {
 		int remainingBudget = budget;
 		if (interaction.getRequest() != null && interaction.getRequest().getDocuments() != null) {
-			RagDocumentsCachedDaoResult current = interaction.getRequest().getDocuments();
-			for (RagDocumentReferenceItem doc : current.getDocumentItems()) {
+			AIDocumentsSet current = interaction.getRequest().getDocuments();
+			for (AIDocumentReferenceItem doc : current.getDocumentItems()) {
 				// shallow clone the docreference to recompose one doc with fragments not yet in
 				// the out contents
-				RagDocumentReferenceItem outDoc = (RagDocumentReferenceItem) doc.clone();
+				AIDocumentReferenceItem outDoc = (AIDocumentReferenceItem) doc.clone();
 				// clear its fragments list
 				outDoc.setFragments(new ArrayList<>());
 				outDoc.recalculateSize();
-				for (RagDocumentFragment fragment : doc.getFragments()) {
+				for (AIDocumentFragment fragment : doc.getFragments()) {
 					// if the fragment is not yet in the list
 					if (!alreadyInFragments.containsKey(fragment.getCode())) {
 
-						if (fragment.getNTokens() <= remainingBudget) {
+						if (fragment.getTokensSize() <= remainingBudget) {
 							// if this fragment is coherent with the actual budget
 							// i add this to the actual document
-							remainingBudget -= fragment.getNTokens();
+							remainingBudget -= fragment.getTokensSize();
 							outDoc.getFragments().add(fragment);
 							outDoc.recalculateSize();
 						} else {
@@ -502,10 +501,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		return remainingBudget;
 	}
 
-	private void mergeGraphRagResults(TokenLimitedContent<RagDocumentsCachedDaoResult> documents,
+	private void mergeGraphRagResults(TokensContainer<AIDocumentsSet> documents,
 			List<KnowledgeGraphSearchResult> graphRagResults, int availableTokensForDocuments) {
-		final Map<String, List<RagDocumentFragment>> fragments = new HashMap<String, List<RagDocumentFragment>>();
-		final Map<String, RagDocumentReferenceItem> alreadyExisting = new HashMap<String, RagDocumentReferenceItem>();
+		final Map<String, List<AIDocumentFragment>> fragments = new HashMap<String, List<AIDocumentFragment>>();
+		final Map<String, AIDocumentReferenceItem> alreadyExisting = new HashMap<String, AIDocumentReferenceItem>();
 		documents.getValue().getDocumentItems().forEach(x -> {
 			alreadyExisting.put(x.getCode(), x);
 		});
@@ -514,17 +513,17 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			if (documentCode == null)
 				return;
 			if (!fragments.containsKey(documentCode)) {
-				fragments.put(documentCode, new ArrayList<RagDocumentFragment>());
+				fragments.put(documentCode, new ArrayList<AIDocumentFragment>());
 			}
-			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
+			AIDocumentFragment fragment = new AIDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
 			fragment.setOrigin(GRAPH_RAG);
-			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
+			AIDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
 			boolean fragmentAlreadyFound = existingDoc != null && existingDoc.getFragments().stream()
 					.anyMatch(f -> f.getCode() != null && f.getCode().equals(fragment.getCode()));
 			if ((!fragmentAlreadyFound)
-					&& (documents.getNToken() + fragment.getNTokens()) <= availableTokensForDocuments) {
+					&& (documents.getTokensSize() + fragment.getTokensSize()) <= availableTokensForDocuments) {
 				if (existingDoc == null) {
-					existingDoc = new RagDocumentReferenceItem(x.getExtractedDocumentMetaData());
+					existingDoc = new AIDocumentReferenceItem(x.getExtractedDocumentMetaData());
 					alreadyExisting.put(documentCode, existingDoc);
 					documents.getValue().getDocumentItems().add(existingDoc);
 				}
@@ -561,14 +560,14 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @param chatHandler     The chat model handler used.
 	 * @return The token-limited version of the chat history.
 	 */
-	private TokenLimitedContent<ChatHistoryData> shrinkHistory(GUserChatContext userContext, int tokensBudget,
+	private TokensContainer<ChatHistoryData> shrinkHistory(GUserChatContext userContext, int tokensBudget,
 			HistoryStrategy historyStrategy, IGConfigurableChatModel chatHandler) {
 		if (historyStrategy == null)
 			historyStrategy = HistoryStrategy.SHORTENQUEUE;
-		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
+		TokensContainer<ChatHistoryData> _history = new TokensContainer<ChatHistoryData>();
 
 		ChatHistoryData out = new ChatHistoryData();
-		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		GUserChatInteractionsConsolidationData consolidated = null;// userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
@@ -606,7 +605,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		out.setInteractions(history);
 		_history.setValue(out);
-		_history.setNToken(nhistoryTokens);
+		_history.setTokensSize(nhistoryTokens);
 		return _history;
 	}
 
@@ -644,8 +643,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		}
 		ChatModelLimitedRequest lrequest = new ChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
-		final int rawContextNTokens=getContextLength(chatHandler);
-		final int contextWindowNToken =(int) Math.round(((double) rawContextNTokens)*0.85);
+		final int rawContextNTokens = getContextLength(chatHandler);
+		final int contextWindowNToken = (int) Math.round(((double) rawContextNTokens) * 0.85);
 
 		// retrieve percentage of allocations settings and optimizations
 		ContextWindowLengthRangeSettings settings = findOptimizationSettings(contextWindowNToken);
@@ -662,10 +661,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 					* (settings.minimumToolAvailablePercent / 100.0));
 		}
 		// compute query tokens size
-		lrequest.setQuery(new TokenLimitedContent<String>());
+		lrequest.setQuery(new TokensContainer<String>());
 		lrequest.getQuery().setValue(request.getQuery());
-		lrequest.getQuery().setNToken(tokenEstimator.estimate(request.getQuery()));
-		int requestSize = lrequest.getQuery().getNToken();
+		lrequest.getQuery().setTokensSize(tokenEstimator.estimate(request.getQuery()));
+		int requestSize = lrequest.getQuery().getTokensSize();
 		// adding history history and the
 		// available tokens for documents will be already decreased from this allocation
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
@@ -674,7 +673,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 		// compute actual history size
 		boolean historyToBeShrinked = false;
-		int historySizeTarget = lrequest.getHistory().getNToken();
+		int historySizeTarget = lrequest.getHistory().getTokensSize();
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
 			// maximum available tokens for documents theorizing to shring the history to

@@ -28,7 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
@@ -61,7 +61,7 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 	@Autowired
 	protected IGToolCallbackSourceRepositoryPattern functionsCallbackWrapper;
 	@Autowired
-	protected GeboRagConfigs ragConfig;
+	protected GeboChatConfigs ragConfig;
 
 	/**
 	 * Constructor for GChatProfileManagementServiceImpl.
@@ -137,7 +137,7 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 			return existing.get();
 		
 		// Retrieve or create default prompt configuration
-		GPromptConfig prompt = promptConfigDao.defaultPrompt(true);
+		GPromptConfig prompt = promptConfigDao.defaultChatPrompt(true);
 		if (prompt == null)
 			throw new LLMConfigException("Default prompt is not configured in this system");
 		

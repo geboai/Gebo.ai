@@ -6,9 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deletePromptConfig**](GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
-[**getAllPromptConfig**](GeboAdminPromptsControllerApi.md#getAllPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/getAllPromptConfig | 
-[**getAllPromptConfigByQbe**](GeboAdminPromptsControllerApi.md#getAllPromptConfigByQbe) | **POST** /api/admin/GeboAdminPromptsController/getAllPromptConfigByQbe | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
+[**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 [**insertPromptConfig**](GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
 [**updatePromptConfig**](GeboAdminPromptsControllerApi.md#updatePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/updatePromptConfig | 
 
@@ -97,92 +96,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-<a name="getAllPromptConfig"></a>
-# **getAllPromptConfig**
-> PageGPromptConfig getAllPromptConfig(body)
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
-
-
-GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-DataPage body = new DataPage(); // DataPage | 
-try {
-    PageGPromptConfig result = apiInstance.getAllPromptConfig(body);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getAllPromptConfig");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **body** | [**DataPage**](DataPage.md)|  |
-
-### Return type
-
-[**PageGPromptConfig**](PageGPromptConfig.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-<a name="getAllPromptConfigByQbe"></a>
-# **getAllPromptConfigByQbe**
-> PageGPromptConfig getAllPromptConfigByQbe(body)
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
-
-
-GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
-PromptConfigByQbeParam body = new PromptConfigByQbeParam(); // PromptConfigByQbeParam | 
-try {
-    PageGPromptConfig result = apiInstance.getAllPromptConfigByQbe(body);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getAllPromptConfigByQbe");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **body** | [**PromptConfigByQbeParam**](PromptConfigByQbeParam.md)|  |
-
-### Return type
-
-[**PageGPromptConfig**](PageGPromptConfig.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
 <a name="getPromptCategories"></a>
 # **getPromptCategories**
 > List&lt;String&gt; getPromptCategories()
@@ -220,6 +133,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getPromptConfigByFilter"></a>
+# **getPromptConfigByFilter**
+> GPromptConfig getPromptConfigByFilter(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+PromptFilter body = new PromptFilter(); // PromptFilter | 
+try {
+    GPromptConfig result = apiInstance.getPromptConfigByFilter(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getPromptConfigByFilter");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**PromptFilter**](PromptFilter.md)|  |
+
+### Return type
+
+[**GPromptConfig**](GPromptConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="insertPromptConfig"></a>

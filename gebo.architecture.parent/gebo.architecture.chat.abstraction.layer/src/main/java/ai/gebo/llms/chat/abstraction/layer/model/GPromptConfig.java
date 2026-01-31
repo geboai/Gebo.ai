@@ -6,163 +6,183 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.UUID;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.ToString;
 
 /**
- * AI generated comments
- * GPromptConfig class represents the configuration for a prompt used in chat models.
- * It contains various properties that define the characteristics of the prompt.
+ * AI generated comments GPromptConfig class represents the configuration for a
+ * prompt used in chat models. It contains various properties that define the
+ * characteristics of the prompt.
  */
-public class GPromptConfig extends GBaseObject {
+@Document
+@ToString
+public class GPromptConfig implements Cloneable {
+	public static final String DEFAULT_LANGUAGE = "en";
+	private static final String SEPARATOR = "-";
+	private static final String FIELD_PLACEHOLDER = "-|-";
+	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
+	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 
-    private String prompt = null;
-    private String modelProvider = null;
-    private String modelName = null;
-    private String promptCategory = null;
-    private Boolean defaultPrompt = null;
-    private Boolean ragPrompt = null;
-    private GObjectRef<GBaseChatModelConfig> modelConfigurationReference = null;
+	public static final String PROMPT_USE_DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-chat-pipeline-routing-decision-prompt";
+	@Id
+	private String code = null;
+	private String description = null;
+	@NotNull
+	private String prompt = null;
+	@HashIndexed
+	private String langCode = DEFAULT_LANGUAGE;
+	@HashIndexed
+	@NotNull
+	private String promptUse = null;
+	// internal llm provider handler id
+	@HashIndexed
+	private String modelProvider = null;
+	// model code
+	@HashIndexed
+	private String modelCode = null;
+	private String promptCategory = null;
+	private Boolean configDeclarated;
 
-    /**
-     * Default constructor for GPromptConfig class.
-     */
-    public GPromptConfig() {
+	private void regenerateCode() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(value(promptUse));
+		buffer.append(SEPARATOR);
+		if (langCode == null || langCode.trim().length() == 0) {
+			langCode = DEFAULT_LANGUAGE;
+		}
+		buffer.append(value(langCode));
+		buffer.append(SEPARATOR);
+		buffer.append(value(modelProvider));
+		buffer.append(SEPARATOR);
+		buffer.append(value(modelCode));
+		this.code = buffer.toString();
+	}
 
-    }
+	private String value(String s) {
+		if (s == null || s.trim().length() == 0)
+			return FIELD_PLACEHOLDER;
+		return s.trim().toUpperCase();
+	}
 
-    /**
-     * Gets the prompt string.
-     * @return the prompt string.
-     */
-    public String getPrompt() {
-        return prompt;
-    }
+	/**
+	 * Creates a new GPromptConfig instance with a specified prompt. Generates a
+	 * random UUID code and assigns it to the new instance.
+	 * 
+	 * @param prompt2 the prompt to set in the new configuration.
+	 * @return a new instance of GPromptConfig with the specified prompt.
+	 */
+	public static GPromptConfig of(String prompt, String promptUse) {
+		GPromptConfig cfg = new GPromptConfig();
+		cfg.setPrompt(prompt);
+		cfg.setPromptUse(promptUse);
+		return cfg;
+	}
 
-    /**
-     * Sets the prompt string.
-     * @param prompt the prompt string to set.
-     */
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
+	public static GPromptConfig of(String prompt) {
+		GPromptConfig cfg = new GPromptConfig();
+		cfg.setPrompt(prompt);
 
-    /**
-     * Gets the model provider.
-     * @return the model provider.
-     */
-    public String getModelProvider() {
-        return modelProvider;
-    }
+		return cfg;
+	}
 
-    /**
-     * Sets the model provider.
-     * @param modelProvider the model provider to set.
-     */
-    public void setModelProvider(String modelProvider) {
-        this.modelProvider = modelProvider;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    /**
-     * Gets the model name.
-     * @return the model name.
-     */
-    public String getModelName() {
-        return modelName;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    /**
-     * Sets the model name.
-     * @param modelName the model name to set.
-     */
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * Gets the reference to the model configuration.
-     * @return the model configuration reference.
-     */
-    public GObjectRef<GBaseChatModelConfig> getModelConfigurationReference() {
-        return modelConfigurationReference;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
-     * Sets the reference to the model configuration.
-     * @param modelConfigurationReference the reference to set.
-     */
-    public void setModelConfigurationReference(GObjectRef<GBaseChatModelConfig> modelConfigurationReference) {
-        this.modelConfigurationReference = modelConfigurationReference;
-    }
+	public String getPrompt() {
+		return prompt;
+	}
 
-    /**
-     * Gets the prompt category.
-     * @return the prompt category.
-     */
-    public String getPromptCategory() {
-        return promptCategory;
-    }
+	public void setPrompt(String prompt) {
+		this.prompt = prompt;
+	}
 
-    /**
-     * Sets the prompt category.
-     * @param promptCategory the prompt category to set.
-     */
-    public void setPromptCategory(String promptCategory) {
-        this.promptCategory = promptCategory;
-    }
+	public String getLangCode() {
+		return langCode;
+	}
 
-    /**
-     * Checks if it is a RAG (Retrieve and Generate) prompt.
-     * @return true if it's a RAG prompt, false otherwise.
-     */
-    public Boolean getRagPrompt() {
-        return ragPrompt;
-    }
+	public void setLangCode(String langCode) {
+		this.langCode = langCode;
+		regenerateCode();
+	}
 
-    /**
-     * Sets the RAG prompt status.
-     * @param ragPrompt true if it's a RAG prompt, false otherwise.
-     */
-    public void setRagPrompt(Boolean ragPrompt) {
-        this.ragPrompt = ragPrompt;
-    }
+	public String getPromptUse() {
+		return promptUse;
+	}
 
-    /**
-     * Checks if it is the default prompt.
-     * @return true if it's the default prompt, false otherwise.
-     */
-    public Boolean getDefaultPrompt() {
-        return defaultPrompt;
-    }
+	public void setPromptUse(String promptUse) {
+		this.promptUse = promptUse;
+		regenerateCode();
+	}
 
-    /**
-     * Sets the default prompt status.
-     * @param defaultPrompt true to set as the default prompt, false otherwise.
-     */
-    public void setDefaultPrompt(Boolean defaultPrompt) {
-        this.defaultPrompt = defaultPrompt;
-    }
+	public String getModelProvider() {
+		return modelProvider;
+	}
 
-    /**
-     * Creates a new GPromptConfig instance with a specified prompt.
-     * Generates a random UUID code and assigns it to the new instance.
-     * @param prompt2 the prompt to set in the new configuration.
-     * @return a new instance of GPromptConfig with the specified prompt.
-     */
-    public static GPromptConfig of(String prompt2) {
-        GPromptConfig cfg = new GPromptConfig();
-        cfg.setPrompt(prompt2);
-        cfg.setCode(UUID.randomUUID().toString());
-        return cfg;
-    }
+	public void setModelProvider(String modelProvider) {
+		this.modelProvider = modelProvider;
+		regenerateCode();
+	}
 
+	public String getModelCode() {
+		return modelCode;
+	}
+
+	public void setModelCode(String modelName) {
+		this.modelCode = modelName;
+		regenerateCode();
+	}
+
+	public String getPromptCategory() {
+		return promptCategory;
+	}
+
+	public void setPromptCategory(String promptCategory) {
+		this.promptCategory = promptCategory;
+	}
+
+	public Boolean getConfigDeclarated() {
+		return configDeclarated;
+	}
+
+	public void setConfigDeclarated(Boolean staticDeclarated) {
+		this.configDeclarated = staticDeclarated;
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Something is going very very wrongly", e);
+		}
+	}
+
+	public GPromptConfig copy() {
+		return (GPromptConfig) this.clone();
+	}
 }

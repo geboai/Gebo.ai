@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GeboComponentInfo;
 import ai.gebo.monolithic.api.client.model.SearchResult;
 import ai.gebo.monolithic.api.client.model.SearchResultReference;
 import ai.gebo.monolithic.api.client.model.VFilesystemReference;
@@ -22,12 +23,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 /**
  * SearchResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class SearchResult {
   @JsonProperty("id")
@@ -45,14 +47,20 @@ public class SearchResult {
   @JsonProperty("nestingLevel")
   private Integer nestingLevel = null;
 
-  @JsonProperty("systemHandlerId")
-  private String systemHandlerId = null;
+  @JsonProperty("modificationDate")
+  private Date modificationDate = null;
+
+  @JsonProperty("childs")
+  private List<SearchResult> childs = null;
+
+  @JsonProperty("originComponent")
+  private GeboComponentInfo originComponent = null;
 
   @JsonProperty("systemConfigurationCode")
   private String systemConfigurationCode = null;
 
-  @JsonProperty("childs")
-  private List<SearchResult> childs = null;
+  @JsonProperty("code")
+  private String code = null;
 
   public SearchResult id(String id) {
     this.id = id;
@@ -144,40 +152,22 @@ public class SearchResult {
     this.nestingLevel = nestingLevel;
   }
 
-  public SearchResult systemHandlerId(String systemHandlerId) {
-    this.systemHandlerId = systemHandlerId;
+  public SearchResult modificationDate(Date modificationDate) {
+    this.modificationDate = modificationDate;
     return this;
   }
 
    /**
-   * Get systemHandlerId
-   * @return systemHandlerId
+   * Get modificationDate
+   * @return modificationDate
   **/
-  @Schema(required = true, description = "")
-  public String getSystemHandlerId() {
-    return systemHandlerId;
+  @Schema(description = "")
+  public Date getModificationDate() {
+    return modificationDate;
   }
 
-  public void setSystemHandlerId(String systemHandlerId) {
-    this.systemHandlerId = systemHandlerId;
-  }
-
-  public SearchResult systemConfigurationCode(String systemConfigurationCode) {
-    this.systemConfigurationCode = systemConfigurationCode;
-    return this;
-  }
-
-   /**
-   * Get systemConfigurationCode
-   * @return systemConfigurationCode
-  **/
-  @Schema(required = true, description = "")
-  public String getSystemConfigurationCode() {
-    return systemConfigurationCode;
-  }
-
-  public void setSystemConfigurationCode(String systemConfigurationCode) {
-    this.systemConfigurationCode = systemConfigurationCode;
+  public void setModificationDate(Date modificationDate) {
+    this.modificationDate = modificationDate;
   }
 
   public SearchResult childs(List<SearchResult> childs) {
@@ -206,6 +196,60 @@ public class SearchResult {
     this.childs = childs;
   }
 
+  public SearchResult originComponent(GeboComponentInfo originComponent) {
+    this.originComponent = originComponent;
+    return this;
+  }
+
+   /**
+   * Get originComponent
+   * @return originComponent
+  **/
+  @Schema(required = true, description = "")
+  public GeboComponentInfo getOriginComponent() {
+    return originComponent;
+  }
+
+  public void setOriginComponent(GeboComponentInfo originComponent) {
+    this.originComponent = originComponent;
+  }
+
+  public SearchResult systemConfigurationCode(String systemConfigurationCode) {
+    this.systemConfigurationCode = systemConfigurationCode;
+    return this;
+  }
+
+   /**
+   * Get systemConfigurationCode
+   * @return systemConfigurationCode
+  **/
+  @Schema(required = true, description = "")
+  public String getSystemConfigurationCode() {
+    return systemConfigurationCode;
+  }
+
+  public void setSystemConfigurationCode(String systemConfigurationCode) {
+    this.systemConfigurationCode = systemConfigurationCode;
+  }
+
+  public SearchResult code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(required = true, description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -221,14 +265,16 @@ public class SearchResult {
         Objects.equals(this.navigationReference, searchResult.navigationReference) &&
         Objects.equals(this.descriptiveText, searchResult.descriptiveText) &&
         Objects.equals(this.nestingLevel, searchResult.nestingLevel) &&
-        Objects.equals(this.systemHandlerId, searchResult.systemHandlerId) &&
+        Objects.equals(this.modificationDate, searchResult.modificationDate) &&
+        Objects.equals(this.childs, searchResult.childs) &&
+        Objects.equals(this.originComponent, searchResult.originComponent) &&
         Objects.equals(this.systemConfigurationCode, searchResult.systemConfigurationCode) &&
-        Objects.equals(this.childs, searchResult.childs);
+        Objects.equals(this.code, searchResult.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, resultReference, navigationReference, descriptiveText, nestingLevel, systemHandlerId, systemConfigurationCode, childs);
+    return Objects.hash(id, resultReference, navigationReference, descriptiveText, nestingLevel, modificationDate, childs, originComponent, systemConfigurationCode, code);
   }
 
 
@@ -242,9 +288,11 @@ public class SearchResult {
     sb.append("    navigationReference: ").append(toIndentedString(navigationReference)).append("\n");
     sb.append("    descriptiveText: ").append(toIndentedString(descriptiveText)).append("\n");
     sb.append("    nestingLevel: ").append(toIndentedString(nestingLevel)).append("\n");
-    sb.append("    systemHandlerId: ").append(toIndentedString(systemHandlerId)).append("\n");
-    sb.append("    systemConfigurationCode: ").append(toIndentedString(systemConfigurationCode)).append("\n");
+    sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    childs: ").append(toIndentedString(childs)).append("\n");
+    sb.append("    originComponent: ").append(toIndentedString(originComponent)).append("\n");
+    sb.append("    systemConfigurationCode: ").append(toIndentedString(systemConfigurationCode)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("}");
     return sb.toString();
   }

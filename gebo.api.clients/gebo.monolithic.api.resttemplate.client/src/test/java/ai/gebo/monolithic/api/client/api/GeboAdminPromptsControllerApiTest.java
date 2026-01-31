@@ -12,17 +12,12 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.DataPage;
-import ai.gebo.monolithic.api.client.model.GPromptConfig;
-import ai.gebo.monolithic.api.client.model.PageGPromptConfig;
-import ai.gebo.monolithic.api.client.model.PromptConfigByQbeParam;
-import org.junit.Test;
-import org.junit.Ignore;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import ai.gebo.monolithic.api.client.model.GPromptConfig;
 
 /**
  * API tests for GeboAdminPromptsControllerApi
@@ -70,28 +65,7 @@ public class GeboAdminPromptsControllerApiTest {
      * @throws ApiException
      *          if the Api call fails
      */
-    @Test
-    public void getAllPromptConfigTest() {
-        DataPage body = null;
-        PageGPromptConfig response = api.getAllPromptConfig(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getAllPromptConfigByQbeTest() {
-        PromptConfigByQbeParam body = null;
-        PageGPromptConfig response = api.getAllPromptConfigByQbe(body);
-
-        // TODO: test validations
-    }
+ 
     /**
      * 
      *

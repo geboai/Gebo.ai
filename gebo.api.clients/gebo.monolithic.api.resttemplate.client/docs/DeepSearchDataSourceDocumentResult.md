@@ -16,3 +16,4 @@ Name | Type | Description | Notes
 **documentIndex** | **Integer** |  |  [optional]
 **dataSourceDescription** | **String** |  | 
 **analyzedSearchResult** | [**SearchResult**](SearchResult.md) |  | 
+**processPercentage** | **Double** |  |  [optional]

@@ -10,10 +10,10 @@ import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
@@ -94,5 +94,8 @@ public interface IGChatStorageAreaService {
 			throws IOException;
 
 	public InputStream streamContent(LLMGeneratedResource generated) throws IOException;
+
+	public List<Document> getIngestedContentsOf(LLMGeneratedResource uploaded)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
 }

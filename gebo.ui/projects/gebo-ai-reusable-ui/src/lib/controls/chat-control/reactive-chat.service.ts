@@ -69,5 +69,10 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
         this.internalStreamChat(apiUrl, request, onMessage, onError);
     }
 
+    streamAgenticChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+        const apiUrl:string= this.basePath+"/api/users/GeboChatPipelinesController/streamChatPipeline";
+         this.internalStreamChat(apiUrl, request, onMessage, onError);
+    }
+
     
 }

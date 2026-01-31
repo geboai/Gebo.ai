@@ -36,9 +36,9 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInD
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
@@ -239,19 +239,19 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 	}
 
 	@Override
-	public RagDocumentsCachedDaoResult toRagDocumentsCachedDaoResult(List<KnowledgeGraphSearchResult> graphRagResults) {
-		final Map<String, RagDocumentReferenceItem> alreadyExisting = new HashMap<String, RagDocumentReferenceItem>();
+	public AIDocumentsSet toRagDocumentsCachedDaoResult(List<KnowledgeGraphSearchResult> graphRagResults) {
+		final Map<String, AIDocumentReferenceItem> alreadyExisting = new HashMap<String, AIDocumentReferenceItem>();
 
 		graphRagResults.stream().forEach(x -> {
 			String documentCode = x.getExtractedDocumentMetaData().getCode();
 			if (documentCode == null)
 				return;
 
-			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
-			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
+			AIDocumentFragment fragment = new AIDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
+			AIDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
 
 			if (existingDoc == null) {
-				existingDoc = new RagDocumentReferenceItem(x.getExtractedDocumentMetaData());
+				existingDoc = new AIDocumentReferenceItem(x.getExtractedDocumentMetaData());
 				alreadyExisting.put(documentCode, existingDoc);
 
 			}
@@ -260,7 +260,7 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 			existingDoc.recalculateSize();
 
 		});
-		return RagDocumentsCachedDaoResult.createDocumentsDaoResultFromMap(alreadyExisting);
+		return AIDocumentsSet.fromMap(alreadyExisting);
 	}
 
 }

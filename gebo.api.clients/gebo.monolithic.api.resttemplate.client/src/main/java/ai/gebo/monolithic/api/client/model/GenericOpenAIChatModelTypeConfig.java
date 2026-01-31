@@ -23,7 +23,7 @@ import java.util.Date;
  * GenericOpenAIChatModelTypeConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GenericOpenAIChatModelTypeConfig {
   @JsonProperty("code")
@@ -58,6 +58,9 @@ public class GenericOpenAIChatModelTypeConfig {
 
   @JsonProperty("optionalAuthentication")
   private Boolean optionalAuthentication = null;
+
+  @JsonProperty("applyThinkingMarkupHandling")
+  private Boolean applyThinkingMarkupHandling = null;
 
   public GenericOpenAIChatModelTypeConfig code(String code) {
     this.code = code;
@@ -257,6 +260,24 @@ public class GenericOpenAIChatModelTypeConfig {
     this.optionalAuthentication = optionalAuthentication;
   }
 
+  public GenericOpenAIChatModelTypeConfig applyThinkingMarkupHandling(Boolean applyThinkingMarkupHandling) {
+    this.applyThinkingMarkupHandling = applyThinkingMarkupHandling;
+    return this;
+  }
+
+   /**
+   * Get applyThinkingMarkupHandling
+   * @return applyThinkingMarkupHandling
+  **/
+  @Schema(description = "")
+  public Boolean isApplyThinkingMarkupHandling() {
+    return applyThinkingMarkupHandling;
+  }
+
+  public void setApplyThinkingMarkupHandling(Boolean applyThinkingMarkupHandling) {
+    this.applyThinkingMarkupHandling = applyThinkingMarkupHandling;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -277,12 +298,13 @@ public class GenericOpenAIChatModelTypeConfig {
         Objects.equals(this.baseUrl, genericOpenAIChatModelTypeConfig.baseUrl) &&
         Objects.equals(this.modelsListProvider, genericOpenAIChatModelTypeConfig.modelsListProvider) &&
         Objects.equals(this.providerId, genericOpenAIChatModelTypeConfig.providerId) &&
-        Objects.equals(this.optionalAuthentication, genericOpenAIChatModelTypeConfig.optionalAuthentication);
+        Objects.equals(this.optionalAuthentication, genericOpenAIChatModelTypeConfig.optionalAuthentication) &&
+        Objects.equals(this.applyThinkingMarkupHandling, genericOpenAIChatModelTypeConfig.applyThinkingMarkupHandling);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelConfigurationClass, baseUrl, modelsListProvider, providerId, optionalAuthentication, applyThinkingMarkupHandling);
   }
 
 
@@ -302,6 +324,7 @@ public class GenericOpenAIChatModelTypeConfig {
     sb.append("    modelsListProvider: ").append(toIndentedString(modelsListProvider)).append("\n");
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    optionalAuthentication: ").append(toIndentedString(optionalAuthentication)).append("\n");
+    sb.append("    applyThinkingMarkupHandling: ").append(toIndentedString(applyThinkingMarkupHandling)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -20,5 +20,6 @@ export interface DeepSearchResponse {
     deepsearchCode?: string;
     response?: string;
     searchResultsEmpty?: boolean;
+    processPercentage?: number;
     dataSourceDescription?: string;
 }

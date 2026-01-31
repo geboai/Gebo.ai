@@ -43,11 +43,11 @@
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
   	<module>gebo.architecture.setup</module>
-  	<module>gebo.architecture.deepsearch</module>
   	<module>gebo.architecture.hazelcast</module>
   	<module>gebo.architecture.search.abstraction.layer</module>
   	<module>gebo.architecture.rag-threasholds-autotune</module>
   	<module>gebo.architecture.opensearch</module>
   	<module>gebo.architecture.fulltext</module>
+  	<module>gebo.architecture.rag.support.layer</module>
   </modules>
 </project>

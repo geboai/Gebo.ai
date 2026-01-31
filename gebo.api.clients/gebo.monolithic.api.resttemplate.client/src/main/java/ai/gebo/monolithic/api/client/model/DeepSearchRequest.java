@@ -25,7 +25,7 @@ import java.util.List;
  * DeepSearchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class DeepSearchRequest {
   @JsonProperty("code")
@@ -53,7 +53,7 @@ public class DeepSearchRequest {
   private String query = null;
 
   @JsonProperty("knowledgeBases")
-  private List<String> knowledgeBases = new ArrayList<>();
+  private List<String> knowledgeBases = null;
 
   @JsonProperty("userChatContextCode")
   private String userChatContextCode = null;
@@ -214,6 +214,9 @@ public class DeepSearchRequest {
   }
 
   public DeepSearchRequest addKnowledgeBasesItem(String knowledgeBasesItem) {
+    if (this.knowledgeBases == null) {
+      this.knowledgeBases = new ArrayList<>();
+    }
     this.knowledgeBases.add(knowledgeBasesItem);
     return this;
   }
@@ -222,7 +225,7 @@ public class DeepSearchRequest {
    * Get knowledgeBases
    * @return knowledgeBases
   **/
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   public List<String> getKnowledgeBases() {
     return knowledgeBases;
   }

@@ -52,6 +52,29 @@ services:
       NEO4J_apoc_export_file_enabled: "true"
       NEO4J_apoc_import_file_enabled: "true"
       NEO4J_apoc_import_file_use__neo4j__config: "true"
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - plugins.security.ssl.transport.enabled=true
+      # consigliato in docker (evita bootstrap checks su memlock)
+      - bootstrap.memory_lock=true
+      # heap: regola in base alla RAM della macchina
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    
   # =======================
   # gebo.ai 
   # =======================
@@ -65,6 +88,7 @@ services:
       - mongo
       - qdrant
       - neo4j 
+      - opensearch 
     deploy:
       resources:
         limits:

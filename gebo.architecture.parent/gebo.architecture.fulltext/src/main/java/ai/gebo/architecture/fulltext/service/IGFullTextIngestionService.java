@@ -7,7 +7,7 @@ import ai.gebo.architecture.fulltext.model.FullTextChunk;
 import ai.gebo.architecture.fulltext.model.FullTextDocument;
 
 public interface IGFullTextIngestionService {
-
+	public static final String KBSOURCE = "kbsource:";
 	public void deleteDocuments(List<FullTextDocument> documents) throws FullTextException;
 
 	public void upsert(List<FullTextChunk> chunks)  throws FullTextException;

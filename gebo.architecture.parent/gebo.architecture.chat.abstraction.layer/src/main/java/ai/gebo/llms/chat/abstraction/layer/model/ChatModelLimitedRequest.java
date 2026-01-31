@@ -1,8 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
-import java.util.List;
-
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import lombok.Data;
 
 @Data
@@ -13,10 +11,10 @@ public class ChatModelLimitedRequest {
 	private boolean historyConsolidationRequired = false;
 	private int historySizeTarget = 0;
 	/** The chat history limited by tokens */
-	private TokenLimitedContent<ChatHistoryData> history;
+	private TokensContainer<ChatHistoryData> history;
 	/** The query string limited by tokens */
-	private TokenLimitedContent<String> query;
-	private TokenLimitedContent<RagDocumentsCachedDaoResult> uploadedDocuments;
+	private TokensContainer<String> query;
+	private TokensContainer<AIDocumentsSet> uploadedDocuments;
 	/** The remaining token space available */
 	private int residualTokenSpace;
 
@@ -25,9 +23,9 @@ public class ChatModelLimitedRequest {
 		ChatModelRequestContextWindowStats stats = new ChatModelRequestContextWindowStats();
 		stats.contextWindowLengthNTokens = contextWindowNToken;
 		stats.documentsNTokens = 0;
-		stats.historyNTokens = history != null ? history.getNToken() : 0;
-		stats.queryNTokens = query != null ? query.getNToken() : 0;
-		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getNToken() : 0;
+		stats.historyNTokens = history != null ? history.getTokensSize() : 0;
+		stats.queryNTokens = query != null ? query.getTokensSize() : 0;
+		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getTokensSize() : 0;
 		stats.contextDocumentsNTokens = 0;
 		if (stats.contextWindowLengthNTokens > 0.0) {
 			// Calculate available tokens and percentage shares for each component

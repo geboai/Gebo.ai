@@ -3,7 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.repository;
 import java.util.stream.Stream;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 
 public interface UserUploadContentServerSideRepository extends IGBaseMongoDBRepository<UserUploadContentServerSide> {
 	@Override

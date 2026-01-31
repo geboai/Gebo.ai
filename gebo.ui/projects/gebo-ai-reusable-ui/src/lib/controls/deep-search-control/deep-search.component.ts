@@ -77,12 +77,15 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     };
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
+    protected deepSearchNotification?:{content?:string};
     protected completionPercent: number = 0;
     protected showChooseDataSourceDialog: boolean = false;
     protected deepSearchUISettings:DeepSearchUISettings= {
         deepSearchUIAllowChooseSources:false,
         externalSourcesEnabled:false
     }
+    protected programmaticStreaming:boolean=false;
+    protected deepSearchStarting:boolean=false;
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
         private deepSearchControllerService: GeboDeepSearchControllerService,
         private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
@@ -100,15 +103,24 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.deepSearchDataSourceResponse = undefined;
         this.analisysStep = undefined;
         this.deepSearchResponse = undefined;
+        this.deepSearchNotification=undefined;
+        this.chatResponse=undefined;
     }
     protected get inEventsLoop(): boolean {
         return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
     }
-    protected get isDieplayingDeepSearchProcess(): boolean {
-        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse;
+    protected get isDisplayingDeepSearchProcess(): boolean {
+        return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse || !this.deepSearchNotification || !this.deepSearchResponse;
     }
-
-    private onMessage(msg: IGeboChatMessage | string) {
+    public switchToStreamingEventsLoop(streaming:boolean):void {
+        this.clearEventsDisplay();
+        this.completionPercent=0;
+        this.programmaticStreaming=streaming;
+        this.streamingResponse=streaming;
+        this.deepSearchStarting=true;
+    }
+    public onMessage(msg: IGeboChatMessage | string) {
+        this.deepSearchStarting=false;
         if (typeof msg === "string") {
 
         } else {
@@ -144,6 +156,10 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             this.completionPercent = Math.round(msg.content?.processPercentage);
                         }
                     } break;
+                    case "DeepSearchNotification": {
+                        this.clearEventsDisplay();
+                        this.deepSearchNotification=msg.content;
+                    }break;
                     case "GUserMessage": {
                         this.clearEventsDisplay();
                         const message: ToastMessageOptions = {
@@ -152,7 +168,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             severity: msg.content?.severity
                         };
                         this.messageService.addMessage("GeboAIDeepSearchModule","GeboAIDeepSearchComponent",message);
-                        this.errorOccurredEvent.emit(msg.content);
+                        //this.errorOccurredEvent.emit(msg.content);
                     } break;
                     case "GeboChatResponse": {
                         this.clearEventsDisplay();
@@ -164,16 +180,17 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
 
             if (msg.lastMessage === true) {
                 this.streamingResponse = false;
+                this.programmaticStreaming=false;
                 this.skipDeepSearchEvent.emit(true);
             }
         }
     }
-    onError(err: any) {
+    public onError(err: any) {
         this.streamingResponse = false;
         this.errorOccurredEvent.emit(err);
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search") {
+        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search" && !this.programmaticStreaming) {
             this.chooseDataSources();
         }
         if (changes["currentDeepSearchRequest"] && this.currentDeepSearchRequest) {

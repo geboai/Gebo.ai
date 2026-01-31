@@ -25,11 +25,13 @@ import { FileUploadControllerService } from './api/fileUploadController.service'
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
+import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
+import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboCoreAnalisysControllerService } from './api/geboCoreAnalisysController.service';
 import { GeboDeepSearchAdminControllerService } from './api/geboDeepSearchAdminController.service';
@@ -120,11 +122,13 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     FileUploadsControllerService,
     FunctionsLookupControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
+    GeboAdminPromptUseInfoControllerService,
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
     GeboAdvancedSetupStatusControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
+    GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
     GeboCoreAnalisysControllerService,
     GeboDeepSearchAdminControllerService,

@@ -34,9 +34,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 		if (found.isEmpty()) {
 			return null;
 		} else {
-			found.get();
+			return found.get();
 		}
-		return null;
 
 	}
 
@@ -73,8 +72,6 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
 			CustomSearchResultExtractionDataType consolidated);
-
-	
 
 	public String getQueriesExtractionPrompt();
 

@@ -14,8 +14,8 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.AIDocumentsSet;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
-import ai.gebo.monolithic.api.client.model.RagDocumentsCachedDaoResult;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,7 +27,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -54,17 +54,23 @@ public class GeboChatRequest {
   @JsonProperty("choosedKnowledgeBases")
   private List<String> choosedKnowledgeBases = null;
 
+  @JsonProperty("chatPipelineProcessId")
+  private String chatPipelineProcessId = null;
+
   @JsonProperty("forcedRequestDocuments")
   private List<String> forcedRequestDocuments = null;
 
   @JsonProperty("documents")
-  private RagDocumentsCachedDaoResult documents = null;
+  private AIDocumentsSet documents = null;
 
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
 
   @JsonProperty("deepSearchDataSources")
   private List<String> deepSearchDataSources = null;
+
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
 
   public GeboChatRequest id(String id) {
     this.id = id;
@@ -218,6 +224,24 @@ public class GeboChatRequest {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
+  public GeboChatRequest chatPipelineProcessId(String chatPipelineProcessId) {
+    this.chatPipelineProcessId = chatPipelineProcessId;
+    return this;
+  }
+
+   /**
+   * Get chatPipelineProcessId
+   * @return chatPipelineProcessId
+  **/
+  @Schema(description = "")
+  public String getChatPipelineProcessId() {
+    return chatPipelineProcessId;
+  }
+
+  public void setChatPipelineProcessId(String chatPipelineProcessId) {
+    this.chatPipelineProcessId = chatPipelineProcessId;
+  }
+
   public GeboChatRequest forcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
     return this;
@@ -244,7 +268,7 @@ public class GeboChatRequest {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
-  public GeboChatRequest documents(RagDocumentsCachedDaoResult documents) {
+  public GeboChatRequest documents(AIDocumentsSet documents) {
     this.documents = documents;
     return this;
   }
@@ -254,11 +278,11 @@ public class GeboChatRequest {
    * @return documents
   **/
   @Schema(description = "")
-  public RagDocumentsCachedDaoResult getDocuments() {
+  public AIDocumentsSet getDocuments() {
     return documents;
   }
 
-  public void setDocuments(RagDocumentsCachedDaoResult documents) {
+  public void setDocuments(AIDocumentsSet documents) {
     this.documents = documents;
   }
 
@@ -314,6 +338,24 @@ public class GeboChatRequest {
     this.deepSearchDataSources = deepSearchDataSources;
   }
 
+  public GeboChatRequest tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
+
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -332,15 +374,17 @@ public class GeboChatRequest {
         Objects.equals(this.query, geboChatRequest.query) &&
         Objects.equals(this.customRagConfig, geboChatRequest.customRagConfig) &&
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
+        Objects.equals(this.chatPipelineProcessId, geboChatRequest.chatPipelineProcessId) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
         Objects.equals(this.documents, geboChatRequest.documents) &&
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
-        Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources);
+        Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
+        Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, forcedRequestDocuments, documents, userUploadedContents, deepSearchDataSources);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, documents, userUploadedContents, deepSearchDataSources, tokensSize);
   }
 
 
@@ -357,10 +401,12 @@ public class GeboChatRequest {
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
     sb.append("    customRagConfig: ").append(toIndentedString(customRagConfig)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
+    sb.append("    chatPipelineProcessId: ").append(toIndentedString(chatPipelineProcessId)).append("\n");
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
     sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();
   }

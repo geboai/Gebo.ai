@@ -25,7 +25,7 @@ import java.util.List;
  * DeepSearchDocumentAnalisysResultStep
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-04T21:19:29.777959200+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
 
 public class DeepSearchDocumentAnalisysResultStep {
   @JsonProperty("code")
@@ -60,6 +60,9 @@ public class DeepSearchDocumentAnalisysResultStep {
 
   @JsonProperty("fragmentsCodes")
   private List<String> fragmentsCodes = new ArrayList<>();
+
+  @JsonProperty("processPercentage")
+  private Double processPercentage = null;
 
   public DeepSearchDocumentAnalisysResultStep code(String code) {
     this.code = code;
@@ -264,6 +267,24 @@ public class DeepSearchDocumentAnalisysResultStep {
     this.fragmentsCodes = fragmentsCodes;
   }
 
+  public DeepSearchDocumentAnalisysResultStep processPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+    return this;
+  }
+
+   /**
+   * Get processPercentage
+   * @return processPercentage
+  **/
+  @Schema(description = "")
+  public Double getProcessPercentage() {
+    return processPercentage;
+  }
+
+  public void setProcessPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -284,12 +305,13 @@ public class DeepSearchDocumentAnalisysResultStep {
         Objects.equals(this.fragment, deepSearchDocumentAnalisysResultStep.fragment) &&
         Objects.equals(this.documentCode, deepSearchDocumentAnalisysResultStep.documentCode) &&
         Objects.equals(this.index, deepSearchDocumentAnalisysResultStep.index) &&
-        Objects.equals(this.fragmentsCodes, deepSearchDocumentAnalisysResultStep.fragmentsCodes);
+        Objects.equals(this.fragmentsCodes, deepSearchDocumentAnalisysResultStep.fragmentsCodes) &&
+        Objects.equals(this.processPercentage, deepSearchDocumentAnalisysResultStep.processPercentage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, fragment, documentCode, index, fragmentsCodes);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, fragment, documentCode, index, fragmentsCodes, processPercentage);
   }
 
 
@@ -309,6 +331,7 @@ public class DeepSearchDocumentAnalisysResultStep {
     sb.append("    documentCode: ").append(toIndentedString(documentCode)).append("\n");
     sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("    fragmentsCodes: ").append(toIndentedString(fragmentsCodes)).append("\n");
+    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

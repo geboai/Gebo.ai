@@ -22,4 +22,5 @@ export interface DeepSearchDocumentAnalisysResultStep {
     documentCode: string;
     index: number;
     fragmentsCodes: Array<string>;
+    processPercentage?: number;
 }

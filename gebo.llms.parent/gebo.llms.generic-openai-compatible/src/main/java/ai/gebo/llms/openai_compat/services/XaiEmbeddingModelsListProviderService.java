@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai_compat.services;
 
@@ -34,30 +31,23 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * Service that provides a list of available models from X.ai (formerly known as xAI).
- * This service implements the IGModelsListProvider interface to fetch embedding 
- * and language models from X.ai's API.
+ * Service that provides a list of available models from X.ai (formerly known as
+ * xAI). This service implements the IGModelsListProvider interface to fetch
+ * embedding and language models from X.ai's API.
  */
 @Service
+@AllArgsConstructor
 public class XaiEmbeddingModelsListProviderService implements IGModelsListProvider {
 	public final static String XAI_MODELS_LIST = "XaiModelsList";
 	private final static String XAI_EMBEDDING_LIST = "https://api.x.ai/v1/embedding-models";
 	private final static String XAI_LLMS_LIST = "https://api.x.ai/v1/language-models";
-	@Autowired
-	IGModelChoiceMetaInfoEnricherService enricherService;
-	@Autowired
-	RestTemplateWrapperService restTemplateWrapper;
-
-	/**
-	 * Default constructor for the XaiEmbeddingModelsListProviderService.
-	 */
-	public XaiEmbeddingModelsListProviderService() {
-
-	}
+	final IGModelChoiceMetaInfoEnricherService enricherService;
+	final RestTemplateWrapperService restTemplateWrapper;
 
 	/**
 	 * Returns the unique identifier for this model provider service.
@@ -71,7 +61,8 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 	}
 
 	/**
-	 * Data class representing the structure of embedding model information returned by X.ai API.
+	 * Data class representing the structure of embedding model information returned
+	 * by X.ai API.
 	 */
 	public static class XaiEmbeddingModelData {
 		public Long created = null;
@@ -85,7 +76,8 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 	}
 
 	/**
-	 * Data class representing the structure of language model information returned by X.ai API.
+	 * Data class representing the structure of language model information returned
+	 * by X.ai API.
 	 */
 	public static class XaiLlmsData {
 		public Double completion_text_token_price = null;
@@ -115,62 +107,34 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 	}
 
 	/**
-	 * Creates HTTP headers with the provided API key for authenticating with X.ai API.
-	 * 
-	 * @param clearApiKey The API key to use for authentication
-	 * @return HttpHeaders with the authorization header set
-	 */
-	private HttpHeaders getHeaders(String clearApiKey) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + clearApiKey);
-		return headers;
-	}
-
-	/**
-	 * Creates a new instance of the specified model choice type.
-	 * 
-	 * @param <ModelChoice> The type of model choice to instantiate
-	 * @param choiceType The class of the model choice
-	 * @return A new instance of the specified model choice type, or null if instantiation fails
-	 */
-	private <ModelChoice extends GBaseModelChoice> ModelChoice newInstance(Class<ModelChoice> choiceType) {
-		try {
-			return choiceType.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
 	 * Fetches available models from X.ai based on the requested model type.
 	 * Supports both embedding models and chat/language models.
 	 * 
 	 * @param <ModelChoice> The type of model choice to return
 	 * @param <ModelConfig> The type of model configuration
-	 * @param providerId The provider identifier
-	 * @param config The model configuration
-	 * @param clearApiKey The API key for X.ai
-	 * @param choiceType The class of the model choice
-	 * @return An OperationStatus containing a list of available models or error information
+	 * @param providerId    The provider identifier
+	 * @param config        The model configuration
+	 * @param clearApiKey   The API key for X.ai
+	 * @param choiceType    The class of the model choice
+	 * @return An OperationStatus containing a list of available models or error
+	 *         information
 	 */
 	@Override
-	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>,ModelType extends GModelType> OperationStatus<List<ModelChoice>> geModels(
-			String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType,ModelType type) {
+	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>, ModelType extends GModelType> OperationStatus<List<ModelChoice>> geModels(
+			String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType, ModelType type) {
 		List<ModelChoice> models = new ArrayList<ModelChoice>();
 		try {
 			if (GBaseEmbeddingModelChoice.class.isAssignableFrom(choiceType)) {
 				List<GBaseEmbeddingModelChoice> embeddingmodels = new ArrayList<GBaseEmbeddingModelChoice>();
 
-				HttpEntity<String> request = new HttpEntity<String>(getHeaders(clearApiKey));
+				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
 				ResponseEntity<XaiEmbeddingModelDataList> response = restTemplateWrapper.exchange(XAI_EMBEDDING_LIST,
 						HttpMethod.GET, request, XaiEmbeddingModelDataList.class);
 				XaiEmbeddingModelDataList result = response.hasBody() ? response.getBody()
 						: new XaiEmbeddingModelDataList();
 				if (result.models != null) {
 					for (XaiEmbeddingModelData m : result.models) {
-						GBaseEmbeddingModelChoice entry = (GBaseEmbeddingModelChoice) newInstance(choiceType);
+						GBaseEmbeddingModelChoice entry = (GBaseEmbeddingModelChoice) ModelsListCommonUtils.newInstance(choiceType);
 						entry.setCode(m.id);
 						entry.setDescription(m.id);
 						embeddingmodels.add(entry);
@@ -183,14 +147,14 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 				models = new ArrayList(embeddingmodels);
 			} else if (GBaseChatModelChoice.class.isAssignableFrom(choiceType)) {
 
-				HttpEntity<String> request = new HttpEntity<String>(getHeaders(clearApiKey));
-				ResponseEntity<XaiLlmsDataList> response = restTemplateWrapper.exchange(XAI_LLMS_LIST, HttpMethod.GET, request,
-						XaiLlmsDataList.class);
+				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
+				ResponseEntity<XaiLlmsDataList> response = restTemplateWrapper.exchange(XAI_LLMS_LIST, HttpMethod.GET,
+						request, XaiLlmsDataList.class);
 				XaiLlmsDataList result = response.hasBody() ? response.getBody() : new XaiLlmsDataList();
 				if (result.models != null) {
 					List<GBaseChatModelChoice> chatmodels = new ArrayList<GBaseChatModelChoice>();
 					for (XaiLlmsData m : result.models) {
-						GBaseChatModelChoice entry = (GBaseChatModelChoice) newInstance(choiceType);
+						GBaseChatModelChoice entry = (GBaseChatModelChoice) ModelsListCommonUtils.newInstance(choiceType);
 						entry.setCode(m.id);
 						entry.setDescription(m.id);
 						chatmodels.add(entry);

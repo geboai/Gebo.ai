@@ -27,6 +27,7 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -41,7 +42,7 @@ import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
-import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -51,6 +52,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
@@ -218,6 +220,15 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			return model;
 		}
 
+		@Override
+		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+			if (this.type.getCode().equals(CHATMODEL_VLLM)) {
+				return new ThinkTagSkippingOutputConverter<T>(type);
+			} else {
+				return super.createConverter(type);
+			}
+		}
+
 		/**
 		 * Creates a basic configuration for the OpenAI-compatible model
 		 * 
@@ -239,8 +250,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			return true;
 		}
 
-		protected ChatClientRequestSpec prepareCall(Prompt prompt, String userQuestion, IChatContext chatContext,
-				List<Document> documents) {
+		@Override
+		protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
+			String userQuestion = chatContext.getActualUserRequest();
 			if (type.getCode().equals(CHATMODEL_VLLM)) {
 				ChatClient client = getChatClient();
 				// Here prompt, documents and consolidated history
@@ -256,7 +268,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				}
 				return reqObject;
 			} else
-				return super.prepareCall(prompt, userQuestion, chatContext, documents);
+				return super.prepareCall(prompt, chatContext);
 		}
 
 		@Override

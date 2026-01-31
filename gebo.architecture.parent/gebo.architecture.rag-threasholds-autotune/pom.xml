@@ -14,5 +14,10 @@
 			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.rag.support.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

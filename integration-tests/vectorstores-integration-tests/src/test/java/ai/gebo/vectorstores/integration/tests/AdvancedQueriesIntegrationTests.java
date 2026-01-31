@@ -30,13 +30,13 @@ import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEnd
 import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestProjectEndpoint.TestEndpointType;
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
-import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
-import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
@@ -61,7 +61,7 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 	@Autowired
 	VectorizedContentRepository vectorizatedContents;
 	@Autowired
-	IGRagDocumentsCachedDao ragDocumentsCachedDao;
+	IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
@@ -134,18 +134,18 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		List<GVectorizedContent> vectorizated = vectorizatedStream.toList();
 		assertFalse("Vectorizated list cannot be empty", vectorizated.isEmpty());
 		LOGGER.info("Vectorized infos " + mapper.writeValueAsString(vectorizated));
-		RagDocumentsCachedDaoResult results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
+		AIDocumentsSet results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
 				openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti", results.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
-		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getNTokens() == 0);
+		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getTokensSize() == 0);
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
-		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
+		AIDocumentsSet results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
 				knowledgeBases, openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti",
 				results1.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results1.getNBytes() == 0);
-		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results1.getNTokens() == 0);
+		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results1.getTokensSize() == 0);
 
 	}
 

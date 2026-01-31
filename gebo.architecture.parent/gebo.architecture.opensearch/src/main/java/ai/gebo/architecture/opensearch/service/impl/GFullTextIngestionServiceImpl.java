@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GFullTextIngestionServiceImpl implements IGFullTextIngestionService {
+	
 	private final OpenSearchFullTextChunkIndexService indexService;
 
 	@Override

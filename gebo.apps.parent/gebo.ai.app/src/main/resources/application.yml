@@ -97,8 +97,7 @@ spring.jackson:
     INDENT_OUTPUT: true
 ai.gebo.chat:
   promptDefaults:
-    - ragPrompt: false
-      defaultPrompt: true
+    - promptUse: "standard-chat-prompt"
       prompt:
         '"""You are an advanced Large Language Model acting as a personal assistant.n
 
@@ -140,8 +139,7 @@ ai.gebo.chat:
         - End responses with a short actionable next step or summary when useful.n
         - Use the same language of user question"""'
 
-    - ragPrompt: true
-      defaultPrompt: true
+    - promptUse: "standard-rag-prompt"
       prompt:
         '"""You are an advanced Large Language Model acting as a Personal AI Assistant with direct access to:n
         A Retrieve-Augmented Generation (RAG) system that provides relevant company documents, chunks, and metadata.n
@@ -201,7 +199,7 @@ ai.gebo.chat:
         - Document: `<title>` (KB code: `<id>`): key point ... n
         **Additional Insights from Training Knowledge**  n
         ... explanation, context, comparison, or optimization tips ...
-        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTIONn"""'
+        RESPOND ALWAYS IN THE SAME LANGUAGE OF THE USER QUESTION\n"""'
 
 ai.gebo.config:
   setupConfiguresWorkdir: false
@@ -278,12 +276,12 @@ ai.gebo.core.config:
     timeout: 10000
 
 ai.gebo.opensearch:
-    enabled: true	
-    protocol: https
-    host: localhost
-    port: 9200
-    username: admin
-    password: dothesearch1973-Advanced		
+  enabled: true
+  protocol: https
+  host: localhost
+  port: 9200
+  username: admin
+  password: dothesearch1973-Advanced
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

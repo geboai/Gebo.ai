@@ -7,3 +7,4 @@ Name | Type | Description | Notes
 **requestNTokens** | **Integer** |  |  [optional]
 **response** | [**GeboTemplatedChatResponse**](GeboTemplatedChatResponse.md) |  |  [optional]
 **responseNTokens** | **Integer** |  |  [optional]
+**tokensSize** | **Integer** |  |  [optional]

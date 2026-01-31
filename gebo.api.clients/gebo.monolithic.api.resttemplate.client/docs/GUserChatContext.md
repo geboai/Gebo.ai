@@ -18,4 +18,3 @@ Name | Type | Description | Notes
 **interactions** | [**List&lt;ChatInteractions&gt;**](ChatInteractions.md) |  |  [optional]
 **chatModelCode** | **String** |  |  [optional]
 **choosedKnowledgeBases** | **List&lt;String&gt;** |  |  [optional]
-**consolidation** | [**GUserChatConsolidationData**](GUserChatConsolidationData.md) |  |  [optional]

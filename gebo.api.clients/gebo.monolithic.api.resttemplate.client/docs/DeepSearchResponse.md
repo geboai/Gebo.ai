@@ -12,4 +12,5 @@ Name | Type | Description | Notes
 **deepsearchCode** | **String** |  |  [optional]
 **response** | **String** |  |  [optional]
 **searchResultsEmpty** | **Boolean** |  |  [optional]
+**processPercentage** | **Double** |  |  [optional]
 **dataSourceDescription** | **String** |  |  [optional]

@@ -16,7 +16,6 @@ package ai.gebo.llms.abstraction.layer.services;
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.model.base.GObjectRef;
 
 /**
  * Interface representing the DAO (Data Access Object) for runtime 

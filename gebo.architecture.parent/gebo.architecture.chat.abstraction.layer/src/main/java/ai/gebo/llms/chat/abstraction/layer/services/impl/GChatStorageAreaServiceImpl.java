@@ -26,12 +26,12 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentContent;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentsContent;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
@@ -330,6 +330,19 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 			return Files.newInputStream(outPath);
 		}
 		return null;
+	}
+
+	@Override
+	public List<Document> getIngestedContentsOf(LLMGeneratedResource generated)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException {
+		InputStream is = streamContent(generated);
+		if (is == null)
+			return List.of();
+		GDocumentReference doc = documentReferenceFactory.createReference(Path.of(generated.getFileName()));
+		IngestionHandlerData ingested = ingestionHandler.handleContent(doc, is);
+		if (ingested.isUnmanagedContent())
+			return List.of();
+		return ingested.getStream().toList();
 	}
 
 }

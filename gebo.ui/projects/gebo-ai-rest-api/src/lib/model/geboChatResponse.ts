@@ -24,10 +24,12 @@ export interface GeboChatResponse {
     queryResponse?: string;
     windowOccupation?: GeboWorkingMemoryWindowOccupation;
     query?: string;
+    thinkingOutputs?: Array<string>;
     backendMessages?: Array<GUserMessage>;
     forcedDocumentsRef?: Array<GResponseDocumentRef>;
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;
+    pipelineRouterDecisionCode?: string;
 }

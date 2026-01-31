@@ -16,6 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import lombok.Data;
 
 /**
@@ -27,7 +28,15 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chat")
 @Data
-public class GeboChatPromptsConfigs {
+public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
+	private static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
+
+	private static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
+
+	private static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
+
+	private static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
+
 	// List of default prompt configurations
 	private List<GPromptConfig> promptDefaults = new ArrayList<GPromptConfig>();
 
@@ -40,7 +49,7 @@ public class GeboChatPromptsConfigs {
 	private GPromptConfig summarizeChatDescriptionPrompt = new GPromptConfig();
 
 	private GPromptConfig historyConsolidationPrompt = new GPromptConfig();
-	private int leaveLastInteractionsOnHistoryConsolidation = 4;
+	private GPromptConfig historyDocumentsConsolidationPrompt = new GPromptConfig();
 
 	/**
 	 * Constructor for GeboChatPromptsConfigs. Initializes the default prompt
@@ -48,9 +57,9 @@ public class GeboChatPromptsConfigs {
 	 */
 	public GeboChatPromptsConfigs() {
 		// Initialize the default prompt template with a code and prompt message
-		defaultPromptTemplateWizardConfig.setCode("prompt-template-wizard-default");
+		defaultPromptTemplateWizardConfig.setPromptUse(PROMPT_TEMPLATE_WIZARD_DEFAULT);
 		defaultPromptTemplateWizardConfig.setPrompt("Write a chat prompt to assist the user on its tasks ");
-		summarizeChatDescriptionPrompt.setCode("summarize-chat-description");
+		summarizeChatDescriptionPrompt.setPromptUse(SUMMARIZE_CHAT_DESCRIPTION);
 		summarizeChatDescriptionPrompt.setPrompt("You are a summarization assistant.\n"
 				+ "Given a single user request sent to a chatbot, generate a short, meaningful description of the chat.\n"
 				+ "The description must capture the core intent of the user request, without adding details that are not explicitly stated.\n"
@@ -58,7 +67,7 @@ public class GeboChatPromptsConfigs {
 				+ "Avoid questions: produce a concise descriptive label.\n"
 				+ "Do not include any system or assistant messages.\n"
 				+ "Output only the final description, nothing else.");
-		historyConsolidationPrompt.setCode("history-consolidation-prompt");
+		historyConsolidationPrompt.setPromptUse(HISTORY_CONSOLIDATION_PROMPT);
 		historyConsolidationPrompt.setPrompt("You are a chat history consolidation system.\r\n" + "\r\n"
 				+ "Your task:\r\n"
 				+ "Given an existing summary of a chat session and a batch of new dialogue messages, produce an updated, concise summary that reflects the entire conversation so far.\r\n"
@@ -81,16 +90,61 @@ public class GeboChatPromptsConfigs {
 				+ "- Write in a concise, neutral, third-person style (e.g., \"The user is building...\", \"The assistant suggested...\").\r\n"
 				+ "- Organize the text into 1–3 short paragraphs.\r\n"
 				+ "- The summary must be self-contained and understandable without seeing the raw chat.\r\n"
-				+ "- Aim to keep the length brief but complete (ideally under 400–500 words).\r\n" + "\r\n"
-				+ "Input format:\r\n" + "[EXISTING_SUMMARY]\r\n" + "{existing_summary}\r\n" + "[/EXISTING_SUMMARY]\r\n"
-				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{new_messages}\r\n" + "[/NEW_MESSAGES]\r\n" + "\r\n" + "Where:\r\n"
-				+ "- EXISTING_SUMMARY is the current stored summary text (possibly empty).\r\n"
+				+ "- Aim to keep the length brief but complete (ideally under {historySizeTarget} tokens).\r\n" + "\r\n"
+				+ "Input format:\r\n" + "[EXISTING_SUMMARY]\r\n" + "{consolidated}\r\n" + "[/EXISTING_SUMMARY]\r\n"
+				+ "\r\n" + "[NEW_MESSAGES]\r\n" + "{documents}\r\n" + "{question}\r\n[/NEW_MESSAGES]\r\n" + "\r\n"
+				+ "Where:\r\n" + "- EXISTING_SUMMARY is the current stored summary text (possibly empty).\r\n"
 				+ "- NEW_MESSAGES is the new dialogue turns formatted as lines like:\r\n" + "  user: ...\r\n"
 				+ "  assistant: ...\r\n" + "  user: ...\r\n" + "  ...\r\n" + "\r\n" + "Your output:\r\n"
 				+ "- Produce ONLY the new consolidated session summary as plain text.\r\n"
 				+ "- Do NOT include headings, labels, JSON, bullet points, or any extra commentary.\r\n"
 				+ "- Just return the updated summary text.\r\n" + "- Generate a maximum of {historySizeTarget} tokens"
 				+ "");
+		historyDocumentsConsolidationPrompt.setPromptUse(CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
+		historyDocumentsConsolidationPrompt.setPrompt(
+				"You are an expert “document condenser” for an enterprise RAG chat system.\r\n" + "\r\n" + "TASK\r\n"
+						+ "Given:\r\n" + "A) LAST_TURNS, user and assistant chat, latest first:\r\n" + "{question}\r\n"
+						+ "B) INPUT DOCUMENTS\r\n{documents}\r\n" + "C) CONSOLIDATED HISTORY:\r\n{consolidated}\r\n"
+						+ "produce ONE JSON object of type CSSRelevantShrinkedDocument for each input documents that contains:\r\n"
+						+ "\r\n" + "a faithful, compact summary of the document,\r\n" + "\r\n"
+						+ "a relevancy score (Float) measuring how relevant the document is to the last 3 turns,\r\n"
+						+ "\r\n" + "an estimated token length for the produced summary.\r\n" + "\r\n"
+						+ "OUTPUT RULES (STRICT)\r\n" + "\r\n"
+						+ "Output ONLY a single valid JSON object. No markdown. No extra keys. No comments.\r\n"
+						+ "Use these exact keys: documentReference, documentName, documentTitle, summarizedContent, relevancyRate, tokensLength.\r\n"
+						+ "\r\n"
+						+ "Keep summarizedContent concise but information-dense. Prefer factual bullet-like sentences separated by \"\\n\".\r\n"
+						+ "\r\n"
+						+ "Do NOT invent facts. If documents do not contain enough information, say so explicitly in the summary.\r\n"
+						+ "\r\n" + "If some metadata fields are missing, set them to null.\r\n" + "\r\n"
+						+ "relevancyRate must be a Float in [0.0, 1.0].\r\n" + "\r\n"
+						+ "tokensLength must be an Integer estimating tokens of summarizedContent only.\r\n" + "\r\n"
+						+ "Language of summarizedContent: same as the user’s language detected in last turns (default to English).\r\n"
+						+ "\r\n" + "HOW TO SCORE RELEVANCY (relevancyRate)\r\n"
+						+ "Compute relevance ONLY against the last 3 turns.\r\n" + "Use this rubric:\r\n" + "\r\n"
+						+ "0.00–0.10: unrelated / generic\r\n" + "\r\n"
+						+ "0.11–0.30: weakly related (shares broad topic only)\r\n" + "\r\n"
+						+ "0.31–0.60: moderately useful (some direct overlap)\r\n" + "\r\n"
+						+ "0.61–0.85: strongly useful (directly answers/grounds key parts)\r\n" + "\r\n"
+						+ "0.86–1.00: critical (contains necessary details, constraints, or authoritative facts)\r\n"
+						+ "\r\n" + "HOW TO SUMMARIZE (summarizedContent)\r\n" + "\r\n"
+						+ "Capture: key claims, definitions, procedures, requirements, constraints, numbers, identifiers, and any “actionable” details.\r\n"
+						+ "\r\n" + "Preserve important terminology and acronyms as-is.\r\n" + "\r\n"
+						+ "If the document is long, prioritize parts most relevant to the last 3 turns.\r\n" + "\r\n"
+						+ "If the document contains multiple sections, reflect that structure in the summary.\r\n"
+						+ "OUTPUT FORMAT\r\n{format}\r\n" + "\r\n" + "\r\n");
+	}
+
+	@Override
+	public List<GPromptConfig> promptsList() {
+		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
+		out.add(defaultPromptTemplateWizardConfig);
+		out.add(historyDocumentsConsolidationPrompt);
+		out.add(summarizeChatDescriptionPrompt);
+		out.add(historyConsolidationPrompt);
+		out.addAll(promptTemplateWizardConfigs);
+		out.addAll(promptDefaults);
+		return out;
 	}
 
 }

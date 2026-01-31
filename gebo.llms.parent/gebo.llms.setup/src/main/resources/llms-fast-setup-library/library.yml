@@ -230,13 +230,24 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-regolo.ai
           doModelsLookup: true
           choices:
+            - code: deepseek-r1-70b
+              description: DeepSeek R1 70b
+              uses: CHAT
+            - code: gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              uses: CHAT
+            - code: qwen3-30b
+              description: Qwen3 30b
+              defaultChoice: true
             - code: Llama-3.3-70B-Instruct
               description: Meta LLama 3.3 70b instruct
               uses: CHAT
-              defaultChoice: true
-            - code: Llama-3.1-8B-Instruct
-              description: Meta LLama 3.1 8b instruct
+            - code: Qwen3-8B
+              description: Qwen3 8B
               uses: INTERNAL_SERVICES
+        #            - code: Llama-3.1-8B-Instruct
+        #              description: Meta LLama 3.1 8b instruct
+        #              uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-regolo.ai
           doModelsLookup: true
