@@ -27,12 +27,13 @@
                   text
                   rounded
                   class="custom-blue-btn"
-                  (click)="contextAddChatBehaviorMenu1.toggle($event)">
+                  (click)="contextAddChatBehaviorMenu1.toggle($event)" 
+                  [disabled]="formGroup.invalid || loading">
         </p-button>
 
         <p-contextMenu #contextAddChatBehaviorMenu1
                        [model]="addBehaviorsMenu"
-                       appendTo="body">
+                       appendTo="body" >
         </p-contextMenu>
       </div>
       <textarea rows="1"
