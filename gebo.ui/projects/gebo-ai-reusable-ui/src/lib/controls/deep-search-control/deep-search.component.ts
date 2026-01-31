@@ -77,6 +77,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     };
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
+    protected deepSearchNotification?:{content?:string};
     protected completionPercent: number = 0;
     protected showChooseDataSourceDialog: boolean = false;
     protected deepSearchUISettings:DeepSearchUISettings= {
@@ -101,6 +102,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.deepSearchDataSourceResponse = undefined;
         this.analisysStep = undefined;
         this.deepSearchResponse = undefined;
+        this.deepSearchNotification=undefined;
     }
     protected get inEventsLoop(): boolean {
         return !this.deepSearchResponse && !this.chatResponse && this.streamingResponse;
@@ -149,6 +151,10 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             this.completionPercent = Math.round(msg.content?.processPercentage);
                         }
                     } break;
+                    case "DeepSearchNotification": {
+                        this.clearEventsDisplay();
+                        this.deepSearchNotification=msg.content;
+                    }break;
                     case "GUserMessage": {
                         this.clearEventsDisplay();
                         const message: ToastMessageOptions = {

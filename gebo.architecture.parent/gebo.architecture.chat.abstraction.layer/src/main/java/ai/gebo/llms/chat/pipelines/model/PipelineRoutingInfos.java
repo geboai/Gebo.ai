@@ -11,4 +11,8 @@ public class PipelineRoutingInfos {
 	List<String> stepIds = new ArrayList<String>();
 	@NotNull
 	String pipelineRouterDecisionCode = null;
+	@NotNull
+	String chatModel = null;
+	@NotNull
+	String serviceModel = null;
 }

@@ -51,6 +51,7 @@ import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
@@ -126,6 +127,11 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 				nextStepValue = handler.streamSearch(chatModel, deepSearchConfig, request, dataSourcesResults,
 						chunkingSessionId, totalSteps, doneSteps, state);
+				if (nextStepValue != null) {
+					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
+							"Analyzing data from " + handler.getDescription(chatModel, deepSearchConfig, request));
+					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
+				}
 				nextStepValue.subscribeOn(deepSearchScheduler);
 				if (dataSourcesFlux == null) {
 					dataSourcesFlux = nextStepValue;
@@ -230,7 +236,11 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			}
 			return Flux.just(evt);
 		});
-		return Flux.concat(body, trail);
+
+		Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
+				"Analyzing data from internal Gebo.ai knowledge bases");
+
+		return Flux.concat(notificationFlux, body, trail);
 	}
 
 	private List<IGReactiveDeepSearchDataSourceService> filterChoosed(
@@ -258,7 +268,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 				.getDynamicDeepSearchServices();
 		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
-		Flux<AbstractDeepSearchEvent> composedFlux = null;
+		Flux<AbstractDeepSearchEvent> composedFlux = DeepSearchNotificationEvent.flux(request,
+				"Deep search data sources analisys...");
 
 		if (chatModel != null) {
 

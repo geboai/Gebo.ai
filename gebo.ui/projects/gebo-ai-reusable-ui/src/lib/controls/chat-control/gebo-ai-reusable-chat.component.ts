@@ -647,6 +647,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
                     interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
+                    if (recvd.content?.chatModel)
+                    this.modelName=recvd.content?.chatModel;
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
                     if (pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
                         this.chatInputShell.switchToStreamingEventsLoop(true);

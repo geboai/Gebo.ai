@@ -153,7 +153,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				serviceModel, pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IStreamingOutputChatPipelineService streamingOutputService) {
-			Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(runtimeData, response));
+			Flux<GeboChatMessageEnvelope> first = Flux
+					.just(buildRoutingInfos(runtimeData, response, chatModel, serviceModel));
 			Flux<GeboChatMessageEnvelope> out = streamingOutputService.execute(runtimeData, chatModel, serviceModel);
 			return Flux.concat(first, out);
 		}
@@ -161,11 +162,20 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData,
-			GeboChatResponse response) {
+			GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
 		PipelineRoutingInfosMessageEnvelope data = new PipelineRoutingInfosMessageEnvelope();
 		PipelineRoutingInfos content = new PipelineRoutingInfos();
 		content.setPipelineRouterDecisionCode(response.getPipelineRouterDecisionCode());
+		content.setChatModel(
+				chatModel != null && chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
+						? chatModel.getConfig().getChoosedModel().getCode()
+						: null);
+		content.setServiceModel(serviceModel != null && serviceModel.getConfig() != null
+				&& serviceModel.getConfig().getChoosedModel() != null
+						? serviceModel.getConfig().getChoosedModel().getCode()
+						: null);
 		data.setContent(content);
+
 		runtimeData.getRoutingDecisions().forEach(x -> {
 			x.getFutureRoute().forEach(stepId -> {
 				data.getContent().getStepIds().add(stepId);

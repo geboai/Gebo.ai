@@ -28,6 +28,9 @@
 
 
             </span>
+            <span class="deep-search__label" *ngIf="deepSearchNotification">
+                {{deepSearchNotification?.content}}
+            </span>
             <span class="deep-search__label" *ngIf="deepSearchDataSourceResponse">
                 <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>&nbsp;
                 <span>{{deepSearchDataSourceResponse.dataSourceDescription}}</span>
