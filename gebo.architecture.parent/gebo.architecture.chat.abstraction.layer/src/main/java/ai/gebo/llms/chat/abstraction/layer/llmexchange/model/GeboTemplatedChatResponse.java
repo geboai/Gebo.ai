@@ -49,6 +49,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
 	private List<LLMGeneratedResource> generatedResources = new ArrayList<>();
 	private String pipelineRouterDecisionCode = null;
+	private String deepSearchRequestId = null;
 
 	/**
 	 * Default constructor for GeboTemplatedChatResponse.

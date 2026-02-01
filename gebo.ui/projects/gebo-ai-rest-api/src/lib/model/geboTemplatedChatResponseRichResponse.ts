@@ -33,4 +33,5 @@ export interface GeboTemplatedChatResponseRichResponse {
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;
     pipelineRouterDecisionCode?: string;
+    deepSearchRequestId?: string;
 }

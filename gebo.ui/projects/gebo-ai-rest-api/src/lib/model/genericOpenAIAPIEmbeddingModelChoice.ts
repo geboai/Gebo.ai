@@ -24,5 +24,6 @@ export interface GenericOpenAIAPIEmbeddingModelChoice {
     metaInfos?: ModelMetaInfo;
     informativeUrl?: string;
     contextLength?: number;
+    nativeModelMetaInfos?: any;
     optimalTokenizationParam?: number;
 }

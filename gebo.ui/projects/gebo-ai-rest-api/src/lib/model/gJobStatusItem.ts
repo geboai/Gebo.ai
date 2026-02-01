@@ -13,15 +13,15 @@ import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 
 export interface GJobStatusItem { 
     jobType?: GJobStatusItem.JobTypeEnum;
-    error?: boolean;
     description?: string;
-    startDateTime?: Date;
+    error?: boolean;
     code?: string;
+    workflowId?: string;
+    processing?: boolean;
+    finished?: boolean;
+    startDateTime?: Date;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
     endDateTime?: Date;
-    finished?: boolean;
-    processing?: boolean;
-    workflowId?: string;
     workflowType?: string;
 }
 export namespace GJobStatusItem {

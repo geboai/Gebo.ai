@@ -528,7 +528,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchRequest.setQuery(request.getQuery());
 		deepSearchRequest.setUserChatContextCode(chatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
-
+		response.setDeepSearchRequestId(deepSearchRequest.getCode());
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 
 		Flux<AbstractDeepSearchEvent> flux = streamDeepSearch(deepSearchRequest);
@@ -613,7 +613,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources)
 			throws LLMConfigException {
-		
+
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()
 				: DeepSearchVariant.SINGLE_THREAD;
@@ -623,6 +623,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchRequest.setQuery(request.getLastRequest().getQuery());
 		deepSearchRequest.setUserChatContextCode(userChatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
+		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
 		AIDocumentsSet allDocuments = request.getAllDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;
 		switch (variant) {

@@ -13,9 +13,9 @@
 export interface GPromptConfig { 
     code?: string;
     description?: string;
-    prompt?: string;
+    prompt: string;
     langCode?: string;
-    promptUse?: string;
+    promptUse: string;
     modelProvider?: string;
     modelCode?: string;
     promptCategory?: string;
