@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -22,7 +24,7 @@ import reactor.core.publisher.Flux;
 public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements IStreamingOutputChatPipelineService {
 	private static final String TOOLS_LIST = "toolsList";
 	private final IGChatService chatService;
-	private final ChatPipelinesConfiguration configuration;
+	private final IGPromptConfigDao promptsDao;
 	public static final String DEFAULT_TOOL_USING_STREAMING = "default-tool-using-streaming";
 
 	@Override
@@ -42,7 +44,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		List<String> toolCallsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedToolsCallList(runtimeData);
 		PromptTemplate promptTemplate = new PromptTemplate(
-				configuration.getDefaultPipelineToolCallOutputPrompt().getPrompt());
+				promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT).getPrompt());
 		promptTemplate.add(TOOLS_LIST, toolCallsList != null ? toolCallsList : List.of());
 		try {
 			return chatService.streamChat(promptTemplate.render(), runtimeData.getRequestResources(),

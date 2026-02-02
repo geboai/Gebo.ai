@@ -26,6 +26,14 @@ import lombok.Data;
 @Data
 public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 	private List<GPromptLibraryReference> library = new ArrayList<GPromptLibraryReference>();
+	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
+	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
+	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
+	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
+	public static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
+	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
+	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
+	public static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboPromptsLibrary.class);
 
 	@Override

@@ -19,7 +19,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
@@ -40,7 +40,7 @@ import lombok.Data;
 public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
 		implements IGChatSessionStateShrinkerService {
 	private static final String NEWLINE = "\r";
-	final GeboChatPromptsConfigs chatPromptsConfig;
+
 	final GeboChatConfigs chatConfig;
 	final IGPromptConfigDao promptsDao;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
@@ -49,10 +49,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	public static final String HISTORY_SIZE_TARGET = "historySizeTarget";
 
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
-			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatPromptsConfigs chatPromptsConfig,
-			GeboChatConfigs chatConfig, IGPromptConfigDao promptsDao) {
+			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatConfigs chatConfig,
+			IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
-		this.chatPromptsConfig = chatPromptsConfig;
+
 		this.chatConfig = chatConfig;
 		this.promptsDao = promptsDao;
 	}
@@ -110,7 +110,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 					lastTurns.append(NEWLINE);
 				}
 			}
-			GPromptConfig _prompt = promptsDao.findByPromptUse(GeboChatPromptsConfigs.HISTORY_CONSOLIDATION_PROMPT);
+			GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
 			String prompt = _prompt.getPrompt();
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
@@ -158,7 +158,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	private GUserChatInteractionsConsolidationData consolidateHistory(CSSSimplifiedChatHistory value,
 			int historySizeTarget, IGConfigurableChatModel usedChatModel) {
 		List<ConsolidationInput> inputs = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
-		GPromptConfig _prompt = chatPromptsConfig.getHistoryConsolidationPrompt();
+		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 		String prompt = _prompt.getPrompt();
 
 		String existingSummary = "";

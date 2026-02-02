@@ -38,7 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -88,17 +88,17 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
-			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
-			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
-			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
+			GUserChatContextRepository userContextRepository, IGPromptConfigDao promptsDao,
+			InteractionsContextService interactionsContext, IGSecurityService securityService,
+			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
 			ChatHistoryConsolidationService historyConsolidationService,
 			IGChatRequestResourcesBuilder chatRequestBuilder, IGChatRagSearchService ragSearchService) {
-		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
-				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
+		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
+				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
 				generatedResourceRepository, historyConsolidationService, knowledgeBaseVisibilityService,
 				chatRequestBuilder);
 		this.chatProfilesRepository = chatProfilesRepository;
@@ -542,7 +542,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (repodata.isPresent()) {
 			GUserChatContext context = repodata.get();
 			data = new GUserChatInfoData(context);
-			GPromptConfig prompt = this.promptConfigs.getSummarizeChatDescriptionPrompt();
+			GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 			IGConfigurableChatModel handler = chatModelConfigurations.defaultHandler();
 			try {
 				if (context.getChatProfileCode() != null) {
@@ -645,5 +645,4 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	}
 
-	
 }

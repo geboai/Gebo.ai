@@ -12,11 +12,8 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.model.OperationStatus;
 import jakarta.validation.constraints.NotNull;
 
@@ -43,9 +38,7 @@ public class PromptTemplateWizardController {
 	@Autowired
 	IGChatModelRuntimeConfigurationDao chatModelsDato;
 	
-	/** Configuration for Gebo chat prompts */
-	@Autowired
-	GeboChatPromptsConfigs promptConfigs;
+	
 
 	/**
 	 * Default constructor for the controller
@@ -100,27 +93,5 @@ public class PromptTemplateWizardController {
 		}
 	}
 
-	/**
-	 * Container class for prompt template wizard configurations
-	 */
-	public static class PromptTemplateWizardConfigs {
-		/** List of available prompt template configurations */
-		public List<GPromptConfig> promptTemplateWizardConfigs = null;
-		
-		/** Default prompt template configuration */
-		public GPromptConfig defaultPromptTemplateWizardConfig = null;
-	}
 	
-	/**
-	 * Endpoint to retrieve all available template wizard configurations
-	 * 
-	 * @return A container with both the default and all available prompt template configurations
-	 */
-	@GetMapping(value = "getTemplateWizardConfigs", produces = MediaType.APPLICATION_JSON_VALUE)
-	public PromptTemplateWizardConfigs getTemplateWizardConfigs() {
-		PromptTemplateWizardConfigs c = new PromptTemplateWizardConfigs();
-		c.defaultPromptTemplateWizardConfig = this.promptConfigs.getDefaultPromptTemplateWizardConfig();
-		c.promptTemplateWizardConfigs = this.promptConfigs.getPromptTemplateWizardConfigs();
-		return c;
-	}
 }
