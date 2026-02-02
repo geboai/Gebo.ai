@@ -28,14 +28,14 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chat")
 @Data
-public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
-	private static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
+public class GeboChatPromptsConfigs  {
+	public static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
 
-	private static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
+	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
 
-	private static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
+	public static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
 
-	private static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
+	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
 
 	// List of default prompt configurations
 	private List<GPromptConfig> promptDefaults = new ArrayList<GPromptConfig>();
@@ -135,7 +135,7 @@ public class GeboChatPromptsConfigs implements IGStaticPromptsProvider {
 						+ "OUTPUT FORMAT\r\n{format}\r\n" + "\r\n" + "\r\n");
 	}
 
-	@Override
+	//@Override
 	public List<GPromptConfig> promptsList() {
 		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
 		out.add(defaultPromptTemplateWizardConfig);

@@ -32,6 +32,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDoc
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
 
@@ -41,6 +42,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	private static final String NEWLINE = "\r";
 	final GeboChatPromptsConfigs chatPromptsConfig;
 	final GeboChatConfigs chatConfig;
+	final IGPromptConfigDao promptsDao;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
@@ -48,10 +50,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatPromptsConfigs chatPromptsConfig,
-			GeboChatConfigs chatConfig) {
+			GeboChatConfigs chatConfig, IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.chatPromptsConfig = chatPromptsConfig;
 		this.chatConfig = chatConfig;
+		this.promptsDao = promptsDao;
 	}
 
 	@Override
@@ -107,7 +110,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 					lastTurns.append(NEWLINE);
 				}
 			}
-			String prompt = this.chatPromptsConfig.getHistoryDocumentsConsolidationPrompt().getPrompt();
+			GPromptConfig _prompt = promptsDao.findByPromptUse(GeboChatPromptsConfigs.HISTORY_CONSOLIDATION_PROMPT);
+			String prompt = _prompt.getPrompt();
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
 			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();

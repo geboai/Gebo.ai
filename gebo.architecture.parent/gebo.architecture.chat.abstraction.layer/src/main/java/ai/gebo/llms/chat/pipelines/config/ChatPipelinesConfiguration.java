@@ -17,12 +17,12 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chatpipes")
 @Data
-public class ChatPipelinesConfiguration implements IGStaticPromptsProvider {
+public class ChatPipelinesConfiguration {
 	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
 	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
-	private static final String DEFAULT_PIPELINE = "default-pipeline";
+	public static final String DEFAULT_PIPELINE = "default-pipeline";
 
 	public ChatPipelinesConfiguration() {
 		ChatPipelineConfiguration defaultPipeline = new ChatPipelineConfiguration();
@@ -34,17 +34,19 @@ public class ChatPipelinesConfiguration implements IGStaticPromptsProvider {
 		this.defaultPipelineRoutingDecisionPrompt = new GPromptConfig();
 		this.defaultPipelineRoutingDecisionPrompt.setPromptUse(DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		this.defaultPipelineRoutingDecisionPrompt.setPrompt(
-				"You are a chat pipeline routing manager. Your task is to output ONLY a single JSON object (no markdown, no extra text).\r\n"
+				"You are a chat pipeline routing manager.\r\n "
+				+ " Your task is to output ONLY a single JSON object (no markdown, no extra text).\r\n"
 						+ "\r\n" + "You must set \"responseRoutingDecision\" to exactly one of:\r\n"
 						+ "- \"PURE_LLM_RESPONSE\"\r\n" + "- \"RAG_LLM_RESPONSE\"\r\n"
 						+ "- \"DEEP_SEARCH_RESPONSE\"\r\n" + "- \"TOOLS_USE_RESPONSE\"\r\n" + "\r\n" + "\r\n"
-						+ "Inputs:\r\n"
+						+ "Inputs:\r\n" + "- current user question:\r\n{question}\r\n"
+						+ "- latest chat interactions, latest first (may be empty):\r\n{latestInteractions}\r\n"
+						+ "\r\n"
 						+ "- document list, documents/doc fragments already present in the chat history (may be empty):\r\n"
-						+ "{documents}\r\n" + "\r\n" + "- latest chat interactions, latest first (may be empty):\r\n"
-						+ "{latestInteractions}\r\n" + "\r\n" + "- current user question:\r\n" + "{question}\r\n"
-						+ "\r\n" + "- deep search data sources (may be empty):\r\n" + "{deepSearchDataSources}\r\n"
-						+ "\r\n" + "- tools list (may be empty):\r\n" + "{toolsList}\r\n" + "\r\n"
-						+ "Decision rules (apply in this exact priority order):\r\n" + "1) TOOLS_USE_RESPONSE:\r\n"
+						+ "{documents}\r\n" + "\r\n" + "\r\n" + "- deep search data sources (may be empty):\r\n"
+						+ "{deepSearchDataSources}\r\n" + "\r\n" + "- tools list (may be empty):\r\n"
+						+ "{toolsList}\r\n" + "\r\n" + "Decision rules (apply in this exact priority order):\r\n"
+						+ "1) TOOLS_USE_RESPONSE:\r\n"
 						+ "   Choose this if the user explicitly asks to use tools mentioning to perform an action indicated in the tools list OR the question cannot be answered without using one of the provided tools.\r\n"
 						+ "2) DEEP_SEARCH_RESPONSE:\r\n"
 						+ "   Choose this if the user explicitly requests a search/report/research/in-depth/deep analysis (in english or expressing the same concepts in other languages), OR asks for citations/sources across multiple documents/data sources  (in english or expressing the same concepts in other languages), OR asks to analyze/compare a broad corpus  (in english or expressing the same concepts in other languages).\r\n"
@@ -197,7 +199,7 @@ public class ChatPipelinesConfiguration implements IGStaticPromptsProvider {
 	private int maxRoutingDecisionDocumentsTokenBudget = 12000;
 	private int globalRagTopK = 20;
 
-	@Override
+	//@Override
 	public List<GPromptConfig> promptsList() {
 
 		return List.of(defaultPipelineRoutingDecisionPrompt, defaultPipelineRagOutputPrompt,
