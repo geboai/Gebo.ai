@@ -14,6 +14,8 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.CleanQueryUtil;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.GGoogleDriveSystem;
+import ai.gebo.googledrive.handlers.GoogleDriveSystemContext;
+import ai.gebo.googledrive.handlers.IGGoogleDriveVirtualFilesystemBrowser;
 import ai.gebo.googledrive.handlers.IGGoogleDriveVirtualFilesystemConsumingService;
 import ai.gebo.googledrive.handlers.config.GoogleWorkspaceHandlerConfig;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNativePositionObject;
@@ -21,17 +23,19 @@ import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNavigationCoordinates;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResourceReference;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class GoogleDriveSearchService extends
-		GAbstractRemoteVirtualFilesystemSearchService<GoogleDriveResultsExtractionData, GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveNativePositionObject, GoogleDriveNavigationCoordinates, GoogleDriveResourceReference, IGGoogleDriveVirtualFilesystemConsumingService> {
+		GAbstractRemoteVirtualFilesystemSearchService<GoogleDriveResultsExtractionData, GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveNativePositionObject, GoogleDriveNavigationCoordinates, GoogleDriveResourceReference, IGGoogleDriveVirtualFilesystemConsumingService, GoogleDriveSystemContext> {
 	final GoogleDriveCredentialsFactory googleCredentialsFactory;
 	final GoogleWorkspaceHandlerConfig config;
 
 	public GoogleDriveSearchService(GoogleDriveCredentialsFactory googleCredentialsFactory,
 			GoogleDriveVirtualFilesystemConsumingService virtualFileSystemConsumingService,
-			GGoogleDriveSystemContentHandlerImpl contentManagementSystemHandler, GoogleWorkspaceHandlerConfig config) {
-		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
+			GGoogleDriveSystemContentHandlerImpl contentManagementSystemHandler, GoogleWorkspaceHandlerConfig config,
+			IGGoogleDriveVirtualFilesystemBrowser browsingService) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.googleCredentialsFactory = googleCredentialsFactory;
 		this.config = config;
 	}
@@ -81,9 +85,16 @@ public class GoogleDriveSearchService extends
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public String getMessagingModuleId() {
 		return GStandardModulesConstraints.GOOGLE_DRIVE_MODULE;
+	}
+
+	@Override
+	protected GoogleDriveSystemContext createBrowsingContext(GGoogleDriveSystem systemType) {
+
+		return GoogleDriveSystemContext.of(systemType.getCode());
 	}
 
 }

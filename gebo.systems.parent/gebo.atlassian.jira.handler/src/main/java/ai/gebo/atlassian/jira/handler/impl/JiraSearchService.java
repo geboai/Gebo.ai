@@ -21,17 +21,19 @@ import ai.gebo.atlassian.jira.handler.impl.model.JiraNavigationCoordinates;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResourceReference;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class JiraSearchService extends
-		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService> {
+		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService, JiraBrowsingContext> {
 	final JiraApiClientFactory jiraConnectionFactory;
 	final JiraHandlerConfig config;
 
 	public JiraSearchService(JiraApiClientFactory jiraConnectionFactory,
 			GJiraRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			JiraContentManagementHandlerImpl contentManagementSystemHandler, JiraHandlerConfig config) {
-		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
+			JiraContentManagementHandlerImpl contentManagementSystemHandler, JiraHandlerConfig config,
+			JiraBrowsingService browsingService) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.jiraConnectionFactory = jiraConnectionFactory;
 		this.config = config;
 	}
@@ -74,15 +76,23 @@ public class JiraSearchService extends
 
 		return config.getQueryExtractionPrompt();
 	}
+
 	@Override
 	public String getMessagingModuleId() {
 		return GStandardModulesConstraints.ATLASSIAN_JIRA_MODULE;
 	}
+
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			JiraResultsExtractionData extractedData) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected JiraBrowsingContext createBrowsingContext(GJiraSystem systemType) {
+
+		return JiraBrowsingContext.of(systemType.getCode());
 	}
 
 }

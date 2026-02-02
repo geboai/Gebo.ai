@@ -26,6 +26,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RoutingDecisionResponse;
+import ai.gebo.llms.deepsearch.service.IDeepSearchDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GBaseObject;
@@ -42,16 +43,19 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	private final ChatPipelinesConfiguration chatPipelinesConfig;
 	private final IGDeepSearchService deepSearchService;
 	private final IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo;
+	private final IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
 
 	public DefaultRoutingChatPipelineStepServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
 			DefaultRagStreamingOutputChatPipelineStepServiceImpl defaultRagStreamingOutputChatPipelineStepServiceImpl,
 			ChatPipelinesConfiguration chatPipelinesConfig, IGDeepSearchService deepSearchService,
-			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo) {
+			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo,
+			IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.chatPipelinesConfig = chatPipelinesConfig;
 		this.deepSearchService = deepSearchService;
 		this.toolCallbackSourceRepo = toolCallbackSourceRepo;
+		this.deepSearchDataSourcesCatalogsService = deepSearchDataSourcesCatalogsService;
 	}
 
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
@@ -96,7 +100,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				templateParams.put(TOOLS_LIST, toolsList);
 				int usedTokens = tokensLength(prompt, latestInteractions, deepSearchDataSources, toolsList,
 						runtimeData.getRequestResources().getLastRequest().getQuery());
-				int remainingContext =(int) (((double) (serviceModel.getContextLength() - usedTokens))*0.8d);
+				int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
 				final int documentsTokenBudget = Math.min(remainingContext,
 						this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 				String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),

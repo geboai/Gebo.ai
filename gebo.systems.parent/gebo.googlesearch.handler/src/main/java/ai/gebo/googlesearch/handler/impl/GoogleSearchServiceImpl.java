@@ -272,8 +272,6 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 		return getRequest;
 	}
 
-	
-
 	@Override
 	public String getQueriesExtractionPrompt() {
 
@@ -310,6 +308,12 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 	public String getMessagingModuleId() {
 
 		return "google-search-module";
+	}
+
+	@Override
+	public List<String> getCataloguesListSample(String configurationCode) {
+
+		return List.of("All publicly available catalogues can be searched over internet using google searches");
 	}
 
 }

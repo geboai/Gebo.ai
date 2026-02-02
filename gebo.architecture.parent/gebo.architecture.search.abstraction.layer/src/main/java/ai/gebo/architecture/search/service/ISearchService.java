@@ -85,6 +85,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 		}
 	}
 
+	public List<String> getCataloguesListSample(String configurationCode) throws SearchServiceException;
+
 	public default void setOriginOn(List<SearchResult> sr) {
 		if (sr != null) {
 			sr.forEach(this::setOriginOn);

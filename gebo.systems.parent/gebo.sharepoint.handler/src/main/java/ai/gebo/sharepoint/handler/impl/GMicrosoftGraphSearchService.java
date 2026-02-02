@@ -14,6 +14,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.CleanQueryUtil;
 import ai.gebo.sharepoint.handler.GSharepointContentManagementSystem;
 import ai.gebo.sharepoint.handler.GSharepointProjectEndpoint;
+import ai.gebo.sharepoint.handler.IGMicrosoftGraphVirtualFilesystemBrowsingService;
 import ai.gebo.sharepoint.handler.IGMicrosoftGraphVirtualFilesystemConsumingService;
 import ai.gebo.sharepoint.handler.config.MicrosoftSharepointHandlerConfig;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNativePositionObject;
@@ -21,18 +22,19 @@ import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class GMicrosoftGraphSearchService extends
-		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService> {
+		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService, SharepointBrowsingContext> {
 	final GMicrosoftGraphClientFactory msGraphConnectionFactory;
 	final MicrosoftSharepointHandlerConfig config;
 
 	public GMicrosoftGraphSearchService(GMicrosoftGraphClientFactory msGraphConnectionFactory,
 			GMicrosoftGraphVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
 			GSharepointContentManagementSystemHandlerImpl contentManagementSystemHandler,
-			MicrosoftSharepointHandlerConfig config) {
-		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
+			MicrosoftSharepointHandlerConfig config, IGMicrosoftGraphVirtualFilesystemBrowsingService browsingService) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.msGraphConnectionFactory = msGraphConnectionFactory;
 		this.config = config;
 	}
@@ -86,6 +88,12 @@ public class GMicrosoftGraphSearchService extends
 			MicrosoftResultsExtractionData extractedData) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected SharepointBrowsingContext createBrowsingContext(GSharepointContentManagementSystem systemType) {
+
+		return SharepointBrowsingContext.of(systemType.getCode());
 	}
 
 }

@@ -45,10 +45,11 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class ConfluenceSearchService extends
-		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService> {
+		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext> {
 	private static final String HTML = ".html";
 	private static final String TEXT_HTML = "text/html";
 	final ConfluenceConnectionFactory confluenceConnectionFactory;
@@ -57,8 +58,9 @@ public class ConfluenceSearchService extends
 
 	public ConfluenceSearchService(ConfluenceConnectionFactory confluenceConnectionFactory,
 			GConfluenceRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
-			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler, ConfluenceHandlerConfig config) {
-		super(virtualFileSystemConsumingService, contentManagementSystemHandler);
+			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler, ConfluenceHandlerConfig config,
+			ConfluenceBrowsingService browsingService) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.confluenceConnectionFactory = confluenceConnectionFactory;
 		this.config = config;
 	}
@@ -68,10 +70,12 @@ public class ConfluenceSearchService extends
 
 		return "Confluence Search";
 	}
+
 	@Override
 	public String getMessagingModuleId() {
 		return GStandardModulesConstraints.ATLASSIAN_CONFLUENCE_MODULE;
 	}
+
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
@@ -387,6 +391,12 @@ public class ConfluenceSearchService extends
 			ConfluenceResultsExtractionData extractedData) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected ConfluenceBrowsingContext createBrowsingContext(GConfluenceSystem systemType) {
+
+		return ConfluenceBrowsingContext.of(systemType.getCode());
 	}
 
 }

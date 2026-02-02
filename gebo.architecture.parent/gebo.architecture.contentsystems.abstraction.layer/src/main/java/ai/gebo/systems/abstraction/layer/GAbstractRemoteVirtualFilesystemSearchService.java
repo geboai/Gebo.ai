@@ -3,35 +3,39 @@ package ai.gebo.systems.abstraction.layer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
-import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
-import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.knlowledgebase.model.projects.GVirtualFilesystemProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.model.virtualfs.GVirtualFilesystemRoot;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 import ai.gebo.systems.abstraction.layer.model.AbstractNavigationCoordinates;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionResultDataType extends BaseSearchResultsExtractionDataType, SystemType extends GContentManagementSystem, EndpointType extends GVirtualFilesystemProjectEndpoint, ImplementativePositionObjectType extends AbstractNativePositionObject, PositionsCoordinateType extends AbstractNavigationCoordinates, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ResourceReferenceType>>
+public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionResultDataType extends BaseSearchResultsExtractionDataType, SystemType extends GContentManagementSystem, EndpointType extends GVirtualFilesystemProjectEndpoint, ImplementativePositionObjectType extends AbstractNativePositionObject, PositionsCoordinateType extends AbstractNavigationCoordinates, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ResourceReferenceType>, BrowsingContext extends IGVirtualFileSystemContext>
 		implements ISearchService<ExtractionResultDataType> {
 
 	protected final GAbstractRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ImplementativePositionObjectType, PositionsCoordinateType, ResourceReferenceType> virtualFileSystemConsumingService;
 	protected final GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemType, EndpointType, ResourceReferenceType, ConsumingServiceType> contentManagementSystemHandler;
+	protected final IGVirtualFilesystemBrowsingService<BrowsingContext> browsingService;
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public SearchableSystemMetaData findSystemById(String systemId) {
@@ -136,6 +140,31 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 		String key = getKey(result);
 		d.put(key, true);
 	}
+
+	@Override
+	public List<String> getCataloguesListSample(String configurationCode) throws SearchServiceException {
+		SearchableSystemMetaData system = findSystemById(configurationCode);
+		if (system == null)
+			throw new SearchServiceException("Unknown system " + configurationCode);
+		try {
+			OperationStatus<List<GVirtualFilesystemRoot>> roots = browsingService
+					.getRoots(createBrowsingContext((SystemType) system.getSystemConfigurationReference()));
+			if (!roots.isHasErrorMessages() && roots.getResult() != null) {
+				return roots.getResult().stream().map(x -> x.getDescription())
+						.filter(y -> y != null && y.trim().length() > 0).toList();
+			} else {
+				roots.getMessages().forEach(x -> {
+					LOGGER.error(x.getSummary() + " - " + x.getDetail());
+				});
+				throw new SearchServiceException("Problems browsing system:" + configurationCode);
+			}
+		} catch (VirtualFilesystemBrowsingException e) {
+			throw new SearchServiceException("Problems browsing system:" + configurationCode, e);
+		}
+
+	}
+
+	protected abstract BrowsingContext createBrowsingContext(SystemType systemType);
 
 	private String getKey(SearchResult result) {
 		return result.getNavigationReference() != null && result.getNavigationReference().root != null
