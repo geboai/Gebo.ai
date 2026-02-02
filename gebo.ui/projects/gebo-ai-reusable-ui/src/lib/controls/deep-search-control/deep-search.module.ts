@@ -14,8 +14,10 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from "primeng/dialog";
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { GeboAIDeepSearchDetailsComponent } from "./deep-search-details.component";
+import { MarkdownComponent } from "ngx-markdown";
+import { AccordionModule } from "primeng/accordion";
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,TabsModule,ButtonModule,FieldsetModule,PanelModule,BlockUIModule,GeboAIFieldTranslationContainerModule,ProgressBarModule,DialogModule,SelectButtonModule,FieldsetModule,GeboAINotificationsModule ],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, TabsModule, ButtonModule, FieldsetModule, PanelModule, BlockUIModule, GeboAIFieldTranslationContainerModule, ProgressBarModule, DialogModule, SelectButtonModule, FieldsetModule, GeboAINotificationsModule, MarkdownComponent,AccordionModule],
     declarations:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent],
     exports:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent],
     providers:[GeboAIStreamDeepSearchService]

@@ -282,8 +282,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 							sink.next(step);
 							if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
 								if (dsDocumentEvent.getOutputData() != null
-										&& dsDocumentEvent.getOutputData().getAnalyzedResult() != null
-										&& dsDocumentEvent.getOutputData().getAnalyzedResult().trim().length() > 0
+										&& dsDocumentEvent.getOutputData().getAnalisysResult() != null
+										&& dsDocumentEvent.getOutputData().getAnalisysResult().trim().length() > 0
 										&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
 												|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
 									dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
@@ -361,8 +361,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 	private void persistSideEffects(AbstractDeepSearchEvent step) {
 		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
-			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalyzedResult() != null
-					&& !dsDocumentEvent.getOutputData().getAnalyzedResult().trim().isEmpty()
+			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalisysResult() != null
+					&& !dsDocumentEvent.getOutputData().getAnalisysResult().trim().isEmpty()
 					&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
 							|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
 				dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
@@ -451,9 +451,9 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 	@Override
 	public DeepSearchRequest findDeepSearchRequest(String deepSearchCode) {
 		Optional<DeepSearchRequest> data = requestsRepository.findById(deepSearchCode);
-		if (data.isPresent()) {
-			securityService.checkBeingCreator(data.get());
-		}
+		// if (data.isPresent()) {
+		// securityService.checkBeingCreator(data.get());
+		// }
 		return data.isPresent() ? data.get() : null;
 	}
 
@@ -694,6 +694,13 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			exceptionEnvelope.setLastMessage(true);
 			return Flux.just(exceptionEnvelope);
 		});
+	}
+
+	@Override
+	public long getDeepSearchDocumentsCount(String deepSearchCode) {
+
+		return this.dataSourceDocumentResultRepository.countByDeepsearchCode(deepSearchCode)
+				+ this.dataSourceDocumentResultRepository.countByDeepsearchCode(deepSearchCode);
 	}
 
 }

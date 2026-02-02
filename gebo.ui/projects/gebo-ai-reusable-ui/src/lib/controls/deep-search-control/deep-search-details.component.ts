@@ -1,73 +1,73 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDocumentAnalisysResultStep, GeboDeepSearchControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDocumentAnalisysResultStep, DeepSearchResponse, GeboDeepSearchControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { EnrichedDocumentReferenceViewRetrieveService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
-interface DeepSearchItem {
-    dataSourceDescription: string;
-    reference: string;
-    url?: string;
-    content: string;
-    itemType:"data-source"|"knowledge-base"
-}
+
 @Component({
     selector: "gebo-ai-deep-search-details",
     templateUrl: "deep-search-details.component.html",
+    styleUrl:"deep-search-details.component.scss",
     standalone: false
 })
 export class GeboAIDeepSearchDetailsComponent implements OnInit, OnChanges {
     @Input() deepSearchRequestCode?: string;
-    protected data: DeepSearchItem[] = [];
+    protected data: (DeepSearchDataSourceDocumentResult|DeepSearchDocumentAnalisysResultStep)[] = [];
+    protected result?:DeepSearchResponse;
     protected loading: boolean = false;
+    protected thereAreDetails:boolean=false;
+    protected listIsShowed:boolean=false;
     constructor(private deepSearchService: GeboDeepSearchControllerService) {
 
     }
     ngOnInit(): void {
 
     }
+    toggleShowedList() {
+        this.listIsShowed=!this.listIsShowed;
+        if (this.listIsShowed) {
+            if (this.data.length===0 && this.deepSearchRequestCode) {
+                this.loadData(this.deepSearchRequestCode);
+            }
+        }
+    }
     loadData(code: string) {
         const ob = this.deepSearchService.getMyDeepSearchDataSourceDocumentResultsByRequestCode(code);
         const ob1 = this.deepSearchService.getMyDeepSearchesSteps(code);
-        const observables: [Observable<DeepSearchDataSourceDocumentResult[]>, Observable<DeepSearchDocumentAnalisysResultStep[]>] = [ob, ob1];
+        const obResponse=this.deepSearchService.getMyDeepSearchResponseByRequestCode(code);
+        const observables: [Observable<DeepSearchDataSourceDocumentResult[]>, Observable<DeepSearchDocumentAnalisysResultStep[]>,Observable<DeepSearchResponse>] = [ob, ob1,obResponse];
         this.loading = true;
         forkJoin(observables).subscribe({
             next: (entries) => {
-                const items: DeepSearchItem[] = [];
+                const items: (DeepSearchDataSourceDocumentResult|DeepSearchDocumentAnalisysResultStep)[] = [];
                 if (entries && entries[0]) {
                     entries[0].forEach(entry => {
-                        if (entry.analyzedResult) {
-                            const item: DeepSearchItem = {
-                                dataSourceDescription: entry.dataSourceDescription,
-                                reference: entry.analyzedSearchResult.descriptiveText,
-                                url: entry.analyzedSearchResult?.resultReference.uri,
-                                content: entry.analyzedResult,
-                                itemType:"data-source"
-                            };
-                            items.push(item);
-                        }
+                        items.push(entry);
                     });
                 }
                 if (entries && entries[1]) {
                     entries[1].forEach(entry => {
-                        if (entry.fragment) {
-                            const item: DeepSearchItem = {
-                                dataSourceDescription: "Gebo.ai knowledge base",
-                                reference: entry.documentCode,
-                                url: undefined,
-                                content: entry.fragment,
-                                itemType:"knowledge-base"
-                            };
-                            items.push(item);
-                        }
+                        items.push(entry);
                     });
                 }
+                this.result=entries && entries[2]?entries[2]:undefined;
+                this.data=items;
+                this.thereAreDetails=this.data?.length?true:false;
             },
             complete: () => {
                 this.loading = false;
             }
         })
     }
+    checkDetailsPresent(code:string) {
+        this.deepSearchService.getDeepSearchDocumentsCount(code).subscribe({
+            next:(count)=>{
+                this.thereAreDetails= count > 0;
+            }
+        })
+    }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["deepSearchRequestCode"] && this.deepSearchRequestCode) {
-            this.loadData(this.deepSearchRequestCode);
+            this.checkDetailsPresent(this.deepSearchRequestCode);
         }
     }
 

@@ -15,4 +15,5 @@ Name | Type | Description | Notes
 **metaInfos** | [**ModelMetaInfo**](ModelMetaInfo.md) |  |  [optional]
 **informativeUrl** | **String** |  |  [optional]
 **contextLength** | **Integer** |  |  [optional]
+**nativeModelMetaInfos** | **Object** |  |  [optional]
 **optimalTokenizationParam** | **Integer** |  |  [optional]

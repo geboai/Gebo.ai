@@ -24,7 +24,7 @@ import java.util.Date;
  * GDeepseekChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GDeepseekChatModelChoice {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GDeepseekChatModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -285,6 +288,24 @@ public class GDeepseekChatModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GDeepseekChatModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GDeepseekChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -343,13 +364,14 @@ public class GDeepseekChatModelChoice {
         Objects.equals(this.metaInfos, gdeepseekChatModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gdeepseekChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gdeepseekChatModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, gdeepseekChatModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.supportsStructuredOutput, gdeepseekChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, gdeepseekChatModelChoice.supportsFunctionCalls);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, supportsStructuredOutput, supportsFunctionCalls);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls);
   }
 
 
@@ -370,6 +392,7 @@ public class GDeepseekChatModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("}");

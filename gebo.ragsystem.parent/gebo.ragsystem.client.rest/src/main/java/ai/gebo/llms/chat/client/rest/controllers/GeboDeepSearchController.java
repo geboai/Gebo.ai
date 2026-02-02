@@ -125,8 +125,8 @@ public class GeboDeepSearchController {
 
 	private Flux<ServerSentEvent<String>> stream(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType) {
-		return deepSearchService.mapToChatFlux(
-				flux, trailingType).map(StreamUtil.mappingFunction).map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
+		return deepSearchService.mapToChatFlux(flux, trailingType).map(StreamUtil.mappingFunction)
+				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -135,4 +135,10 @@ public class GeboDeepSearchController {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchChatResponseEvent.class);
 	}
+
+	@GetMapping(value = "getDeepSearchDocumentsCount", produces = MediaType.APPLICATION_JSON_VALUE)
+	public long getDeepSearchDocumentsCount(@RequestParam("deepSearchCode") String deepSearchCode) {
+		return this.deepSearchService.getDeepSearchDocumentsCount(deepSearchCode);
+	}
+
 }

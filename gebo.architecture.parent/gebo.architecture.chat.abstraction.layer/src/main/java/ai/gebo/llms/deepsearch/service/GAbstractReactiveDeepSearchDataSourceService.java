@@ -42,8 +42,10 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSe
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.llms.deepsearch.model.DeepSearchSourceType;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
@@ -272,6 +274,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			_analyzedEvent.getOutputData()
 					.setEmptyResult(returned.getContentIsRelevant() == null || !returned.getContentIsRelevant());
 			_analyzedEvent.getOutputData().setHandlerId(getHandlerId());
+			_analyzedEvent.getOutputData().setAnalyzedDocument(
+					createAnalyzedDocument(actualSearchResultToLoad, chatModel, deepSearchConfig, request));
 			_analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
 			_analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
 			_analyzedEvent.getOutputData()
@@ -279,7 +283,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 			_analyzedEvent.getOutputData()
 					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-			_analyzedEvent.getOutputData().setAnalyzedResult(returned.getExtractedRelevantContent());
+			_analyzedEvent.getOutputData().setAnalisysResult(returned.getExtractedRelevantContent());
 			LLMCallStep<CustomContentExtractionType> out = new LLMCallStep<CustomContentExtractionType>(returned,
 					docWithRef, deepStepAnalisys, _analyzedEvent);
 			doneSteps.incrementAndGet();
@@ -398,7 +402,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							title = evds.getOutputData().getAnalyzedSearchResult().getNavigationReference().path.name;
 						}
 					}
-					String text = evds.getOutputData().getAnalyzedResult();
+					String text = evds.getOutputData().getAnalisysResult();
 					ConsolidationInput data = new ConsolidationInput(
 							processed.getOutputData().getDataSourceDescription() + " " + docName, url, title, text);
 					input.add(data);
@@ -506,7 +510,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			String documentReference = "extracted from: " + x.getDataSourceDescription() + " document: " + title;
 
 			ConsolidationInput input = new ConsolidationInput(documentReference, documentUrl, title,
-					x.getAnalyzedResult());
+					x.getAnalisysResult());
 			return input;
 		}).toList();
 		DeepSearchDataSourceProcessedEvent event = new DeepSearchDataSourceProcessedEvent();
@@ -557,6 +561,45 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			LOGGER.debug("End extractSearchQueries(...) handler:" + getHandlerId() + " returning " + searches);
 		}
 		return searches;
+	}
+
+	private DeepSearchAnalyzedDocument createAnalyzedDocument(SearchResult sr, IGConfigurableChatModel chatModel,
+			DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
+		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
+		doc.setDataSourceCode(getHandlerId());
+		doc.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+
+		if (sr != null) {
+			StringBuffer computedCode = new StringBuffer();
+			computedCode.append(getHandlerId() + ":");
+			if (sr.getNavigationReference() != null) {
+
+				if (sr.getNavigationReference().root != null && sr.getNavigationReference().root.getCode() != null) {
+					computedCode.append(sr.getNavigationReference().root.getCode());
+					computedCode.append(":");
+				}
+				if (sr.getNavigationReference().path != null) {
+					computedCode.append(sr.getNavigationReference().path.absolutePath);
+				}
+				if (sr.getNavigationReference().path != null && sr.getNavigationReference().path.name != null) {
+					doc.setName(sr.getNavigationReference().path.name);
+				}
+			} else if (sr.getResultReference() != null && sr.getResultReference().getUri() != null) {
+				computedCode.append(sr.getResultReference().getUri());
+			}
+			doc.setCode(computedCode.toString());
+			SearchResultReference rr = sr.getResultReference();
+			if (rr != null && rr.getName() != null) {
+				doc.setName(rr.getName());
+
+			}
+			if (rr != null && rr.getUri() != null) {
+				doc.setUrl(rr.getUri());
+			}
+
+		}
+		doc.setSourceType(DeepSearchSourceType.EXTERNAL_SEARCH);
+		return doc;
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,

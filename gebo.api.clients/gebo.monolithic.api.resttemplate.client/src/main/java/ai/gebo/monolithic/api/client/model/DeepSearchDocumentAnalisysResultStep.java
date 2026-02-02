@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.DeepSearchAnalyzedDocument;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +26,7 @@ import java.util.List;
  * DeepSearchDocumentAnalisysResultStep
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class DeepSearchDocumentAnalisysResultStep {
   @JsonProperty("code")
@@ -49,20 +50,23 @@ public class DeepSearchDocumentAnalisysResultStep {
   @JsonProperty("deepsearchCode")
   private String deepsearchCode = null;
 
-  @JsonProperty("fragment")
-  private String fragment = null;
+  @JsonProperty("emptyResult")
+  private Boolean emptyResult = null;
 
-  @JsonProperty("documentCode")
-  private String documentCode = null;
+  @JsonProperty("analisysResult")
+  private String analisysResult = null;
+
+  @JsonProperty("analyzedDocument")
+  private DeepSearchAnalyzedDocument analyzedDocument = null;
+
+  @JsonProperty("processPercentage")
+  private Double processPercentage = null;
 
   @JsonProperty("index")
   private Integer index = null;
 
   @JsonProperty("fragmentsCodes")
   private List<String> fragmentsCodes = new ArrayList<>();
-
-  @JsonProperty("processPercentage")
-  private Double processPercentage = null;
 
   public DeepSearchDocumentAnalisysResultStep code(String code) {
     this.code = code;
@@ -190,40 +194,76 @@ public class DeepSearchDocumentAnalisysResultStep {
     this.deepsearchCode = deepsearchCode;
   }
 
-  public DeepSearchDocumentAnalisysResultStep fragment(String fragment) {
-    this.fragment = fragment;
+  public DeepSearchDocumentAnalisysResultStep emptyResult(Boolean emptyResult) {
+    this.emptyResult = emptyResult;
     return this;
   }
 
    /**
-   * Get fragment
-   * @return fragment
+   * Get emptyResult
+   * @return emptyResult
   **/
-  @Schema(required = true, description = "")
-  public String getFragment() {
-    return fragment;
+  @Schema(description = "")
+  public Boolean isEmptyResult() {
+    return emptyResult;
   }
 
-  public void setFragment(String fragment) {
-    this.fragment = fragment;
+  public void setEmptyResult(Boolean emptyResult) {
+    this.emptyResult = emptyResult;
   }
 
-  public DeepSearchDocumentAnalisysResultStep documentCode(String documentCode) {
-    this.documentCode = documentCode;
+  public DeepSearchDocumentAnalisysResultStep analisysResult(String analisysResult) {
+    this.analisysResult = analisysResult;
     return this;
   }
 
    /**
-   * Get documentCode
-   * @return documentCode
+   * Get analisysResult
+   * @return analisysResult
   **/
-  @Schema(required = true, description = "")
-  public String getDocumentCode() {
-    return documentCode;
+  @Schema(description = "")
+  public String getAnalisysResult() {
+    return analisysResult;
   }
 
-  public void setDocumentCode(String documentCode) {
-    this.documentCode = documentCode;
+  public void setAnalisysResult(String analisysResult) {
+    this.analisysResult = analisysResult;
+  }
+
+  public DeepSearchDocumentAnalisysResultStep analyzedDocument(DeepSearchAnalyzedDocument analyzedDocument) {
+    this.analyzedDocument = analyzedDocument;
+    return this;
+  }
+
+   /**
+   * Get analyzedDocument
+   * @return analyzedDocument
+  **/
+  @Schema(required = true, description = "")
+  public DeepSearchAnalyzedDocument getAnalyzedDocument() {
+    return analyzedDocument;
+  }
+
+  public void setAnalyzedDocument(DeepSearchAnalyzedDocument analyzedDocument) {
+    this.analyzedDocument = analyzedDocument;
+  }
+
+  public DeepSearchDocumentAnalisysResultStep processPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+    return this;
+  }
+
+   /**
+   * Get processPercentage
+   * @return processPercentage
+  **/
+  @Schema(description = "")
+  public Double getProcessPercentage() {
+    return processPercentage;
+  }
+
+  public void setProcessPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
   }
 
   public DeepSearchDocumentAnalisysResultStep index(Integer index) {
@@ -267,24 +307,6 @@ public class DeepSearchDocumentAnalisysResultStep {
     this.fragmentsCodes = fragmentsCodes;
   }
 
-  public DeepSearchDocumentAnalisysResultStep processPercentage(Double processPercentage) {
-    this.processPercentage = processPercentage;
-    return this;
-  }
-
-   /**
-   * Get processPercentage
-   * @return processPercentage
-  **/
-  @Schema(description = "")
-  public Double getProcessPercentage() {
-    return processPercentage;
-  }
-
-  public void setProcessPercentage(Double processPercentage) {
-    this.processPercentage = processPercentage;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -302,16 +324,17 @@ public class DeepSearchDocumentAnalisysResultStep {
         Objects.equals(this.dateModified, deepSearchDocumentAnalisysResultStep.dateModified) &&
         Objects.equals(this.dateCreated, deepSearchDocumentAnalisysResultStep.dateCreated) &&
         Objects.equals(this.deepsearchCode, deepSearchDocumentAnalisysResultStep.deepsearchCode) &&
-        Objects.equals(this.fragment, deepSearchDocumentAnalisysResultStep.fragment) &&
-        Objects.equals(this.documentCode, deepSearchDocumentAnalisysResultStep.documentCode) &&
+        Objects.equals(this.emptyResult, deepSearchDocumentAnalisysResultStep.emptyResult) &&
+        Objects.equals(this.analisysResult, deepSearchDocumentAnalisysResultStep.analisysResult) &&
+        Objects.equals(this.analyzedDocument, deepSearchDocumentAnalisysResultStep.analyzedDocument) &&
+        Objects.equals(this.processPercentage, deepSearchDocumentAnalisysResultStep.processPercentage) &&
         Objects.equals(this.index, deepSearchDocumentAnalisysResultStep.index) &&
-        Objects.equals(this.fragmentsCodes, deepSearchDocumentAnalisysResultStep.fragmentsCodes) &&
-        Objects.equals(this.processPercentage, deepSearchDocumentAnalisysResultStep.processPercentage);
+        Objects.equals(this.fragmentsCodes, deepSearchDocumentAnalisysResultStep.fragmentsCodes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, fragment, documentCode, index, fragmentsCodes, processPercentage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, emptyResult, analisysResult, analyzedDocument, processPercentage, index, fragmentsCodes);
   }
 
 
@@ -327,11 +350,12 @@ public class DeepSearchDocumentAnalisysResultStep {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    deepsearchCode: ").append(toIndentedString(deepsearchCode)).append("\n");
-    sb.append("    fragment: ").append(toIndentedString(fragment)).append("\n");
-    sb.append("    documentCode: ").append(toIndentedString(documentCode)).append("\n");
+    sb.append("    emptyResult: ").append(toIndentedString(emptyResult)).append("\n");
+    sb.append("    analisysResult: ").append(toIndentedString(analisysResult)).append("\n");
+    sb.append("    analyzedDocument: ").append(toIndentedString(analyzedDocument)).append("\n");
+    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("    index: ").append(toIndentedString(index)).append("\n");
     sb.append("    fragmentsCodes: ").append(toIndentedString(fragmentsCodes)).append("\n");
-    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("}");
     return sb.toString();
   }

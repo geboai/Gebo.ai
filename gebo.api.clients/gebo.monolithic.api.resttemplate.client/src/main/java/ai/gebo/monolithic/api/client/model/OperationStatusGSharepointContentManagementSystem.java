@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGSharepointContentManagementSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class OperationStatusGSharepointContentManagementSystem {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGSharepointContentManagementSystem {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGSharepointContentManagementSystem result(GSharepointContentManagementSystem result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGSharepointContentManagementSystem {
     this.messages = messages;
   }
 
-  public OperationStatusGSharepointContentManagementSystem hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGSharepointContentManagementSystem hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGSharepointContentManagementSystem {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGSharepointContentManagementSystem hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGSharepointContentManagementSystem {
     OperationStatusGSharepointContentManagementSystem operationStatusGSharepointContentManagementSystem = (OperationStatusGSharepointContentManagementSystem) o;
     return Objects.equals(this.result, operationStatusGSharepointContentManagementSystem.result) &&
         Objects.equals(this.messages, operationStatusGSharepointContentManagementSystem.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGSharepointContentManagementSystem.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGSharepointContentManagementSystem.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGSharepointContentManagementSystem.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGSharepointContentManagementSystem.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGSharepointContentManagementSystem {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

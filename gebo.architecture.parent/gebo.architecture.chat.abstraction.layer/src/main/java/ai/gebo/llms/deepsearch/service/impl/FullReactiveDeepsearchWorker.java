@@ -190,9 +190,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 									inputs);
 							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 							resultStep.setDeepsearchCode(request.getCode());
-							resultStep.setFragment(result);
+							resultStep.setAnalisysResult(result);
 							resultStep.setIndex(history.size());
-							resultStep.setDocumentCode(documentCode);
+							resultStep.setAnalyzedDocument(KnowledgeBaseDocRefUtil.create(docdata.get()));
 							resultStep.setFragmentsCodes(fragments.stream().map(x -> x.getCode()).toList());
 							DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
 							resultStep.setProcessPercentage(state.calculateProcessedPercent());
@@ -553,7 +553,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			for (AbstractDeepSearchEvent event : history) {
 				if (event instanceof DeepSearchDocumentEvent docEvent) {
 					steps.add(docEvent.getOutputData());
-					String actualFragment = docEvent.getOutputData().getFragment();
+					String actualFragment = docEvent.getOutputData().getAnalisysResult();
 					GDocumentReference document = docEvent.getInputData();
 					int length = tokenEstimator.estimate(actualFragment);
 					if (tokens + length >= tokensBudget) {

@@ -25,7 +25,7 @@ import java.util.Date;
  * GMistralEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GMistralEmbeddingModelChoice {
   @JsonProperty("code")
@@ -63,6 +63,9 @@ public class GMistralEmbeddingModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -286,6 +289,24 @@ public class GMistralEmbeddingModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GMistralEmbeddingModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GMistralEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -344,13 +365,14 @@ public class GMistralEmbeddingModelChoice {
         Objects.equals(this.metaInfos, gmistralEmbeddingModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gmistralEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gmistralEmbeddingModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, gmistralEmbeddingModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.optimalTokenizationParam, gmistralEmbeddingModelChoice.optimalTokenizationParam) &&
         Objects.equals(this.modelCard, gmistralEmbeddingModelChoice.modelCard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, optimalTokenizationParam, modelCard);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam, modelCard);
   }
 
 
@@ -371,6 +393,7 @@ public class GMistralEmbeddingModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("    modelCard: ").append(toIndentedString(modelCard)).append("\n");
     sb.append("}");

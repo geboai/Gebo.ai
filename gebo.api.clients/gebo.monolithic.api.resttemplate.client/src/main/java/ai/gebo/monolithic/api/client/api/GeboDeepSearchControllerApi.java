@@ -32,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GeboDeepSearchControllerApi {
     private ApiClient apiClient;
@@ -177,6 +177,51 @@ public class GeboDeepSearchControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param deepSearchCode  (required)
+     * @return Long
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public Long getDeepSearchDocumentsCount(String deepSearchCode) throws RestClientException {
+        return getDeepSearchDocumentsCountWithHttpInfo(deepSearchCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param deepSearchCode  (required)
+     * @return ResponseEntity&lt;Long&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<Long> getDeepSearchDocumentsCountWithHttpInfo(String deepSearchCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'deepSearchCode' is set
+        if (deepSearchCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'deepSearchCode' when calling getDeepSearchDocumentsCount");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboDeepSearchController/getDeepSearchDocumentsCount").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "deepSearchCode", deepSearchCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<Long> returnType = new ParameterizedTypeReference<Long>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

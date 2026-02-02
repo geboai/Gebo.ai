@@ -18,3 +18,4 @@ Name | Type | Description | Notes
 **contextWindowStats** | [**ChatModelRequestContextWindowStats**](ChatModelRequestContextWindowStats.md) |  |  [optional]
 **generatedResources** | [**List&lt;LLMGeneratedResource&gt;**](LLMGeneratedResource.md) |  |  [optional]
 **pipelineRouterDecisionCode** | **String** |  |  [optional]
+**deepSearchRequestId** | **String** |  |  [optional]

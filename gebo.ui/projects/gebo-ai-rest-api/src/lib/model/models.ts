@@ -29,6 +29,7 @@ export * from './configurationEntry';
 export * from './contentMetaInfo';
 export * from './contentObject';
 export * from './dataPage';
+export * from './deepSearchAnalyzedDocument';
 export * from './deepSearchConfig';
 export * from './deepSearchDataSourceDocumentResult';
 export * from './deepSearchDataSourceResponse';

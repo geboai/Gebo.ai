@@ -24,7 +24,7 @@ import java.util.Date;
  * GOpenAIEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GOpenAIEmbeddingModelChoice {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GOpenAIEmbeddingModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -282,6 +285,24 @@ public class GOpenAIEmbeddingModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GOpenAIEmbeddingModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GOpenAIEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -322,12 +343,13 @@ public class GOpenAIEmbeddingModelChoice {
         Objects.equals(this.metaInfos, gopenAIEmbeddingModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gopenAIEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gopenAIEmbeddingModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, gopenAIEmbeddingModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.optimalTokenizationParam, gopenAIEmbeddingModelChoice.optimalTokenizationParam);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, optimalTokenizationParam);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam);
   }
 
 
@@ -348,6 +370,7 @@ public class GOpenAIEmbeddingModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("}");
     return sb.toString();

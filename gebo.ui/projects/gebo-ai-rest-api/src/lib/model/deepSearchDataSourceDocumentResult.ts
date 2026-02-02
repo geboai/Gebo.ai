@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DeepSearchAnalyzedDocument } from './deepSearchAnalyzedDocument';
 import { SearchResult } from './searchResult';
 
 export interface DeepSearchDataSourceDocumentResult { 
@@ -18,12 +19,13 @@ export interface DeepSearchDataSourceDocumentResult {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    emptyResult?: boolean;
-    analyzedResult?: string;
     deepsearchCode: string;
+    emptyResult?: boolean;
+    analisysResult?: string;
+    analyzedDocument: DeepSearchAnalyzedDocument;
+    processPercentage?: number;
     handlerId: string;
     documentIndex?: number;
     dataSourceDescription: string;
     analyzedSearchResult: SearchResult;
-    processPercentage?: number;
 }

@@ -30,7 +30,7 @@ import java.util.List;
  * GeboChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GeboChatResponse {
   @JsonProperty("id")
@@ -77,6 +77,9 @@ public class GeboChatResponse {
 
   @JsonProperty("pipelineRouterDecisionCode")
   private String pipelineRouterDecisionCode = null;
+
+  @JsonProperty("deepSearchRequestId")
+  private String deepSearchRequestId = null;
 
   public GeboChatResponse id(String id) {
     this.id = id;
@@ -396,6 +399,24 @@ public class GeboChatResponse {
     this.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
   }
 
+  public GeboChatResponse deepSearchRequestId(String deepSearchRequestId) {
+    this.deepSearchRequestId = deepSearchRequestId;
+    return this;
+  }
+
+   /**
+   * Get deepSearchRequestId
+   * @return deepSearchRequestId
+  **/
+  @Schema(description = "")
+  public String getDeepSearchRequestId() {
+    return deepSearchRequestId;
+  }
+
+  public void setDeepSearchRequestId(String deepSearchRequestId) {
+    this.deepSearchRequestId = deepSearchRequestId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -420,12 +441,13 @@ public class GeboChatResponse {
         Objects.equals(this.calledFunctions, geboChatResponse.calledFunctions) &&
         Objects.equals(this.contextWindowStats, geboChatResponse.contextWindowStats) &&
         Objects.equals(this.generatedResources, geboChatResponse.generatedResources) &&
-        Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode);
+        Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode) &&
+        Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, deepSearchRequestId);
   }
 
 
@@ -449,6 +471,7 @@ public class GeboChatResponse {
     sb.append("    contextWindowStats: ").append(toIndentedString(contextWindowStats)).append("\n");
     sb.append("    generatedResources: ").append(toIndentedString(generatedResources)).append("\n");
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
+    sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

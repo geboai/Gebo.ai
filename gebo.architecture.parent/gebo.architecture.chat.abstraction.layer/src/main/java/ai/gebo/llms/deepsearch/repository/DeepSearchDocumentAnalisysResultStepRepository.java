@@ -21,4 +21,5 @@ public interface DeepSearchDocumentAnalisysResultStepRepository
 		
 		return DeepSearchDocumentAnalisysResultStep.class;
 	}
+	public long countByDeepsearchCode(String deepSearchCode);
 }

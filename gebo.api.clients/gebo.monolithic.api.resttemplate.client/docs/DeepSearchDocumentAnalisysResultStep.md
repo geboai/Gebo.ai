@@ -10,8 +10,9 @@ Name | Type | Description | Notes
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **deepsearchCode** | **String** |  | 
-**fragment** | **String** |  | 
-**documentCode** | **String** |  | 
+**emptyResult** | **Boolean** |  |  [optional]
+**analisysResult** | **String** |  |  [optional]
+**analyzedDocument** | [**DeepSearchAnalyzedDocument**](DeepSearchAnalyzedDocument.md) |  | 
+**processPercentage** | **Double** |  |  [optional]
 **index** | **Integer** |  | 
 **fragmentsCodes** | **List&lt;String&gt;** |  | 
-**processPercentage** | **Double** |  |  [optional]

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GPromptConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GPromptConfig {
   @JsonProperty("code")
@@ -97,7 +97,7 @@ public class GPromptConfig {
    * Get prompt
    * @return prompt
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public String getPrompt() {
     return prompt;
   }
@@ -133,7 +133,7 @@ public class GPromptConfig {
    * Get promptUse
    * @return promptUse
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public String getPromptUse() {
     return promptUse;
   }

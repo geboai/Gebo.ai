@@ -12,20 +12,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class DeepSearchDocumentAnalisysResultStep extends GBaseObject {
-	@NotNull
-	@HashIndexed
-	String deepsearchCode = null;
-	@NotNull
-	String fragment = null;
-	@NotNull
-	@HashIndexed
-	String documentCode = null;
+public class DeepSearchDocumentAnalisysResultStep extends BaseDeepSearchDocumentAnalisysResult {
+	
 	@NotNull
 	@Order
 	Integer index = null;
 	@NotNull
 	@NotEmpty
 	List<String> fragmentsCodes = new ArrayList<String>();
-	private double processPercentage=0.0;
+	
 }

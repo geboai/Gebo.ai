@@ -57,10 +57,13 @@ public interface IGDeepSearchService {
 
 	public void deleteDeepSearchByUserContextCode(String userContextCode);
 
+	public long getDeepSearchDocumentsCount(String deepSearchCode);
+
 	public DeepSearchUISettings getDeepSearchUISettings();
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources) throws LLMConfigException;
+			GeboChatResponse chatResponse, GUserChatContext userChatContext, List<String> deepSearchDataSources)
+			throws LLMConfigException;
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType);

@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**deleteDeepSearch**](GeboDeepSearchControllerApi.md#deleteDeepSearch) | **DELETE** /api/users/GeboDeepSearchController/deleteDeepSearch | 
 [**doDeepSearch**](GeboDeepSearchControllerApi.md#doDeepSearch) | **POST** /api/users/GeboDeepSearchController/doDeepSearch | 
 [**getDeepSearchDataSources**](GeboDeepSearchControllerApi.md#getDeepSearchDataSources) | **GET** /api/users/GeboDeepSearchController/getDeepSearchDataSources | 
+[**getDeepSearchDocumentsCount**](GeboDeepSearchControllerApi.md#getDeepSearchDocumentsCount) | **GET** /api/users/GeboDeepSearchController/getDeepSearchDocumentsCount | 
 [**getDeepSearchUISettings**](GeboDeepSearchControllerApi.md#getDeepSearchUISettings) | **GET** /api/users/GeboDeepSearchController/getDeepSearchUISettings | 
 [**getMyDeepSearchById**](GeboDeepSearchControllerApi.md#getMyDeepSearchById) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchById | 
 [**getMyDeepSearchDataSourceDocumentResultsByRequestCode**](GeboDeepSearchControllerApi.md#getMyDeepSearchDataSourceDocumentResultsByRequestCode) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchDataSourceDocumentResultsByRequestCode | 
@@ -133,6 +134,49 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;GBaseObject&gt;**](GBaseObject.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getDeepSearchDocumentsCount"></a>
+# **getDeepSearchDocumentsCount**
+> Long getDeepSearchDocumentsCount(deepSearchCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
+
+
+GeboDeepSearchControllerApi apiInstance = new GeboDeepSearchControllerApi();
+String deepSearchCode = "deepSearchCode_example"; // String | 
+try {
+    Long result = apiInstance.getDeepSearchDocumentsCount(deepSearchCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboDeepSearchControllerApi#getDeepSearchDocumentsCount");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **deepSearchCode** | **String**|  |
+
+### Return type
+
+**Long**
 
 ### Authorization
 

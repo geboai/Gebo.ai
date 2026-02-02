@@ -24,7 +24,7 @@ import java.util.Date;
  * GOllamaEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class GOllamaEmbeddingModelChoice {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GOllamaEmbeddingModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -282,6 +285,24 @@ public class GOllamaEmbeddingModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GOllamaEmbeddingModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GOllamaEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -322,12 +343,13 @@ public class GOllamaEmbeddingModelChoice {
         Objects.equals(this.metaInfos, gollamaEmbeddingModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gollamaEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gollamaEmbeddingModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, gollamaEmbeddingModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.optimalTokenizationParam, gollamaEmbeddingModelChoice.optimalTokenizationParam);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, optimalTokenizationParam);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam);
   }
 
 
@@ -348,6 +370,7 @@ public class GOllamaEmbeddingModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -9,11 +9,12 @@ Name | Type | Description | Notes
 **userCreated** | **String** |  |  [optional]
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
-**emptyResult** | **Boolean** |  |  [optional]
-**analyzedResult** | **String** |  |  [optional]
 **deepsearchCode** | **String** |  | 
+**emptyResult** | **Boolean** |  |  [optional]
+**analisysResult** | **String** |  |  [optional]
+**analyzedDocument** | [**DeepSearchAnalyzedDocument**](DeepSearchAnalyzedDocument.md) |  | 
+**processPercentage** | **Double** |  |  [optional]
 **handlerId** | **String** |  | 
 **documentIndex** | **Integer** |  |  [optional]
 **dataSourceDescription** | **String** |  | 
 **analyzedSearchResult** | [**SearchResult**](SearchResult.md) |  | 
-**processPercentage** | **Double** |  |  [optional]

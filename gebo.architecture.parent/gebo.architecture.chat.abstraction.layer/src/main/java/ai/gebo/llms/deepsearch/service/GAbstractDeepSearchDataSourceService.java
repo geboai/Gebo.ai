@@ -30,8 +30,10 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceStandardState;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.llms.deepsearch.model.DeepSearchSourceType;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
@@ -272,7 +274,8 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				analyzedEvent.setInputData(actualSearchResultRef.getActualSearchResult());
 				analyzedEvent.setOutputData(new DeepSearchDataSourceDocumentResult());
 				analyzedEvent.getOutputData().setEmptyResult(false);
-				analyzedEvent.getOutputData().setHandlerId(getHandlerId());
+				analyzedEvent.getOutputData().setAnalyzedDocument(
+						createAnalyzedDocument(actualSearchResultRef, chatModel, deepSearchConfig, request));
 				analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
 				analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultRef.getActualSearchResult());
 				analyzedEvent.getOutputData()
@@ -280,7 +283,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				analyzedEvent.getOutputData().setDocumentIndex(state.getQueryResultsReferenceIndex());
 				analyzedEvent.getOutputData()
 						.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-				analyzedEvent.getOutputData().setAnalyzedResult(actualContribute.getExtractedRelevantContent());
+				analyzedEvent.getOutputData().setAnalisysResult(actualContribute.getExtractedRelevantContent());
 				state.getCumulatedAnalisys().add(analyzedEvent.getOutputData());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Actual document analyzed result:" + actualContribute.getExtractedRelevantContent());
@@ -300,6 +303,45 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 					+ returned);
 		}
 		return returned;
+	}
+
+	DeepSearchAnalyzedDocument createAnalyzedDocument(SearchResultsStepInfo actualSearchResultRef,
+			IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
+		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
+		doc.setDataSourceCode(getHandlerId());
+		doc.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+		SearchResult sr = actualSearchResultRef.getActualSearchResult();
+		if (sr != null) {
+			StringBuffer computedCode = new StringBuffer();
+			computedCode.append(getHandlerId() + ":");
+			if (sr.getNavigationReference() != null) {
+
+				if (sr.getNavigationReference().root != null && sr.getNavigationReference().root.getCode() != null) {
+					computedCode.append(sr.getNavigationReference().root.getCode());
+					computedCode.append(":");
+				}
+				if (sr.getNavigationReference().path != null) {
+					computedCode.append(sr.getNavigationReference().path.absolutePath);
+				}
+				if (sr.getNavigationReference().path != null && sr.getNavigationReference().path.name != null) {
+					doc.setName(sr.getNavigationReference().path.name);
+				}
+			} else if (sr.getResultReference() != null && sr.getResultReference().getUri() != null) {
+				computedCode.append(sr.getResultReference().getUri());
+			}
+			doc.setCode(computedCode.toString());
+			SearchResultReference rr = sr.getResultReference();
+			if (rr != null && rr.getName() != null) {
+				doc.setName(rr.getName());
+
+			}
+			if (rr != null && rr.getUri() != null) {
+				doc.setUrl(rr.getUri());
+			}
+
+		}
+		doc.setSourceType(DeepSearchSourceType.EXTERNAL_SEARCH);
+		return doc;
 	}
 
 	private boolean checkNotYetVisited(SearchResult actualSearchResult, DeepSearchDataSourceStandardState state) {
@@ -368,7 +410,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 			String documentReference = "extracted from: " + x.getDataSourceDescription() + " document: " + title;
 
 			ConsolidationInput input = new ConsolidationInput(documentReference, documentUrl, title,
-					x.getAnalyzedResult());
+					x.getAnalisysResult());
 			return input;
 		}).toList();
 		DeepSearchDataSourceProcessedEvent event = new DeepSearchDataSourceProcessedEvent();

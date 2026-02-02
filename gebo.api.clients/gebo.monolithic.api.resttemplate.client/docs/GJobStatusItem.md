@@ -3,17 +3,17 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
 **error** | **Boolean** |  |  [optional]
-**description** | **String** |  |  [optional]
-**startDateTime** | [**Date**](Date.md) |  |  [optional]
 **code** | **String** |  |  [optional]
-**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
-**endDateTime** | [**Date**](Date.md) |  |  [optional]
-**finished** | **Boolean** |  |  [optional]
-**processing** | **Boolean** |  |  [optional]
-**workflowId** | **String** |  |  [optional]
+**description** | **String** |  |  [optional]
 **workflowType** | **String** |  |  [optional]
+**startDateTime** | [**Date**](Date.md) |  |  [optional]
+**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
+**workflowId** | **String** |  |  [optional]
+**processing** | **Boolean** |  |  [optional]
+**finished** | **Boolean** |  |  [optional]
+**jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
 
 <a name="JobTypeEnum"></a>
 ## Enum: JobTypeEnum

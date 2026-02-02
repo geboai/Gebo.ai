@@ -16,4 +16,5 @@ public interface DeepSearchDataSourceDocumentResultRepository
 	public void deleteByDeepsearchCode(String deepSearchCode);
 
 	public List<DeepSearchDataSourceDocumentResult> findByDeepsearchCode(String deepSearchCode);
+	public long countByDeepsearchCode(String deepSearchCode);
 }

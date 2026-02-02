@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.DeepSearchAnalyzedDocument;
 import ai.gebo.monolithic.api.client.model.SearchResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,7 +25,7 @@ import java.util.Date;
  * DeepSearchDataSourceDocumentResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-01-29T10:56:30.042559800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
 
 public class DeepSearchDataSourceDocumentResult {
   @JsonProperty("code")
@@ -45,14 +46,20 @@ public class DeepSearchDataSourceDocumentResult {
   @JsonProperty("dateCreated")
   private Date dateCreated = null;
 
+  @JsonProperty("deepsearchCode")
+  private String deepsearchCode = null;
+
   @JsonProperty("emptyResult")
   private Boolean emptyResult = null;
 
-  @JsonProperty("analyzedResult")
-  private String analyzedResult = null;
+  @JsonProperty("analisysResult")
+  private String analisysResult = null;
 
-  @JsonProperty("deepsearchCode")
-  private String deepsearchCode = null;
+  @JsonProperty("analyzedDocument")
+  private DeepSearchAnalyzedDocument analyzedDocument = null;
+
+  @JsonProperty("processPercentage")
+  private Double processPercentage = null;
 
   @JsonProperty("handlerId")
   private String handlerId = null;
@@ -65,9 +72,6 @@ public class DeepSearchDataSourceDocumentResult {
 
   @JsonProperty("analyzedSearchResult")
   private SearchResult analyzedSearchResult = null;
-
-  @JsonProperty("processPercentage")
-  private Double processPercentage = null;
 
   public DeepSearchDataSourceDocumentResult code(String code) {
     this.code = code;
@@ -177,6 +181,24 @@ public class DeepSearchDataSourceDocumentResult {
     this.dateCreated = dateCreated;
   }
 
+  public DeepSearchDataSourceDocumentResult deepsearchCode(String deepsearchCode) {
+    this.deepsearchCode = deepsearchCode;
+    return this;
+  }
+
+   /**
+   * Get deepsearchCode
+   * @return deepsearchCode
+  **/
+  @Schema(required = true, description = "")
+  public String getDeepsearchCode() {
+    return deepsearchCode;
+  }
+
+  public void setDeepsearchCode(String deepsearchCode) {
+    this.deepsearchCode = deepsearchCode;
+  }
+
   public DeepSearchDataSourceDocumentResult emptyResult(Boolean emptyResult) {
     this.emptyResult = emptyResult;
     return this;
@@ -195,40 +217,58 @@ public class DeepSearchDataSourceDocumentResult {
     this.emptyResult = emptyResult;
   }
 
-  public DeepSearchDataSourceDocumentResult analyzedResult(String analyzedResult) {
-    this.analyzedResult = analyzedResult;
+  public DeepSearchDataSourceDocumentResult analisysResult(String analisysResult) {
+    this.analisysResult = analisysResult;
     return this;
   }
 
    /**
-   * Get analyzedResult
-   * @return analyzedResult
+   * Get analisysResult
+   * @return analisysResult
   **/
   @Schema(description = "")
-  public String getAnalyzedResult() {
-    return analyzedResult;
+  public String getAnalisysResult() {
+    return analisysResult;
   }
 
-  public void setAnalyzedResult(String analyzedResult) {
-    this.analyzedResult = analyzedResult;
+  public void setAnalisysResult(String analisysResult) {
+    this.analisysResult = analisysResult;
   }
 
-  public DeepSearchDataSourceDocumentResult deepsearchCode(String deepsearchCode) {
-    this.deepsearchCode = deepsearchCode;
+  public DeepSearchDataSourceDocumentResult analyzedDocument(DeepSearchAnalyzedDocument analyzedDocument) {
+    this.analyzedDocument = analyzedDocument;
     return this;
   }
 
    /**
-   * Get deepsearchCode
-   * @return deepsearchCode
+   * Get analyzedDocument
+   * @return analyzedDocument
   **/
   @Schema(required = true, description = "")
-  public String getDeepsearchCode() {
-    return deepsearchCode;
+  public DeepSearchAnalyzedDocument getAnalyzedDocument() {
+    return analyzedDocument;
   }
 
-  public void setDeepsearchCode(String deepsearchCode) {
-    this.deepsearchCode = deepsearchCode;
+  public void setAnalyzedDocument(DeepSearchAnalyzedDocument analyzedDocument) {
+    this.analyzedDocument = analyzedDocument;
+  }
+
+  public DeepSearchDataSourceDocumentResult processPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
+    return this;
+  }
+
+   /**
+   * Get processPercentage
+   * @return processPercentage
+  **/
+  @Schema(description = "")
+  public Double getProcessPercentage() {
+    return processPercentage;
+  }
+
+  public void setProcessPercentage(Double processPercentage) {
+    this.processPercentage = processPercentage;
   }
 
   public DeepSearchDataSourceDocumentResult handlerId(String handlerId) {
@@ -303,24 +343,6 @@ public class DeepSearchDataSourceDocumentResult {
     this.analyzedSearchResult = analyzedSearchResult;
   }
 
-  public DeepSearchDataSourceDocumentResult processPercentage(Double processPercentage) {
-    this.processPercentage = processPercentage;
-    return this;
-  }
-
-   /**
-   * Get processPercentage
-   * @return processPercentage
-  **/
-  @Schema(description = "")
-  public Double getProcessPercentage() {
-    return processPercentage;
-  }
-
-  public void setProcessPercentage(Double processPercentage) {
-    this.processPercentage = processPercentage;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -337,19 +359,20 @@ public class DeepSearchDataSourceDocumentResult {
         Objects.equals(this.userCreated, deepSearchDataSourceDocumentResult.userCreated) &&
         Objects.equals(this.dateModified, deepSearchDataSourceDocumentResult.dateModified) &&
         Objects.equals(this.dateCreated, deepSearchDataSourceDocumentResult.dateCreated) &&
-        Objects.equals(this.emptyResult, deepSearchDataSourceDocumentResult.emptyResult) &&
-        Objects.equals(this.analyzedResult, deepSearchDataSourceDocumentResult.analyzedResult) &&
         Objects.equals(this.deepsearchCode, deepSearchDataSourceDocumentResult.deepsearchCode) &&
+        Objects.equals(this.emptyResult, deepSearchDataSourceDocumentResult.emptyResult) &&
+        Objects.equals(this.analisysResult, deepSearchDataSourceDocumentResult.analisysResult) &&
+        Objects.equals(this.analyzedDocument, deepSearchDataSourceDocumentResult.analyzedDocument) &&
+        Objects.equals(this.processPercentage, deepSearchDataSourceDocumentResult.processPercentage) &&
         Objects.equals(this.handlerId, deepSearchDataSourceDocumentResult.handlerId) &&
         Objects.equals(this.documentIndex, deepSearchDataSourceDocumentResult.documentIndex) &&
         Objects.equals(this.dataSourceDescription, deepSearchDataSourceDocumentResult.dataSourceDescription) &&
-        Objects.equals(this.analyzedSearchResult, deepSearchDataSourceDocumentResult.analyzedSearchResult) &&
-        Objects.equals(this.processPercentage, deepSearchDataSourceDocumentResult.processPercentage);
+        Objects.equals(this.analyzedSearchResult, deepSearchDataSourceDocumentResult.analyzedSearchResult);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, emptyResult, analyzedResult, deepsearchCode, handlerId, documentIndex, dataSourceDescription, analyzedSearchResult, processPercentage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, emptyResult, analisysResult, analyzedDocument, processPercentage, handlerId, documentIndex, dataSourceDescription, analyzedSearchResult);
   }
 
 
@@ -364,14 +387,15 @@ public class DeepSearchDataSourceDocumentResult {
     sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    emptyResult: ").append(toIndentedString(emptyResult)).append("\n");
-    sb.append("    analyzedResult: ").append(toIndentedString(analyzedResult)).append("\n");
     sb.append("    deepsearchCode: ").append(toIndentedString(deepsearchCode)).append("\n");
+    sb.append("    emptyResult: ").append(toIndentedString(emptyResult)).append("\n");
+    sb.append("    analisysResult: ").append(toIndentedString(analisysResult)).append("\n");
+    sb.append("    analyzedDocument: ").append(toIndentedString(analyzedDocument)).append("\n");
+    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("    handlerId: ").append(toIndentedString(handlerId)).append("\n");
     sb.append("    documentIndex: ").append(toIndentedString(documentIndex)).append("\n");
     sb.append("    dataSourceDescription: ").append(toIndentedString(dataSourceDescription)).append("\n");
     sb.append("    analyzedSearchResult: ").append(toIndentedString(analyzedSearchResult)).append("\n");
-    sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");
     sb.append("}");
     return sb.toString();
   }
