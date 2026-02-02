@@ -91,6 +91,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
 
 
+
     /**
      * Stores the capabilities of the current model provider
      */
@@ -364,7 +365,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.formGroup.controls["forcedRequestDocuments"].setValue(actualChoosed);
         }
     }
-
+    isDeepSearchResponse(item?: GeboChatResponse) {
+        return (item?.pipelineRouterDecisionCode==="DEEP_SEARCH_RESPONSE" && item?.deepSearchRequestId)?true:false;
+    }
+    getDeepSearchRequestId(item?: GeboChatResponse) {
+        return item?.deepSearchRequestId;
+    }
     /**
      * Handles changes to input properties
      * Loads model info and chat history when chatInfo changes

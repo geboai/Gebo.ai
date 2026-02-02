@@ -96,7 +96,13 @@
         <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
       </div>
-
+      @if (isDeepSearchResponse(interaction?.response)) {
+        <div class="gebo-ai-reusable-chat_interactin-deep-search-details">
+          <gebo-ai-deep-search-details [deepSearchRequestCode]="getDeepSearchRequestId(interaction?.response)">
+            
+          </gebo-ai-deep-search-details>
+        </div>
+      }
       @if(ragsystem && interaction?.response?.documentsRef?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
