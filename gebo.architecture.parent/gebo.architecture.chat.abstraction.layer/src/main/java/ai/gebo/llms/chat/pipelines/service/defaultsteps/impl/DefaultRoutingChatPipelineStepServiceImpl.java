@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
@@ -17,6 +15,9 @@ import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -28,7 +29,6 @@ import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWit
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RoutingDecisionResponse;
 import ai.gebo.llms.deepsearch.service.IDeepSearchDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
-import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GBaseObject;
 
 @Component
@@ -44,18 +44,20 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	private final IGDeepSearchService deepSearchService;
 	private final IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo;
 	private final IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
+	private final IGPromptConfigDao promptsDao;
 
 	public DefaultRoutingChatPipelineStepServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
 			DefaultRagStreamingOutputChatPipelineStepServiceImpl defaultRagStreamingOutputChatPipelineStepServiceImpl,
 			ChatPipelinesConfiguration chatPipelinesConfig, IGDeepSearchService deepSearchService,
 			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo,
-			IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService) {
+			IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService, IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.chatPipelinesConfig = chatPipelinesConfig;
 		this.deepSearchService = deepSearchService;
 		this.toolCallbackSourceRepo = toolCallbackSourceRepo;
 		this.deepSearchDataSourcesCatalogsService = deepSearchDataSourcesCatalogsService;
+		this.promptsDao = promptsDao;
 	}
 
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
@@ -87,8 +89,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 		} else {
 			try {
 				Map<String, Object> templateParams = new HashMap<String, Object>();
-
-				final String prompt = chatPipelinesConfig.getDefaultPipelineRoutingDecisionPrompt().getPrompt();
+				GPromptConfig _prompt = this.promptsDao
+						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
+				final String prompt = _prompt.getPrompt();
 
 				String latestInteractions = RoutingPromptUtil
 						.latestInteractionsPromptPart(runtimeData.getRequestResources().getLastInteractions());

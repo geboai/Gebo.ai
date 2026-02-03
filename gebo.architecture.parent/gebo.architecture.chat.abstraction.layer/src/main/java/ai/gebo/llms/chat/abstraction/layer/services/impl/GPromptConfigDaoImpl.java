@@ -9,6 +9,10 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +20,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.chat.abstraction.layer.config.GPromptLibraryReference;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.repository.PromptConfigRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
@@ -60,14 +68,15 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * @param configs    GeboChatPromptsConfigs providing prompt configurations
 	 * @param source     GPromptConfigDynamicSource providing dynamic configurations
 	 * @param directRepo PromptConfigRepository for direct repository access
+	 * @throws IOException 
 	 */
 	public GPromptConfigDaoImpl(@Autowired(required = false) List<IGStaticPromptsProvider> configs,
-			PromptConfigRepository directRepo) {
+			PromptConfigRepository directRepo) throws IOException {
 		super(listPrompts(configs), new GPromptConfigDynamicSource(directRepo));
 		this.directRepo = directRepo;
 	}
 
-	private static List<GPromptConfig> listPrompts(List<IGStaticPromptsProvider> configs) {
+	private static List<GPromptConfig> listPrompts(List<IGStaticPromptsProvider> configs) throws IOException {
 		if (configs == null)
 			return List.of();
 		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
@@ -75,7 +84,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 			List<GPromptConfig> prompts = provider.promptsList();
 			for (GPromptConfig p : prompts) {
 				if (p.getPromptUse() == null || p.getPromptUse().trim().length() == 0) {
-					throw new IllegalStateException("The provider:"+provider.getId()+" exposes a prompt with no promptUse field value cannot be managed " + p);
+					throw new IllegalStateException("The provider:" + provider.getId()
+							+ " exposes a prompt with no promptUse field value cannot be managed " + p);
 				} else {
 					p = p.copy();
 					p.setConfigDeclarated(true);
@@ -83,6 +93,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 				}
 			}
 		}
+		
 		return out;
 	}
 
@@ -179,6 +190,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 		}
 		return null;
 	}
+
 	@Override
 	public GPromptConfig exactFindByPromptUse(String promptUse, String langCode, String modelProvider,
 			String modelCode) {

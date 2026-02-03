@@ -48,7 +48,6 @@ import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -92,7 +91,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
 
 	final protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
-	final protected GeboChatPromptsConfigs promptConfigs;
+	
 	final protected IGPromptConfigDao promptsDao;
 
 	final protected InteractionsContextService interactionsContext;
