@@ -22,6 +22,8 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceStandardState;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
@@ -49,8 +51,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 			Class<CustomSearchResultExtractionDataType> customContentExtractionType,
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
-			DeepSearchDefaultConfig deepSearchDefaultConfig) {
-		super(chatModelsConfigDao, embeddingModelsRuntimeDao, customContentExtractionType);
+			DeepSearchDefaultConfig deepSearchDefaultConfig, IGPromptConfigDao promptsDao) {
+		super(chatModelsConfigDao, embeddingModelsRuntimeDao, customContentExtractionType, promptsDao);
 		this.searchService = searchService;
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
@@ -134,7 +136,8 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 					}
 					return List.of();
 				}
-				ai.gebo.model.base.TypedInputStream tInputStream = searchService.loadSearchResult(actualSearchResultToLoad);
+				ai.gebo.model.base.TypedInputStream tInputStream = searchService
+						.loadSearchResult(actualSearchResultToLoad);
 				is = tInputStream.getInputStream();
 				String contentType = tInputStream.getContentType();
 				if (contentType == null) {
@@ -205,14 +208,13 @@ public class DeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionData
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
 
-		String standardPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
+		String standardPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT).getPrompt();
 		String wrappedServicePrompt = searchService.getQueriesExtractionPrompt();
 
 		return wrappedServicePrompt != null && wrappedServicePrompt.trim().length() > 0 ? wrappedServicePrompt
 				: standardPrompt;
 	}
-
-	
 
 	@Override
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,

@@ -15,6 +15,8 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.ratings.DocumentRateRequest;
@@ -25,17 +27,20 @@ import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 @Service
 public class SearchResultsRankingService extends BaseLlmsInvokingService {
 	static final JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
+	final IGPromptConfigDao promptsDao;
 
 	public SearchResultsRankingService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
-			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
+			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
+		this.promptsDao = promptsDao;
 
 	}
 
 	public void rateReferences(IGConfigurableChatModel chatModel, DeepSearchConfig config,
 			List<SearchResult> searchResults, DeepSearchRequest request, SharedRatingsStructure ratingStructure)
 			throws IOException, LLMConfigException {
-		final String prompt = config.getRatingPrompt();
+		final String prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONTENT_RATING_PROMPT)
+				.getPrompt();
 		final double jsonBudget = chatModel.getContextLength()
 				- (estimator.estimate(prompt) + estimator.estimate(prompt));
 		List<String> splitted = splittedByBudget(searchResults, Math.round(jsonBudget * 0.8));

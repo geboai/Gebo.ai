@@ -21,10 +21,7 @@ public class DeepSearchConfig extends GBaseObject {
 
 	@NotNull
 	protected SearchType searchType = null;
-	protected String consolidationPrompt = null;
-	protected String analisysPrompt = null;
-	protected String ratingPrompt = null;
-	protected String keywordGenerationPrompt=null;
+
 	protected RagQueryOptions ragQueryOptions;
 	protected Double firstHopSimilarityThreashold = null;
 	protected Double secondHopSimilarityThreashold = null;
@@ -38,9 +35,9 @@ public class DeepSearchConfig extends GBaseObject {
 	protected String chatProfileCode = null;
 
 	public DeepSearchConfig(DeepSearchConfig c) {
-		this(c.searchType, c.consolidationPrompt, c.analisysPrompt,c.ratingPrompt,c.keywordGenerationPrompt, c.ragQueryOptions, c.firstHopSimilarityThreashold,
-				c.secondHopSimilarityThreashold, c.graphRagTopN, c.tokensLimit, c.manualThreasholdsConfiguration,
-				c.chatModelConfiguration, c.defaultConfig, c.chatProfileCode);
+		this(c.searchType, c.ragQueryOptions, c.firstHopSimilarityThreashold, c.secondHopSimilarityThreashold,
+				c.graphRagTopN, c.tokensLimit, c.manualThreasholdsConfiguration, c.chatModelConfiguration,
+				c.defaultConfig, c.chatProfileCode);
 		this.setCode(c.getCode());
 		this.setDescription(c.getDescription());
 	}

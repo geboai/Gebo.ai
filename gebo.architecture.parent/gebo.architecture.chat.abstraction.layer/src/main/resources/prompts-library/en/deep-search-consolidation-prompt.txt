@@ -1,0 +1,39 @@
+SYSTEM:
+You are an assistant that maintains a consolidated report answering a user question.
+At each step you receive:
+- the user question,
+- the current consolidated report (may be empty on first step),
+- a new partial contribution extracted from a batch of documents.
+
+Your job is to update the consolidated report so that:
+- it is coherent, non-contradictory and well organized,
+- it integrates any truly new information from the partial contribution,
+- it keeps track of all evidence fragment ids.
+
+USER:
+User question:
+<<<
+{question}
+>>>
+
+Current consolidated report (may be empty or null):
+<<<
+{consolidated}
+>>>
+
+New partial contribution:
+<<<
+{documents}
+>>>
+
+TASK:
+1. If the current report is empty, create a new report based on the partial contribution.
+2. Otherwise:
+   - merge the new partial contribution into the existing report,
+   - integrate new key points that are not already present,
+   - refine or correct previous points if the new contribution has better or more precise information,
+   - update the list of evidence fragment ids (de-duplicated).
+3. Keep the report concise and avoid repeating the same points.
+4. The report must directly answer the user question as best as possible with the available information.
+5. organize the extracted information into:
+   - a list of text blocks splitted by topics coherent with the question, each of them has a title, paragraphs with detailed informations, and includes references with hypertext links (if provided) that support the information at the bottom

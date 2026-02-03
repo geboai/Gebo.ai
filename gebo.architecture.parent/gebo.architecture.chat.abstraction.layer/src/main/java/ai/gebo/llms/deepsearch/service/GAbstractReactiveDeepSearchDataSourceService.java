@@ -36,6 +36,8 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
@@ -70,6 +72,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected final IGeboThreadManager threadManager;
 	protected final SearchResultsRankingService rankingService;
 	protected final DeepSearchDefaultConfig deepSearchDefaultConfig;
+	protected final IGPromptConfigDao promptsDao;
 	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
 	private static final int MAX_NESTING_LEVEL = 2;
 	private static final JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -78,13 +81,15 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected GAbstractReactiveDeepSearchDataSourceService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IDocumentsChunkService chunkingService,
 			Class<CustomContentExtractionType> customContentExtractionType, IGeboThreadManager threadManager,
-			SearchResultsRankingService rankingService, DeepSearchDefaultConfig deepSearchDefaultConfig) {
+			SearchResultsRankingService rankingService, DeepSearchDefaultConfig deepSearchDefaultConfig,
+			IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.customContentExtractionType = customContentExtractionType;
 		this.chunkingService = chunkingService;
 		this.threadManager = threadManager;
 		this.rankingService = rankingService;
 		this.deepSearchDefaultConfig = deepSearchDefaultConfig;
+		this.promptsDao = promptsDao;
 	}
 
 	@AllArgsConstructor
@@ -173,7 +178,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 			return Flux.just(returned);
 		}
-		final String analisysPrompt = deepSearchConfig.getAnalisysPrompt();
+		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
+				.getPrompt();
 		final int promptTokens = tokenCountEstimator.estimate(analisysPrompt);
 		final int queryTokens = tokenCountEstimator.estimate(request.getQuery());
 		final double tokensTotalExactBudget = chatModel.getContextLength() - (promptTokens + queryTokens);
@@ -182,8 +188,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final List<AbstractChunkingSpecs> specs = List.of(TextChunkingSpecs.maximizedLength(tokensBudget));
 
 		KeywordsList chunkingKeywordsMatching = callLLMStructuredReturn(chatModel,
-				deepSearchConfig.getKeywordGenerationPrompt(), request.getQuery(), Map.of("context", ""),
-				KeywordsList.class);
+				promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_KEYWORD_GENERATION_PROMPT).getPrompt(),
+				request.getQuery(), Map.of("context", ""), KeywordsList.class);
 
 		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
 				chatModel.getContextLength() * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
@@ -410,8 +416,10 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			}
 
 			try {
-				processed.getOutputData().setResponse(callLLMConsolidateText(chatModel,
-						deepSearchConfig.getConsolidationPrompt(), request.getQuery(), "", input));
+				processed.getOutputData()
+						.setResponse(callLLMConsolidateText(chatModel, promptsDao
+								.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
+								request.getQuery(), "", input));
 				processed.getOutputData().setProcessPercentage(deepSearchState.calculateProcessedPercent());
 				outValue = processed;
 			} catch (Throwable th) {
@@ -527,7 +535,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		}
 		event.getOutputData().setDataSourceReferences(dsReferences);
 		if (!cumulatedAnalisys.isEmpty()) {
-			String data = super.callLLMConsolidateText(chatModel, deepSearchConfig.getConsolidationPrompt(),
+			String data = super.callLLMConsolidateText(chatModel,
+					promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 					request.getQuery(), null, inputs);
 			event.getOutputData().setResponse(data);
 		}

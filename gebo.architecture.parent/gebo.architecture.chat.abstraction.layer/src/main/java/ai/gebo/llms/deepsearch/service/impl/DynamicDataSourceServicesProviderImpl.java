@@ -13,6 +13,7 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.service.DeepSearchDataSourceServiceWrapper;
 import ai.gebo.llms.deepsearch.service.IDynamicDataSourceServicesProvider;
@@ -30,6 +31,7 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 	final DeepSearchDefaultConfig deepSearchDefaultConfig;
+	final IGPromptConfigDao promptsDao;
 	private final static Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceServicesProviderImpl.class);
 
 	@Override
@@ -49,7 +51,7 @@ public class DynamicDataSourceServicesProviderImpl implements IDynamicDataSource
 			try {
 				wrapper = new DeepSearchDataSourceServiceWrapper(chatModelsConfigDao, embeddingModelsRuntimeDao,
 						iSearchService.getCustomResultsAggregationDataType(), iSearchService, documentReferenceFactory,
-						ingestionHandler, deepSearchDefaultConfig);
+						ingestionHandler, deepSearchDefaultConfig, promptsDao);
 				wrappers.add(wrapper);
 			} catch (Throwable e) {
 				LOGGER.error("Exception in getDynamicDeepSearchServices()", e);

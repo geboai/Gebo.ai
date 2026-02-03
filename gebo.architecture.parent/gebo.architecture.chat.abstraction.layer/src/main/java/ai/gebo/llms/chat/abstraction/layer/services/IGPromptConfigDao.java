@@ -48,12 +48,16 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @return
 	 */
 	default GPromptConfig findByPromptUse(String promptUse) {
-		return this.findByPromptUse(promptUse, "en", null, null);
+		GPromptConfig data = this.findByPromptUse(promptUse, "en", null, null);
+		if (data == null)
+			throw new IllegalStateException("The default prompt for use:" + promptUse
+					+ " does not exist, this can leave software in an inconsistent state");
+		return data;
 	}
 
 	public GPromptConfig exactFindByPromptUse(String promptUse, String langCode, String modelProvider,
 			String modelCode);
- 
+
 	/************************************************************************************
 	 * Gets a prompt by its specific use, language (failing back to english) and llm
 	 * code hierarchically falling back if no custom specific is declared

@@ -34,6 +34,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
@@ -90,6 +92,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 	private DeepSearchDefaultConfig defaultDeepsearchConfig;
 	@Autowired
 	private IRagThreasholdAutotuneService threasholdAutotuneService;
+	@Autowired
+	private IGPromptConfigDao promptsDao;
 
 	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
@@ -160,7 +164,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
 			consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
 		}
-		final String analisysPrompt = configuration.getAnalisysPrompt();
+		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
+				.getPrompt();
 
 		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
 
@@ -222,7 +227,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			event.getOutputData().setSearchResultsEmpty(results.isEmpty());
 			try {
 				if (!results.isEmpty()) {
-					String result = callLLMConsolidateText(chatModel, configuration.getConsolidationPrompt(),
+					String result = callLLMConsolidateText(chatModel,
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 							request.getQuery(), "", new ArrayList(results));
 					event.getOutputData().setResponse(result);
 				}
@@ -454,7 +460,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							x.getResponse());
 					inputs.add(consolidated);
 				}
-				String consolidatedText = callLLMConsolidateText(chatModel, configuration.getConsolidationPrompt(),
+				String consolidatedText = callLLMConsolidateText(chatModel,
+						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 						request.getQuery(), "", inputs);
 				consolidatedResult.getOutputData().setResponse(consolidatedText);
 				consolidatedResult.getOutputData().setProcessPercentage(100);
@@ -558,9 +565,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 					int length = tokenEstimator.estimate(actualFragment);
 					if (tokens + length >= tokensBudget) {
 
-						consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
-								configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
-								consolidated);
+						consolidated = callLLMWithDocumentsAndConsolidation(chatModel, promptsDao
+								.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
+								fragments.toString(), request.getQuery(), consolidated);
 						fragments = new StringBuffer();
 						tokens = 0;
 
@@ -574,7 +581,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 				}
 			}
 			if (!fragments.isEmpty()) {
-				consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
+				consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
+						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 						fragments.toString(), request.getQuery(), consolidated);
 			}
 		}

@@ -1,0 +1,21 @@
+SYSTEM:
+You are an assistant that extracts ONLY information relevant to the user question
+from a batch of document fragments. Ignore everything else.
+
+USER:
+User question:
+<<<
+{question}
+>>>
+
+Document batch (each fragment has an id and text):
+{documents}"
+
+TASK:
+1. Read the question and the document fragments.
+2. Extract ONLY the information that is clearly relevant to the question.
+3. organize the extracted information into:
+   - a list of text blocks splitted by topics coherent with the question, each of them has a title, paragraphs with detailed informations, and includes references with hypertext links (if provided) that support the information at the bottom
+.
+4. If this batch is completely irrelevant, say so.
+

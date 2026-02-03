@@ -20,6 +20,8 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -35,7 +37,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected final int maxSearchesReturnedPerSystem;
 	protected final IGDocumentReferenceFactory documentReferenceFactory;
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
 
@@ -45,14 +47,15 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
-			IGeboThreadManager threadManager, SearchResultsRankingService rankingService) {
+			IGeboThreadManager threadManager, SearchResultsRankingService rankingService,
+			IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
-				threadManager, rankingService, deepSearchDefaultConfig);
+				threadManager, rankingService, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
 		this.ingestionHandler = ingestionHandler;
-		
+
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
 	}
@@ -128,7 +131,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
 
-		String standardPrompt = deepSearchDefaultConfig.getSearchQueryExtractionPrompt();
+		String standardPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT).getPrompt();
 		String wrappedServicePrompt = searchService.getQueriesExtractionPrompt();
 
 		return wrappedServicePrompt != null && wrappedServicePrompt.trim().length() > 0 ? wrappedServicePrompt

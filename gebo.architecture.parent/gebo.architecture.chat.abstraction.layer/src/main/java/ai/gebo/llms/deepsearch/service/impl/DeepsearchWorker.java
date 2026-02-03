@@ -32,6 +32,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
@@ -83,6 +85,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 	private DeepSearchDefaultConfig defaultDeepsearchConfig;
 	@Autowired
 	private IRagThreasholdAutotuneService threasholdAutotuneService;
+	@Autowired
+	private IGPromptConfigDao promptsDao;
 
 	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
@@ -192,7 +196,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				if (!currentProcessedFragments.isEmpty()) {
 					state.setElaboratedFragmentsCount(
 							state.getElaboratedFragmentsCount() + currentProcessedFragments.size());
-					String result = callLLMWithDocuments(chatModel, configuration.getAnalisysPrompt(),
+					String result = callLLMWithDocuments(chatModel,
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT).getPrompt(),
 							currentProcessedFragments, request.getQuery());
 					DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 					resultStep.setDeepsearchCode(request.getCode());
@@ -279,7 +284,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 									if (!singleSource) {
 										String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
-												configuration.getConsolidationPrompt(),
+												promptsDao
+														.findByPromptUse(
+																GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT)
+														.getPrompt(),
 												processedDataSource.getOutputData().getResponse(), request.getQuery(),
 												state.getConsolidatedResult() != null ? state.getConsolidatedResult()
 														: "");
@@ -401,7 +409,10 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 									if (!singleSource) {
 										String _consolidatedResult = callLLMWithDocumentsAndConsolidation(chatModel,
-												configuration.getConsolidationPrompt(),
+												promptsDao
+														.findByPromptUse(
+																GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT)
+														.getPrompt(),
 												processedDataSource.getOutputData().getResponse(), request.getQuery(),
 												state.getConsolidatedResult() != null ? state.getConsolidatedResult()
 														: "");
@@ -526,9 +537,9 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 					int length = tokenEstimator.estimate(actualFragment);
 					if (tokens + length >= tokensBudget) {
 
-						consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
-								configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
-								consolidated);
+						consolidated = callLLMWithDocumentsAndConsolidation(chatModel, promptsDao
+								.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
+								fragments.toString(), request.getQuery(), consolidated);
 						fragments = new StringBuffer();
 						tokens = 0;
 
@@ -542,7 +553,8 @@ public class DeepsearchWorker extends BaseLlmsInvokingService {
 				}
 			}
 			if (!fragments.isEmpty()) {
-				consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
+				consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
+						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 						fragments.toString(), request.getQuery(), consolidated);
 			}
 		}

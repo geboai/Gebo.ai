@@ -30,3 +30,19 @@ ai.gebo.prompts:
     - promptUse: default-pipeline-tools-call-output-prompt
       langCode: en
       reference: /prompts-library/en/default-pipeline-tools-call-output-prompt.txt
+    # deep search prompts  
+    - promptUse: deep-search-file-analisys-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-file-analisys-prompt.txt
+    - promptUse: deep-search-consolidation-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-consolidation-prompt.txt
+    - promptUse: deep-search-content-rating-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-content-rating-prompt.txt
+    - promptUse: deep-search-keyword-generation-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-keyword-generation-prompt.txt
+    - promptUse: deep-search-search-query-extraction-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-search-query-extraction-prompt.txt

@@ -24,6 +24,8 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
@@ -45,15 +47,17 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		IGDeepSearchDataSourceService<DeepSearchDataSourceStandardState, SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractDeepSearchDataSourceService.class);
 	final Class<CustomContentExtractionType> customContentExtractionType;
+	final IGPromptConfigDao promptsDao;
 	protected static final String DATA_SOURCE_DESCRIPTION = "dataSourceDescription";
 	private static final int MAX_NESTING_LEVEL = 2;
 	private static final int MAX_DOCUMENT_TOKENS_SIZE_CONTEXT_MOLTIPLICATOR = 10;
 
 	protected GAbstractDeepSearchDataSourceService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
-			Class<CustomContentExtractionType> customContentExtractionType) {
+			Class<CustomContentExtractionType> customContentExtractionType, IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.customContentExtractionType = customContentExtractionType;
+		this.promptsDao = promptsDao;
 	}
 
 	@Override
@@ -185,7 +189,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 									LOGGER.debug("Sending to llm for structure consolidation content:"
 											+ actualSearchResultRef.getActualSearchResult());
 								}
-								String prompt = deepSearchConfig.getAnalisysPrompt();
+								String prompt = promptsDao
+										.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
+										.getPrompt();
 								BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
 										CustomContentExtractionType actualData,
 										CustomContentExtractionType currentConsolidation) -> {
@@ -427,7 +433,7 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 		}
 		event.getOutputData().setDataSourceReferences(dsReferences);
 		if (!cumulatedAnalisys.isEmpty()) {
-			String data = super.callLLMConsolidateText(chatModel, deepSearchConfig.getConsolidationPrompt(),
+			String data = super.callLLMConsolidateText(chatModel, promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
 					request.getQuery(), null, inputs);
 			event.getOutputData().setResponse(data);
 		}
@@ -445,8 +451,9 @@ public abstract class GAbstractDeepSearchDataSourceService<CustomContentExtracti
 				}).toList();
 		if (inputs.isEmpty())
 			return "";
-		return callLLMConsolidateText(chatModel, deepSearchConfig.getAnalisysPrompt(), request.getQuery(), null,
-				inputs);
+		return callLLMConsolidateText(chatModel,
+				promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT).getPrompt(),
+				request.getQuery(), null, inputs);
 	}
 
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned,
