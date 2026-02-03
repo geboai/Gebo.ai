@@ -170,11 +170,19 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 	 */
 	public List<Document> aiDocumentsList() {
 		final List<Document> documents = new ArrayList<Document>();
+		final List<AIDocumentFragment> fragments = new ArrayList<AIDocumentFragment>();
+		final Map<String, Boolean> alreadyInserted = new HashMap<String, Boolean>();
 		documentItems.forEach(x -> {
 			x.getFragments().forEach(y -> {
-				if (y.toAIDocument() != null)
-					documents.add(y.toAIDocument());
+				if (!alreadyInserted.containsKey(y.getDocumentId())) {
+					fragments.add(y);
+					alreadyInserted.put(y.getDocumentId(), true);
+				}
 			});
+		});
+		fragments.forEach(y -> {
+			if (y.toAIDocument() != null)
+				documents.add(y.toAIDocument());
 		});
 		return documents;
 	}
@@ -213,6 +221,7 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 
 	public static void removeAIDocumentReferenceByCode(String code, AIDocumentsSet... set) {
 		if (set != null) {
+
 			for (AIDocumentsSet aiDocumentsSet : set) {
 				if (aiDocumentsSet != null) {
 					aiDocumentsSet.removeAIDocumentReferenceByCode(code);

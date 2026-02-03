@@ -10,7 +10,7 @@ import lombok.Data;
 public class RoutingDecisionResponse {
 	@NotNull
 	private RespondingWith responseRoutingDecision = null;
-	private SearchRewritings queryRewritings = null;
+	private SearchesSuggestions suggestedSearches = null;
 	private List<String> expandDocuments = null;
 	private List<String> deepSearchDataSourceCodesToAnalyze = new ArrayList<String>();
 	private List<String> toolsToUse = null;

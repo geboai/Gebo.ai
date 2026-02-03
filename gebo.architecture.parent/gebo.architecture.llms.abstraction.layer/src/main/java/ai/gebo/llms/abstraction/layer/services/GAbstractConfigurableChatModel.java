@@ -215,11 +215,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		Integer contextLength = null;
 		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
-			if (contextLength == null) {
+			if (contextLength == null || contextLength.intValue() == 0) {
 				if (getConfig().getChoosedModel() != null
 						&& getConfig().getChoosedModel() instanceof GBaseModelChoice choice) {
 					contextLength = choice.getContextLength();
-					if (contextLength == null) {
+					if (contextLength == null || contextLength.intValue() == 0) {
 						if (choice.getMetaInfos() != null) {
 							contextLength = choice.getMetaInfos().getContextLength();
 						}
@@ -232,7 +232,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		} else {
 			LOGGER.error("No config value for configurable model!!");
 		}
-		if (contextLength == null)
+		if (contextLength == null || contextLength.intValue() == 0)
 			contextLength = 8192;
 		return contextLength;
 	}

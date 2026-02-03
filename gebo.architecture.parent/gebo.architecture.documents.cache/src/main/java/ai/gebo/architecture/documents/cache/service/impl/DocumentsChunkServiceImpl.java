@@ -571,21 +571,21 @@ public class DocumentsChunkServiceImpl
 				LOGGER.error("Error in call to prepareChunks(...)", th);
 				return null;
 			}
-		})).subscribeOn(chunkingScheduler).flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
-			String nextId = resp.getNextChunkSetId();
-			if (nextId == null)
-				return Mono.empty();
+		})).subscribeOn(chunkingScheduler).filter(x -> x != null)
+				.flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
+					String nextId = resp.getNextChunkSetId();
+					if (nextId == null)
+						return Mono.empty();
 
-			return Mono
-					.fromCallable(
+					return Mono.fromCallable(
 							() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId, chunkingSessionId)))
-					.subscribeOn(chunkingScheduler);
-		}).concatMap(resp -> {
-			var set = resp.getCurrentChunkSet();
-			var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
-			var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
-			return Flux.fromIterable(mapped);
-		}));
+							.subscribeOn(chunkingScheduler);
+				}).concatMap(resp -> {
+					var set = resp.getCurrentChunkSet();
+					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
+					var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
+					return Flux.fromIterable(mapped);
+				}));
 	}
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,

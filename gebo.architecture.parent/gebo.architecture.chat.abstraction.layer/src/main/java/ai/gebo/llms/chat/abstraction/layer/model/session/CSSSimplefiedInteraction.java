@@ -13,6 +13,7 @@ public class CSSSimplefiedInteraction implements ITokensCountable {
 	private Integer userTokenSize = null;
 	private String assistant = null;
 	private Integer assistantTokenSize = null;
+	private String pipelineRoutingDecision=null;
 
 	@Override
 	public int getTokensSize() {

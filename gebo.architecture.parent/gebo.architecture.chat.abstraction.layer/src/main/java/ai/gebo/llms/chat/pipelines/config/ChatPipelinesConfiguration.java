@@ -34,5 +34,5 @@ public class ChatPipelinesConfiguration {
 
 	private int maxRoutingDecisionDocumentsTokenBudget = 12000;
 	private int globalRagTopK = 20;
-	private double rewriteThreashold = 0.67;
+	private double rewriteThreashold = 0.60;
 }

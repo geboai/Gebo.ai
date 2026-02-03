@@ -16,4 +16,7 @@ public interface DeepSearchDataSourceSampledCatalogsRepository
 	public List<DeepSearchDataSourceSampledCatalogs> findByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
 			String messagingModuleId, String messagingSystemId, String systemConfigurationCode);
 
+	public List<DeepSearchDataSourceSampledCatalogs> findByHandlerId(String HandlerId);
+	public List<DeepSearchDataSourceSampledCatalogs> findByHandlerIdIn(List<String> HandlerId);
+
 }

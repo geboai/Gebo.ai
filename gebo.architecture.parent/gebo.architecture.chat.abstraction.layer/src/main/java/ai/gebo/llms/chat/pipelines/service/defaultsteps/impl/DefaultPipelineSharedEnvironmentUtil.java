@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchRewritings;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchesSuggestions;
 
 public class DefaultPipelineSharedEnvironmentUtil {
 
@@ -13,9 +13,9 @@ public class DefaultPipelineSharedEnvironmentUtil {
 	public static final String AI_SELECTED_QUERY_REWRITE_SUGGESTIONS = "AI_SELECTED_QUERY_REWRITE_SUGGESTIONS";
 	public static final String AI_SELECTED_TOOLS_LIST = "AI_SELECTED_TOOLS_LIST";
 
-	public static SearchRewritings getAISuggestedSearchRewritings(ChatPipelineExecutionRuntimeData data) {
+	public static SearchesSuggestions getAISuggestedSearchRewritings(ChatPipelineExecutionRuntimeData data) {
 		if (data.getSharedEnvironment() != null && data.getSharedEnvironment()
-				.get(AI_SELECTED_QUERY_REWRITE_SUGGESTIONS) instanceof SearchRewritings r) {
+				.get(AI_SELECTED_QUERY_REWRITE_SUGGESTIONS) instanceof SearchesSuggestions r) {
 			return r;
 		}
 		return null;

@@ -14,10 +14,16 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.model.base.GBaseObject;
 
 final class RoutingPromptUtil {
+
+	private static final String END_ROUTING_DECISION = "<<<END_ROUTING_DECISION>>>";
+	private static final String ROUTING_DECISION = "<<<ROUTING_DECISION>>>";
+	private static final String END_MAIN_SECTIONS_SAMPLE = "END_MAIN_SECTIONS_SAMPLE";
+	private static final String MAIN_SECTIONS_SAMPLE = "MAIN_SECTIONS_SAMPLE";
 
 	private static String documentRendering(AIDocumentReferenceItem doc, int maxTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
@@ -211,13 +217,29 @@ final class RoutingPromptUtil {
 			for (int i = lastInteractions.size() - 1; i >= 0; i--) {
 				CSSSimplefiedInteraction interaction = lastInteractions.get(i);
 				if (interaction.getUser() != null) {
-					buffer.append(USER);
+					buffer.append(USER_TURN_START);
+					buffer.append(NEWLINE);
 					buffer.append(interaction.getUser());
+					buffer.append(NEWLINE);
+					buffer.append(USER_TURN_END);
+					buffer.append(NEWLINE);
+				}
+				if (interaction.getPipelineRoutingDecision() != null) {
+					buffer.append(ROUTING_DECISION);
+					buffer.append(NEWLINE);
+					buffer.append(interaction.getPipelineRoutingDecision());
+					buffer.append(NEWLINE);
+					buffer.append(END_ROUTING_DECISION);
 					buffer.append(NEWLINE);
 				}
 				if (interaction.getAssistant() != null) {
-					buffer.append(ASSISTANT);
+					buffer.append(ASSISTANT_TURN_START);
+					buffer.append(NEWLINE);
+					
+
 					buffer.append(interaction.getAssistant());
+					buffer.append(NEWLINE);
+					buffer.append(ASSISTANT_TURN_END);
 					buffer.append(NEWLINE);
 				}
 			}
@@ -225,31 +247,53 @@ final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	private static final String ASSISTANT = "ASSISTANT: ";
-	private static final String USER = "USER: ";
+	private static final String ASSISTANT_TURN_END = "<<<END_ASSISTANT>>>";
+	private static final String ASSISTANT_TURN_START = "<<<ASSISTANT>>>";
+	private static final String USER_TURN_END = "<<<END_USER>>>";
+	private static final String USER_TURN_START = "<<<USER>>>";
 
-	static String dataSourcesListPromptPart(List<GBaseObject> dataSources) {
+	/*
+	 * static String dataSourcesListPromptPart(List<GBaseObject> dataSources) {
+	 * StringBuffer buffer = new StringBuffer(); if (dataSources != null &&
+	 * !dataSources.isEmpty()) { buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
+	 * buffer.append(NEWLINE); for (GBaseObject obj : dataSources) {
+	 * buffer.append(CODE); buffer.append(obj.getCode()); buffer.append(NEWLINE);
+	 * buffer.append(DESCRIPTION); buffer.append(obj.getDescription());
+	 * buffer.append(NEWLINE); }
+	 * buffer.append(END_DEEP_SEARCH_DATA_SOURCES_CATALOG); buffer.append(NEWLINE);
+	 * } return buffer.toString(); }
+	 */
+
+	private static final String CODE = "- code: ";
+	private static final String DESCRIPTION = "  description:";
+	private static final String DEEP_SEARCH_DATA_SOURCES_CATALOG = "DEEP_SEARCH_DATA_SOURCES_CATALOG";
+	private static final String END_DEEP_SEARCH_DATA_SOURCES_CATALOG = "END_DEEP_SEARCH_DATA_SOURCES_CATALOG";
+
+	public static Object dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources) {
 		StringBuffer buffer = new StringBuffer();
 		if (dataSources != null && !dataSources.isEmpty()) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
-			for (GBaseObject obj : dataSources) {
+			for (DeepSearchDataSourceMetaInfos obj : dataSources) {
 				buffer.append(CODE);
-				buffer.append(obj.getCode());
+				buffer.append(obj.getHandlerId());
 				buffer.append(NEWLINE);
 				buffer.append(DESCRIPTION);
 				buffer.append(obj.getDescription());
 				buffer.append(NEWLINE);
+				if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
+					buffer.append(MAIN_SECTIONS_SAMPLE);
+					buffer.append(NEWLINE);
+					buffer.append(obj.getCatalogues().toString());
+					buffer.append(NEWLINE);
+					buffer.append(END_MAIN_SECTIONS_SAMPLE);
+					buffer.append(NEWLINE);
+				}
 			}
 			buffer.append(END_DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
 		}
 		return buffer.toString();
 	}
-
-	private static final String CODE = "- code: ";
-	private static final String DESCRIPTION = "  description:";
-	private static final String DEEP_SEARCH_DATA_SOURCES_CATALOG = "DEEP_SEARCH_DATA_SOURCES_CATALOG";
-	private static final String END_DEEP_SEARCH_DATA_SOURCES_CATALOG = "END_DEEP_SEARCH_DATA_SOURCES_CATALOG";
 
 }

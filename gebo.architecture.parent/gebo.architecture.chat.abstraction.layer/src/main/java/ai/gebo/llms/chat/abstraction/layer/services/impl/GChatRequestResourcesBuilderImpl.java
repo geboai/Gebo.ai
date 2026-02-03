@@ -104,9 +104,12 @@ public class GChatRequestResourcesBuilderImpl implements IGChatRequestResourcesB
 			String assistant = interaction.getResponse() != null && interaction.getResponse().getQueryResponse() != null
 					? interaction.getResponse().getQueryResponse().toString()
 					: "";
+			String decisionCode = interaction.getResponse() != null
+					? interaction.getResponse().getPipelineRouterDecisionCode()
+					: null;
 			int assistantTokenSize = interaction.getResponseNTokens() != null ? interaction.getResponseNTokens() : 0;
 			CSSSimplefiedInteraction semplified = new CSSSimplefiedInteraction(user, userTokenSize, assistant,
-					assistantTokenSize);
+					assistantTokenSize, decisionCode);
 			lastInteractions.add(semplified);
 			if (_uploads != null) {
 				uploads.addAll(uploads);

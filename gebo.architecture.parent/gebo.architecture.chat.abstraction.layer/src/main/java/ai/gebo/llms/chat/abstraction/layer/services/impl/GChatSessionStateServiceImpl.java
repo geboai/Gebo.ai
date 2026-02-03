@@ -157,8 +157,9 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 						latestChatWithDocuments.put(key, new Integer(index));
 					}
 				}
+				String decisionCode=i.getResponse()!=null?i.getResponse().getPipelineRouterDecisionCode():null;
 				CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction(user, userTokens, assistant,
-						assistantTokens);
+						assistantTokens, decisionCode);
 				outState.getChatHistory().getValue().getInteractions().add(interaction);
 				outState.getChatHistory().setTokensSize((int) historyTokens);
 				index++;

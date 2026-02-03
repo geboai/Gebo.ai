@@ -16,8 +16,10 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
@@ -49,6 +51,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	protected final ChatPipelinesConfiguration pipelinesConfiguration;
 	protected final IGChatSessionStateService sessionStateService;
 	protected final IGChatRequestResourcesBuilder chatRequestResourcesBuilder;
+	protected final ChatProfilesRepository chatProfilesRepository;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChatPipelinesExecutorImpl.class);
 
 	protected void add(ChatPipelineExecutionRuntimeData runtimeData, IChatPipelineStepRuntimeData stepdata) {
@@ -78,13 +81,21 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		try {
 			resources = chatRequestResourcesBuilder.buildRequestResources(request, context, tokensBudget);
 		} catch (IOException | GeboPersistenceException | GeboContentHandlerSystemException
-				| GeboIngestionException e) {
+				| GeboIngestionException e) { 
 			final String msg = "Exception while building request resources";
 			LOGGER.error(msg, e);
 			throw new ChatPipelineException(msg, e);
 		}
+
+		GChatProfileConfiguration chatProfile = null;
+		if (context.getChatProfileCode() != null) {
+			Optional<GChatProfileConfiguration> profile = this.chatProfilesRepository
+					.findById(context.getChatProfileCode());
+			if (profile.isPresent())
+				chatProfile = profile.get();
+		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), resources, response, context, streaming);
+				chatModel.getContextLength(), resources, response, context, chatProfile, streaming);
 		// putting a sintetic routing decision for the first 2 steps to mantain the
 		// routing coherency
 		runtimeData.getRoutingDecisions()

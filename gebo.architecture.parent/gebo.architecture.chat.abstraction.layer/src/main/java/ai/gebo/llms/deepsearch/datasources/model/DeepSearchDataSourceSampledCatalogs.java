@@ -15,9 +15,14 @@ public class DeepSearchDataSourceSampledCatalogs extends GBaseObject {
 	private String messagingModuleId = null;
 	@NotNull
 	private String messagingSystemId = null;
+
+	@NotNull
+	private String handlerId = null;
+
 	@NotNull
 	private String systemConfigurationCode = null;
-	@NotNull @NotEmpty
+	@NotNull
+	@NotEmpty
 	private List<String> catalogs = new ArrayList<String>();
 
 	public void recalculateCode() {

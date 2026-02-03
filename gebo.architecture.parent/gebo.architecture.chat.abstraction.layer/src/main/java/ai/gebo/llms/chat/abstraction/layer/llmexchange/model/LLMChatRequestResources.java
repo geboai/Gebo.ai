@@ -110,7 +110,9 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	public AIDocumentsSet getAllDocuments() {
-		return AIDocumentsSet.join(latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
+		return AIDocumentsSet.join(
+				(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null),
+				latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
 				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
 	}
 
@@ -122,7 +124,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	public void removeAIDocumentReferenceByCode(String docId) {
-		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, latestRequestsChatWithDocuments, retrievedDocuments,
+		AIDocumentsSet.removeAIDocumentReferenceByCode(docId,(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null), latestRequestsChatWithDocuments, retrievedDocuments,
 				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				llmGeneratedDocuments);
 	}

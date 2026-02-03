@@ -640,7 +640,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(out, request.getLastRequest(),
 				chatResponse, userChatContext);
 		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
-				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
+				.onErrorResume(Common.commonFallBack(deepSearchRequest));
 	}
 
 	private List<String> createKnowledgeBasesList(LLMChatRequestResources request, GUserChatContext userChatContext) {

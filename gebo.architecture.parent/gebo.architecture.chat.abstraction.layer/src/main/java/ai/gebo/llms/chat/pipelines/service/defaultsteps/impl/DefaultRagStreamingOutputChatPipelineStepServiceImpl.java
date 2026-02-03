@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -25,7 +26,7 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchRewritings;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchesSuggestions;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -66,11 +67,13 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData);
-		SearchRewritings searchRewritings = DefaultPipelineSharedEnvironmentUtil
+		SearchesSuggestions searchRewritings = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedSearchRewritings(runtimeData);
 
 		try {
-			request = integrateWithSearches(searchRewritings, runtimeData, chatModel.getContextLength());
+			int contextLength = chatModel.getContextLength();
+			contextLength = Math.max(contextLength, 8192);
+			request = integrateWithSearches(searchRewritings, runtimeData, contextLength);
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
 					runtimeData.getChatResponse(), chatModel);
@@ -80,18 +83,26 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 
 	}
 
-	private LLMChatRequestResources integrateWithSearches(SearchRewritings searchRewritings,
+	private LLMChatRequestResources integrateWithSearches(SearchesSuggestions searchRewritings,
 			ChatPipelineExecutionRuntimeData runtimeData, int contextWindowLength)
 			throws FullTextException, LLMConfigException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
+		int tokensBudget = contextWindowLength - request.getTokensSize();
+		boolean returnCleanRequest = false;
+		if (tokensBudget < contextWindowLength / 2) {
+			returnCleanRequest = true;
+			tokensBudget = contextWindowLength - (request.getLastRequest().getTokensSize()
+					+ ITokensCountable.tokensSize(request.getLastInteractions()));
+		}
 		AIDocumentsSet documentSet = searchesService.search(searchRewritings,
 				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
-				runtimeData.getUserChatContext(), contextWindowLength - request.getTokensSize());
-		if (documentSet != null) {
-			for (AIDocumentReferenceItem item : documentSet.getDocumentItems()) {
-				request.removeAIDocumentReferenceByCode(item.getCode());
-				request.getRetrievedDocuments().getDocumentItems().add(item);
-			}
+				runtimeData.getUserChatContext(), tokensBudget);
+		if (returnCleanRequest) {
+			request.getLastRequest().setDocuments(documentSet);
+			request = new LLMChatRequestResources(new AIDocumentsSet(), new AIDocumentsSet(), new AIDocumentsSet(),
+					new AIDocumentsSet(), new AIDocumentsSet(), new AIDocumentsSet(), request.getChatConsolidation(),
+					request.getLastInteractions(), request.getLastRequest());
+		} else {
 			request.getLastRequest().setDocuments(documentSet);
 		}
 		return request;
