@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
@@ -65,6 +66,7 @@ import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Scheduler;
 
 @Service
@@ -94,6 +96,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 	private IRagThreasholdAutotuneService threasholdAutotuneService;
 	@Autowired
 	private IGPromptConfigDao promptsDao;
+	@Autowired
+	private IGeboThreadManager threadManager;
 
 	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
@@ -169,11 +173,15 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
 
-		Flux<AbstractDeepSearchEvent> body = Flux.fromIterable(consolidatedDaoResult.getDocumentItems())
+		ParallelFlux<AbstractDeepSearchEvent> body = Flux.fromIterable(consolidatedDaoResult.getDocumentItems())
 				.map((refItem) -> {
 					String documentCode = refItem.getCode();
-					Optional<GDocumentReference> docdata = documentRepo.findById(refItem.getCode());
+					Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
 					if (docdata.isPresent()) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug(
+									"Loading on " + Thread.currentThread().getName() + " document:" + documentCode);
+						}
 						List<AIDocumentFragment> fragments = refItem.getFragments();
 
 						List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
@@ -216,7 +224,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 						}
 					} else
 						return null;
-				}).filter(Objects::nonNull);
+				}).parallel(4).runOn(threadManager.getScheduler()).filter(Objects::nonNull);
 		Flux<AbstractDeepSearchEvent> trail = Flux.defer(() -> {
 			AbstractDeepSearchEvent evt = null;
 			DeepSearchKnowledgeBasesProcessedEvent event = new DeepSearchKnowledgeBasesProcessedEvent();
@@ -245,7 +253,6 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 		Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 				"Analyzing data from internal Gebo.ai knowledge bases");
-
 		return Flux.concat(notificationFlux, body, trail);
 	}
 

@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
@@ -118,14 +119,32 @@ public class LLMChatRequestResources implements ITokensCountable {
 
 	public AIDocumentReferenceItem findAIDocumentReferenceByCode(String docId) {
 		AIDocumentsSet allDocs = getAllDocuments();
-		Optional<AIDocumentReferenceItem> optdoc = allDocs.getDocumentItems().stream()
-				.filter(x -> x.getCode().equals(docId)).findFirst();
-		return optdoc.isPresent() ? optdoc.get() : null;
+		List<AIDocumentReferenceItem> optdoc = allDocs.getDocumentItems().stream()
+				.filter(x -> x.getCode().equals(docId)).toList();
+		Map<String, AIDocumentFragment> fragments = new HashMap<String, AIDocumentFragment>();
+
+		optdoc.forEach(x -> {
+			List<AIDocumentFragment> localFragments = x.getFragments();
+			if (localFragments != null) {
+				localFragments.forEach(y -> {
+					fragments.put(y.getDocumentId(), y);
+				});
+			}
+		});
+		if (!optdoc.isEmpty()) {
+			AIDocumentReferenceItem doc = optdoc.get(0);
+			doc.setFragments(new ArrayList<AIDocumentFragment>(fragments.values()));
+			doc.recalculateSize();
+			doc.reorderFragmentsByPosition();
+			return doc;
+		}
+		return null;
 	}
 
 	public void removeAIDocumentReferenceByCode(String docId) {
-		AIDocumentsSet.removeAIDocumentReferenceByCode(docId,(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null), latestRequestsChatWithDocuments, retrievedDocuments,
-				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
-				llmGeneratedDocuments);
+		AIDocumentsSet.removeAIDocumentReferenceByCode(docId,
+				(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null),
+				latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
+				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
 	}
 }

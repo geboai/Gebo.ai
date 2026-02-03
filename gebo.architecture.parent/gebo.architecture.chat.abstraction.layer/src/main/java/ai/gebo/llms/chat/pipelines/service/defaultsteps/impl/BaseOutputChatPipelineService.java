@@ -41,8 +41,9 @@ public class BaseOutputChatPipelineService {
 		LLMChatRequestResources rc = runtimeData.getRequestResources();
 		if (docsList != null && !docsList.isEmpty()) {
 			LOGGER.info("Try loading AI suggested docs:" + docsList);
+			AIDocumentsSet out = new AIDocumentsSet();
 			for (String docId : docsList) {
-				
+
 				AIDocumentReferenceItem item = runtimeData.getRequestResources().findAIDocumentReferenceByCode(docId);
 				if (item != null) {
 					runtimeData.getRequestResources().removeAIDocumentReferenceByCode(docId);
@@ -82,8 +83,8 @@ public class BaseOutputChatPipelineService {
 						}
 					}
 					if (ingested != null) {
-						rc.getRetrievedDocuments().getDocumentItems().add(ingested);
-						rc.getRetrievedDocuments().recalculateSize();
+						out.getDocumentItems().add(ingested);
+						out.recalculateSize();
 					} else {
 						LOGGER.error("The code " + docId
 								+ " cannot be retrieved as documentref or uploaded or generated document");
@@ -92,6 +93,10 @@ public class BaseOutputChatPipelineService {
 						| GeboIngestionException e) {
 					LOGGER.error("Exception ingesting document: " + docId, e);
 				}
+			}
+			AIDocumentsSet docs = rc.getLastRequest().getDocuments();
+			if (docs != null) {
+				rc.getLastRequest().setDocuments(AIDocumentsSet.join(docs, out));
 			}
 		}
 		return rc;
