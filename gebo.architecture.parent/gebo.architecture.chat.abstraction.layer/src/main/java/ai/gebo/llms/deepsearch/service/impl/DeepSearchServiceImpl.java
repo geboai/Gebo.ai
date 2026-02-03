@@ -525,7 +525,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getId());
 		deepSearchRequest.setKnowledgeBases(knowledgeBasesCodesList);
-		deepSearchRequest.setQuery(request.getQuery());
+		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request));
 		deepSearchRequest.setUserChatContextCode(chatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
 		response.setDeepSearchRequestId(deepSearchRequest.getCode());
@@ -620,7 +620,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getLastRequest().getId());
 		deepSearchRequest.setKnowledgeBases(createKnowledgeBasesList(request, userChatContext));
-		deepSearchRequest.setQuery(request.getLastRequest().getQuery());
+		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request.getLastRequest()));
 		deepSearchRequest.setUserChatContextCode(userChatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());

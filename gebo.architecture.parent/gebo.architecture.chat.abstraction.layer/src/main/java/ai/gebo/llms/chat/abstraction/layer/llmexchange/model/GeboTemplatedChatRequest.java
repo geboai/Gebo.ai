@@ -47,7 +47,7 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 
 	/** The chat query, parameterized by RequestType */
 	private RequestType query = null;
-
+	private RequestType rewrittenQuery = null;
 	/** Custom configuration for RAG (Retrieval-Augmented Generation) requests */
 	private GeboRagRequestCustomConfig customRagConfig = null;
 
@@ -60,5 +60,9 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	private AIDocumentsSet documents = null;
 	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	private List<String> deepSearchDataSources = null;
+
+	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
+		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();
+	}
 
 }

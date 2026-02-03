@@ -95,7 +95,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getActualUserRequest() {
 
-			return lastRequest.getQuery();
+			return GeboChatRequest.actualQuery(lastRequest);
 		}
 
 		@Override

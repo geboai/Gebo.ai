@@ -34,6 +34,7 @@ import ai.gebo.model.base.GBaseObject;
 @Component
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingService
 		implements IRoutingChatPipelineStepService {
+	private static final String REWRITE_THREASHOLD = "rewriteThreashold";
 	private static final String NEWLINE = "\r\n";
 	private static final String DEEP_SEARCH_DATA_SOURCES = "deepSearchDataSources";
 	private static final String LATEST_INTERACTIONS = "latestInteractions";
@@ -88,32 +89,51 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 
 		} else {
 			try {
-				Map<String, Object> templateParams = new HashMap<String, Object>();
-				GPromptConfig _prompt = this.promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
-				final String prompt = _prompt.getPrompt();
+				boolean firstCycle = true;
+				boolean retryRouting = false;
+				RoutingDecisionResponse llmRoutingDecision = null;
+				String query = runtimeData.getRequestResources().getLastRequest().getQuery();
+				do {
+					retryRouting = false;
+					Map<String, Object> templateParams = new HashMap<String, Object>();
+					GPromptConfig _prompt = this.promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
+					final String prompt = _prompt.getPrompt();
 
-				String latestInteractions = RoutingPromptUtil
-						.latestInteractionsPromptPart(runtimeData.getRequestResources().getLastInteractions());
-				String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
-				String toolsList = toolsListPromptPart(chatModel);
+					String latestInteractions = RoutingPromptUtil
+							.latestInteractionsPromptPart(runtimeData.getRequestResources().getLastInteractions());
+					String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
+					String toolsList = toolsListPromptPart(chatModel);
 
-				templateParams.put(LATEST_INTERACTIONS, latestInteractions);
-				templateParams.put(DEEP_SEARCH_DATA_SOURCES, deepSearchDataSources);
-				templateParams.put(TOOLS_LIST, toolsList);
-				int usedTokens = tokensLength(prompt, latestInteractions, deepSearchDataSources, toolsList,
-						runtimeData.getRequestResources().getLastRequest().getQuery());
-				int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
-				final int documentsTokenBudget = Math.min(remainingContext,
-						this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
-				String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
-						documentsTokenBudget);
-				templateParams.put(DOCUMENTS, documents);
-				RoutingDecisionResponse llmRoutingDecision = callLLMStructuredReturn(serviceModel, prompt,
-						runtimeData.getRequestResources().getLastRequest().getQuery(), templateParams,
-						RoutingDecisionResponse.class);
-				LOGGER.info("Routing decision object:" + llmRoutingDecision);
-				List<String> routes = futureRoutes(llmRoutingDecision.getResponseRoutingDecision(),
+					templateParams.put(LATEST_INTERACTIONS, latestInteractions);
+					templateParams.put(DEEP_SEARCH_DATA_SOURCES, deepSearchDataSources);
+					templateParams.put(TOOLS_LIST, toolsList);
+					templateParams.put(REWRITE_THREASHOLD, chatPipelinesConfig.getRewriteThreashold());
+					int usedTokens = tokensLength(prompt, latestInteractions, deepSearchDataSources, toolsList, query);
+					int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
+					final int documentsTokenBudget = Math.min(remainingContext,
+							this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
+					String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
+							documentsTokenBudget);
+					templateParams.put(DOCUMENTS, documents);
+					llmRoutingDecision = callLLMStructuredReturn(serviceModel, prompt, query, templateParams,
+							RoutingDecisionResponse.class);
+					if (firstCycle && llmRoutingDecision.getNeedsRewrite() != null
+							&& llmRoutingDecision.getNeedsRewrite() && firstCycle) {
+						retryRouting = true;
+						LOGGER.info("Running a query rewrite for uncertain input");
+						GPromptConfig rewritePrompt = promptsDao
+								.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
+						query = callLLM(serviceModel, rewritePrompt.getPrompt(), query,
+								Map.of(LATEST_INTERACTIONS, latestInteractions));
+						runtimeData.getRequestResources().getLastRequest().setRewrittenQuery(query);
+
+					}
+					firstCycle = false;
+				} while (retryRouting);
+				final RoutingDecisionResponse finalDecision = llmRoutingDecision;
+				LOGGER.info("Routing decision object:" + finalDecision);
+				List<String> routes = futureRoutes(finalDecision.getResponseRoutingDecision(),
 						RespondingWith.PURE_LLM_RESPONSE, runtimeData.isStreamingOutput());
 				final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {
 
@@ -132,12 +152,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 					@Override
 					public Map<String, Object> getEnvironmentContributions() {
 
-						return getEnvironmentContribution(llmRoutingDecision, RespondingWith.PURE_LLM_RESPONSE);
+						return getEnvironmentContribution(finalDecision, RespondingWith.PURE_LLM_RESPONSE);
 					}
 				};
-				RespondingWith routingDecisionCode = llmRoutingDecision != null
-						&& llmRoutingDecision.getResponseRoutingDecision() != null
-								? llmRoutingDecision.getResponseRoutingDecision()
+				RespondingWith routingDecisionCode = finalDecision != null
+						&& finalDecision.getResponseRoutingDecision() != null
+								? finalDecision.getResponseRoutingDecision()
 								: RespondingWith.PURE_LLM_RESPONSE;
 				rd = new RoutingDecision(routes, routingEntry, routingDecisionCode.name());
 			} catch (Throwable th) {

@@ -14,4 +14,7 @@ public class RoutingDecisionResponse {
 	private List<String> expandDocuments = null;
 	private List<String> deepSearchDataSourceCodesToAnalyze = new ArrayList<String>();
 	private List<String> toolsToUse = null;
+	private Float confidence = null;
+	private List<String> ambiguityReasons = new ArrayList<String>();
+	private Boolean needsRewrite=null;
 }

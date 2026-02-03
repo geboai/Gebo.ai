@@ -35,5 +35,19 @@ Field rules:
 - toolsToUse: fill ONLY when responseRoutingDecision is TOOLS_USE_RESPONSE (otherwise []).
 - If deep search data sources is empty and you would otherwise choose DEEP_SEARCH_RESPONSE, choose RAG_LLM_RESPONSE instead unless tools can satisfy it.
 - If tools list is empty you cannot choose TOOLS_USE_RESPONSE.  
+CONFIDENCE:
+Return a confidence score in [0.00..1.00] representing how certain you are that the chosen route is correct.
+Compute it deterministically from the rubric:
+Start at 0.50
+Add +0.10 for each signal among A..E that is clearly consistent with the chosen route (score=2).
+Add +0.05 for each signal among A..E that is somewhat consistent (score=1).
+Subtract -0.10 for each strong ambiguity or missing detail that could flip the route.
+Clamp to [0.00..1.00].
+Also return a short list of ambiguity reasons (max 3). If none, return an empty list.
+needsRewrite RULE:
+
+Set needsRewrite=true only if confidence < {rewriteThreshold} OR if there is clear ambiguity in the user question that prevents confident routing.
+
+Otherwise false.
 OUTPUT FORMAT:
 {format}

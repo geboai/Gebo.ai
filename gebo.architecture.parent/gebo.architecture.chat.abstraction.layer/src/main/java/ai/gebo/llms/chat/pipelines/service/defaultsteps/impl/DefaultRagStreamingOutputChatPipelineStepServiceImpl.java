@@ -11,6 +11,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
@@ -70,8 +71,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 
 		try {
 			request = integrateWithSearches(searchRewritings, runtimeData, chatModel.getContextLength());
-			GPromptConfig prompt = promptsDao
-					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
+			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
 					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException | FullTextException e) {
@@ -84,9 +84,9 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			ChatPipelineExecutionRuntimeData runtimeData, int contextWindowLength)
 			throws FullTextException, LLMConfigException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
-		AIDocumentsSet documentSet = searchesService.search(searchRewritings, request.getLastRequest().getQuery(),
-				configuration.getGlobalRagTopK(), runtimeData.getUserChatContext(),
-				contextWindowLength - request.getTokensSize());
+		AIDocumentsSet documentSet = searchesService.search(searchRewritings,
+				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
+				runtimeData.getUserChatContext(), contextWindowLength - request.getTokensSize());
 		if (documentSet != null) {
 			for (AIDocumentReferenceItem item : documentSet.getDocumentItems()) {
 				request.removeAIDocumentReferenceByCode(item.getCode());

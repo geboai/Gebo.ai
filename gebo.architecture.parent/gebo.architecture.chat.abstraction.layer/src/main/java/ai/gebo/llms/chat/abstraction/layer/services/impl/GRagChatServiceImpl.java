@@ -95,11 +95,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-			ChatHistoryConsolidationService historyConsolidationService,
+		
 			IGChatRequestResourcesBuilder chatRequestBuilder, IGChatRagSearchService ragSearchService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, historyConsolidationService, knowledgeBaseVisibilityService,
+				generatedResourceRepository, knowledgeBaseVisibilityService,
 				chatRequestBuilder);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;

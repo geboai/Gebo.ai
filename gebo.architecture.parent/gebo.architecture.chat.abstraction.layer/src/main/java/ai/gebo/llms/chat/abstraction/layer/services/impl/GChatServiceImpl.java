@@ -81,13 +81,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			InteractionsContextService interactionsContext, IGSecurityService securityService,
 			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-			ChatHistoryConsolidationService historyConsolidationService,
+
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
 			IGChatRequestResourcesBuilder chatRequestBuilder) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, historyConsolidationService, knowledgeBaseSecurityService,
-				chatRequestBuilder);
+				generatedResourceRepository, knowledgeBaseSecurityService, chatRequestBuilder);
 
 	}
 
@@ -125,7 +124,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 		// Retrieve default prompt
 		GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
-		ChatModelLimitedRequest limitedRequest = null;
+
 		// Check if prompt is configured
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
@@ -166,10 +165,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		} else {
 			userContext = persistenceManager.transactionalUpdate(userContext);
 		}
-		if (limitedRequest.isHistoryConsolidationRequired()) {
-			this.historyConsolidationService.consolidateHistory(userContext.getCode(),
-					limitedRequest.getHistorySizeTarget());
-		}
+
 		// Clean up context
 		LLMtInteractionContextThreadLocal.Context.remove();
 		return gresponse;

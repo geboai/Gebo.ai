@@ -29,6 +29,7 @@ public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
 	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
+	public static final String DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT = "default-pipeline-initial-query-rewriting-prompt";
 	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
 	public static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
 	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
@@ -45,7 +46,8 @@ public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 			DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT, CHAT_HISTORY_DOCUMENTS_CONSOLIDATION,
 			HISTORY_CONSOLIDATION_PROMPT, PROMPT_TEMPLATE_WIZARD_DEFAULT, SUMMARIZE_CHAT_DESCRIPTION,
 			DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT, DEEP_SEARCH_KEYWORD_GENERATION_PROMPT,
-			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT);
+			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT,
+			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboPromptsLibrary.class);
 

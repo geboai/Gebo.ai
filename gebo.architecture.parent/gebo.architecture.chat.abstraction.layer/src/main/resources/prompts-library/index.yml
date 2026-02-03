@@ -46,3 +46,6 @@ ai.gebo.prompts:
     - promptUse: deep-search-search-query-extraction-prompt
       langCode: en
       reference: /prompts-library/en/deep-search-search-query-extraction-prompt.txt
+    - promptUse: default-pipeline-initial-query-rewriting-prompt
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt.txt  

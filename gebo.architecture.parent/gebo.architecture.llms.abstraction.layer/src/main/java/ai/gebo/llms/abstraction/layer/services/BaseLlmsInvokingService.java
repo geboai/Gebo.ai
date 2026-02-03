@@ -135,9 +135,23 @@ public class BaseLlmsInvokingService {
 
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
 			String question, Map<String, Object> params) {
-		
+
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		loadParams(promptTemplate, params);
+		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	protected String callLLM(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> params) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		loadParams(promptTemplate, params);
 		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());

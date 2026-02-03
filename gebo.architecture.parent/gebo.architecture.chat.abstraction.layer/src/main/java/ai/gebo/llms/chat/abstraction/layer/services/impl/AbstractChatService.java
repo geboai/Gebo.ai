@@ -103,7 +103,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGChatStorageAreaService chatStorageAreaService;
 
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
-	final protected ChatHistoryConsolidationService historyConsolidationService;
+	
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseSecurityService;
 	final protected IGChatRequestResourcesBuilder chatRequestBuilder;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -371,7 +371,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					freshCopy = persistenceManager.transactionalUpdate(userContext);
 				}
 				if (chatHistoryConsolidation) {
-					this.historyConsolidationService.consolidateHistory(freshCopy.getCode(), historySizeTarget);
+					//this.historyConsolidationService.consolidateHistory(freshCopy.getCode(), historySizeTarget);
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
