@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
@@ -26,6 +28,7 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import reactor.core.publisher.Flux;
@@ -42,7 +45,7 @@ import reactor.core.publisher.Flux;
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
 		implements IGConfigurableChatModel<ModelConfig> {
-
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	// Configuration for the chat model
 	protected ModelConfig config = null;
 	// Type of the chat model
@@ -210,18 +213,24 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public int getContextLength() {
 		Integer contextLength = null;
-		if (getConfig() != null && contextLength == null) {
+		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
-			if (contextLength == null && getConfig().getChoosedModel() != null) {
-				GBaseChatModelChoice choice = (GBaseChatModelChoice) getConfig().getChoosedModel();
-				contextLength = choice.getContextLength();
-				if (contextLength == null) {
-					if (choice.getMetaInfos() != null) {
-						contextLength = choice.getMetaInfos().getContextLength();
+			if (contextLength == null) {
+				if (getConfig().getChoosedModel() != null
+						&& getConfig().getChoosedModel() instanceof GBaseModelChoice choice) {
+					contextLength = choice.getContextLength();
+					if (contextLength == null) {
+						if (choice.getMetaInfos() != null) {
+							contextLength = choice.getMetaInfos().getContextLength();
+						}
 					}
+				} else {
+					LOGGER.error("No model choice valorized or wrong class for configurable chat model:" + getCode());
 				}
 			}
 
+		} else {
+			LOGGER.error("No config value for configurable model!!");
 		}
 		if (contextLength == null)
 			contextLength = 8192;

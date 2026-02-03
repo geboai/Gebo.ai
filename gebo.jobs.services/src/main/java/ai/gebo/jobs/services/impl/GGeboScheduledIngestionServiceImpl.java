@@ -219,7 +219,10 @@ public class GGeboScheduledIngestionServiceImpl
 				if (!handlers.isEmpty()) {
 					ComputedWorkflowResult measures = handlers.get(0).computeWorkflowStatus(status.getCode(),
 							status.getWorkflowType(), status.getWorkflowId());
-					if (measures.isFinished() || (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) > now) {
+					boolean batchFinished = (measures.isFinished()
+							&& measures.getRootStatus().getBatchDocumentsInput() > 0);
+					boolean timeoutPassed = (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) <= now;
+					if (batchFinished || timeoutPassed) {
 						try {
 							GJobStatus writablestatus = persistenceManager.findById(GJobStatus.class, status.getCode());
 							writablestatus.setProcessing(false);
