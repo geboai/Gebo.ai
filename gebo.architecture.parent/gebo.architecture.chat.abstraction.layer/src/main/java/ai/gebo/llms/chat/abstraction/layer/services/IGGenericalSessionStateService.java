@@ -29,6 +29,8 @@ public interface IGGenericalSessionStateService<SessionType extends IChatRequest
 
 	public void deleteState(String id);
 
+	public SessionType save(SessionType data);
+
 	public SessionType addRequestToState(GeboChatRequest request, GUserChatContext context, int targetTokenBudget)
 			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException;
 

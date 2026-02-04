@@ -2,6 +2,9 @@ package ai.gebo.llms.chat.abstraction.layer.model.session;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -17,7 +20,9 @@ import lombok.Data;
  * user inside a chat context
  */
 @Data
+@Document
 public class ChatFullSessionState implements ITokensCountable, IChatRequestFactory {
+	@Id
 	protected String userChatContextCode = null;
 	int targetTokenBudget = 0;
 	private TokensContainer<GeboChatRequest> currentRequest = new TokensContainer<GeboChatRequest>();
@@ -61,5 +66,4 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 				currentRequest.getValue());
 	}
 
-	
 }

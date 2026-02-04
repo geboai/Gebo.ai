@@ -19,6 +19,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
@@ -69,7 +70,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
 		SearchesSuggestions searchRewritings = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedSearchRewritings(runtimeData);
@@ -89,7 +90,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 
 	private LLMChatRequestResources integrateWithSearches(SearchesSuggestions searchRewritings,
 			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
-			int contextWindowLength) throws FullTextException, LLMConfigException {
+			int contextWindowLength) throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
 		int tokensBudget = contextWindowLength - request.getTokensSize();
 		boolean returnCleanRequest = false;

@@ -22,6 +22,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -40,7 +41,7 @@ public class BaseOutputChatPipelineService {
 	static private final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
 
 	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel targetChatModel) {
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException {
 		List<String> docsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedSelectedDocuments(runtimeData);
 		LLMChatRequestResources rc = runtimeData.getRequestResources();
 		if (docsList != null && !docsList.isEmpty()) {

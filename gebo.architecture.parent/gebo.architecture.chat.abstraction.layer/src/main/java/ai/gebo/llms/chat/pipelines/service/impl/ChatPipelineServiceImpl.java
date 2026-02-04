@@ -16,6 +16,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
@@ -38,7 +39,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
 
 	@Override
-	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request) throws ChatPipelineException {
+	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request) throws ChatPipelineException, GeboChatSessionLifecycleException {
 		try {
 			GUserChatContext context = null;
 			if (request.getUserChatContextCode() != null) {
@@ -82,7 +83,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request)
-			throws ChatPipelineException {
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		try {
 
 			GUserChatContext context = null;

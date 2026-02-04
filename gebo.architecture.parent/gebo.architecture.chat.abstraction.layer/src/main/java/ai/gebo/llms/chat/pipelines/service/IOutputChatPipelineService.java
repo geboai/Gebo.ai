@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.pipelines.service;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 
 public interface IOutputChatPipelineService extends IChatPipelineStepService {
@@ -11,5 +12,5 @@ public interface IOutputChatPipelineService extends IChatPipelineStepService {
 	}
 
 	public GeboChatResponse execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) throws ChatPipelineException;
+			IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException;
 }

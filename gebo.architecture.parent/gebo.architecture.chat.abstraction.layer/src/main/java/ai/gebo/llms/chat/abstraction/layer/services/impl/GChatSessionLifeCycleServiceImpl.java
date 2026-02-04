@@ -12,6 +12,9 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
@@ -21,19 +24,31 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService {
+
 	private final IGChatFullSessionStateService fullSessionStateService;
 	private final IGShrinkedChatSessionStateService shrinkedSessionStateService;
 
 	@Override
-	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel) {
-		// TODO Auto-generated method stub
-
+	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException {
+		if (context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+			throw new GeboChatSessionLifecycleException("Cannot create a session for user context=>" + context.getCode()
+					+ " that already has interactions");
+		} else {
+			ChatFullSessionState data = fullSessionStateService.retrieveState(context.getCode());
+			if (data != null)
+				throw new GeboChatSessionLifecycleException(
+						"Cannot create a session for user context=>" + context.getCode() + " that already has one");
+		}
+		ChatFullSessionState data = new ChatFullSessionState();
+		data.setUserChatContextCode(context.getCode());
+		this.fullSessionStateService.save(data);
 	}
 
 	@Override
 	public void removeChatSession(GUserChatContext context) {
-		// TODO Auto-generated method stub
-
+		this.fullSessionStateService.deleteState(context.getCode());
+		this.shrinkedSessionStateService.deleteState(context.getCode());
 	}
 
 	@Override
@@ -103,6 +118,15 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void ensureChatSessionExists(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException {
+
+		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context.getCode());
+		if (state == null)
+			createChatSession(context, targetChatModel);
 	}
 
 }

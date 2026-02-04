@@ -25,38 +25,40 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
  * state.
  */
 public interface IGChatSessionLifeCycleService {
-	public void ensureChatSessionExists(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+	public void ensureChatSessionExists(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException;
 
-	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException;
 
-	public void removeChatSession(GUserChatContext context);
+	public void removeChatSession(GUserChatContext context) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			GUserChatContext context, IGConfigurableChatModel targetChatModel);
+			GUserChatContext context, IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel);
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
 	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel);
 

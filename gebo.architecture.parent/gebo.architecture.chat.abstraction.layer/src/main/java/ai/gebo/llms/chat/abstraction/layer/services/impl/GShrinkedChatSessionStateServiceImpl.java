@@ -45,4 +45,10 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 		return null;
 	}
 
+	@Override
+	public ShrinkedChatSessionState save(ShrinkedChatSessionState data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
