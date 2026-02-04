@@ -361,7 +361,16 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatContext context,
 			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException {
+		List<LLMGeneratedResource> generated = response.getGeneratedResources();
+		if (generated != null) {
+			for (LLMGeneratedResource llmGeneratedResource : generated) {
+
+				addLLMGeneratedDocumntsToState(llmGeneratedResource, context, targetChatModel);
+
+			}
+		}
 		ChatFullSessionState state = this.fullSessionStateService.addInteractionToState(request, response, context);
+
 		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.addInteractionToState(request, response,
 				context);
 		int budget = getTokensBudget(targetChatModel);

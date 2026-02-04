@@ -30,13 +30,13 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GChatSessionStateServiceImpl implements IGChatFullSessionStateService {
+public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateService {
 	final IGChatStorageAreaService storageAreaService;
 	final DocumentReferenceRepository documentsRepository;
 	final AIDocumentsCacheService documentsCacheService;
 	final ChatFullSessionStateRepository sessionRepo;
 	final GeboChatConfigs chatConfig;
-	final static Logger LOGGER = LoggerFactory.getLogger(GChatSessionStateServiceImpl.class);
+	final static Logger LOGGER = LoggerFactory.getLogger(GChatFullSessionStateServiceImpl.class);
 
 	@Override
 	public ChatFullSessionState addRequestToState(GeboChatRequest request, GUserChatContext context) {
@@ -68,7 +68,9 @@ public class GChatSessionStateServiceImpl implements IGChatFullSessionStateServi
 	@Override
 	public ChatFullSessionState addInteractionToState(GeboChatRequest request, GeboChatResponse response,
 			GUserChatContext context) {
-		// TODO Auto-generated method stub
+		ChatFullSessionState state = retrieveState(context);
+		
+		
 		return null;
 	}
 
