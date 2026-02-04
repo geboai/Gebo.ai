@@ -109,7 +109,7 @@ final class RoutingPromptUtil {
 			int documentsTokenBudget) {
 		AtomicInteger tokensBudget = new AtomicInteger(documentsTokenBudget);
 		AIDocumentsSet result = new AIDocumentsSet();
-		result = tryAdd(result, requestResources.getRetrievedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getLatestRequestsRetrievedDocuments(), tokensBudget);
 		result = tryAdd(result, requestResources.getLatestRequestsChatWithDocuments(), tokensBudget);
 		result = tryAdd(result, requestResources.getLatestRequestsUploadedDocuments(), tokensBudget);
 		result = tryAdd(result, requestResources.getHistoricallyRetrievedDocuments(), tokensBudget);

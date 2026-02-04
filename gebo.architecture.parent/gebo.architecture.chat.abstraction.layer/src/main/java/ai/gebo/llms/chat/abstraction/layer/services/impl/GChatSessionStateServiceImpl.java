@@ -22,6 +22,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
@@ -31,7 +32,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredC
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.system.ingestion.GeboIngestionException;
@@ -39,7 +40,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
+public class GChatSessionStateServiceImpl implements IGChatFullSessionStateService {
 	final IGChatStorageAreaService storageAreaService;
 	final DocumentReferenceRepository documentsRepository;
 	final AIDocumentsCacheService documentsCacheService;
@@ -54,7 +55,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 	}
 
 	@Override
-	public ChatFullSessionState extractState(GeboChatRequest request, GUserChatContext context)
+	public ChatFullSessionState addRequestToState(GeboChatRequest request, GUserChatContext context, int targetTokenBudget)
 			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
 		ChatFullSessionState outState = new ChatFullSessionState();
 		outState.setUserChatContextCode(context.getCode());
@@ -166,9 +167,9 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			}
 		}
 		outState.getChatHistory().setTokensSize((int) historyTokens);
-		if (request != null && request.getDocuments() != null && !request.getDocuments().getDocumentItems().isEmpty()) {
+		if (request != null && request.getLatestRequestsChatWithDocuments() != null && !request.getLatestRequestsChatWithDocuments().getDocumentItems().isEmpty()) {
 			Map<String, AIDocumentReferenceItem> docsMap = new HashMap<String, AIDocumentReferenceItem>();
-			for (AIDocumentReferenceItem doc : request.getDocuments().getDocumentItems()) {
+			for (AIDocumentReferenceItem doc : request.getLatestRequestsChatWithDocuments().getDocumentItems()) {
 				docsMap.put(doc.getCode(), doc);
 			}
 			List<GDocumentReference> docsList = documentsRepository.findAllById(docsMap.keySet());
@@ -178,7 +179,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 
 					CSSInteractionReferredContent<GDocumentReference> entry = new CSSInteractionReferredContent<GDocumentReference>(
 							interactions.size(), aiDoc, doc);
-					outState.getRetrievedDocuments().getValue().add(entry);
+					outState.getLatestRequestsRetrievedDocuments().getValue().add(entry);
 				}
 			}
 		}
@@ -269,7 +270,7 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 		int index = 0;
 		for (ChatInteractions inter : interactions) {
 			if (inter.getRequest() != null) {
-				AIDocumentsSet docs = inter.getRequest().getDocuments();
+				AIDocumentsSet docs = inter.getRequest().getLatestRequestsChatWithDocuments();
 				if (docs != null) {
 					for (AIDocumentReferenceItem d : docs.getDocumentItems()) {
 						PosHigher pos = out.get(d.getCode());
@@ -285,6 +286,26 @@ public class GChatSessionStateServiceImpl implements IGChatSessionStateService {
 			index++;
 		}
 		return out;
+	}
+
+	@Override
+	public ChatFullSessionState retrieveState(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteState(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ChatFullSessionState addInteractionToState(GeboChatRequest request, GeboChatResponse response,
+			GUserChatContext context, int targetTokenBudget)
+			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

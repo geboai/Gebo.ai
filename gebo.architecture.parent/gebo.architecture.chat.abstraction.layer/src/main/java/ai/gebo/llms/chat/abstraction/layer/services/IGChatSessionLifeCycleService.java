@@ -1,0 +1,63 @@
+package ai.gebo.llms.chat.abstraction.layer.services;
+
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+
+/******************************************************************************************************
+ * Mantains the 2 session levels transparently letting adding resources in the
+ * chat requests/session transparently always returned an updated and trimmed to
+ * tokensBudgetSize LLMChatRequestResources directly usable for llms call. At
+ * the beginning of a chat user context life the chat session is created, in the
+ * chat interaction user request, resources are added/removed, the assistant
+ * response is registered, and once chatRequestCompleted is called the service
+ * will choose if generate or update the shrinked session state. A shrinked
+ * session state is managed only when the target tokensBudget is reached in a
+ * call to chatRequestCompleted, untill that moment adding resources reaching
+ * the tokensBudget causes only the returned LLMChatRequestResources to discard
+ * oldest references (even if is created from the full or the shrinked session
+ * state.
+ */
+public interface IGChatSessionLifeCycleService {
+	public void ensureChatSessionExists(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+
+	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+
+	public void removeChatSession(GUserChatContext context);
+
+	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public LLMChatRequestResources addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
+			GUserChatContext context, IGConfigurableChatModel targetChatModel);
+
+	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatContext context,
+			IGConfigurableChatModel targetChatModel);
+
+	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+
+}

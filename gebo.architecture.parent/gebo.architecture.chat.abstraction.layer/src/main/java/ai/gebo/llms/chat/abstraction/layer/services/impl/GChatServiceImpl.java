@@ -29,6 +29,7 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -57,6 +58,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.GUserMessage;
@@ -81,12 +83,11 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			InteractionsContextService interactionsContext, IGSecurityService securityService,
 			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
-			IGChatRequestResourcesBuilder chatRequestBuilder) {
+			IGChatSessionLifeCycleService chatSessionLifecycleService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, knowledgeBaseSecurityService, chatRequestBuilder);
+				generatedResourceRepository, knowledgeBaseSecurityService, chatSessionLifecycleService);
 
 	}
 
@@ -138,8 +139,8 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 			prompt = promptTemplate.create();
 
-			LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-					handler.getContextLength() / 2);
+			LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request, userContext,
+					handler);
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 			gresponse = callTemplatedChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
 					responseType);
@@ -248,7 +249,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				modelCode = userContext.getChatModelCode();
 				handler = chatModelConfigurations.findByCode(modelCode);
 			}
-
+			if (handler==null) {
+				handler=chatModelConfigurations.defaultHandler();
+			}
+			this.chatSessionLifecycleService.ensureChatSessionExists(userContext, handler);	
 			// Process chat interaction
 			GeboTemplatedChatResponse<T> response = chat(handler, userContext, request, responseType);
 			response.getBackendMessages().add(GUserMessage.successMessage("OK!", "Chat system running correctly"));
@@ -412,11 +416,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				Prompt prompt = null;
 				promptTemplate = new PromptTemplate(promptTemplateText);
 				prompt = promptTemplate.create();
-				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-						handler.getContextLength() / 2);
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
+						userContext, handler);
+				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getLatestRequestsChatWithDocuments(),
+						fullRequest.getLatestRequestsRetrievedDocuments(),
+						fullRequest.getLatestRequestsUploadedDocuments());
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, chatRequestContext,
-						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3);
+						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, showedDocuments);
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux

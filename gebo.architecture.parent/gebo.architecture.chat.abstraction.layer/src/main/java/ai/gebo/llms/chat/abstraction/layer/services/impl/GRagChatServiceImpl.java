@@ -62,6 +62,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementServi
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRagSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
@@ -80,6 +81,7 @@ import reactor.core.publisher.Flux;
  */
 @Service
 public class GRagChatServiceImpl extends AbstractChatService implements IGRagChatService {
+
 	final protected ChatProfilesRepository chatProfilesRepository;
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
@@ -91,22 +93,20 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			GUserChatContextRepository userContextRepository, IGPromptConfigDao promptsDao,
 			InteractionsContextService interactionsContext, IGSecurityService securityService,
 			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
-			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
-			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			IGChatProfileManagementService chatProfileManagementService,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-		
-			IGChatRequestResourcesBuilder chatRequestBuilder, IGChatRagSearchService ragSearchService) {
+			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
+			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatProfilesRepository chatProfilesRepository,
+			IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
+			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
+			IGChatProfileManagementService chatProfileManagementService, IGChatRagSearchService ragSearchService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, knowledgeBaseVisibilityService,
-				chatRequestBuilder);
+				generatedResourceRepository, knowledgeBaseSecurityService, chatSessionLifecycleService);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.chatProfileManagementService = chatProfileManagementService;
 		this.ragSearchService = ragSearchService;
-
 	}
 
 	/**
@@ -203,9 +203,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
-				request.setDocuments(extractedDocuments);
-				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-						contextLength);
+
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
+						userContext, chatHandler);
+				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
+							userContext, chatHandler);
+				}
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
 				response = callTemplatedChatClient(chatHandler, prompt, context, request, response,
@@ -434,6 +438,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				userContext.setRagChat(true);
 				userContext.setChatCreationDateTime(new Date());
 				userContext.setUsername(currentUserName);
+				
 				userContext = persistenceManager.insert(userContext);
 			} else {
 				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
@@ -463,6 +468,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 */
 	private Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request, GChatProfileConfiguration chatProfile,
 			GUserChatContext userContext, UserInfos user) throws LLMConfigException {
+		
 		// Set up chat environment and models
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
 
@@ -515,13 +521,21 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 						contextLength / 3);
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
-				request.setDocuments(extractedDocuments);
-				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-						contextLength);
+
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
+						userContext, chatHandler);
+				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
+							userContext, chatHandler);
+				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
+				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getLatestRequestsChatWithDocuments(),
+						fullRequest.getLatestRequestsRetrievedDocuments(),
+						fullRequest.getLatestRequestsUploadedDocuments());
 				return streamChatClient(chatHandler, prompt, context, request, response, userContext,
-						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3);
+						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3,
+						showedDocuments);
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);

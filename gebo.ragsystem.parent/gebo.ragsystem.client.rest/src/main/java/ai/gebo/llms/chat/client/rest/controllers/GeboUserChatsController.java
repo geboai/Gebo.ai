@@ -157,22 +157,10 @@ public class GeboUserChatsController {
 			UserChatHistory history = new UserChatHistory();
 			history.setCode(context.getCode());
 			history.setDescription(context.getDescription());
-			history.setInteractions(getClientViewOf(context.getInteractions()));
+			history.setInteractions(context.getInteractions());
 			return history;
 		}
 
-		private static List<ChatInteractions> getClientViewOf(List<ChatInteractions> interactions)
-				throws CloneNotSupportedException {
-
-			List<ChatInteractions> cinteractions = new ArrayList<>();
-			if (interactions != null) {
-				for (ChatInteractions chatInteraction : interactions) {
-					ChatInteractions clientVision = chatInteraction.clientClone();
-					cinteractions.add(clientVision);
-				}
-			}
-			return cinteractions;
-		}
 	}
 
 	/**

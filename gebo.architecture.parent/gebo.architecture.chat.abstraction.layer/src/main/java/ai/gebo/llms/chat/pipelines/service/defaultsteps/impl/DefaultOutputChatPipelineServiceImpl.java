@@ -9,6 +9,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -20,14 +21,14 @@ public class DefaultOutputChatPipelineServiceImpl extends BaseOutputChatPipeline
 
 	public DefaultOutputChatPipelineServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
-			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo);
-		
-	    }
+			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
+			IGChatSessionLifeCycleService chatSessionLifecycleService) {
+		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
+				chatSessionLifecycleService);
+
+	}
 
 	public static final String DEFAULT_OUTPUT_STEP = "default-output-step";
-
-	
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -44,7 +45,7 @@ public class DefaultOutputChatPipelineServiceImpl extends BaseOutputChatPipeline
 	@Override
 	public GeboChatResponse execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		LLMChatRequestResources requestResources=super.integrateWithAISuggestedDocuments(runtimeData);
+		LLMChatRequestResources requestResources = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
 		return null;
 	}
 

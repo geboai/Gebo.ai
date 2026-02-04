@@ -17,29 +17,31 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
+@Data
 public class LLMChatRequestResources implements ITokensCountable {
-	private static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	// documents that are inherently choosed to chat with from the user or in the
 	// last not consolidated turns
-	private final AIDocumentsSet latestRequestsChatWithDocuments;
+	private AIDocumentsSet latestRequestsChatWithDocuments = null;
 	// retrieved documents in the last request
-	private final AIDocumentsSet retrievedDocuments;
+	private AIDocumentsSet latestRequestsRetrievedDocuments = null;
 	// documents specifically uploaded from the user in the last not consolidated
 	// turns
-	private final AIDocumentsSet latestRequestsUploadedDocuments;
+	private AIDocumentsSet latestRequestsUploadedDocuments = null;
 	// Rag retrieved contents storically or in the current request
-	private final AIDocumentsSet historicallyRetrievedDocuments;
+	private AIDocumentsSet historicallyRetrievedDocuments = null;
 	// Uploaded historical contents
-	private final AIDocumentsSet historicallyUploadedDocuments;
+	private AIDocumentsSet historicallyUploadedDocuments = null;
 	// LLM Generated artifacts/documents
-	private final AIDocumentsSet llmGeneratedDocuments;
-	private final String chatConsolidation;
-	private final List<CSSSimplefiedInteraction> lastInteractions;
-	private final GeboChatRequest lastRequest;
+	private AIDocumentsSet llmGeneratedDocuments = null;
+	private String chatConsolidation = null;
+	private List<CSSSimplefiedInteraction> lastInteractions = null;
+	private GeboChatRequest lastRequest = null;
 
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
@@ -63,7 +65,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		int size = 0;
 		size += ITokensCountable.tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				llmGeneratedDocuments, latestRequestsChatWithDocuments, latestRequestsUploadedDocuments,
-				retrievedDocuments, lastRequest);
+				latestRequestsRetrievedDocuments, lastRequest);
 		size += ITokensCountable.tokensSize(lastInteractions);
 		return size;
 	}
@@ -90,7 +92,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public List<Document> getDocuments() {
 
-			return getAllDocuments().aiDocumentsList();
+			return allDocuments().aiDocumentsList();
 		}
 
 		@Override
@@ -110,15 +112,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 		return new NestedChatRequestContext();
 	}
 
-	public AIDocumentsSet getAllDocuments() {
-		return AIDocumentsSet.join(
-				(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null),
-				latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
+	public AIDocumentsSet allDocuments() {
+		return AIDocumentsSet.join(latestRequestsChatWithDocuments, latestRequestsRetrievedDocuments, latestRequestsUploadedDocuments,
 				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
 	}
 
 	public AIDocumentReferenceItem findAIDocumentReferenceByCode(String docId) {
-		AIDocumentsSet allDocs = getAllDocuments();
+		AIDocumentsSet allDocs = allDocuments();
 		List<AIDocumentReferenceItem> optdoc = allDocs.getDocumentItems().stream()
 				.filter(x -> x.getCode().equals(docId)).toList();
 		Map<String, AIDocumentFragment> fragments = new HashMap<String, AIDocumentFragment>();
@@ -142,9 +142,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	public void removeAIDocumentReferenceByCode(String docId) {
-		AIDocumentsSet.removeAIDocumentReferenceByCode(docId,
-				(lastRequest != null && lastRequest.getDocuments() != null ? lastRequest.getDocuments() : null),
-				latestRequestsChatWithDocuments, retrievedDocuments, latestRequestsUploadedDocuments,
-				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
+		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, latestRequestsChatWithDocuments, latestRequestsRetrievedDocuments,
+				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
+				llmGeneratedDocuments);
 	}
 }

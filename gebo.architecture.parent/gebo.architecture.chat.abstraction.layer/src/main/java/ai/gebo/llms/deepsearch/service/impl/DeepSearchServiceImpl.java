@@ -624,7 +624,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		deepSearchRequest.setUserChatContextCode(userChatContext.getCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
-		AIDocumentsSet allDocuments = request.getAllDocuments();
+		AIDocumentsSet allDocuments = request.allDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;
 		switch (variant) {
 		case FULL_REACTIVE: {

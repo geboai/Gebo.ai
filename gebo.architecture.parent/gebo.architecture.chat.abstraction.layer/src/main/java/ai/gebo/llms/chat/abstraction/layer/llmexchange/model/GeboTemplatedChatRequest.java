@@ -56,8 +56,7 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	private String chatPipelineProcessId = null;
 	/** List of documents that are forcibly requested */
 	private List<String> forcedRequestDocuments = new ArrayList<String>();
-	/** documents retrieved on rag or "chat with document" **/
-	private AIDocumentsSet documents = null;
+	
 	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	private List<String> deepSearchDataSources = null;
 

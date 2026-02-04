@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.model.session;
 
+import java.util.List;
+
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -15,8 +17,17 @@ import lombok.Data;
  * user inside a chat context
  */
 @Data
-public class ChatFullSessionState implements ITokensCountable {
+public class ChatFullSessionState implements ITokensCountable, IChatRequestFactory {
 	protected String userChatContextCode = null;
+	int targetTokenBudget = 0;
+	private TokensContainer<GeboChatRequest> currentRequest = new TokensContainer<GeboChatRequest>();
+	private TokensContainer<CSSSimplifiedChatHistory> chatHistory = new TokensContainer<CSSSimplifiedChatHistory>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> historicallyRetrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
+	private TokensContainer<CSSReferredContentList<UserUploadedContent>> historicallyUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
+	private TokensContainer<CSSReferredContentList<UserUploadedContent>> latestRequestsUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> latestRequestsChatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> latestRequestsRetrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
+	private TokensContainer<CSSReferredContentList<LLMGeneratedResource>> llmGeneratedDocuments = new TokensContainer<CSSReferredContentList<LLMGeneratedResource>>();
 
 	public ChatFullSessionState() {
 		getChatHistory().setValue(new CSSSimplifiedChatHistory());
@@ -25,22 +36,13 @@ public class ChatFullSessionState implements ITokensCountable {
 		getLlmGeneratedDocuments().setValue(new CSSReferredContentList<LLMGeneratedResource>());
 		getLatestRequestsChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
 		getLatestRequestsUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContent>());
-		getRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
+		getLatestRequestsRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
 	}
-
-	private TokensContainer<GeboChatRequest> currentRequest = new TokensContainer<GeboChatRequest>();
-	private TokensContainer<CSSSimplifiedChatHistory> chatHistory = new TokensContainer<CSSSimplifiedChatHistory>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> historicallyRetrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<UserUploadedContent>> historicallyUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
-	private TokensContainer<CSSReferredContentList<UserUploadedContent>> latestRequestsUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> latestRequestsChatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<LLMGeneratedResource>> llmGeneratedDocuments = new TokensContainer<CSSReferredContentList<LLMGeneratedResource>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> retrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
 
 	public int getTokensSize() {
 		return ITokensCountable.tokensSize(chatHistory, historicallyRetrievedDocuments, historicallyUploadedDocuments,
 				latestRequestsUploadedDocuments, latestRequestsChatWithDocuments, llmGeneratedDocuments,
-				retrievedDocuments, currentRequest);
+				latestRequestsRetrievedDocuments, currentRequest);
 	}
 
 	private static AIDocumentsSet toDocsSet(TokensContainer<? extends CSSReferredContentList> container) {
@@ -50,10 +52,14 @@ public class ChatFullSessionState implements ITokensCountable {
 			return null;
 	}
 
-	public LLMChatRequestResources toChatRequestResources() {
-		return new LLMChatRequestResources(toDocsSet(latestRequestsChatWithDocuments), toDocsSet(retrievedDocuments),
-				toDocsSet(latestRequestsUploadedDocuments), toDocsSet(historicallyRetrievedDocuments),
-				toDocsSet(historicallyUploadedDocuments), toDocsSet(llmGeneratedDocuments), null,
-				chatHistory.getValue().getInteractions(), currentRequest.getValue());
+	@Override
+	public LLMChatRequestResources createChatRequestResources() {
+		return new LLMChatRequestResources(toDocsSet(latestRequestsChatWithDocuments),
+				toDocsSet(latestRequestsRetrievedDocuments), toDocsSet(latestRequestsUploadedDocuments),
+				toDocsSet(historicallyRetrievedDocuments), toDocsSet(historicallyUploadedDocuments),
+				toDocsSet(llmGeneratedDocuments), null, chatHistory.getValue().getInteractions(),
+				currentRequest.getValue());
 	}
+
+	
 }

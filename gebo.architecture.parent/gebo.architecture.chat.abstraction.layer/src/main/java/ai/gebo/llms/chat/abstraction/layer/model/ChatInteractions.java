@@ -16,16 +16,7 @@ public class ChatInteractions implements ITokensCountable {
 	private GeboTemplatedChatResponse response = null; // Stores the chat response
 	private Integer responseNTokens = null; // Number of tokens in the response
 
-	public ChatInteractions clientClone() throws CloneNotSupportedException {
-		GeboChatRequest clonedrequest = request != null ? (GeboChatRequest) request.clone() : null;
-		clonedrequest.setDocuments(null);
-		ChatInteractions cloned = new ChatInteractions();
-		cloned.request = clonedrequest;
-		cloned.requestNTokens = (requestNTokens);
-		cloned.response = (response);
-		cloned.responseNTokens = (responseNTokens);
-		return cloned;
-	}
+	
 
 	@Override
 	public int getTokensSize() {

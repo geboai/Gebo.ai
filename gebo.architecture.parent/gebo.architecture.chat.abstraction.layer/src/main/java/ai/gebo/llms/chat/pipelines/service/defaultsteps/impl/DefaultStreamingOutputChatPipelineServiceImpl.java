@@ -14,6 +14,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceReposi
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
@@ -34,8 +35,10 @@ public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputCha
 	public DefaultStreamingOutputChatPipelineServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGChatService chatService, ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo);
+			IGChatService chatService, ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
+			IGChatSessionLifeCycleService chatSessionLifecycleService) {
+		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
+				chatSessionLifecycleService);
 		this.chatService = chatService;
 		this.configuration = configuration;
 		this.promptsDao = promptsDao;
@@ -56,10 +59,9 @@ public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputCha
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData);
+		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
 		try {
-			GPromptConfig prompt = promptsDao
-					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
+			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
 			return this.chatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
 					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {

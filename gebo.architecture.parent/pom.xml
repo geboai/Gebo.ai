@@ -49,5 +49,6 @@
   	<module>gebo.architecture.opensearch</module>
   	<module>gebo.architecture.fulltext</module>
   	<module>gebo.architecture.rag.support.layer</module>
+  	<module>gebo.architecture.redis</module>
   </modules>
 </project>

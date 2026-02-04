@@ -19,6 +19,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
@@ -37,18 +38,21 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	private final IGPromptConfigDao promptsDao;
 	private final ChatPipelinesConfiguration configuration;
 	private final SearchesService searchesService;
+
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
 
 	public DefaultRagStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
 			IGRagChatService ragChatService, ChatPipelinesConfiguration configuration, SearchesService searchesService,
-			IGPromptConfigDao promptsDao) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo);
+			IGPromptConfigDao promptsDao, IGChatSessionLifeCycleService chatSessionLifecycleService) {
+		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
+				chatSessionLifecycleService);
 		this.ragChatService = ragChatService;
 		this.configuration = configuration;
 		this.searchesService = searchesService;
 		this.promptsDao = promptsDao;
+
 	}
 
 	@Override
@@ -66,14 +70,14 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData);
+		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
 		SearchesSuggestions searchRewritings = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedSearchRewritings(runtimeData);
 
 		try {
 			int contextLength = chatModel.getContextLength();
 			contextLength = Math.max(contextLength, 8192);
-			request = integrateWithSearches(searchRewritings, runtimeData, contextLength);
+			request = integrateWithSearches(searchRewritings, runtimeData, chatModel, contextLength);
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
 					runtimeData.getChatResponse(), chatModel);
@@ -84,8 +88,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	}
 
 	private LLMChatRequestResources integrateWithSearches(SearchesSuggestions searchRewritings,
-			ChatPipelineExecutionRuntimeData runtimeData, int contextWindowLength)
-			throws FullTextException, LLMConfigException {
+			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
+			int contextWindowLength) throws FullTextException, LLMConfigException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
 		int tokensBudget = contextWindowLength - request.getTokensSize();
 		boolean returnCleanRequest = false;
@@ -97,14 +101,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 		AIDocumentsSet documentSet = searchesService.search(searchRewritings,
 				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
 				runtimeData.getUserChatContext(), tokensBudget);
-		if (returnCleanRequest) {
-			request.getLastRequest().setDocuments(documentSet);
-			request = new LLMChatRequestResources(new AIDocumentsSet(), new AIDocumentsSet(), new AIDocumentsSet(),
-					new AIDocumentsSet(), new AIDocumentsSet(), new AIDocumentsSet(), request.getChatConsolidation(),
-					request.getLastInteractions(), request.getLastRequest());
-		} else {
-			request.getLastRequest().setDocuments(documentSet);
-		}
+		request = chatSessionLifecycleService.addRetrievedDocumentsToState(documentSet,
+				runtimeData.getUserChatContext(), targetChatModel);
 		return request;
 	}
 
