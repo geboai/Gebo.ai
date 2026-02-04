@@ -2,6 +2,8 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.io.IOException;
 
+import org.springframework.scheduling.annotation.Async;
+
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
@@ -11,5 +13,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionStat
  * budget
  */
 public interface IGChatSessionStateShrinkerService {
-	public ShrinkedChatSessionState shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException;
+	@Async
+	public void shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException;
 }

@@ -10,6 +10,7 @@ import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
@@ -23,10 +24,11 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	@Id
 	@NotNull
 	private String userChatContextCode = null;
-	private AIDocumentsSet latestRequestsUploadedDocuments = new AIDocumentsSet();
-	private AIDocumentsSet latestRequestsChatWithDocuments = new AIDocumentsSet();
-	private AIDocumentsSet latestRequestsRetrievedDocuments = new AIDocumentsSet();;
-
+	private CSSReferredContentList<UserUploadedContent> latestRequestsUploadedDocuments = new CSSReferredContentList<UserUploadedContent>();
+	private CSSReferredContentList<GDocumentReference> latestRequestsChatWithDocuments = new CSSReferredContentList<GDocumentReference>();
+	private CSSReferredContentList<GDocumentReference> latestRequestsRetrievedDocuments = new CSSReferredContentList<GDocumentReference>();
+	private CSSReferredContentList<LLMGeneratedResource> latestRequestsLlmGeneratedDocuments = new CSSReferredContentList<LLMGeneratedResource>();
+	private CSSfRelevantShrinkedDocumentList relevantChatWithDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantUploadedDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantLlmGeneratedDocuments = new CSSfRelevantShrinkedDocumentList();
@@ -41,16 +43,27 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 
 	@Override
 	public int getTokensSize() {
-		return ITokensCountable.tokensSize(latestRequestsChatWithDocuments, relevantLlmGeneratedDocuments,
-				relevantRetrievedDocuments, relevantUploadedDocuments, consolidatedInteractions);
+		return ITokensCountable.tokensSize(latestRequestsUploadedDocuments, latestRequestsChatWithDocuments,
+				latestRequestsRetrievedDocuments, latestRequestsLlmGeneratedDocuments, relevantChatWithDocuments,
+				relevantUploadedDocuments, relevantRetrievedDocuments, relevantLlmGeneratedDocuments,
+				consolidatedInteractions, chatHistory, currentRequest);
 	}
 
 	@Override
 	public LLMChatRequestResources createChatRequestResources() {
-		return new LLMChatRequestResources((latestRequestsChatWithDocuments), (latestRequestsRetrievedDocuments),
-				(latestRequestsUploadedDocuments), toDocsSet(relevantRetrievedDocuments),
-				toDocsSet(relevantUploadedDocuments), toDocsSet(relevantLlmGeneratedDocuments),
-				consolidatedInteractions.getConsolidationText(), chatHistory.getInteractions(), currentRequest);
+		AIDocumentsSet chatWithDocuments = AIDocumentsSet.join(this.latestRequestsChatWithDocuments.toAIDocumentsSet(),
+				this.relevantChatWithDocuments.toAIDocumentsSet(0.0f));
+		AIDocumentsSet retrievedDocuments = AIDocumentsSet.join(
+				this.latestRequestsRetrievedDocuments.toAIDocumentsSet(),
+				this.relevantRetrievedDocuments.toAIDocumentsSet(0.0f));
+		AIDocumentsSet uploadedDocuments = AIDocumentsSet.join(this.latestRequestsUploadedDocuments.toAIDocumentsSet(),
+				this.relevantUploadedDocuments.toAIDocumentsSet(0.0f));
+		AIDocumentsSet llmGeneratedDocuments = AIDocumentsSet.join(
+				this.latestRequestsLlmGeneratedDocuments.toAIDocumentsSet(),
+				this.relevantLlmGeneratedDocuments.toAIDocumentsSet(0.0f));
+		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
+				llmGeneratedDocuments, consolidatedInteractions.getConsolidationText(), chatHistory.getInteractions(),
+				currentRequest);
 	}
 
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {

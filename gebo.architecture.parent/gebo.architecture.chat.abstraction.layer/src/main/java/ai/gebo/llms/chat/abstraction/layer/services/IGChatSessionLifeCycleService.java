@@ -1,8 +1,11 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
+
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -34,10 +37,10 @@ public interface IGChatSessionLifeCycleService {
 	public void removeChatSession(GUserChatContext context) throws GeboChatSessionLifecycleException;
 
 	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException, IOException;
 
 	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
+			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException, IOException;
 
 	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
 			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
@@ -60,6 +63,6 @@ public interface IGChatSessionLifeCycleService {
 	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatContext context,
 			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException;
 
-	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel);
+	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
 
 }

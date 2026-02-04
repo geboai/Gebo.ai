@@ -38,7 +38,7 @@ public class BaseOutputChatPipelineService {
 	protected final UserUploadContentServerSideRepository uploadsRepo;
 	protected final LLMGeneratedResourceRepository generatedRepo;
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
-	static private final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
+	protected final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
 
 	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException {

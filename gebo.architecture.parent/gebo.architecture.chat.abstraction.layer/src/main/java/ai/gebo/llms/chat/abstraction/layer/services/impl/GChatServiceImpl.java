@@ -416,9 +416,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				prompt = promptTemplate.create();
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
 						userContext, handler);
-				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getLatestRequestsChatWithDocuments(),
-						fullRequest.getLatestRequestsRetrievedDocuments(),
-						fullRequest.getLatestRequestsUploadedDocuments());
+				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
+						fullRequest.getRetrievedDocuments(),
+						fullRequest.getUploadedDocuments());
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, showedDocuments);

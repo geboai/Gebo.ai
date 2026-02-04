@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -61,6 +62,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -385,7 +387,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
 		responseFlux.doOnComplete(() -> {
-			this.chatSessionLifecycleService.chatRequestCompleted(userContext, configurableChatModel);
+			try {
+				this.chatSessionLifecycleService.chatRequestCompleted(userContext, configurableChatModel);
+			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End composeFlux(....)");
@@ -540,9 +547,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getLatestRequestsChatWithDocuments(),
-				requestResources.getLatestRequestsRetrievedDocuments(),
-				requestResources.getLatestRequestsUploadedDocuments());
+		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
+				requestResources.getRetrievedDocuments(),
+				requestResources.getUploadedDocuments());
 		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
 				response, requestResources.createChatRequestContext(), showedDocuments);
 	}
@@ -557,9 +564,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		final int contextWindow = chatModel.getContextLength();
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getLatestRequestsChatWithDocuments(),
-				requestResources.getLatestRequestsRetrievedDocuments(),
-				requestResources.getLatestRequestsUploadedDocuments());
+		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
+				requestResources.getRetrievedDocuments(),
+				requestResources.getUploadedDocuments());
 		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
 				response, userChatContext, requestResources.createChatRequestContext(), shrink, targetSize,
 				showedDocuments);

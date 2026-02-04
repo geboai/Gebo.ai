@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -78,7 +79,7 @@ public class GChatSessionStateServiceImpl implements IGChatFullSessionStateServi
 	}
 
 	@Override
-	public ChatFullSessionState addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+	public ChatFullSessionState addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context)
 			throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
@@ -92,7 +93,7 @@ public class GChatSessionStateServiceImpl implements IGChatFullSessionStateServi
 	}
 
 	@Override
-	public ChatFullSessionState addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
+	public ChatFullSessionState addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context)
 			throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
@@ -120,7 +121,7 @@ public class GChatSessionStateServiceImpl implements IGChatFullSessionStateServi
 	}
 
 	@Override
-	public ChatFullSessionState addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, GUserChatContext context)
+	public ChatFullSessionState addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, AIDocumentReferenceItem ingested, GUserChatContext context)
 			throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;

@@ -529,9 +529,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getLatestRequestsChatWithDocuments(),
-						fullRequest.getLatestRequestsRetrievedDocuments(),
-						fullRequest.getLatestRequestsUploadedDocuments());
+				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
+						fullRequest.getRetrievedDocuments(),
+						fullRequest.getUploadedDocuments());
 				return streamChatClient(chatHandler, prompt, context, request, response, userContext,
 						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3,
 						showedDocuments);

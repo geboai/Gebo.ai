@@ -27,27 +27,22 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 	int targetTokenBudget = 0;
 	private TokensContainer<GeboChatRequest> currentRequest = new TokensContainer<GeboChatRequest>();
 	private TokensContainer<CSSSimplifiedChatHistory> chatHistory = new TokensContainer<CSSSimplifiedChatHistory>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> historicallyRetrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<UserUploadedContent>> historicallyUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
-	private TokensContainer<CSSReferredContentList<UserUploadedContent>> latestRequestsUploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> latestRequestsChatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> latestRequestsRetrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
+	private TokensContainer<CSSReferredContentList<UserUploadedContent>> uploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> chatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReference>> retrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
 	private TokensContainer<CSSReferredContentList<LLMGeneratedResource>> llmGeneratedDocuments = new TokensContainer<CSSReferredContentList<LLMGeneratedResource>>();
 
 	public ChatFullSessionState() {
 		getChatHistory().setValue(new CSSSimplifiedChatHistory());
-		getHistoricallyRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
-		getHistoricallyUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContent>());
 		getLlmGeneratedDocuments().setValue(new CSSReferredContentList<LLMGeneratedResource>());
-		getLatestRequestsChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
-		getLatestRequestsUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContent>());
-		getLatestRequestsRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
+		getChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
+		getUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContent>());
+		getRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
 	}
 
 	public int getTokensSize() {
-		return ITokensCountable.tokensSize(chatHistory, historicallyRetrievedDocuments, historicallyUploadedDocuments,
-				latestRequestsUploadedDocuments, latestRequestsChatWithDocuments, llmGeneratedDocuments,
-				latestRequestsRetrievedDocuments, currentRequest);
+		return ITokensCountable.tokensSize(chatHistory, uploadedDocuments, chatWithDocuments, llmGeneratedDocuments,
+				retrievedDocuments, currentRequest);
 	}
 
 	private static AIDocumentsSet toDocsSet(TokensContainer<? extends CSSReferredContentList> container) {
@@ -59,11 +54,9 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 
 	@Override
 	public LLMChatRequestResources createChatRequestResources() {
-		return new LLMChatRequestResources(toDocsSet(latestRequestsChatWithDocuments),
-				toDocsSet(latestRequestsRetrievedDocuments), toDocsSet(latestRequestsUploadedDocuments),
-				toDocsSet(historicallyRetrievedDocuments), toDocsSet(historicallyUploadedDocuments),
-				toDocsSet(llmGeneratedDocuments), null, chatHistory.getValue().getInteractions(),
-				currentRequest.getValue());
+		return new LLMChatRequestResources(toDocsSet(chatWithDocuments), toDocsSet(retrievedDocuments),
+				toDocsSet(uploadedDocuments), toDocsSet(llmGeneratedDocuments), null,
+				chatHistory.getValue().getInteractions(), currentRequest.getValue());
 	}
 
 }

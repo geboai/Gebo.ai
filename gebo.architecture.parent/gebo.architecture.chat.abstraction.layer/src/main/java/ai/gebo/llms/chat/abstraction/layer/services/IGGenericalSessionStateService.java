@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -40,13 +41,13 @@ public interface IGGenericalSessionStateService<SessionType extends IChatRequest
 	public SessionType addRequestToState(GeboChatRequest request, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+	public SessionType addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
 	public SessionType removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
+	public SessionType addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
 	public SessionType removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
@@ -58,7 +59,7 @@ public interface IGGenericalSessionStateService<SessionType extends IChatRequest
 	public SessionType removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, GUserChatContext context)
+	public SessionType addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, AIDocumentReferenceItem ingested, GUserChatContext context)
 			throws GeboChatSessionLifecycleException;
 
 	public SessionType addInteractionToState(GeboChatRequest request, GeboChatResponse response,

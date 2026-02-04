@@ -27,17 +27,12 @@ import lombok.NoArgsConstructor;
 public class LLMChatRequestResources implements ITokensCountable {
 	// documents that are inherently choosed to chat with from the user or in the
 	// last not consolidated turns
-	private AIDocumentsSet latestRequestsChatWithDocuments = null;
+	private AIDocumentsSet chatWithDocuments = null;
 	// retrieved documents in the last request
-	private AIDocumentsSet latestRequestsRetrievedDocuments = null;
+	private AIDocumentsSet retrievedDocuments = null;
 	// documents specifically uploaded from the user in the last not consolidated
 	// turns
-	private AIDocumentsSet latestRequestsUploadedDocuments = null;
-	// Rag retrieved contents storically or in the current request
-	private AIDocumentsSet historicallyRetrievedDocuments = null;
-	// Uploaded historical contents
-	private AIDocumentsSet historicallyUploadedDocuments = null;
-	// LLM Generated artifacts/documents
+	private AIDocumentsSet uploadedDocuments = null;
 	private AIDocumentsSet llmGeneratedDocuments = null;
 	private String chatConsolidation = null;
 	private List<CSSSimplefiedInteraction> lastInteractions = null;
@@ -63,9 +58,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 	@Override
 	public int getTokensSize() {
 		int size = 0;
-		size += ITokensCountable.tokensSize(historicallyRetrievedDocuments, historicallyUploadedDocuments,
-				llmGeneratedDocuments, latestRequestsChatWithDocuments, latestRequestsUploadedDocuments,
-				latestRequestsRetrievedDocuments, lastRequest);
+		size += ITokensCountable.tokensSize(llmGeneratedDocuments, chatWithDocuments, uploadedDocuments,
+				retrievedDocuments, lastRequest);
 		size += ITokensCountable.tokensSize(lastInteractions);
 		return size;
 	}
@@ -113,8 +107,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	public AIDocumentsSet allDocuments() {
-		return AIDocumentsSet.join(latestRequestsChatWithDocuments, latestRequestsRetrievedDocuments, latestRequestsUploadedDocuments,
-				historicallyRetrievedDocuments, historicallyUploadedDocuments, llmGeneratedDocuments);
+		return AIDocumentsSet.join(chatWithDocuments, retrievedDocuments, uploadedDocuments, llmGeneratedDocuments);
 	}
 
 	public AIDocumentReferenceItem findAIDocumentReferenceByCode(String docId) {
@@ -142,8 +135,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	public void removeAIDocumentReferenceByCode(String docId) {
-		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, latestRequestsChatWithDocuments, latestRequestsRetrievedDocuments,
-				latestRequestsUploadedDocuments, historicallyRetrievedDocuments, historicallyUploadedDocuments,
-				llmGeneratedDocuments);
+		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, chatWithDocuments, retrievedDocuments, uploadedDocuments,
+				 llmGeneratedDocuments);
 	}
 }

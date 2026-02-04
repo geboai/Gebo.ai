@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -59,7 +60,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException {
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
 		List<String> aiChoosedDataSources = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedDeepSearchDataSources(runtimeData);
@@ -69,7 +71,11 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {
-				this.chatSessionLifecycleService.chatRequestCompleted(runtimeData.getUserChatContext(), chatModel);
+				try {
+					this.chatSessionLifecycleService.chatRequestCompleted(runtimeData.getUserChatContext(), chatModel);
+				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
+					LOGGER.error("Exceptinin deep search streaming pipeline handler", e);
+				}
 			});
 			mapped.subscribeOn(threadManager.getScheduler());
 			return mapped;

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -56,7 +57,7 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 	}
 
 	@Override
-	public ShrinkedChatSessionState addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context) throws GeboChatSessionLifecycleException {
+	public ShrinkedChatSessionState addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -68,7 +69,7 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 	}
 
 	@Override
-	public ShrinkedChatSessionState addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context) throws GeboChatSessionLifecycleException {
+	public ShrinkedChatSessionState addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -94,7 +95,7 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 
 	@Override
 	public ShrinkedChatSessionState addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			GUserChatContext context) throws GeboChatSessionLifecycleException {
+			AIDocumentReferenceItem ingested, GUserChatContext context) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
