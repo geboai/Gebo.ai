@@ -37,6 +37,7 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	@NotNull
 	private GeboChatRequest currentRequest = null;
 	private int targetTokenBudget = 0;
+	private boolean toBeShrinked = false;
 
 	@Override
 	public int getTokensSize() {

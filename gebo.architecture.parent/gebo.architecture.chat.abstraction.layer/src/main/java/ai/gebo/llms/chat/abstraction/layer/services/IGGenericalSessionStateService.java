@@ -4,8 +4,14 @@ import java.io.IOException;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.session.IChatRequestFactory;
 import ai.gebo.system.ingestion.GeboIngestionException;
@@ -21,7 +27,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
  * @param <SessionType>
  */
 public interface IGGenericalSessionStateService<SessionType extends IChatRequestFactory> {
-	public default SessionType retrieveState(GUserChatContext context, int targetTokenBudget) {
+	public default SessionType retrieveState(GUserChatContext context) {
 		return retrieveState(context.getCode());
 	}
 
@@ -31,10 +37,30 @@ public interface IGGenericalSessionStateService<SessionType extends IChatRequest
 
 	public SessionType save(SessionType data);
 
-	public SessionType addRequestToState(GeboChatRequest request, GUserChatContext context, int targetTokenBudget)
-			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException;
+	public SessionType addRequestToState(GeboChatRequest request, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
+
+	public SessionType addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, GUserChatContext context)
+			throws GeboChatSessionLifecycleException;
 
 	public SessionType addInteractionToState(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context, int targetTokenBudget)
-			throws IOException, GeboPersistenceException, GeboContentHandlerSystemException, GeboIngestionException;
+			GUserChatContext context) throws GeboChatSessionLifecycleException;
 }
