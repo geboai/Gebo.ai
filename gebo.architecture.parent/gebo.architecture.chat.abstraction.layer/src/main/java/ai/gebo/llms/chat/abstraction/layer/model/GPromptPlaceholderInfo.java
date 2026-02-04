@@ -1,13 +1,10 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
 import ai.gebo.model.base.GBaseObject;
+import lombok.Data;
 
-public class GPromptPlaceholderInfo extends GBaseObject {
-
-	public GPromptPlaceholderInfo() {
-		
-	}
-
-	
+@Data
+public class GPromptPlaceholderInfo {
+	private String placeholder = null, description = null;
 
 }

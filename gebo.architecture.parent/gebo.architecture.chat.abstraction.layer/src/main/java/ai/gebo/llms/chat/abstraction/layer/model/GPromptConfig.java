@@ -33,10 +33,6 @@ public class GPromptConfig implements Cloneable {
 	public static final String DEFAULT_LANGUAGE = "en";
 	private static final String SEPARATOR = "-";
 	private static final String FIELD_PLACEHOLDER = "-|-";
-	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
-	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
-
-	public static final String PROMPT_USE_DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-chat-pipeline-routing-decision-prompt";
 	@Id
 	private String code = null;
 	private String description = null;
