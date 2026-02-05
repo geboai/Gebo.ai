@@ -163,14 +163,18 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	private boolean removeProgressively(ShrinkedChatSessionState shrinked,
 			CSSReferredContentList<?> cssReferredContentList, int budget) {
-		// TODO Auto-generated method stub
-		return false;
+		do {
+			cssReferredContentList.remove(cssReferredContentList.size() - 1);
+		} while (!cssReferredContentList.isEmpty() && budget > shrinked.getTokensSize());
+		return budget > shrinked.getTokensSize();
 	}
 
 	private boolean removeProgressively(ShrinkedChatSessionState shrinked,
 			CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments, int budget) {
-		// TODO Auto-generated method stub
-		return false;
+		do {
+			relevantRetrievedDocuments.remove(relevantRetrievedDocuments.size() - 1);
+		} while (!relevantRetrievedDocuments.isEmpty() && budget > shrinked.getTokensSize());
+		return budget > shrinked.getTokensSize();
 	}
 
 	private int getTokensBudget(IGConfigurableChatModel targetChatModel) {

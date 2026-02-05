@@ -72,35 +72,60 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			throw new LLMConfigException("No Internal services or default chat model present");
 		out.setConsolidatedInteractions(
 				consolidateHistory(fullSessionState.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
-		out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(fullSessionState.getChatWithDocuments()),
+		out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(out, fullSessionState.getChatWithDocuments()),
 				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
 				usedChatModel));
-		out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(fullSessionState.getRetrievedDocuments()),
+		out.setRelevantRetrievedDocuments(
+				shrinkDocumentList(untillLatest(out, fullSessionState.getRetrievedDocuments()),
+						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
+						usedChatModel));
+		out.setRelevantLlmGeneratedDocuments(
+				shrinkDocumentList(untillLatest(out, fullSessionState.getLlmGeneratedDocuments()),
+						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
+						usedChatModel));
+		out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(out, fullSessionState.getUploadedDocuments()),
 				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
 				usedChatModel));
-		out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(
-				untillLatest(fullSessionState.getLlmGeneratedDocuments()), fullSessionState.getChatHistory().getValue(),
-				out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
-		out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(fullSessionState.getUploadedDocuments()),
-				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-				usedChatModel));
-		out.setLatestRequestsChatWithDocuments(afterLatest(fullSessionState.getChatWithDocuments()));
-		out.setLatestRequestsLlmGeneratedDocuments(afterLatest(fullSessionState.getLlmGeneratedDocuments()));
-		out.setLatestRequestsRetrievedDocuments(afterLatest(fullSessionState.getRetrievedDocuments()));
-		out.setLatestRequestsUploadedDocuments(afterLatest(fullSessionState.getUploadedDocuments()));
+		out.setLatestRequestsChatWithDocuments(afterLatest(out, fullSessionState.getChatWithDocuments()));
+		out.setLatestRequestsLlmGeneratedDocuments(afterLatest(out, fullSessionState.getLlmGeneratedDocuments()));
+		out.setLatestRequestsRetrievedDocuments(afterLatest(out, fullSessionState.getRetrievedDocuments()));
+		out.setLatestRequestsUploadedDocuments(afterLatest(out, fullSessionState.getUploadedDocuments()));
 		shrinkedStateRepository.save(out);
 
 	}
 
-	private CSSReferredContentList afterLatest(TokensContainer<? extends CSSReferredContentList> chatWithDocuments) {
-		// TODO Auto-generated method stub
-		return null;
+	private CSSReferredContentList afterLatest(ShrinkedChatSessionState out,
+			TokensContainer<? extends CSSReferredContentList> data) {
+		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
+				.getLeaveLastInteractionsOnHistoryConsolidation();
+		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+		CSSReferredContentList in = data.getValue();
+		final CSSReferredContentList bag = new CSSReferredContentList();
+		for (int index = 0; index < in.size(); index++) {
+			CSSInteractionReferredContent entry = (CSSInteractionReferredContent) in.get(index);
+			if (entry.getInteractionIndex() >= lastIndex) {
+				bag.add(entry);
+			}
+		}
+		return bag;
 	}
 
-	private TokensContainer<? extends CSSReferredContentList> untillLatest(
-			TokensContainer<? extends CSSReferredContentList> chatWithDocuments) {
-		// TODO Auto-generated method stub
-		return null;
+	private TokensContainer<? extends CSSReferredContentList> untillLatest(ShrinkedChatSessionState out,
+			TokensContainer<? extends CSSReferredContentList> data) {
+		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
+				.getLeaveLastInteractionsOnHistoryConsolidation();
+		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+		CSSReferredContentList in = data.getValue();
+		final CSSReferredContentList bag = new CSSReferredContentList();
+		for (int index = 0; index < in.size(); index++) {
+			CSSInteractionReferredContent entry = (CSSInteractionReferredContent) in.get(index);
+			if (entry.getInteractionIndex() < lastIndex) {
+				bag.add(entry);
+			}
+		}
+		TokensContainer<CSSReferredContentList> _out = new TokensContainer<CSSReferredContentList>();
+		_out.setValue(bag);
+		return _out;
 	}
 
 	@Data
