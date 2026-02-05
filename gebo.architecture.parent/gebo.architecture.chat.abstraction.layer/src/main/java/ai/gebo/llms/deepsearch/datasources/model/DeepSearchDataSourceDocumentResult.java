@@ -3,11 +3,9 @@ package ai.gebo.llms.deepsearch.datasources.model;
 import java.util.UUID;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.data.mongodb.core.index.HashIndexed;
 
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.llms.deepsearch.model.BaseDeepSearchDocumentAnalisysResult;
-import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

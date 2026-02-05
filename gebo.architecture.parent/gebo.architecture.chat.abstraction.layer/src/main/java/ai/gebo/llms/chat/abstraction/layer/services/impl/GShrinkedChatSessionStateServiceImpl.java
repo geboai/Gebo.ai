@@ -1,16 +1,11 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
-import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
@@ -26,7 +21,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionStat
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
-import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
 @Component

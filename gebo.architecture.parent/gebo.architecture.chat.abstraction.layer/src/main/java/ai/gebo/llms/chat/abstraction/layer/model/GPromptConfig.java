@@ -9,17 +9,11 @@
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
-import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.model.base.GBaseObject;
-import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.ToString;
 
 /**

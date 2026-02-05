@@ -1,7 +1,5 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.io.IOException;
 import java.util.List;
 

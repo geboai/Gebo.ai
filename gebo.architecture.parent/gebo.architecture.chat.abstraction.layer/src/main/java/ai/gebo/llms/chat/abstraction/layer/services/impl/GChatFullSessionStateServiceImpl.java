@@ -1,15 +1,13 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
-import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
@@ -28,10 +26,10 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateReposi
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
-import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
-@Service
+@Component
+@Scope("singleton")
 @AllArgsConstructor
 public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateService {
 	private final IGChatStorageAreaService storageAreaService;

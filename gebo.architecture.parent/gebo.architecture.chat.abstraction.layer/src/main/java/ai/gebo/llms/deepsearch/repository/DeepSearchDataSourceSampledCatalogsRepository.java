@@ -4,7 +4,6 @@ import java.util.List;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceSampledCatalogs;
-import jakarta.validation.constraints.NotNull;
 
 public interface DeepSearchDataSourceSampledCatalogsRepository
 		extends IGBaseMongoDBRepository<DeepSearchDataSourceSampledCatalogs> {

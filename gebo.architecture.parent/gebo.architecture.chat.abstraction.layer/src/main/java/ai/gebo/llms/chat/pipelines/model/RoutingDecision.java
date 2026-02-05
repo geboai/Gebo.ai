@@ -2,7 +2,6 @@ package ai.gebo.llms.chat.pipelines.model;
 
 import java.util.List;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

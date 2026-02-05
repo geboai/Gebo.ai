@@ -13,7 +13,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
-import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

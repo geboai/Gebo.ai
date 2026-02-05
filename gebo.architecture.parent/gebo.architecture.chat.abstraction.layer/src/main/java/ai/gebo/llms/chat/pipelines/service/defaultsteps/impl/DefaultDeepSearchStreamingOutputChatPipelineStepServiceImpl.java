@@ -23,7 +23,6 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
-import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
 @Component

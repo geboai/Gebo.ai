@@ -1,6 +1,5 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
-import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
 @Data
