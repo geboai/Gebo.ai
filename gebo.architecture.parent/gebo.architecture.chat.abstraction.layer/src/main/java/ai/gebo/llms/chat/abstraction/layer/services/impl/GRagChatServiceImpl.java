@@ -44,6 +44,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -204,10 +205,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setDocumentsRef(docrefs);
 
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler, policy);
+						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
 					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler, policy);
+							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				}
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
@@ -437,7 +438,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				userContext.setRagChat(true);
 				userContext.setChatCreationDateTime(new Date());
 				userContext.setUsername(currentUserName);
-				
+
 				userContext = persistenceManager.insert(userContext);
 			} else {
 				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
@@ -467,7 +468,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 */
 	private Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request, GChatProfileConfiguration chatProfile,
 			GUserChatContext userContext, UserInfos user) throws LLMConfigException {
-		
+
 		// Set up chat environment and models
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
 
@@ -522,16 +523,15 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setDocumentsRef(docrefs);
 
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler, policy);
+						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
 					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler, policy);
+							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
-						fullRequest.getRetrievedDocuments(),
-						fullRequest.getUploadedDocuments());
+						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 				return streamChatClient(chatHandler, prompt, context, request, response, userContext,
 						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3,
 						showedDocuments);

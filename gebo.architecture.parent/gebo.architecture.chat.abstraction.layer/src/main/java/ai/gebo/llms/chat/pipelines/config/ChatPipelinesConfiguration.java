@@ -16,6 +16,10 @@ import lombok.Data;
 @Data
 public class ChatPipelinesConfiguration {
 	public static final String DEFAULT_PIPELINE = "default-pipeline";
+	private Double fixedDocumentsRequestRoutesDeepSearchTreasholdContextWindowCoeff = 0.5;
+	private Integer fixedDocumentsRequestRoutesDeepSearchTokenThreashold = null;
+	private Integer warnUploadedFileSizeTokenBudget = 150000;
+	private Integer maximumUploadedFileSizeTokenBudget = 500000;
 
 	public ChatPipelinesConfiguration() {
 		ChatPipelineConfiguration defaultPipeline = new ChatPipelineConfiguration();
