@@ -38,30 +38,30 @@ public interface IGGenericalSessionStateService<SessionType extends IChatRequest
 
 	public SessionType save(SessionType data);
 
-	public SessionType addRequestToState(GeboChatRequest request, GUserChatContext context)
+	public SessionType addRequestToState(SessionType session, GeboChatRequest request, int index)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context)
+	public SessionType addUploadedDocumentToState(SessionType session, UserUploadedContent content, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+	public SessionType removeUploadedDocumentToState(SessionType session, UserUploadedContent content)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context)
+	public SessionType addChatWithDocumentToState(SessionType session, GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, int index)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
+	public SessionType removeChatWithDocumentToState(SessionType session, GDocumentReference reference)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
+	public SessionType addRetrievedDocumentsToState(SessionType session, AIDocumentsSet retrieved, int index)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
+	public SessionType removeRetrievedDocumentsToState(SessionType session, AIDocumentsSet retrieved)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, AIDocumentReferenceItem ingested, GUserChatContext context)
+	public SessionType addLLMGeneratedDocumntsToState(SessionType session, LLMGeneratedResource resource, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException;
 
-	public SessionType addInteractionToState(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context) throws GeboChatSessionLifecycleException;
+	public SessionType addInteractionToState(SessionType session, GeboChatRequest request,
+			GeboChatResponse response, int index) throws GeboChatSessionLifecycleException;
 }

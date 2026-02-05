@@ -1,103 +1,152 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
+import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import lombok.AllArgsConstructor;
 
+@Component
+@Scope("singleton")
+@AllArgsConstructor
 public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessionStateService {
-
-	public GShrinkedChatSessionStateServiceImpl() {
-		// TODO Auto-generated constructor stub
-	}
+	private final ShrinkedChatSessionStateRepository repo;
+	private final DocumentReferenceRepository docRepo;
 
 	@Override
 	public ShrinkedChatSessionState retrieveState(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<ShrinkedChatSessionState> op = repo.findById(id);
+		return op.isPresent() ? op.get() : null;
 	}
 
 	@Override
 	public void deleteState(String id) {
-		// TODO Auto-generated method stub
-
+		repo.deleteById(id);
 	}
 
 	@Override
-	public ShrinkedChatSessionState addRequestToState(GeboChatRequest request, GUserChatContext context)
-			 {
-		// TODO Auto-generated method stub
-		return null;
+	public ShrinkedChatSessionState addRequestToState(ShrinkedChatSessionState session, GeboChatRequest request,
+			int index) {
+		session.setCurrentRequest(request);
+		return session;
 	}
 
 	@Override
-	public ShrinkedChatSessionState addInteractionToState(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context)
-			{
-		// TODO Auto-generated method stub
-		return null;
+	public ShrinkedChatSessionState addInteractionToState(ShrinkedChatSessionState session, GeboChatRequest request,
+			GeboChatResponse response, int index) {
+		session.setCurrentRequest(null);
+		List<CSSSimplefiedInteraction> interactions = session.getChatHistory().getInteractions();
+		CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction();
+		interaction.setUser(request.getQuery());
+		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
+		interaction.setUserTokenSize(length);
+		interaction.setAssistant(response.getQueryResponse());
+		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
+		interaction.setAssistantTokenSize(length);
+		interactions.add(interaction);
+		return session;
 	}
 
 	@Override
 	public ShrinkedChatSessionState save(ShrinkedChatSessionState data) {
+
+		return repo.save(data);
+	}
+
+	@Override
+	public ShrinkedChatSessionState addUploadedDocumentToState(ShrinkedChatSessionState session,
+			UserUploadedContent content, AIDocumentReferenceItem ingested, int index)
+			throws GeboChatSessionLifecycleException {
+		CSSInteractionReferredContent<UserUploadedContent> contentBag = new CSSInteractionReferredContent<UserUploadedContent>();
+		contentBag.setContentObject(content);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getLatestRequestsUploadedDocuments().add(contentBag);
+		return session;
+	}
+
+	@Override
+	public ShrinkedChatSessionState removeUploadedDocumentToState(ShrinkedChatSessionState session,
+			UserUploadedContent content) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ShrinkedChatSessionState addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context) throws GeboChatSessionLifecycleException {
+	public ShrinkedChatSessionState addChatWithDocumentToState(ShrinkedChatSessionState session,
+			GDocumentReference reference, AIDocumentReferenceItem ingested, int index)
+			throws GeboChatSessionLifecycleException {
+		CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
+		contentBag.setContentObject(reference);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getLatestRequestsChatWithDocuments().add(contentBag);
+		return session;
+	}
+
+	@Override
+	public ShrinkedChatSessionState removeChatWithDocumentToState(ShrinkedChatSessionState session,
+			GDocumentReference reference) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ShrinkedChatSessionState removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context) throws GeboChatSessionLifecycleException {
+	public ShrinkedChatSessionState addRetrievedDocumentsToState(ShrinkedChatSessionState session,
+			AIDocumentsSet retrieved, int index) throws GeboChatSessionLifecycleException {
+		for (AIDocumentReferenceItem doc : retrieved.getDocumentItems()) {
+			Optional<GDocumentReference> dr = this.docRepo.findById(doc.getCode());
+			if (dr.isPresent()) {
+				CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
+				contentBag.setContentObject(dr.get());
+				contentBag.setData(doc);
+				contentBag.setInteractionIndex(index);
+				session.getLatestRequestsRetrievedDocuments().add(contentBag);
+			}
+		}
+		return session;
+	}
+
+	@Override
+	public ShrinkedChatSessionState removeRetrievedDocumentsToState(ShrinkedChatSessionState session,
+			AIDocumentsSet retrieved) throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ShrinkedChatSessionState addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context) throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ShrinkedChatSessionState removeChatWithDocumentToState(GDocumentReference reference,
-			GUserChatContext context) throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ShrinkedChatSessionState addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context) throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ShrinkedChatSessionState removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context) throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ShrinkedChatSessionState addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			AIDocumentReferenceItem ingested, GUserChatContext context) throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
+	public ShrinkedChatSessionState addLLMGeneratedDocumntsToState(ShrinkedChatSessionState session,
+			LLMGeneratedResource resource, AIDocumentReferenceItem ingested, int index)
+			throws GeboChatSessionLifecycleException {
+		CSSInteractionReferredContent<LLMGeneratedResource> contentBag = new CSSInteractionReferredContent<LLMGeneratedResource>();
+		contentBag.setContentObject(resource);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getLatestRequestsLlmGeneratedDocuments().add(contentBag);
+		return session;
 	}
 
 }

@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -19,7 +21,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
+import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -31,21 +34,20 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateService {
-	final IGChatStorageAreaService storageAreaService;
-	final DocumentReferenceRepository documentsRepository;
-	final AIDocumentsCacheService documentsCacheService;
-	final ChatFullSessionStateRepository sessionRepo;
-	final GeboChatConfigs chatConfig;
-	final static Logger LOGGER = LoggerFactory.getLogger(GChatFullSessionStateServiceImpl.class);
+	private final IGChatStorageAreaService storageAreaService;
+	private final DocumentReferenceRepository documentsRepository;
+	private final AIDocumentsCacheService documentsCacheService;
+	private final ChatFullSessionStateRepository sessionRepo;
+	private final DocumentReferenceRepository docRepo;
+	private final GeboChatConfigs chatConfig;
+	private final static Logger LOGGER = LoggerFactory.getLogger(GChatFullSessionStateServiceImpl.class);
 
 	@Override
-	public ChatFullSessionState addRequestToState(GeboChatRequest request, GUserChatContext context) {
-		ChatFullSessionState outState = retrieveState(context.getCode());
-		if (outState.getCurrentRequest() == null || outState.getCurrentRequest().getValue() == null) {
-			outState.getCurrentRequest().setValue(request);
-			sessionRepo.save(outState);
-		}
-		return outState;
+	public ChatFullSessionState addRequestToState(ChatFullSessionState session, GeboChatRequest request, int index) {
+
+		session.getCurrentRequest().setValue(request);
+
+		return session;
 	}
 
 	@Override
@@ -66,67 +68,96 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 	}
 
 	@Override
-	public ChatFullSessionState addInteractionToState(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context) {
-		ChatFullSessionState state = retrieveState(context);
-		
-		
-		return null;
+	public ChatFullSessionState addInteractionToState(ChatFullSessionState session, GeboChatRequest request,
+			GeboChatResponse response, int index) {
+		session.setCurrentRequest(null);
+		List<CSSSimplefiedInteraction> interactions = session.getChatHistory().getValue().getInteractions();
+		CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction();
+		interaction.setUser(request.getQuery());
+		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
+		interaction.setUserTokenSize(length);
+		interaction.setAssistant(response.getQueryResponse());
+		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
+		interaction.setAssistantTokenSize(length);
+		interactions.add(interaction);
+		return session;
+
 	}
 
 	@Override
 	public ChatFullSessionState save(ChatFullSessionState data) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.sessionRepo.save(data);
 	}
 
 	@Override
-	public ChatFullSessionState addUploadedDocumentToState(UserUploadedContent content, AIDocumentReferenceItem ingested, GUserChatContext context)
+	public ChatFullSessionState addUploadedDocumentToState(ChatFullSessionState session, UserUploadedContent content,
+			AIDocumentReferenceItem ingested, int index) throws GeboChatSessionLifecycleException {
+		CSSInteractionReferredContent<UserUploadedContent> contentBag = new CSSInteractionReferredContent<UserUploadedContent>();
+		contentBag.setContentObject(content);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getUploadedDocuments().getValue().add(contentBag);
+		return session;
+	}
+
+	@Override
+	public ChatFullSessionState removeUploadedDocumentToState(ChatFullSessionState session, UserUploadedContent content)
 			throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ChatFullSessionState removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context)
+	public ChatFullSessionState addChatWithDocumentToState(ChatFullSessionState session, GDocumentReference reference,
+			AIDocumentReferenceItem ingested, int index) throws GeboChatSessionLifecycleException {
+		CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
+		contentBag.setContentObject(reference);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getChatWithDocuments().getValue().add(contentBag);
+		return session;
+	}
+
+	@Override
+	public ChatFullSessionState removeChatWithDocumentToState(ChatFullSessionState session,
+			GDocumentReference reference) throws GeboChatSessionLifecycleException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ChatFullSessionState addRetrievedDocumentsToState(ChatFullSessionState session, AIDocumentsSet retrieved,
+			int index) throws GeboChatSessionLifecycleException {
+		for (AIDocumentReferenceItem doc : retrieved.getDocumentItems()) {
+			Optional<GDocumentReference> dr = this.docRepo.findById(doc.getCode());
+			if (dr.isPresent()) {
+				CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
+				contentBag.setContentObject(dr.get());
+				contentBag.setData(doc);
+				contentBag.setInteractionIndex(index);
+				session.getRetrievedDocuments().getValue().add(contentBag);
+			}
+		}
+		return session;
+	}
+
+	@Override
+	public ChatFullSessionState removeRetrievedDocumentsToState(ChatFullSessionState session, AIDocumentsSet retrieved)
 			throws GeboChatSessionLifecycleException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ChatFullSessionState addChatWithDocumentToState(GDocumentReference reference, AIDocumentReferenceItem ingestedDocument, GUserChatContext context)
+	public ChatFullSessionState addLLMGeneratedDocumntsToState(ChatFullSessionState session,
+			LLMGeneratedResource resource, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ChatFullSessionState removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context)
-			throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ChatFullSessionState addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
-			throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ChatFullSessionState removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context)
-			throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ChatFullSessionState addLLMGeneratedDocumntsToState(LLMGeneratedResource resource, AIDocumentReferenceItem ingested, GUserChatContext context)
-			throws GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
+		CSSInteractionReferredContent<LLMGeneratedResource> contentBag = new CSSInteractionReferredContent<LLMGeneratedResource>();
+		contentBag.setContentObject(resource);
+		contentBag.setData(ingested);
+		contentBag.setInteractionIndex(index);
+		session.getLlmGeneratedDocuments().getValue().add(contentBag);
+		return session;
 	}
 
 }
