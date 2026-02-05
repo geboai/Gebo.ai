@@ -204,10 +204,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setDocumentsRef(docrefs);
 
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler);
+						userContext, chatHandler, policy);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
 					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler);
+							userContext, chatHandler, policy);
 				}
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
@@ -522,10 +522,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setDocumentsRef(docrefs);
 
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler);
+						userContext, chatHandler, policy);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
 					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler);
+							userContext, chatHandler, policy);
 				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();

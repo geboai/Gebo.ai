@@ -112,7 +112,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 
 				RoutingDecisionResponse llmRoutingDecision = null;
 				String query = runtimeData.getRequestResources().getLastRequest().getQuery();
-
+				//TODO: PUT HERE A SHORTCUT TO GO ON DEEP SEARCH WITH ONLY REQUEST RESOURCES WHEN CHAT WITH OR UPLOADED RESOURCES
+				//ARE EXCEEDING THE TOKENS BUDGET 
+				
 				String latestInteractions = RoutingPromptUtil
 						.latestInteractionsPromptPart(runtimeData.getRequestResources().getLastInteractions());
 				GPromptConfig rewritePrompt = promptsDao

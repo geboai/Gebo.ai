@@ -11,6 +11,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import jakarta.validation.constraints.NotNull;
@@ -49,7 +50,7 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	}
 
 	@Override
-	public LLMChatRequestResources createChatRequestResources() {
+	public LLMChatRequestResources createChatRequestResources(LLMRequestGenerationPolicy pol) {
 		AIDocumentsSet chatWithDocuments = AIDocumentsSet.join(this.latestRequestsChatWithDocuments.toAIDocumentsSet(),
 				this.relevantChatWithDocuments.toAIDocumentsSet(0.0f));
 		AIDocumentsSet retrievedDocuments = AIDocumentsSet.join(
@@ -62,7 +63,7 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 				this.relevantLlmGeneratedDocuments.toAIDocumentsSet(0.0f));
 		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
 				llmGeneratedDocuments, consolidatedInteractions.getConsolidationText(), chatHistory.getInteractions(),
-				currentRequest);
+				currentRequest, pol);
 	}
 
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {

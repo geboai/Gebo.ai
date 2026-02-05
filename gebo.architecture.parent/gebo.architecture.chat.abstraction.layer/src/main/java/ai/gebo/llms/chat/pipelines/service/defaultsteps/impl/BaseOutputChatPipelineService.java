@@ -18,6 +18,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
@@ -39,7 +40,7 @@ public class BaseOutputChatPipelineService {
 	protected final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
 
 	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException {
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException {
 		List<String> docsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedSelectedDocuments(runtimeData);
 		LLMChatRequestResources rc = runtimeData.getRequestResources();
 		if (docsList != null && !docsList.isEmpty()) {
@@ -98,7 +99,7 @@ public class BaseOutputChatPipelineService {
 				}
 			}
 			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(out, runtimeData.getUserChatContext(),
-					targetChatModel);
+					targetChatModel, policy);
 		}
 		return rc;
 	}

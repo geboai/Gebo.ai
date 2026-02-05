@@ -34,7 +34,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 	private String chatConsolidation = null;
 	private List<CSSSimplefiedInteraction> lastInteractions = null;
 	private GeboChatRequest lastRequest = null;
-
+	private LLMRequestGenerationPolicy generationPolicy;
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
 		CSSSimplefiedInteraction interaction = null;

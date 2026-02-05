@@ -14,6 +14,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
@@ -69,12 +70,14 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GeboChatResponse response,
 			GUserChatContext context, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String pipelineCode, boolean streaming) throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+			String pipelineCode, boolean streaming)
+			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
 		LLMChatRequestResources resources = null;
-		resources = this.chatSessionLifecycleService.addRequestToState(request, context, chatModel);
+		resources = this.chatSessionLifecycleService.addRequestToState(request, context, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 
 		GChatProfileConfiguration chatProfile = null;
 		if (context.getChatProfileCode() != null) {

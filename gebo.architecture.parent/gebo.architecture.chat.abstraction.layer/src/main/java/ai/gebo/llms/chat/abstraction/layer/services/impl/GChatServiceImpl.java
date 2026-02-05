@@ -44,6 +44,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
@@ -138,7 +139,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			prompt = promptTemplate.create();
 
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request, userContext,
-					handler);
+					handler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 			gresponse = callTemplatedChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
 					responseType);
@@ -247,10 +248,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				modelCode = userContext.getChatModelCode();
 				handler = chatModelConfigurations.findByCode(modelCode);
 			}
-			if (handler==null) {
-				handler=chatModelConfigurations.defaultHandler();
+			if (handler == null) {
+				handler = chatModelConfigurations.defaultHandler();
 			}
-			this.chatSessionLifecycleService.ensureChatSessionExists(userContext, handler);	
+			this.chatSessionLifecycleService.ensureChatSessionExists(userContext, handler);
 			// Process chat interaction
 			GeboTemplatedChatResponse<T> response = chat(handler, userContext, request, responseType);
 			response.getBackendMessages().add(GUserMessage.successMessage("OK!", "Chat system running correctly"));
@@ -415,10 +416,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				promptTemplate = new PromptTemplate(promptTemplateText);
 				prompt = promptTemplate.create();
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, handler);
+						userContext, handler,  LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
-						fullRequest.getRetrievedDocuments(),
-						fullRequest.getUploadedDocuments());
+						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, showedDocuments);

@@ -9,6 +9,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import lombok.Data;
@@ -51,10 +52,10 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 	}
 
 	@Override
-	public LLMChatRequestResources createChatRequestResources() {
+	public LLMChatRequestResources createChatRequestResources(LLMRequestGenerationPolicy pol) {
 		return new LLMChatRequestResources(toDocsSet(chatWithDocuments), toDocsSet(retrievedDocuments),
 				toDocsSet(uploadedDocuments), toDocsSet(llmGeneratedDocuments), null,
-				chatHistory.getValue().getInteractions(), currentRequest.getValue());
+				chatHistory.getValue().getInteractions(), currentRequest.getValue(), pol);
 	}
 
 }

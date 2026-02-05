@@ -7,6 +7,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -46,7 +47,8 @@ public class DefaultOutputChatPipelineServiceImpl extends BaseOutputChatPipeline
 	@Override
 	public GeboChatResponse execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources requestResources = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
+		LLMChatRequestResources requestResources = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		return null;
 	}
 

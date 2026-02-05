@@ -55,6 +55,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
@@ -376,7 +377,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					freshCopy = persistenceManager.transactionalUpdate(userContext);
 				}
 				this.chatSessionLifecycleService.addInteractionToState(request, response, userContext,
-						configurableChatModel);
+						configurableChatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
 			} finally {
@@ -390,8 +391,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			try {
 				this.chatSessionLifecycleService.chatRequestCompleted(userContext, configurableChatModel);
 			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
 			}
 		});
 		if (LOGGER.isDebugEnabled()) {
@@ -548,8 +548,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(),
-				requestResources.getUploadedDocuments());
+				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
 		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
 				response, requestResources.createChatRequestContext(), showedDocuments);
 	}
@@ -565,8 +564,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
 		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(),
-				requestResources.getUploadedDocuments());
+				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
 		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
 				response, userChatContext, requestResources.createChatRequestContext(), shrink, targetSize,
 				showedDocuments);

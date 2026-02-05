@@ -12,6 +12,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
@@ -67,8 +68,10 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
+		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		SearchesSuggestions searchRewritings = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedSearchRewritings(runtimeData);
 
@@ -89,18 +92,13 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
 			int contextWindowLength) throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
-		int tokensBudget = contextWindowLength - request.getTokensSize();
-		boolean returnCleanRequest = false;
-		if (tokensBudget < contextWindowLength / 2) {
-			returnCleanRequest = true;
-			tokensBudget = contextWindowLength - (request.getLastRequest().getTokensSize()
-					+ ITokensCountable.tokensSize(request.getLastInteractions()));
-		}
+		int tokensBudget = contextWindowLength / 4;
 		AIDocumentsSet documentSet = searchesService.search(searchRewritings,
 				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
 				runtimeData.getUserChatContext(), tokensBudget);
 		request = chatSessionLifecycleService.addRetrievedDocumentsToState(documentSet,
-				runtimeData.getUserChatContext(), targetChatModel);
+				runtimeData.getUserChatContext(), targetChatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		return request;
 	}
 

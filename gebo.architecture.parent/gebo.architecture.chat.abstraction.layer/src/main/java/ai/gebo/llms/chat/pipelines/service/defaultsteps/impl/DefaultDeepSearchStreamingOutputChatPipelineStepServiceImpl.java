@@ -11,6 +11,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
@@ -61,7 +62,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel);
+		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 		List<String> aiChoosedDataSources = DefaultPipelineSharedEnvironmentUtil
 				.getAISuggestedDeepSearchDataSources(runtimeData);
 		try {
