@@ -214,7 +214,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			}
 			List<SearchResult> nextList = new ArrayList<SearchResult>();
 			try {
-				rankingService.rateReferences(chatModel, deepSearchConfig, list, request, sharedRatingStructure);
+				rankingService.rateReferences(serviceModel, deepSearchConfig, list, request, sharedRatingStructure);
 				int delta = deepSearchDefaultConfig.getPerDataSourceMaxVisited() - doneSteps.intValue();
 				int nExtract = delta;
 				Math.min(delta, deepSearchDefaultConfig.getMaxExternalSourcesSearchResults());

@@ -179,7 +179,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private boolean removeLatestDocumentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSReferredContentList<?> cssReferredContentList, int budget) {
 		do {
-			cssReferredContentList.getData().remove(cssReferredContentList.getData().size() - 1);
+			if (!cssReferredContentList.getData().isEmpty())
+				cssReferredContentList.getData().remove(0);
 		} while (!cssReferredContentList.getData().isEmpty() && budget > shrinked.getTokensSize());
 		return budget > shrinked.getTokensSize();
 	}
@@ -187,7 +188,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private boolean removeRelevantPastContentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments, int budget) {
 		do {
-			relevantRetrievedDocuments.remove(relevantRetrievedDocuments.size() - 1);
+			if (!relevantRetrievedDocuments.isEmpty())
+				relevantRetrievedDocuments.remove(0);
 		} while (!relevantRetrievedDocuments.isEmpty() && budget > shrinked.getTokensSize());
 		return budget > shrinked.getTokensSize();
 	}
