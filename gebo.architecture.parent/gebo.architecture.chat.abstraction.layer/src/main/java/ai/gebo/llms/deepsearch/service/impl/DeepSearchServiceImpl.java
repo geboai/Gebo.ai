@@ -201,7 +201,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
 				flow = worker.streamDeepSearch(prep.request, allDocuments, new ArrayList<>(), new DeepSearchState(),
-						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, null,
+						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, prep.serviceModel,
 						deepSearchScheduler, chunkSessionId);
 				if (flow != null) {
 					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
