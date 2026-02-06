@@ -16,15 +16,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 
 /**
  * Gebo.ai comment agent Repository interface for managing GUserChatContext
  * entities with MongoDB. Extends the generic IGBaseMongoDBRepository providing
  * additional methods for specific query operations.
  */
-public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUserChatContext> {
+public interface GUserChatSessionRepository extends IGBaseMongoDBRepository<GUserChatSession> {
 
 	/**
 	 * Returns the managed type of the repository, which is GUserChatContext. This
@@ -33,8 +33,8 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	 * @return the class type GUserChatContext
 	 */
 	@Override
-	default Class<GUserChatContext> getManagedType() {
-		return GUserChatContext.class;
+	default Class<GUserChatSession> getManagedType() {
+		return GUserChatSession.class;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	 * @param page a Pageable object to manage pagination information.
 	 * @return a Page of GUserChatInfo data.
 	 */
-	public Page<GUserChatInfo> findAllBy(Example<GUserChatContext> qbe, Pageable page);
+	public Page<GUserChatInfo> findAllBy(Example<GUserChatSession> qbe, Pageable page);
 
 	/**
 	 * Finds chat information by the given username and pageable parameters.

@@ -40,22 +40,22 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
@@ -90,7 +90,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
-			GUserChatContextRepository userContextRepository, IGPromptConfigDao promptsDao,
+			GUserChatSessionRepository userContextRepository, IGPromptConfigDao promptsDao,
 			InteractionsContextService interactionsContext, IGSecurityService securityService,
 			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
@@ -150,7 +150,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 *                                  issues.
 	 */
 	private <ResponseType> GeboTemplatedChatResponse<ResponseType> chat(GeboChatRequest request,
-			GChatProfileConfiguration chatProfile, GUserChatContext userContext, Class<ResponseType> rt)
+			GChatProfileConfiguration chatProfile, GUserChatSession userContext, Class<ResponseType> rt)
 			throws GeboPersistenceException, LLMConfigException {
 		// Chat environment setup
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
@@ -264,7 +264,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		}
 		GChatProfileConfiguration chatProfile = null;
 		String code = request.getChatProfileCode();
-		GUserChatContext userContext = null;
+		GUserChatSession userContext = null;
 
 		// Retrieve the chat profile from the repository.
 		Optional<GChatProfileConfiguration> profileEntry = chatProfilesRepository.findById(code);
@@ -277,7 +277,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			// Get the current user's username and manage the chat user context.
 			String currentUserName = securityService.getCurrentUser().getUsername();
 			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				userContext = new GUserChatContext();
+				userContext = new GUserChatSession();
 				userContext.setDescription(chatProfile.getDescription());
 				userContext.setChatProfileCode(request.getChatProfileCode());
 				userContext.setRagChat(true);
@@ -285,7 +285,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				userContext.setUsername(currentUserName);
 				userContext = persistenceManager.insert(userContext);
 			} else {
-				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
+				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
 				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
 					throw new SecurityException("Attempting to access the wrong chat userContext");
 				}
@@ -418,7 +418,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		}
 		GChatProfileConfiguration chatProfile = null;
 		String code = request.getChatProfileCode();
-		GUserChatContext userContext = null;
+		GUserChatSession userContext = null;
 
 		// Retrieve chat profile from repository by its code
 		Optional<GChatProfileConfiguration> profileEntry = chatProfilesRepository.findById(code);
@@ -432,7 +432,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			UserInfos user = securityService.getCurrentUser();
 			String currentUserName = user.getUsername();
 			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				userContext = new GUserChatContext();
+				userContext = new GUserChatSession();
 				userContext.setDescription(chatProfile.getDescription());
 				userContext.setChatProfileCode(request.getChatProfileCode());
 				userContext.setRagChat(true);
@@ -441,7 +441,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 				userContext = persistenceManager.insert(userContext);
 			} else {
-				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
+				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
 				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
 					throw new SecurityException("Attempting to access the wrong chat userContext");
 				}
@@ -467,7 +467,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException If configuration is not properly set
 	 */
 	private Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request, GChatProfileConfiguration chatProfile,
-			GUserChatContext userContext, UserInfos user) throws LLMConfigException {
+			GUserChatSession userContext, UserInfos user) throws LLMConfigException {
 
 		// Set up chat environment and models
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
@@ -551,9 +551,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
 		GUserChatInfoData data = null;
-		Optional<GUserChatContext> repodata = this.userContextRepository.findById(id);
+		Optional<GUserChatSession> repodata = this.userContextRepository.findById(id);
 		if (repodata.isPresent()) {
-			GUserChatContext context = repodata.get();
+			GUserChatSession context = repodata.get();
 			data = new GUserChatInfoData(context);
 			GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 			IGConfigurableChatModel handler = chatModelConfigurations.defaultHandler();
@@ -603,7 +603,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (!canAccess)
 			throw new SecurityException("Trying to access wrong chat profile");
 		String description = chatProfile.getDescription();
-		GUserChatContext userContext = new GUserChatContext();
+		GUserChatSession userContext = new GUserChatSession();
 		userContext.setChatProfileCode(referenceCode);
 		userContext.setDescription(description);
 		userContext.setRagChat(true);
@@ -625,7 +625,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (!canAccess)
 			throw new SecurityException("Trying to access wrong chat profile");
 		String description = chatProfile.getDescription();
-		GUserChatContext userContext = new GUserChatContext();
+		GUserChatSession userContext = new GUserChatSession();
 		userContext.setChatProfileCode(profileCode);
 		userContext.setDescription(description);
 		userContext.setRagChat(true);

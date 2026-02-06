@@ -50,17 +50,16 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -93,7 +92,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
 
-	final protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	final protected GUserChatSessionRepository userContextRepository; // Repository for user chat context data
 
 	final protected IGPromptConfigDao promptsDao;
 
@@ -230,7 +229,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
 			final Prompt prompt, final KBContext context, final GeboChatRequest request,
-			final GeboChatResponse response, final GUserChatContext userContext, IChatRequestContext chatRequestContext,
+			final GeboChatResponse response, final GUserChatSession userContext, IChatRequestContext chatRequestContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
 
@@ -264,7 +263,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
 	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
-			final GeboChatRequest request, final GeboChatResponse response, final GUserChatContext userContext,
+			final GeboChatRequest request, final GeboChatResponse response, final GUserChatSession userContext,
 			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget,
 			IGConfigurableChatModel configurableChatModel, AIDocumentsSet showedDocuments) {
 		if (LOGGER.isDebugEnabled()) {
@@ -368,7 +367,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				interaction.setRequest(request);
 				interaction.setResponse(response);
 				interactions.add(interaction);
-				GUserChatContext freshCopy = null;
+				GUserChatSession freshCopy = null;
 				userContext.setInteractions(interactions);
 				userContext.setDateModified(new Date());
 				if (userContext.getCode() == null) {
@@ -376,8 +375,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				} else {
 					freshCopy = persistenceManager.transactionalUpdate(userContext);
 				}
-				this.chatSessionLifecycleService.addInteractionToState(request, response, userContext,
-						configurableChatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				this.chatSessionLifecycleService.addInteractionToState(request, response, userContext);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
 			} finally {
@@ -423,7 +421,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		String context = request.getUserChatContextCode();
 		if (context == null || context.trim().length() == 0)
 			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
 		if (contextData.isEmpty()) {
 			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
 		}
@@ -435,7 +433,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		}
 		response.setQuery(request.getQuery());
 		response.setUserChatContextCode(context);
-		GUserChatContext chatContext = contextData.get();
+		GUserChatSession chatContext = contextData.get();
 		if (chatContext.getInteractions() != null) {
 			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
 		} else {
@@ -461,21 +459,21 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		String context = request.getUserChatContextCode();
 		if (context == null || context.trim().length() == 0)
 			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
 		if (contextData.isEmpty()) {
 			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
 		}
 		if (request.getId() == null) {
 			throw new IllegalStateException("User request must have an id");
 		}
-		GUserChatContext chatContext = contextData.get();
+		GUserChatSession chatContext = contextData.get();
 		addChatRequestToUserContext(request, chatContext);
 
 	}
 
 	@Override
 	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext chatContext) {
+			GUserChatSession chatContext) {
 		String context = request.getUserChatContextCode();
 		if (context == null || context.trim().length() == 0)
 			throw new IllegalStateException("User chat context code cannot be null or empty");
@@ -505,7 +503,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	}
 
 	@Override
-	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatContext chatContext) {
+	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatSession chatContext) {
 		if (chatContext.getInteractions() != null) {
 			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
 		} else {
@@ -523,7 +521,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		String context = request.getUserChatContextCode();
 		if (context == null || context.trim().length() == 0)
 			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
 		if (contextData.isEmpty()) {
 			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
 		}
@@ -543,7 +541,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
@@ -555,7 +553,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);

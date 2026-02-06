@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.pipelines.model;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import lombok.Data;
 
 @Data

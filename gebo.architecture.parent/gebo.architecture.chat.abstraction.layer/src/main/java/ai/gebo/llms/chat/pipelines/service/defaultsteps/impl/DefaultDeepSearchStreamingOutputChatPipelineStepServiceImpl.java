@@ -10,9 +10,9 @@ import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -68,7 +68,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 				.getAISuggestedDeepSearchDataSources(runtimeData);
 		try {
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request,
-					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), aiChoosedDataSources);
+					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), aiChoosedDataSources, chatModel, serviceModel);
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {

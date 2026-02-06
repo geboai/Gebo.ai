@@ -49,6 +49,7 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
+	 * @param serviceModel TODO
 	 * @param request
 	 * @param pastSystemsResponses
 	 * @param chunkingSessionId TODO
@@ -63,8 +64,8 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws GeboIngestionException
 	 * @throws SearchServiceException
 	 */
-	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

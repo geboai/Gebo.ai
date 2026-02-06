@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.model.session;
 
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;

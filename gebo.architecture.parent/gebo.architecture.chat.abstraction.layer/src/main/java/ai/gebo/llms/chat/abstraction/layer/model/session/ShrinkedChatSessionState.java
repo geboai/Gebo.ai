@@ -7,13 +7,10 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -24,10 +21,10 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	@Id
 	@NotNull
 	private String userChatContextCode = null;
-	private CSSReferredContentList<UserUploadedContent> latestRequestsUploadedDocuments = new CSSReferredContentList<UserUploadedContent>();
-	private CSSReferredContentList<GDocumentReference> latestRequestsChatWithDocuments = new CSSReferredContentList<GDocumentReference>();
-	private CSSReferredContentList<GDocumentReference> latestRequestsRetrievedDocuments = new CSSReferredContentList<GDocumentReference>();
-	private CSSReferredContentList<LLMGeneratedResource> latestRequestsLlmGeneratedDocuments = new CSSReferredContentList<LLMGeneratedResource>();
+	private CSSReferredContentList<UserUploadedContentSTO> latestRequestsUploadedDocuments = new CSSReferredContentList<UserUploadedContentSTO>();
+	private CSSReferredContentList<GDocumentReferenceSTO> latestRequestsChatWithDocuments = new CSSReferredContentList<GDocumentReferenceSTO>();
+	private CSSReferredContentList<GDocumentReferenceSTO> latestRequestsRetrievedDocuments = new CSSReferredContentList<GDocumentReferenceSTO>();
+	private CSSReferredContentList<LLMGeneratedResourceSTO> latestRequestsLlmGeneratedDocuments = new CSSReferredContentList<LLMGeneratedResourceSTO>();
 	private CSSfRelevantShrinkedDocumentList relevantChatWithDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantUploadedDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList();

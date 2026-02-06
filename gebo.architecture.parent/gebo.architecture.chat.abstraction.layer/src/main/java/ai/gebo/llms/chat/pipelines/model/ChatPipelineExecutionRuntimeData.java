@@ -8,7 +8,7 @@ import java.util.Map;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChatPipelineExecutionRuntimeData {
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
-			LLMChatRequestResources requestResources, GeboChatResponse chatResponse, GUserChatContext userChatContext,GChatProfileConfiguration chatProfile,
+			LLMChatRequestResources requestResources, GeboChatResponse chatResponse, GUserChatSession userChatContext,GChatProfileConfiguration chatProfile,
 			boolean streamingOutput) {
 		this(configuration, contextWindowSize, contextWindowSize, new ArrayList(), chatResponse, new ArrayList(),
 				streamingOutput, requestResources, userChatContext, chatProfile);
@@ -30,7 +30,7 @@ public class ChatPipelineExecutionRuntimeData {
 	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
-	private final GUserChatContext userChatContext;
+	private final GUserChatSession userChatContext;
 	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
 	private final GChatProfileConfiguration chatProfile;
 

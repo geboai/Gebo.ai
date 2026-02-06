@@ -31,7 +31,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchesSuggestions;
 import ai.gebo.model.base.GObjectRef;
@@ -60,7 +60,7 @@ public class SearchesService {
 	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 
 	public AIDocumentsSet search(SearchesSuggestions rewritings, String userQuery, int globalTopK,
-			GUserChatContext context, int tokensBudget) throws FullTextException, LLMConfigException {
+			GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(..)");
 		}

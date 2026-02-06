@@ -39,8 +39,8 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
@@ -144,7 +144,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
 		// load the created user context
-		GUserChatContext data = persistentObjectManager.findById(GUserChatContext.class, cleanChat.getCode());
+		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
 		List<ChatInteractions> _interactions = new ArrayList<>();
 		for (TChatInteraction tChatInteraction : interactions) {
@@ -163,20 +163,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		authApiClient.setApiKey(newToken);
 		persistentObjectManager.update(data);
 
-		/*
-		 * URL url1 = getClass().getClassLoader().getResource(
-		 * "chat-sessions/gebo-ai-manual-tech-configuration.pdf"); URL url2 =
-		 * getClass().getClassLoader().getResource(
-		 * "chat-sessions/maven-modules-guide1.0.pdf"); GeboUserChatUploadsControllerApi
-		 * uploadsControllerApi = new GeboUserChatUploadsControllerApi(authApiClient);
-		 * OperationStatusListUserUploadedContent rv =
-		 * uploadsControllerApi.chatSessionUpload(data.getCode(), List.of( new File(
-		 * "C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\gebo-ai-manual-tech-configuration.pdf"
-		 * ), new File(
-		 * "C:\\Users\\Paolo\\GitHub\\Gebo.ai\\integration-tests\\ollama-integration-tests\\src\\test\\resources\\chat-sessions\\maven-modules-guide1.0.pdf"
-		 * ))); assertFalse("Uploads cannot have error messages",
-		 * rv.isHasErrorMessages());
-		 */
+	
 		for (int i = _interactions.size() - 3; i < _interactions.size(); i++) {
 			ai.gebo.monolithic.api.client.model.GeboChatRequest request = new ai.gebo.monolithic.api.client.model.GeboChatRequest();
 			request.setStreamResponse(false);

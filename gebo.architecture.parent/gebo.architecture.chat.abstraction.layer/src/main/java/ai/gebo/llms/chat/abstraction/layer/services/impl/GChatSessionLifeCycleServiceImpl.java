@@ -23,10 +23,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
@@ -51,7 +51,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGAIDocumentsCacheService documentsCacheService;
 
 	@Override
-	public void createChatSession(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+	public void createChatSession(GUserChatSession context, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException {
 		if (context.getInteractions() != null && !context.getInteractions().isEmpty()) {
 			throw new GeboChatSessionLifecycleException("Cannot create a session for user context=>" + context.getCode()
@@ -72,13 +72,13 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public void removeChatSession(GUserChatContext context) {
+	public void removeChatSession(GUserChatSession context) {
 		this.fullSessionStateService.deleteState(context.getCode());
 		this.shrinkedSessionStateService.deleteState(context.getCode());
 	}
 
 	@Override
-	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatContext context,
+	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, IOException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -153,19 +153,21 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		default: {
 
 			LLMChatRequestResources data = shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getRelevantRetrievedDocuments(), budget))
+			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantChatWithDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getRelevantUploadedDocuments(), budget))
+			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantRetrievedDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getRelevantLlmGeneratedDocuments(), budget))
+			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantUploadedDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getLatestRequestsRetrievedDocuments(), budget))
+			if (removeRelevantPastContentsProgressively(shrinked, shrinked.getRelevantLlmGeneratedDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getLatestRequestsChatWithDocuments(), budget))
+			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsRetrievedDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getLatestRequestsUploadedDocuments(), budget))
+			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsChatWithDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
-			if (removeProgressively(shrinked, shrinked.getLatestRequestsLlmGeneratedDocuments(), budget))
+			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsUploadedDocuments(), budget))
+				return shrinked.createChatRequestResources(policy);
+			if (removeLatestDocumentsProgressively(shrinked, shrinked.getLatestRequestsLlmGeneratedDocuments(), budget))
 				return shrinked.createChatRequestResources(policy);
 			return shrinked.createChatRequestResources(policy);
 		}
@@ -174,15 +176,15 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	}
 
-	private boolean removeProgressively(ShrinkedChatSessionState shrinked,
+	private boolean removeLatestDocumentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSReferredContentList<?> cssReferredContentList, int budget) {
 		do {
-			cssReferredContentList.remove(cssReferredContentList.size() - 1);
-		} while (!cssReferredContentList.isEmpty() && budget > shrinked.getTokensSize());
+			cssReferredContentList.getData().remove(cssReferredContentList.getData().size() - 1);
+		} while (!cssReferredContentList.getData().isEmpty() && budget > shrinked.getTokensSize());
 		return budget > shrinked.getTokensSize();
 	}
 
-	private boolean removeProgressively(ShrinkedChatSessionState shrinked,
+	private boolean removeRelevantPastContentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments, int budget) {
 		do {
 			relevantRetrievedDocuments.remove(relevantRetrievedDocuments.size() - 1);
@@ -201,7 +203,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
+	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, IOException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
@@ -233,7 +235,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatContext context,
+	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -258,7 +260,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
+	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		AIDocumentReferenceItem data = null;
@@ -291,7 +293,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatContext context,
+	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -316,7 +318,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
+	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
@@ -343,7 +345,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatContext context,
+	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -370,7 +372,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	@Override
 	public LLMChatRequestResources addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			GUserChatContext context, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			GUserChatSession context, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -407,8 +409,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatContext context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatSession context)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -436,26 +437,20 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		state = this.fullSessionStateService.addInteractionToState(state, request, response, index);
 		shrinked = this.shrinkedSessionStateService.addInteractionToState(shrinked, request, response, index);
-		int budget = getTokensBudget(targetChatModel);
-		if (shrinked.getTokensSize() >= budget) {
-			int targetTokenBudget = getTargetShrinkResize(targetChatModel);
-			shrinked.setToBeShrinked(true);
-			shrinked.setTargetTokenBudget(targetTokenBudget);
-		}
 		this.fullSessionStateService.save(state);
 		this.shrinkedSessionStateService.save(shrinked);
 
 	}
 
 	@Override
-	public void chatRequestCompleted(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException {
 		this.sessionStateShrinkerService.shrink(retrieveAndCheck(context), getTargetShrinkResize(targetChatModel));
 
 	}
 
 	@Override
-	public void ensureChatSessionExists(GUserChatContext context, IGConfigurableChatModel targetChatModel)
+	public void ensureChatSessionExists(GUserChatSession context, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException {
 
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context.getCode());
@@ -471,7 +466,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		return state;
 	}
 
-	private ChatFullSessionState retrieveAndCheck(GUserChatContext ctx) throws GeboChatSessionLifecycleException {
+	private ChatFullSessionState retrieveAndCheck(GUserChatSession ctx) throws GeboChatSessionLifecycleException {
 		return this.retrieveAndCheck(ctx.getCode());
 	}
 }

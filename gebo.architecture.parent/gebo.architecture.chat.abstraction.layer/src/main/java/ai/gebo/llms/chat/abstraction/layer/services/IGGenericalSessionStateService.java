@@ -7,7 +7,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.model.session.IChatRequestFactory;
 
 /**********************************************************************************************
@@ -21,7 +21,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.IChatRequestFactory;
  * @param <SessionType>
  */
 public interface IGGenericalSessionStateService<SessionType extends IChatRequestFactory> {
-	public default SessionType retrieveState(GUserChatContext context) {
+	public default SessionType retrieveState(GUserChatSession context) {
 		return retrieveState(context.getCode());
 	}
 

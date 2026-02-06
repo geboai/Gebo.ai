@@ -22,6 +22,9 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GDocumentReferenceSTO;
+import ai.gebo.llms.chat.abstraction.layer.model.session.LLMGeneratedResourceSTO;
+import ai.gebo.llms.chat.abstraction.layer.model.session.UserUploadedContentSTO;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
@@ -90,11 +93,11 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 	@Override
 	public ChatFullSessionState addUploadedDocumentToState(ChatFullSessionState session, UserUploadedContent content,
 			AIDocumentReferenceItem ingested, int index) throws GeboChatSessionLifecycleException {
-		CSSInteractionReferredContent<UserUploadedContent> contentBag = new CSSInteractionReferredContent<UserUploadedContent>();
-		contentBag.setContentObject(content);
+		CSSInteractionReferredContent<UserUploadedContentSTO> contentBag = new CSSInteractionReferredContent<UserUploadedContentSTO>();
+		contentBag.setContentObject(UserUploadedContentSTO.of(content));
 		contentBag.setData(ingested);
 		contentBag.setInteractionIndex(index);
-		session.getUploadedDocuments().getValue().add(contentBag);
+		session.getUploadedDocuments().getValue().getData().add(contentBag);
 		return session;
 	}
 
@@ -108,11 +111,11 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 	@Override
 	public ChatFullSessionState addChatWithDocumentToState(ChatFullSessionState session, GDocumentReference reference,
 			AIDocumentReferenceItem ingested, int index) throws GeboChatSessionLifecycleException {
-		CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
-		contentBag.setContentObject(reference);
+		CSSInteractionReferredContent<GDocumentReferenceSTO> contentBag = new CSSInteractionReferredContent<GDocumentReferenceSTO>();
+		contentBag.setContentObject(GDocumentReferenceSTO.of(reference));
 		contentBag.setData(ingested);
 		contentBag.setInteractionIndex(index);
-		session.getChatWithDocuments().getValue().add(contentBag);
+		session.getChatWithDocuments().getValue().getData().add(contentBag);
 		return session;
 	}
 
@@ -129,11 +132,11 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 		for (AIDocumentReferenceItem doc : retrieved.getDocumentItems()) {
 			Optional<GDocumentReference> dr = this.docRepo.findById(doc.getCode());
 			if (dr.isPresent()) {
-				CSSInteractionReferredContent<GDocumentReference> contentBag = new CSSInteractionReferredContent<GDocumentReference>();
-				contentBag.setContentObject(dr.get());
+				CSSInteractionReferredContent<GDocumentReferenceSTO> contentBag = new CSSInteractionReferredContent<GDocumentReferenceSTO>();
+				contentBag.setContentObject(GDocumentReferenceSTO.of(dr.get()));
 				contentBag.setData(doc);
 				contentBag.setInteractionIndex(index);
-				session.getRetrievedDocuments().getValue().add(contentBag);
+				session.getRetrievedDocuments().getValue().getData().add(contentBag);
 			}
 		}
 		return session;
@@ -150,11 +153,11 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 	public ChatFullSessionState addLLMGeneratedDocumntsToState(ChatFullSessionState session,
 			LLMGeneratedResource resource, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException {
-		CSSInteractionReferredContent<LLMGeneratedResource> contentBag = new CSSInteractionReferredContent<LLMGeneratedResource>();
-		contentBag.setContentObject(resource);
+		CSSInteractionReferredContent<LLMGeneratedResourceSTO> contentBag = new CSSInteractionReferredContent<LLMGeneratedResourceSTO>();
+		contentBag.setContentObject(LLMGeneratedResourceSTO.of(resource));
 		contentBag.setData(ingested);
 		contentBag.setInteractionIndex(index);
-		session.getLlmGeneratedDocuments().getValue().add(contentBag);
+		session.getLlmGeneratedDocuments().getValue().getData().add(contentBag);
 		return session;
 	}
 

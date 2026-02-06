@@ -18,14 +18,14 @@ import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import reactor.core.publisher.Flux;
 
 /**
@@ -158,18 +158,18 @@ public interface IGGenericalChatService {
 
 	public void addChatRequestToUserContext(GeboChatRequest request);
 
-	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatContext context);
+	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatSession context);
 
 	public GeboChatResponse createUnprocessedResponse(GeboChatRequest request);
 
 	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response);
 
 	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context);
+			GUserChatSession context);
 
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
+			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
 
 	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatContext userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
+			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
 }

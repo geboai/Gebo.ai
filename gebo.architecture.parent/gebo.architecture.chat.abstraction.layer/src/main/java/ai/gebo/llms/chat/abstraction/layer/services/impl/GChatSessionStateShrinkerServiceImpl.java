@@ -22,7 +22,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSReferredContentList;
@@ -31,6 +30,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteractio
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplifiedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
@@ -100,11 +100,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 				.getLeaveLastInteractionsOnHistoryConsolidation();
 		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
 		CSSReferredContentList in = data.getValue();
-		final CSSReferredContentList bag = new CSSReferredContentList();
-		for (int index = 0; index < in.size(); index++) {
-			CSSInteractionReferredContent entry = (CSSInteractionReferredContent) in.get(index);
+		final CSSReferredContentList<?> bag = new CSSReferredContentList();
+		for (int index = 0; index < in.getData().size(); index++) {
+			 CSSInteractionReferredContent entry =  in.getData().get(index);
 			if (entry.getInteractionIndex() >= lastIndex) {
-				bag.add(entry);
+				bag.getData().add(entry);
 			}
 		}
 		return bag;
@@ -117,10 +117,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
 		CSSReferredContentList in = data.getValue();
 		final CSSReferredContentList bag = new CSSReferredContentList();
-		for (int index = 0; index < in.size(); index++) {
-			CSSInteractionReferredContent entry = (CSSInteractionReferredContent) in.get(index);
+		for (int index = 0; index < in.getData().size(); index++) {
+			CSSInteractionReferredContent entry =  in.getData().get(index);
 			if (entry.getInteractionIndex() < lastIndex) {
-				bag.add(entry);
+				bag.getData().add(entry);
 			}
 		}
 		TokensContainer<CSSReferredContentList> _out = new TokensContainer<CSSReferredContentList>();
@@ -138,7 +138,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			IGConfigurableChatModel usedChatModel) throws LLMConfigException, IOException {
 		CSSfRelevantShrinkedDocumentList outList = new CSSfRelevantShrinkedDocumentList();
 
-		if (docs != null && docs.getValue() != null && !docs.getValue().isEmpty()) {
+		if (docs != null && docs.getValue() != null && !docs.getValue().getData().isEmpty()) {
 			Map<String, AIDocumentReferenceItem> refsMap = new HashMap<String, AIDocumentReferenceItem>();
 			StringBuffer lastTurns = new StringBuffer();
 			int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
@@ -162,8 +162,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
 			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
-			for (int i = 0; i < docs.getValue().size(); i++) {
-				CSSInteractionReferredContent content = (CSSInteractionReferredContent) docs.getValue().get(i);
+			for (int i = 0; i < docs.getValue().getData().size(); i++) {
+				CSSInteractionReferredContent content =  docs.getValue().getData().get(i);
 				if (content.getData().getFragments().isEmpty())
 					continue;
 				refsMap.put(content.getData().getCode(), content.getData());

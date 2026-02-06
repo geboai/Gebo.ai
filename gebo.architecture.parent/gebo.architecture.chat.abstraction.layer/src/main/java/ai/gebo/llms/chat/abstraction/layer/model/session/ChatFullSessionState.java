@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
@@ -26,17 +25,17 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 	int targetTokenBudget = 0;
 	private TokensContainer<GeboChatRequest> currentRequest = new TokensContainer<GeboChatRequest>();
 	private TokensContainer<CSSSimplifiedChatHistory> chatHistory = new TokensContainer<CSSSimplifiedChatHistory>();
-	private TokensContainer<CSSReferredContentList<UserUploadedContent>> uploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContent>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> chatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<GDocumentReference>> retrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReference>>();
-	private TokensContainer<CSSReferredContentList<LLMGeneratedResource>> llmGeneratedDocuments = new TokensContainer<CSSReferredContentList<LLMGeneratedResource>>();
+	private TokensContainer<CSSReferredContentList<UserUploadedContentSTO>> uploadedDocuments = new TokensContainer<CSSReferredContentList<UserUploadedContentSTO>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReferenceSTO>> chatWithDocuments = new TokensContainer<CSSReferredContentList<GDocumentReferenceSTO>>();
+	private TokensContainer<CSSReferredContentList<GDocumentReferenceSTO>> retrievedDocuments = new TokensContainer<CSSReferredContentList<GDocumentReferenceSTO>>();
+	private TokensContainer<CSSReferredContentList<LLMGeneratedResourceSTO>> llmGeneratedDocuments = new TokensContainer<CSSReferredContentList<LLMGeneratedResourceSTO>>();
 
 	public ChatFullSessionState() {
 		getChatHistory().setValue(new CSSSimplifiedChatHistory());
-		getLlmGeneratedDocuments().setValue(new CSSReferredContentList<LLMGeneratedResource>());
-		getChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
-		getUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContent>());
-		getRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReference>());
+		getLlmGeneratedDocuments().setValue(new CSSReferredContentList<LLMGeneratedResourceSTO>());
+		getChatWithDocuments().setValue(new CSSReferredContentList<GDocumentReferenceSTO>());
+		getUploadedDocuments().setValue(new CSSReferredContentList<UserUploadedContentSTO>());
+		getRetrievedDocuments().setValue(new CSSReferredContentList<GDocumentReferenceSTO>());
 	}
 
 	public int getTokensSize() {

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
@@ -69,7 +69,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GeboChatResponse response,
-			GUserChatContext context, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			GUserChatSession context, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String pipelineCode, boolean streaming)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
@@ -148,7 +148,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatContext context,
+	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, GUserChatSession context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = createResponse(request, context);
@@ -188,7 +188,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	@Override
-	public GeboChatResponse execute(GeboChatRequest request, GUserChatContext context,
+	public GeboChatResponse execute(GeboChatRequest request, GUserChatSession context,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = createResponse(request, context);
@@ -202,7 +202,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				"The step service " + nextStep.getStepId() + " is not an IOutputChatPipelineService");
 	}
 
-	protected GeboChatResponse createResponse(GeboChatRequest request, GUserChatContext context) {
+	protected GeboChatResponse createResponse(GeboChatRequest request, GUserChatSession context) {
 		GeboChatResponse response = new GeboChatResponse();
 		response.setId(UUID.randomUUID().toString());
 		response.setQuery(request.getQuery());

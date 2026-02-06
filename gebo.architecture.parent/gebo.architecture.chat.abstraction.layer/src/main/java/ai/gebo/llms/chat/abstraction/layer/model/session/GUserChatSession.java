@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.model.session;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -28,7 +29,7 @@ import lombok.Data;
  */
 @Document
 @Data
-public class GUserChatContext extends GBaseObject {
+public class GUserChatSession extends GBaseObject {
 
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
 	@HashIndexed
@@ -42,9 +43,7 @@ public class GUserChatContext extends GBaseObject {
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
 
-	/** Default constructor for GUserChatContext */
-	public GUserChatContext() {
-
-	}
+	
+	
 
 }
