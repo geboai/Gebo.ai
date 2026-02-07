@@ -11,6 +11,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
  * budget
  */
 public interface IGChatSessionStateShrinkerService {
-	@Async
+	
 	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException;
 }

@@ -7,6 +7,11 @@ import org.springframework.ai.document.Document;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.GMessageEnvelope;
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
@@ -40,8 +45,9 @@ import lombok.AllArgsConstructor;
 @Component
 @Scope("singleton")
 @AllArgsConstructor
-public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService {
+public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService, IGMessageEmitter {
 
+	static final String SESSION_LIFE_CYCLE_SERVICE = "sessionLifeCycleService";
 	private final IGChatFullSessionStateService fullSessionStateService;
 	private final IGShrinkedChatSessionStateService shrinkedSessionStateService;
 	private final GeboChatSessionLifeCycleConfig lifeCycleConfig;
@@ -49,6 +55,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final DocumentReferenceRepository documentsRepository;
 	private final IGChatStorageAreaService chatAreaStorageSession;
 	private final IGAIDocumentsCacheService documentsCacheService;
+	private final IGMessageBroker broker;
 
 	@Override
 	public void createChatSession(GUserChatSession context, IGConfigurableChatModel targetChatModel)
@@ -440,6 +447,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		state = this.fullSessionStateService.addInteractionToState(state, request, response, index);
 		shrinked = this.shrinkedSessionStateService.addInteractionToState(shrinked, request, response, index);
 		this.fullSessionStateService.save(state);
+
 		this.shrinkedSessionStateService.save(shrinked);
 
 	}
@@ -447,9 +455,19 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException {
-		
-		this.sessionStateShrinkerService.shrink(context.getCode(), getTargetShrinkResize(targetChatModel));
-
+		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.retrieveState(context);
+		if (shrinked != null && shrinked.isToBeShrinked()) {
+			String code = context.getCode();
+			int budgetSize = getTargetShrinkResize(targetChatModel);
+			SessionShrinkRequestPayload checkPayload = new SessionShrinkRequestPayload();
+			checkPayload.setTokensBudget(budgetSize);
+			checkPayload.setUserChatSessionCode(code);
+			GMessageEnvelope<SessionShrinkRequestPayload> envelope = GMessageEnvelope.newMessageFrom(this,
+					checkPayload);
+			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+			envelope.setTargetComponent(SessionShrinkMessagesReceiver.SESSION_SHRINKER);
+			this.broker.accept(envelope);
+		}
 	}
 
 	@Override
@@ -471,5 +489,29 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	private ChatFullSessionState retrieveAndCheck(GUserChatSession ctx) throws GeboChatSessionLifecycleException {
 		return this.retrieveAndCheck(ctx.getCode());
+	}
+
+	@Override
+	public String getMessagingModuleId() {
+
+		return GStandardModulesConstraints.CORE_MODULE;
+	}
+
+	@Override
+	public String getMessagingSystemId() {
+
+		return SESSION_LIFE_CYCLE_SERVICE;
+	}
+
+	@Override
+	public SystemComponentType getComponentType() {
+
+		return SystemComponentType.APPLICATION_COMPONENT;
+	}
+
+	@Override
+	public List<String> getEmittedPayloadTypes() {
+
+		return List.of(SessionShrinkRequestPayload.class.getName());
 	}
 }

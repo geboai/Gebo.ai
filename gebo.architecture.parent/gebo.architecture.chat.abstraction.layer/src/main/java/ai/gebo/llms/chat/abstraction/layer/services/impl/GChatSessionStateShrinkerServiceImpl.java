@@ -72,7 +72,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	}
 
 	@Override
-	@Async
+
 	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin shrink(" + sessionCode + ")");
@@ -123,10 +123,57 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
 						oldVersion.getRelevantUploadedDocuments(), tokensBudget, usedChatModel,
 						ShrinkedDocumentOrigin.UPLOADED));
-				out.setLatestRequestsChatWithDocuments(afterLatest(full, full.getChatWithDocuments()));
-				out.setLatestRequestsLlmGeneratedDocuments(afterLatest(full, full.getLlmGeneratedDocuments()));
-				out.setLatestRequestsRetrievedDocuments(afterLatest(full, full.getRetrievedDocuments()));
-				out.setLatestRequestsUploadedDocuments(afterLatest(full, full.getUploadedDocuments()));
+				int tokensSize = out.getTokensSize();
+				CSSReferredContentList latestRequestsChatWithDocuments = afterLatest(full, full.getChatWithDocuments());
+				if (tokensBudget < (tokensSize + latestRequestsChatWithDocuments.getTokensSize())) {
+					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
+							latestRequestsChatWithDocuments, latestRequestsChatWithDocuments.getTokensSize());
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
+							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+							usedChatModel, ShrinkedDocumentOrigin.CHAT_WITH_SELECTED);
+					out.getRelevantChatWithDocuments().addAll(shrinkedDocs);
+				} else {
+					out.setLatestRequestsChatWithDocuments(latestRequestsChatWithDocuments);
+				}
+				tokensSize = out.getTokensSize();
+				CSSReferredContentList latestRequestsLlmGeneratedDocuments = afterLatest(full,
+						full.getLlmGeneratedDocuments());
+				if (tokensBudget < (tokensSize + latestRequestsLlmGeneratedDocuments.getTokensSize())) {
+					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
+							latestRequestsLlmGeneratedDocuments, latestRequestsLlmGeneratedDocuments.getTokensSize());
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
+							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+							usedChatModel, ShrinkedDocumentOrigin.GENERATED);
+					out.getRelevantLlmGeneratedDocuments().addAll(shrinkedDocs);
+				} else {
+					out.setLatestRequestsLlmGeneratedDocuments(latestRequestsLlmGeneratedDocuments);
+				}
+				tokensSize = out.getTokensSize();
+				CSSReferredContentList latestRequestsRetrievedDocuments = afterLatest(full,
+						full.getRetrievedDocuments());
+				if (tokensBudget < (tokensSize + latestRequestsRetrievedDocuments.getTokensSize())) {
+					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
+							latestRequestsRetrievedDocuments, latestRequestsRetrievedDocuments.getTokensSize());
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
+							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+							usedChatModel, ShrinkedDocumentOrigin.RETRIEVED);
+					out.getRelevantRetrievedDocuments().addAll(shrinkedDocs);
+				} else {
+					out.setLatestRequestsRetrievedDocuments(latestRequestsRetrievedDocuments);
+				}
+				tokensSize = out.getTokensSize();
+				CSSReferredContentList latestRequestsUploadedDocuments = afterLatest(full, full.getUploadedDocuments());
+				if (tokensBudget < (tokensSize + latestRequestsRetrievedDocuments.getTokensSize())) {
+					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
+							latestRequestsUploadedDocuments, latestRequestsUploadedDocuments.getTokensSize());
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
+							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+							usedChatModel, ShrinkedDocumentOrigin.GENERATED);
+					out.getRelevantUploadedDocuments().addAll(shrinkedDocs);
+				} else {
+					out.setLatestRequestsUploadedDocuments(latestRequestsUploadedDocuments);
+				}
+
 				int afterSize = out.getTokensSize();
 				LOGGER.info("Shrinked to:" + afterSize + " tokens");
 				shrinkedStateRepository.save(out);

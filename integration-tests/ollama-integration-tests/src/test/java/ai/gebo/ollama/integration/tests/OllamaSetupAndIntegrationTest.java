@@ -2,6 +2,7 @@ package ai.gebo.ollama.integration.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
@@ -249,11 +250,10 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 				boolean value = fullState.getRetrievedDocuments().getValue().getData().isEmpty();
 				assertFalse(value, "The retrieve documents structure cannot be empty");
 				ShrinkedChatSessionState shrinkedState = shrinkedSessionService.retrieveState(data);
-				value = (shrinkedState.getRelevantRetrievedDocuments().isEmpty()
-						&& shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
-				assertFalse(value, "The latest or relevant retrieve documents structure cannot be both empty");
-				String newToken = tokenRenewApi.renew().getToken();
-				authApiClient.setApiKey(newToken);
+				value = (!shrinkedState.getRelevantRetrievedDocuments().isEmpty()
+						|| !shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
+				assertTrue(value, "The latest and relevant retrieve documents structure cannot be both empty");
+				
 
 			}
 			// request.setUserUploadedContents(rv.getResult());
@@ -291,11 +291,10 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			boolean value = fullState.getRetrievedDocuments().getValue().getData().isEmpty();
 			assertFalse(value, "The retrieve documents structure cannot be empty");
 			ShrinkedChatSessionState shrinkedState = shrinkedSessionService.retrieveState(data);
-			value = (shrinkedState.getRelevantRetrievedDocuments().isEmpty()
-					&& shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
-			assertFalse(value, "The latest or relevant retrieve documents structure cannot be both empty");
-			String newToken = tokenRenewApi.renew().getToken();
-			authApiClient.setApiKey(newToken);
+			value = (!shrinkedState.getRelevantRetrievedDocuments().isEmpty()
+					|| !shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
+			assertTrue(value, "The latest and relevant retrieve documents structure cannot be both empty");
+		
 			Thread.currentThread().sleep(10000);
 			index++;
 
