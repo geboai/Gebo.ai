@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDoc
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedDocumentOrigin;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
@@ -53,6 +56,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
 	public static final String HISTORY_SIZE_TARGET = "historySizeTarget";
+	private static Logger LOGGER = LoggerFactory.getLogger(GChatSessionStateShrinkerServiceImpl.class);
 
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatConfigs chatConfig,
@@ -70,8 +74,12 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	@Override
 	@Async
 	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin shrink(" + sessionCode + ")");
+		}
+		boolean doShrink = false;
 		ChatFullSessionState full = null;
-		ShrinkedChatSessionState oldVersion = null;
+		ShrinkedChatSessionState oldVersion = new ShrinkedChatSessionState();
 		Optional<ChatFullSessionState> f = this.fullStateRepository.findById(sessionCode);
 		Optional<ShrinkedChatSessionState> s = this.shrinkedStateRepository.findById(sessionCode);
 		if (f.isPresent()) {
@@ -79,29 +87,53 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			if (s.isPresent()) {
 				oldVersion = s.get();
 
+			} else {
+				doShrink = true;
 			}
-			ShrinkedChatSessionState out = new ShrinkedChatSessionState();
-			out.setUserChatContextCode(sessionCode);
-			IGConfigurableChatModel usedChatModel = chatModelsConfigDao
-					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			if (usedChatModel == null)
-				throw new LLMConfigException("No Internal services or default chat model present");
-			out.setConsolidatedInteractions(
-					consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
-			out.setChatHistory(copyLatest(full.getChatHistory().getValue()));
-			out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(full, full.getChatWithDocuments()),
-					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
-			out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(full, full.getRetrievedDocuments()),
-					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
-			out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(untillLatest(full, full.getLlmGeneratedDocuments()),
-					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
-			out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
-					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
-			out.setLatestRequestsChatWithDocuments(afterLatest(full, full.getChatWithDocuments()));
-			out.setLatestRequestsLlmGeneratedDocuments(afterLatest(full, full.getLlmGeneratedDocuments()));
-			out.setLatestRequestsRetrievedDocuments(afterLatest(full, full.getRetrievedDocuments()));
-			out.setLatestRequestsUploadedDocuments(afterLatest(full, full.getUploadedDocuments()));
-			shrinkedStateRepository.save(out);
+			int size = full.getTokensSize();
+			int oldShrinkedSize = oldVersion.getTokensSize();
+			doShrink = oldShrinkedSize > tokensBudget;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Full session size=" + size + " shrinked=" + oldShrinkedSize + " tokens");
+			}
+			if (doShrink) {
+				LOGGER.info("Shrinked session size = " + oldShrinkedSize + ", so running shrinker");
+				ShrinkedChatSessionState out = new ShrinkedChatSessionState();
+				out.setUserChatContextCode(sessionCode);
+				IGConfigurableChatModel usedChatModel = chatModelsConfigDao
+						.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+				if (usedChatModel == null)
+					throw new LLMConfigException("No Internal services or default chat model present");
+				out.setConsolidatedInteractions(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
+						oldVersion, usedChatModel));
+				out.setChatHistory(copyLatest(full.getChatHistory().getValue()));
+				out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(full, full.getChatWithDocuments()),
+						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
+						oldVersion.getRelevantChatWithDocuments(), tokensBudget, usedChatModel,
+						ShrinkedDocumentOrigin.CHAT_WITH_SELECTED));
+				out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(full, full.getRetrievedDocuments()),
+						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
+						oldVersion.getRelevantRetrievedDocuments(), tokensBudget, usedChatModel,
+						ShrinkedDocumentOrigin.RETRIEVED));
+				out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(
+						untillLatest(full, full.getLlmGeneratedDocuments()), full.getChatHistory().getValue(),
+						out.getConsolidatedInteractions(), oldVersion.getRelevantLlmGeneratedDocuments(), tokensBudget,
+						usedChatModel, ShrinkedDocumentOrigin.GENERATED));
+				out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
+						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
+						oldVersion.getRelevantUploadedDocuments(), tokensBudget, usedChatModel,
+						ShrinkedDocumentOrigin.UPLOADED));
+				out.setLatestRequestsChatWithDocuments(afterLatest(full, full.getChatWithDocuments()));
+				out.setLatestRequestsLlmGeneratedDocuments(afterLatest(full, full.getLlmGeneratedDocuments()));
+				out.setLatestRequestsRetrievedDocuments(afterLatest(full, full.getRetrievedDocuments()));
+				out.setLatestRequestsUploadedDocuments(afterLatest(full, full.getUploadedDocuments()));
+				int afterSize = out.getTokensSize();
+				LOGGER.info("Shrinked to:" + afterSize + " tokens");
+				shrinkedStateRepository.save(out);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End shrink(" + sessionCode + ")");
 		}
 
 	}
@@ -160,8 +192,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	}
 
 	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(TokensContainer<? extends CSSReferredContentList> docs,
-			CSSSimplifiedChatHistory chatHistory, GUserChatInteractionsConsolidationData consolidated, int tokensBudget,
-			IGConfigurableChatModel usedChatModel) throws LLMConfigException, IOException {
+			CSSSimplifiedChatHistory chatHistory, GUserChatInteractionsConsolidationData consolidated,
+			CSSfRelevantShrinkedDocumentList alreadyElaborated, int tokensBudget, IGConfigurableChatModel usedChatModel,
+			ShrinkedDocumentOrigin origin) throws LLMConfigException, IOException {
 		CSSfRelevantShrinkedDocumentList outList = new CSSfRelevantShrinkedDocumentList();
 
 		if (docs != null && docs.getValue() != null && !docs.getValue().getData().isEmpty()) {
@@ -189,57 +222,70 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
 
 			for (int i = 0; i < docs.getValue().getData().size(); i++) {
-				List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
 				CSSInteractionReferredContent content = docs.getValue().getData().get(i);
-				if (content.getAiDocument().getFragments().isEmpty())
-					continue;
-				refsMap.put(content.getAiDocument().getCode(), content.getAiDocument());
-				StringBuffer buffer = new StringBuffer();
-				for (AIDocumentFragment fragment : content.getAiDocument().getFragments()) {
-					buffer.append(fragment.getDocumentContent());
-				}
-				if (!buffer.isEmpty()) {
-					ConsolidationInput input = new ConsolidationInput(content.getAiDocument().getCode(),
-							content.getAiDocument().getOriginalUrl(), (String) content.getAiDocument().getFragments()
-									.get(0).getMetaData().get(DocumentMetaInfos.TITLE),
-							buffer.toString());
-					toBeConsolidated.add(input);
-					if (!toBeConsolidated.isEmpty()) {
-						CSSRelevantShrinkedDocument out = new CSSRelevantShrinkedDocument();
-						out.setDocumentName(content.getAiDocument().getName());
-						out.setDocumentReference(content.getAiDocument().getCode());
-						out.setDocumentUrl(content.getAiDocument().getOriginalUrl());
-						out.setMetaData(new HashMap<String, Object>(
-								content.getAiDocument().getFragments().get(0).getMetaData()));
-						String text = callLLMConsolidateText(usedChatModel, prompt, question, pastConsolidation, null,
-								toBeConsolidated);
-						if (usedChatModel.isApplyThinkingMarkupHandling() && text != null) {
-							text = ClientChatCallUtil.removeThinking(text);
+				Optional<CSSRelevantShrinkedDocument> matching = alreadyElaborated.stream().filter(x -> {
+					boolean isSameDoc = (content.getAiDocument() != null && content.getAiDocument().getCode() != null
+							&& content.getAiDocument().getCode().equals(x.getDocumentReference())
+							&& x.getInteractionIndex() == content.getInteractionIndex()
+							&& x.getDocumentOrigin() == origin);
+
+					return isSameDoc;
+				}).findFirst();
+				if (matching.isPresent()) {
+					outList.add(matching.get());
+				} else {
+					List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
+					if (content.getAiDocument().getFragments().isEmpty())
+						continue;
+					refsMap.put(content.getAiDocument().getCode(), content.getAiDocument());
+					StringBuffer buffer = new StringBuffer();
+					for (AIDocumentFragment fragment : content.getAiDocument().getFragments()) {
+						buffer.append(fragment.getDocumentContent());
+					}
+					if (!buffer.isEmpty()) {
+						ConsolidationInput input = new ConsolidationInput(content.getAiDocument().getCode(),
+								content.getAiDocument().getOriginalUrl(), (String) content.getAiDocument()
+										.getFragments().get(0).getMetaData().get(DocumentMetaInfos.TITLE),
+								buffer.toString());
+						toBeConsolidated.add(input);
+						if (!toBeConsolidated.isEmpty()) {
+							CSSRelevantShrinkedDocument out = new CSSRelevantShrinkedDocument();
+							out.setId(null);
+							out.setDocumentName(content.getAiDocument().getName());
+							out.setDocumentReference(content.getAiDocument().getCode());
+							out.setDocumentUrl(content.getAiDocument().getOriginalUrl());
+							out.setDocumentOrigin(origin);
+							out.setInteractionIndex(content.getInteractionIndex());
+							out.setMetaData(new HashMap<String, Object>(
+									content.getAiDocument().getFragments().get(0).getMetaData()));
+							String text = callLLMConsolidateText(usedChatModel, prompt, question, pastConsolidation,
+									null, toBeConsolidated);
+							if (usedChatModel.isApplyThinkingMarkupHandling() && text != null) {
+								text = ClientChatCallUtil.removeThinking(text);
+							}
+							if (text != null && text.trim().length() > 0) {
+								out.setSummarizedContent(text);
+								outList.add(out);
+							}
+
 						}
-						if (text != null && text.trim().length() > 0) {
-							out.setSummarizedContent(text);
-							outList.add(out);
-						}
-						/*
-						 * CSSData _consolidated = callLLMConsolidateStructuredReturn(usedChatModel,
-						 * prompt, question, pastConsolidation, CSSData.class, this::joiner,
-						 * toBeConsolidated); outList.addAll( _consolidated != null &&
-						 * _consolidated.getData() != null ? _consolidated.getData() : List.of());
-						 */
 					}
 				}
 			}
 
 			for (CSSRelevantShrinkedDocument cssRelevantShrinkedDocument : outList) {
-				cssRelevantShrinkedDocument.setId(UUID.randomUUID().toString());
-				cssRelevantShrinkedDocument
-						.setTokensSize(tokensEstimator.estimate(cssRelevantShrinkedDocument.getSummarizedContent()));
-				if (cssRelevantShrinkedDocument.getDocumentReference() != null) {
-					AIDocumentReferenceItem doc = refsMap.get(cssRelevantShrinkedDocument.getDocumentReference());
-					if (doc != null) {
-						AIDocumentFragment fragment = doc.getFragments().get(0);
-						cssRelevantShrinkedDocument.setMetaData(new HashMap<String, Object>(fragment.getMetaData()));
-						cssRelevantShrinkedDocument.getMetaData().remove(DocumentMetaInfos.CONTENT_PAGE);
+				if (cssRelevantShrinkedDocument.getId() == null) {
+					cssRelevantShrinkedDocument.setId(UUID.randomUUID().toString());
+					cssRelevantShrinkedDocument.setTokensSize(
+							tokensEstimator.estimate(cssRelevantShrinkedDocument.getSummarizedContent()));
+					if (cssRelevantShrinkedDocument.getDocumentReference() != null) {
+						AIDocumentReferenceItem doc = refsMap.get(cssRelevantShrinkedDocument.getDocumentReference());
+						if (doc != null) {
+							AIDocumentFragment fragment = doc.getFragments().get(0);
+							cssRelevantShrinkedDocument
+									.setMetaData(new HashMap<String, Object>(fragment.getMetaData()));
+							cssRelevantShrinkedDocument.getMetaData().remove(DocumentMetaInfos.CONTENT_PAGE);
+						}
 					}
 				}
 			}
@@ -248,7 +294,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	}
 
 	private GUserChatInteractionsConsolidationData consolidateHistory(CSSSimplifiedChatHistory value,
-			int historySizeTarget, IGConfigurableChatModel usedChatModel) {
+			int historySizeTarget, ShrinkedChatSessionState oldVersion, IGConfigurableChatModel usedChatModel) {
 		List<ConsolidationInput> inputs = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
 		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 		String prompt = _prompt.getPrompt();
@@ -285,25 +331,6 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			return newConsolidation;
 		} else
 			return null;
-	}
-
-	private CSSData joiner(CSSData t1, CSSData t2) {
-		CSSfRelevantShrinkedDocumentList out = new CSSfRelevantShrinkedDocumentList();
-		if (t1 != null && t1.getData() != null)
-			out.addAll(t1.getData());
-
-		if (t2 != null && t2.getData() != null) {
-			for (CSSRelevantShrinkedDocument t : t2.getData()) {
-				t.setId(UUID.randomUUID().toString());
-				if (t.getSummarizedContent() != null) {
-					t.setTokensSize(this.tokensEstimator.estimate(t.getSummarizedContent()));
-				}
-			}
-			out.addAll(t2.getData());
-		}
-		CSSData d = new CSSData();
-		d.setData(out);
-		return d;
 	}
 
 }

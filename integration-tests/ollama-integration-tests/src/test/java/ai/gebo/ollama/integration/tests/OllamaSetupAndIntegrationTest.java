@@ -192,6 +192,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		ApiClient authApiClient = new ApiClient();
 		authApiClient.setApiKey(result.getResult().getSecurityHeaderData().getToken());
+		TokenRenewControllerApi tokenRenewApi = new TokenRenewControllerApi(authApiClient);
 		ChatModelsControllerApi chatModelsControllerApi = new ChatModelsControllerApi(authApiClient);
 
 		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
@@ -251,6 +252,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 				value = (shrinkedState.getRelevantRetrievedDocuments().isEmpty()
 						&& shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
 				assertFalse(value, "The latest or relevant retrieve documents structure cannot be both empty");
+				String newToken = tokenRenewApi.renew().getToken();
+				authApiClient.setApiKey(newToken);
 
 			}
 			// request.setUserUploadedContents(rv.getResult());
@@ -291,13 +294,15 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			value = (shrinkedState.getRelevantRetrievedDocuments().isEmpty()
 					&& shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
 			assertFalse(value, "The latest or relevant retrieve documents structure cannot be both empty");
+			String newToken = tokenRenewApi.renew().getToken();
+			authApiClient.setApiKey(newToken);
+			Thread.currentThread().sleep(10000);
 			index++;
 
 		}
 
-		TokenRenewControllerApi tokenRenewApi = new TokenRenewControllerApi(authApiClient);
-		String newToken = tokenRenewApi.renew().getToken();
-		authApiClient.setApiKey(newToken);
+		
+		
 		persistentObjectManager.update(data);
 
 		int loopIndex = 0;

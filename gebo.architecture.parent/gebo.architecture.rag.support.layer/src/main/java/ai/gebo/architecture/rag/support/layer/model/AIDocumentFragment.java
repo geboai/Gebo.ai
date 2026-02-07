@@ -88,7 +88,8 @@ public class AIDocumentFragment implements IAIContent, Cloneable, ITokensCountab
 		this.parentProjectCode = metaData.getParentProjectCode();
 		this.rootKnowledgebaseCode = metaData.getRootKnowledgebaseCode();
 		this.NBytes = metaData.getBytesLength() != null ? metaData.getBytesLength().longValue() : 0l;
-		this.tokensSize = metaData.getTokenLength() != null ? metaData.getTokenLength().intValue() : 0;
+		this.tokensSize = metaData.getTokenLength() != null ? metaData.getTokenLength().intValue()
+				: tokensEstimator.estimate(this.documentContent);
 		this.chunkPosition = metaData.getChunkPosition() != null ? metaData.getChunkPosition().longValue() : null;
 	}
 
