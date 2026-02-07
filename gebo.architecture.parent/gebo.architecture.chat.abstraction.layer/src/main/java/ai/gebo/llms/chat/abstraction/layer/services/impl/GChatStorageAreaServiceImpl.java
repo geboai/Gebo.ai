@@ -29,10 +29,10 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentContent;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentsContent;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -51,7 +51,7 @@ import lombok.AllArgsConstructor;
 public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGGeboConfigService configurationService;
 	final UserUploadContentServerSideRepository uploadContentsRepository;
-	final GUserChatContextRepository userChatContextRepository;
+	final GUserChatSessionRepository userChatContextRepository;
 	final IGSecurityService securityService;
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 	final IGDocumentReferenceFactory documentReferenceFactory;
@@ -61,7 +61,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	@Override
-	public Path getSessionPath(GUserChatContext context) throws IOException {
+	public Path getSessionPath(GUserChatSession context) throws IOException {
 		this.securityService.checkBeingCreator(context);
 		UserInfos currentUser = securityService.getCurrentUser();
 		if (context.getUsername() != null && currentUser.getUsername() != null
@@ -91,7 +91,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public UserUploadContentServerSide addUploadedFile(String userSessionCode, MultipartFile file)
 			throws IOException, GeboContentHandlerSystemException, GeboIngestionException {
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(userSessionCode);
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(userSessionCode);
 		UserInfos actualUser = this.securityService.getCurrentUser();
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
@@ -159,7 +159,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public void deleteUploadedFile(UserUploadContentServerSide ss) throws IOException {
 		this.securityService.checkBeingCreator(ss);
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(ss.getUserContextCode());
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(ss.getUserContextCode());
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
 		uploadContentsRepository.delete(ss);
@@ -174,7 +174,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	}
 
 	@Override
-	public void deleteSessionContents(GUserChatContext context) throws IOException {
+	public void deleteSessionContents(GUserChatSession context) throws IOException {
 		this.securityService.checkBeingCreator(context);
 		Path path = getSessionPath(context);
 		DirectoryStream<Path> data = Files.newDirectoryStream(path);
@@ -194,7 +194,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public Path getUploadedFilePath(UserUploadContentServerSide ss) throws IOException {
 		this.securityService.checkBeingCreator(ss);
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(ss.getUserContextCode());
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(ss.getUserContextCode());
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
 		Path path = getSessionPath(contextData.get());
@@ -205,7 +205,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public List<Document> getIngestedContentsOf(UserUploadContentServerSide ss) throws IOException {
 		this.securityService.checkBeingCreator(ss);
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(ss.getUserContextCode());
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(ss.getUserContextCode());
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
 		this.securityService.checkBeingCreator(contextData.get());
@@ -225,7 +225,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 	@Override
 	public OperationStatus<List<UserUploadedContent>> deleteUploadedContents(String userSessionCode, List<String> id) {
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(userSessionCode);
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(userSessionCode);
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
 		this.securityService.checkBeingCreator(contextData.get());
@@ -252,11 +252,11 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 	@Override
 	public InputStream getContent(UserUploadedContent content) throws IOException {
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(content.getUserContextCode());
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(content.getUserContextCode());
 		Optional<UserUploadContentServerSide> serverSideContent = this.uploadContentsRepository
 				.findById(content.getCode());
 		if (contextData.isPresent() && serverSideContent.isPresent()) {
-			GUserChatContext ctx = contextData.get();
+			GUserChatSession ctx = contextData.get();
 			UserUploadContentServerSide ssc = serverSideContent.get();
 			this.securityService.checkBeingCreator(ctx);
 			this.securityService.checkBeingCreator(ssc);
@@ -276,7 +276,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	}
 
 	@Override
-	public LLMGeneratedResource addMedia(Media media, GUserChatContext userContext) throws IOException {
+	public LLMGeneratedResource addMedia(Media media, GUserChatSession userContext) throws IOException {
 		securityService.checkBeingCreator(userContext);
 		LLMGeneratedResource resource = new LLMGeneratedResource();
 		resource.setCode(UUID.randomUUID().toString());
@@ -309,7 +309,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public LLMGeneratedResource getGeneratedContent(String userSessionCode, String generatedResourceCode)
 			throws IOException {
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(userSessionCode);
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(userSessionCode);
 		if (contextData.isPresent()) {
 			securityService.checkBeingCreator(contextData.get());
 			Optional<LLMGeneratedResource> data = this.llmGeneratedResourceRepository.findById(generatedResourceCode);
@@ -321,7 +321,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 	@Override
 	public InputStream streamContent(LLMGeneratedResource generated) throws IOException {
-		Optional<GUserChatContext> contextData = userChatContextRepository.findById(generated.getUserContextCode());
+		Optional<GUserChatSession> contextData = userChatContextRepository.findById(generated.getUserContextCode());
 		if (contextData.isPresent()) {
 			securityService.checkBeingCreator(contextData.get());
 			Path path = getSessionPath(contextData.get());

@@ -13,7 +13,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
@@ -25,7 +25,7 @@ public interface IGChatStorageAreaService {
 	 * @return
 	 * @throws IOException
 	 */
-	public Path getSessionPath(GUserChatContext context) throws IOException;
+	public Path getSessionPath(GUserChatSession context) throws IOException;
 
 	/***************************************************************************************************
 	 * adds the file to ths storage area for the actual session and ingests it
@@ -55,7 +55,7 @@ public interface IGChatStorageAreaService {
 	 * @param context
 	 * @throws IOException
 	 */
-	public void deleteSessionContents(GUserChatContext context) throws IOException;
+	public void deleteSessionContents(GUserChatSession context) throws IOException;
 
 	/******************************************************************************************************
 	 * Gets the phisical path of the content
@@ -88,7 +88,7 @@ public interface IGChatStorageAreaService {
 	 */
 	public List<Document> getIngestedContentsOf(UserUploadedContent uploaded) throws IOException;
 
-	public LLMGeneratedResource addMedia(Media media, GUserChatContext userContext) throws IOException;
+	public LLMGeneratedResource addMedia(Media media, GUserChatSession userContext) throws IOException;
 
 	public LLMGeneratedResource getGeneratedContent(String userSessionCode, String generatedResourceCode)
 			throws IOException;

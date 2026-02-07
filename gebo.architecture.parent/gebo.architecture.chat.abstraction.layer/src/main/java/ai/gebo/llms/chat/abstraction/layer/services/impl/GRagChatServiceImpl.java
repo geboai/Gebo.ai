@@ -40,28 +40,29 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRagSearchService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
@@ -80,6 +81,7 @@ import reactor.core.publisher.Flux;
  */
 @Service
 public class GRagChatServiceImpl extends AbstractChatService implements IGRagChatService {
+
 	final protected ChatProfilesRepository chatProfilesRepository;
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
@@ -88,25 +90,23 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
-			GUserChatContextRepository userContextRepository, IGPromptConfigDao promptsDao,
+			GUserChatSessionRepository userContextRepository, IGPromptConfigDao promptsDao,
 			InteractionsContextService interactionsContext, IGSecurityService securityService,
 			IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
-			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
-			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			IGChatProfileManagementService chatProfileManagementService,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-		
-			IGChatRequestResourcesBuilder chatRequestBuilder, IGChatRagSearchService ragSearchService) {
+			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
+			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatProfilesRepository chatProfilesRepository,
+			IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
+			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
+			IGChatProfileManagementService chatProfileManagementService, IGChatRagSearchService ragSearchService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository, knowledgeBaseVisibilityService,
-				chatRequestBuilder);
+				generatedResourceRepository, knowledgeBaseSecurityService, chatSessionLifecycleService);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 		this.chatProfileManagementService = chatProfileManagementService;
 		this.ragSearchService = ragSearchService;
-
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 *                                  issues.
 	 */
 	private <ResponseType> GeboTemplatedChatResponse<ResponseType> chat(GeboChatRequest request,
-			GChatProfileConfiguration chatProfile, GUserChatContext userContext, Class<ResponseType> rt)
+			GChatProfileConfiguration chatProfile, GUserChatSession userContext, Class<ResponseType> rt)
 			throws GeboPersistenceException, LLMConfigException {
 		// Chat environment setup
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
@@ -203,9 +203,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
-				request.setDocuments(extractedDocuments);
-				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-						contextLength);
+
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
+						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
+							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				}
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
 				response = callTemplatedChatClient(chatHandler, prompt, context, request, response,
@@ -260,7 +264,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		}
 		GChatProfileConfiguration chatProfile = null;
 		String code = request.getChatProfileCode();
-		GUserChatContext userContext = null;
+		GUserChatSession userContext = null;
 
 		// Retrieve the chat profile from the repository.
 		Optional<GChatProfileConfiguration> profileEntry = chatProfilesRepository.findById(code);
@@ -273,7 +277,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			// Get the current user's username and manage the chat user context.
 			String currentUserName = securityService.getCurrentUser().getUsername();
 			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				userContext = new GUserChatContext();
+				userContext = new GUserChatSession();
 				userContext.setDescription(chatProfile.getDescription());
 				userContext.setChatProfileCode(request.getChatProfileCode());
 				userContext.setRagChat(true);
@@ -281,7 +285,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				userContext.setUsername(currentUserName);
 				userContext = persistenceManager.insert(userContext);
 			} else {
-				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
+				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
 				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
 					throw new SecurityException("Attempting to access the wrong chat userContext");
 				}
@@ -414,7 +418,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		}
 		GChatProfileConfiguration chatProfile = null;
 		String code = request.getChatProfileCode();
-		GUserChatContext userContext = null;
+		GUserChatSession userContext = null;
 
 		// Retrieve chat profile from repository by its code
 		Optional<GChatProfileConfiguration> profileEntry = chatProfilesRepository.findById(code);
@@ -428,15 +432,16 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			UserInfos user = securityService.getCurrentUser();
 			String currentUserName = user.getUsername();
 			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				userContext = new GUserChatContext();
+				userContext = new GUserChatSession();
 				userContext.setDescription(chatProfile.getDescription());
 				userContext.setChatProfileCode(request.getChatProfileCode());
 				userContext.setRagChat(true);
 				userContext.setChatCreationDateTime(new Date());
 				userContext.setUsername(currentUserName);
+
 				userContext = persistenceManager.insert(userContext);
 			} else {
-				userContext = persistenceManager.findById(GUserChatContext.class, request.getUserChatContextCode());
+				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
 				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
 					throw new SecurityException("Attempting to access the wrong chat userContext");
 				}
@@ -462,7 +467,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException If configuration is not properly set
 	 */
 	private Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request, GChatProfileConfiguration chatProfile,
-			GUserChatContext userContext, UserInfos user) throws LLMConfigException {
+			GUserChatSession userContext, UserInfos user) throws LLMConfigException {
+
 		// Set up chat environment and models
 		ChatProfileRuntimeEnvironment chatEnvironment = chatProfileManagementService.createChatEnvironment(chatProfile);
 
@@ -515,13 +521,20 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 						contextLength / 3);
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
-				request.setDocuments(extractedDocuments);
-				LLMChatRequestResources fullRequest = chatRequestBuilder.buildRequestResources(request, userContext,
-						contextLength);
+
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
+						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
+							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
+				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
+						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 				return streamChatClient(chatHandler, prompt, context, request, response, userContext,
-						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3);
+						chatRequestContext, fullRequest.getTokensSize() > contextLength / 2, contextLength / 3,
+						showedDocuments);
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);
@@ -538,9 +551,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
 		GUserChatInfoData data = null;
-		Optional<GUserChatContext> repodata = this.userContextRepository.findById(id);
+		Optional<GUserChatSession> repodata = this.userContextRepository.findById(id);
 		if (repodata.isPresent()) {
-			GUserChatContext context = repodata.get();
+			GUserChatSession context = repodata.get();
 			data = new GUserChatInfoData(context);
 			GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 			IGConfigurableChatModel handler = chatModelConfigurations.defaultHandler();
@@ -590,7 +603,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (!canAccess)
 			throw new SecurityException("Trying to access wrong chat profile");
 		String description = chatProfile.getDescription();
-		GUserChatContext userContext = new GUserChatContext();
+		GUserChatSession userContext = new GUserChatSession();
 		userContext.setChatProfileCode(referenceCode);
 		userContext.setDescription(description);
 		userContext.setRagChat(true);
@@ -612,7 +625,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (!canAccess)
 			throw new SecurityException("Trying to access wrong chat profile");
 		String description = chatProfile.getDescription();
-		GUserChatContext userContext = new GUserChatContext();
+		GUserChatSession userContext = new GUserChatSession();
 		userContext.setChatProfileCode(profileCode);
 		userContext.setDescription(description);
 		userContext.setRagChat(true);

@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -16,27 +15,32 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BaseOutputChatPipelineService {
-	final IGAIDocumentsCacheService documentsCacheService;
-	final IGChatStorageAreaService chatStorageAreaService;
-	final DocumentReferenceRepository docreferenceRepo;
-	final UserUploadContentServerSideRepository uploadsRepo;
-	final LLMGeneratedResourceRepository generatedRepo;
-	static private final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
+	protected final IGAIDocumentsCacheService documentsCacheService;
+	protected final IGChatStorageAreaService chatStorageAreaService;
+	protected final DocumentReferenceRepository docreferenceRepo;
+	protected final UserUploadContentServerSideRepository uploadsRepo;
+	protected final LLMGeneratedResourceRepository generatedRepo;
+	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	protected final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
 
-	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData) {
+	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException {
 		List<String> docsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedSelectedDocuments(runtimeData);
 		LLMChatRequestResources rc = runtimeData.getRequestResources();
 		if (docsList != null && !docsList.isEmpty()) {
@@ -94,10 +98,8 @@ public class BaseOutputChatPipelineService {
 					LOGGER.error("Exception ingesting document: " + docId, e);
 				}
 			}
-			AIDocumentsSet docs = rc.getLastRequest().getDocuments();
-			if (docs != null) {
-				rc.getLastRequest().setDocuments(AIDocumentsSet.join(docs, out));
-			}
+			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(out, runtimeData.getUserChatContext(),
+					targetChatModel, policy);
 		}
 		return rc;
 	}

@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.Date;
 
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import lombok.Data;
 
 @Data
@@ -23,7 +24,7 @@ public class GUserChatInfoData implements GUserChatInfo {
 		this.ragChat = info.getRagChat();
 	}
 
-	public GUserChatInfoData(GUserChatContext info) {
+	public GUserChatInfoData(GUserChatSession info) {
 		this.code = info.getCode();
 		this.username = info.getUsername();
 		this.description = info.getDescription();

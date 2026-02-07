@@ -1,6 +1,5 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,7 +15,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
-import ai.gebo.model.base.GBaseObject;
 
 final class RoutingPromptUtil {
 
@@ -110,10 +108,8 @@ final class RoutingPromptUtil {
 		AtomicInteger tokensBudget = new AtomicInteger(documentsTokenBudget);
 		AIDocumentsSet result = new AIDocumentsSet();
 		result = tryAdd(result, requestResources.getRetrievedDocuments(), tokensBudget);
-		result = tryAdd(result, requestResources.getLatestRequestsChatWithDocuments(), tokensBudget);
-		result = tryAdd(result, requestResources.getLatestRequestsUploadedDocuments(), tokensBudget);
-		result = tryAdd(result, requestResources.getHistoricallyRetrievedDocuments(), tokensBudget);
-		result = tryAdd(result, requestResources.getHistoricallyUploadedDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getChatWithDocuments(), tokensBudget);
+		result = tryAdd(result, requestResources.getUploadedDocuments(), tokensBudget);
 		result = tryAdd(result, requestResources.getLlmGeneratedDocuments(), tokensBudget);
 		return result;
 	}

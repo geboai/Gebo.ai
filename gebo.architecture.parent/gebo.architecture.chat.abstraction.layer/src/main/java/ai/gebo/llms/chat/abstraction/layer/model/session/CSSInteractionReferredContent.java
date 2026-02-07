@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CSSInteractionReferredContent<T> implements ITokensCountable {
 	private int interactionIndex = 0;
-	private AIDocumentReferenceItem data = null;
-	private T contentObject = null;
+	private AIDocumentReferenceItem aiDocument = null;
+	private T appReference = null;
 
 	@Override
 	public int getTokensSize() {
-		return data != null ? data.getTokensSize() : 0;
+		return aiDocument != null ? aiDocument.getTokensSize() : 0;
 	}
 }

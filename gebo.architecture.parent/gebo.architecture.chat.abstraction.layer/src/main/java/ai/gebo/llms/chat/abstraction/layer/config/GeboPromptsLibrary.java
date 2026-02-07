@@ -3,12 +3,9 @@ package ai.gebo.llms.chat.abstraction.layer.config;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,6 +23,8 @@ import lombok.Data;
 @Data
 public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 	private List<GPromptLibraryReference> library = new ArrayList<GPromptLibraryReference>();
+	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
+	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT = "default-pipeline-rag-output-prompt";
 	public static final String DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT = "default-pipeline-routing-decision-prompt";
@@ -47,7 +46,7 @@ public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 			HISTORY_CONSOLIDATION_PROMPT, PROMPT_TEMPLATE_WIZARD_DEFAULT, SUMMARIZE_CHAT_DESCRIPTION,
 			DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT, DEEP_SEARCH_KEYWORD_GENERATION_PROMPT,
 			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT,
-			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
+			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT);
 
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboPromptsLibrary.class);
 

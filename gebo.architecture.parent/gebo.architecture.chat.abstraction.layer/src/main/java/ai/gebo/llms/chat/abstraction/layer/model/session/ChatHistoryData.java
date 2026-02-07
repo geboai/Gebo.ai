@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.model.session;
 
 import java.util.List;
 

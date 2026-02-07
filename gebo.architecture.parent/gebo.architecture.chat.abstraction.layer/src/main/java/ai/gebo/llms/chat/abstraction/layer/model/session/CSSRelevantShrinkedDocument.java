@@ -18,7 +18,6 @@ import lombok.Data;
 @Data
 @JsonClassDescription("Summarized document")
 public class CSSRelevantShrinkedDocument {
-
 	@JsonPropertyDescription("uuid, auto generated")
 	private String id = null;
 	@JsonPropertyDescription("document reference code")
@@ -31,12 +30,11 @@ public class CSSRelevantShrinkedDocument {
 	private String documentUrl = null;
 	@JsonPropertyDescription("document summarized content")
 	private String summarizedContent = null;
-	@JsonPropertyDescription("content relevancy vs last chat exchanged user/assistant messages")
-	private Float relevancyRate = null;
+
 	@JsonPropertyDescription("length in tokens")
 	private Integer tokensSize = null;
-	@JsonPropertyDescription("list of keywords relevant for  last chat exchanged user/assistant messages")
-	private List<String> keywords = new ArrayList<String>();
+	private int interactionIndex = -1;
+	private ShrinkedDocumentOrigin documentOrigin = null;
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 
 	public AIDocumentReferenceItem toAIDocumentReferenceItem() {

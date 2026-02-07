@@ -8,7 +8,7 @@ public interface ITokensCountable {
 	public static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 
 	public int getTokensSize();
-
+	
 	public static int tokensSize(ITokensCountable... data) {
 		int toks = 0;
 		if (data != null) {

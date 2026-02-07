@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.utils.DataPage;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.base.GBaseObject;
@@ -48,7 +48,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/users/GeboUserChatsController")
 @AllArgsConstructor
 public class GeboUserChatsController {
-	final GUserChatContextRepository repository;
+	final GUserChatSessionRepository repository;
 	final IGSecurityService securityService;
 	final IGChatStorageAreaService chatStorageAreaService;
 
@@ -57,7 +57,7 @@ public class GeboUserChatsController {
 	 * pattern. Contains a filter object and pagination information.
 	 */
 	public static class ChatInfosByQbeParam {
-		public GUserChatContext filter = new GUserChatContext();
+		public GUserChatSession filter = new GUserChatSession();
 		public DataPage page = new DataPage();
 	};
 
@@ -78,9 +78,9 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getChatInfosByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo getChatInfosByCode(@RequestParam("id") String id) {
-		Optional<GUserChatContext> optional = repository.findById(id);
+		Optional<GUserChatSession> optional = repository.findById(id);
 		if (optional.isPresent()) {
-			GUserChatContext data = optional.get();
+			GUserChatSession data = optional.get();
 			securityService.checkBeingCreator(data);
 			return new GUserChatInfoData(data);
 		}
@@ -117,11 +117,11 @@ public class GeboUserChatsController {
 	 */
 	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserChats(@RequestBody List<String> ids) {
-		List<GUserChatContext> data = repository.findAllById(ids);
-		for (GUserChatContext gUserChatContext : data) {
+		List<GUserChatSession> data = repository.findAllById(ids);
+		for (GUserChatSession gUserChatContext : data) {
 			securityService.checkBeingCreator(gUserChatContext);
 		}
-		for (GUserChatContext gUserChatContext : data) {
+		for (GUserChatSession gUserChatContext : data) {
 			try {
 				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
 			} catch (IOException e) {
@@ -153,26 +153,14 @@ public class GeboUserChatsController {
 		 * @return A new UserChatHistory with data from the provided context
 		 * @throws CloneNotSupportedException
 		 */
-		public static UserChatHistory from(GUserChatContext context) throws CloneNotSupportedException {
+		public static UserChatHistory from(GUserChatSession context) throws CloneNotSupportedException {
 			UserChatHistory history = new UserChatHistory();
 			history.setCode(context.getCode());
 			history.setDescription(context.getDescription());
-			history.setInteractions(getClientViewOf(context.getInteractions()));
+			history.setInteractions(context.getInteractions());
 			return history;
 		}
 
-		private static List<ChatInteractions> getClientViewOf(List<ChatInteractions> interactions)
-				throws CloneNotSupportedException {
-
-			List<ChatInteractions> cinteractions = new ArrayList<>();
-			if (interactions != null) {
-				for (ChatInteractions chatInteraction : interactions) {
-					ChatInteractions clientVision = chatInteraction.clientClone();
-					cinteractions.add(clientVision);
-				}
-			}
-			return cinteractions;
-		}
 	}
 
 	/**
@@ -187,9 +175,9 @@ public class GeboUserChatsController {
 	 */
 	@GetMapping(value = "getChatHistory", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserChatHistory getChatHistory(@RequestParam("code") String code) throws CloneNotSupportedException {
-		Optional<GUserChatContext> optional = repository.findById(code);
+		Optional<GUserChatSession> optional = repository.findById(code);
 		if (optional.isPresent()) {
-			GUserChatContext uc = optional.get();
+			GUserChatSession uc = optional.get();
 			String currUN = securityService.getCurrentUser().getUsername();
 			if (uc.getUsername().equals(currUN))
 				return UserChatHistory.from(uc);
@@ -209,9 +197,9 @@ public class GeboUserChatsController {
 	 */
 	@PostMapping(value = "changeChatDescription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GLookupEntry changeChatDescription(@RequestBody GLookupEntry entry) {
-		Optional<GUserChatContext> data = repository.findById(entry.getCode());
+		Optional<GUserChatSession> data = repository.findById(entry.getCode());
 		if (data.isPresent()) {
-			GUserChatContext uc = data.get();
+			GUserChatSession uc = data.get();
 			uc.setDescription(entry.getDescription());
 			repository.save(uc);
 			return GLookupEntry.of(uc);

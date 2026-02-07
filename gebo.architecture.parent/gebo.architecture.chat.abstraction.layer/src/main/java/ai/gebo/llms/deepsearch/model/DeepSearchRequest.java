@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.drew.lang.annotations.NotNull;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class DeepSearchRequest extends GBaseObject {
 	@NotNull
 
 	List<String> knowledgeBases = new ArrayList<String>();
-	@GObjectReference(referencedType = GUserChatContext.class)
+	@GObjectReference(referencedType = GUserChatSession.class)
 	String userChatContextCode = null;
 	String chatRequestCode = null;
 	List<String> deepSearchDataSources = null;

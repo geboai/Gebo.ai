@@ -10,9 +10,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +17,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.chat.abstraction.layer.config.GPromptLibraryReference;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.repository.PromptConfigRepository;
@@ -68,7 +62,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * @param configs    GeboChatPromptsConfigs providing prompt configurations
 	 * @param source     GPromptConfigDynamicSource providing dynamic configurations
 	 * @param directRepo PromptConfigRepository for direct repository access
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public GPromptConfigDaoImpl(@Autowired(required = false) List<IGStaticPromptsProvider> configs,
 			PromptConfigRepository directRepo) throws IOException {
@@ -93,7 +87,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 				}
 			}
 		}
-		
+
 		return out;
 	}
 
@@ -138,8 +132,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 */
 	@Override
 	public GPromptConfig defaultChatPrompt(GBaseChatModelConfig chatConfiguration, Boolean ragPrompt) {
-		String promptUse = ragPrompt != null && ragPrompt ? GPromptConfig.PROMPT_USE_STANDARD_RAG_PROMPT
-				: GPromptConfig.PROMPT_USE_STANDARD_CHAT_PROMPT;
+		String promptUse = ragPrompt != null && ragPrompt ? GeboPromptsLibrary.PROMPT_USE_STANDARD_RAG_PROMPT
+				: GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT;
 		return findByPromptUse(promptUse, chatConfiguration);
 	}
 
@@ -152,8 +146,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 */
 	@Override
 	public GPromptConfig defaultChatPrompt(Boolean ragPrompt) {
-		String promptUse = ragPrompt != null && ragPrompt ? GPromptConfig.PROMPT_USE_STANDARD_RAG_PROMPT
-				: GPromptConfig.PROMPT_USE_STANDARD_CHAT_PROMPT;
+		String promptUse = ragPrompt != null && ragPrompt ? GeboPromptsLibrary.PROMPT_USE_STANDARD_RAG_PROMPT
+				: GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT;
 		return findByPromptUse(promptUse);
 	}
 

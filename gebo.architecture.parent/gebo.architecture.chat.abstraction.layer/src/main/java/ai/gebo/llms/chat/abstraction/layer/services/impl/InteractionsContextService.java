@@ -14,8 +14,8 @@ import java.util.List;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 
 /**
  * Gebo.ai comment agent Service for managing and processing user chat
@@ -41,7 +41,7 @@ public class InteractionsContextService {
 	 * @return A Document object representing the interactions as a concatenated
 	 *         string.
 	 */
-	public Document interactionsAsDocument(GUserChatContext userContext, int tokensThreshold) {
+	public Document interactionsAsDocument(GUserChatSession userContext, int tokensThreshold) {
 		if (userContext == null || userContext.getInteractions() == null) {
 			return new Document("");
 		}

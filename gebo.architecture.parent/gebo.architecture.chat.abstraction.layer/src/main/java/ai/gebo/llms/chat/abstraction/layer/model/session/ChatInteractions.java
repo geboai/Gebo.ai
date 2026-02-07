@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.llms.chat.abstraction.layer.model.session;
 
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -16,16 +16,7 @@ public class ChatInteractions implements ITokensCountable {
 	private GeboTemplatedChatResponse response = null; // Stores the chat response
 	private Integer responseNTokens = null; // Number of tokens in the response
 
-	public ChatInteractions clientClone() throws CloneNotSupportedException {
-		GeboChatRequest clonedrequest = request != null ? (GeboChatRequest) request.clone() : null;
-		clonedrequest.setDocuments(null);
-		ChatInteractions cloned = new ChatInteractions();
-		cloned.request = clonedrequest;
-		cloned.requestNTokens = (requestNTokens);
-		cloned.response = (response);
-		cloned.responseNTokens = (responseNTokens);
-		return cloned;
-	}
+	
 
 	@Override
 	public int getTokensSize() {
