@@ -62,7 +62,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 	}
 
 	@Override
-	@Async
+	// @Async
 	public void shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException {
 		ShrinkedChatSessionState out = new ShrinkedChatSessionState();
 		out.setUserChatContextCode(fullSessionState.getUserChatContextCode());
@@ -72,37 +72,55 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			throw new LLMConfigException("No Internal services or default chat model present");
 		out.setConsolidatedInteractions(
 				consolidateHistory(fullSessionState.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
-		out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(out, fullSessionState.getChatWithDocuments()),
-				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-				usedChatModel));
+		out.setChatHistory(copyLatest(fullSessionState.getChatHistory().getValue()));
+		out.setRelevantChatWithDocuments(
+				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getChatWithDocuments()),
+						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
+						usedChatModel));
 		out.setRelevantRetrievedDocuments(
-				shrinkDocumentList(untillLatest(out, fullSessionState.getRetrievedDocuments()),
+				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getRetrievedDocuments()),
 						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
 						usedChatModel));
 		out.setRelevantLlmGeneratedDocuments(
-				shrinkDocumentList(untillLatest(out, fullSessionState.getLlmGeneratedDocuments()),
+				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getLlmGeneratedDocuments()),
 						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
 						usedChatModel));
-		out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(out, fullSessionState.getUploadedDocuments()),
-				fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-				usedChatModel));
-		out.setLatestRequestsChatWithDocuments(afterLatest(out, fullSessionState.getChatWithDocuments()));
-		out.setLatestRequestsLlmGeneratedDocuments(afterLatest(out, fullSessionState.getLlmGeneratedDocuments()));
-		out.setLatestRequestsRetrievedDocuments(afterLatest(out, fullSessionState.getRetrievedDocuments()));
-		out.setLatestRequestsUploadedDocuments(afterLatest(out, fullSessionState.getUploadedDocuments()));
+		out.setRelevantUploadedDocuments(
+				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getUploadedDocuments()),
+						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
+						usedChatModel));
+		out.setLatestRequestsChatWithDocuments(afterLatest(fullSessionState, fullSessionState.getChatWithDocuments()));
+		out.setLatestRequestsLlmGeneratedDocuments(
+				afterLatest(fullSessionState, fullSessionState.getLlmGeneratedDocuments()));
+		out.setLatestRequestsRetrievedDocuments(
+				afterLatest(fullSessionState, fullSessionState.getRetrievedDocuments()));
+		out.setLatestRequestsUploadedDocuments(afterLatest(fullSessionState, fullSessionState.getUploadedDocuments()));
 		shrinkedStateRepository.save(out);
 
 	}
 
-	private CSSReferredContentList afterLatest(ShrinkedChatSessionState out,
+	private CSSSimplifiedChatHistory copyLatest(CSSSimplifiedChatHistory value) {
+		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
+				.getLeaveLastInteractionsOnHistoryConsolidation();
+		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+		lastIndex = Math.max(lastIndex, 0);
+		CSSSimplifiedChatHistory newHistory = new CSSSimplifiedChatHistory();
+		for (int i = lastIndex; i < value.getInteractions().size(); i++) {
+			newHistory.getInteractions().add(value.getInteractions().get(i));
+		}
+		return newHistory;
+	}
+
+	private CSSReferredContentList afterLatest(ChatFullSessionState fullSessionState,
 			TokensContainer<? extends CSSReferredContentList> data) {
 		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
-		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+		int lastIndex = fullSessionState.getChatHistory().getValue().getInteractions().size()
+				- leaveLastInteractionsOnHistoryConsolidation;
 		CSSReferredContentList in = data.getValue();
 		final CSSReferredContentList<?> bag = new CSSReferredContentList();
 		for (int index = 0; index < in.getData().size(); index++) {
-			 CSSInteractionReferredContent entry =  in.getData().get(index);
+			CSSInteractionReferredContent entry = in.getData().get(index);
 			if (entry.getInteractionIndex() >= lastIndex) {
 				bag.getData().add(entry);
 			}
@@ -110,15 +128,16 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		return bag;
 	}
 
-	private TokensContainer<? extends CSSReferredContentList> untillLatest(ShrinkedChatSessionState out,
+	private TokensContainer<? extends CSSReferredContentList> untillLatest(ChatFullSessionState fullSessionState,
 			TokensContainer<? extends CSSReferredContentList> data) {
 		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
-		int lastIndex = out.getChatHistory().getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+		int lastIndex = fullSessionState.getChatHistory().getValue().getInteractions().size()
+				- leaveLastInteractionsOnHistoryConsolidation;
 		CSSReferredContentList in = data.getValue();
 		final CSSReferredContentList bag = new CSSReferredContentList();
 		for (int index = 0; index < in.getData().size(); index++) {
-			CSSInteractionReferredContent entry =  in.getData().get(index);
+			CSSInteractionReferredContent entry = in.getData().get(index);
 			if (entry.getInteractionIndex() < lastIndex) {
 				bag.getData().add(entry);
 			}
@@ -163,18 +182,18 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
 			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
 			for (int i = 0; i < docs.getValue().getData().size(); i++) {
-				CSSInteractionReferredContent content =  docs.getValue().getData().get(i);
-				if (content.getData().getFragments().isEmpty())
+				CSSInteractionReferredContent content = docs.getValue().getData().get(i);
+				if (content.getAiDocument().getFragments().isEmpty())
 					continue;
-				refsMap.put(content.getData().getCode(), content.getData());
+				refsMap.put(content.getAiDocument().getCode(), content.getAiDocument());
 				StringBuffer buffer = new StringBuffer();
-				for (AIDocumentFragment fragment : content.getData().getFragments()) {
+				for (AIDocumentFragment fragment : content.getAiDocument().getFragments()) {
 					buffer.append(fragment.getDocumentContent());
 				}
 				if (!buffer.isEmpty()) {
-					ConsolidationInput input = new ConsolidationInput(content.getData().getCode(),
-							content.getData().getOriginalUrl(),
-							(String) content.getData().getFragments().get(0).getMetaData().get(DocumentMetaInfos.TITLE),
+					ConsolidationInput input = new ConsolidationInput(content.getAiDocument().getCode(),
+							content.getAiDocument().getOriginalUrl(), (String) content.getAiDocument().getFragments()
+									.get(0).getMetaData().get(DocumentMetaInfos.TITLE),
 							buffer.toString());
 					toBeConsolidated.add(input);
 				}
@@ -213,31 +232,33 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
 		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
-
-		for (int i = 0; i < lastIndex; i++) {
-			StringBuffer new_messages = new StringBuffer();
-			CSSSimplefiedInteraction interaction = value.getInteractions().get(i);
-			if (interaction.getUser() != null) {
-				new_messages.append(USER_MSG);
-				new_messages.append(interaction.getUser());
-				new_messages.append(NEWLINE);
+		if (lastIndex > 0) {
+			for (int i = 0; i < lastIndex; i++) {
+				StringBuffer new_messages = new StringBuffer();
+				CSSSimplefiedInteraction interaction = value.getInteractions().get(i);
+				if (interaction.getUser() != null) {
+					new_messages.append(USER_MSG);
+					new_messages.append(interaction.getUser());
+					new_messages.append(NEWLINE);
+				}
+				if (interaction.getAssistant() != null) {
+					new_messages.append(ASSISTANT_MSG);
+					new_messages.append(interaction.getAssistant());
+					new_messages.append(NEWLINE);
+				}
+				ConsolidationInput input = new ConsolidationInput(null, null, null, new_messages.toString());
+				inputs.add(input);
 			}
-			if (interaction.getAssistant() != null) {
-				new_messages.append(ASSISTANT_MSG);
-				new_messages.append(interaction.getAssistant());
-				new_messages.append(NEWLINE);
-			}
-			ConsolidationInput input = new ConsolidationInput(null, null, null, new_messages.toString());
-			inputs.add(input);
-		}
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
-		String consolidated = callLLMConsolidateText(usedChatModel, prompt, "", existingSummary, params, inputs);
-		GUserChatInteractionsConsolidationData newConsolidation = new GUserChatInteractionsConsolidationData();
-		newConsolidation.setConsolidationText(consolidated);
-		newConsolidation.setLastInteractionPointer(value.getInteractions().size());
-		newConsolidation.setTokensSize(tokensEstimator.estimate(newConsolidation.getConsolidationText()));
-		return newConsolidation;
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
+			String consolidated = callLLMConsolidateText(usedChatModel, prompt, "", existingSummary, params, inputs);
+			GUserChatInteractionsConsolidationData newConsolidation = new GUserChatInteractionsConsolidationData();
+			newConsolidation.setConsolidationText(consolidated);
+			newConsolidation.setLastInteractionPointer(lastIndex);
+			newConsolidation.setTokensSize(tokensEstimator.estimate(newConsolidation.getConsolidationText()));
+			return newConsolidation;
+		} else
+			return null;
 	}
 
 	private CSSData joiner(CSSData t1, CSSData t2) {

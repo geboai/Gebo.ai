@@ -59,8 +59,9 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 				this.latestRequestsLlmGeneratedDocuments.toAIDocumentsSet(),
 				this.relevantLlmGeneratedDocuments.toAIDocumentsSet(0.0f));
 		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
-				llmGeneratedDocuments, consolidatedInteractions.getConsolidationText(), chatHistory.getInteractions(),
-				currentRequest, pol);
+				llmGeneratedDocuments,
+				consolidatedInteractions != null ? consolidatedInteractions.getConsolidationText() : null,
+				chatHistory.getInteractions(), currentRequest, pol);
 	}
 
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {

@@ -12,6 +12,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
  * budget
  */
 public interface IGChatSessionStateShrinkerService {
-	@Async
+	//@Async
 	public void shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException;
 }

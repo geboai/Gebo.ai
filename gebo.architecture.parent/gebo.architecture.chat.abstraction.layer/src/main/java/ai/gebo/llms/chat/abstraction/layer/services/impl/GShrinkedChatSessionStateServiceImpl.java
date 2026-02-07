@@ -78,8 +78,8 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 			UserUploadedContent content, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException {
 		CSSInteractionReferredContent<UserUploadedContentSTO> contentBag = new CSSInteractionReferredContent<UserUploadedContentSTO>();
-		contentBag.setContentObject(UserUploadedContentSTO.of(content));
-		contentBag.setData(ingested);
+		contentBag.setAppReference(UserUploadedContentSTO.of(content));
+		contentBag.setAiDocument(ingested);
 		contentBag.setInteractionIndex(index);
 		session.getLatestRequestsUploadedDocuments().getData().add(contentBag);
 		return session;
@@ -97,8 +97,8 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 			GDocumentReference reference, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException {
 		CSSInteractionReferredContent<GDocumentReferenceSTO> contentBag = new CSSInteractionReferredContent<GDocumentReferenceSTO>();
-		contentBag.setContentObject(GDocumentReferenceSTO.of(reference));
-		contentBag.setData(ingested);
+		contentBag.setAppReference(GDocumentReferenceSTO.of(reference));
+		contentBag.setAiDocument(ingested);
 		contentBag.setInteractionIndex(index);
 		session.getLatestRequestsChatWithDocuments().getData().add(contentBag);
 		return session;
@@ -118,8 +118,8 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 			Optional<GDocumentReference> dr = this.docRepo.findById(doc.getCode());
 			if (dr.isPresent()) {
 				CSSInteractionReferredContent<GDocumentReferenceSTO> contentBag = new CSSInteractionReferredContent<GDocumentReferenceSTO>();
-				contentBag.setContentObject(GDocumentReferenceSTO.of(dr.get()));
-				contentBag.setData(doc);
+				contentBag.setAppReference(GDocumentReferenceSTO.of(dr.get()));
+				contentBag.setAiDocument(doc);
 				contentBag.setInteractionIndex(index);
 				session.getLatestRequestsRetrievedDocuments().getData().add(contentBag);
 			}
@@ -139,8 +139,8 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 			LLMGeneratedResource resource, AIDocumentReferenceItem ingested, int index)
 			throws GeboChatSessionLifecycleException {
 		CSSInteractionReferredContent<LLMGeneratedResourceSTO> contentBag = new CSSInteractionReferredContent<LLMGeneratedResourceSTO>();
-		contentBag.setContentObject(LLMGeneratedResourceSTO.of(resource));
-		contentBag.setData(ingested);
+		contentBag.setAppReference(LLMGeneratedResourceSTO.of(resource));
+		contentBag.setAiDocument(ingested);
 		contentBag.setInteractionIndex(index);
 		session.getLatestRequestsLlmGeneratedDocuments().getData().add(contentBag);
 		return session;
