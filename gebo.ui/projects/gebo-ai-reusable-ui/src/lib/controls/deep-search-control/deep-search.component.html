@@ -7,12 +7,12 @@
             <p-progressbar [value]="completionPercent" [style]="{ height: '10px' }"></p-progressbar>
         </div>
         <div class="deep-search__label">
-            <span *ngIf="inEventsLoop && deepSearchStarting" class="deep-search__label"
-                id="DeepSearchProcessingSearch" gebo-ai-text>Searching relevant informations</span>
-            <span class="deep-search__label" *ngIf="analisysStep"><span id="DeepSearchProcessingFile"
-                    gebo-ai-text>Analized
-                    file</span>&nbsp;
-                <span>{{analisysStep?.documentRef?.name}}</span></span>
+            <span *ngIf="inEventsLoop && deepSearchStarting" class="deep-search__label" id="DeepSearchProcessingSearch"
+                gebo-ai-text>Searching relevant informations</span>
+            <span class="deep-search__label" *ngIf="analisysStep"> <span>
+                    {{analisysStep?.dataSourceDescription}}
+                </span>&nbsp;<span id="DeepSearchProcessingFile" gebo-ai-text>Analized
+                    file</span>&nbsp;<span>{{analisysStep?.analyzedDocument?.name}}</span></span>
             <span class="deep-search__label" *ngIf="deepSearchDataSourceDocumentResult">
                 <span>
                     {{deepSearchDataSourceDocumentResult.dataSourceDescription}}

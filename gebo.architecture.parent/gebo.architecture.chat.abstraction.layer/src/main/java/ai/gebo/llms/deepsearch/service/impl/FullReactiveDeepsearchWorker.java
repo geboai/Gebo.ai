@@ -36,11 +36,15 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
+import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -48,6 +52,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchKnowledgebasesResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchPhase;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
+import ai.gebo.llms.deepsearch.model.DeepSearchSourceType;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
@@ -56,6 +61,7 @@ import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchUploadedDocumentEvent;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
@@ -94,6 +100,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 	private DeepSearchDefaultConfig defaultDeepsearchConfig;
 	@Autowired
 	private IRagThreasholdAutotuneService threasholdAutotuneService;
+	@Autowired
+	private UserUploadContentServerSideRepository userUploadedRepository;
 	@Autowired
 	private IGPromptConfigDao promptsDao;
 	@Autowired
@@ -176,8 +184,30 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		ParallelFlux<AbstractDeepSearchEvent> body = Flux.fromIterable(consolidatedDaoResult.getDocumentItems())
 				.map((refItem) -> {
 					String documentCode = refItem.getCode();
-					Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
-					if (docdata.isPresent()) {
+
+					GDocumentReference documentReference = null;
+					UserUploadedContent uploadedContent = null;
+					DeepSearchAnalyzedDocument analyzed = null;
+					{
+						Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
+						if (docdata.isPresent()) {
+							documentReference = docdata.get();
+							analyzed = KnowledgeBaseDocRefUtil.create(documentReference);
+						} else {
+							Optional<UserUploadContentServerSide> updopt = this.userUploadedRepository
+									.findById(documentCode);
+							if (updopt.isPresent()) {
+								uploadedContent = new UserUploadedContent(updopt.get());
+							}
+							analyzed = new DeepSearchAnalyzedDocument();
+							analyzed.setCode(uploadedContent.getCode());
+							analyzed.setDataSourceCode("User uploaded file");
+							analyzed.setDataSourceDescription("User uploaded file");
+							analyzed.setName(uploadedContent.getFileName());
+							analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);							
+						}
+					}
+					if (analyzed != null || uploadedContent != null) {
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug(
 									"Loading on " + Thread.currentThread().getName() + " document:" + documentCode);
@@ -205,16 +235,30 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							resultStep.setDeepsearchCode(request.getCode());
 							resultStep.setAnalisysResult(result);
 							resultStep.setIndex(history.size());
-							resultStep.setAnalyzedDocument(KnowledgeBaseDocRefUtil.create(docdata.get()));
+							resultStep.setAnalyzedDocument(analyzed);
 							resultStep.setFragmentsCodes(fragments.stream().map(x -> x.getCode()).toList());
-							DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
-							resultStep.setProcessPercentage(state.calculateProcessedPercent());
-							event.setInputData(docdata.get());
-							event.setOutputData(resultStep);
-							ConsolidationInput input = new ConsolidationInput(event.getInputData().getName(),
-									event.getInputData().getUri(), event.getInputData().getName(), result);
-							results.add(input);
-							return (AbstractDeepSearchEvent) event;
+							AbstractDeepSearchEvent outEvent = null;
+							if (documentReference != null) {
+								DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
+								resultStep.setProcessPercentage(state.calculateProcessedPercent());
+								event.setInputData(documentReference);
+								event.setOutputData(resultStep);
+								ConsolidationInput input = new ConsolidationInput(event.getInputData().getName(),
+										event.getInputData().getUri(), event.getInputData().getName(), result);
+								results.add(input);
+								outEvent = event;
+							}
+							if (uploadedContent != null) {
+								DeepSearchUploadedDocumentEvent event = new DeepSearchUploadedDocumentEvent();
+								event.setInputData(uploadedContent);
+								resultStep.setProcessPercentage(state.calculateProcessedPercent());
+								event.setOutputData(resultStep);
+								ConsolidationInput input = new ConsolidationInput(uploadedContent.getFileName(), null,
+										uploadedContent.getFileName(), result);
+								results.add(input);
+								outEvent = event;
+							}
+							return outEvent;
 						} catch (Throwable th) {
 							LOGGER.error("Error calling llm", th);
 							DeepSearchErrorEvent event = new DeepSearchErrorEvent();
@@ -267,8 +311,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, AIDocumentsSet sessionDocuments,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,IGConfigurableChatModel serviceModel,
-			Scheduler deepSearchScheduler, String chunkingSessionId) throws LLMConfigException {
+			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
+			throws LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....)");

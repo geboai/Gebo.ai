@@ -71,7 +71,13 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchResponse?: DeepSearchResponse;
     protected chatResponse?: GeboChatResponse;
     protected analisysStep?: {
-        documentRef?: GResponseDocumentRef,
+        analyzedDocument?: {
+            name?:string;
+            url?:string;
+            code?:string;
+        },
+        dataSourceCode?:string;
+        dataSourceDescription?:string;
         analisysPortion?: string,
         completionPercent?: number
     };
@@ -148,6 +154,13 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             this.completionPercent = Math.round(msg.content?.processPercentage);
                         }
                     } break;
+                    case "DeepSearchDocumentAnalisysResultStep": {
+                        this.analisysStep = msg.content;
+                        if (msg.content?.processPercentage) {
+
+                            this.completionPercent = Math.round(msg.content?.processPercentage);
+                        }
+                    }break;
                     case "DeepSearchDataSourceResponse": {
                         this.clearEventsDisplay();
                         this.deepSearchDataSourceResponse = msg.content;

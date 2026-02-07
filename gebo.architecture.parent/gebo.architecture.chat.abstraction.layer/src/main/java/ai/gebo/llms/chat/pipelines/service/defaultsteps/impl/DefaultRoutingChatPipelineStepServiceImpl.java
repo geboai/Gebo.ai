@@ -131,6 +131,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(
 						chatModel);
 				if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
+					
 					rd = createDeepSearchHeavyDocumentsFixedRoute(runtimeData);
 				} else {
 					RoutingDecisionResponse llmRoutingDecision = null;
@@ -226,7 +227,16 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 					public List<IStepContribution> getContextEnrichingContribution() {
 						return List.of();
 					}
-				}, DEEP_SEARCH_DATA_SOURCES);
+
+					@Override
+					public Map<String, Object> getEnvironmentContributions() {
+						Map<String, Object> params = new HashMap<String, Object>();
+						params.put(DefaultPipelineSharedEnvironmentUtil.AI_SELECTED_DEEP_SEARCH_DATA_SOURCES,
+								List.of());
+						
+						return params;
+					}
+				}, RespondingWith.DEEP_SEARCH_RESPONSE.name());
 		return rd;
 	}
 

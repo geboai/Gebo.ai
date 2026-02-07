@@ -22,13 +22,11 @@ public class DefaultPipelineSharedEnvironmentUtil {
 	}
 
 	private static List<String> cleanList(List list) {
-		if (list == null || list.isEmpty())
-			return null;
-		List<String> outList = null;
+		
+		List<String> outList = new ArrayList<String>();
 		for (Object object : list) {
 			if (object != null && object instanceof String string && string.trim().length() > 0) {
-				if (outList == null)
-					outList = new ArrayList<String>();
+				
 				outList.add(string);
 			}
 		}
