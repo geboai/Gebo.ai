@@ -114,7 +114,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
-	private Flux<AbstractDeepSearchEvent> dataSourcesNextStep(DeepSearchRequest request,
+	private List<Flux<AbstractDeepSearchEvent>> dataSourcesNextStep(DeepSearchRequest request,
 			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
 			List<IGReactiveDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler,
@@ -123,10 +123,10 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin dataSourcesNextStep(....)");
 		}
-
+		List<Flux<AbstractDeepSearchEvent>> out = new ArrayList<Flux<AbstractDeepSearchEvent>>();
 		// if already CurrentDataSourceHandlerRunning is initialized continue processing
 		// next step
-		Flux<AbstractDeepSearchEvent> dataSourcesFlux = null;
+
 		// find next data source to evaluate end execute
 		for (IGReactiveDeepSearchDataSourceService handler : handlers) {
 			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
@@ -147,20 +147,18 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 							"Analyzing data from " + handler.getDescription(chatModel, deepSearchConfig, request));
 					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
+					nextStepValue.onErrorResume(Common.commonFallBack(request));
+					nextStepValue.subscribeOn(deepSearchScheduler);
+					out.add(nextStepValue);
 				}
-				nextStepValue.subscribeOn(deepSearchScheduler);
-				if (dataSourcesFlux == null) {
-					dataSourcesFlux = nextStepValue;
-				} else {
-					dataSourcesFlux = Flux.concat(dataSourcesFlux, nextStepValue);
-				}
+
 			}
 		}
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End dataSourcesNextStep(....)");
 		}
-		return dataSourcesFlux;
+		return out;
 	}
 
 	private Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearchNextStep(DeepSearchRequest request,
@@ -204,7 +202,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							analyzed.setDataSourceCode("User uploaded file");
 							analyzed.setDataSourceDescription("User uploaded file");
 							analyzed.setName(uploadedContent.getFileName());
-							analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);							
+							analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);
 						}
 					}
 					if (analyzed != null || uploadedContent != null) {
@@ -328,7 +326,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		Flux<AbstractDeepSearchEvent> composedFlux = DeepSearchNotificationEvent.flux(request,
 				"Deep search data sources analisys...");
-
+		List<Flux<AbstractDeepSearchEvent>> sources = new ArrayList<Flux<AbstractDeepSearchEvent>>();
 		if (chatModel != null) {
 
 			if (LOGGER.isDebugEnabled()) {
@@ -347,12 +345,12 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							.toList());
 					handlers = filterChoosed(handlers, request);
 					if (!handlers.isEmpty()) {
-						Flux<AbstractDeepSearchEvent> nextStepValue = null;
+
 						try {
-							nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults, state, handlers,
-									chatModel, serviceModel, configuration, deepSearchScheduler, chunkingSessionId);
-							if (nextStepValue != null)
-								nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
+							List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesNextStep(request, history,
+									dataSourcesResults, state, handlers, chatModel, serviceModel, configuration,
+									deepSearchScheduler, chunkingSessionId);
+							sources.addAll(newSources);
 						} catch (Throwable e) {
 							LOGGER.error("Exception accessing deep search data source", e);
 							DeepSearchDataSourceProcessedEvent processedDataSource = new DeepSearchDataSourceProcessedEvent();
@@ -363,15 +361,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							processedDataSource.getOutputData()
 									.setErrorMessage(GUserMessage.errorMessage("Exception in deep search", e));
 							processedDataSource.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
-							nextStepValue = Flux.just(processedDataSource);
+							sources.add(Flux.just(processedDataSource));
 
-						}
-						if (nextStepValue != null) {
-							if (composedFlux == null) {
-								composedFlux = nextStepValue;
-							} else {
-								composedFlux = Flux.concat(composedFlux, nextStepValue);
-							}
 						}
 
 					}
@@ -391,8 +382,11 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 					Flux<AbstractDeepSearchEvent> nextStepValue = knowledgeBaseDeepSearchNextStep(request,
 							sessionDocuments, dataSourcesResults, history, state, configuration, userInfos, chatModel,
 							chunkingSessionId, embeddingModels);
-					if (nextStepValue != null)
+					if (nextStepValue != null) {
 						nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
+						nextStepValue.subscribeOn(deepSearchScheduler);
+						sources.add(nextStepValue);
+					}
 					if (nextStepValue == null) {
 						boolean singleSource = !thereAreNotEmpty(dataSourcesResults);
 						String consolidatedResult = null;
@@ -417,15 +411,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 						event.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
 						state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
 						dataSourcesResults.add(event.getOutputData());
-						nextStepValue = Flux.just(event);
+						sources.add(Flux.just(event));
 					}
-					if (nextStepValue != null) {
-						if (composedFlux == null) {
-							composedFlux = nextStepValue;
-						} else {
-							composedFlux = Flux.concat(composedFlux, nextStepValue);
-						}
-					}
+
 				} else {
 					state.setPhase(DeepSearchPhase.AFTER_KNOWLEDGE_BASE_SEARCH);
 				}
@@ -447,12 +435,12 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							.toList());
 					handlers = filterChoosed(handlers, request);
 					if (!handlers.isEmpty()) {
-						Flux<AbstractDeepSearchEvent> nextStepValue = null;
+
 						try {
-							nextStepValue = dataSourcesNextStep(request, history, dataSourcesResults, state, handlers,
-									chatModel, serviceModel, configuration, deepSearchScheduler, chunkingSessionId);
-							if (nextStepValue != null)
-								nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
+							List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesNextStep(request, history,
+									dataSourcesResults, state, handlers, chatModel, serviceModel, configuration,
+									deepSearchScheduler, chunkingSessionId);
+							sources.addAll(newSources);
 						} catch (Throwable e) {
 							LOGGER.error("Exception accessing deep search data source", e);
 							DeepSearchDataSourceProcessedEvent processedDataSource = new DeepSearchDataSourceProcessedEvent();
@@ -463,14 +451,7 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 							processedDataSource.getOutputData()
 									.setErrorMessage(GUserMessage.errorMessage("Exception in deep search", e));
 							processedDataSource.getOutputData().setProcessPercentage(state.calculateProcessedPercent());
-							nextStepValue = Flux.just(processedDataSource);
-						}
-						if (nextStepValue != null) {
-							if (composedFlux == null) {
-								composedFlux = nextStepValue;
-							} else {
-								composedFlux = Flux.concat(composedFlux, nextStepValue);
-							}
+							sources.add(Flux.just(processedDataSource));
 						}
 
 					}
@@ -487,6 +468,8 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			LOGGER.debug("Consolidate final result");
 		}
 		final Vector<IDeepSearchResult> intermediates = new Vector<IDeepSearchResult>();
+		Flux<AbstractDeepSearchEvent> mergedFlux = Flux.merge(sources);
+		composedFlux = Flux.concat(composedFlux, mergedFlux);
 		composedFlux = composedFlux.map(event -> {
 			if (event != null && event.getOutputData() != null
 					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult) {
