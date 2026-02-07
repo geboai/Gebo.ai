@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -17,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.model.DocumentMetaInfos;
 
 public class ClientChatCallUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientChatCallUtil.class);
 	private static final String ASSISTANT_TURN_END_ESCAPED = "< < <END_ASSISTANT> > >";
 	private static final String USER_TURN_END_ESCAPED = "< < <END_USER> > >";
 	private static final String ASSISTANT_TURN_START_ESCAPED = "< < <ASSISTANT> > >";
@@ -38,19 +41,44 @@ public class ClientChatCallUtil {
 	private static final String NEWLINE = "\r\n";
 
 	public static String removeThinking(String data) {
-		String lower = data.toLowerCase();
-		int startTag = lower.indexOf(THINK_TAG_START);
-		int endTag = lower.indexOf(THINK_TAG_END);
-		if (endTag > startTag && startTag >= 0) {
-			return data.substring(endTag + THINK_TAG_END.length());
-		} else {
-			startTag = lower.indexOf(THINKING_TAG_START);
-			endTag = lower.indexOf(THINKING_TAG_END);
-			if (endTag > startTag && startTag >= 0) {
-				return data.substring(endTag + THINKING_TAG_START.length());
-			}
-			return data;
+		String outString = null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin removeThinking(..) of " + data);
 		}
+		if (data == null || data.trim().length() == 0) {
+			outString = data;
+		} else {
+			String lower = data.toLowerCase();
+
+			int startTag = lower.indexOf(THINK_TAG_START);
+			int endTag = lower.indexOf(THINK_TAG_END);
+			if (endTag > 0) {
+				outString = data.substring(endTag + THINK_TAG_END.length());
+				if (startTag < 0) {
+					LOGGER.warn("End of thinking tag retrieved but no " + THINK_TAG_START
+							+ " found, returning after end aniway=>" + outString);
+					LOGGER.warn("Think phase whas:" + data.substring(0, endTag));
+				}
+
+			} else {
+				startTag = lower.indexOf(THINKING_TAG_START);
+				endTag = lower.indexOf(THINKING_TAG_END);
+				if (endTag > 0) {
+					outString = data.substring(endTag + THINKING_TAG_START.length());
+					if (startTag < 0) {
+						LOGGER.warn("End of thinking tag retrieved but no " + THINK_TAG_START
+								+ " found, returning after end aniway=>" + outString);
+						LOGGER.warn("Think phase whas:" + data.substring(0, endTag));
+					}
+				} else {
+					outString = data;
+				}
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End removeThinking(..) returning " + outString);
+		}
+		return outString;
 	}
 
 	public static boolean isInsideThinking(String data) {

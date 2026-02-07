@@ -31,12 +31,10 @@ public class CSSRelevantShrinkedDocument {
 	private String documentUrl = null;
 	@JsonPropertyDescription("document summarized content")
 	private String summarizedContent = null;
-	@JsonPropertyDescription("content relevancy vs last chat exchanged user/assistant messages")
-	private Float relevancyRate = null;
+	
 	@JsonPropertyDescription("length in tokens")
 	private Integer tokensSize = null;
-	@JsonPropertyDescription("list of keywords relevant for  last chat exchanged user/assistant messages")
-	private List<String> keywords = new ArrayList<String>();
+	
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 
 	public AIDocumentReferenceItem toAIDocumentReferenceItem() {

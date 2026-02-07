@@ -447,7 +447,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException {
-		this.sessionStateShrinkerService.shrink(retrieveAndCheck(context), getTargetShrinkResize(targetChatModel));
+		this.sessionStateShrinkerService.shrink(context.getCode(), getTargetShrinkResize(targetChatModel));
 
 	}
 

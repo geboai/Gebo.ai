@@ -5,13 +5,12 @@ import java.io.IOException;
 import org.springframework.scheduling.annotation.Async;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 
 /*****************************************************************************************
  * Service to reduce from the full session state to a shrinked copy to stay in a
  * budget
  */
 public interface IGChatSessionStateShrinkerService {
-	//@Async
-	public void shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException;
+	@Async
+	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException;
 }

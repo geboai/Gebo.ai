@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
@@ -15,6 +16,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -32,6 +34,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.session.CSSfRelevantShrinkedDoc
 import ai.gebo.llms.chat.abstraction.layer.model.session.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatInteractionsConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
@@ -42,10 +45,10 @@ import lombok.Data;
 public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
 		implements IGChatSessionStateShrinkerService {
 	private static final String NEWLINE = "\r";
-
 	final GeboChatConfigs chatConfig;
 	final IGPromptConfigDao promptsDao;
 	final ShrinkedChatSessionStateRepository shrinkedStateRepository;
+	final ChatFullSessionStateRepository fullStateRepository;
 	private final static JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 	public static final String ASSISTANT_MSG = "assistant:";
 	public static final String USER_MSG = "user:";
@@ -53,49 +56,53 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 
 	public GChatSessionStateShrinkerServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatConfigs chatConfig,
-			IGPromptConfigDao promptsDao, ShrinkedChatSessionStateRepository shrinkedStateRepository) {
+			IGPromptConfigDao promptsDao, ShrinkedChatSessionStateRepository shrinkedStateRepository,
+			ChatFullSessionStateRepository fullStateRepository) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 
 		this.chatConfig = chatConfig;
 		this.promptsDao = promptsDao;
 		this.shrinkedStateRepository = shrinkedStateRepository;
+		this.fullStateRepository = fullStateRepository;
+
 	}
 
 	@Override
-	// @Async
-	public void shrink(ChatFullSessionState fullSessionState, int tokensBudget) throws LLMConfigException, IOException {
-		ShrinkedChatSessionState out = new ShrinkedChatSessionState();
-		out.setUserChatContextCode(fullSessionState.getUserChatContextCode());
-		IGConfigurableChatModel usedChatModel = chatModelsConfigDao
-				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		if (usedChatModel == null)
-			throw new LLMConfigException("No Internal services or default chat model present");
-		out.setConsolidatedInteractions(
-				consolidateHistory(fullSessionState.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
-		out.setChatHistory(copyLatest(fullSessionState.getChatHistory().getValue()));
-		out.setRelevantChatWithDocuments(
-				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getChatWithDocuments()),
-						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-						usedChatModel));
-		out.setRelevantRetrievedDocuments(
-				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getRetrievedDocuments()),
-						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-						usedChatModel));
-		out.setRelevantLlmGeneratedDocuments(
-				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getLlmGeneratedDocuments()),
-						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-						usedChatModel));
-		out.setRelevantUploadedDocuments(
-				shrinkDocumentList(untillLatest(fullSessionState, fullSessionState.getUploadedDocuments()),
-						fullSessionState.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget,
-						usedChatModel));
-		out.setLatestRequestsChatWithDocuments(afterLatest(fullSessionState, fullSessionState.getChatWithDocuments()));
-		out.setLatestRequestsLlmGeneratedDocuments(
-				afterLatest(fullSessionState, fullSessionState.getLlmGeneratedDocuments()));
-		out.setLatestRequestsRetrievedDocuments(
-				afterLatest(fullSessionState, fullSessionState.getRetrievedDocuments()));
-		out.setLatestRequestsUploadedDocuments(afterLatest(fullSessionState, fullSessionState.getUploadedDocuments()));
-		shrinkedStateRepository.save(out);
+	@Async
+	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException {
+		ChatFullSessionState full = null;
+		ShrinkedChatSessionState oldVersion = null;
+		Optional<ChatFullSessionState> f = this.fullStateRepository.findById(sessionCode);
+		Optional<ShrinkedChatSessionState> s = this.shrinkedStateRepository.findById(sessionCode);
+		if (f.isPresent()) {
+			full = f.get();
+			if (s.isPresent()) {
+				oldVersion = s.get();
+
+			}
+			ShrinkedChatSessionState out = new ShrinkedChatSessionState();
+			out.setUserChatContextCode(sessionCode);
+			IGConfigurableChatModel usedChatModel = chatModelsConfigDao
+					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+			if (usedChatModel == null)
+				throw new LLMConfigException("No Internal services or default chat model present");
+			out.setConsolidatedInteractions(
+					consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4, usedChatModel));
+			out.setChatHistory(copyLatest(full.getChatHistory().getValue()));
+			out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(full, full.getChatWithDocuments()),
+					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
+			out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(full, full.getRetrievedDocuments()),
+					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
+			out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(untillLatest(full, full.getLlmGeneratedDocuments()),
+					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
+			out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
+					full.getChatHistory().getValue(), out.getConsolidatedInteractions(), tokensBudget, usedChatModel));
+			out.setLatestRequestsChatWithDocuments(afterLatest(full, full.getChatWithDocuments()));
+			out.setLatestRequestsLlmGeneratedDocuments(afterLatest(full, full.getLlmGeneratedDocuments()));
+			out.setLatestRequestsRetrievedDocuments(afterLatest(full, full.getRetrievedDocuments()));
+			out.setLatestRequestsUploadedDocuments(afterLatest(full, full.getUploadedDocuments()));
+			shrinkedStateRepository.save(out);
+		}
 
 	}
 
@@ -180,8 +187,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 			String prompt = _prompt.getPrompt();
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
-			List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
+
 			for (int i = 0; i < docs.getValue().getData().size(); i++) {
+				List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
 				CSSInteractionReferredContent content = docs.getValue().getData().get(i);
 				if (content.getAiDocument().getFragments().isEmpty())
 					continue;
@@ -196,14 +204,32 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 									.get(0).getMetaData().get(DocumentMetaInfos.TITLE),
 							buffer.toString());
 					toBeConsolidated.add(input);
+					if (!toBeConsolidated.isEmpty()) {
+						CSSRelevantShrinkedDocument out = new CSSRelevantShrinkedDocument();
+						out.setDocumentName(content.getAiDocument().getName());
+						out.setDocumentReference(content.getAiDocument().getCode());
+						out.setDocumentUrl(content.getAiDocument().getOriginalUrl());
+						out.setMetaData(new HashMap<String, Object>(
+								content.getAiDocument().getFragments().get(0).getMetaData()));
+						String text = callLLMConsolidateText(usedChatModel, prompt, question, pastConsolidation, null,
+								toBeConsolidated);
+						if (usedChatModel.isApplyThinkingMarkupHandling() && text != null) {
+							text = ClientChatCallUtil.removeThinking(text);
+						}
+						if (text != null && text.trim().length() > 0) {
+							out.setSummarizedContent(text);
+							outList.add(out);
+						}
+						/*
+						 * CSSData _consolidated = callLLMConsolidateStructuredReturn(usedChatModel,
+						 * prompt, question, pastConsolidation, CSSData.class, this::joiner,
+						 * toBeConsolidated); outList.addAll( _consolidated != null &&
+						 * _consolidated.getData() != null ? _consolidated.getData() : List.of());
+						 */
+					}
 				}
 			}
-			if (!toBeConsolidated.isEmpty()) {
-				CSSData _consolidated = callLLMConsolidateStructuredReturn(usedChatModel, prompt, question,
-						pastConsolidation, CSSData.class, this::joiner, toBeConsolidated);
-				outList.addAll(
-						_consolidated != null && _consolidated.getData() != null ? _consolidated.getData() : List.of());
-			}
+
 			for (CSSRelevantShrinkedDocument cssRelevantShrinkedDocument : outList) {
 				cssRelevantShrinkedDocument.setId(UUID.randomUUID().toString());
 				cssRelevantShrinkedDocument

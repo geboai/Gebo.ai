@@ -49,15 +49,15 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	@Override
 	public LLMChatRequestResources createChatRequestResources(LLMRequestGenerationPolicy pol) {
 		AIDocumentsSet chatWithDocuments = AIDocumentsSet.join(this.latestRequestsChatWithDocuments.toAIDocumentsSet(),
-				this.relevantChatWithDocuments.toAIDocumentsSet(0.0f));
+				this.relevantChatWithDocuments.toAIDocumentsSet());
 		AIDocumentsSet retrievedDocuments = AIDocumentsSet.join(
 				this.latestRequestsRetrievedDocuments.toAIDocumentsSet(),
-				this.relevantRetrievedDocuments.toAIDocumentsSet(0.0f));
+				this.relevantRetrievedDocuments.toAIDocumentsSet());
 		AIDocumentsSet uploadedDocuments = AIDocumentsSet.join(this.latestRequestsUploadedDocuments.toAIDocumentsSet(),
-				this.relevantUploadedDocuments.toAIDocumentsSet(0.0f));
+				this.relevantUploadedDocuments.toAIDocumentsSet());
 		AIDocumentsSet llmGeneratedDocuments = AIDocumentsSet.join(
 				this.latestRequestsLlmGeneratedDocuments.toAIDocumentsSet(),
-				this.relevantLlmGeneratedDocuments.toAIDocumentsSet(0.0f));
+				this.relevantLlmGeneratedDocuments.toAIDocumentsSet());
 		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
 				llmGeneratedDocuments,
 				consolidatedInteractions != null ? consolidatedInteractions.getConsolidationText() : null,
