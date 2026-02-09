@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchRequest, DeepSearchResponse, DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 
@@ -70,17 +70,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
 
     protected deepSearchResponse?: DeepSearchResponse;
     protected chatResponse?: GeboChatResponse;
-    protected analisysStep?: {
-        analyzedDocument?: {
-            name?:string;
-            url?:string;
-            code?:string;
-        },
-        dataSourceCode?:string;
-        dataSourceDescription?:string;
-        analisysPortion?: string,
-        completionPercent?: number
-    };
+    protected analisysStep?:DeepSearchDocumentAnalisysResultStep;
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected deepSearchNotification?:{content?:string};

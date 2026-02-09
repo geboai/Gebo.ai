@@ -20,15 +20,12 @@ export interface DeepSearchConfig {
     dateModified?: Date;
     dateCreated?: Date;
     searchType: DeepSearchConfig.SearchTypeEnum;
-    consolidationPrompt?: string;
-    analisysPrompt?: string;
-    ratingPrompt?: string;
-    keywordGenerationPrompt?: string;
     ragQueryOptions?: RagQueryOptions;
     firstHopSimilarityThreashold?: number;
     secondHopSimilarityThreashold?: number;
     graphRagTopN?: number;
     tokensLimit?: number;
+    documentsParallelism?: number;
     manualThreasholdsConfiguration?: boolean;
     chatModelConfiguration?: GObjectRefGBaseChatModelConfig;
     defaultConfig?: boolean;

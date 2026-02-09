@@ -11,10 +11,6 @@
  */
 
 export interface GPromptPlaceholderInfo { 
-    code?: string;
+    placeholder?: string;
     description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
 }

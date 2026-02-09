@@ -589,9 +589,9 @@ public class DocumentsChunkServiceImpl
 	}
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
-			ChunkingParams chunkingSpecs, String chunkSessionId) {
+			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
-		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
+		
 		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler)
 				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, chunkSessionId));
 
@@ -613,9 +613,8 @@ public class DocumentsChunkServiceImpl
 	@Override
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
 			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
-			ChunkingParams chunkingSpecs, String chunkSessionId) {
+			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
-		final int docConcurrency = cacheConfig.getReactiveDocumentsConcurrency();
 		ParallelFlux<IDocumentChunkWithRef> out = Flux.from(documentsPublisher).flatMapIterable(list -> list)
 				.parallel(docConcurrency).runOn(chunkingScheduler)
 				.flatMap(doc -> Flux.defer(() -> streamChunksSingle(doc, chunkingSpecs, chunkSessionId)));

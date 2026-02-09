@@ -8,7 +8,6 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
@@ -18,7 +17,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 
 public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
-	public DataSourceExecutionTime getExecutionTime();
+	
 
 	/**************************************************************************
 	 * Returns a unique identifier for this handler

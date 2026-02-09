@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 import { DataPage } from './dataPage';
-import { GUserChatContext } from './gUserChatContext';
+import { GUserChatSession } from './gUserChatSession';
 
 export interface ChatInfosByQbeParam { 
-    filter?: GUserChatContext;
+    filter?: GUserChatSession;
     page?: DataPage;
 }

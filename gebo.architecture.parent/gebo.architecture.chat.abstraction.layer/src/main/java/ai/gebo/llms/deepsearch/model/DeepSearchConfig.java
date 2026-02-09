@@ -27,6 +27,7 @@ public class DeepSearchConfig extends GBaseObject {
 	protected Double secondHopSimilarityThreashold = null;
 	protected Integer graphRagTopN = null;
 	protected Integer tokensLimit = null;
+	protected int documentsParallelism = 2;
 	protected Boolean manualThreasholdsConfiguration = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	protected GObjectRef<GBaseChatModelConfig> chatModelConfiguration = null;
@@ -36,8 +37,8 @@ public class DeepSearchConfig extends GBaseObject {
 
 	public DeepSearchConfig(DeepSearchConfig c) {
 		this(c.searchType, c.ragQueryOptions, c.firstHopSimilarityThreashold, c.secondHopSimilarityThreashold,
-				c.graphRagTopN, c.tokensLimit, c.manualThreasholdsConfiguration, c.chatModelConfiguration,
-				c.defaultConfig, c.chatProfileCode);
+				c.graphRagTopN, c.tokensLimit, c.documentsParallelism, c.manualThreasholdsConfiguration,
+				c.chatModelConfiguration, c.defaultConfig, c.chatProfileCode);
 		this.setCode(c.getCode());
 		this.setDescription(c.getDescription());
 	}

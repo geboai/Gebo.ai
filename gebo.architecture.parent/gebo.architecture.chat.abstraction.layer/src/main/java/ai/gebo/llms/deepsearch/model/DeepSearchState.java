@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data
 public class DeepSearchState {
-	private DeepSearchPhase phase = DeepSearchPhase.BEFORE_KNOWLEDGE_BASE_SEARCH;
 	private AIDocumentsSet documentSearchResults = null;
 	private String currentDataSourceHandlerRunning = null;
 	private int ragDocumentsPointer = 0;

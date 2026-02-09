@@ -28,7 +28,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.secondHopSimilarityThreashold = 0.5;
 		this.searchType = SearchType.MULTI_HOP;
 		this.chatModelConfiguration = null;
-
+		this.documentsParallelism = 2;
 		this.ragQueryOptions = new RagQueryOptions(1000000, CompletenessLevel.STRICT_QUERY_RELATED);
 		this.ragQueryOptions.setTopK(100);
 		this.ragQueryOptions.setSimilarityThreashold(0.5);

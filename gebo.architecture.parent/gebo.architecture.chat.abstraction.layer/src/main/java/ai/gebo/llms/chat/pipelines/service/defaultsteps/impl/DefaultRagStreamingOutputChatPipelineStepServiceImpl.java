@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -21,6 +20,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
@@ -36,15 +36,16 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	private final IGRagChatService ragChatService;
 	private final IGPromptConfigDao promptsDao;
 	private final ChatPipelinesConfiguration configuration;
-	private final SearchesService searchesService;
+	private final IGDocumentsSearchService searchesService;
 
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
 
 	public DefaultRagStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGRagChatService ragChatService, ChatPipelinesConfiguration configuration, SearchesService searchesService,
-			IGPromptConfigDao promptsDao, IGChatSessionLifeCycleService chatSessionLifecycleService) {
+			IGRagChatService ragChatService, ChatPipelinesConfiguration configuration,
+			IGDocumentsSearchService searchesService, IGPromptConfigDao promptsDao,
+			IGChatSessionLifeCycleService chatSessionLifecycleService) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
 				chatSessionLifecycleService);
 		this.ragChatService = ragChatService;
@@ -93,7 +94,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			int contextWindowLength) throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = runtimeData.getRequestResources();
 		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(searchRewritings,
+		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
+				searchRewritings.getRewrittenFullTextSearchSentences(),
 				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
 				runtimeData.getUserChatContext(), tokensBudget);
 		request = chatSessionLifecycleService.addRetrievedDocumentsToState(documentSet,

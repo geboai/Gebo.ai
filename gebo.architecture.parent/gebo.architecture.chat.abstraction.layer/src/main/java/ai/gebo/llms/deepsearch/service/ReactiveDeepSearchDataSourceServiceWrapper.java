@@ -23,7 +23,6 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
-import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
@@ -55,16 +54,11 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
 		this.ingestionHandler = ingestionHandler;
-
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
 	}
 
-	@Override
-	public DataSourceExecutionTime getExecutionTime() {
-
-		return DataSourceExecutionTime.RUNS_AFTER_DOCUMENTS_SEARCH;
-	}
+	
 
 	@Override
 	public String getHandlerId() {

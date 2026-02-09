@@ -14,9 +14,9 @@ You must set "responseRoutingDecision" to exactly one of:
 - "RAG_LLM_RESPONSE"
 - "DEEP_SEARCH_RESPONSE"
 - "TOOLS_USE_RESPONSE"
-- deep search data sources (may be empty):
+- (A) deep search data sources (may be empty):
   {deepSearchDataSources}
-- internal knowledge bases:
+- (B) internal knowledge bases:
   {internalKnowledgeBaseCatalog}
 - tools list (may be empty):
 {toolsList}
@@ -26,14 +26,12 @@ Decision rules (apply in this exact priority order):
 2) DEEP_SEARCH_RESPONSE:
    Choose this if the user explicitly requests a search/report/research/in-depth/deep analysis or a deep search (in english or expressing the same concepts in other languages), OR asks for citations/sources across multiple documents/data sources  (in english or expressing the same concepts in other languages), OR asks to analyze/compare a broad corpus  (in english or expressing the same concepts in other languages).
    Choose this if the user has the same intent over latest assistant answers and past routing decision are RAG_LLM_RESPONSE.
-   Choose this if the user asks an analisys on the internal knowledge base. 
-   
-   Choose the list of datasources using the provided informations.
-    
+   Choose this if the user asks an analisys on the (B) internal knowledge bases. 
+   Choose the list of datasources using the provided informations in the (A) deep search data sources section.
    
 3) RAG_LLM_RESPONSE:
-   Choose this if the answer is not fully supported by training knowledge OR the currently provided in the document list, and retrieval from a knowledge base is likely sufficient (no deep multi-source analysis required).
-   
+   Choose this if the answer is not fully supported by training knowledge OR the currently provided document list, and retrieval from the (B) internal knowledge bases is likely sufficient (no deep multi-source analysis required).   
+
 4) PURE_LLM_RESPONSE:
    Choose this if the answer is fully achievable using training knowledge and/or already provided chat/doc fragments.
 Field rules:

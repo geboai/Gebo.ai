@@ -19,7 +19,6 @@ import { Observable }                                        from 'rxjs';
 
 import { OperationStatusPromptTemplateResponse } from '../model/operationStatusPromptTemplateResponse';
 import { PromptTemplateParam } from '../model/promptTemplateParam';
-import { PromptTemplateWizardConfigs } from '../model/promptTemplateWizardConfigs';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -96,42 +95,6 @@ export class PromptTemplateWizardControllerService {
         return this.httpClient.request<OperationStatusPromptTemplateResponse>('post',`${this.basePath}/api/users/PromptTemplateWizardController/generatePromptTemplate`,
             {
                 body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTemplateWizardConfigs(observe?: 'body', reportProgress?: boolean): Observable<PromptTemplateWizardConfigs>;
-    public getTemplateWizardConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PromptTemplateWizardConfigs>>;
-    public getTemplateWizardConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PromptTemplateWizardConfigs>>;
-    public getTemplateWizardConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PromptTemplateWizardConfigs>('get',`${this.basePath}/api/users/PromptTemplateWizardController/getTemplateWizardConfigs`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
