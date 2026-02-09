@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 public class Common {
 	private static final String SOME_PROBLEMS_IN_THE_DEEP_SEARCH = "Some problems in the deep search...";
 
-	static Function<? super Throwable, ? extends Publisher<? extends AbstractDeepSearchEvent>> commonFallBack(
+	public static Function<? super Throwable, ? extends Publisher<? extends AbstractDeepSearchEvent>> commonFallBack(
 			DeepSearchRequest deepSearchRequest) {
 		final Function<? super Throwable, ? extends Publisher<? extends AbstractDeepSearchEvent>> out = x -> {
 			DeepSearchErrorEvent event = new DeepSearchErrorEvent();

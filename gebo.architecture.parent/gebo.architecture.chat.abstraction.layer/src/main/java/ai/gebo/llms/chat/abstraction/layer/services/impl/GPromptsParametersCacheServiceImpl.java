@@ -10,7 +10,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.PromptsParametersCache;
 import ai.gebo.llms.chat.abstraction.layer.repository.PromptsParametersCacheRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
 import ai.gebo.security.services.IGSecurityService;
-import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.AllArgsConstructor;
 
 @Service

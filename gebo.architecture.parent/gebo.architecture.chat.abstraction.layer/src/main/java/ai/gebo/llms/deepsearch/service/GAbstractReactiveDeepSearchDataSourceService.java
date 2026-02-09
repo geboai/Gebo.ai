@@ -10,7 +10,6 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +53,7 @@ import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
+import ai.gebo.llms.deepsearch.service.impl.Common;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
@@ -108,6 +108,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		private List<String> keywords = new ArrayList<String>();
 	};
 
+	static class SearchResultsList extends ArrayList<SearchResult> {
+	};
+
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
@@ -119,72 +122,66 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
 		}
 		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
-		final List<SearchResult> actualResultsSnapshots = new ArrayList<SearchResult>();
 
-		DeepSearchDataSourceExtractedSearchQueries searchQueries = this.extractSearchQueries(request,
-				pastSystemsResponses, deepSearchConfig, chatModel, serviceModel, "");
-
-		if (searchQueries.getSearchIsUnnecessary() != null && searchQueries.getSearchIsUnnecessary()) {
-			DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
-			returned.setInputData(request);
-			returned.setOutputData(new DeepSearchDataSourceResponse());
-			returned.getOutputData().setSearchResultsEmpty(true);
-			returned.getOutputData().setHandlerId(getHandlerId());
-			returned.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-			returned.getOutputData().setDeepsearchCode(request.getCode());
-			return Flux.just(returned);
-		}
-		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
-		for (SearchQuery query : searchQueries.getSearchQuery()) {
-			try {
-				List<SearchResult> results = executeSearch(query, request);
-				if (results.isEmpty())
-					continue;
-				SearchWithResults sr = new SearchWithResults();
-				sr.setResults(flattenResults(results));
-				sr.setSearchQuery(query);
-				queryResults.add(sr);
-			} catch (Throwable th) {
-				LOGGER.error("Handler:" + getHandlerId() + " fails running query:" + query, th);
-				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
-				errorEvent.setInputData(request);
-				errorEvent.setOutputData(GUserMessage
-						.errorMessage("Error searching " + getDescription(chatModel, deepSearchConfig, request), th));
-				return Flux.just(errorEvent);
+		Flux<SearchResultsList> searchFlux = Flux.defer(() -> {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deferred generation for handler id: " + getHandlerId());
 			}
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Queries results=>" + queryResults);
-		}
-		queryResults = cleanAndRemoveDuplicated(queryResults);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Cleaned Queries results=>" + queryResults);
-		}
+			SearchResultsList actualResultsSnapshots = new SearchResultsList();
+			DeepSearchDataSourceExtractedSearchQueries searchQueries;
+			try {
+				searchQueries = extractSearchQueries(request, pastSystemsResponses, deepSearchConfig, chatModel,
+						serviceModel, "");
+			} catch (LLMConfigException e) {
+				LOGGER.error("Error exctracting search", e);
+				return Flux.just(actualResultsSnapshots);
+			}
 
-		for (SearchWithResults searchWithResults : queryResults) {
-			actualResultsSnapshots.addAll(searchWithResults.getResults());
-		}
+			if (searchQueries.getSearchIsUnnecessary() != null && searchQueries.getSearchIsUnnecessary()) {
+				DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
+				returned.setInputData(request);
+				returned.setOutputData(new DeepSearchDataSourceResponse());
+				returned.getOutputData().setSearchResultsEmpty(true);
+				returned.getOutputData().setHandlerId(getHandlerId());
+				returned.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+				returned.getOutputData().setDeepsearchCode(request.getCode());
+				return Flux.just(actualResultsSnapshots);
+			}
+			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
+			for (SearchQuery query : searchQueries.getSearchQuery()) {
+				try {
+					List<SearchResult> results = executeSearch(query, request);
+					if (results.isEmpty())
+						continue;
+					SearchWithResults sr = new SearchWithResults();
+					sr.setResults(flattenResults(results));
+					sr.setSearchQuery(query);
+					queryResults.add(sr);
+				} catch (Throwable th) {
+					LOGGER.error("Error executing search", th);
+				}
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Queries results=>" + queryResults);
+			}
+			queryResults = cleanAndRemoveDuplicated(queryResults);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Cleaned Queries results=>" + queryResults);
+			}
 
-		if (searchQueries == null || searchQueries.getSearchQuery() == null
-				|| searchQueries.getSearchQuery().isEmpty()) {
-			DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
-			returned.setInputData(request);
-			returned.setOutputData(new DeepSearchDataSourceResponse());
-			returned.getOutputData().setSearchResultsEmpty(true);
-			returned.getOutputData().setHandlerId(getHandlerId());
-			returned.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			for (SearchWithResults searchWithResults : queryResults) {
+				actualResultsSnapshots.addAll(searchWithResults.getResults());
+			}
 
-			returned.getOutputData().setDeepsearchCode(request.getCode());
+			return Flux.just(actualResultsSnapshots);
+		});
 
-			return Flux.just(returned);
-		}
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 		final int promptTokens = tokenCountEstimator.estimate(analisysPrompt);
 		final int queryTokens = tokenCountEstimator.estimate(request.getQuery());
 		final double tokensTotalExactBudget = chatModel.getContextLength() - (promptTokens + queryTokens);
 		final int tokensBudget = (int) Math.round(tokensTotalExactBudget * 0.7);
-		final java.util.function.Supplier<List<SearchResult>> staticSupplier = () -> actualResultsSnapshots;
 		final List<AbstractChunkingSpecs> specs = List.of(TextChunkingSpecs.maximizedLength(tokensBudget));
 
 		KeywordsList chunkingKeywordsMatching = callLLMStructuredReturn(serviceModel,
@@ -201,9 +198,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			return this.customStructureConsolidation(actualData, currentConsolidation);
 		};
-		final Function<java.util.function.Supplier<List<SearchResult>>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (
-				supplier) -> {
-			List<SearchResult> list = supplier.get();
+		final Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (
+				List<SearchResult> list) -> {
 			List<SearchResult> cleanList = new ArrayList<SearchResult>();
 			if (list != null && !list.isEmpty()) {
 				cleanList = cleanAndRemoveDuplicatedResults(list, avoidMultipleAccess);
@@ -236,7 +232,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			return chunkingService.streamChunks(nextList, params, chunkingSessionId,
 					deepSearchConfig.getDocumentsParallelism());
 		};
-		ParallelFlux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(staticSupplier);
+		// Flux<IDocumentChunkWithRef> loaded =
+		// searchFlux.concatMap(chunksLoadFunction);
+		Flux<IDocumentChunkWithRef> loadedChunks = searchFlux.concatMap(chunksLoadFunction);
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {
 
 			SearchResult actualSearchResultToLoad = (SearchResult) docWithRef.getDocumentRef();
@@ -297,12 +295,12 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			_analyzedEvent.getOutputData().setProcessPercentage(deepSearchState.calculateProcessedPercent());
 			return out;
 		};
-		ParallelFlux<LLMCallStep<CustomContentExtractionType>> relevantContents = loadedChunks.map(llmElaborate)
+		Flux<LLMCallStep<CustomContentExtractionType>> relevantContents = loadedChunks.map(llmElaborate)
 				.filter(x -> x != null && x.getReturned() != null && x.getReturned().getContentIsRelevant() != null
 						&& x.getReturned().getContentIsRelevant());
 		final Vector<AbstractDeepSearchEvent> listedEvents = new Vector<AbstractDeepSearchEvent>();
 		final Vector<SearchResultAnalisysOutcome> furtherAnalisys = new Vector<SearchResultAnalisysOutcome>();
-		ParallelFlux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
+		Flux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
 			AbstractDeepSearchEvent event = x.getEvent();
 			listedEvents.add(event);
 			if (x.getAnalisysDeepRefs() != null) {
@@ -319,11 +317,12 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			LOGGER.debug("End streamSearch(....) handler=" + getHandlerId());
 		}
 
-		return Flux.concat(outFlux, additionalAnalisys, trail);
+		return Flux.concat(outFlux, additionalAnalisys, trail).subscribeOn(threadManager.getBoundedElastic())
+				.onErrorResume(Common.commonFallBack(request));
 	}
 
 	private Flux<AbstractDeepSearchEvent> additionalAnalisys(
-			Function<Supplier<List<SearchResult>>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction,
+			Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction,
 			DeepSearchRequest request, IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
 			Vector<SearchResultAnalisysOutcome> furtherAnalisys,
 			Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate,
@@ -331,21 +330,18 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin additionalAnalisys(....)");
 		}
-		final java.util.function.Supplier<List<SearchResult>> deferredSearchResultSupplier = () -> {
+		Flux<AbstractDeepSearchEvent> outValue = Flux.defer(() -> {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Begin deferred additionalAnalisys(...)");
+			}
 			List<SearchResult> searchResults = new ArrayList<SearchResult>();
 			for (SearchResultAnalisysOutcome o : furtherAnalisys) {
 				if (o.getRelatedResults() != null) {
 					searchResults.addAll(o.getRelatedResults());
 				}
 			}
-			return cleanAndRemoveDuplicatedResults(searchResults, avoidMultipleAccess);
-		};
-		Flux<AbstractDeepSearchEvent> outValue = Flux.defer(() -> {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Begin deferred additionalAnalisys(...)");
-			}
 
-			ParallelFlux<IDocumentChunkWithRef> chunks = chunksLoadFunction.apply(deferredSearchResultSupplier);
+			ParallelFlux<IDocumentChunkWithRef> chunks = chunksLoadFunction.apply(searchResults);
 
 			ParallelFlux<AbstractDeepSearchEvent> events = chunks.map(llmElaborate).filter(
 					x -> x != null && x.returned != null && Boolean.TRUE.equals(x.returned.getContentIsRelevant()))

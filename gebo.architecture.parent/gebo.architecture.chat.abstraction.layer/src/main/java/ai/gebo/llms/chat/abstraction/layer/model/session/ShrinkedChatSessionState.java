@@ -9,7 +9,6 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

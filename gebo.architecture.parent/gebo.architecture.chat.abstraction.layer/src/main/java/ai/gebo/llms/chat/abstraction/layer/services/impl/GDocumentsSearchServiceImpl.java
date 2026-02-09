@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
+package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
 import ai.gebo.architecture.fulltext.model.MetaDataFilter;
@@ -30,16 +30,27 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchesSuggestions;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.services.IGSecurityService;
 
-@Component
-public class SearchesService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SearchesService.class);
+@Service
+public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentsSearchServiceImpl.class);
+
+	@Override
+	public AIDocumentsSet search(GeboChatRequest chatRequest, GUserChatSession context, int tokensBudget)
+			throws FullTextException, LLMConfigException {
+		List<String> semanticSearches = new ArrayList<String>();
+		List<String> fullTextSearches = new ArrayList<String>();
+		String userQuery = GeboChatRequest.actualQuery(chatRequest);
+		return this.search(semanticSearches, fullTextSearches, userQuery, tokensBudget, context, tokensBudget);
+	}
+
 	@Autowired
 	IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
 	@Autowired
@@ -59,8 +70,9 @@ public class SearchesService {
 	@Autowired
 	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 
-	public AIDocumentsSet search(SearchesSuggestions rewritings, String userQuery, int globalTopK,
-			GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException {
+	@Override
+	public AIDocumentsSet search(List<String> semanticSearches, List<String> fullTextSearches, String userQuery,
+			int globalTopK, GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(..)");
 		}
@@ -141,14 +153,14 @@ public class SearchesService {
 		if (!knowledgeBases.isEmpty()) {
 			List<String> semanticSearchedQuery = new ArrayList<String>();
 			List<String> fullTextSearchedQuery = new ArrayList<String>();
-			if (rewritings != null && rewritings.getRewrittenSemanticSearchSentences() != null) {
-				semanticSearchedQuery.addAll(rewritings.getRewrittenSemanticSearchSentences());
+			if (semanticSearches != null) {
+				semanticSearchedQuery.addAll(semanticSearches);
 			}
 			if (userQuery != null) {
 				semanticSearchedQuery.add(userQuery);
 			}
-			if (rewritings != null && rewritings.getRewrittenFullTextSearchSentences() != null) {
-				fullTextSearchedQuery.addAll(rewritings.getRewrittenFullTextSearchSentences());
+			if (fullTextSearches != null) {
+				fullTextSearchedQuery.addAll(fullTextSearches);
 			}
 			boolean endSearch = false;
 			if (!semanticSearchedQuery.isEmpty() && !embeddingModels.isEmpty()) {
@@ -177,7 +189,7 @@ public class SearchesService {
 						out = AIDocumentsSet.join(data, out);
 						endSearch = ((out.countFragments() >= globalTopK) || out.getTokensSize() >= tokensBudget);
 						if (!endSearch) {
-							
+
 						}
 						if (endSearch)
 							break;
@@ -194,7 +206,7 @@ public class SearchesService {
 					AIDocumentsSet fullTextDocSet = toAIDocumentsSet(fullTextResult);
 					out = AIDocumentsSet.join(fullTextDocSet, out);
 				}
-				endSearch = out.countFragments() >= globalTopK  || out.getTokensSize() >= tokensBudget;
+				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;
 			}
 			if (knowledgeGraphSearchService != null && !endSearch) {
 				List<KnowledgeGraphSearchResult> hits = knowledgeGraphSearchService.knowledgeGraphSearch(userQuery,

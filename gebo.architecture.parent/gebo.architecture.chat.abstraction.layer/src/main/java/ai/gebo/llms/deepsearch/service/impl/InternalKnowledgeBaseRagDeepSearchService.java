@@ -55,6 +55,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 
 @Service
@@ -69,6 +70,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	private final IRagThreasholdAutotuneService threasholdAutotuneService;
 	private final UserUploadContentServerSideRepository userUploadedRepository;
+	private final IGeboThreadManager threadManager;
 
 	public InternalKnowledgeBaseRagDeepSearchService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IGPromptConfigDao promptsDao,
@@ -77,7 +79,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,
 			DeepSearchDefaultConfig defaultDeepsearchConfig, IRagThreasholdAutotuneService threasholdAutotuneService,
-			UserUploadContentServerSideRepository userUploadedRepository) {
+			UserUploadContentServerSideRepository userUploadedRepository, IGeboThreadManager threadManager) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.graphRagSearchService = graphRagSearchService;
 		this.promptsDao = promptsDao;
@@ -91,27 +93,33 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 		this.userUploadedRepository = userUploadedRepository;
 	}
 
-	private IGeboThreadManager threadManager;
-
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
 			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
 			List<IGConfigurableEmbeddingModel> embeddingModels) {
-		AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
-		if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
-			AIDocumentsSet searchResult = getSearchResults(request, configuration, userInfos, embeddingModels);
-			consolidatedDaoResult = AIDocumentsSet.join(searchResult, consolidatedDaoResult);
-		}
-		if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
-			consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
-		}
+
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 
 		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
-
-		ParallelFlux<AbstractDeepSearchEvent> body = Flux.fromIterable(consolidatedDaoResult.getDocumentItems())
+		Flux<AIDocumentsSet> documentSearch = Flux.defer(() -> {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deferred knowledge base search");
+			}
+			AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
+			if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+				AIDocumentsSet searchResult = getSearchResults(request, configuration, userInfos, embeddingModels);
+				consolidatedDaoResult = AIDocumentsSet.join(searchResult, consolidatedDaoResult);
+			}
+			if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
+				consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
+			}
+			return Flux.just(consolidatedDaoResult);
+		});
+		;
+		ParallelFlux<AbstractDeepSearchEvent> body = documentSearch
+				.flatMap(s -> Flux.fromIterable(s.getDocumentItems())).parallel(configuration.getDocumentsParallelism())
 				.map((refItem) -> {
 					String documentCode = refItem.getCode();
 
@@ -198,8 +206,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 						}
 					} else
 						return null;
-				}).parallel(this.defaultDeepsearchConfig.getDocumentsParallelism()).runOn(threadManager.getScheduler())
-				.filter(Objects::nonNull);
+				}).runOn(threadManager.getScheduler()).filter(Objects::nonNull);
 		Flux<AbstractDeepSearchEvent> trail = Flux.defer(() -> {
 			AbstractDeepSearchEvent evt = null;
 			DeepSearchKnowledgeBasesProcessedEvent event = new DeepSearchKnowledgeBasesProcessedEvent();

@@ -60,10 +60,10 @@ import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceReposi
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatRagSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
@@ -86,7 +86,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	final protected IGChatProfileManagementService chatProfileManagementService;
-	final protected IGChatRagSearchService ragSearchService;
+	final protected IGDocumentsSearchService ragSearchService;
 
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
@@ -98,7 +98,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatProfilesRepository chatProfilesRepository,
 			IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			IGChatProfileManagementService chatProfileManagementService, IGChatRagSearchService ragSearchService) {
+			IGChatProfileManagementService chatProfileManagementService, IGDocumentsSearchService ragSearchService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptsDao,
 				interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
 				generatedResourceRepository, knowledgeBaseSecurityService, chatSessionLifecycleService);
@@ -198,7 +198,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				// Generates a limited resources request based on policy
 				UserInfos user = securityService.getCurrentUser();
 				// TODO: CALCULATE PROPER DOCUMENT TOKENS BUDGET
-				AIDocumentsSet extractedDocuments = ragSearchService.searchRelatedDocuments(request, userContext,
+				AIDocumentsSet extractedDocuments = ragSearchService.search(request, userContext,
 						contextLength / 3);
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
@@ -517,7 +517,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				if (chatHandler.getType() != null) {
 					response.setUsedChatModelProvider(chatHandler.getType().getCode());
 				}
-				AIDocumentsSet extractedDocuments = ragSearchService.searchRelatedDocuments(request, userContext,
+				AIDocumentsSet extractedDocuments = ragSearchService.search(request, userContext,
 						contextLength / 3);
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);

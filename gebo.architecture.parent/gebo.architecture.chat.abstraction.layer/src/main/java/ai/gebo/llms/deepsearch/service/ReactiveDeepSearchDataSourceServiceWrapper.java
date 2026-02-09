@@ -54,7 +54,6 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
 		this.ingestionHandler = ingestionHandler;
-
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
 	}
