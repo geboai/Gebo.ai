@@ -10,9 +10,9 @@
             <span *ngIf="inEventsLoop && deepSearchStarting" class="deep-search__label" id="DeepSearchProcessingSearch"
                 gebo-ai-text>Searching relevant informations</span>
             <span class="deep-search__label" *ngIf="analisysStep"> <span>
-                    {{analisysStep?.dataSourceDescription}}
+                    {{analisysStep?.analyzedDocument?.dataSourceDescription}}
                 </span>&nbsp;<span id="DeepSearchProcessingFile" gebo-ai-text>Analized
-                    file</span>&nbsp;<span>{{analisysStep?.analyzedDocument?.name}}</span></span>
+                    file</span>&nbsp;<span>{{analisysStep?.analyzedDocument?.name || analisysStep?.analyzedDocument?.code}}</span></span>
             <span class="deep-search__label" *ngIf="deepSearchDataSourceDocumentResult">
                 <span>
                     {{deepSearchDataSourceDocumentResult.dataSourceDescription}}

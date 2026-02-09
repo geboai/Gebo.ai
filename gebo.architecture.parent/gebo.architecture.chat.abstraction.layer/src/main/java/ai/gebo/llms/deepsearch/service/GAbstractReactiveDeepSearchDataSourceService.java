@@ -233,7 +233,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Total steps incremented to:" + nTotal);
 			}
-			return chunkingService.streamChunks(nextList, params, chunkingSessionId);
+			return chunkingService.streamChunks(nextList, params, chunkingSessionId,
+					deepSearchConfig.getDocumentsParallelism());
 		};
 		ParallelFlux<IDocumentChunkWithRef> loadedChunks = chunksLoadFunction.apply(staticSupplier);
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
-import ai.gebo.llms.deepsearch.model.DataSourceExecutionTime;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 
@@ -27,12 +26,6 @@ public class GReactiveDeepSearchDataSourceServiceRepositoryPatternImpl
 	public String getCodeValue(IGReactiveDeepSearchDataSourceService x) {
 
 		return x.getHandlerId();
-	}
-
-	@Override
-	public List<IGReactiveDeepSearchDataSourceService> findByExecutionTime(DataSourceExecutionTime executionTime) {
-
-		return findImplementations(x -> x.getExecutionTime() == executionTime);
 	}
 
 }

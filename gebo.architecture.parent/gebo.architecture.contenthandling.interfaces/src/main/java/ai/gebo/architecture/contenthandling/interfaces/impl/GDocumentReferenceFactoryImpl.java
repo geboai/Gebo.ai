@@ -84,6 +84,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			GDocumentReference reference = new GDocumentReference();
 			reference.setReferenceType(ReferenceType.FILE);
 			reference.setAbsolutePath(file.toAbsolutePath().toString());
+			reference.setName(file.getFileName().toString());
 			reference.setCode(codePrefix + "/" + file.getFileName().toString());
 			reference.setContentType(mimeType);
 			reference.setExtension(extension);
@@ -309,6 +310,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 				reference.setReferenceType(ReferenceType.FILE);
 				reference.setAbsolutePath(file.toAbsolutePath().toString());
 				reference.setCode(file.getFileName().toString());
+				reference.setName(file.getFileName().toString());
 				reference.setContentType(mimeType);
 				reference.setExtension(extension);
 

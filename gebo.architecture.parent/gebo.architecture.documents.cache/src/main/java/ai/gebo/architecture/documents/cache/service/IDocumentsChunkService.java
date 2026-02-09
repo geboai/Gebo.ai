@@ -32,11 +32,11 @@ public interface IDocumentsChunkService {
 			String nextChunkId, String chunkSessionId) throws DocumentCacheAccessException, IOException;
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
-			ChunkingParams chunkingSpecs, String chunkSessionId);
+			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency);
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
 			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
-			ChunkingParams chunkingSpecs, String chunkSessionId);
+			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency);
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,
 			ChunkingParams chunkingSpecs, String chunkSessionId);

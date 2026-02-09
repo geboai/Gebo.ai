@@ -19,9 +19,10 @@ export interface DeepSearchAnalyzedDocument {
     sourceType: DeepSearchAnalyzedDocument.SourceTypeEnum;
 }
 export namespace DeepSearchAnalyzedDocument {
-    export type SourceTypeEnum = 'KNOWLEDGE_BASE' | 'EXTERNAL_SEARCH';
+    export type SourceTypeEnum = 'KNOWLEDGE_BASE' | 'EXTERNAL_SEARCH' | 'UPLOADED_FILE';
     export const SourceTypeEnum = {
         KNOWLEDGEBASE: 'KNOWLEDGE_BASE' as SourceTypeEnum,
-        EXTERNALSEARCH: 'EXTERNAL_SEARCH' as SourceTypeEnum
+        EXTERNALSEARCH: 'EXTERNAL_SEARCH' as SourceTypeEnum,
+        UPLOADEDFILE: 'UPLOADED_FILE' as SourceTypeEnum
     };
 }

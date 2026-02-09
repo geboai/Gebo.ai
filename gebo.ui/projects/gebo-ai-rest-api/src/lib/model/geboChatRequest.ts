@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { AIDocumentsSet } from './aIDocumentsSet';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
 import { UserUploadedContent } from './userUploadedContent';
 
@@ -20,11 +19,11 @@ export interface GeboChatRequest {
     chatModelCode?: string;
     streamResponse?: boolean;
     query?: string;
+    rewrittenQuery?: string;
     customRagConfig?: GeboRagRequestCustomConfig;
     choosedKnowledgeBases?: Array<string>;
     chatPipelineProcessId?: string;
     forcedRequestDocuments?: Array<string>;
-    documents?: AIDocumentsSet;
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
     tokensSize?: number;
