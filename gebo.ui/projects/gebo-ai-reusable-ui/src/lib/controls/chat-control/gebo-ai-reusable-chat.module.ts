@@ -55,6 +55,8 @@ import { PopoverModule } from 'primeng/popover';
 import { ContextMenuModule } from "primeng/contextmenu";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 import { GeboAIExtensiblePipelineRouteDisplayComponent } from "./extensible-pipeline-route-label.component";
+import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-display.component";
+import { ProgressBarModule } from "primeng/progressbar";
 console.log(
   '[GeboAIReusableChatModule] declarations =',
   GeboAIReusableChatComponent,
@@ -92,6 +94,7 @@ console.log(
     PopoverModule, 
     TieredMenuModule, 
     ContextMenuModule, 
+    ProgressBarModule,
     GeboAINotificationsModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
@@ -104,7 +107,7 @@ console.log(
       }
     }
   }), ReactiveRagChatService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
   exports: [GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

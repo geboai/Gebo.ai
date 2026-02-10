@@ -506,8 +506,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatSession userChatContext, List<String> deepSearchDataSources,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws LLMConfigException {
+			GeboChatResponse chatResponse, GUserChatSession userChatContext, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources) throws LLMConfigException {
 
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()

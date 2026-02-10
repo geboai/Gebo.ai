@@ -62,13 +62,14 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-		List<String> aiChoosedDataSources = DefaultPipelineSharedEnvironmentUtil
-				.getAISuggestedDeepSearchDataSources(runtimeData);
+		LLMChatRequestResources request = runtimeData.getRequestResources();
+		
 		try {
+			List<String> aiChoosedDataSources = null;
+			List<String> semanticSearches=null;
+			List<String> fullTextSearches=null;
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request,
-					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), aiChoosedDataSources, chatModel, serviceModel);
+					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {

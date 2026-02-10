@@ -25,9 +25,9 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.SearchesSuggestions;
 import reactor.core.publisher.Flux;
 
 @Component
@@ -73,12 +73,12 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-		SearchesSuggestions searchRewritings = DefaultPipelineSharedEnvironmentUtil
-				.getAISuggestedSearchRewritings(runtimeData);
+		
 
 		try {
 			int contextLength = chatModel.getContextLength();
 			contextLength = Math.max(contextLength, 8192);
+			SearchesSuggestions searchRewritings=null;
 			request = integrateWithSearches(searchRewritings, runtimeData, chatModel, contextLength);
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),

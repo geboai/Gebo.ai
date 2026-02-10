@@ -16,30 +16,10 @@ import { Subscription, timer } from "rxjs";
 })
 export class GeboAIExtensiblePipelineRouteDisplayComponent implements OnChanges {
     protected visible: boolean = false;
-    protected timer?: Subscription;
+    
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["pipelineRouterDecisionCode"]) {
-            try {
-                this.timer?.unsubscribe();
-            } catch (e) {
-
-            }
-            this.visible = true;
-            this.timer = timer(5000).subscribe({
-                next: () => {
-                    this.hide();
-                    try {
-                        this.timer?.unsubscribe();
-                    } catch (e) {
-
-                    }
-                }
-            });
-
-        }
+        
     }
-    protected hide(): void {
-        this.visible=false;
-    }
+   
     @Input() pipelineRouterDecisionCode?: string;
 }

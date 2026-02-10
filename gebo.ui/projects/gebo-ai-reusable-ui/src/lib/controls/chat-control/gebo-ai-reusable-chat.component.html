@@ -88,11 +88,7 @@
         <div class="gebo-ai-reusable-chat__interaction-item-title">
           {{modelName || interaction?.response?.usedChatModelCode }}
         </div>
-        @if(interaction.pipelineRouterDecisionCode) {
-        <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route">
-           <gebo-ai-pipline-route-display [pipelineRouterDecisionCode]="interaction.pipelineRouterDecisionCode"></gebo-ai-pipline-route-display>
-        </div>
-        }
+        
         <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
       </div>
@@ -169,7 +165,10 @@
       (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)" (speechEvent)="onSpeechEvent($event)"
       (messageSubmit)="onSumbit()" (messageSend)="sendMessage()" (loadingChange)="loadingChatResponse=$event"
       (deepSearchChatRequest)="onExternalModuleRequest($event)"
-      (deepsearchChatResponse)="onExternalModuleResponse($event)">
+      (deepsearchChatResponse)="onExternalModuleResponse($event)" 
+      [routingChoiceSelector]="currentPipelineRouterDecisionCode"
+      [streaming]="chatStreaming"
+      >
     </gebo-ai-chat-input-shell>
 
     <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"

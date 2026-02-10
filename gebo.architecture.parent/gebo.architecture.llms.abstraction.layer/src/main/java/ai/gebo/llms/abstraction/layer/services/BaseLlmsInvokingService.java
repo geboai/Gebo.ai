@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
@@ -127,7 +128,11 @@ public class BaseLlmsInvokingService {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
 		String result = response.getResult().getOutput().getText();
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
@@ -148,7 +153,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm " + chatModel.getCode());
 		}
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm " + chatModel.getCode() + " in " + time + " ms");
@@ -171,12 +180,16 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm " + chatModel.getCode());
 		}
-
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
 		if (LOGGER.isDebugEnabled()) {
 			long delta = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm " + chatModel.getCode() + " in " + delta + " ms");
 		}
+		
 		String result = response.getResult().getOutput().getText();
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
@@ -203,7 +216,11 @@ public class BaseLlmsInvokingService {
 				promptTemplate.add(entry.getKey(), entry.getValue());
 			}
 		}
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
 		String result = response.getResult().getOutput().getText();
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
@@ -233,7 +250,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
@@ -259,7 +280,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
@@ -284,7 +309,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
@@ -307,7 +336,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
@@ -333,7 +366,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
@@ -355,7 +392,11 @@ public class BaseLlmsInvokingService {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
 		}
-		T data = chatModel.getChatClient().prompt(promptTemplate.create()).call().entity(outputConverter);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			time = System.currentTimeMillis() - time;
 			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");

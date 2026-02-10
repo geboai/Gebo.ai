@@ -30,7 +30,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
-import { IGeboChatMessage } from "../../services/base-streaming.service";
+import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { GeboAIDeepSearchComponent } from "../deep-search-control/deep-search.component";
@@ -366,7 +366,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         }
     }
     isDeepSearchResponse(item?: GeboChatResponse) {
-        return (item?.pipelineRouterDecisionCode==="DEEP_SEARCH_RESPONSE" && item?.deepSearchRequestId)?true:false;
+        return (item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" && item?.deepSearchRequestId) ? true : false;
     }
     getDeepSearchRequestId(item?: GeboChatResponse) {
         return item?.deepSearchRequestId;
@@ -618,7 +618,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
-        this.currentPipelineRouterDecisionCode = (this.ragsystem === true?"WAITING":undefined);
+        this.currentPipelineRouterDecisionCode = (this.ragsystem === true ? "WAITING" : undefined);
         const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
         const interaction: GeboChatInteraction = {
             loading: true,
@@ -641,9 +641,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 } else {
                     recvd = msg as IGeboChatMessage;
                 }
-                if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                    this.chatInputShell.onDeepSearchMessage(recvd);
-                }
+
+                this.chatInputShell.onStreamMessage(recvd);
+
                 if (recvd.contentObjectType === "GUserMessage") {
                     const message = recvd.content as ToastMessageOptions;
                     this.lastInteractionMessages = [message];
@@ -655,11 +655,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     if (recvd.content?.chatModel)
-                    this.modelName=recvd.content?.chatModel;
+                        this.modelName = recvd.content?.chatModel;
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
-                    if (pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                        this.chatInputShell.switchToStreamingEventsLoop(true);
-                    }
+                    
                 }
                 if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
@@ -742,7 +740,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
             if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                this.chatInputShell.onDeepSearchError(error);
+                this.chatInputShell.onStreamError(error);
             }
         }
         this.chatStreaming = true;
