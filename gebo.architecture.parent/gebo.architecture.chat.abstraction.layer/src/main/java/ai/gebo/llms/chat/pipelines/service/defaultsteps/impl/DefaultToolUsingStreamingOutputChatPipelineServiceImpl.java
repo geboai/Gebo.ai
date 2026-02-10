@@ -41,7 +41,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		List<String> toolCallsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedToolsCallList(runtimeData);
+		List<String> toolCallsList = List.of();
 		PromptTemplate promptTemplate = new PromptTemplate(
 				promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT).getPrompt());
 		promptTemplate.add(TOOLS_LIST, toolCallsList != null ? toolCallsList : List.of());

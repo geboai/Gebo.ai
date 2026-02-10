@@ -35,8 +35,6 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 		implements IStreamingOutputChatPipelineService {
 	private final IGRagChatService ragChatService;
 	private final IGPromptConfigDao promptsDao;
-	private final ChatPipelinesConfiguration configuration;
-	private final IGDocumentsSearchService searchesService;
 
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
 
@@ -47,10 +45,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			IGDocumentsSearchService searchesService, IGPromptConfigDao promptsDao,
 			IGChatSessionLifeCycleService chatSessionLifecycleService) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService);
+				chatSessionLifecycleService, configuration, searchesService);
 		this.ragChatService = ragChatService;
-		this.configuration = configuration;
-		this.searchesService = searchesService;
 		this.promptsDao = promptsDao;
 
 	}
@@ -71,15 +67,12 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		
 
 		try {
-			int contextLength = chatModel.getContextLength();
-			contextLength = Math.max(contextLength, 8192);
-			SearchesSuggestions searchRewritings=null;
-			request = integrateWithSearches(searchRewritings, runtimeData, chatModel, contextLength);
+			LLMChatRequestResources request = super.doDocumentsRetrieve(runtimeData, chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
 					runtimeData.getChatResponse(), chatModel);
@@ -87,21 +80,6 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			throw new ChatPipelineException("Exception in finalizing rag chat", e);
 		}
 
-	}
-
-	private LLMChatRequestResources integrateWithSearches(SearchesSuggestions searchRewritings,
-			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
-			int contextWindowLength) throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = runtimeData.getRequestResources();
-		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
-				searchRewritings.getRewrittenFullTextSearchSentences(),
-				GeboChatRequest.actualQuery(request.getLastRequest()), configuration.getGlobalRagTopK(),
-				runtimeData.getUserChatContext(), tokensBudget);
-		request = chatSessionLifecycleService.addRetrievedDocumentsToState(documentSet,
-				runtimeData.getUserChatContext(), targetChatModel,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-		return request;
 	}
 
 }

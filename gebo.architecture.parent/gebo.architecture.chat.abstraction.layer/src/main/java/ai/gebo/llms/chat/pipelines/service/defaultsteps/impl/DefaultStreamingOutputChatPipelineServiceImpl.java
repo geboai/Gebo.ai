@@ -18,6 +18,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -37,9 +38,9 @@ public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputCha
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
 			IGChatService chatService, ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
+			IGChatSessionLifeCycleService chatSessionLifecycleService, IGDocumentsSearchService searchesService) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService);
+				chatSessionLifecycleService, configuration, searchesService);
 		this.chatService = chatService;
 		this.configuration = configuration;
 		this.promptsDao = promptsDao;
@@ -61,12 +62,11 @@ public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputCha
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+
 		try {
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
-			return this.chatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
-					runtimeData.getChatResponse(), chatModel);
+			return this.chatService.streamChat(prompt.getPrompt(), runtimeData.getRequestResources(),
+					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}

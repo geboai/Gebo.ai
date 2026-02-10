@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -16,6 +17,8 @@ import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
@@ -25,7 +28,10 @@ import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSid
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
@@ -37,15 +43,42 @@ public class BaseOutputChatPipelineService {
 	protected final UserUploadContentServerSideRepository uploadsRepo;
 	protected final LLMGeneratedResourceRepository generatedRepo;
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	protected final ChatPipelinesConfiguration configuration;
+	private final IGDocumentsSearchService searchesService;
 	protected final Logger LOGGER = LoggerFactory.getLogger(BaseOutputChatPipelineService.class);
 
-	public LLMChatRequestResources integrateWithAISuggestedDocuments(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException {
-		List<String> docsList = DefaultPipelineSharedEnvironmentUtil.getAISuggestedSelectedDocuments(runtimeData);
+	private AIDocumentsSet search(SearchesSuggestions searchRewritings, ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel targetChatModel, int contextWindowLength)
+			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
+
+		int tokensBudget = contextWindowLength / 4;
+		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
+				searchRewritings.getRewrittenFullTextSearchSentences(),
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()),
+				configuration.getGlobalRagTopK(), runtimeData.getUserChatContext(), tokensBudget);
+
+		return documentSet;
+	}
+
+	protected LLMChatRequestResources doDocumentsRetrieve(ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+		SearchesSuggestions searchSuggestions = null;
+		// TODO: Ask llm for search rewritings and considered documents
+		return this.integrateWithAISuggestedSearchAndDocuments(runtimeData, targetChatModel, searchSuggestions, policy);
+	}
+
+	private LLMChatRequestResources integrateWithAISuggestedSearchAndDocuments(
+			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
+			SearchesSuggestions searchSuggestions, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+
+		List<String> docsList = searchSuggestions.getSuggestedDocuments();
 		LLMChatRequestResources rc = runtimeData.getRequestResources();
+		AIDocumentsSet out = new AIDocumentsSet();
 		if (docsList != null && !docsList.isEmpty()) {
 			LOGGER.info("Try loading AI suggested docs:" + docsList);
-			AIDocumentsSet out = new AIDocumentsSet();
+
 			for (String docId : docsList) {
 
 				AIDocumentReferenceItem item = runtimeData.getRequestResources().findAIDocumentReferenceByCode(docId);
@@ -98,9 +131,16 @@ public class BaseOutputChatPipelineService {
 					LOGGER.error("Exception ingesting document: " + docId, e);
 				}
 			}
+
+		}
+		AIDocumentsSet searchResult = this.search(searchSuggestions, runtimeData, targetChatModel,
+				targetChatModel.getContextLength());
+		out = AIDocumentsSet.join(out, searchResult);
+		if (!out.getDocumentItems().isEmpty()) {
 			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(out, runtimeData.getUserChatContext(),
 					targetChatModel, policy);
-		}
+		} else
+			rc = runtimeData.getRequestResources();
 		return rc;
 	}
 

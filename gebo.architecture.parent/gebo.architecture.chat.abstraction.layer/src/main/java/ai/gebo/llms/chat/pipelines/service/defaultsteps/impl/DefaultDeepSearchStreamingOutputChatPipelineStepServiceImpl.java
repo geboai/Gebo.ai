@@ -18,6 +18,8 @@ import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSid
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -38,9 +40,9 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
 			IGDeepSearchService deepSearchService, IGeboThreadManager threadManager,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
+			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration, IGDocumentsSearchService searchesService) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService);
+				chatSessionLifecycleService, configuration, searchesService);
 		this.deepSearchService = deepSearchService;
 		this.threadManager = threadManager;
 
@@ -66,8 +68,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 		
 		try {
 			List<String> aiChoosedDataSources = null;
-			List<String> semanticSearches=null;
-			List<String> fullTextSearches=null;
+			
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request,
 					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
