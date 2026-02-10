@@ -67,15 +67,14 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		
 
 		try {
-			LLMChatRequestResources request = super.doDocumentsRetrieve(runtimeData, chatModel,
+			DocumentsEnrichDecision enrichDecision = super.doDocumentsRetrieve(runtimeData, chatModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-			
+
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
-			return ragChatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
-					runtimeData.getChatResponse(), chatModel);
+			return ragChatService.streamChat(prompt.getPrompt(), enrichDecision.getRequestResources(),
+					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException | FullTextException e) {
 			throw new ChatPipelineException("Exception in finalizing rag chat", e);
 		}

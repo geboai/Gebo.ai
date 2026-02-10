@@ -7,4 +7,5 @@ import lombok.Data;
 public class DeepSearchNotification {
 	@NotNull
 	String content = null;
+	String dataSourceDescription = null;
 }

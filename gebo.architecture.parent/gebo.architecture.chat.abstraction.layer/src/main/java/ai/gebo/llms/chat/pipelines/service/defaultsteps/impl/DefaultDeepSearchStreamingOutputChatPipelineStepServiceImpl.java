@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -23,6 +24,7 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.BaseOutputChatPipelineService.DocumentsEnrichDecision;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
@@ -40,7 +42,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
 			IGDeepSearchService deepSearchService, IGeboThreadManager threadManager,
-			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration, IGDocumentsSearchService searchesService) {
+			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration,
+			IGDocumentsSearchService searchesService) {
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
 				chatSessionLifecycleService, configuration, searchesService);
 		this.deepSearchService = deepSearchService;
@@ -64,13 +67,15 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = runtimeData.getRequestResources();
-		
+
 		try {
-			List<String> aiChoosedDataSources = null;
-			
-			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request,
-					runtimeData.getChatResponse(), runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
+			DocumentsEnrichDecision enrichDecision = super.doDocumentsRetrieve(runtimeData, chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+			List<String> aiChoosedDataSources = enrichDecision.getSearchesDecisions().getDeepSearchDataSources();
+
+			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(
+					enrichDecision.getRequestResources(), runtimeData.getChatResponse(),
+					runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {
@@ -82,7 +87,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			});
 			mapped.subscribeOn(threadManager.getScheduler());
 			return mapped;
-		} catch (LLMConfigException e) {
+		} catch (LLMConfigException | FullTextException e) {
 			throw new ChatPipelineException("Error executing deep search", e);
 		}
 

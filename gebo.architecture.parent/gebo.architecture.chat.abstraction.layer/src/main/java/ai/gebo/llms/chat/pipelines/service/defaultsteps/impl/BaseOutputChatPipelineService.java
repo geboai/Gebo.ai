@@ -34,6 +34,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public class BaseOutputChatPipelineService {
@@ -60,14 +61,20 @@ public class BaseOutputChatPipelineService {
 		return documentSet;
 	}
 
-	protected LLMChatRequestResources doDocumentsRetrieve(ChatPipelineExecutionRuntimeData runtimeData,
+	protected DocumentsEnrichDecision doDocumentsRetrieve(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
 		SearchesSuggestions searchSuggestions = null;
 		// TODO: Ask llm for search rewritings and considered documents
-		return this.integrateWithAISuggestedSearchAndDocuments(runtimeData, targetChatModel, searchSuggestions, policy);
+		LLMChatRequestResources req = this.integrateWithAISuggestedSearchAndDocuments(runtimeData, targetChatModel, searchSuggestions, policy);
+		return new DocumentsEnrichDecision(req, searchSuggestions);
 	}
-
+	@AllArgsConstructor
+	@Getter
+	static class DocumentsEnrichDecision {
+		private final LLMChatRequestResources requestResources;
+		private final SearchesSuggestions searchesDecisions;
+	} 
 	private LLMChatRequestResources integrateWithAISuggestedSearchAndDocuments(
 			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
 			SearchesSuggestions searchSuggestions, LLMRequestGenerationPolicy policy)
