@@ -35,26 +35,34 @@ documentCodes=<value>
 
 Where <value> rules are:
 - datasources value:
-  - Format: [<dsCode1>|<dsCode2>|...]
+  - Format: 
+       dataSources=dscode1
+       dataSources=dscode2
   - Use ONLY ds codes that exist in section (A).
   - Output 0 to 5 codes. If none apply or catalog (A) is empty: [].
 
 - semanticQueries value:
-  - Format: [<q1>|<q2>|...]
+  - Format: 
+        semanticQueries=semantic query text1
+        semanticQueries=semantic query text2
   - Output 2 to 6 queries.
   - Each query: max 16 words, natural language, focused on intent + key entities.
   - Vary queries to cover: (i) core intent, (ii) synonyms/alternate phrasing, (iii) key entities/components, (iv) constraints (versions, environment), (v) expected artifact types (docs, code, configs).
   - If inputs are empty/unclear, still output at least 2 best-guess queries from user question.
 
 - fullTextQueries value:
-  - Format: [<k1>|<k2>|...]
+  - Format: 
+         fullTextQueries=full text search1
+         fullTextQueries=full text search2
   - Output 3 to 10 keyword queries.
   - Each keyword query: max 8 tokens, compact terms, no heavy punctuation, no quotes.
   - Prefer: product/module names, class/method names, error codes, acronyms, versions, protocols, vendor names.
   - Include at least one entry that is the most specific literal string(s) present in  user question or latest chat interactions (if any).
 
 - documentCodes value:
-  - Format: [<code1>|<code2>|...]
+  - Format: 
+       documentCodes=document-code1
+       documentCodes=document-code2
   - Output 0 to 3 codes
 
 SELECTION GUIDELINES:

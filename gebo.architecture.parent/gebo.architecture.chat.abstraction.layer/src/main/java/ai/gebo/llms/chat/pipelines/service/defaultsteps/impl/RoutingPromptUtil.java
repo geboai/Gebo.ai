@@ -162,7 +162,7 @@ final class RoutingPromptUtil {
 	private static final String DOCUMENTS_CATALOG = "DOCUMENTS_CATALOG";
 	private static final String END_DOCUMENTS_CATALOG = "END_DOCUMENTS_CATALOG";
 	private static final String LANGUAGE = "language: ";
-	private static final String NEWLINE = "\r";
+	private static final String NEWLINE = "\r\n";
 	private static final String CONTENT_BEGIN = "CONTENT_BEGIN";
 	private static final String CONTENT_END = "CONTENT_END";
 
@@ -193,6 +193,7 @@ final class RoutingPromptUtil {
 					buffer.append(TOOL_END);
 					buffer.append(NEWLINE);
 				}
+				buffer.append(NEWLINE);
 			}
 			buffer.append(END_TOOLS_CATALOG);
 			buffer.append(NEWLINE);
@@ -201,9 +202,9 @@ final class RoutingPromptUtil {
 	}
 
 	private static final String TOOL_BEGIN = "TOOL_BEGIN";
-	private static final String TOOL_CATEGORY_DESCRIPTION = "tool-category-description:";
-	private static final String TOOL_CODE = "code:";
-	private static final String TOOL_DESCRIPTION = "description:";
+	private static final String TOOL_CATEGORY_DESCRIPTION = "TOOL_CATEGORY_DESCRIPTION: ";
+	private static final String TOOL_CODE = "TOOL_NAME: ";
+	private static final String TOOL_DESCRIPTION = "TOOL_DESCRIPTION: ";
 	private static final String TOOL_END = "TOOL_END";
 	private static final String TOOLS_CATALOG = "TOOLS_CATALOG";
 
