@@ -108,6 +108,9 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 		outValue.setRewrittenFullTextSearchSentences(fieldEntries.get(FULL_TEXT_QUERIES_FIELD));
 		outValue.setRewrittenSemanticSearchSentences(fieldEntries.get(SEMANTIC_QUERIES_FIELD));
 		outValue.setSuggestedDocuments(fieldEntries.get(DOCUMENT_CODES_FIELD));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Searches suggestions:" + outValue);
+		}
 		return outValue;
 	}
 

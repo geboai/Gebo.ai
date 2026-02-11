@@ -44,14 +44,14 @@ Where <value> rules are:
   - Output 2 to 6 queries.
   - Each query: max 16 words, natural language, focused on intent + key entities.
   - Vary queries to cover: (i) core intent, (ii) synonyms/alternate phrasing, (iii) key entities/components, (iv) constraints (versions, environment), (v) expected artifact types (docs, code, configs).
-  - If inputs are empty/unclear, still output at least 2 best-guess queries from {question}.
+  - If inputs are empty/unclear, still output at least 2 best-guess queries from user question.
 
 - fullTextQueries value:
   - Format: [<k1>|<k2>|...]
   - Output 3 to 10 keyword queries.
   - Each keyword query: max 8 tokens, compact terms, no heavy punctuation, no quotes.
   - Prefer: product/module names, class/method names, error codes, acronyms, versions, protocols, vendor names.
-  - Include at least one entry that is the most specific literal string(s) present in {question} (if any).
+  - Include at least one entry that is the most specific literal string(s) present in  user question or latest chat interactions (if any).
 
 - documentCodes value:
   - Format: [<code1>|<code2>|...]
@@ -64,7 +64,7 @@ SELECTION GUIDELINES:
 
 
 CONSTRAINTS:
-- Use '|' as the only separator inside lists.
+- Use newline as the only separator inside lists.
 - Do not wrap items in quotes.
-- Do not output anything else besides the 3 lines with the exact field names above.
-- The line separator between fields MUST be exactly the two characters: backslash-r (i.e., "\r"), not a real newline.
+- Do not output anything else besides the lines with the exact field names above.
+- The line separator between fields MUST be newline.
