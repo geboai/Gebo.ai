@@ -30,7 +30,7 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -64,7 +64,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 
 public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
-		extends BaseLlmsInvokingService implements
+		extends BaseLLMSInvokingAndProvidingService implements
 		IGReactiveDeepSearchDataSourceService<SearchResult, DeepSearchDataSourceDocumentResult, DeepSearchDataSourceDocumentResultEvent> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractReactiveDeepSearchDataSourceService.class);
 	protected final Class<CustomContentExtractionType> customContentExtractionType;
@@ -238,10 +238,10 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final Function<IDocumentChunkWithRef, LLMCallStep<CustomContentExtractionType>> llmElaborate = docWithRef -> {
 
 			SearchResult actualSearchResultToLoad = (SearchResult) docWithRef.getDocumentRef();
-			ConsolidationInput cInput = new ConsolidationInput(actualSearchResultToLoad.getResultReference().getName(),
+			LLMInputDocument cInput = new LLMInputDocument(actualSearchResultToLoad.getResultReference().getName(),
 					actualSearchResultToLoad.getResultReference().getUri(),
 					actualSearchResultToLoad.getResultReference().getTitle(), docWithRef.getChunk().getChunkData());
-			List<ConsolidationInput> inputs = List.of(cInput);
+			List<LLMInputDocument> inputs = List.of(cInput);
 			CustomContentExtractionType returned;
 			try {
 				if (LOGGER.isDebugEnabled()) {
@@ -381,7 +381,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
 			processed.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
 			processed.getOutputData().setDeepsearchCode(request.getCode());
-			List<ConsolidationInput> input = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
+			List<LLMInputDocument> input = new ArrayList<BaseLLMSInvokingAndProvidingService.LLMInputDocument>();
 			for (AbstractDeepSearchEvent ev : listedEvents) {
 				if (ev instanceof DeepSearchDataSourceDocumentResultEvent evds) {
 					String docName = null;
@@ -406,7 +406,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 						}
 					}
 					String text = evds.getOutputData().getAnalisysResult();
-					ConsolidationInput data = new ConsolidationInput(
+					LLMInputDocument data = new LLMInputDocument(
 							processed.getOutputData().getDataSourceDescription() + " " + docName, url, title, text);
 					input.add(data);
 				}
@@ -498,7 +498,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 	private DeepSearchDataSourceProcessedEvent consolidate(List<DeepSearchDataSourceDocumentResult> cumulatedAnalisys,
 			DeepSearchRequest request, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
-		List<ConsolidationInput> inputs = cumulatedAnalisys.stream().map(x -> {
+		List<LLMInputDocument> inputs = cumulatedAnalisys.stream().map(x -> {
 			String documentUrl = null;
 			String title = null;
 			if (x.getAnalyzedSearchResult().getResultReference() != null) {
@@ -514,7 +514,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			}
 			String documentReference = "extracted from: " + x.getDataSourceDescription() + " document: " + title;
 
-			ConsolidationInput input = new ConsolidationInput(documentReference, documentUrl, title,
+			LLMInputDocument input = new LLMInputDocument(documentReference, documentUrl, title,
 					x.getAnalisysResult());
 			return input;
 		}).toList();

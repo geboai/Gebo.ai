@@ -22,7 +22,7 @@ import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -59,7 +59,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 
 @Service
-public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingService {
+public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingAndProvidingService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalKnowledgeBaseRagDeepSearchService.class);
 	private final IGPromptConfigDao promptsDao;
 	private final IKnowledgeGraphSearchService graphRagSearchService;
@@ -102,7 +102,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 
-		final Vector<ConsolidationInput> results = new Vector<ConsolidationInput>();
+		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
 		Flux<AIDocumentsSet> documentSearch = Flux.defer(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deferred knowledge base search");
@@ -152,7 +152,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 						}
 						List<AIDocumentFragment> fragments = refItem.getFragments();
 
-						List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
+						List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
 						for (AIDocumentFragment f : fragments) {
 							Map<String, Object> meta = f.getMetaData();
 							String docReference = meta != null ? (String) meta.get(DocumentMetaInfos.GEBO_FILE_NAME)
@@ -162,7 +162,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 							String title = meta != null ? (String) meta.get(DocumentMetaInfos.TITLE) : null;
 							if (title == null)
 								title = docReference;
-							ConsolidationInput cInput = new ConsolidationInput(docReference, url, title,
+							LLMInputDocument cInput = new LLMInputDocument(docReference, url, title,
 									f.getDocumentContent());
 							inputs.add(cInput);
 						}
@@ -181,7 +181,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 								resultStep.setProcessPercentage(state.calculateProcessedPercent());
 								event.setInputData(documentReference);
 								event.setOutputData(resultStep);
-								ConsolidationInput input = new ConsolidationInput(event.getInputData().getName(),
+								LLMInputDocument input = new LLMInputDocument(event.getInputData().getName(),
 										event.getInputData().getUri(), event.getInputData().getName(), result);
 								results.add(input);
 								outEvent = event;
@@ -191,7 +191,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLlmsInvokingS
 								event.setInputData(uploadedContent);
 								resultStep.setProcessPercentage(state.calculateProcessedPercent());
 								event.setOutputData(resultStep);
-								ConsolidationInput input = new ConsolidationInput(uploadedContent.getFileName(), null,
+								LLMInputDocument input = new LLMInputDocument(uploadedContent.getFileName(), null,
 										uploadedContent.getFileName(), result);
 								results.add(input);
 								outEvent = event;

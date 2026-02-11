@@ -6,7 +6,9 @@ import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -33,22 +35,18 @@ import reactor.core.publisher.Flux;
 @Component
 public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
+
 	private final IGRagChatService ragChatService;
-	private final IGPromptConfigDao promptsDao;
-
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
-
 	public DefaultRagStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGRagChatService ragChatService, ChatPipelinesConfiguration configuration,
-			IGDocumentsSearchService searchesService, IGPromptConfigDao promptsDao,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService, configuration, searchesService);
-		this.ragChatService = ragChatService;
-		this.promptsDao = promptsDao;
+			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration,
+			IGPromptConfigDao promptsDao, IGDocumentsSearchService searchesService, IGRagChatService ragChatService) {
 
+		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
+				chatSessionLifecycleService, configuration, promptsDao, searchesService);
+		this.ragChatService = ragChatService;
 	}
 
 	@Override
@@ -69,12 +67,20 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			DocumentsEnrichDecision enrichDecision = super.doDocumentsRetrieve(runtimeData, chatModel,
+			Flux<DocumentsEnrichDecision> enrichDecision = super.doDocumentsRetrieve(runtimeData, serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-
-			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
-			return ragChatService.streamChat(prompt.getPrompt(), enrichDecision.getRequestResources(),
-					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+			Flux<GeboChatMessageEnvelope> flux = enrichDecision.concatMap(ed -> {
+				GPromptConfig prompt = promptsDao
+						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
+				try {
+					return ragChatService.streamChat(prompt.getPrompt(), ed.getRequestResources(),
+							runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+				} catch (GeboChatException | LLMConfigException e) {
+					String msg = "Nested exception in deferred stream creation";
+					throw new RuntimeException(msg, e);
+				}
+			});
+			return flux;
 		} catch (GeboChatException | LLMConfigException | FullTextException e) {
 			throw new ChatPipelineException("Exception in finalizing rag chat", e);
 		}

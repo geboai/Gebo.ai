@@ -15,7 +15,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.search.model.SearchServiceException;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -46,7 +46,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 @Service
-public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
+public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
 
 	private static final String NEWLINE = "\r\n";
 	private static final String SEARCH_MODULE_NAME = "Search module name:";
@@ -243,9 +243,9 @@ public class FullReactiveDeepsearchWorker extends BaseLlmsInvokingService {
 			consolidatedResult.setOutputData(new DeepSearchResponse());
 			consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
 			if (intermediates != null && !intermediates.isEmpty()) {
-				List<ConsolidationInput> inputs = new ArrayList<ConsolidationInput>();
+				List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
 				for (IDeepSearchResult x : intermediates) {
-					ConsolidationInput consolidated = new ConsolidationInput(x.getDataSourceDescription(), null, null,
+					LLMInputDocument consolidated = new LLMInputDocument(x.getDataSourceDescription(), null, null,
 							x.getResponse());
 					inputs.add(consolidated);
 				}

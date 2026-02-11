@@ -21,7 +21,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -45,19 +45,14 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Component
-public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingService
+public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingAndProvidingService
 		implements IRoutingChatPipelineStepService {
 	private static final String TOPICS = "topics: ";
 	private static final String END_KNOWLEDGE_BASE = "END_KNOWLEDGE_BASE";
 	private static final String KNOWLEDGE_BASE = "KNOWLEDGE_BASE";
 	private static final String END_INTERNAL_KNOWLEDGEBASE_CATALOG = "END_INTERNAL_KNOWLEDGEBASE_CATALOG";
-	private static final String INTERNAL_KNOWLEDGEBASE_CATALOG_TEMPLATE_PARAM = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	private static final String KNOWLEDGE_BASE_TITLE = "knowledge base title: ";
-	private static final String INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM = "internalKnowledgeBaseCatalog";
-	
 	private static final String NEWLINE = "\r\n";
-	private static final String DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM = "deepSearchDataSources";
-	private static final String LATEST_INTERACTIONS_TEMPLATE_PARAMETERS = "latestInteractions";
 	private static final String DOCUMENTS = "documents";
 	private static final String TOOLS_LIST = "toolsList";
 	private final static Logger LOGGER = LoggerFactory.getLogger(DefaultRoutingChatPipelineStepServiceImpl.class);
@@ -69,6 +64,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
+	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
+	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
 
 	public DefaultRoutingChatPipelineStepServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
@@ -89,8 +86,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 		this.promptsParamsCacheService = promptsParamsCacheService;
 	}
 
-	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
-
 	@Override
 	public StepExecutorType getExecutorType() {
 
@@ -100,7 +95,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 	@Override
 	public String getStepId() {
 
-		return DEFAULT_ROUTING_STEP;
+		return DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP;
 	}
 
 	@Override
@@ -112,7 +107,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				&& runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId() != null) {
 			rd = new RoutingDecision(
 					List.of(runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId()),
-					IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP),
+					IChatPipelineStepRuntimeData
+							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
 					runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId());
 
 		} else {
@@ -125,7 +121,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				GPromptConfig rewritePrompt = promptsDao
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 				String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query,
-						Map.of(LATEST_INTERACTIONS_TEMPLATE_PARAMETERS, latestInteractions));
+						Map.of(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM,
+								latestInteractions));
 				runtimeData.getRequestResources().getLastRequest().setRewrittenQuery(rewrited_query);
 				// if actual resource has chat with documents or uploads with more than actual
 				// tokens budget than doing a deep search ONLY on
@@ -150,8 +147,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 						String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
 						String toolsList = toolsListPromptPart(chatModel);
 						String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
-						templateParams.put(INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM, internalKnowledgeBaseCatalog);
-						templateParams.put(DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM, deepSearchDataSources);
+						templateParams.put(
+								DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
+								internalKnowledgeBaseCatalog);
+						templateParams.put(
+								DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
+								deepSearchDataSources);
 						templateParams.put(TOOLS_LIST, toolsList);
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("End Calculating router params to be cached");
@@ -160,8 +161,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 					};
 					final Map<String, Object> templateParams = this.promptsParamsCacheService.lookupCache(
 							GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
-							runtimeData.getUserChatContext().getCode(), DEFAULT_ROUTING_STEP, 120000, paramsProvider);
-					templateParams.put(LATEST_INTERACTIONS_TEMPLATE_PARAMETERS, latestInteractions);
+							runtimeData.getUserChatContext().getCode(),
+							DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
+					templateParams.put(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM,
+							latestInteractions);
 					int usedTokens = tokensLength(prompt, latestInteractions, templateParams.toString(),
 							rewrited_query);
 					int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
@@ -205,7 +208,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 				LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
 				rd = new RoutingDecision(
 						List.of(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT),
-						IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_ROUTING_STEP),
+						IChatPipelineStepRuntimeData
+								.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
 						RespondingWith.PURE_LLM_RESPONSE.name());
 			}
 		}
@@ -265,7 +269,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 
 					@Override
 					public Map<String, Object> getEnvironmentContributions() {
-						
+
 						return Map.of();
 					}
 				}, RespondingWith.DEEP_SEARCH_RESPONSE.name());
@@ -287,7 +291,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 			}
 		}
 		if (!knowledgeBases.isEmpty()) {
-			buffer.append(INTERNAL_KNOWLEDGEBASE_CATALOG_TEMPLATE_PARAM);
+			buffer.append(START_INTERNAL_KNOWLEDGEBASE_CATALOG);
 			buffer.append(NEWLINE);
 			for (GKnowledgeBase kb : knowledgeBases) {
 				buffer.append(KNOWLEDGE_BASE);
@@ -328,8 +332,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLlmsInvokingS
 		}
 		return buffer.toString();
 	}
-
-	
 
 	private String toolsListPromptPart(IGConfigurableChatModel chatModel) {
 		StringBuffer buffer = new StringBuffer();

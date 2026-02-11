@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.search.model.SearchResult;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -25,7 +25,7 @@ import ai.gebo.llms.deepsearch.model.ratings.RatedDocumentsList;
 import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 
 @Service
-public class SearchResultsRankingService extends BaseLlmsInvokingService {
+public class SearchResultsRankingService extends BaseLLMSInvokingAndProvidingService {
 	static final JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 	final IGPromptConfigDao promptsDao;
 

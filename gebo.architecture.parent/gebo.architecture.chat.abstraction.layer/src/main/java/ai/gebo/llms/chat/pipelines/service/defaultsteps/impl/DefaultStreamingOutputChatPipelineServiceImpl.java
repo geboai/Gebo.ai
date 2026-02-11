@@ -24,27 +24,16 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
 @Component
-public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputChatPipelineService
-		implements IStreamingOutputChatPipelineService {
+@AllArgsConstructor
+public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreamingOutputChatPipelineService {
 	private final IGChatService chatService;
 	private final ChatPipelinesConfiguration configuration;
 	private final IGPromptConfigDao promptsDao;
 	public static final String DEFAULT_STREAMING_OUTPUT = "default-streaming-output";
-
-	public DefaultStreamingOutputChatPipelineServiceImpl(IGAIDocumentsCacheService documentsCacheService,
-			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
-			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGChatService chatService, ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGChatSessionLifeCycleService chatSessionLifecycleService, IGDocumentsSearchService searchesService) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService, configuration, searchesService);
-		this.chatService = chatService;
-		this.configuration = configuration;
-		this.promptsDao = promptsDao;
-	}
 
 	@Override
 	public StepExecutorType getExecutorType() {

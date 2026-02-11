@@ -9,7 +9,9 @@ import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -20,6 +22,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
@@ -31,26 +34,23 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import reactor.core.publisher.Flux;
 
 @Component
-
 public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends BaseOutputChatPipelineService
 		implements IStreamingOutputChatPipelineService {
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
-
 	public DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGDeepSearchService deepSearchService, IGeboThreadManager threadManager,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration,
-			IGDocumentsSearchService searchesService) {
+			IGPromptConfigDao promptsDao, IGDocumentsSearchService searchesService, IGeboThreadManager threadManager,
+			IGDeepSearchService deepSearchService) {
+
 		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService, configuration, searchesService);
+				chatSessionLifecycleService, configuration, promptsDao, searchesService);
 		this.deepSearchService = deepSearchService;
 		this.threadManager = threadManager;
-
 	}
-
 	@Override
 	public StepExecutorType getExecutorType() {
 
@@ -69,13 +69,19 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			DocumentsEnrichDecision enrichDecision = super.doDocumentsRetrieve(runtimeData, chatModel,
+			Flux<DocumentsEnrichDecision> enrichDecision = super.doDocumentsRetrieve(runtimeData, serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-			List<String> aiChoosedDataSources = enrichDecision.getSearchesDecisions().getDeepSearchDataSources();
 
-			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(
-					enrichDecision.getRequestResources(), runtimeData.getChatResponse(),
-					runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
+			Flux<AbstractDeepSearchEvent> flux = enrichDecision.concatMap(ed -> {
+				List<String> aiChoosedDataSources = ed.getSearchesDecisions().getDeepSearchDataSources();
+				try {
+					return deepSearchService.streamDeepSearch(ed.getRequestResources(), runtimeData.getChatResponse(),
+							runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
+				} catch (LLMConfigException e) {
+					String msg = "Nested exception in deferred stream creation";
+					throw new RuntimeException(msg, e);
+				}
+			});
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {

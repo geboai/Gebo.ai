@@ -43,7 +43,7 @@ import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTune
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneQuestionResult;
 import ai.gebo.architecture.rag_threasholds_autotune.service.impl.model.AutoTuneRatedThreashold;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -53,7 +53,7 @@ import ai.gebo.model.DocumentMetaInfos;
 
 @Component
 @Scope("singleton")
-public class RagThreasholdAutotuneServiceImpl extends BaseLlmsInvokingService implements IRagThreasholdAutotuneService {
+public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidingService implements IRagThreasholdAutotuneService {
 	private final ThreasholdAutotuneProcessResultRepository resultRepo;
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
