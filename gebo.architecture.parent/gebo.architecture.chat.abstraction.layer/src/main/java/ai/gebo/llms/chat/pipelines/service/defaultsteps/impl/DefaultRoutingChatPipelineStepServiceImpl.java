@@ -54,7 +54,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	private static final String KNOWLEDGE_BASE_TITLE = "knowledge base title: ";
 	private static final String NEWLINE = "\r\n";
 	private static final String DOCUMENTS = "documents";
-	private static final String TOOLS_LIST = "toolsList";
 	private final static Logger LOGGER = LoggerFactory.getLogger(DefaultRoutingChatPipelineStepServiceImpl.class);
 	private final ChatPipelinesConfiguration chatPipelinesConfig;
 	private final IGDeepSearchService deepSearchService;
@@ -153,7 +152,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 						templateParams.put(
 								DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
 								deepSearchDataSources);
-						templateParams.put(TOOLS_LIST, toolsList);
+						templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("End Calculating router params to be cached");
 						}

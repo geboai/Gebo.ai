@@ -234,7 +234,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 		});
 
 		Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
-				"Analyzing data from internal Gebo.ai knowledge bases");
+				"Searching documents", "Internal knowledge base");
 		return Flux.concat(notificationFlux, body, trail).onErrorResume(Common.commonFallBack(request))
 				.subscribeOn(this.threadManager.getScheduler());
 	}

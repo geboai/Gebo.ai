@@ -98,8 +98,12 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 	private SearchesSuggestions askSearchesSuggestion(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel targetChatModel) {
 		GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_SEARCH_PLANNER_PROMPT);
-		Map<String, Object> params = DefaultPipelineSharedPromptPlaceholders
-				.extractSharedPromptParameters(runtimeData.getSharedEnvironment());
+		Map<String, Object> params = DefaultPipelineSharedPromptPlaceholders.extractSharedPromptParameters(
+				runtimeData.getSharedEnvironment(),
+				DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
+				DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
+				DefaultPipelineSharedPromptPlaceholders.DOCUMENTS_TEMPLATE_PARAM,
+				DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM);
 		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt.getPrompt(),
 				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()), params,
 				List.of(DATASOURCES_FIELD, SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD, DOCUMENT_CODES_FIELD));

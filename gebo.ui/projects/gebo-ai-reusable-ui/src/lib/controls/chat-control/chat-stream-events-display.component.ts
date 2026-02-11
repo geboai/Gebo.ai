@@ -25,7 +25,8 @@ export class GeboAIChatStreamEventsDisplayComponent {
     protected analisysStep?: DeepSearchDocumentAnalisysResultStep;
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
-    protected deepSearchNotification?: { content?: string };
+    protected deepSearchNotification?: { content?: string,dataSourceDescription?:string};
+    
     protected completionPercent: number = 0;
     constructor(private messageService: GeboAIRootNotificationService) {
 
@@ -41,7 +42,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
         this.deepSearchDataSourceDocumentResult = undefined;
         this.deepSearchDataSourceResponse = undefined;
         this.analisysStep = undefined;
-        this.deepSearchNotification = undefined;
+        this.deepSearchNotification = undefined;        
 
     }
     public onMessage(msg?: IGeboChatMessage) {

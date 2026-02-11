@@ -112,7 +112,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						dataSourcesResults, chunkingSessionId, totalSteps, doneSteps, state);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
-							"Analyzing data from " + handler.getDescription(chatModel, deepSearchConfig, request));
+							"Extracting relevant documents",
+							handler.getDescription(chatModel, deepSearchConfig, request));
 					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
 					nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -154,7 +155,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		Flux<AbstractDeepSearchEvent> composedFlux = DeepSearchNotificationEvent.flux(request,
-				"Deep search data sources analisys...");
+				"Accessing data sources and internal knowledge base", "");
 		List<Flux<AbstractDeepSearchEvent>> sources = new ArrayList<Flux<AbstractDeepSearchEvent>>();
 		if (chatModel != null) {
 

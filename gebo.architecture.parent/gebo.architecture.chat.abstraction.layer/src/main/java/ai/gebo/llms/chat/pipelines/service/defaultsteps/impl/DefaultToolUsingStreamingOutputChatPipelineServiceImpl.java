@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements IStreamingOutputChatPipelineService {
-	private static final String TOOLS_LIST = "toolsList";
+
 	private final IGChatService chatService;
 	private final IGPromptConfigDao promptsDao;
 	public static final String DEFAULT_TOOL_USING_STREAMING = "default-tool-using-streaming";
@@ -41,13 +42,15 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
-		List<String> toolCallsList = List.of();
+		Map<String, Object> params = DefaultPipelineSharedPromptPlaceholders.extractSharedPromptParameters(
+				runtimeData.getSharedEnvironment(), DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM);
 		PromptTemplate promptTemplate = new PromptTemplate(
 				promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT).getPrompt());
-		promptTemplate.add(TOOLS_LIST, toolCallsList != null ? toolCallsList : List.of());
+
 		try {
-			return chatService.streamChat(promptTemplate.render(), runtimeData.getRequestResources(),
-					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+			return chatService.streamChat(promptTemplate.create(params).getContents(),
+					runtimeData.getRequestResources(), runtimeData.getUserChatContext(), runtimeData.getChatResponse(),
+					chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception in tools execution output", e);
 		}

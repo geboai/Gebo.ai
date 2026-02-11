@@ -10,16 +10,20 @@ public class DefaultPipelineSharedPromptPlaceholders {
 	public static final String DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM = "deepSearchDataSources";
 	public static final String LATEST_INTERACTIONS_TEMPLATE_PARAM = "latestInteractions";
 	public static final String DOCUMENTS_TEMPLATE_PARAM = "documents";
-	public static final List<String> ALL_TEMPLATE_PARAMETERS = List.of(INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
-			DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM, LATEST_INTERACTIONS_TEMPLATE_PARAM, DOCUMENTS_TEMPLATE_PARAM);
 
-	public static Map<String, Object> extractSharedPromptParameters(Map<String, Object> params) {
+	static final String TOOLS_LIST_TEMPLATE_PARAM = "toolsList";
+
+	public static Map<String, Object> extractSharedPromptParameters(Map<String, Object> params,
+			String... templatePlaceholders) {
 		Map<String, Object> out = new HashMap<String, Object>();
-		for (String param : ALL_TEMPLATE_PARAMETERS) {
-			if (params != null && params.containsKey(param)) {
-				out.put(param, params.get(param));
+		if (templatePlaceholders != null && templatePlaceholders.length > 0) {
+			for (String param : templatePlaceholders) {
+				if (params != null && params.containsKey(param)) {
+					out.put(param, params.get(param));
+				}
 			}
 		}
 		return out;
 	}
+
 }
