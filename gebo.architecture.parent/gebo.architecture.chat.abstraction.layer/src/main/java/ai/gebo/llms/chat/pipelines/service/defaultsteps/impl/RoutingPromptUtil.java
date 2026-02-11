@@ -18,6 +18,8 @@ import ai.gebo.model.ExtractedDocumentMetaData;
 
 final class RoutingPromptUtil {
 
+	private static final String SPACE = " ";
+	private static final String LIST_ITEM = "-";
 	private static final String END_ROUTING_DECISION = "<<<END_ROUTING_DECISION>>>";
 	private static final String ROUTING_DECISION = "<<<ROUTING_DECISION>>>";
 	private static final String END_MAIN_SECTIONS_SAMPLE = "END_MAIN_SECTIONS_SAMPLE";
@@ -160,7 +162,7 @@ final class RoutingPromptUtil {
 	private static final String DOCUMENTS_CATALOG = "DOCUMENTS_CATALOG";
 	private static final String END_DOCUMENTS_CATALOG = "END_DOCUMENTS_CATALOG";
 	private static final String LANGUAGE = "language: ";
-	private static final String NEWLINE = "\r\n";
+	private static final String NEWLINE = "\r";
 	private static final String CONTENT_BEGIN = "CONTENT_BEGIN";
 	private static final String CONTENT_END = "CONTENT_END";
 
@@ -231,7 +233,6 @@ final class RoutingPromptUtil {
 				if (interaction.getAssistant() != null) {
 					buffer.append(ASSISTANT_TURN_START);
 					buffer.append(NEWLINE);
-					
 
 					buffer.append(interaction.getAssistant());
 					buffer.append(NEWLINE);
@@ -280,8 +281,12 @@ final class RoutingPromptUtil {
 				if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
 					buffer.append(MAIN_SECTIONS_SAMPLE);
 					buffer.append(NEWLINE);
-					buffer.append(obj.getCatalogues().toString());
-					buffer.append(NEWLINE);
+					for (String catalog : obj.getCatalogues()) {
+						buffer.append(LIST_ITEM);
+						buffer.append(SPACE);
+						buffer.append(catalog);
+						buffer.append(NEWLINE);
+					}
 					buffer.append(END_MAIN_SECTIONS_SAMPLE);
 					buffer.append(NEWLINE);
 				}

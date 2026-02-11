@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model;
+package ai.gebo.llms.chat.pipelines.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,5 +15,7 @@ public class SearchesSuggestions {
 	private List<String> rewrittenSemanticSearchSentences = new ArrayList<String>();
 	@JsonPropertyDescription("full text searched  texts related to user question")
 	private List<String> rewrittenFullTextSearchSentences = new ArrayList<String>();
+	private List<String> suggestedDocuments = new ArrayList<String>();
+	private List<String> deepSearchDataSources = new ArrayList<String>();
 
 }

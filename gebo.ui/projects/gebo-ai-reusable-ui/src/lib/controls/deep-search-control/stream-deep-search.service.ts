@@ -1,5 +1,6 @@
 import { BASE_PATH, DeepSearchRequest, GeboChatRequest } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboAIBaseStreamingService, IGeboChatMessage } from "../../services/base-streaming.service";
+import { GeboAIBaseStreamingService } from "../../services/base-streaming.service";
+import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { Inject, Injectable } from "@angular/core";
 const deepSearchStreamRelativeURL:string="/api/users/GeboDeepSearchController/streamDeepSearch";
 const deepSearchStreamInChatRelativeURL:string="/api/users/GeboDeepSearchController/streamDeepSearchWithChatContext";

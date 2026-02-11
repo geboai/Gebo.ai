@@ -4,8 +4,10 @@ import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo } fr
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
 import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
 import { MenuItem } from 'primeng/api';
-import { IGeboChatMessage } from '@Gebo.ai/reusable-ui';
+
 import { GeboAIDeepSearchComponent } from '../deep-search-control/deep-search.component';
+import { IGeboChatMessage } from '../../services/gebo-chat-message';
+import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-display.component';
 
 @Component({
   selector: 'gebo-ai-chat-input-shell',
@@ -13,8 +15,8 @@ import { GeboAIDeepSearchComponent } from '../deep-search-control/deep-search.co
   styleUrls: ['./chat-input-shell.component.scss'],
   standalone: false
 })
-export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
- 
+export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
+
 
   @Input() interactions: any[] | null = null;
   @Input() formGroup!: FormGroup;
@@ -25,10 +27,12 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
 
   @Input() chatInfo?: GUserChatInfo;
   @Input() userChatContextCode?: string;
-  
+
   @Input() capabilities: any;
   @Input() currentAudioTrack: any;
   @Input() loading = false;
+  @Input() streaming: boolean = false;
+  @Input() routingChoiceSelector?: string;
   @Output() loadingChange: EventEmitter<boolean> = new EventEmitter();
   // flags per le dialog
   @Input() openSelectDocumentsWindow = false;
@@ -44,7 +48,7 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
   @Output() messageSend = new EventEmitter<void>();
   @Output() deepSearchChatRequest: EventEmitter<GeboChatRequest> = new EventEmitter();
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
-  @ViewChild(GeboAIDeepSearchComponent) deepSearchComponent!:GeboAIDeepSearchComponent;
+  @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
   protected addBehaviorsMenu: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -56,7 +60,7 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
     id: "ChatWithDocsMenuItem",
     icon: "pi pi-search",
     label: "Browse/search company file(s)",
-    disabled:true,
+    disabled: true,
     command: (event) => {
       this.openSelectDocsDialog();
     }
@@ -88,14 +92,16 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
     this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data => { this.nextRequestMode = data; });
     this.setStandardChatMode();
   }
-  
+
   private setStandardChatMode(): void {
-    this.nextRequestMode="standard-chat";
-    this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
+    this.setChatMode("standard-chat");
+  }
+  private setChatMode(mode: "standard-chat" | "deep-search"): void {
+    this.nextRequestMode = mode;
+    this.chooseModeFormGroup.controls["nextRequestMode"].setValue(mode);
   }
 
-  
-  
+
   ngOnInit(): void {
     this.translationService.translateOnActualLanguage(this.requestTypeOptions).subscribe({
       next: (resources) => {
@@ -109,13 +115,21 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
     });
   }
   ngOnChanges(changes: SimpleChanges): void {
-      if (changes["ragsystem"]) {
-        const item=this.addBehaviorsMenu.find(x=>x.id==="ChatWithDocsMenuItem");
-        if (item) {
-          item.disabled=!this.ragsystem;
-        }
-        this.addBehaviorsMenu=[...this.addBehaviorsMenu];
+    if (this.routingChoiceSelector==='DEEP_SEARCH_RESPONSE' && changes["routingChoiceSelector"]) {
+        this.setChatMode("deep-search");
+    }
+    if (changes["streaming"]) {
+      if (this.streaming===false) {
+        this.setChatMode("standard-chat");
       }
+    }
+    if (changes["ragsystem"]) {
+      const item = this.addBehaviorsMenu.find(x => x.id === "ChatWithDocsMenuItem");
+      if (item) {
+        item.disabled = !this.ragsystem;
+      }
+      this.addBehaviorsMenu = [...this.addBehaviorsMenu];
+    }
   }
   onSubmit() {
     this.onSendClick();
@@ -136,17 +150,13 @@ export class GeboAIChatInputShellComponent implements OnInit,OnChanges {
       this.messageSubmit.emit();
     }
   }
- onDeepSearchError(error: any) {
-      this.deepSearchComponent.onError(error);
+  onStreamError(error: any) {
+    //this.streamNotificationsComponent.onError(error);
   }
-  onDeepSearchMessage(recvd: IGeboChatMessage) {
-      this.deepSearchComponent.onMessage(recvd);
+  onStreamMessage(recvd: IGeboChatMessage) {
+    this.streamNotificationsComponent.onMessage(recvd);
   }
-  switchToStreamingEventsLoop(d: boolean):void {
-      this.deepSearchComponent.switchToStreamingEventsLoop(d);
-      this.nextRequestMode=d===true?"deep-search":"standard-chat";
-      this.loadingChange.emit(true);
-  }
+
   onNewSessionCreatedOnUploadInternal(evt: any) {
     this.newSessionCreatedOnUpload.emit(evt);
   }

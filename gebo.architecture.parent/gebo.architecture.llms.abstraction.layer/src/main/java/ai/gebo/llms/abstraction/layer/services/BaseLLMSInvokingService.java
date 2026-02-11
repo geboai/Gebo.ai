@@ -1,0 +1,860 @@
+package ai.gebo.llms.abstraction.layer.services;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ai.gebo.model.DocumentMetaInfos;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+public class BaseLLMSInvokingService {
+
+	private static final String ASSIGNMENT = "=";
+
+	static class ConsolidationBatchItem {
+		LLMInputDocument input = null;
+		int tokensCount = 0;
+	}
+
+	static class ConsolidationDocuments {
+		List<Document> inputs = new ArrayList<Document>();
+		int totaltokens = 0;
+		boolean complete = false;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public static class LLMInputDocument {
+		final String documentReference;
+		final String documentUrl;
+		final String title;
+		final String text;
+	}
+
+	static class ConsolidationInputBatch {
+		List<ConsolidationBatchItem> inputs = new ArrayList<ConsolidationBatchItem>();
+		int totaltokens = 0;
+		boolean complete = false;
+	}
+
+	public static final String CONSOLIDATED_TEMPLATE_VARIABLE = "consolidated";
+	public static final char CSV_COLUMN_SEPARATOR = ';';
+	public static final String CSV_COLUMN_SEPARATOR_STRING = ";";
+	public static final String DOCUMENT_REFERENCE = "DOCUMENT-REFERENCE:";
+	public static final String DOCUMENT_TITLE = "DOCUMENT-TITLE:";
+	public static final String DOCUMENT_URL = "DOCUMENT-URL:";
+	public static final String DOCUMENTS_TEMPLATE_VARIABLE = "documents";
+	public static double ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = 0.7;
+	public static final String FORMAT_TEMPLATE_VARIABLE = "format";
+	private static final String NEWLINE = "\r\n";
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+	protected static final JTokkitTokenCountEstimator tokensEstimation = new JTokkitTokenCountEstimator();
+	public static final String USER_QUESTION_TEMPLATE_VARIABLE = "question";
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+	public BaseLLMSInvokingService() {
+
+	}
+
+	protected static final <T> Supplier<T> stream2supplier(Stream<T> stream) {
+		if (stream == null)
+			return () -> null;
+		final Iterator<T> iterator = stream.iterator();
+		return () -> iterator.hasNext() ? iterator.next() : null;
+	}
+
+	protected static <T> Stream<T> supplier2stream(Supplier<T> supplier) {
+		if (supplier == null)
+			return Stream.empty();
+		return Stream.generate(supplier).takeWhile(Objects::nonNull);
+	}
+
+	protected static int tokensLength(String... contents) {
+		if (contents != null)
+			return 0;
+		int totalTokens = 0;
+		for (int i = 0; i < contents.length; i++) {
+			String content = contents[i];
+			if (content != null) {
+				totalTokens += tokensEstimation.estimate(content);
+			}
+		}
+		return totalTokens;
+	}
+
+	protected String callLLM(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> params) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		loadParams(promptTemplate, params);
+		long time = 0;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
+		if (LOGGER.isDebugEnabled()) {
+			long delta = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm " + chatModel.getCode() + " in " + delta + " ms");
+		}
+
+		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	protected Map<String, List<String>> callLLMRepeatableFieldEntryOutput(IGConfigurableChatModel chatModel,
+			String prompt, String question, Map<String, Object> params, List<String> validFields) {
+
+		Map<String, String> validFieldsMap = new HashMap<String, String>();
+		for (String fieldName : validFields) {
+			validFieldsMap.put(fieldName.toLowerCase().trim(), fieldName.trim());
+		}
+		Map<String, List<String>> outValue = new HashMap<String, List<String>>();
+		String toBeParsed = callLLM(chatModel, prompt, question, params);
+		ByteArrayInputStream bis = new ByteArrayInputStream(toBeParsed.getBytes());
+		DataInputStream dis = new DataInputStream(bis);
+		String line = null;
+		try {
+			while ((line = dis.readLine()) != null) {
+
+				int equalIndex = line.indexOf(ASSIGNMENT);
+				if (equalIndex > 0) {
+					String fieldName = line.substring(0, equalIndex);
+					String fieldValue = (equalIndex + 1 < line.length()) ? line.substring(equalIndex + 1) : null;
+					if (fieldValue != null) {
+						fieldValue = fieldValue.replace("\n", " ").replace("\r", " ").trim();
+						String originalCaseFieldName = validFieldsMap.get(fieldName.toLowerCase().trim());
+						if (originalCaseFieldName != null) {
+							if (!outValue.containsKey(originalCaseFieldName)) {
+								outValue.put(originalCaseFieldName, new ArrayList<String>());
+							}
+							outValue.get(originalCaseFieldName).add(fieldValue);
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			LOGGER.warn("Exception while doing a in-memory readLine()", e);
+		}
+		return outValue;
+
+	}
+
+	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalParams, Stream<Document> toCalculate) {
+		return callLLMConcatenateText(chatModel, prompt, question, additionalParams, stream2supplier(toCalculate));
+	}
+
+	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalParams, Supplier<Document> input) {
+		final int contextWindow = chatModel.getContextLength();
+
+		Document currentInput = null;
+		final int promptLength = tokensEstimation.estimate(prompt);
+		StringBuffer outBuffer = new StringBuffer();
+		// Following 2 variables have to be updated once a consolidation is re-run
+
+		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
+		do {
+
+			currentInput = input.get();
+			if (currentInput != null && currentInput.isText() && currentInput.getText().trim().length() > 0) {
+
+				final int textTokensLength = tokensEstimation.estimate(currentInput.toString());
+
+				if (textTokensLength > fragmentBudget) {
+					// splits will be loaded in currentBatchesQueue
+					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
+							fragmentBudget, true);
+					List<Document> documents = splitter.split(currentInput);
+					final Document _currentInput = currentInput;
+					List<ConsolidationDocuments> splitted = documents.stream().map(x -> {
+						ConsolidationDocuments batchItem = new ConsolidationDocuments();
+						batchItem.inputs.add(x);
+
+						batchItem.totaltokens = tokensEstimation.estimate(x.toString());
+						x.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, batchItem.totaltokens);
+						return batchItem;
+					}).toList();
+
+					currentBatchesQueue.addAll(splitted);
+				} else {
+
+					ConsolidationDocuments lastBatch = currentBatchesQueue.isEmpty() ? null
+							: currentBatchesQueue.get(currentBatchesQueue.size() - 1);
+
+					boolean allocateNewBatch = false;
+					if (lastBatch != null) {
+						if (fragmentBudget > (lastBatch.totaltokens + textTokensLength)) {
+							lastBatch.totaltokens += textTokensLength;
+							lastBatch.inputs.add(currentInput);
+						} else {
+							lastBatch.complete = true;
+							allocateNewBatch = true;
+						}
+					} else {
+						allocateNewBatch = true;
+					}
+					if (allocateNewBatch) {
+						ConsolidationDocuments newBatch = new ConsolidationDocuments();
+						newBatch.inputs.add(currentInput);
+						newBatch.totaltokens += textTokensLength;
+						currentBatchesQueue.add(newBatch);
+					}
+				}
+			}
+			List<ConsolidationDocuments> unmanaged = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationDocuments>();
+			for (ConsolidationDocuments consolidationInputBatch : currentBatchesQueue) {
+				// if this batch is complete or we are at the end of contents
+				if (consolidationInputBatch.complete || currentInput == null) {
+					String outValue = callLLMWithDocuments(chatModel, prompt, consolidationInputBatch.inputs, question,
+							additionalParams);
+
+					outValue = ClientChatCallUtil.removeThinking(outValue);
+
+					if (outValue != null) {
+						outBuffer.append(outValue);
+						outBuffer.append(NEWLINE);
+					}
+					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+				} else {
+					unmanaged.add(consolidationInputBatch);
+				}
+			}
+			currentBatchesQueue = unmanaged;
+		} while (currentInput != null);
+		return outBuffer.isEmpty() ? null : outBuffer.toString();
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			List<LLMInputDocument> input) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
+				aggregator, input);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
+			List<LLMInputDocument> input, boolean alreadySplitted) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
+				aggregator, input);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, List<LLMInputDocument> input) throws LLMConfigException, IOException {
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, input, false);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, List<LLMInputDocument> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
+		Iterator<LLMInputDocument> iterator = input.iterator();
+		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, () -> {
+					if (iterator.hasNext())
+						return iterator.next();
+					return null;
+				}, alreadySplitted);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, Supplier<LLMInputDocument> input) throws LLMConfigException, IOException {
+		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
+				type, aggregator, input, false);
+	}
+
+	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
+			BiFunction<T, T, T> aggregator, Supplier<LLMInputDocument> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
+		final int contextWindow = chatModel.getContextLength();
+		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
+		LLMInputDocument currentInput = null;
+		final int promptLength = tokensEstimation.estimate(prompt);
+		T consolidated = null;
+		String _consolidated = pastConsolidation;
+		BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(type);
+		final String formatSpecification = outputConverter.getFormat();
+		final int formatSpecificationLength = tokensEstimation.estimate(formatSpecification);
+		int fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow, additionalParams);
+		do {
+			currentInput = input.get();
+
+			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
+				StringBuffer metaInfos = new StringBuffer();
+				if (currentInput.documentReference != null) {
+					metaInfos.append(DOCUMENT_REFERENCE + currentInput.documentReference);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.documentUrl != null) {
+					metaInfos.append(DOCUMENT_URL + currentInput.documentUrl);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.title != null) {
+					metaInfos.append(DOCUMENT_TITLE + currentInput.title);
+					metaInfos.append(NEWLINE);
+				}
+				String metaData = metaInfos.toString();
+				final String fullTextWithMetaData = metaData + currentInput.text;
+				fragmentBudget -= formatSpecificationLength;
+				final int textTokensLength = tokensEstimation.estimate(fullTextWithMetaData);
+
+				if (!alreadySplitted && textTokensLength > fragmentBudget) {
+					// splits will be loaded in currentBatchesQueue
+					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
+							fragmentBudget, true);
+					Document document = new Document(currentInput.text);
+					List<Document> documents = splitter.split(document);
+					final LLMInputDocument _currentInput = currentInput;
+					List<ConsolidationBatchItem> splitted = documents.stream().map(x -> {
+						ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+						LLMInputDocument ci = new LLMInputDocument(_currentInput.documentReference,
+								_currentInput.documentUrl, _currentInput.title, metaData + x.getText());
+						batchItem.input = ci;
+						batchItem.tokensCount = tokensEstimation.estimate(ci.text);
+						return batchItem;
+					}).toList();
+					List<ConsolidationInputBatch> newBatchesQueue = splitted.stream().map(x -> {
+						ConsolidationInputBatch d = new ConsolidationInputBatch();
+						d.inputs.add(x);
+						d.totaltokens += x.tokensCount;
+						d.complete = true;
+						return d;
+					}).toList();
+					currentBatchesQueue.addAll(newBatchesQueue);
+				} else {
+
+					ConsolidationInputBatch lastBatch = currentBatchesQueue.isEmpty() ? null
+							: currentBatchesQueue.get(currentBatchesQueue.size() - 1);
+					ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+					LLMInputDocument ci = new LLMInputDocument(currentInput.documentReference, currentInput.documentUrl,
+							currentInput.title, fullTextWithMetaData);
+					batchItem.input = ci;
+					batchItem.tokensCount = textTokensLength;
+					boolean allocateNewBatch = false;
+					if (lastBatch != null) {
+						if (fragmentBudget > (lastBatch.totaltokens + batchItem.tokensCount)) {
+							lastBatch.totaltokens += batchItem.tokensCount;
+							lastBatch.inputs.add(batchItem);
+						} else {
+							lastBatch.complete = true;
+							allocateNewBatch = true;
+						}
+					} else {
+						allocateNewBatch = true;
+					}
+					if (allocateNewBatch) {
+						ConsolidationInputBatch newBatch = new ConsolidationInputBatch();
+						newBatch.inputs.add(batchItem);
+						newBatch.totaltokens += batchItem.tokensCount;
+						currentBatchesQueue.add(newBatch);
+					}
+				}
+			}
+
+			for (ConsolidationInputBatch consolidationInputBatch : currentBatchesQueue) {
+				// if this batch is complete or we are at the end of contents
+				if (consolidationInputBatch.complete || currentInput == null) {
+					StringBuffer currentText = new StringBuffer();
+					for (ConsolidationBatchItem d : consolidationInputBatch.inputs) {
+						String thisContent = d.input.text;
+						currentText.append(thisContent);
+						currentText.append(NEWLINE);
+					}
+					T oldConsolidated = consolidated;
+					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
+							currentText.toString(), question, _consolidated, additionalParams, type);
+					// eventual handling of consolidation programmable aggregation
+					if (aggregator != null) {
+						consolidated = aggregator.apply(oldConsolidated, consolidated);
+					}
+					_consolidated = objectMapper.writeValueAsString(consolidated);
+					fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow);
+					fragmentBudget -= formatSpecificationLength;
+				}
+			}
+		} while (currentInput != null);
+		return consolidated;
+	}
+
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			String pastConsolidation, List<LLMInputDocument> input) {
+		return this.callLLMConsolidateText(chatModel, prompt, question, pastConsolidation, Map.of(), input);
+	}
+
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			String pastConsolidation, Map<String, Object> additionalParams, List<LLMInputDocument> input) {
+		Iterator<LLMInputDocument> iterator = input.iterator();
+		return callLLMConsolidateText(chatModel, prompt, question, pastConsolidation, additionalParams, () -> {
+			if (iterator.hasNext())
+				return iterator.next();
+			return null;
+		});
+	}
+
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, String prompt, String question,
+			String pastConsolidation, Map<String, Object> additionalParams, Supplier<LLMInputDocument> input) {
+		final int contextWindow = chatModel.getContextLength();
+		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
+		LLMInputDocument currentInput = null;
+		final int promptLength = tokensEstimation.estimate(prompt);
+		String consolidated = pastConsolidation != null ? pastConsolidation : "";
+		// Following 2 variables have to be updated once a consolidation is re-run
+
+		int fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow);
+		do {
+			currentInput = input.get();
+			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
+				StringBuffer metaInfos = new StringBuffer();
+				if (currentInput.documentReference != null) {
+					metaInfos.append(DOCUMENT_REFERENCE + currentInput.documentReference);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.documentUrl != null) {
+					metaInfos.append(DOCUMENT_URL + currentInput.documentUrl);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.title != null) {
+					metaInfos.append(DOCUMENT_TITLE + currentInput.title);
+					metaInfos.append(NEWLINE);
+				}
+				String metaData = metaInfos.toString();
+				final int metaDataTokens = tokensEstimation.estimate(metaData);
+				final String fullTextWithMetaData = metaData + currentInput.text;
+				fragmentBudget -= metaDataTokens;
+				final int textTokensLength = tokensEstimation.estimate(fullTextWithMetaData);
+				// final PromptTemplate promptTemplate = new PromptTemplate(prompt);
+				// promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+				// promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+				// if text token is too big for the residual i consolidate inside the single
+				// text
+				if (textTokensLength > fragmentBudget) {
+					// splits will be loaded in currentBatchesQueue
+					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
+							fragmentBudget, true);
+					Document document = new Document(currentInput.text);
+					List<Document> documents = splitter.split(document);
+					final LLMInputDocument _currentInput = currentInput;
+					List<ConsolidationBatchItem> splitted = documents.stream().map(x -> {
+						ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+						LLMInputDocument ci = new LLMInputDocument(_currentInput.documentReference,
+								_currentInput.documentUrl, _currentInput.title, metaData + x.getText());
+						batchItem.input = ci;
+						batchItem.tokensCount = tokensEstimation.estimate(ci.text);
+						return batchItem;
+					}).toList();
+					List<ConsolidationInputBatch> newBatchesQueue = splitted.stream().map(x -> {
+						ConsolidationInputBatch d = new ConsolidationInputBatch();
+						d.inputs.add(x);
+						d.totaltokens += x.tokensCount;
+						d.complete = true;
+						return d;
+					}).toList();
+					currentBatchesQueue.addAll(newBatchesQueue);
+				} else {
+
+					ConsolidationInputBatch lastBatch = currentBatchesQueue.isEmpty() ? null
+							: currentBatchesQueue.get(currentBatchesQueue.size() - 1);
+					ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+					LLMInputDocument ci = new LLMInputDocument(currentInput.documentReference, currentInput.documentUrl,
+							currentInput.title, fullTextWithMetaData);
+					batchItem.input = ci;
+					batchItem.tokensCount = textTokensLength;
+					boolean allocateNewBatch = false;
+					if (lastBatch != null) {
+						if (fragmentBudget > (lastBatch.totaltokens + batchItem.tokensCount)) {
+							lastBatch.totaltokens += batchItem.tokensCount;
+							lastBatch.inputs.add(batchItem);
+						} else {
+							lastBatch.complete = true;
+							allocateNewBatch = true;
+						}
+					} else {
+						allocateNewBatch = true;
+					}
+					if (allocateNewBatch) {
+						ConsolidationInputBatch newBatch = new ConsolidationInputBatch();
+						newBatch.inputs.add(batchItem);
+						newBatch.totaltokens += batchItem.tokensCount;
+						currentBatchesQueue.add(newBatch);
+					}
+				}
+			}
+
+			for (ConsolidationInputBatch consolidationInputBatch : currentBatchesQueue) {
+				// if this batch is complete or we are at the end of contents
+				if (consolidationInputBatch.complete || currentInput == null) {
+					StringBuffer currentText = new StringBuffer();
+					for (ConsolidationBatchItem d : consolidationInputBatch.inputs) {
+						String thisContent = d.input.text;
+						currentText.append(thisContent);
+						currentText.append(NEWLINE);
+					}
+					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
+							question, consolidated, additionalParams);
+					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
+				}
+			}
+		} while (currentInput != null);
+		return consolidated;
+	}
+
+	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, String prompt, String question,
+			Map<String, Object> additionalVariables, Class<T> type) throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+		return data;
+	}
+
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, Object consolidated, Class<T> type) throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+		return data;
+	}
+
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			String question, Object consolidated, Map<String, Object> additionalVariables, Class<T> type)
+			throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalVariables.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+		return data;
+	}
+
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
+			String question) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
+		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
+			String question, Map<String, Object> params) {
+
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		loadParams(promptTemplate, params);
+		long time = 0;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm " + chatModel.getCode() + " in " + time + " ms");
+		}
+		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, String consolidated) {
+		return this.callLLMWithDocumentsAndConsolidation(chatModel, prompt, documents, question, consolidated,
+				Map.of());
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, String consolidated, Map<String, Object> additionalParams) {
+
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		if (additionalParams != null) {
+			for (Entry<String, Object> entry : additionalParams.entrySet()) {
+				promptTemplate.add(entry.getKey(), entry.getValue());
+			}
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
+		String result = response.getResult().getOutput().getText();
+		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+		if (result != null && skipThinkingMarkup) {
+			result = ClientChatCallUtil.removeThinking(result);
+		}
+		return result;
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			String prompt, Object documents, String question, Object consolidated, Class<T> type)
+			throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+		return data;
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			String prompt, Object documents, String question, Object consolidated, Map<String, Object> additionalParams,
+			Class<T> type) throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		for (Entry<String, Object> entry : additionalParams.entrySet()) {
+			promptTemplate.add(entry.getKey(), entry.getValue());
+		}
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+
+		return data;
+	}
+
+	protected <T> T callLLMWithDocumentsStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, Class<T> type) throws LLMConfigException {
+		prompt = fixPromptWithFormat(prompt);
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
+		promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
+		promptTemplate.add(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+		long time = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm (structured output) " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+		}
+		T data = chatModel.getChatClient().prompt(_renderedPrompt).call().entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			time = System.currentTimeMillis() - time;
+			LOGGER.debug("Called llm  (structured output) " + chatModel.getCode() + " in " + time + " ms");
+		}
+		return data;
+	}
+
+	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength) {
+		return computeFragmentBudget(consolidated, promptLength, contextWindowLength, Map.of());
+	}
+
+	protected int computeFragmentBudget(String consolidated, int promptLength, int contextWindowLength,
+			Map<String, Object> additionalParams) {
+		double consolidationLength = tokensEstimation.estimate(consolidated);
+		double contextWindowD = contextWindowLength;
+		double promptLengthD = promptLength;
+		if (additionalParams != null) {
+			for (Object entry : additionalParams.values()) {
+				if (entry != null) {
+					contextWindowD -= tokensEstimation.estimate(entry.toString());
+				}
+			}
+		}
+		return (int) Math
+				.round((contextWindowD - (consolidationLength + promptLengthD)) * ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+	}
+
+	protected Stream<String> filterCSVLines(Stream<String> streamedLines, int nColumns) {
+		return streamedLines.filter(x -> this.isCSV(x, nColumns));
+	}
+
+	protected Stream<String> filterCSVLines(String content, int nColumns) {
+		if (content == null || content.trim().length() == 0)
+			return Stream.empty();
+		final ByteArrayInputStream bis = new ByteArrayInputStream(content.getBytes());
+		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bis));
+		final Supplier<String> supplier = () -> {
+			String line = null;
+			try {
+				line = bufferedReader.readLine();
+			} catch (Throwable th) {
+			}
+			return line;
+		};
+		return filterCSVLines(supplier2stream(supplier), nColumns);
+	}
+
+	protected String fixPromptWithFormat(String prompt) {
+		if (!prompt.toLowerCase().contains("{" + FORMAT_TEMPLATE_VARIABLE.toLowerCase() + "}")) {
+			prompt += "\r\nOUTPUT FORMAT:\r\n";
+			prompt += "{" + FORMAT_TEMPLATE_VARIABLE + "}";
+		}
+		return prompt;
+	}
+
+	protected boolean isCSV(String line, int nColumns) {
+		if (line == null || line.trim().length() == 0)
+			return false;
+		char chars[] = line.toCharArray();
+		int count = 0;
+		for (int i = 0; i < chars.length; i++) {
+			char c = chars[i];
+			if (c == CSV_COLUMN_SEPARATOR) {
+				count++;
+			}
+		}
+		return count >= (nColumns - 1);
+	}
+
+	protected void loadParams(PromptTemplate template, Map<String, Object> params) {
+		if (params != null) {
+			for (Entry<String, Object> entry : params.entrySet()) {
+				template.add(entry.getKey(), entry.getValue());
+			}
+		}
+	}
+
+	protected <T> Stream<T> readCSVLines(String content, int nColumns, Function<String, T> reader) {
+		return filterCSVLines(content, nColumns).map(reader).filter(y -> y != null);
+	}
+
+}

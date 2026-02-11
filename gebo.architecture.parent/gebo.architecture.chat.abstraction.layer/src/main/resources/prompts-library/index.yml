@@ -49,3 +49,6 @@ ai.gebo.prompts:
     - promptUse: default-pipeline-initial-query-rewriting-prompt
       langCode: en
       reference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt.txt  
+    - promptUse: default-pipeline-search-planner
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-search-planner.txt  

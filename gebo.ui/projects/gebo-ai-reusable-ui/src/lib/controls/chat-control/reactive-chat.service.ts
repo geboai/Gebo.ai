@@ -19,7 +19,8 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { BASE_PATH, GeboChatRequest } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboAIBaseStreamingService, IGeboChatMessage } from "../../services/base-streaming.service";
+import { GeboAIBaseStreamingService } from "../../services/base-streaming.service";
+import { IGeboChatMessage } from "../../services/gebo-chat-message";
 
 
 

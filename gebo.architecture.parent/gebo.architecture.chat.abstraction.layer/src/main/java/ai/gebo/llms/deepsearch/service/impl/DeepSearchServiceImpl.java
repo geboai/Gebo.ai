@@ -24,7 +24,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -81,7 +81,7 @@ import reactor.core.scheduler.Scheduler;
 @Component
 @Scope("singleton")
 
-public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IGDeepSearchService {
+public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService implements IGDeepSearchService {
 
 	
 
@@ -506,8 +506,8 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, GUserChatSession userChatContext, List<String> deepSearchDataSources,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws LLMConfigException {
+			GeboChatResponse chatResponse, GUserChatSession userChatContext, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources) throws LLMConfigException {
 
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()

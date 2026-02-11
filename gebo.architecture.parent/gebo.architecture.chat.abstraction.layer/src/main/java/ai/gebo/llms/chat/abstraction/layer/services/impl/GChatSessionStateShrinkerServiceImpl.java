@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
-import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -44,7 +44,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
 
 @Service
-public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingService
+public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndProvidingService
 		implements IGChatSessionStateShrinkerService {
 	private static final String NEWLINE = "\r";
 	final GeboChatConfigs chatConfig;
@@ -280,7 +280,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 				if (matching.isPresent()) {
 					outList.add(matching.get());
 				} else {
-					List<ConsolidationInput> toBeConsolidated = new ArrayList<ConsolidationInput>();
+					List<LLMInputDocument> toBeConsolidated = new ArrayList<LLMInputDocument>();
 					if (content.getAiDocument().getFragments().isEmpty())
 						continue;
 					refsMap.put(content.getAiDocument().getCode(), content.getAiDocument());
@@ -289,7 +289,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 						buffer.append(fragment.getDocumentContent());
 					}
 					if (!buffer.isEmpty()) {
-						ConsolidationInput input = new ConsolidationInput(content.getAiDocument().getCode(),
+						LLMInputDocument input = new LLMInputDocument(content.getAiDocument().getCode(),
 								content.getAiDocument().getOriginalUrl(), (String) content.getAiDocument()
 										.getFragments().get(0).getMetaData().get(DocumentMetaInfos.TITLE),
 								buffer.toString());
@@ -341,7 +341,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 
 	private GUserChatInteractionsConsolidationData consolidateHistory(CSSSimplifiedChatHistory value,
 			int historySizeTarget, ShrinkedChatSessionState oldVersion, IGConfigurableChatModel usedChatModel) {
-		List<ConsolidationInput> inputs = new ArrayList<BaseLlmsInvokingService.ConsolidationInput>();
+		List<LLMInputDocument> inputs = new ArrayList<BaseLLMSInvokingAndProvidingService.LLMInputDocument>();
 		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 		String prompt = _prompt.getPrompt();
 
@@ -364,7 +364,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLlmsInvokingServic
 					new_messages.append(interaction.getAssistant());
 					new_messages.append(NEWLINE);
 				}
-				ConsolidationInput input = new ConsolidationInput(null, null, null, new_messages.toString());
+				LLMInputDocument input = new LLMInputDocument(null, null, null, new_messages.toString());
 				inputs.add(input);
 			}
 			Map<String, Object> params = new HashMap<String, Object>();

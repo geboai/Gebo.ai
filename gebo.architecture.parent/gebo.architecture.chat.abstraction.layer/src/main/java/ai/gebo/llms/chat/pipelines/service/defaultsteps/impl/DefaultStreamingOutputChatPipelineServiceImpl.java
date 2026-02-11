@@ -18,32 +18,22 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
 @Component
-public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputChatPipelineService
-		implements IStreamingOutputChatPipelineService {
+@AllArgsConstructor
+public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreamingOutputChatPipelineService {
 	private final IGChatService chatService;
 	private final ChatPipelinesConfiguration configuration;
 	private final IGPromptConfigDao promptsDao;
 	public static final String DEFAULT_STREAMING_OUTPUT = "default-streaming-output";
-
-	public DefaultStreamingOutputChatPipelineServiceImpl(IGAIDocumentsCacheService documentsCacheService,
-			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
-			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGChatService chatService, ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService);
-		this.chatService = chatService;
-		this.configuration = configuration;
-		this.promptsDao = promptsDao;
-	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -61,12 +51,11 @@ public class DefaultStreamingOutputChatPipelineServiceImpl extends BaseOutputCha
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		LLMChatRequestResources request = super.integrateWithAISuggestedDocuments(runtimeData, chatModel,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+
 		try {
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
-			return this.chatService.streamChat(prompt.getPrompt(), request, runtimeData.getUserChatContext(),
-					runtimeData.getChatResponse(), chatModel);
+			return this.chatService.streamChat(prompt.getPrompt(), runtimeData.getRequestResources(),
+					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}

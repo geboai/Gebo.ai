@@ -1,0 +1,53 @@
+@if (streaming) {
+<div class="gebo-ai-reusable-chat_chat-status">
+    @if(routingChoiceSelector) {
+    <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route">
+        <gebo-ai-pipline-route-display
+            [pipelineRouterDecisionCode]="routingChoiceSelector"></gebo-ai-pipline-route-display>
+    </div>
+    }
+
+    @if (routingChoiceSelector==='DEEP_SEARCH_RESPONSE') {
+    <div class="deep-search">
+        <div class="deep-search__progressbar">
+            <p-progressbar [value]="completionPercent" [style]="{ height: '10px' }"></p-progressbar>
+        </div>
+        <div class="deep-search__label">
+            <span *ngIf="inEventsLoop && !isDisplayingDeepSearchProcess" class="deep-search__label"
+                id="DeepSearchProcessingSearch" gebo-ai-text>Searching relevant informations</span>
+            <span class="deep-search__label" *ngIf="analisysStep"> <span>
+                    {{analisysStep?.analyzedDocument?.dataSourceDescription}}
+                </span>&nbsp;<span id="DeepSearchProcessingFile" gebo-ai-text>Analized
+                    file</span>&nbsp;<span>{{analisysStep?.analyzedDocument?.name ||
+                    analisysStep?.analyzedDocument?.code}}</span></span>
+            <span class="deep-search__label" *ngIf="deepSearchDataSourceDocumentResult">
+                <span>
+                    {{deepSearchDataSourceDocumentResult.dataSourceDescription}}
+                </span>&nbsp;
+                <span id="DeepSearchDataSourceProcessingDocument" gebo-ai-text>Analyzed search result</span>
+                &nbsp;
+                <span *ngIf="deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference">
+                    {{(deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.path?deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.path?.name:deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference?.root?.description)}}
+                </span>
+                <span
+                    *ngIf="(!deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference) && deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference">{{deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference?.uri}}
+                </span>
+            </span>
+            <span class="deep-search__label" *ngIf="deepSearchNotification">
+                {{deepSearchNotification?.content}}
+            </span>
+            <span class="deep-search__label" *ngIf="deepSearchDataSourceResponse">
+                <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>&nbsp;
+                <span>{{deepSearchDataSourceResponse.dataSourceDescription}}</span>
+            </span>
+            <span class="deep-search__label" *ngIf="completionPercent===100" id="DeepSearchingConsolidating"
+                gebo-ai-text>
+                Consolidating the final report
+            </span>
+
+        </div>
+    </div>
+
+    }
+</div>
+}
