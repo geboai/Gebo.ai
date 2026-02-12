@@ -18,48 +18,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Date;
 /**
  * GPromptPlaceholderInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
 
 public class GPromptPlaceholderInfo {
-  @JsonProperty("code")
-  private String code = null;
+  @JsonProperty("placeholder")
+  private String placeholder = null;
 
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("userModified")
-  private String userModified = null;
-
-  @JsonProperty("userCreated")
-  private String userCreated = null;
-
-  @JsonProperty("dateModified")
-  private Date dateModified = null;
-
-  @JsonProperty("dateCreated")
-  private Date dateCreated = null;
-
-  public GPromptPlaceholderInfo code(String code) {
-    this.code = code;
+  public GPromptPlaceholderInfo placeholder(String placeholder) {
+    this.placeholder = placeholder;
     return this;
   }
 
    /**
-   * Get code
-   * @return code
+   * Get placeholder
+   * @return placeholder
   **/
   @Schema(description = "")
-  public String getCode() {
-    return code;
+  public String getPlaceholder() {
+    return placeholder;
   }
 
-  public void setCode(String code) {
-    this.code = code;
+  public void setPlaceholder(String placeholder) {
+    this.placeholder = placeholder;
   }
 
   public GPromptPlaceholderInfo description(String description) {
@@ -80,78 +67,6 @@ public class GPromptPlaceholderInfo {
     this.description = description;
   }
 
-  public GPromptPlaceholderInfo userModified(String userModified) {
-    this.userModified = userModified;
-    return this;
-  }
-
-   /**
-   * Get userModified
-   * @return userModified
-  **/
-  @Schema(description = "")
-  public String getUserModified() {
-    return userModified;
-  }
-
-  public void setUserModified(String userModified) {
-    this.userModified = userModified;
-  }
-
-  public GPromptPlaceholderInfo userCreated(String userCreated) {
-    this.userCreated = userCreated;
-    return this;
-  }
-
-   /**
-   * Get userCreated
-   * @return userCreated
-  **/
-  @Schema(description = "")
-  public String getUserCreated() {
-    return userCreated;
-  }
-
-  public void setUserCreated(String userCreated) {
-    this.userCreated = userCreated;
-  }
-
-  public GPromptPlaceholderInfo dateModified(Date dateModified) {
-    this.dateModified = dateModified;
-    return this;
-  }
-
-   /**
-   * Get dateModified
-   * @return dateModified
-  **/
-  @Schema(description = "")
-  public Date getDateModified() {
-    return dateModified;
-  }
-
-  public void setDateModified(Date dateModified) {
-    this.dateModified = dateModified;
-  }
-
-  public GPromptPlaceholderInfo dateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-    return this;
-  }
-
-   /**
-   * Get dateCreated
-   * @return dateCreated
-  **/
-  @Schema(description = "")
-  public Date getDateCreated() {
-    return dateCreated;
-  }
-
-  public void setDateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -162,17 +77,13 @@ public class GPromptPlaceholderInfo {
       return false;
     }
     GPromptPlaceholderInfo gpromptPlaceholderInfo = (GPromptPlaceholderInfo) o;
-    return Objects.equals(this.code, gpromptPlaceholderInfo.code) &&
-        Objects.equals(this.description, gpromptPlaceholderInfo.description) &&
-        Objects.equals(this.userModified, gpromptPlaceholderInfo.userModified) &&
-        Objects.equals(this.userCreated, gpromptPlaceholderInfo.userCreated) &&
-        Objects.equals(this.dateModified, gpromptPlaceholderInfo.dateModified) &&
-        Objects.equals(this.dateCreated, gpromptPlaceholderInfo.dateCreated);
+    return Objects.equals(this.placeholder, gpromptPlaceholderInfo.placeholder) &&
+        Objects.equals(this.description, gpromptPlaceholderInfo.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated);
+    return Objects.hash(placeholder, description);
   }
 
 
@@ -181,12 +92,8 @@ public class GPromptPlaceholderInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class GPromptPlaceholderInfo {\n");
     
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    placeholder: ").append(toIndentedString(placeholder)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    userModified: ").append(toIndentedString(userModified)).append("\n");
-    sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
-    sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
-    sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**filter** | [**GUserChatContext**](GUserChatContext.md) |  |  [optional]
+**filter** | [**GUserChatSession**](GUserChatSession.md) |  |  [optional]
 **page** | [**DataPage**](DataPage.md) |  |  [optional]
