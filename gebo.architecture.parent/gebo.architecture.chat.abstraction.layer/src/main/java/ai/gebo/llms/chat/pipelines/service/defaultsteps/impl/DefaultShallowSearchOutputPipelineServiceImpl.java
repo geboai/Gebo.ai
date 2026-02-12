@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -25,9 +26,9 @@ import reactor.core.publisher.Flux;
 
 @Service
 @AllArgsConstructor
-public class DefaultSearchOutputPipelineServiceImpl implements IStreamingOutputChatPipelineService {
+public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreamingOutputChatPipelineService {
 	static final String CHOOSED_DATASOURCE_HANDLER = "CHOOSED-DATASOURCE-HANDLER";
-	static final String DEFAULT_SEARCH_STREAMING_OUTPUT = "default-search-streaming-output";
+	static final String DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT = "default-shallow-search-streaming-output";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	private final IGDeepSearchDataSourceExecutor executor;
@@ -41,14 +42,19 @@ public class DefaultSearchOutputPipelineServiceImpl implements IStreamingOutputC
 	@Override
 	public String getStepId() {
 
-		return DEFAULT_SEARCH_STREAMING_OUTPUT;
+		return DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT;
 	}
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		String choosedSourceId = (String) runtimeData.getSharedEnvironment().get(CHOOSED_DATASOURCE_HANDLER);
+		Object _choosedSourceId = runtimeData.getSharedEnvironment()
+				.get(DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM);
+		String choosedSourceId = null;
+		if (_choosedSourceId != null && _choosedSourceId instanceof List list && !list.isEmpty()) {
+			choosedSourceId = list.get(0).toString();
+		}
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
 				serviceModel, config, null);

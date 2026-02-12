@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -15,7 +16,7 @@ import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
 import lombok.AllArgsConstructor;
-
+@Service
 @AllArgsConstructor
 public class ReactiveEnabledDeepSearchDataSourceLookupServiceImpl implements IGReactiveEnabledDeepSearchDataSourceLookupService {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ReactiveEnabledDeepSearchDataSourceLookupServiceImpl.class);
