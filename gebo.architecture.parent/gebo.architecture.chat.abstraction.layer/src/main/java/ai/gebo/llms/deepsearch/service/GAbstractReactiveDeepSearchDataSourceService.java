@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -115,7 +116,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
 			List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps,
-			AtomicInteger doneSteps, DeepSearchState deepSearchState) throws LLMConfigException, IOException,
+			AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException,
 			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
 		if (LOGGER.isDebugEnabled()) {

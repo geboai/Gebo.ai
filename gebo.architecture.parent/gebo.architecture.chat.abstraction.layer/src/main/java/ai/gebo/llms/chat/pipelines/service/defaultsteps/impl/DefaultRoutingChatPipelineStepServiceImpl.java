@@ -47,6 +47,8 @@ import lombok.ToString;
 @Component
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingAndProvidingService
 		implements IRoutingChatPipelineStepService {
+	private static final String SEARCHED_SYSTEM = "searchedSystem";
+	private static final String ROUTING_DECISION = "routingDecision";
 	private static final String TOPICS = "topics: ";
 	private static final String END_KNOWLEDGE_BASE = "END_KNOWLEDGE_BASE";
 	private static final String KNOWLEDGE_BASE = "KNOWLEDGE_BASE";
@@ -146,13 +148,18 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 						String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
 						String toolsList = toolsListPromptPart(chatModel);
 						String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
+						String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
 						templateParams.put(
 								DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
 								internalKnowledgeBaseCatalog);
 						templateParams.put(
 								DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
 								deepSearchDataSources);
-						templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
+						templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM,
+								toolsList);
+						templateParams.put(
+								DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
+								shallowSystemsCatalog);
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("End Calculating router params to be cached");
 						}
@@ -172,13 +179,19 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 					String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
 							documentsTokenBudget);
 					templateParams.put(DOCUMENTS, documents);
-					String decisionText = callLLM(serviceModel, prompt, rewrited_query, templateParams);
+					Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt,
+							rewrited_query, templateParams, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
 
-					SimpleDecision decision = parseDecision(decisionText);
+					RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
+							? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
+							: RespondingWith.PURE_LLM_RESPONSE;
+					final Map<String, Object> environmentMap = new HashMap<String, Object>();
+					environmentMap.putAll(templateParams);
+					environmentMap.putAll(decisionMap);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Routing decision object:" + decision);
 					}
-					List<String> routes = futureRoutes(decision.getDecision(), RespondingWith.PURE_LLM_RESPONSE,
+					List<String> routes = futureRoutes(decision, RespondingWith.PURE_LLM_RESPONSE,
 							runtimeData.isStreamingOutput());
 					final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {
 
@@ -197,11 +210,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 						@Override
 						public Map<String, Object> getEnvironmentContributions() {
 
-							return templateParams;
+							return environmentMap;
 						}
 					};
 
-					rd = new RoutingDecision(routes, routingEntry, decision.getDecision().name());
+					rd = new RoutingDecision(routes, routingEntry, decision.name());
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
@@ -216,6 +229,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 
 	}
 
+	private String shallowSearchSystemsCatalog(ChatPipelineExecutionRuntimeData runtimeData) {
+		List<DeepSearchDataSourceMetaInfos> systems = this.deepSearchDataSourcesCatalogsService
+				.getActiveDeepSearchDataSourceMetaInfos();
+		return RoutingPromptUtil.shallowSearchSystemsCatalog(systems);
+	}
+
 	@AllArgsConstructor
 	@Getter
 	@ToString
@@ -224,7 +243,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		private final String motivation;
 	}
 
-	private SimpleDecision parseDecision(String decision) {
+	private RespondingWith parseDecision(String decision) {
 		TreeMap<Integer, RespondingWith> ordered = new TreeMap<Integer, RespondingWith>();
 		String tolower = decision.toLowerCase();
 		for (RespondingWith rw : RespondingWith.values()) {
@@ -235,7 +254,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		}
 		RespondingWith _decision = ordered.isEmpty() ? RespondingWith.PURE_LLM_RESPONSE
 				: ordered.firstEntry().getValue();
-		return new SimpleDecision(_decision, secondRow(decision));
+		return _decision;
 	}
 
 	private String secondRow(String decision) {
@@ -289,6 +308,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				}
 			}
 		}
+		return deepSearchInternalKnowledgeBasePromptPart(knowledgeBases);
+	}
+
+	private String deepSearchInternalKnowledgeBasePromptPart(List<GKnowledgeBase> knowledgeBases) {
+		StringBuffer buffer = new StringBuffer();
 		if (!knowledgeBases.isEmpty()) {
 			buffer.append(START_INTERNAL_KNOWLEDGEBASE_CATALOG);
 			buffer.append(NEWLINE);
@@ -330,6 +354,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			buffer.append(NEWLINE);
 		}
 		return buffer.toString();
+
 	}
 
 	private String toolsListPromptPart(IGConfigurableChatModel chatModel) {

@@ -26,6 +26,7 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 @Service
 public class JiraSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService, JiraBrowsingContext> {
+	private static final String JIRA = "jira";
 	final JiraApiClientFactory jiraConnectionFactory;
 	final JiraHandlerConfig config;
 
@@ -54,6 +55,12 @@ public class JiraSearchService extends
 
 		}
 		return List.of();
+	}
+
+	@Override
+	public String getId() {
+
+		return JIRA;
 	}
 
 	@Override

@@ -83,8 +83,6 @@ import reactor.core.scheduler.Scheduler;
 
 public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService implements IGDeepSearchService {
 
-	
-
 	static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
 	protected final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	protected final DeepSearchConfigRepository configRepository;
@@ -120,7 +118,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			DeepSearchDataSourceDocumentResultRepository dataSourceDocumentResultRepository,
 			DeepSearchDataSourceResponseRepository dataSourceResponseRepository,
 			ChatProfilesRepository chatProfilesRepository, IGeboThreadManager threadManager,
-			
+
 			IGChatSessionLifeCycleService sessionLifecyCleService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -144,7 +142,6 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 		this.deepSearchScheduler = threadManager.getBoundedElastic();
 
-		
 		this.sessionLifecyCleService = sessionLifecyCleService;
 	}
 
@@ -245,7 +242,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
-	private void persistSideEffects(AbstractDeepSearchEvent step) {
+	void persistSideEffects(AbstractDeepSearchEvent step) {
 		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
 			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalisysResult() != null
 					&& !dsDocumentEvent.getOutputData().getAnalisysResult().trim().isEmpty()
@@ -425,7 +422,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		return manageTrailingChatSessionEvents(flux, request, response, chatContext);
 	}
 
-	private Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
+	Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
 			GeboChatRequest request, GeboChatResponse response, GUserChatSession chatContext) {
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 		final boolean isRag = chatContext.getRagChat() != null && chatContext.getRagChat();

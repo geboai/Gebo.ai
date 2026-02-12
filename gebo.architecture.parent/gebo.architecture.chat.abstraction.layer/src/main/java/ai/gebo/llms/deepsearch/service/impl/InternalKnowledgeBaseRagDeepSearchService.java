@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
-			List<IGConfigurableEmbeddingModel> embeddingModels) {
+			List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
 
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
