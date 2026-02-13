@@ -375,7 +375,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				} else {
 					freshCopy = persistenceManager.transactionalUpdate(userContext);
 				}
-				this.chatSessionLifecycleService.addInteractionToState(request, response, userContext);
+				this.chatSessionLifecycleService.addInteractionToState(userContext, request, response);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
 			} finally {

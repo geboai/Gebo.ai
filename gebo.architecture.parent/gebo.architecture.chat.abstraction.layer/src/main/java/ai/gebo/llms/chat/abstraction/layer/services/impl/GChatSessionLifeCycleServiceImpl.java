@@ -85,7 +85,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatSession context,
+	public LLMChatRequestResources addRequestToState(GUserChatSession context, GeboChatRequest request,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, IOException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -212,7 +212,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
+	public LLMChatRequestResources addUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, IOException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
@@ -244,7 +244,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
+	public LLMChatRequestResources removeUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -269,7 +269,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
+	public LLMChatRequestResources addChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		AIDocumentReferenceItem data = null;
@@ -302,7 +302,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
+	public LLMChatRequestResources removeChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -327,7 +327,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
+	public LLMChatRequestResources addRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
@@ -354,7 +354,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
+	public LLMChatRequestResources removeRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -380,8 +380,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			GUserChatSession context, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+	public LLMChatRequestResources addLLMGeneratedDocumntsToState(GUserChatSession context,
+			LLMGeneratedResource resource, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);
@@ -418,7 +418,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatSession context)
+	public void addInteractionToState(GUserChatSession context, GeboChatRequest request, GeboChatResponse response)
 			throws GeboChatSessionLifecycleException {
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
 		ChatFullSessionState state = this.fullSessionStateService.retrieveState(context);

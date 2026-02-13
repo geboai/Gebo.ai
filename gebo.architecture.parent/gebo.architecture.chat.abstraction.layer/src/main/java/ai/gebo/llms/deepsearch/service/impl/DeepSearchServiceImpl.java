@@ -456,7 +456,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 				}
 				try {
-					this.sessionLifecyCleService.addInteractionToState(request, response, chatContext);
+					this.sessionLifecyCleService.addInteractionToState(chatContext, request, response);
 				} catch (GeboChatSessionLifecycleException e) {
 					LOGGER.error("Exceptin in trailing event", e);
 				}

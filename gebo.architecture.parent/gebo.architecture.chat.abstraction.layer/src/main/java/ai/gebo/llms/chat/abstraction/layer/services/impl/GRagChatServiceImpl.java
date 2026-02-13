@@ -204,11 +204,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
 
-				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(userContext,
+						request, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
-					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(userContext,
+							extractedDocuments, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				}
 				// Prepares and calls the templated chat client with the prompt
 				Prompt prompt = promptTemplate.create();
@@ -522,11 +522,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				response.setDocumentsRef(docrefs);
 
-				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(request,
-						userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequestToState(userContext,
+						request, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				if (extractedDocuments != null && extractedDocuments.getDocumentItems().size() > 0) {
-					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(extractedDocuments,
-							userContext, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+					fullRequest = chatSessionLifecycleService.addRetrievedDocumentsToState(userContext,
+							extractedDocuments, chatHandler, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				}
 				Prompt prompt = promptTemplate.create();
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();

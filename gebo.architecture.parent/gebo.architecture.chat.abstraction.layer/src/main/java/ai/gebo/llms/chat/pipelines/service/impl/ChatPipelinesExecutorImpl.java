@@ -76,7 +76,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());
 		LLMChatRequestResources resources = null;
-		resources = this.chatSessionLifecycleService.addRequestToState(request, context, chatModel,
+		resources = this.chatSessionLifecycleService.addRequestToState(context, request, chatModel,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 
 		GChatProfileConfiguration chatProfile = null;
