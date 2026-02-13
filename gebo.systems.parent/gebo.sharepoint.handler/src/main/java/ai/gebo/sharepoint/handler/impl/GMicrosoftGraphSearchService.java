@@ -27,6 +27,7 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 @Service
 public class GMicrosoftGraphSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService, SharepointBrowsingContext> {
+	private static final String SHAREPOINT = "sharepoint";
 	final GMicrosoftGraphClientFactory msGraphConnectionFactory;
 	final MicrosoftSharepointHandlerConfig config;
 
@@ -43,6 +44,12 @@ public class GMicrosoftGraphSearchService extends
 	public String getDescription() {
 
 		return "Sharepoint/OneDrive Search";
+	}
+
+	@Override
+	public String getId() {
+
+		return SHAREPOINT;
 	}
 
 	@Override

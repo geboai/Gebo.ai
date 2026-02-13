@@ -16,3 +16,4 @@ Name | Value
 ---- | -----
 KNOWLEDGE_BASE | &quot;KNOWLEDGE_BASE&quot;
 EXTERNAL_SEARCH | &quot;EXTERNAL_SEARCH&quot;
+UPLOADED_FILE | &quot;UPLOADED_FILE&quot;

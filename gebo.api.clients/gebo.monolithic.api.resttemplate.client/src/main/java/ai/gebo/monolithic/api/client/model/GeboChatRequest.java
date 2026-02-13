@@ -14,7 +14,6 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.AIDocumentsSet;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +26,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -48,6 +47,9 @@ public class GeboChatRequest {
   @JsonProperty("query")
   private String query = null;
 
+  @JsonProperty("rewrittenQuery")
+  private String rewrittenQuery = null;
+
   @JsonProperty("customRagConfig")
   private GeboRagRequestCustomConfig customRagConfig = null;
 
@@ -59,9 +61,6 @@ public class GeboChatRequest {
 
   @JsonProperty("forcedRequestDocuments")
   private List<String> forcedRequestDocuments = null;
-
-  @JsonProperty("documents")
-  private AIDocumentsSet documents = null;
 
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
@@ -180,6 +179,24 @@ public class GeboChatRequest {
     this.query = query;
   }
 
+  public GeboChatRequest rewrittenQuery(String rewrittenQuery) {
+    this.rewrittenQuery = rewrittenQuery;
+    return this;
+  }
+
+   /**
+   * Get rewrittenQuery
+   * @return rewrittenQuery
+  **/
+  @Schema(description = "")
+  public String getRewrittenQuery() {
+    return rewrittenQuery;
+  }
+
+  public void setRewrittenQuery(String rewrittenQuery) {
+    this.rewrittenQuery = rewrittenQuery;
+  }
+
   public GeboChatRequest customRagConfig(GeboRagRequestCustomConfig customRagConfig) {
     this.customRagConfig = customRagConfig;
     return this;
@@ -268,24 +285,6 @@ public class GeboChatRequest {
     this.forcedRequestDocuments = forcedRequestDocuments;
   }
 
-  public GeboChatRequest documents(AIDocumentsSet documents) {
-    this.documents = documents;
-    return this;
-  }
-
-   /**
-   * Get documents
-   * @return documents
-  **/
-  @Schema(description = "")
-  public AIDocumentsSet getDocuments() {
-    return documents;
-  }
-
-  public void setDocuments(AIDocumentsSet documents) {
-    this.documents = documents;
-  }
-
   public GeboChatRequest userUploadedContents(List<UserUploadedContent> userUploadedContents) {
     this.userUploadedContents = userUploadedContents;
     return this;
@@ -372,11 +371,11 @@ public class GeboChatRequest {
         Objects.equals(this.chatModelCode, geboChatRequest.chatModelCode) &&
         Objects.equals(this.streamResponse, geboChatRequest.streamResponse) &&
         Objects.equals(this.query, geboChatRequest.query) &&
+        Objects.equals(this.rewrittenQuery, geboChatRequest.rewrittenQuery) &&
         Objects.equals(this.customRagConfig, geboChatRequest.customRagConfig) &&
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
         Objects.equals(this.chatPipelineProcessId, geboChatRequest.chatPipelineProcessId) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
-        Objects.equals(this.documents, geboChatRequest.documents) &&
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
@@ -384,7 +383,7 @@ public class GeboChatRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, documents, userUploadedContents, deepSearchDataSources, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, tokensSize);
   }
 
 
@@ -399,11 +398,11 @@ public class GeboChatRequest {
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    streamResponse: ").append(toIndentedString(streamResponse)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    rewrittenQuery: ").append(toIndentedString(rewrittenQuery)).append("\n");
     sb.append("    customRagConfig: ").append(toIndentedString(customRagConfig)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
     sb.append("    chatPipelineProcessId: ").append(toIndentedString(chatPipelineProcessId)).append("\n");
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
-    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");

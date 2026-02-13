@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /**
  * Gebo.ai comment agent Repository interface for managing GUserChatContext

@@ -12,13 +12,12 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 
 final class RoutingPromptUtil {
 
-	private static final String SPACE = " ";
 	private static final String LIST_ITEM = "-";
 	private static final String END_ROUTING_DECISION = "<<<END_ROUTING_DECISION>>>";
 	private static final String ROUTING_DECISION = "<<<ROUTING_DECISION>>>";
@@ -293,6 +292,46 @@ final class RoutingPromptUtil {
 				}
 			}
 			buffer.append(END_DEEP_SEARCH_DATA_SOURCES_CATALOG);
+			buffer.append(NEWLINE);
+		}
+		return buffer.toString();
+	}
+
+	static final String END_SYSTEM_CATALOG = "END_SYSTEM_CATALOG";
+	private static final String SYSTEM_CATALOG = "SYSTEM_CATALOG";
+	private static final String DESCRIPTION2 = "description:";
+	private static final String SHALLOW_SYSTEM_PREFIX = "shallow";
+	static final String SPACE = " ";
+	static final String SYSTEM_ID = "systemId:";
+	private static final String END_SHALLOW_SEARCH_SYSTEMS_CATALOG = "END_SHALLOW_SEARCH_SYSTEMS_CATALOG";
+	private static final String SHALLOW_SEARCH_SYSTEMS_CATALOG = "SHALLOW_SEARCH_SYSTEMS_CATALOG";
+
+	static String shallowSearchSystemsCatalog(List<DeepSearchDataSourceMetaInfos> systems) {
+		StringBuffer buffer = new StringBuffer();
+		if (!systems.isEmpty()) {
+			buffer.append(SHALLOW_SEARCH_SYSTEMS_CATALOG);
+			buffer.append(NEWLINE);
+			for (DeepSearchDataSourceMetaInfos meta : systems) {
+				buffer.append(SYSTEM_ID);
+				buffer.append(SPACE);
+				buffer.append(SHALLOW_SYSTEM_PREFIX + meta.getHandlerId());
+				buffer.append(NEWLINE);
+				buffer.append(DESCRIPTION);
+				buffer.append(SPACE);
+				buffer.append(meta.getDescription());
+				buffer.append(NEWLINE);
+				buffer.append(SYSTEM_CATALOG);
+				buffer.append(NEWLINE);
+				for (String cat : meta.getCatalogues()) {
+					buffer.append(LIST_ITEM);
+					buffer.append(SPACE);
+					buffer.append(cat);
+					buffer.append(NEWLINE);
+				}
+				buffer.append(END_SYSTEM_CATALOG);
+				buffer.append(NEWLINE);
+			}
+			buffer.append(END_SHALLOW_SEARCH_SYSTEMS_CATALOG);
 			buffer.append(NEWLINE);
 		}
 		return buffer.toString();

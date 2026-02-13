@@ -2,7 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
 
 import java.util.Date;
 
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import lombok.Data;
 
 @Data

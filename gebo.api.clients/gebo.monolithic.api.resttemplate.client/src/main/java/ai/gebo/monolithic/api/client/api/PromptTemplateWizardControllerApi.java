@@ -4,7 +4,6 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.OperationStatusPromptTemplateResponse;
 import ai.gebo.monolithic.api.client.model.PromptTemplateParam;
-import ai.gebo.monolithic.api.client.model.PromptTemplateWizardConfigs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
 
 public class PromptTemplateWizardControllerApi {
     private ApiClient apiClient;
@@ -89,43 +88,5 @@ public class PromptTemplateWizardControllerApi {
 
         ParameterizedTypeReference<OperationStatusPromptTemplateResponse> returnType = new ParameterizedTypeReference<OperationStatusPromptTemplateResponse>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
-    }
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @return PromptTemplateWizardConfigs
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public PromptTemplateWizardConfigs getTemplateWizardConfigs() throws RestClientException {
-        return getTemplateWizardConfigsWithHttpInfo().getBody();
-    }
-
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;PromptTemplateWizardConfigs&gt;
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public ResponseEntity<PromptTemplateWizardConfigs> getTemplateWizardConfigsWithHttpInfo() throws RestClientException {
-        Object postBody = null;
-        String path = UriComponentsBuilder.fromPath("/api/users/PromptTemplateWizardController/getTemplateWizardConfigs").build().toUriString();
-        
-        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-        final HttpHeaders headerParams = new HttpHeaders();
-        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-
-        final String[] accepts = { 
-            "application/json"
-         };
-        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
-        final String[] contentTypes = {  };
-        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
-
-        String[] authNames = new String[] {  };
-
-        ParameterizedTypeReference<PromptTemplateWizardConfigs> returnType = new ParameterizedTypeReference<PromptTemplateWizardConfigs>() {};
-        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

@@ -12,7 +12,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /******************************************************************************************************
  * Mantains the 2 session levels transparently letting adding resources in the
@@ -37,32 +37,45 @@ public interface IGChatSessionLifeCycleService {
 
 	public void removeChatSession(GUserChatSession context) throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addRequestToState(GeboChatRequest request, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException;
+	public LLMChatRequestResources addRequestToState(GUserChatSession context, GeboChatRequest request,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException, IOException;
 
-	public LLMChatRequestResources addUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException;
+	public void updateRequest(GUserChatSession context, GeboChatRequest request)
+			throws GeboChatSessionLifecycleException, IOException;
 
-	public LLMChatRequestResources removeUploadedDocumentToState(UserUploadedContent content, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources addUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException, IOException;
 
-	public LLMChatRequestResources addChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources removeUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources removeChatWithDocumentToState(GDocumentReference reference, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources addChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources removeChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources removeRetrievedDocumentsToState(AIDocumentsSet retrieved, GUserChatSession context,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources addRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addLLMGeneratedDocumntsToState(LLMGeneratedResource resource,
-			GUserChatSession context, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources removeRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public void addInteractionToState(GeboChatRequest request, GeboChatResponse response, GUserChatSession context) throws GeboChatSessionLifecycleException;
+	public LLMChatRequestResources addLLMGeneratedDocumntsToState(GUserChatSession context,
+			LLMGeneratedResource resource, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException;
 
-	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel) throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
+	public void addInteractionToState(GUserChatSession context, GeboChatRequest request, GeboChatResponse response)
+			throws GeboChatSessionLifecycleException;
+
+	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
 
 }

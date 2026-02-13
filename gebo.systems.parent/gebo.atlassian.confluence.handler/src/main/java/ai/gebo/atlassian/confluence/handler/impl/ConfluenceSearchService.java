@@ -50,6 +50,7 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 @Service
 public class ConfluenceSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext> {
+	private static final String CONFLUENCE = "confluence";
 	private static final String HTML = ".html";
 	private static final String TEXT_HTML = "text/html";
 	final ConfluenceConnectionFactory confluenceConnectionFactory;
@@ -69,6 +70,12 @@ public class ConfluenceSearchService extends
 	public String getDescription() {
 
 		return "Confluence Search";
+	}
+
+	@Override
+	public String getId() {
+
+		return CONFLUENCE;
 	}
 
 	@Override

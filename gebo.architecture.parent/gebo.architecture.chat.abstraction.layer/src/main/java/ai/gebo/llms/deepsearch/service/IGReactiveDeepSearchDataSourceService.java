@@ -2,6 +2,7 @@ package ai.gebo.llms.deepsearch.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -54,6 +55,7 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @param chunkingSessionId TODO
 	 * @param totalSteps TODO
 	 * @param doneSteps TODO
+	 * @param completed TODO
 	 * @param deepSearchState TODO
 	 * @param history
 	 * @return
@@ -64,7 +66,7 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws SearchServiceException
 	 */
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

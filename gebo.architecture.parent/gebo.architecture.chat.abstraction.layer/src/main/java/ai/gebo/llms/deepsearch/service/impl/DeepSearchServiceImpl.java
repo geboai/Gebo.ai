@@ -36,13 +36,13 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
@@ -83,8 +83,6 @@ import reactor.core.scheduler.Scheduler;
 
 public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService implements IGDeepSearchService {
 
-	
-
 	static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
 	protected final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	protected final DeepSearchConfigRepository configRepository;
@@ -120,7 +118,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			DeepSearchDataSourceDocumentResultRepository dataSourceDocumentResultRepository,
 			DeepSearchDataSourceResponseRepository dataSourceResponseRepository,
 			ChatProfilesRepository chatProfilesRepository, IGeboThreadManager threadManager,
-			
+
 			IGChatSessionLifeCycleService sessionLifecyCleService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -144,7 +142,6 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 		this.deepSearchScheduler = threadManager.getBoundedElastic();
 
-		
 		this.sessionLifecyCleService = sessionLifecyCleService;
 	}
 
@@ -245,7 +242,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
-	private void persistSideEffects(AbstractDeepSearchEvent step) {
+	void persistSideEffects(AbstractDeepSearchEvent step) {
 		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
 			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalisysResult() != null
 					&& !dsDocumentEvent.getOutputData().getAnalisysResult().trim().isEmpty()
@@ -425,7 +422,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		return manageTrailingChatSessionEvents(flux, request, response, chatContext);
 	}
 
-	private Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
+	Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
 			GeboChatRequest request, GeboChatResponse response, GUserChatSession chatContext) {
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 		final boolean isRag = chatContext.getRagChat() != null && chatContext.getRagChat();
@@ -459,7 +456,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 				}
 				try {
-					this.sessionLifecyCleService.addInteractionToState(request, response, chatContext);
+					this.sessionLifecyCleService.addInteractionToState(chatContext, request, response);
 				} catch (GeboChatSessionLifecycleException e) {
 					LOGGER.error("Exceptin in trailing event", e);
 				}

@@ -28,6 +28,7 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 @Service
 public class GoogleDriveSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<GoogleDriveResultsExtractionData, GGoogleDriveSystem, GGoogleDriveProjectEndpoint, GoogleDriveNativePositionObject, GoogleDriveNavigationCoordinates, GoogleDriveResourceReference, IGGoogleDriveVirtualFilesystemConsumingService, GoogleDriveSystemContext> {
+	private static final String GOOGLE_DRIVE = "google-drive";
 	final GoogleDriveCredentialsFactory googleCredentialsFactory;
 	final GoogleWorkspaceHandlerConfig config;
 
@@ -44,6 +45,12 @@ public class GoogleDriveSearchService extends
 	public String getDescription() {
 
 		return "Google Drive/Workspace Search";
+	}
+
+	@Override
+	public String getId() {
+
+		return GOOGLE_DRIVE;
 	}
 
 	@Override

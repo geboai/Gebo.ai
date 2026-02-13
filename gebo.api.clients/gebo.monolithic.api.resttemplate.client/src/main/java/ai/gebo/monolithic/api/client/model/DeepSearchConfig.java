@@ -25,7 +25,7 @@ import java.util.Date;
  * DeepSearchConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-02T16:54:09.842199+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
 
 public class DeepSearchConfig {
   @JsonProperty("code")
@@ -80,18 +80,6 @@ public class DeepSearchConfig {
   }  @JsonProperty("searchType")
   private SearchTypeEnum searchType = null;
 
-  @JsonProperty("consolidationPrompt")
-  private String consolidationPrompt = null;
-
-  @JsonProperty("analisysPrompt")
-  private String analisysPrompt = null;
-
-  @JsonProperty("ratingPrompt")
-  private String ratingPrompt = null;
-
-  @JsonProperty("keywordGenerationPrompt")
-  private String keywordGenerationPrompt = null;
-
   @JsonProperty("ragQueryOptions")
   private RagQueryOptions ragQueryOptions = null;
 
@@ -106,6 +94,9 @@ public class DeepSearchConfig {
 
   @JsonProperty("tokensLimit")
   private Integer tokensLimit = null;
+
+  @JsonProperty("documentsParallelism")
+  private Integer documentsParallelism = null;
 
   @JsonProperty("manualThreasholdsConfiguration")
   private Boolean manualThreasholdsConfiguration = null;
@@ -245,78 +236,6 @@ public class DeepSearchConfig {
     this.searchType = searchType;
   }
 
-  public DeepSearchConfig consolidationPrompt(String consolidationPrompt) {
-    this.consolidationPrompt = consolidationPrompt;
-    return this;
-  }
-
-   /**
-   * Get consolidationPrompt
-   * @return consolidationPrompt
-  **/
-  @Schema(description = "")
-  public String getConsolidationPrompt() {
-    return consolidationPrompt;
-  }
-
-  public void setConsolidationPrompt(String consolidationPrompt) {
-    this.consolidationPrompt = consolidationPrompt;
-  }
-
-  public DeepSearchConfig analisysPrompt(String analisysPrompt) {
-    this.analisysPrompt = analisysPrompt;
-    return this;
-  }
-
-   /**
-   * Get analisysPrompt
-   * @return analisysPrompt
-  **/
-  @Schema(description = "")
-  public String getAnalisysPrompt() {
-    return analisysPrompt;
-  }
-
-  public void setAnalisysPrompt(String analisysPrompt) {
-    this.analisysPrompt = analisysPrompt;
-  }
-
-  public DeepSearchConfig ratingPrompt(String ratingPrompt) {
-    this.ratingPrompt = ratingPrompt;
-    return this;
-  }
-
-   /**
-   * Get ratingPrompt
-   * @return ratingPrompt
-  **/
-  @Schema(description = "")
-  public String getRatingPrompt() {
-    return ratingPrompt;
-  }
-
-  public void setRatingPrompt(String ratingPrompt) {
-    this.ratingPrompt = ratingPrompt;
-  }
-
-  public DeepSearchConfig keywordGenerationPrompt(String keywordGenerationPrompt) {
-    this.keywordGenerationPrompt = keywordGenerationPrompt;
-    return this;
-  }
-
-   /**
-   * Get keywordGenerationPrompt
-   * @return keywordGenerationPrompt
-  **/
-  @Schema(description = "")
-  public String getKeywordGenerationPrompt() {
-    return keywordGenerationPrompt;
-  }
-
-  public void setKeywordGenerationPrompt(String keywordGenerationPrompt) {
-    this.keywordGenerationPrompt = keywordGenerationPrompt;
-  }
-
   public DeepSearchConfig ragQueryOptions(RagQueryOptions ragQueryOptions) {
     this.ragQueryOptions = ragQueryOptions;
     return this;
@@ -405,6 +324,24 @@ public class DeepSearchConfig {
 
   public void setTokensLimit(Integer tokensLimit) {
     this.tokensLimit = tokensLimit;
+  }
+
+  public DeepSearchConfig documentsParallelism(Integer documentsParallelism) {
+    this.documentsParallelism = documentsParallelism;
+    return this;
+  }
+
+   /**
+   * Get documentsParallelism
+   * @return documentsParallelism
+  **/
+  @Schema(description = "")
+  public Integer getDocumentsParallelism() {
+    return documentsParallelism;
+  }
+
+  public void setDocumentsParallelism(Integer documentsParallelism) {
+    this.documentsParallelism = documentsParallelism;
   }
 
   public DeepSearchConfig manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
@@ -496,15 +433,12 @@ public class DeepSearchConfig {
         Objects.equals(this.dateModified, deepSearchConfig.dateModified) &&
         Objects.equals(this.dateCreated, deepSearchConfig.dateCreated) &&
         Objects.equals(this.searchType, deepSearchConfig.searchType) &&
-        Objects.equals(this.consolidationPrompt, deepSearchConfig.consolidationPrompt) &&
-        Objects.equals(this.analisysPrompt, deepSearchConfig.analisysPrompt) &&
-        Objects.equals(this.ratingPrompt, deepSearchConfig.ratingPrompt) &&
-        Objects.equals(this.keywordGenerationPrompt, deepSearchConfig.keywordGenerationPrompt) &&
         Objects.equals(this.ragQueryOptions, deepSearchConfig.ragQueryOptions) &&
         Objects.equals(this.firstHopSimilarityThreashold, deepSearchConfig.firstHopSimilarityThreashold) &&
         Objects.equals(this.secondHopSimilarityThreashold, deepSearchConfig.secondHopSimilarityThreashold) &&
         Objects.equals(this.graphRagTopN, deepSearchConfig.graphRagTopN) &&
         Objects.equals(this.tokensLimit, deepSearchConfig.tokensLimit) &&
+        Objects.equals(this.documentsParallelism, deepSearchConfig.documentsParallelism) &&
         Objects.equals(this.manualThreasholdsConfiguration, deepSearchConfig.manualThreasholdsConfiguration) &&
         Objects.equals(this.chatModelConfiguration, deepSearchConfig.chatModelConfiguration) &&
         Objects.equals(this.defaultConfig, deepSearchConfig.defaultConfig) &&
@@ -513,7 +447,7 @@ public class DeepSearchConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, consolidationPrompt, analisysPrompt, ratingPrompt, keywordGenerationPrompt, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, manualThreasholdsConfiguration, chatModelConfiguration, defaultConfig, chatProfileCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, searchType, ragQueryOptions, firstHopSimilarityThreashold, secondHopSimilarityThreashold, graphRagTopN, tokensLimit, documentsParallelism, manualThreasholdsConfiguration, chatModelConfiguration, defaultConfig, chatProfileCode);
   }
 
 
@@ -529,15 +463,12 @@ public class DeepSearchConfig {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    searchType: ").append(toIndentedString(searchType)).append("\n");
-    sb.append("    consolidationPrompt: ").append(toIndentedString(consolidationPrompt)).append("\n");
-    sb.append("    analisysPrompt: ").append(toIndentedString(analisysPrompt)).append("\n");
-    sb.append("    ratingPrompt: ").append(toIndentedString(ratingPrompt)).append("\n");
-    sb.append("    keywordGenerationPrompt: ").append(toIndentedString(keywordGenerationPrompt)).append("\n");
     sb.append("    ragQueryOptions: ").append(toIndentedString(ragQueryOptions)).append("\n");
     sb.append("    firstHopSimilarityThreashold: ").append(toIndentedString(firstHopSimilarityThreashold)).append("\n");
     sb.append("    secondHopSimilarityThreashold: ").append(toIndentedString(secondHopSimilarityThreashold)).append("\n");
     sb.append("    graphRagTopN: ").append(toIndentedString(graphRagTopN)).append("\n");
     sb.append("    tokensLimit: ").append(toIndentedString(tokensLimit)).append("\n");
+    sb.append("    documentsParallelism: ").append(toIndentedString(documentsParallelism)).append("\n");
     sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
     sb.append("    chatModelConfiguration: ").append(toIndentedString(chatModelConfiguration)).append("\n");
     sb.append("    defaultConfig: ").append(toIndentedString(defaultConfig)).append("\n");

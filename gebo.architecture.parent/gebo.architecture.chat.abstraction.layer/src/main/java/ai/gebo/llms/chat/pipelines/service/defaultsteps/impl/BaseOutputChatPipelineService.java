@@ -194,7 +194,7 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				targetChatModel.getContextLength());
 		out = AIDocumentsSet.join(out, searchResult);
 		if (!out.getDocumentItems().isEmpty()) {
-			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(out, runtimeData.getUserChatContext(),
+			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(runtimeData.getUserChatContext(), out,
 					targetChatModel, policy);
 		} else
 			rc = runtimeData.getRequestResources();

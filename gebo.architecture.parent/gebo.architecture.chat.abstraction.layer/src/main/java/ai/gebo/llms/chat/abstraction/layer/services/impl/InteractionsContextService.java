@@ -14,8 +14,8 @@ import java.util.List;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.llms.chat.abstraction.layer.model.session.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /**
  * Gebo.ai comment agent Service for managing and processing user chat
