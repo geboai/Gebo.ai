@@ -25,7 +25,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatRe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import reactor.core.publisher.Flux;
 
 /**

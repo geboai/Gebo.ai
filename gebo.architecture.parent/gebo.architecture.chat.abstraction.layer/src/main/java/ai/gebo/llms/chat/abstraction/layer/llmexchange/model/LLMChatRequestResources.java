@@ -13,7 +13,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
-import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

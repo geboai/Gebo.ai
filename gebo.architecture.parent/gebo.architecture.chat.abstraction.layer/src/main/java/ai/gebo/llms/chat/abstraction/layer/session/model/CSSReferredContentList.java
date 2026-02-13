@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model.session;
+package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.drew.lang.annotations.NotNull;
 
-import ai.gebo.llms.chat.abstraction.layer.model.session.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;

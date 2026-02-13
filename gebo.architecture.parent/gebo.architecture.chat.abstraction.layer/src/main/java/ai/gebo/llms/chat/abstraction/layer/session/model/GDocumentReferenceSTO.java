@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model.session;
+package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

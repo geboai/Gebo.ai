@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model.session;
+package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.util.Date;
 import java.util.List;

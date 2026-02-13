@@ -15,15 +15,15 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.model.session.CSSInteractionReferredContent;
-import ai.gebo.llms.chat.abstraction.layer.model.session.CSSSimplefiedInteraction;
-import ai.gebo.llms.chat.abstraction.layer.model.session.GDocumentReferenceSTO;
-import ai.gebo.llms.chat.abstraction.layer.model.session.LLMGeneratedResourceSTO;
-import ai.gebo.llms.chat.abstraction.layer.model.session.ShrinkedChatSessionState;
-import ai.gebo.llms.chat.abstraction.layer.model.session.UserUploadedContentSTO;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSInteractionReferredContent;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GDocumentReferenceSTO;
+import ai.gebo.llms.chat.abstraction.layer.session.model.LLMGeneratedResourceSTO;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
+import ai.gebo.llms.chat.abstraction.layer.session.model.UserUploadedContentSTO;
 import lombok.AllArgsConstructor;
 
 @Component

@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model.session;
+package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
