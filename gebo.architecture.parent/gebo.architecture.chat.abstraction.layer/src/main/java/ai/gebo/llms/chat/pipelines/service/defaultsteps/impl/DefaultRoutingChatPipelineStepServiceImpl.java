@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
@@ -65,6 +68,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
+	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
 
@@ -75,7 +79,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo,
 			IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService, IGPromptConfigDao promptsDao,
 			IGKnowledgebaseVisibilityService visibleKnowledgeBasesService, IGPersistentObjectManager persistentManager,
-			IGPromptsParametersCacheService promptsParamsCacheService) {
+			IGPromptsParametersCacheService promptsParamsCacheService,
+			IGChatSessionLifeCycleService chatSessionLifecycleService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.chatPipelinesConfig = chatPipelinesConfig;
 		this.deepSearchService = deepSearchService;
@@ -85,6 +90,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		this.visibleKnowledgeBasesService = visibleKnowledgeBasesService;
 		this.persistentManager = persistentManager;
 		this.promptsParamsCacheService = promptsParamsCacheService;
+		this.chatSessionLifecycleService = chatSessionLifecycleService;
 	}
 
 	@Override
@@ -100,7 +106,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	}
 
 	private String doRequestRewrite(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String latestInteractions) {
+			IGConfigurableChatModel serviceModel, String latestInteractions) throws GeboChatSessionLifecycleException, IOException {
 		String query = runtimeData.getRequestResources().getLastRequest().getQuery();
 
 		GPromptConfig rewritePrompt = promptsDao
@@ -108,6 +114,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query,
 				Map.of(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM, latestInteractions));
 		runtimeData.getRequestResources().getLastRequest().setRewrittenQuery(rewrited_query);
+		this.chatSessionLifecycleService.updateRequest(runtimeData.getUserChatContext(),
+				runtimeData.getRequestResources().getLastRequest());
 		return rewrited_query;
 	}
 

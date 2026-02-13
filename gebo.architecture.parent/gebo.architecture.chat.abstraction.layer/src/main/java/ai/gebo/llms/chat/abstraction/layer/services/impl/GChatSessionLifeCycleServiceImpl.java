@@ -47,11 +47,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService, IGMessageEmitter {
 
+	private final SessionShrinkMessagesReceiver sessionShrinkMessagesReceiver;
+
 	static final String SESSION_LIFE_CYCLE_SERVICE = "sessionLifeCycleService";
 	private final IGChatFullSessionStateService fullSessionStateService;
 	private final IGShrinkedChatSessionStateService shrinkedSessionStateService;
 	private final GeboChatSessionLifeCycleConfig lifeCycleConfig;
-	private final IGChatSessionStateShrinkerService sessionStateShrinkerService;
 	private final DocumentReferenceRepository documentsRepository;
 	private final IGChatStorageAreaService chatAreaStorageSession;
 	private final IGAIDocumentsCacheService documentsCacheService;
@@ -513,5 +514,28 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	public List<String> getEmittedPayloadTypes() {
 
 		return List.of(SessionShrinkRequestPayload.class.getName());
+	}
+
+	@Override
+	public void updateRequest(GUserChatSession context, GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		ChatFullSessionState full = this.fullSessionStateService.retrieveState(context);
+		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.retrieveState(context);
+		if (shrinked.getCurrentRequest() != null && request.getId() != null
+				&& shrinked.getCurrentRequest().getId().equals(request.getId())) {
+			shrinked.setCurrentRequest(request);
+			this.shrinkedSessionStateService.save(shrinked);
+		} else
+			throw new GeboChatSessionLifecycleException(
+					"Logical problem, the request id to update does not match the actual one");
+		if (full.getCurrentRequest().getValue() != null && full.getCurrentRequest().getValue().getId() != null
+				&& request.getId() != null && full.getCurrentRequest().getValue().getId().equals(request.getId())) {
+			full.getCurrentRequest().setValue(request);
+			this.fullSessionStateService.save(full);
+
+		} else
+			throw new GeboChatSessionLifecycleException(
+					"Logical problem, the request id to update does not match the actual one");
+
 	}
 }
