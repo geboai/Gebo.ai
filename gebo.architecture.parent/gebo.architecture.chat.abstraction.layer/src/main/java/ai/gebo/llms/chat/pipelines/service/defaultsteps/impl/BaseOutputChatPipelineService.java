@@ -69,7 +69,7 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
 				searchRewritings.getRewrittenFullTextSearchSentences(),
 				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()),
-				configuration.getGlobalRagTopK(), runtimeData.getUserChatContext(), tokensBudget);
+				configuration.getGlobalRagTopK(), tokensBudget);
 
 		return documentSet;
 	}
@@ -194,8 +194,8 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				targetChatModel.getContextLength());
 		out = AIDocumentsSet.join(out, searchResult);
 		if (!out.getDocumentItems().isEmpty()) {
-			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(runtimeData.getUserChatContext(), out,
-					targetChatModel, policy);
+			rc = chatSessionLifecycleService.addRetrievedDocuments(runtimeData.getRequestResources().getLastRequest(),
+					out, targetChatModel, policy);
 		} else
 			rc = runtimeData.getRequestResources();
 		return rc;

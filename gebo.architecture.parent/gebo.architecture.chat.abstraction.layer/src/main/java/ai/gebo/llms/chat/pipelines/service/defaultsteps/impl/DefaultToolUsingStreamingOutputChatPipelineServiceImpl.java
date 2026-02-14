@@ -49,8 +49,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 
 		try {
 			return chatService.streamChat(promptTemplate.create(params).getContents(),
-					runtimeData.getRequestResources(), runtimeData.getUserChatContext(), runtimeData.getChatResponse(),
-					chatModel);
+					runtimeData.getRequestResources(), runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception in tools execution output", e);
 		}

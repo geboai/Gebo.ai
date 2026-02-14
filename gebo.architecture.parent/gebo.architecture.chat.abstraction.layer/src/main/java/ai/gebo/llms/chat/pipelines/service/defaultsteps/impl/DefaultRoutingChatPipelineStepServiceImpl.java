@@ -106,7 +106,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	}
 
 	private String doRequestRewrite(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String latestInteractions) throws GeboChatSessionLifecycleException, IOException {
+			IGConfigurableChatModel serviceModel, String latestInteractions)
+			throws GeboChatSessionLifecycleException, IOException {
 		String query = runtimeData.getRequestResources().getLastRequest().getQuery();
 
 		GPromptConfig rewritePrompt = promptsDao
@@ -114,14 +115,13 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query,
 				Map.of(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM, latestInteractions));
 		runtimeData.getRequestResources().getLastRequest().setRewrittenQuery(rewrited_query);
-		this.chatSessionLifecycleService.updateRequest(runtimeData.getUserChatContext(),
-				runtimeData.getRequestResources().getLastRequest());
+		this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getLastRequest());
 		return rewrited_query;
 	}
 
 	private RoutingDecision doDecideRoute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
-			String rewrited_query) {
+			String rewrited_query) throws GeboChatSessionLifecycleException {
 		GPromptConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		final String prompt = _prompt.getPrompt();
@@ -147,7 +147,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			return templateParams;
 		};
 		final Map<String, Object> templateParams = this.promptsParamsCacheService.lookupCache(
-				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT, runtimeData.getUserChatContext().getCode(),
+				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
+				runtimeData.getRequestResources().getLastRequest().getUserChatContextCode(),
 				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
 		templateParams.put(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM,
 				latestInteractions);
@@ -306,18 +307,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 
 	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData) {
 		StringBuffer buffer = new StringBuffer();
-		List<GKnowledgeBase> knowledgeBases = new ArrayList<GKnowledgeBase>();
-		if (runtimeData.getChatProfile() != null) {
-			if (runtimeData.getChatProfile().getUserChoosesKnowledgeBases() != null
-					&& runtimeData.getChatProfile().getUserChoosesKnowledgeBases()) {
-				knowledgeBases.addAll(visibleKnowledgeBasesService.allVisibleKnowledgebases());
-			} else {
-				List<String> list = runtimeData.getChatProfile().getKnowledgeBaseCodes();
-				if (list != null && !list.isEmpty()) {
-					knowledgeBases.addAll(visibleKnowledgeBasesService.visiblesAndChildKnowledgebases(list));
-				}
-			}
-		}
+		List<GKnowledgeBase> knowledgeBases = this.chatSessionLifecycleService
+				.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getLastRequest());
+
 		return deepSearchInternalKnowledgeBasePromptPart(knowledgeBases);
 	}
 

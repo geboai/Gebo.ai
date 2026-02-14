@@ -144,32 +144,11 @@ public interface IGGenericalChatService {
 	 */
 	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
 
-	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException;
-
-	/***************************************************************************
-	 * Creates a new Chat user context
-	 * 
-	 * @param chatProfileCode
-	 * @return
-	 * @throws GeboPersistenceException
-	 * @throws LLMConfigException
-	 */
-	public GUserChatInfo createNewChat(String referenceCode) throws GeboPersistenceException, LLMConfigException;
-
-	public void addChatRequestToUserContext(GeboChatRequest request);
-
-	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatSession context);
-
-	public GeboChatResponse createUnprocessedResponse(GeboChatRequest request);
-
-	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response);
-
-	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response,
-			GUserChatSession context);
-
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
+			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException;
 
 	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
+			GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException;
 }

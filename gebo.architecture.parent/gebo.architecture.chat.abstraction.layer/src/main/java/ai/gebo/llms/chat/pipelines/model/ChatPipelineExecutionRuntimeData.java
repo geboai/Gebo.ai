@@ -16,10 +16,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChatPipelineExecutionRuntimeData {
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
-			LLMChatRequestResources requestResources, GeboChatResponse chatResponse, GUserChatSession userChatContext,GChatProfileConfiguration chatProfile,
-			boolean streamingOutput) {
+			LLMChatRequestResources requestResources, GeboChatResponse chatResponse, boolean streamingOutput) {
 		this(configuration, contextWindowSize, contextWindowSize, new ArrayList(), chatResponse, new ArrayList(),
-				streamingOutput, requestResources, userChatContext, chatProfile);
+				streamingOutput, requestResources);
 	}
 
 	private final ChatPipelineConfiguration configuration;
@@ -30,8 +29,6 @@ public class ChatPipelineExecutionRuntimeData {
 	private List<RoutingDecision> routingDecisions = new ArrayList<RoutingDecision>();
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
-	private final GUserChatSession userChatContext;
 	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
-	private final GChatProfileConfiguration chatProfile;
 
 }

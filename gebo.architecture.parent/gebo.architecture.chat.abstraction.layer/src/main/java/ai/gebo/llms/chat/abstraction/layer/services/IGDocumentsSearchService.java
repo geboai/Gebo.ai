@@ -6,12 +6,10 @@ import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 public interface IGDocumentsSearchService {
 	public AIDocumentsSet search(List<String> semanticSearches, List<String> fullTextSearches, String userQuery,
-			int globalTopK, GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException;
+			int globalTopK, int tokensBudget) throws FullTextException, LLMConfigException;
 
-	public AIDocumentsSet search(GeboChatRequest chatRequest, GUserChatSession context,
-			int tokensBudget) throws FullTextException, LLMConfigException;
+	public AIDocumentsSet search(GeboChatRequest chatRequest, int tokensBudget) throws FullTextException, LLMConfigException;
 }

@@ -43,7 +43,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentsSearchServiceImpl.class);
 
 	@Override
-	public AIDocumentsSet search(GeboChatRequest chatRequest, GUserChatSession context, int tokensBudget)
+	public AIDocumentsSet search(GeboChatRequest chatRequest, int tokensBudget)
 			throws FullTextException, LLMConfigException {
 		List<String> semanticSearches = new ArrayList<String>();
 		List<String> fullTextSearches = new ArrayList<String>();

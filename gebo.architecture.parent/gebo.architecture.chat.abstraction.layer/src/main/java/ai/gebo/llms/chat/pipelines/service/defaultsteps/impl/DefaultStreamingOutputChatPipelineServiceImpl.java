@@ -55,7 +55,7 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 		try {
 			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
 			return this.chatService.streamChat(prompt.getPrompt(), runtimeData.getRequestResources(),
-					runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}

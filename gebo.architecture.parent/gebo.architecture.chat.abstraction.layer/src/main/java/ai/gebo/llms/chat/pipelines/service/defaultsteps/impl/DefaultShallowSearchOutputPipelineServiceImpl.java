@@ -60,7 +60,7 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 				serviceModel, config, null);
 		try {
 			return executor.execute(handler, runtimeData.getRequestResources().getLastRequest(),
-					runtimeData.getChatResponse(), chatModel, serviceModel, runtimeData.getUserChatContext());
+					runtimeData.getChatResponse(), chatModel, serviceModel);
 		} catch (LLMConfigException | IOException | GeboIngestionException | GeboContentHandlerSystemException
 				| SearchServiceException e) {
 			throw new ChatPipelineException("Pipeline broken on search", e);

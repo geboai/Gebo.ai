@@ -74,7 +74,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					return ragChatService.streamChat(prompt.getPrompt(), ed.getRequestResources(),
-							runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+							runtimeData.getChatResponse(), chatModel);
 				} catch (GeboChatException | LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

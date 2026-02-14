@@ -71,8 +71,7 @@ public interface IGRagChatService extends IGGenericalChatService {
 	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
 			throws GeboPersistenceException, LLMConfigException;
 
-	public GUserChatInfo createCleanRagChatByProfileCode(@NotNull String profileCode)
-			throws GeboPersistenceException, LLMConfigException;
+	
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBasesByProfileCode(@NotNull String profileCode);
 

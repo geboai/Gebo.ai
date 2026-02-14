@@ -17,7 +17,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
@@ -45,16 +44,16 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(IGReactiveDeepSearchDataSourceService service, GeboChatRequest request,
-			GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			GUserChatSession context) throws LLMConfigException, IOException, GeboIngestionException,
-			GeboContentHandlerSystemException, SearchServiceException {
+			GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
+			SearchServiceException {
 		String query = GeboChatRequest.actualQuery(request);
 		DeepSearchConfig config = this.configProvider.get();
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getId());
 		deepSearchRequest.setKnowledgeBases(List.of());
 		deepSearchRequest.setQuery(query);
-		deepSearchRequest.setUserChatContextCode(context.getCode());
+		deepSearchRequest.setUserChatContextCode(request.getUserChatContextCode());
 		deepSearchRequest.setDeepSearchDataSources(List.of(service.getHandlerId()));
 		deepSearchRequest.setUsername(securityService.getCurrentUser().getUsername());
 		this.deepSearchRequestRepository.save(deepSearchRequest);
@@ -62,7 +61,7 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(chatModel, serviceModel, config, deepSearchRequest,
 				List.of(), chunkSessionId, null, null, null, null);
 		flux = mapDataSourceProcessedToDeepSearchProcessed(flux, deepSearchRequest);
-		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response, context);
+		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));
 
 		flux = flux.subscribeOn(threadManager.getScheduler());

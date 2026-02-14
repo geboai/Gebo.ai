@@ -1,9 +1,12 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.io.IOException;
+import java.util.List;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -12,7 +15,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /******************************************************************************************************
  * Mantains the 2 session levels transparently letting adding resources in the
@@ -29,53 +31,60 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
  * state.
  */
 public interface IGChatSessionLifeCycleService {
-	public void ensureChatSessionExists(GUserChatSession context, IGConfigurableChatModel targetChatModel)
-			throws GeboChatSessionLifecycleException;
 
-	public void createChatSession(GUserChatSession context, IGConfigurableChatModel targetChatModel)
-			throws GeboChatSessionLifecycleException;
+	public boolean isSessionExisting(GeboChatRequest request);
 
-	public void removeChatSession(GUserChatSession context) throws GeboChatSessionLifecycleException;
+	public GeboChatResponse createEmptyResponse(GeboChatRequest request) throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addRequestToState(GUserChatSession context, GeboChatRequest request,
+	public void ensureChatSessionExists(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
+
+	public void createChatSession(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
+
+	public void removeChatSession(String code) throws GeboChatSessionLifecycleException;
+
+	public LLMChatRequestResources addRequest(GeboChatRequest request, IGConfigurableChatModel targetChatModel,
+			LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException;
+
+	public void updateRequest(GeboChatRequest request) throws GeboChatSessionLifecycleException, IOException;
+
+	public LLMChatRequestResources addUploadedDocument(GeboChatRequest request, UserUploadedContent content,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, IOException;
 
-	public void updateRequest(GUserChatSession context, GeboChatRequest request)
-			throws GeboChatSessionLifecycleException, IOException;
-
-	public LLMChatRequestResources addUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
-			throws GeboChatSessionLifecycleException, IOException;
-
-	public LLMChatRequestResources removeUploadedDocumentToState(GUserChatSession context, UserUploadedContent content,
+	public LLMChatRequestResources removeUploadedDocument(GeboChatRequest request, UserUploadedContent content,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
+	public LLMChatRequestResources addChatWithDocument(GeboChatRequest request, GDocumentReference reference,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources removeChatWithDocumentToState(GUserChatSession context, GDocumentReference reference,
+	public LLMChatRequestResources removeChatWithDocument(GeboChatRequest request, GDocumentReference reference,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
+	public LLMChatRequestResources addRetrievedDocuments(GeboChatRequest request, AIDocumentsSet retrieved,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources removeRetrievedDocumentsToState(GUserChatSession context, AIDocumentsSet retrieved,
+	public LLMChatRequestResources removeRetrievedDocuments(GeboChatRequest request, AIDocumentsSet retrieved,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addLLMGeneratedDocumntsToState(GUserChatSession context,
-			LLMGeneratedResource resource, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+	public LLMChatRequestResources addLLMGenerated(GeboChatRequest request, LLMGeneratedResource resource,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public void addInteractionToState(GUserChatSession context, GeboChatRequest request, GeboChatResponse response)
+	public void addInteraction(GeboChatRequest request, GeboChatResponse response)
 			throws GeboChatSessionLifecycleException;
 
-	public void chatRequestCompleted(GUserChatSession context, IGConfigurableChatModel targetChatModel)
+	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request);
+
+	public IGConfigurableChatModel getSessionChatModel(GeboChatRequest request);
+
+	public void chatRequestCompleted(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
 			throws GeboChatSessionLifecycleException, LLMConfigException, IOException;
 
 }

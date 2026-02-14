@@ -39,6 +39,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
+
 	public DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
 			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
 			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
@@ -51,6 +52,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 		this.deepSearchService = deepSearchService;
 		this.threadManager = threadManager;
 	}
+
 	@Override
 	public StepExecutorType getExecutorType() {
 
@@ -76,7 +78,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 				List<String> aiChoosedDataSources = ed.getSearchesDecisions().getDeepSearchDataSources();
 				try {
 					return deepSearchService.streamDeepSearch(ed.getRequestResources(), runtimeData.getChatResponse(),
-							runtimeData.getUserChatContext(), chatModel, serviceModel, aiChoosedDataSources);
+							chatModel, serviceModel, aiChoosedDataSources);
 				} catch (LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);
@@ -86,7 +88,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {
 				try {
-					this.chatSessionLifecycleService.chatRequestCompleted(runtimeData.getUserChatContext(), chatModel);
+					this.chatSessionLifecycleService
+							.chatRequestCompleted(runtimeData.getRequestResources().getLastRequest(), chatModel);
 				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 					LOGGER.error("Exceptinin deep search streaming pipeline handler", e);
 				}
