@@ -96,4 +96,6 @@ public interface IGChatSessionLifeCycleService {
 
 	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException;
 
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
+
 }

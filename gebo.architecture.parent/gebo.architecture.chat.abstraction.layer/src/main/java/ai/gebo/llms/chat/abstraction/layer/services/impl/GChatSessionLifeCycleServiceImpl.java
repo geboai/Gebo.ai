@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,10 +29,12 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -38,6 +42,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
@@ -47,6 +52,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
@@ -66,6 +72,7 @@ import lombok.NoArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService, IGMessageEmitter {
+	private final static Logger LOGGER = LoggerFactory.getLogger(GChatSessionLifeCycleServiceImpl.class);
 	private final SessionShrinkMessagesReceiver sessionShrinkMessagesReceiver;
 	static final String SESSION_LIFE_CYCLE_SERVICE = "sessionLifeCycleService";
 	private final IGChatFullSessionStateService fullSessionStateService;
@@ -81,6 +88,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGMessageBroker broker;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	private final IGPromptConfigDao promptsDao;
 
 	/*
 	 * @NoArgsConstructor
@@ -787,5 +795,29 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			return _data;
 		}
 		throw new IllegalStateException("Chat profile: " + chatProfileCode + " does not exist");
+	}
+	@Override
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException {
+		GUserChatInfoData data = null;
+		GUserChatSession context = get(id);
+
+		data = new GUserChatInfoData(context);
+		GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
+		IGConfigurableChatModel handler = chatModelsDao.defaultHandler();
+		try {
+			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+				String content = handler.getChatClient().prompt(prompt.getPrompt())
+						.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
+				String pureText = ClientChatCallUtil.removeThinking(content);
+				data.setDescription(pureText);
+				context.setDescription(pureText);
+				this.sessionRepository.save(context);
+				return data;
+			}
+		} catch (Throwable th) {
+			LOGGER.error("Exception in suggestChatDescription", th);
+			return data;
+		}
+		return data;
 	}
 }

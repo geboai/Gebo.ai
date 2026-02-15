@@ -321,7 +321,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 if (params["chatProfile"]) {
                     const chatProfileCode = params["chatProfile"];
                     this.chatDataLoading = true;
-                    this.geboRagChatControllerService.createCleanRagChatByProfileCode(chatProfileCode).subscribe({
+                    
+                    this.geboUserChatsControllerService.createCleanChatByChatProfileCode(chatProfileCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);
@@ -333,7 +334,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
                 if (params["modelCode"]) {
                     const modelCode = params["modelCode"];
-                    this.geboChatControllerService.createCleanChatByModelCode(modelCode).subscribe({
+                    this.geboUserChatsControllerService.createCleanChatByModelCode(modelCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);

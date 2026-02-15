@@ -209,5 +209,8 @@ public class GeboUserChatsController {
 			throws GeboChatSessionLifecycleException {
 		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
 	}
-
+	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo suggestChatDescription(@RequestParam("userChatContextCode") String userChatContextCode) throws GeboChatSessionLifecycleException {
+		return this.sessionLifeCycleService.suggestChatDescription(userChatContextCode);
+	}
 }
