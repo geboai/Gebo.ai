@@ -27,8 +27,8 @@ export interface GResponseDocumentRef {
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
     ntokensRelevant?: number;
-    nbytesRelevant?: number;
     shortCode?: string;
+    nbytesRelevant?: number;
     ntotalContentTokens?: number;
 }
 export namespace GResponseDocumentRef {

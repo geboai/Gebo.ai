@@ -434,24 +434,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	}
 
 	
-	@Override
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException {
-		UserInfos user = securityService.getCurrentUser();
-		GUserChatSession userContext = new GUserChatSession();
-		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(modelCode);
-		if (chatModel == null)
-			throw new RuntimeException("Cannot create a chat with not existing chat model code");
-		userContext.setChatModelCode(modelCode);
-		String description = "Chat with "
-				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
-						? chatModel.getConfig().getChoosedModel().getCode()
-						: " chat bot");
-		userContext.setDescription(description);
-		userContext.setUsername(user.getUsername());
-		userContext = persistenceManager.insert(userContext);
-		GUserChatInfoData data = new GUserChatInfoData(userContext);
-
-		return data;
-	}
+	
 
 }

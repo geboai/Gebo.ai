@@ -466,7 +466,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			GeboChatResponse chatResponse, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			List<String> deepSearchDataSources) throws LLMConfigException {
+			List<String> deepSearchDataSources) throws LLMConfigException, GeboChatSessionLifecycleException {
 
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()
@@ -489,7 +489,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				.onErrorResume(Common.commonFallBack(deepSearchRequest));
 	}
 
-	private List<String> createKnowledgeBasesList(LLMChatRequestResources request) {
+	private List<String> createKnowledgeBasesList(LLMChatRequestResources request) throws GeboChatSessionLifecycleException {
 		List<GKnowledgeBase> visibles = this.sessionLifecyCleService
 				.getSessionAvailableKnowledgeBases(request.getLastRequest());
 

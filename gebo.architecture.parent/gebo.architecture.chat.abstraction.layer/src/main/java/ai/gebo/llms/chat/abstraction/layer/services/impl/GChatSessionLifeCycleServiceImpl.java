@@ -1,6 +1,8 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,9 +23,11 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
@@ -34,8 +38,11 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -50,15 +57,16 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionStat
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import io.jsonwebtoken.security.SecurityException;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Component
 @Scope("singleton")
 @AllArgsConstructor
 public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleService, IGMessageEmitter {
-
 	private final SessionShrinkMessagesReceiver sessionShrinkMessagesReceiver;
-
 	static final String SESSION_LIFE_CYCLE_SERVICE = "sessionLifeCycleService";
 	private final IGChatFullSessionStateService fullSessionStateService;
 	private final IGShrinkedChatSessionStateService shrinkedSessionStateService;
@@ -71,6 +79,17 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGPersistentObjectManager persistenceManager;
 	private final IGSecurityService securityService;
 	private final IGMessageBroker broker;
+	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+
+	/*
+	 * @NoArgsConstructor
+	 * 
+	 * @AllArgsConstructor static class CacheEntry { GUserChatSession session =
+	 * null; ChatFullSessionState full = null; ShrinkedChatSessionState shrinked =
+	 * null; } static Hashtable<String, CacheEntry> cache = new Hashtable<String,
+	 * GChatSessionLifeCycleServiceImpl.CacheEntry>();
+	 */
 
 	@Override
 	public void createChatSession(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
@@ -115,13 +134,26 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	private GUserChatSession get(String id) throws GeboChatSessionLifecycleException {
-		return this.sessionRepository.findById(id).orElseThrow(GeboChatSessionLifecycleException::new);
+		if (id == null || id.trim().length() == 0) {
+			throw new GeboChatSessionLifecycleException("session id is null");
+		}
+		GUserChatSession session = this.sessionRepository.findById(id)
+				.orElseThrow(GeboChatSessionLifecycleException::new);
+		this.securityService.checkBeingCreator(session);
+		return session;
 	}
 
 	@Override
-	public void removeChatSession(String code) {
+	public void removeChatSession(String code) throws GeboChatSessionLifecycleException {
+		GUserChatSession session = get(code);
 		this.fullSessionStateService.deleteState(code);
 		this.shrinkedSessionStateService.deleteState(code);
+		try {
+			this.chatAreaStorageSession.deleteSessionContents(code);
+		} catch (IOException e) {
+
+		}
+		this.sessionRepository.deleteById(code);
 	}
 
 	@Override
@@ -181,6 +213,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		this.fullSessionStateService.save(state);
 		this.shrinkedSessionStateService.save(shrinked);
+
 		if (state.getTokensSize() < budget) {
 			return state.createChatRequestResources(policy);
 		}
@@ -235,6 +268,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	private boolean removeLatestDocumentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSReferredContentList<?> cssReferredContentList, int budget) {
+		cssReferredContentList = new CSSReferredContentList(cssReferredContentList);
 		do {
 			if (!cssReferredContentList.getData().isEmpty())
 				cssReferredContentList.getData().remove(0);
@@ -244,6 +278,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	private boolean removeRelevantPastContentsProgressively(ShrinkedChatSessionState shrinked,
 			CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments, int budget) {
+		relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList(relevantRetrievedDocuments);
 		do {
 			if (!relevantRetrievedDocuments.isEmpty())
 				relevantRetrievedDocuments.remove(0);
@@ -438,8 +473,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public LLMChatRequestResources addLLMGenerated(GeboChatRequest request,
-			LLMGeneratedResource resource, IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+	public LLMChatRequestResources addLLMGenerated(GeboChatRequest request, LLMGeneratedResource resource,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException {
 		GUserChatSession context = get(request.getUserChatContextCode());
 		int index = context.getInteractions() != null ? context.getInteractions().size() : 0;
@@ -595,7 +630,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		ChatInteractions interaction = addInteraction ? new ChatInteractions() : alredyInInteraction.get();
 		interaction.setRequest(request);
 		interaction.setRequestNTokens(ITokensCountable.stringsTokensSize(request.getQuery()));
-		
+
 		if (addInteraction)
 			context.getInteractions().add(interaction);
 		sessionRepository.save(context);
@@ -629,9 +664,26 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request) {
-		
-		return null;
+	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		List<GKnowledgeBase> out = new ArrayList<GKnowledgeBase>();
+		GUserChatSession session = get(request.getUserChatContextCode());
+		if (session.getChatProfileCode() != null) {
+			Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository
+					.findById(session.getChatProfileCode());
+			if (profileOpt.isPresent()) {
+				List<String> knowledgeBases = profileOpt.get().getKnowledgeBaseCodes();
+				if (knowledgeBases == null)
+					knowledgeBases = List.of();
+				Boolean allUserVisibles = profileOpt.get().getUserChoosesKnowledgeBases();
+				allUserVisibles = allUserVisibles != null && allUserVisibles;
+				if (!allUserVisibles) {
+					out = this.knowledgeBaseVisibilityService.visiblesAndChildKnowledgebases(knowledgeBases);
+				} else
+					out = this.knowledgeBaseVisibilityService.allVisibleKnowledgebases();
+			}
+		}
+		return out;
 	}
 
 	@Override
@@ -647,8 +699,93 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public IGConfigurableChatModel getSessionChatModel(GeboChatRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException {
+		IGConfigurableChatModel model = this.chatModelsDao.findByCode(modelCode);
+		if (model != null)
+			return createCleanChatByModel(model);
+		throw new IllegalStateException("The model :" + modelCode + " does not exist");
+	}
+
+	@Override
+	public GUserChatInfo createCleanChatByModel(IGConfigurableChatModel chatModel) throws GeboPersistenceException {
+		UserInfos user = securityService.getCurrentUser();
+		GUserChatSession userContext = new GUserChatSession();
+		userContext.setChatModelCode(chatModel.getCode());
+		String description = "Chat with "
+				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
+						? chatModel.getConfig().getChoosedModel().getCode()
+						: " chat bot");
+		userContext.setDescription(description);
+		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
+		ChatFullSessionState data = new ChatFullSessionState();
+		data.setUserChatContextCode(userContext.getCode());
+		this.fullSessionStateService.save(data);
+		ShrinkedChatSessionState shrinked = new ShrinkedChatSessionState();
+		shrinked.setUserChatContextCode(userContext.getCode());
+		this.shrinkedSessionStateService.save(shrinked);
+		GUserChatInfoData _data = new GUserChatInfoData(userContext);
+		return _data;
+	}
+
+	@Override
+	public IGConfigurableChatModel getSessionChatModel(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		IGConfigurableChatModel model = null;
+		String chatProfileCode = request.getChatProfileCode();
+		String chatModelCode = request.getChatModelCode();
+		if (request.getUserChatContextCode() != null) {
+			GUserChatSession session = this.get(request.getUserChatContextCode());
+			chatProfileCode = session.getChatProfileCode();
+			if (session.getChatModelCode() != null && chatModelCode == null) {
+				chatModelCode = session.getChatModelCode();
+			}
+		}
+		if (chatProfileCode != null) {
+			Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository.findById(chatProfileCode);
+			if (profileOpt.isPresent()) {
+				GChatProfileConfiguration profile = profileOpt.get();
+				boolean canAccess = securityService.isCanAccess(profile, true);
+				if (!canAccess)
+					throw new SecurityException("The actual user cannot use the chat profile:" + chatProfileCode);
+				if (profile.getChatModelReference() != null) {
+					model = this.chatModelsDao.findByModelReference(profile.getChatModelReference());
+				}
+			}
+		}
+		if (model == null && chatModelCode != null) {
+			model = this.chatModelsDao.findByCode(chatModelCode);
+		}
+		if (model == null) {
+			model = this.chatModelsDao.defaultHandler();
+		}
+		return model;
+	}
+
+	@Override
+	public GUserChatInfo createCleanChatByChatProfileCode(String chatProfileCode) throws GeboPersistenceException {
+		Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository.findById(chatProfileCode);
+		if (profileOpt.isPresent()) {
+			UserInfos user = this.securityService.getCurrentUser();
+			GChatProfileConfiguration profile = profileOpt.get();
+			boolean canAccess = securityService.isCanAccess(profile, true);
+			if (!canAccess)
+				throw new SecurityException("The actual user cannot use the chat profile:" + chatProfileCode);
+			GUserChatSession userContext = new GUserChatSession();
+			userContext.setRagChat(true);
+			userContext.setChatProfileCode(chatProfileCode);
+			userContext.setDescription(profile.getDescription());
+			userContext.setUsername(user.getUsername());
+			userContext = persistenceManager.insert(userContext);
+			ChatFullSessionState data = new ChatFullSessionState();
+			data.setUserChatContextCode(userContext.getCode());
+			this.fullSessionStateService.save(data);
+			ShrinkedChatSessionState shrinked = new ShrinkedChatSessionState();
+			shrinked.setUserChatContextCode(userContext.getCode());
+			this.shrinkedSessionStateService.save(shrinked);
+			GUserChatInfoData _data = new GUserChatInfoData(userContext);
+			return _data;
+		}
+		throw new IllegalStateException("Chat profile: " + chatProfileCode + " does not exist");
 	}
 }

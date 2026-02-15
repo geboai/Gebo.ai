@@ -210,10 +210,7 @@ public class GeboChatController {
 	}
 
 	
-	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) throws GeboPersistenceException {
-		return chatService.createCleanChatByModelCode(modelCode);
-	}
+	
 	@GetMapping(value = "getVisibleKnowledgeBases", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getVisibleKnowledgeBases()
 			throws GeboPersistenceException, LLMConfigException {

@@ -126,25 +126,31 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		final String prompt = _prompt.getPrompt();
 		Supplier<Map<String, Object>> paramsProvider = () -> {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Begin Calculating router params to be cached");
+			try {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin Calculating router params to be cached");
+				}
+				Map<String, Object> templateParams = new HashMap<String, Object>();
+				String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
+				String toolsList = toolsListPromptPart(chatModel);
+				String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
+				String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
+				templateParams.put(
+						DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
+						internalKnowledgeBaseCatalog);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
+						deepSearchDataSources);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
+						shallowSystemsCatalog);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End Calculating router params to be cached");
+				}
+				return templateParams;
+			} catch (Throwable th) {
+				LOGGER.error("Error in template params loader", th);
+				throw new RuntimeException("Error in template params loader", th);
 			}
-			Map<String, Object> templateParams = new HashMap<String, Object>();
-			String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
-			String toolsList = toolsListPromptPart(chatModel);
-			String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
-			String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
-					internalKnowledgeBaseCatalog);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
-					deepSearchDataSources);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
-					shallowSystemsCatalog);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End Calculating router params to be cached");
-			}
-			return templateParams;
 		};
 		final Map<String, Object> templateParams = this.promptsParamsCacheService.lookupCache(
 				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
@@ -305,7 +311,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		return rd;
 	}
 
-	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData) {
+	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData)
+			throws GeboChatSessionLifecycleException {
 		StringBuffer buffer = new StringBuffer();
 		List<GKnowledgeBase> knowledgeBases = this.chatSessionLifecycleService
 				.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getLastRequest());

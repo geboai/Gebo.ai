@@ -85,7 +85,7 @@ public interface IGChatService extends IGGenericalChatService {
 	 */
 	public InputStream speech(String text, String modelCode) throws LLMConfigException;
 
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException;
+	
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases();
 }

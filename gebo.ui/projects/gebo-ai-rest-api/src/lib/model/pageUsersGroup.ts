@@ -16,13 +16,13 @@ import { UsersGroup } from './usersGroup';
 export interface PageUsersGroup { 
     totalElements?: number;
     totalPages?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<UsersGroup>;
     number?: number;
-    sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
+    sort?: SortObject;
     pageable?: PageableObject;
     empty?: boolean;
 }

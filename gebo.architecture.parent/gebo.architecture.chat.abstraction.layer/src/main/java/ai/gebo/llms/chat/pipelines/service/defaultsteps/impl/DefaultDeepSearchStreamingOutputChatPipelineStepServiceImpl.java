@@ -79,7 +79,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 				try {
 					return deepSearchService.streamDeepSearch(ed.getRequestResources(), runtimeData.getChatResponse(),
 							chatModel, serviceModel, aiChoosedDataSources);
-				} catch (LLMConfigException e) {
+				} catch (LLMConfigException | GeboChatSessionLifecycleException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);
 				}
