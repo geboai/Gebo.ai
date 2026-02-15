@@ -418,7 +418,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
 						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, chatRequestContext,
+				return streamChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, showedDocuments);
 			}
 		} catch (Throwable e) {

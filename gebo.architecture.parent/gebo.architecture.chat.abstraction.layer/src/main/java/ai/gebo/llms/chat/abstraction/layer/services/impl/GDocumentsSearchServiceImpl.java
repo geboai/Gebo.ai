@@ -34,7 +34,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -48,7 +47,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		List<String> semanticSearches = new ArrayList<String>();
 		List<String> fullTextSearches = new ArrayList<String>();
 		String userQuery = GeboChatRequest.actualQuery(chatRequest);
-		return this.search(semanticSearches, fullTextSearches, userQuery, tokensBudget, context, tokensBudget);
+		return this.search(null, semanticSearches, fullTextSearches, userQuery, tokensBudget, tokensBudget);
 	}
 
 	@Autowired
@@ -71,13 +70,13 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 
 	@Override
-	public AIDocumentsSet search(List<String> semanticSearches, List<String> fullTextSearches, String userQuery,
-			int globalTopK, GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException {
+	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, List<String> fullTextSearches,
+			String userQuery, int globalTopK, int tokensBudget) throws FullTextException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(..)");
 		}
 
-		String chatProfileCode = context.getChatProfileCode();
+		String chatProfileCode = request.getChatProfileCode();
 		List<String> knowledgeBases = new ArrayList<String>();
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
 		double firstHopThreashold = chatConfigs.getDefaultSimilarityThreshold();

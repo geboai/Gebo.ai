@@ -216,7 +216,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param context               Knowledge base context
 	 * @param request               Request object
 	 * @param response              Response object to update
-	 * @param userContext           User chat context to update
 	 * @param chatRequestContext    TODO
 	 * @param showedDocuments       TODO
 	 * @param docrefs               List of document references
@@ -226,13 +225,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
 			final Prompt prompt, final KBContext context, final GeboChatRequest request,
-			final GeboChatResponse response, final GUserChatSession userContext, IChatRequestContext chatRequestContext,
-			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
-			throws LLMConfigException {
+			final GeboChatResponse response, IChatRequestContext chatRequestContext, boolean chatHistoryConsolidation,
+			int historySizeTarget, AIDocumentsSet showedDocuments) throws LLMConfigException {
 
 		try {
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, chatRequestContext);
-			return composeFlux(res, context, request, response, userContext, chatRequestContext.getToolsContext(),
+			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
 					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
 		} catch (Throwable th) {
 			LOGGER.error("", th);
@@ -260,9 +258,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
 	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
-			final GeboChatRequest request, final GeboChatResponse response, final GUserChatSession userContext,
-			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget,
-			IGConfigurableChatModel configurableChatModel, AIDocumentsSet showedDocuments) {
+			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
+			AIDocumentsSet showedDocuments) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
@@ -307,7 +305,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 							for (Media media : medias) {
 								LLMGeneratedResource generatedResource;
 								try {
-									generatedResource = this.chatStorageAreaService.addMedia(media, userContext);
+									generatedResource = this.chatStorageAreaService.addMedia(media,
+											request.getUserChatContextCode());
 									response.getGeneratedResources().add(generatedResource);
 								} catch (Throwable e) {
 									LOGGER.error("Error receiving media", e);
@@ -356,22 +355,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			finalEnvelope.setContent(response); // Use the accumulated text
 			finalEnvelope.setLastMessage(true);
 			try {
-				List<ChatInteractions> interactions = userContext.getInteractions();
-				if (interactions == null) {
-					interactions = new ArrayList<ChatInteractions>();
-				}
-				ChatInteractions interaction = new ChatInteractions();
-				interaction.setRequest(request);
-				interaction.setResponse(response);
-				interactions.add(interaction);
-				GUserChatSession freshCopy = null;
-				userContext.setInteractions(interactions);
-				userContext.setDateModified(new Date());
-				if (userContext.getCode() == null) {
-					freshCopy = persistenceManager.transactionalInsert(userContext);
-				} else {
-					freshCopy = persistenceManager.transactionalUpdate(userContext);
-				}
+
 				this.chatSessionLifecycleService.addInteraction(request, response);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
@@ -413,8 +397,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return out;
 	}
 
-	
-
 	public List<GKnowledgeBase> getVisibleKnowledgeBases() {
 
 		return this.knowledgeBaseSecurityService.allVisibleKnowledgebases();
@@ -434,8 +416,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GeboChatResponse response, IGConfigurableChatModel chatModel)
-			throws GeboChatException, LLMConfigException {
+			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 		int tokensLength = requestResources.getTokensSize();
@@ -445,7 +426,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
 				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
 		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
-				response, userChatContext, requestResources.createChatRequestContext(), shrink, targetSize,
-				showedDocuments);
+				response, requestResources.createChatRequestContext(), shrink, targetSize, showedDocuments);
 	}
 }

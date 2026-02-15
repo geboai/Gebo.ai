@@ -164,17 +164,7 @@ public class GeboRagChatController {
 		return chatService.getChatModelUserInfoByChatProfileCode(chatProfileCode);
 	}
 
-	@GetMapping(value = "suggestRagChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo suggestRagChatDescription(@RequestParam("id") @NotNull String id)
-			throws GeboChatException, LLMConfigException {
-		return chatService.suggestChatDescription(id);
-	}
-
-	@GetMapping(value = "createCleanRagChatByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanRagChatByProfileCode(@RequestParam("profileCode") @NotNull String profileCode)
-			throws GeboPersistenceException, LLMConfigException {
-		return chatService.createCleanRagChatByProfileCode(profileCode);
-	}
+	
 
 	@GetMapping(value = "getVisibleKnowledgeBasesByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getVisibleKnowledgeBasesByProfileCode(

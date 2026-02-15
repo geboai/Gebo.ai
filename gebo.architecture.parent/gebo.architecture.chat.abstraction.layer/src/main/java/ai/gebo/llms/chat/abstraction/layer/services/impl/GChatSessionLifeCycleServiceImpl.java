@@ -629,9 +629,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
-			throws GeboChatSessionLifecycleException {
-
+	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request) {
+		
 		return null;
 	}
 

@@ -206,7 +206,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
 		IGConfigurableChatModel chatModel = this.chatModelRuntimeDao.defaultHandler();
-		this.chatLifecycleService.ensureChatSessionExists(data, chatModel);
+		
 		GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT);
 		for (int i = 0; i < INGESTION_FILES.length; i++) {
 			GeboChatRequest request = new GeboChatRequest();
@@ -214,6 +214,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			request.setQuery(interactions.get(i).getUser());
 			request.setUserChatContextCode(cleanChat.getCode());
 			request.setId(UUID.randomUUID().toString());
+			this.chatLifecycleService.ensureChatSessionExists(request, chatModel);
 			ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
 			response.setId(UUID.randomUUID().toString());
 			response.setUserChatContextCode(data.getCode());
@@ -237,12 +238,12 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 				if (!ing.isUnmanagedContent()) {
 					AIDocumentsSet set = AIDocumentsSet.from(ing.getStream().toList());
 
-					r = this.chatLifecycleService.addRetrievedDocuments(data, set, chatModel,
+					r = this.chatLifecycleService.addRetrievedDocuments(request, set, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 					this.chatLifecycleService.addInteraction(request, response);
-					this.chatService.addChatInteractionToUserContext(request, response, data);
-					this.chatLifecycleService.chatRequestCompleted(data, chatModel);
+					
+					this.chatLifecycleService.chatRequestCompleted(request, chatModel);
 					this.showShrinked(data);
 				}
 				ChatFullSessionState fullState = fullSessionService.retrieveState(data);
@@ -282,7 +283,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			persistentObjectManager.update(data);
 			this.chatLifecycleService.addInteraction(interaction.getRequest(),
 					(ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse) interaction.getResponse());
-			this.chatLifecycleService.chatRequestCompleted(data, chatModel);
+			this.chatLifecycleService.chatRequestCompleted(interaction.getRequest(), chatModel);
 			this.showShrinked(data);
 			ChatFullSessionState fullState = fullSessionService.retrieveState(data);
 			boolean value = fullState.getRetrievedDocuments().getValue().getData().isEmpty();

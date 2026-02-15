@@ -66,10 +66,10 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 
 		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
+		AIDocumentsSet documentSet = searchesService.search(null,
+				searchRewritings.getRewrittenSemanticSearchSentences(),
 				searchRewritings.getRewrittenFullTextSearchSentences(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()),
-				configuration.getGlobalRagTopK(), tokensBudget);
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()), configuration.getGlobalRagTopK(), tokensBudget);
 
 		return documentSet;
 	}

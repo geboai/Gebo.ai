@@ -110,26 +110,7 @@ public class GeboUserChatsController {
 		return repository.findByUsername(securityService.getCurrentUser().getUsername(), _page.toPageable());
 	}
 
-	/**
-	 * Deletes multiple user chats by their IDs.
-	 * 
-	 * @param ids List of chat IDs to delete
-	 */
-	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteUserChats(@RequestBody List<String> ids) {
-		List<GUserChatSession> data = repository.findAllById(ids);
-		for (GUserChatSession gUserChatContext : data) {
-			securityService.checkBeingCreator(gUserChatContext);
-		}
-		for (GUserChatSession gUserChatContext : data) {
-			try {
-				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
-			} catch (IOException e) {
-
-			}
-			repository.delete(gUserChatContext);
-		}
-	}
+	
 
 	/**
 	 * Data transfer object for chat history information. Contains only the
