@@ -1,7 +1,6 @@
 package ai.gebo.llms.deepsearch.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;

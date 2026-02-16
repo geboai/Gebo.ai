@@ -13,7 +13,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;

@@ -11,10 +11,10 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
+import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
 import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor

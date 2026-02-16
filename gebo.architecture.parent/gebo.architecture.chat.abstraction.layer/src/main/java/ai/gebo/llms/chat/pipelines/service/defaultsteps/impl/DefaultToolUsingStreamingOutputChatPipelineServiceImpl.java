@@ -1,6 +1,5 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.prompt.PromptTemplate;

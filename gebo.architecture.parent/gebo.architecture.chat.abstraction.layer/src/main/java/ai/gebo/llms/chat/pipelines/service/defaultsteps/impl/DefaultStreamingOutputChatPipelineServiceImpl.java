@@ -2,23 +2,14 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
-import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;

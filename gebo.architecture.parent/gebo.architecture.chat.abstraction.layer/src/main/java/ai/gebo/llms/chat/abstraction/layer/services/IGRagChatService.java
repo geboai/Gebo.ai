@@ -16,7 +16,6 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import jakarta.validation.constraints.NotNull;
 

@@ -36,14 +36,12 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;

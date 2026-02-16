@@ -1,7 +1,5 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;

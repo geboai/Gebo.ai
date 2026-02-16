@@ -13,9 +13,9 @@
 export interface GUserChatInfo { 
     description?: string;
     code?: string;
-    username?: string;
     chatModelCode?: string;
+    username?: string;
     chatProfileCode?: string;
-    chatCreationDateTime?: Date;
     ragChat?: boolean;
+    chatCreationDateTime?: Date;
 }

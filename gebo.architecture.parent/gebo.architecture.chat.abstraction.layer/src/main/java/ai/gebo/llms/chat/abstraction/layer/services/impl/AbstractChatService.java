@@ -12,12 +12,9 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +54,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatRe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -66,7 +62,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
-import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;

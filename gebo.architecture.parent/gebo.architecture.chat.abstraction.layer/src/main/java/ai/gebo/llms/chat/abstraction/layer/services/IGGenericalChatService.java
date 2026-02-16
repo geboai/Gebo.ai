@@ -11,10 +11,7 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -23,9 +20,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import reactor.core.publisher.Flux;
 

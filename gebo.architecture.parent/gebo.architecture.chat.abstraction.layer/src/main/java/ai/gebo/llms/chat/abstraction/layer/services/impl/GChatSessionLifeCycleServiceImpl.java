@@ -48,7 +48,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -65,7 +64,6 @@ import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import io.jsonwebtoken.security.SecurityException;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

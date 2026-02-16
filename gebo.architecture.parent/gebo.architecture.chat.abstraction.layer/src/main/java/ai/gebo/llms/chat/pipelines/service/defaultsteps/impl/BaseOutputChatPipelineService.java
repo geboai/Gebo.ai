@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -17,11 +15,8 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;

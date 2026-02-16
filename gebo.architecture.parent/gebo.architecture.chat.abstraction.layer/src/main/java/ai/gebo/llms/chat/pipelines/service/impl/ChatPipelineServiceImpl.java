@@ -1,7 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
