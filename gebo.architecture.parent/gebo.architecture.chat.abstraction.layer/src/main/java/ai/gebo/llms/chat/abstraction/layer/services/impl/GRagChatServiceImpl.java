@@ -81,9 +81,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	final protected ChatProfilesRepository chatProfilesRepository;
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-	final protected IGChatProfileManagementService chatProfileManagementService;
 	final protected IGDocumentsSearchService ragSearchService;
-
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
@@ -92,8 +90,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGKnowledgebaseVisibilityService knowledgeBaseSecurityService,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, IGDocumentsSearchService ragSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
-			IGChatProfileManagementService chatProfileManagementService) {
+			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
@@ -101,7 +98,6 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
-		this.chatProfileManagementService = chatProfileManagementService;
 		this.ragSearchService = ragSearchService;
 	}
 
@@ -165,10 +161,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			AIDocumentsSet showedDocuments = AIDocumentsSet.join(retrieved, fullRequest.getChatWithDocuments(),
-					fullRequest.getUploadedDocuments());
 			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext,
-					showedDocuments);
+					retrieved);
 		}
 
 		// Set response details
@@ -272,11 +266,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 *
 	 * @param request GeboChatRequest
 	 * @return Flux of GeboChatMessageEnvelope
-	 * @throws GeboChatException  If an error occurs during chat streaming
-	 * @throws LLMConfigException If a configuration error occurs
-	 * @throws GeboPersistenceException 
-	 * @throws IOException 
-	 * @throws FullTextException 
+	 * @throws GeboChatException        If an error occurs during chat streaming
+	 * @throws LLMConfigException       If a configuration error occurs
+	 * @throws GeboPersistenceException
+	 * @throws IOException
+	 * @throws FullTextException
 	 */
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request)
@@ -297,14 +291,12 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		response.setDocumentsRef(docrefs);
 		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-		
+		GPromptConfig prompt = this.promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), true);
 		// Returns the chat stream for the request, profile and context
-		return this.streamChatClient(handler, null, kbcontext, request, response,
+		return this.streamChatClient(handler, new Prompt(prompt.getPrompt()), kbcontext, request, response,
 				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
 
 	}
-
-	
 
 	@Override
 	public List<GKnowledgeBase> getVisibleKnowledgeBasesByProfileCode(@NotNull String profileCode) {

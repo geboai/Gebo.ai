@@ -395,14 +395,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GeboChatResponse response, IGConfigurableChatModel chatModel)
-			throws GeboChatException, LLMConfigException {
+			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
+
 		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
-				response, requestResources.createChatRequestContext(), showedDocuments);
+				response, requestResources.createChatRequestContext(), null);
 	}
 
 	@Override
@@ -414,9 +412,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		final int contextWindow = chatModel.getContextLength();
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
+
 		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
-				response, requestResources.createChatRequestContext(), shrink, targetSize, showedDocuments);
+				response, requestResources.createChatRequestContext(), shrink, targetSize, null);
 	}
 }

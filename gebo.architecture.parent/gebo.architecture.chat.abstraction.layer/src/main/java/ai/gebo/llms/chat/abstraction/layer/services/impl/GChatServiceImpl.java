@@ -124,12 +124,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
-			AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
-					fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext,
-					showedDocuments);
+			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext, null);
 		}
 
 		// Set response details
@@ -279,11 +276,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				prompt = promptTemplate.create();
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
-						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
+
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 				return streamChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
-						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, showedDocuments);
+						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux
