@@ -59,7 +59,9 @@ public interface IGDeepSearchService {
 
 	public void deleteDeepSearchByUserContextCode(String userContextCode);
 
-	public long getDeepSearchDocumentsCount(String deepSearchCode);
+	public 	long getDeepSearchDocumentsCount(String deepSearchCode);
+
+	void stopDeepSearch(String deepSearchRequestId);
 
 	public DeepSearchUISettings getDeepSearchUISettings();
 

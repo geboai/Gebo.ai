@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,7 @@ import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Scheduler;
 
 @Component
@@ -104,6 +106,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	private final Scheduler deepSearchScheduler;
 	private final ExecutorService deepSearchExecutor;
+	private final ConcurrentHashMap<String, Sinks.One<Void>> activeSearchSignals = new ConcurrentHashMap<>();
 
 	public DeepSearchServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			DeepSearchDefaultConfig defaultDeepsearchConfig, DeepSearchConfigRepository configRepository,
@@ -367,8 +370,13 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		List<GKnowledgeBase> kbList = sessionLifecyCleService.getSessionAvailableKnowledgeBases(request);
 		List<String> knowledgeBasesCodesList = kbList.stream().map(x -> x.getCode()).toList();
 
+		Sinks.One<Void> stopSignal = Sinks.one();
+		activeSearchSignals.put(request.getId(), stopSignal);
+
 		Flux<AbstractDeepSearchEvent> outflux = doStream(request, cleanResponse, knowledgeBasesCodesList);
 		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+				.takeUntilOther(stopSignal.asMono())
+				.doFinally(signal -> activeSearchSignals.remove(request.getId()))
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
@@ -531,6 +539,15 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 		return this.dataSourceDocumentResultRepository.countByDeepsearchCode(deepSearchCode)
 				+ this.dataSourceDocumentResultRepository.countByDeepsearchCode(deepSearchCode);
+	}
+
+	@Override
+	public void stopDeepSearch(String deepSearchRequestId) {
+		Sinks.One<Void> signal = activeSearchSignals.get(deepSearchRequestId);
+		if (signal != null) {
+			signal.tryEmitValue(null);
+			LOGGER.info("Deep search stopped by user: " + deepSearchRequestId);
+		}
 	}
 
 }

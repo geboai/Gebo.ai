@@ -143,4 +143,9 @@ public class GeboDeepSearchController {
 		return this.deepSearchService.getDeepSearchDocumentsCount(deepSearchCode);
 	}
 
+	@PostMapping(value = "stopDeepSearch", produces = MediaType.APPLICATION_JSON_VALUE)
+	public void stopDeepSearch(@RequestParam("deepSearchCode") String deepSearchCode) {
+		this.deepSearchService.stopDeepSearch(deepSearchCode);
+	}
+
 }
