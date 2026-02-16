@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -93,28 +94,18 @@ public class GeboChatController {
 	 * @return A response from the chat model
 	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "chat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboChatResponse chat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException {
+	public GeboChatResponse chat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 
 		return chatService.chat(request);
 
 	}
 
-	/**
-	 * Endpoint for rich chat interaction that returns templated responses
-	 * 
-	 * @param request The chat request containing messages and parameters
-	 * @return A templated response with rich content
-	 * @throws GeboChatException  If there's a problem with the chat service
-	 * @throws LLMConfigException If there's a configuration issue with the model
-	 */
-	@PostMapping(value = "richChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboTemplatedChatResponse<RichResponse> richChat(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
-		return chatService.templatedChat(request, RichResponse.class);
-	}
-
+	
 	/**
 	 * Retrieves the capabilities of a specific model provider
 	 * 
@@ -201,10 +192,13 @@ public class GeboChatController {
 	 * @return A flux of server-sent events containing chat response chunks
 	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "streamResponse", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamResponse(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 		return chatService.streamChat(request).map(StreamUtil.mappingFunction)
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}

@@ -72,9 +72,6 @@ import reactor.core.publisher.Flux;
 @Service
 public class GChatServiceImpl extends AbstractChatService implements IGChatService {
 
-	
-
-	
 	public GChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
@@ -85,41 +82,30 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService);
-		
+
 	}
 
 	/**
-	 * Handles the chat interaction using the specified chat model handler, user
-	 * context, request, and response type. This is a generic method supporting
-	 * different response types.
+	 * Initiates a chat session based on the given chat request.
 	 *
-	 * @param <T>          the type parameter for response type
-	 * @param handler      the chat model handler
-	 * @param userContext  the user chat context
-	 * @param request      the chat request object
-	 * @param responseType the class type of the expected response
-	 * @return a templated chat response
-	 * @throws GeboPersistenceException          if persistence fails
-	 * @throws GeboChatException                 if there is an error in chat
-	 *                                           processing
-	 * @throws LLMConfigException                if there is a configuration error
+	 * @param request the chat request
+	 * @return the chat response
+	 * @throws GeboChatException
+	 * @throws GeboPersistenceException
 	 * @throws IOException
-	 * @throws GeboIngestionException
-	 * @throws GeboContentHandlerSystemException
+	 * @throws LLMConfigException
 	 */
-	private <T> GeboTemplatedChatResponse<T> chat(IGConfigurableChatModel handler, GUserChatSession userContext,
-			GeboChatRequest request, Class<T> responseType) throws GeboPersistenceException, GeboChatException,
-			LLMConfigException, IOException, GeboContentHandlerSystemException, GeboIngestionException {
+	@Override
+	public GeboChatResponse chat(GeboChatRequest request)
+			throws GeboChatException, GeboPersistenceException, IOException, LLMConfigException {
+		UserInfos user = securityService.getCurrentUser();
 		KBContext kbcontext = new KBContext();
-		kbcontext.setActualUser(userContext.getUsername());
+		kbcontext.setActualUser(user.getUsername());
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
-		GeboTemplatedChatResponse<T> gresponse = new GeboTemplatedChatResponse<T>();
-		gresponse.setQuery(request.getQuery());
-		List<ChatInteractions> interactions = userContext.getInteractions() != null ? userContext.getInteractions()
-				: new ArrayList<>();
 
-		gresponse.setUserChatContextCode(userContext.getCode());
-
+		this.chatSessionLifecycleService.ensureChatSessionExists(request);
+		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
+		GeboChatResponse chatResponse = this.chatSessionLifecycleService.createEmptyResponse(request);
 		// Retrieve default prompt
 		GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
 
@@ -127,7 +113,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
-			BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(responseType);
 
 			PromptTemplate promptTemplate = null;
 			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
@@ -136,49 +121,32 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 			prompt = promptTemplate.create();
 
-			LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequest(request, handler,
+			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+
+			AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
+					fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-			gresponse = callTemplatedChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
-					responseType);
+
+			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext,
+					showedDocuments);
 		}
 
 		// Set response details
-		gresponse.setCalledFunctions(kbcontext.getCalledFunctions());
+		chatResponse.setCalledFunctions(kbcontext.getCalledFunctions());
 		if (handler.getConfig() != null && handler.getConfig().getChoosedModel() != null) {
-			gresponse.setUsedChatModelCode(handler.getConfig().getChoosedModel().getCode());
+			chatResponse.setUsedChatModelCode(handler.getConfig().getChoosedModel().getCode());
 		}
 		if (handler.getType() != null) {
-			gresponse.setUsedChatModelProvider(handler.getType().getCode());
+			chatResponse.setUsedChatModelProvider(handler.getType().getCode());
 		}
 
 		// Update interactions
-		ChatInteractions interaction = new ChatInteractions();
-		interaction.setRequest(request);
-		interaction.setResponse(gresponse);
-		interactions.add(interaction);
-		userContext.setInteractions(interactions);
-		if (userContext.getCode() == null) {
-			userContext = persistenceManager.transactionalInsert(userContext);
-		} else {
-			userContext = persistenceManager.transactionalUpdate(userContext);
-		}
-
+		this.chatSessionLifecycleService.endRequest(request, chatResponse);
+		this.chatSessionLifecycleService.chatRequestCompleted(request, handler);
 		// Clean up context
 		LLMtInteractionContextThreadLocal.Context.remove();
-		return gresponse;
-	}
-
-	/**
-	 * Initiates a chat session based on the given chat request.
-	 *
-	 * @param request the chat request
-	 * @return the chat response
-	 */
-	@Override
-	public GeboChatResponse chat(GeboChatRequest request) {
-		GeboTemplatedChatResponse<String> generatedResponse = templatedChat(request, String.class);
-		return new GeboChatResponse(generatedResponse);
+		return chatResponse;
 	}
 
 	/**
@@ -207,64 +175,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	}
 
 	/**
-	 * Initiates a templated chat process.
-	 *
-	 * @param <T>          the type parameter for response type
-	 * @param request      the chat request
-	 * @param responseType the class type of the expected response
-	 * @return a templated chat response
-	 */
-	@Override
-	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, Class<T> responseType) {
-		GUserChatSession userContext = null;
-
-		try {
-			// Retrieve current user's name and model configuration
-			String currentUserName = securityService.getCurrentUser().getUsername();
-			String modelCode = request.getChatModelCode();
-			IGConfigurableChatModel handler = null;
-
-			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				handler = chatModelConfigurations.findByCode(modelCode);
-
-				// Initialize new user context
-				userContext = new GUserChatSession();
-				userContext.setDescription("New chat with system=>" + modelCode);
-				userContext.setModelReference(GObjectRef.of((GBaseChatModelConfig) handler.getConfig()));
-				userContext.setRagChat(false);
-				userContext.setChatCreationDateTime(new Date());
-				userContext.setUsername(currentUserName);
-				userContext.setChatModelCode(modelCode);
-				userContext = persistenceManager.insert(userContext);
-			} else {
-				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
-
-				// Security check for user context access
-				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
-					throw new SecurityException("Attempting to access the wrong chat userContext");
-				}
-				modelCode = userContext.getChatModelCode();
-				handler = chatModelConfigurations.findByCode(modelCode);
-			}
-			if (handler == null) {
-				handler = chatModelConfigurations.defaultHandler();
-			}
-			this.chatSessionLifecycleService.ensureChatSessionExists(request, handler);
-			// Process chat interaction
-			GeboTemplatedChatResponse<T> response = chat(handler, userContext, request, responseType);
-			response.getBackendMessages().add(GUserMessage.successMessage("OK!", "Chat system running correctly"));
-			return response;
-
-		} catch (Throwable e) {
-			// Handle exceptions and prepare error response
-			GeboTemplatedChatResponse<T> response = new GeboTemplatedChatResponse<T>();
-			response.setUserChatContextCode(userContext != null ? userContext.getCode() : null);
-			response.getBackendMessages().add(GUserMessage.errorMessage("Chat system error", e));
-			return response;
-		}
-	}
-
-	/**
 	 * Retrieves the meta information associated with a specific chat model.
 	 *
 	 * @param modelCode the code for the model
@@ -276,27 +186,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		return runtime != null && runtime.getConfig() != null && runtime.getConfig().getChoosedModel() != null
 				? (GBaseChatModelChoice) runtime.getConfig().getChoosedModel()
 				: null;
-	}
-
-	/**
-	 * Provides a templated chat implementation that is currently not configured.
-	 * 
-	 * @param <T>               the type parameter for response type
-	 * @param request           the chat request
-	 * @param prompt            the prompt for the chat
-	 * @param customEnvironment custom environment variables
-	 * @param contents          custom contents
-	 * @param responseType      the class type of the expected response
-	 * @return always returns null as it is not implemented
-	 * @throws GeboChatException  if there is an error in chat processing
-	 * @throws LLMConfigException if there is a configuration error
-	 */
-	@Override
-	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, String prompt,
-			Map<String, Object> customEnvironment, Map<String, Function<KBContext, Object>> contents,
-			Class<T> responseType) throws GeboChatException, LLMConfigException {
-		// Method is not implemented, return null
-		return null;
 	}
 
 	/**
@@ -368,39 +257,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			// Retrieve current user's name and model configuration
 			String currentUserName = securityService.getCurrentUser().getUsername();
 			String modelCode = request.getChatModelCode();
-			IGConfigurableChatModel handler = null;
-
-			if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
-				handler = chatModelConfigurations.findByCode(modelCode);
-
-				// Initialize new user context
-				userContext = new GUserChatSession();
-				userContext.setDescription("New chat with system=>" + modelCode);
-				userContext.setModelReference(GObjectRef.of((GBaseChatModelConfig) handler.getConfig()));
-				userContext.setRagChat(false);
-				userContext.setChatCreationDateTime(new Date());
-				userContext.setUsername(currentUserName);
-				userContext.setChatModelCode(modelCode);
-				userContext = persistenceManager.insert(userContext);
-			} else {
-				userContext = persistenceManager.findById(GUserChatSession.class, request.getUserChatContextCode());
-
-				// Security check for user context access
-				if (userContext.getUsername() == null || !userContext.getUsername().equals(currentUserName)) {
-					throw new SecurityException("Attempting to access the wrong chat userContext");
-				}
-				modelCode = userContext.getChatModelCode();
-				handler = chatModelConfigurations.findByCode(modelCode);
-			}
 
 			// Initialize context for interaction
 			KBContext kbcontext = new KBContext();
 			kbcontext.setActualUser(userContext.getUsername());
 			LLMtInteractionContextThreadLocal.Context.set(kbcontext);
-			GeboChatResponse gresponse = new GeboChatResponse();
-			gresponse.setQuery(request.getQuery());
-			gresponse.setUserChatContextCode(userContext.getCode());
-
+			chatSessionLifecycleService.ensureChatSessionExists(request);
+			GeboChatResponse gresponse = chatSessionLifecycleService.createEmptyResponse(request);
+			IGConfigurableChatModel handler = chatSessionLifecycleService.getSessionChatModel(request);
 			// Retrieve default prompt
 			GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
 			if (gprompt == null) {
@@ -413,7 +277,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				Prompt prompt = null;
 				promptTemplate = new PromptTemplate(promptTemplateText);
 				prompt = promptTemplate.create();
-				LLMChatRequestResources fullRequest = chatSessionLifecycleService.addRequest(request, handler,
+				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 				AIDocumentsSet showedDocuments = AIDocumentsSet.join(fullRequest.getChatWithDocuments(),
 						fullRequest.getRetrievedDocuments(), fullRequest.getUploadedDocuments());
@@ -432,8 +296,5 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			return Flux.just(responseEnvelope);
 		}
 	}
-
-	
-	
 
 }

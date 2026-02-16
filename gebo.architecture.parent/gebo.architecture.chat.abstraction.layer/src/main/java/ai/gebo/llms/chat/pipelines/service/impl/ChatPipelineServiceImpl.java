@@ -46,7 +46,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 
-			this.chatSessionLifecycleService.ensureChatSessionExists(request, chatModel);
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
 			return executor.execute(request, chatModel, serviceModel, pipelineCode);
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline";
@@ -63,7 +63,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 			
-			this.chatSessionLifecycleService.ensureChatSessionExists(request, chatModel);
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
 			return executor.streamingExecute(request, chatModel, serviceModel, pipelineCode);
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline (streaming)";

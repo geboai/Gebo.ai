@@ -67,7 +67,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
@@ -84,25 +83,17 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	protected final static ObjectMapper mapper = new ObjectMapper(); // JSON object mapper for
 																		// serialization/deserialization
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass()); // Logger for logging events
-
 	final protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model
 																				// configurations
 
 	final protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
-
 	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
 	final protected IGPromptConfigDao promptsDao;
-
 	final protected InteractionsContextService interactionsContext;
-
 	final protected IGSecurityService securityService;
-
 	final protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
-
 	final protected IGChatStorageAreaService chatStorageAreaService;
-
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
-
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseSecurityService;
 	final protected IGChatSessionLifeCycleService chatSessionLifecycleService;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -356,7 +347,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			finalEnvelope.setLastMessage(true);
 			try {
 
-				this.chatSessionLifecycleService.addInteraction(request, response);
+				this.chatSessionLifecycleService.endRequest(request, response);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
 			} finally {
@@ -404,7 +395,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);

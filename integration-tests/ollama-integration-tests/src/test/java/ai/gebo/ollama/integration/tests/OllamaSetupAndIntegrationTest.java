@@ -214,7 +214,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			request.setQuery(interactions.get(i).getUser());
 			request.setUserChatContextCode(cleanChat.getCode());
 			request.setId(UUID.randomUUID().toString());
-			this.chatLifecycleService.ensureChatSessionExists(request, chatModel);
+			this.chatLifecycleService.ensureChatSessionExists(request);
 			ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
 			response.setId(UUID.randomUUID().toString());
 			response.setUserChatContextCode(data.getCode());
@@ -222,7 +222,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			response.setQueryResponse(interactions.get(i).getAssistant());
 			String file = INGESTION_FILES[i];
 			LOGGER.info("Ingesting and adding file:" + file);
-			LLMChatRequestResources r = this.chatLifecycleService.addRequest(request, chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			LLMChatRequestResources r = this.chatLifecycleService.startRequest(request, chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			try (InputStream is = getClass().getResourceAsStream(file)) {
 				if (is == null)
@@ -241,7 +241,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 					r = this.chatLifecycleService.addRetrievedDocuments(request, set, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
-					this.chatLifecycleService.addInteraction(request, response);
+					this.chatLifecycleService.endRequest(request, response);
 					
 					this.chatLifecycleService.chatRequestCompleted(request, chatModel);
 					this.showShrinked(data);
@@ -273,7 +273,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			interaction.getRequest().setUserChatContextCode(data.getCode());
 			interaction.setRequestNTokens(tokenEstimator.estimate(tChatInteraction.getUser()));
 
-			this.chatLifecycleService.addRequest(interaction.getRequest(), chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			this.chatLifecycleService.startRequest(interaction.getRequest(), chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			interaction.setResponse(new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse());
 			interaction.getResponse().setQueryResponse(tChatInteraction.getAssistant());
 			interaction.getResponse().setUserChatContextCode(data.getCode());
@@ -281,7 +281,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			_interactions.add(interaction);
 			data.setInteractions(_interactions);
 			persistentObjectManager.update(data);
-			this.chatLifecycleService.addInteraction(interaction.getRequest(),
+			this.chatLifecycleService.endRequest(interaction.getRequest(),
 					(ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse) interaction.getResponse());
 			this.chatLifecycleService.chatRequestCompleted(interaction.getRequest(), chatModel);
 			this.showShrinked(data);

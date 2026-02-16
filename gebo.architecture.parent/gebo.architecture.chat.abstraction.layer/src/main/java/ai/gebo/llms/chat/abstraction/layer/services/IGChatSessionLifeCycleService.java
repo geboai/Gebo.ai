@@ -37,15 +37,15 @@ public interface IGChatSessionLifeCycleService {
 
 	public GeboChatResponse createEmptyResponse(GeboChatRequest request) throws GeboChatSessionLifecycleException;
 
-	public void ensureChatSessionExists(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
+	public void ensureChatSessionExists(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException;
 
-	public void createChatSession(GeboChatRequest request, IGConfigurableChatModel targetChatModel)
+	public void createChatSession(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException;
 
 	public void removeChatSession(String code) throws GeboChatSessionLifecycleException;
 
-	public LLMChatRequestResources addRequest(GeboChatRequest request, IGConfigurableChatModel targetChatModel,
+	public LLMChatRequestResources startRequest(GeboChatRequest request, IGConfigurableChatModel targetChatModel,
 			LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException;
 
 	public void updateRequest(GeboChatRequest request) throws GeboChatSessionLifecycleException, IOException;
@@ -78,7 +78,7 @@ public interface IGChatSessionLifeCycleService {
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException;
 
-	public void addInteraction(GeboChatRequest request, GeboChatResponse response)
+	public void endRequest(GeboChatRequest request, GeboChatResponse response)
 			throws GeboChatSessionLifecycleException;
 
 	public List<GKnowledgeBase> getSessionAvailableKnowledgeBases(GeboChatRequest request)
@@ -97,5 +97,7 @@ public interface IGChatSessionLifeCycleService {
 	public GUserChatInfo createCleanChatByModelCode(String modelCode) throws GeboPersistenceException;
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
+
+	public void persist(GeboChatRequest request) throws GeboChatSessionLifecycleException;
 
 }

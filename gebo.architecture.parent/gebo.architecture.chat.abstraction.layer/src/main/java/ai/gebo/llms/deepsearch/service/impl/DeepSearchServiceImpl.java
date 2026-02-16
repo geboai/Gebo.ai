@@ -363,7 +363,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			request.setId(UUID.randomUUID().toString());
 		}
 
-		sessionLifecyCleService.ensureChatSessionExists(request, null);
+		sessionLifecyCleService.ensureChatSessionExists(request);
 		GeboChatResponse cleanResponse = sessionLifecyCleService.createEmptyResponse(request);
 
 		List<GKnowledgeBase> kbList = sessionLifecyCleService.getSessionAvailableKnowledgeBases(request);
@@ -418,7 +418,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				response.setQueryResponse(responseText);
 
 				try {
-					this.sessionLifecyCleService.addInteraction(request, response);
+					this.sessionLifecyCleService.endRequest(request, response);
 				} catch (GeboChatSessionLifecycleException e) {
 					LOGGER.error("Exceptin in trailing event", e);
 				}
