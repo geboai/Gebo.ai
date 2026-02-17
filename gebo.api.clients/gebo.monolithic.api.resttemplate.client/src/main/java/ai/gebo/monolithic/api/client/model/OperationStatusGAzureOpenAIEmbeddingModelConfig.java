@@ -12,18 +12,21 @@
 
 package ai.gebo.monolithic.api.client.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GAzureOpenAIEmbeddingModelConfig;
+import ai.gebo.monolithic.api.client.model.GUserMessage;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * OperationStatusGAzureOpenAIEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
   @JsonProperty("result")
@@ -32,11 +35,11 @@ public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusGAzureOpenAIEmbeddingModelConfig result(GAzureOpenAIEmbeddingModelConfig result) {
     this.result = result;
@@ -82,24 +85,6 @@ public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGAzureOpenAIEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusGAzureOpenAIEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -118,6 +103,24 @@ public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusGAzureOpenAIEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -130,13 +133,13 @@ public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
     OperationStatusGAzureOpenAIEmbeddingModelConfig operationStatusGAzureOpenAIEmbeddingModelConfig = (OperationStatusGAzureOpenAIEmbeddingModelConfig) o;
     return Objects.equals(this.result, operationStatusGAzureOpenAIEmbeddingModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGAzureOpenAIEmbeddingModelConfig.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGAzureOpenAIEmbeddingModelConfig.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGAzureOpenAIEmbeddingModelConfig.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusGAzureOpenAIEmbeddingModelConfig.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusGAzureOpenAIEmbeddingModelConfig.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -147,8 +150,8 @@ public class OperationStatusGAzureOpenAIEmbeddingModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -12,25 +12,38 @@
 
 package ai.gebo.monolithic.api.client.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.DeepSearchRequest;
+import ai.gebo.monolithic.api.client.model.PageableObject;
+import ai.gebo.monolithic.api.client.model.SortObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * PageDeepSearchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class PageDeepSearchRequest {
+  @JsonProperty("totalElements")
+  private Long totalElements = null;
+
   @JsonProperty("totalPages")
   private Integer totalPages = null;
 
-  @JsonProperty("totalElements")
-  private Long totalElements = null;
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
 
   @JsonProperty("first")
   private Boolean first = null;
@@ -47,17 +60,26 @@ public class PageDeepSearchRequest {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
-
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
-
   @JsonProperty("empty")
   private Boolean empty = null;
+
+  public PageDeepSearchRequest totalElements(Long totalElements) {
+    this.totalElements = totalElements;
+    return this;
+  }
+
+   /**
+   * Get totalElements
+   * @return totalElements
+  **/
+  @Schema(description = "")
+  public Long getTotalElements() {
+    return totalElements;
+  }
+
+  public void setTotalElements(Long totalElements) {
+    this.totalElements = totalElements;
+  }
 
   public PageDeepSearchRequest totalPages(Integer totalPages) {
     this.totalPages = totalPages;
@@ -77,22 +99,58 @@ public class PageDeepSearchRequest {
     this.totalPages = totalPages;
   }
 
-  public PageDeepSearchRequest totalElements(Long totalElements) {
-    this.totalElements = totalElements;
+  public PageDeepSearchRequest numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
     return this;
   }
 
    /**
-   * Get totalElements
-   * @return totalElements
+   * Get numberOfElements
+   * @return numberOfElements
   **/
   @Schema(description = "")
-  public Long getTotalElements() {
-    return totalElements;
+  public Integer getNumberOfElements() {
+    return numberOfElements;
   }
 
-  public void setTotalElements(Long totalElements) {
-    this.totalElements = totalElements;
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+  }
+
+  public PageDeepSearchRequest sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
+  public PageDeepSearchRequest pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
   }
 
   public PageDeepSearchRequest first(Boolean first) {
@@ -193,60 +251,6 @@ public class PageDeepSearchRequest {
     this.number = number;
   }
 
-  public PageDeepSearchRequest numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-  }
-
-  public PageDeepSearchRequest sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
-  public PageDeepSearchRequest pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
   public PageDeepSearchRequest empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -275,22 +279,22 @@ public class PageDeepSearchRequest {
       return false;
     }
     PageDeepSearchRequest pageDeepSearchRequest = (PageDeepSearchRequest) o;
-    return Objects.equals(this.totalPages, pageDeepSearchRequest.totalPages) &&
-        Objects.equals(this.totalElements, pageDeepSearchRequest.totalElements) &&
+    return Objects.equals(this.totalElements, pageDeepSearchRequest.totalElements) &&
+        Objects.equals(this.totalPages, pageDeepSearchRequest.totalPages) &&
+        Objects.equals(this.numberOfElements, pageDeepSearchRequest.numberOfElements) &&
+        Objects.equals(this.sort, pageDeepSearchRequest.sort) &&
+        Objects.equals(this.pageable, pageDeepSearchRequest.pageable) &&
         Objects.equals(this.first, pageDeepSearchRequest.first) &&
         Objects.equals(this.last, pageDeepSearchRequest.last) &&
         Objects.equals(this.size, pageDeepSearchRequest.size) &&
         Objects.equals(this.content, pageDeepSearchRequest.content) &&
         Objects.equals(this.number, pageDeepSearchRequest.number) &&
-        Objects.equals(this.numberOfElements, pageDeepSearchRequest.numberOfElements) &&
-        Objects.equals(this.sort, pageDeepSearchRequest.sort) &&
-        Objects.equals(this.pageable, pageDeepSearchRequest.pageable) &&
         Objects.equals(this.empty, pageDeepSearchRequest.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, first, last, size, content, number, numberOfElements, sort, pageable, empty);
+    return Objects.hash(totalElements, totalPages, numberOfElements, sort, pageable, first, last, size, content, number, empty);
   }
 
 
@@ -299,16 +303,16 @@ public class PageDeepSearchRequest {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageDeepSearchRequest {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

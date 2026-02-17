@@ -12,18 +12,21 @@
 
 package ai.gebo.monolithic.api.client.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.GOpenAIEmbeddingModelConfig;
+import ai.gebo.monolithic.api.client.model.GUserMessage;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * OperationStatusGOpenAIEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class OperationStatusGOpenAIEmbeddingModelConfig {
   @JsonProperty("result")
@@ -32,11 +35,11 @@ public class OperationStatusGOpenAIEmbeddingModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusGOpenAIEmbeddingModelConfig result(GOpenAIEmbeddingModelConfig result) {
     this.result = result;
@@ -82,24 +85,6 @@ public class OperationStatusGOpenAIEmbeddingModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGOpenAIEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusGOpenAIEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -118,6 +103,24 @@ public class OperationStatusGOpenAIEmbeddingModelConfig {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusGOpenAIEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -130,13 +133,13 @@ public class OperationStatusGOpenAIEmbeddingModelConfig {
     OperationStatusGOpenAIEmbeddingModelConfig operationStatusGOpenAIEmbeddingModelConfig = (OperationStatusGOpenAIEmbeddingModelConfig) o;
     return Objects.equals(this.result, operationStatusGOpenAIEmbeddingModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGOpenAIEmbeddingModelConfig.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGOpenAIEmbeddingModelConfig.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGOpenAIEmbeddingModelConfig.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusGOpenAIEmbeddingModelConfig.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusGOpenAIEmbeddingModelConfig.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -147,8 +150,8 @@ public class OperationStatusGOpenAIEmbeddingModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

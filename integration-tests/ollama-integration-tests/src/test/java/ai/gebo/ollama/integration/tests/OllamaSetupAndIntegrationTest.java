@@ -76,6 +76,7 @@ import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsLookupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
+import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.GChatModelType;
@@ -200,8 +201,9 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
-		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
-		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);		
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
@@ -350,7 +352,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
-		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history

@@ -12,26 +12,21 @@
 
 package ai.gebo.monolithic.api.client.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class UserInfos {
-  @JsonProperty("name")
-  private String name = null;
-
-  @JsonProperty("roles")
-  private List<String> roles = null;
-
   @JsonProperty("username")
   private String username = null;
 
@@ -41,49 +36,11 @@ public class UserInfos {
   @JsonProperty("sourname")
   private String sourname = null;
 
-  public UserInfos name(String name) {
-    this.name = name;
-    return this;
-  }
+  @JsonProperty("name")
+  private String name = null;
 
-   /**
-   * Get name
-   * @return name
-  **/
-  @Schema(description = "")
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public UserInfos roles(List<String> roles) {
-    this.roles = roles;
-    return this;
-  }
-
-  public UserInfos addRolesItem(String rolesItem) {
-    if (this.roles == null) {
-      this.roles = new ArrayList<>();
-    }
-    this.roles.add(rolesItem);
-    return this;
-  }
-
-   /**
-   * Get roles
-   * @return roles
-  **/
-  @Schema(description = "")
-  public List<String> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
-  }
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
   public UserInfos username(String username) {
     this.username = username;
@@ -139,6 +96,50 @@ public class UserInfos {
     this.sourname = sourname;
   }
 
+  public UserInfos name(String name) {
+    this.name = name;
+    return this;
+  }
+
+   /**
+   * Get name
+   * @return name
+  **/
+  @Schema(description = "")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public UserInfos roles(List<String> roles) {
+    this.roles = roles;
+    return this;
+  }
+
+  public UserInfos addRolesItem(String rolesItem) {
+    if (this.roles == null) {
+      this.roles = new ArrayList<>();
+    }
+    this.roles.add(rolesItem);
+    return this;
+  }
+
+   /**
+   * Get roles
+   * @return roles
+  **/
+  @Schema(description = "")
+  public List<String> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(List<String> roles) {
+    this.roles = roles;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -149,16 +150,16 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.name, userInfos.name) &&
-        Objects.equals(this.roles, userInfos.roles) &&
-        Objects.equals(this.username, userInfos.username) &&
+    return Objects.equals(this.username, userInfos.username) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.sourname, userInfos.sourname);
+        Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.name, userInfos.name) &&
+        Objects.equals(this.roles, userInfos.roles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, roles, username, disabled, sourname);
+    return Objects.hash(username, disabled, sourname, name, roles);
   }
 
 
@@ -167,11 +168,11 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("}");
     return sb.toString();
   }

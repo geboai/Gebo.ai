@@ -1,21 +1,8 @@
 package ai.gebo.monolithic.api.client.api;
 
-import java.io.File;
-import java.util.List;
-
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
+
+import java.io.File;
 import ai.gebo.monolithic.api.client.model.GBaseChatModelChoice;
 import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
@@ -26,7 +13,25 @@ import ai.gebo.monolithic.api.client.model.ServerSentEventString;
 import ai.gebo.monolithic.api.client.model.SpeechRequest;
 import ai.gebo.monolithic.api.client.model.TranscriptResponse;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class GeboChatControllerApi {
     private ApiClient apiClient;
