@@ -13,7 +13,6 @@
 package ai.gebo.monolithic.api.client.api;
 
 import java.io.File;
-import ai.gebo.monolithic.api.client.model.OperationStatusChatSessionCreationWithUpload;
 import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -31,22 +30,6 @@ public class GeboUserChatUploadsControllerApiTest {
 
     private final GeboUserChatUploadsControllerApi api = new GeboUserChatUploadsControllerApi();
 
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void chatSessionCreateWithUploadTest() {
-        String modelCode = null;
-        List<File> files = null;
-        OperationStatusChatSessionCreationWithUpload response = api.chatSessionCreateWithUpload(modelCode, files);
-
-        // TODO: test validations
-    }
     /**
      * 
      *
@@ -75,22 +58,6 @@ public class GeboUserChatUploadsControllerApiTest {
     public void deleteSessionUploadsTest() {
         String userSessionCode = null;
         OperationStatusListUserUploadedContent response = api.deleteSessionUploads(userSessionCode);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void ragChatSessionCreateWithUploadTest() {
-        String chatProfileCode = null;
-        List<File> files = null;
-        OperationStatusChatSessionCreationWithUpload response = api.ragChatSessionCreateWithUpload(chatProfileCode, files);
 
         // TODO: test validations
     }

@@ -13,8 +13,10 @@
 package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.ComponentLLMSStatus;
+import ai.gebo.monolithic.api.client.model.LLMAutoconfigureCreationData;
 import ai.gebo.monolithic.api.client.model.LLMCreateModelData;
 import ai.gebo.monolithic.api.client.model.LLMCredentialsCreationData;
+import ai.gebo.monolithic.api.client.model.LLMCredentialsVerificationData;
 import ai.gebo.monolithic.api.client.model.LLMModelsLookupParameter;
 import ai.gebo.monolithic.api.client.model.LLMSSetupConfigurationData;
 import ai.gebo.monolithic.api.client.model.OperationStatusList;
@@ -36,6 +38,21 @@ public class GeboFastLlmsSetupControllerApiTest {
 
     private final GeboFastLlmsSetupControllerApi api = new GeboFastLlmsSetupControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createLLMByAutoconfigureTest() {
+        LLMAutoconfigureCreationData body = null;
+        OperationStatusList response = api.createLLMByAutoconfigure(body);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -106,6 +123,21 @@ public class GeboFastLlmsSetupControllerApiTest {
     public void verifyCredentialsAndDownloadModelsTest() {
         LLMModelsLookupParameter body = null;
         OperationStatusListGBaseModelChoice response = api.verifyCredentialsAndDownloadModels(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void verifyVendorCredentialsAndDownloadModelsTest() {
+        LLMCredentialsVerificationData body = null;
+        OperationStatusListGBaseModelChoice response = api.verifyVendorCredentialsAndDownloadModels(body);
 
         // TODO: test validations
     }

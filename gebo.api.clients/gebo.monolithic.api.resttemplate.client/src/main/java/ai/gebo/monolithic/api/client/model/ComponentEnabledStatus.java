@@ -13,16 +13,15 @@
 package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * ComponentEnabledStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class ComponentEnabledStatus {
   @JsonProperty("isEnabled")

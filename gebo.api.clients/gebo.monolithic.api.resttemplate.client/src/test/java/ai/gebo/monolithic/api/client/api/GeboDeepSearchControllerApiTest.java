@@ -92,6 +92,21 @@ public class GeboDeepSearchControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void getDeepSearchDocumentsCountTest() {
+        String deepSearchCode = null;
+        Long response = api.getDeepSearchDocumentsCount(deepSearchCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void getDeepSearchUISettingsTest() {
         DeepSearchUISettings response = api.getDeepSearchUISettings();
 
@@ -216,6 +231,21 @@ public class GeboDeepSearchControllerApiTest {
         Integer page = null;
         Integer pageSize = null;
         PageDeepSearchDocumentAnalisysResultStep response = api.getMyDeepSearchesStepsPaged(deepSearchCode, page, pageSize);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void stopDeepSearchTest() {
+        String deepSearchCode = null;
+        api.stopDeepSearch(deepSearchCode);
 
         // TODO: test validations
     }

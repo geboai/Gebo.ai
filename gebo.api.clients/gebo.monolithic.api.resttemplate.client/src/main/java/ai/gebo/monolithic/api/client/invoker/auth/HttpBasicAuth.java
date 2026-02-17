@@ -1,13 +1,12 @@
 package ai.gebo.monolithic.api.client.invoker.auth;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import org.springframework.http.HttpHeaders;
-import java.util.Base64;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 public class HttpBasicAuth implements Authentication {
     private String username;
     private String password;

@@ -17,6 +17,7 @@ Method | HTTP request | Description
 [**getMyDeepSearchesPaged**](GeboDeepSearchControllerApi.md#getMyDeepSearchesPaged) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesPaged | 
 [**getMyDeepSearchesSteps**](GeboDeepSearchControllerApi.md#getMyDeepSearchesSteps) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesSteps | 
 [**getMyDeepSearchesStepsPaged**](GeboDeepSearchControllerApi.md#getMyDeepSearchesStepsPaged) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesStepsPaged | 
+[**stopDeepSearch**](GeboDeepSearchControllerApi.md#stopDeepSearch) | **POST** /api/users/GeboDeepSearchController/stopDeepSearch | 
 [**streamDeepSearch**](GeboDeepSearchControllerApi.md#streamDeepSearch) | **POST** /api/users/GeboDeepSearchController/streamDeepSearch | 
 [**streamDeepSearchWithChatContext**](GeboDeepSearchControllerApi.md#streamDeepSearchWithChatContext) | **POST** /api/users/GeboDeepSearchController/streamDeepSearchWithChatContext | 
 
@@ -571,6 +572,48 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+<a name="stopDeepSearch"></a>
+# **stopDeepSearch**
+> stopDeepSearch(deepSearchCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
+
+
+GeboDeepSearchControllerApi apiInstance = new GeboDeepSearchControllerApi();
+String deepSearchCode = "deepSearchCode_example"; // String | 
+try {
+    apiInstance.stopDeepSearch(deepSearchCode);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboDeepSearchControllerApi#stopDeepSearch");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **deepSearchCode** | **String**|  |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
 
 <a name="streamDeepSearch"></a>
 # **streamDeepSearch**

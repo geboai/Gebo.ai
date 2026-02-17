@@ -12,19 +12,18 @@
 
 package ai.gebo.monolithic.api.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class UserInfos {
   @JsonProperty("name")
@@ -33,14 +32,14 @@ public class UserInfos {
   @JsonProperty("roles")
   private List<String> roles = null;
 
-  @JsonProperty("sourname")
-  private String sourname = null;
+  @JsonProperty("username")
+  private String username = null;
 
   @JsonProperty("disabled")
   private Boolean disabled = null;
 
-  @JsonProperty("username")
-  private String username = null;
+  @JsonProperty("sourname")
+  private String sourname = null;
 
   public UserInfos name(String name) {
     this.name = name;
@@ -86,22 +85,22 @@ public class UserInfos {
     this.roles = roles;
   }
 
-  public UserInfos sourname(String sourname) {
-    this.sourname = sourname;
+  public UserInfos username(String username) {
+    this.username = username;
     return this;
   }
 
    /**
-   * Get sourname
-   * @return sourname
+   * Get username
+   * @return username
   **/
   @Schema(description = "")
-  public String getSourname() {
-    return sourname;
+  public String getUsername() {
+    return username;
   }
 
-  public void setSourname(String sourname) {
-    this.sourname = sourname;
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public UserInfos disabled(Boolean disabled) {
@@ -122,22 +121,22 @@ public class UserInfos {
     this.disabled = disabled;
   }
 
-  public UserInfos username(String username) {
-    this.username = username;
+  public UserInfos sourname(String sourname) {
+    this.sourname = sourname;
     return this;
   }
 
    /**
-   * Get username
-   * @return username
+   * Get sourname
+   * @return sourname
   **/
   @Schema(description = "")
-  public String getUsername() {
-    return username;
+  public String getSourname() {
+    return sourname;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setSourname(String sourname) {
+    this.sourname = sourname;
   }
 
 
@@ -152,14 +151,14 @@ public class UserInfos {
     UserInfos userInfos = (UserInfos) o;
     return Objects.equals(this.name, userInfos.name) &&
         Objects.equals(this.roles, userInfos.roles) &&
-        Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.username, userInfos.username) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.username, userInfos.username);
+        Objects.equals(this.sourname, userInfos.sourname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, roles, sourname, disabled, username);
+    return Objects.hash(name, roles, username, disabled, sourname);
   }
 
 
@@ -170,9 +169,9 @@ public class UserInfos {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
-    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
-    sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
+    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

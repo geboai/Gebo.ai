@@ -150,6 +150,21 @@ public class SecretsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void deleteSecretTest() {
+        SecretInfo body = null;
+        api.deleteSecret(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void getSecretsByContextCodeTest() {
         String context = null;
         List<SecretInfo> response = api.getSecretsByContextCode(context);

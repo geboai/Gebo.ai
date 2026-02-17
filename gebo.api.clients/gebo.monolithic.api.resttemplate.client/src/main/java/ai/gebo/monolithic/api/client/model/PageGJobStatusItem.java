@@ -12,29 +12,31 @@
 
 package ai.gebo.monolithic.api.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.GJobStatusItem;
-import ai.gebo.monolithic.api.client.model.PageableObject;
-import ai.gebo.monolithic.api.client.model.SortObject;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * PageGJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class PageGJobStatusItem {
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
+
   @JsonProperty("totalElements")
   private Long totalElements = null;
 
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -45,23 +47,35 @@ public class PageGJobStatusItem {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
-
   @JsonProperty("empty")
   private Boolean empty = null;
+
+  public PageGJobStatusItem totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+   /**
+   * Get totalPages
+   * @return totalPages
+  **/
+  @Schema(description = "")
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+  }
 
   public PageGJobStatusItem totalElements(Long totalElements) {
     this.totalElements = totalElements;
@@ -81,22 +95,40 @@ public class PageGJobStatusItem {
     this.totalElements = totalElements;
   }
 
-  public PageGJobStatusItem totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
+  public PageGJobStatusItem first(Boolean first) {
+    this.first = first;
     return this;
   }
 
    /**
-   * Get totalPages
-   * @return totalPages
+   * Get first
+   * @return first
   **/
   @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
+  public Boolean isFirst() {
+    return first;
   }
 
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGJobStatusItem last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageGJobStatusItem size(Integer size) {
@@ -161,24 +193,6 @@ public class PageGJobStatusItem {
     this.number = number;
   }
 
-  public PageGJobStatusItem sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
   public PageGJobStatusItem numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -197,6 +211,24 @@ public class PageGJobStatusItem {
     this.numberOfElements = numberOfElements;
   }
 
+  public PageGJobStatusItem sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
   public PageGJobStatusItem pageable(PageableObject pageable) {
     this.pageable = pageable;
     return this;
@@ -213,42 +245,6 @@ public class PageGJobStatusItem {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
-  }
-
-  public PageGJobStatusItem first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageGJobStatusItem last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
   }
 
   public PageGJobStatusItem empty(Boolean empty) {
@@ -279,22 +275,22 @@ public class PageGJobStatusItem {
       return false;
     }
     PageGJobStatusItem pageGJobStatusItem = (PageGJobStatusItem) o;
-    return Objects.equals(this.totalElements, pageGJobStatusItem.totalElements) &&
-        Objects.equals(this.totalPages, pageGJobStatusItem.totalPages) &&
+    return Objects.equals(this.totalPages, pageGJobStatusItem.totalPages) &&
+        Objects.equals(this.totalElements, pageGJobStatusItem.totalElements) &&
+        Objects.equals(this.first, pageGJobStatusItem.first) &&
+        Objects.equals(this.last, pageGJobStatusItem.last) &&
         Objects.equals(this.size, pageGJobStatusItem.size) &&
         Objects.equals(this.content, pageGJobStatusItem.content) &&
         Objects.equals(this.number, pageGJobStatusItem.number) &&
-        Objects.equals(this.sort, pageGJobStatusItem.sort) &&
         Objects.equals(this.numberOfElements, pageGJobStatusItem.numberOfElements) &&
+        Objects.equals(this.sort, pageGJobStatusItem.sort) &&
         Objects.equals(this.pageable, pageGJobStatusItem.pageable) &&
-        Objects.equals(this.first, pageGJobStatusItem.first) &&
-        Objects.equals(this.last, pageGJobStatusItem.last) &&
         Objects.equals(this.empty, pageGJobStatusItem.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, size, content, number, sort, numberOfElements, pageable, first, last, empty);
+    return Objects.hash(totalPages, totalElements, first, last, size, content, number, numberOfElements, sort, pageable, empty);
   }
 
 
@@ -303,16 +299,16 @@ public class PageGJobStatusItem {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageGJobStatusItem {\n");
     
-    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

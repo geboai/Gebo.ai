@@ -13,12 +13,11 @@
 package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
 /**
  * ServerSentEventString
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class ServerSentEventString {
 

@@ -1,7 +1,20 @@
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.invoker.ApiClient;
+import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.OperationStatusPublishingStatus;
 import ai.gebo.monolithic.api.client.model.PublishingStatus;
 import ai.gebo.monolithic.api.client.model.UserUploadToUserSpaceParam;
@@ -9,25 +22,7 @@ import ai.gebo.monolithic.api.client.model.UserspaceFileDto;
 import ai.gebo.monolithic.api.client.model.UserspaceFolderDto;
 import ai.gebo.monolithic.api.client.model.UserspaceKnowledgebaseDto;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class UserspaceControllerApi {
     private ApiClient apiClient;

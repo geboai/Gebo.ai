@@ -82,6 +82,9 @@
 									<library>resttemplate</library>
 									<java8>true</java8>
 									<dateLibrary>java8</dateLibrary>
+									<!--
+									<generateSupportingFiles>false</generateSupportingFiles>
+									-->
 									<modelPackage>ai.gebo.monolithic.api.client.model</modelPackage>
 									<apiPackage>ai.gebo.monolithic.api.client.api</apiPackage>
 									<invokerPackage>ai.gebo.monolithic.api.client.invoker</invokerPackage>

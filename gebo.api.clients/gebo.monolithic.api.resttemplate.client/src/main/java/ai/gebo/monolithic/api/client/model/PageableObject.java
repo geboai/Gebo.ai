@@ -13,17 +13,15 @@
 package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.SortObject;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * PageableObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T08:39:57.819462600+01:00[Europe/Rome]")
 
 public class PageableObject {
   @JsonProperty("offset")
@@ -32,17 +30,17 @@ public class PageableObject {
   @JsonProperty("sort")
   private SortObject sort = null;
 
-  @JsonProperty("paged")
-  private Boolean paged = null;
-
   @JsonProperty("unpaged")
   private Boolean unpaged = null;
 
-  @JsonProperty("pageNumber")
-  private Integer pageNumber = null;
+  @JsonProperty("paged")
+  private Boolean paged = null;
 
   @JsonProperty("pageSize")
   private Integer pageSize = null;
+
+  @JsonProperty("pageNumber")
+  private Integer pageNumber = null;
 
   public PageableObject offset(Long offset) {
     this.offset = offset;
@@ -80,24 +78,6 @@ public class PageableObject {
     this.sort = sort;
   }
 
-  public PageableObject paged(Boolean paged) {
-    this.paged = paged;
-    return this;
-  }
-
-   /**
-   * Get paged
-   * @return paged
-  **/
-  @Schema(description = "")
-  public Boolean isPaged() {
-    return paged;
-  }
-
-  public void setPaged(Boolean paged) {
-    this.paged = paged;
-  }
-
   public PageableObject unpaged(Boolean unpaged) {
     this.unpaged = unpaged;
     return this;
@@ -116,22 +96,22 @@ public class PageableObject {
     this.unpaged = unpaged;
   }
 
-  public PageableObject pageNumber(Integer pageNumber) {
-    this.pageNumber = pageNumber;
+  public PageableObject paged(Boolean paged) {
+    this.paged = paged;
     return this;
   }
 
    /**
-   * Get pageNumber
-   * @return pageNumber
+   * Get paged
+   * @return paged
   **/
   @Schema(description = "")
-  public Integer getPageNumber() {
-    return pageNumber;
+  public Boolean isPaged() {
+    return paged;
   }
 
-  public void setPageNumber(Integer pageNumber) {
-    this.pageNumber = pageNumber;
+  public void setPaged(Boolean paged) {
+    this.paged = paged;
   }
 
   public PageableObject pageSize(Integer pageSize) {
@@ -152,6 +132,24 @@ public class PageableObject {
     this.pageSize = pageSize;
   }
 
+  public PageableObject pageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
+    return this;
+  }
+
+   /**
+   * Get pageNumber
+   * @return pageNumber
+  **/
+  @Schema(description = "")
+  public Integer getPageNumber() {
+    return pageNumber;
+  }
+
+  public void setPageNumber(Integer pageNumber) {
+    this.pageNumber = pageNumber;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -164,15 +162,15 @@ public class PageableObject {
     PageableObject pageableObject = (PageableObject) o;
     return Objects.equals(this.offset, pageableObject.offset) &&
         Objects.equals(this.sort, pageableObject.sort) &&
-        Objects.equals(this.paged, pageableObject.paged) &&
         Objects.equals(this.unpaged, pageableObject.unpaged) &&
-        Objects.equals(this.pageNumber, pageableObject.pageNumber) &&
-        Objects.equals(this.pageSize, pageableObject.pageSize);
+        Objects.equals(this.paged, pageableObject.paged) &&
+        Objects.equals(this.pageSize, pageableObject.pageSize) &&
+        Objects.equals(this.pageNumber, pageableObject.pageNumber);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(offset, sort, paged, unpaged, pageNumber, pageSize);
+    return Objects.hash(offset, sort, unpaged, paged, pageSize, pageNumber);
   }
 
 
@@ -183,10 +181,10 @@ public class PageableObject {
     
     sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    paged: ").append(toIndentedString(paged)).append("\n");
     sb.append("    unpaged: ").append(toIndentedString(unpaged)).append("\n");
-    sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
+    sb.append("    paged: ").append(toIndentedString(paged)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("}");
     return sb.toString();
   }
