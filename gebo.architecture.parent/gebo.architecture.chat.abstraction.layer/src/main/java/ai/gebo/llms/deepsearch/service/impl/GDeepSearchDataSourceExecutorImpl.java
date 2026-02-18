@@ -23,6 +23,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
@@ -70,7 +71,9 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));
 
 		flux = flux.subscribeOn(threadManager.getScheduler());
-		return deepSearchServiceImpl.mapToChatFlux(flux, DeepSearchProcessedEvent.class);
+		// put a chat response at the end
+
+		return deepSearchServiceImpl.mapToChatFlux(flux, DeepSearchChatResponseEvent.class);
 	}
 
 	private Flux<AbstractDeepSearchEvent> mapDataSourceProcessedToDeepSearchProcessed(
