@@ -646,7 +646,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 	@Override
 	public void updateRequest(GeboChatRequest request) throws GeboChatSessionLifecycleException {
-		GUserChatSession context = get(request.getUserChatContextCode());
+		GUserChatSession context = session(request);
+		ChatFullSessionState full = full(request);
+		ShrinkedChatSessionState shrinked = shrink(request);
 		boolean addInteraction = false;
 		Optional<ChatInteractions> alredyInInteraction = context.getInteractions().stream()
 				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
@@ -657,21 +659,16 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 		if (addInteraction)
 			context.getInteractions().add(interaction);
-		sessionRepository.save(context);
-		ChatFullSessionState full = this.fullSessionStateService.retrieveState(context);
-		ShrinkedChatSessionState shrinked = this.shrinkedSessionStateService.retrieveState(context);
+
 		if (shrinked.getCurrentRequest() != null && request.getId() != null
 				&& shrinked.getCurrentRequest().getId().equals(request.getId())) {
 			shrinked.setCurrentRequest(request);
-			this.shrinkedSessionStateService.save(shrinked);
 		} else
 			throw new GeboChatSessionLifecycleException(
 					"Logical problem, the request id to update does not match the actual one");
 		if (full.getCurrentRequest().getValue() != null && full.getCurrentRequest().getValue().getId() != null
 				&& request.getId() != null && full.getCurrentRequest().getValue().getId().equals(request.getId())) {
 			full.getCurrentRequest().setValue(request);
-			this.fullSessionStateService.save(full);
-
 		} else
 			throw new GeboChatSessionLifecycleException(
 					"Logical problem, the request id to update does not match the actual one");

@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class GUserChatSession extends GBaseObject {
 	private GObjectRef<GBaseChatModelConfig> modelReference = null; // Reference to the chat model configuration
 	private Boolean ragChat = null; // Indicates if the chat supports Retrieval-Augmented Generation
 	private String chatMemoryId = null; // Identifier for chat memory
-	private List<ChatInteractions> interactions = null; // List of chat interactions
+	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
 

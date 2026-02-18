@@ -3,6 +3,10 @@ package ai.gebo.architecture.integration.tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +64,7 @@ import ai.gebo.monolithic.api.client.model.FastSharepointSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.FastSharepointSystemInsertRequest.SharepointVersionEnum;
 import ai.gebo.monolithic.api.client.model.GGoogleSearchApiCredentials;
 import ai.gebo.monolithic.api.client.model.GUserMessage;
+import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboOauth2SecretContent;
 import ai.gebo.monolithic.api.client.model.GeboTokenContent;
 import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
@@ -87,6 +92,7 @@ import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationServi
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import redis.clients.jedis.json.Path;
 
 /****************************************************************************************
  * Base for llm multivendor integration tests, taking admin account, llm vendor
@@ -126,6 +132,29 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 			geboClient.setApiKey(header.getToken());
 		}
 		return geboClient;
+	}
+
+	protected void renew(ApiClient apiClient) {
+		TokenRenewControllerApi tr = new TokenRenewControllerApi(apiClient);
+		SecurityHeaderData renewed = tr.renew();
+		apiClient.setApiKey(renewed.getToken());
+	}
+
+	static class ChatRequestPlaybook extends ArrayList<GeboChatRequest> {
+	}
+
+	protected List<GeboChatRequest> loadChatRequests(String resource) throws IOException {
+		InputStream is = getClass().getResourceAsStream(resource);
+		if (is == null) {
+			java.nio.file.Path path = java.nio.file.Path.of(resource);
+			if (Files.exists(path)) {
+				is = Files.newInputStream(path);
+			}
+		}
+		if (is == null)
+			throw new FileNotFoundException(
+					"The resource " + resource + " cannot be load nor as intern or extern resource");
+		return mapper.readValue(is, ChatRequestPlaybook.class);
 	}
 
 	protected RestTemplate createRestTemplate() {

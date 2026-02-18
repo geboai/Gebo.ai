@@ -33,7 +33,10 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -68,6 +71,8 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	IGSecurityService securityService;
 	@Autowired
 	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+	@Autowired
+	GUserChatSessionRepository sessionRepo;
 
 	@Override
 	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, List<String> fullTextSearches,
@@ -77,6 +82,15 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		}
 
 		String chatProfileCode = request.getChatProfileCode();
+		if (chatProfileCode == null || chatProfileCode.trim().length() == 0) {
+			String id = request.getUserChatContextCode();
+			if (id == null)
+				throw new RuntimeException("The chat session have to be initialized");
+			GUserChatSession session = this.sessionRepo.findById(id).orElseThrow(() -> {
+				throw new RuntimeException("The chat session do not exist");
+			});
+			chatProfileCode = session.getChatProfileCode();
+		}
 		List<String> knowledgeBases = new ArrayList<String>();
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
 		double firstHopThreashold = chatConfigs.getDefaultSimilarityThreshold();
