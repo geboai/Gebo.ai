@@ -235,7 +235,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 */
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request) {
-		GUserChatSession userContext = null;
 
 		try {
 			// Retrieve current user's name and model configuration
@@ -244,7 +243,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 			// Initialize context for interaction
 			KBContext kbcontext = new KBContext();
-			kbcontext.setActualUser(userContext.getUsername());
+			kbcontext.setActualUser(currentUserName);
 			LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 			chatSessionLifecycleService.ensureChatSessionExists(request);
 			GeboChatResponse gresponse = chatSessionLifecycleService.createEmptyResponse(request);
@@ -270,9 +269,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux
+			LOGGER.error("Exception in streamChat(...)", e);
 			GeboChatMessageEnvelope<GeboChatResponse> responseEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
 			GeboChatResponse response = new GeboChatResponse();
-			response.setUserChatContextCode(userContext != null ? userContext.getCode() : null);
+			response.setUserChatContextCode(request.getUserChatContextCode());
 			response.getBackendMessages().add(GUserMessage.errorMessage("Chat system error", e));
 			responseEnvelope.setContent(response);
 			responseEnvelope.setLastMessage(true);

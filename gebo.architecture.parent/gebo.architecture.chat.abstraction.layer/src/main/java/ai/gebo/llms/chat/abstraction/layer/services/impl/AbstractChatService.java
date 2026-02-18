@@ -316,8 +316,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 			return returned;
 		}).onErrorResume(exc -> {
+			final String msg = "Error while streaming chat respose";
+			LOGGER.error(msg, exc);
 			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
-			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", exc);
+			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);			
 			exceptionEnvelope.setContent(userMessage);
 			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
