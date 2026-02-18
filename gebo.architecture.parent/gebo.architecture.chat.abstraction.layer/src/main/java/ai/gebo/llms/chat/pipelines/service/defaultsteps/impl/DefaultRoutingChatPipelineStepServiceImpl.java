@@ -1,6 +1,9 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,7 +169,16 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		templateParams.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
 				templateParams, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
-
+		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
+			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
+			List<String> realCodes = new ArrayList<String>();
+			systems.forEach(x -> {
+				if (x.startsWith(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX)) {
+					realCodes.add(x.substring(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX.length()));
+				}
+			});
+			decisionMap.put(SEARCHED_SYSTEM, realCodes);
+		}
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;

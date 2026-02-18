@@ -1,4 +1,4 @@
-[
+[ { "id": "req-00A", "query": "Cerca su internet tramite google che tempo fa domani a Livigno" },
   { "id": "req-001", "query": "Come configuro Spring Boot 3.5 per usare Redis come cache LRU distribuita in cluster con TTL e fallback?" },
   { "id": "req-002", "query": "In Spring Boot quando conviene usare @Service vs @Component e quando ha senso @Scope(\"singleton\")?" },
   { "id": "req-003", "query": "Hibernate: org.hibernate.TransientPropertyValueException in lettura dopo migrazione da Hibernate 3 a 5: cause tipiche e come risolvere?" },

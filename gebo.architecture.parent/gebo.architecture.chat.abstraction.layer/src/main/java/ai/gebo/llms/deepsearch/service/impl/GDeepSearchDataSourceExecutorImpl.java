@@ -3,6 +3,8 @@ package ai.gebo.llms.deepsearch.service.impl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProc
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
+import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
@@ -56,8 +59,12 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		deepSearchRequest.setUsername(securityService.getCurrentUser().getUsername());
 		this.deepSearchRequestRepository.save(deepSearchRequest);
 		final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getId());
+		AtomicInteger totalSteps = new AtomicInteger(0);
+		AtomicInteger doneSteps = new AtomicInteger(0);
+		AtomicBoolean completed = new AtomicBoolean(false);
+		DeepSearchState deepSearchState = new DeepSearchState();
 		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(chatModel, serviceModel, config, deepSearchRequest,
-				List.of(), chunkSessionId, null, null, null, null);
+				List.of(), chunkSessionId, totalSteps, doneSteps, completed, deepSearchState);
 		flux = mapDataSourceProcessedToDeepSearchProcessed(flux, deepSearchRequest);
 		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));

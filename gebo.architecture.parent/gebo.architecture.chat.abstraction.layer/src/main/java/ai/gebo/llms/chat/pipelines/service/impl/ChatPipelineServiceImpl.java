@@ -56,7 +56,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 				return x.isLastMessage() && x.getContent() instanceof GeboChatResponse;
 			});
 			GeboChatMessageEnvelope last = lastMessageFlux.blockLast();
-			if (last.getContent() instanceof GeboChatResponse _response) {
+			if (last!=null && last.getContent() instanceof GeboChatResponse _response) {
 				response = _response;
 			} else {
 				LOGGER.warn("No GeboChatResponse as output");
