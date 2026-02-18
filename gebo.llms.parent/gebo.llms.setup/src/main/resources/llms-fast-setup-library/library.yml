@@ -233,12 +233,10 @@ ai.gebo.llms.vendors.setup.config:
             - code: deepseek-r1-70b
               description: DeepSeek R1 70b
               uses: CHAT
+              defaultChoice: true
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
-            - code: qwen3-30b
-              description: Qwen3 30b
-              defaultChoice: true
             - code: Llama-3.3-70B-Instruct
               description: Meta LLama 3.3 70b instruct
               uses: CHAT

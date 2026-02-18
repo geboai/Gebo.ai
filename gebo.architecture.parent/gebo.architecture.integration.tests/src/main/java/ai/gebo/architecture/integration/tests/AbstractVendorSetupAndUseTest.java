@@ -406,12 +406,14 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 						LOGGER.info("(info) " + msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
-					case ERROR: {
-						LOGGER.error(msg.getSummary() + " -> " + msg.getDetail());
-					}
-						break;
+					
 					case SUCCESS: {
 						LOGGER.info("(success)" + msg.getSummary() + " -> " + msg.getDetail());
+					}
+						break;
+					case ERROR:
+					default:{
+						LOGGER.error(msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
 					}
