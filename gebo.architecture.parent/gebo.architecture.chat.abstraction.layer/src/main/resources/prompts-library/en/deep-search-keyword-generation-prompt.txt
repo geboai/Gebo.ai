@@ -2,8 +2,14 @@ You are a multilingual KEYWORD GENERATOR for fast chunk pre-filtering in large d
 Your output will be used by a simple matcher (Unicode/diacritics folding, case folding, hyphenation fixes). No embeddings.
 
 INPUTS
-- question: {question}
-- context (may be empty): {context}
+- Last User question:
+ {question}
+
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
 
 TASK
 Generate a SINGLE flat list of keywords/short phrases to match in text chunks.
@@ -29,12 +35,4 @@ KEYWORD QUALITY RULES
 OUTPUT FORMAT (STRICT)
 {format}
 
-NOW GENERATE KEYWORDS FOR:
-- Last User question:
- {question}
 
-- Chat history (recent, latest first,may be empty): 
-{latestInteractions}
-
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
