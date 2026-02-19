@@ -24,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
@@ -83,10 +84,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	private List<Flux<AbstractDeepSearchEvent>> dataSourcesDeepSearch(DeepSearchRequest request,
-			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
-			List<IGReactiveDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler,
-			String chunkingSessionId, AtomicBoolean completed) throws LLMConfigException, IOException,
+			MinimalChatContext minimalChatContext, List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults,
+			DeepSearchState state, List<IGReactiveDeepSearchDataSourceService> handlers,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
+			Scheduler deepSearchScheduler, String chunkingSessionId, AtomicBoolean completed) throws LLMConfigException, IOException,
 			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin dataSourcesNextStep(....)");
@@ -110,7 +111,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				state.getDataSourcesStatusDoneSteps().put(handler.getHandlerId(), doneSteps);
 
 				nextStepValue = handler.streamSearch(chatModel, serviceModel, deepSearchConfig, request,
-						dataSourcesResults, chunkingSessionId, totalSteps, doneSteps, completed, state);
+						minimalChatContext, dataSourcesResults, chunkingSessionId, totalSteps, doneSteps, completed, state);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 							"Extracting relevant documents",
@@ -139,10 +140,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
 	}
 
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, AIDocumentsSet sessionDocuments,
-			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			AIDocumentsSet sessionDocuments, List<AbstractDeepSearchEvent> history, DeepSearchState state,
+			DeepSearchConfig configuration, UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
 			throws LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
@@ -170,9 +171,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				if (!handlers.isEmpty()) {
 
 					try {
-						List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesDeepSearch(request, history,
-								dataSourcesResults, state, handlers, chatModel, serviceModel, configuration,
-								deepSearchScheduler, chunkingSessionId, completed);
+						List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesDeepSearch(request, minimalChatContext,
+								history, dataSourcesResults, state, handlers, chatModel, serviceModel,
+								configuration, deepSearchScheduler, chunkingSessionId, completed);
 						sources.addAll(newSources);
 					} catch (Throwable e) {
 						LOGGER.error("Exception accessing deep search data source", e);
@@ -195,7 +196,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
 						.knowledgeBaseDeepSearch(request, sessionDocuments, dataSourcesResults, history, state,
-								configuration, userInfos, chatModel, chunkingSessionId, embeddingModels, completed);
+								configuration, userInfos, chatModel, chunkingSessionId, embeddingModels, completed, minimalChatContext);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);

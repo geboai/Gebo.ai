@@ -317,8 +317,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		assertNotNull(opt.isEmpty(), "Shrinked state must be already being calculated");
 		shrinkedState = opt.get();
-		if (shrinkedState.getConsolidatedInteractions() != null) {
-			LOGGER.info("Consolidated text:" + shrinkedState.getConsolidatedInteractions().getConsolidationText());
+		if (shrinkedState.getChatHistory() != null) {
+			LOGGER.info("Consolidated text:" + shrinkedState.getChatHistory().getConsolidationText());
 		}
 
 		LOGGER.info("Shrinked state:" + shrinkedState);
@@ -400,8 +400,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		assertNotNull(opt.isEmpty(), "Shrinked state must be already being calculated");
 		shrinkedState = opt.get();
-		if (shrinkedState.getConsolidatedInteractions() != null) {
-			LOGGER.info("Consolidated text:" + shrinkedState.getConsolidatedInteractions().getConsolidationText());
+		if (shrinkedState.getChatHistory() != null) {
+			LOGGER.info("Consolidated text:" + shrinkedState.getChatHistory().getConsolidationText());
 		}
 
 		LOGGER.info("Shrinked state:" + shrinkedState);

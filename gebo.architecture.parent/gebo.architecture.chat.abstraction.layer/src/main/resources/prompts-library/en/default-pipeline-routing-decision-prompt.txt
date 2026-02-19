@@ -20,6 +20,9 @@ INPUTS:
 - latest chat interactions, with past routing decisions made (if available) latest first (may be empty):
 {latestInteractions}
 
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
+
 (B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT HISTORY (WILL BE SENT TO LLM FOR EACH ROUTING OPTION) (may be empty):
 {documents}
 

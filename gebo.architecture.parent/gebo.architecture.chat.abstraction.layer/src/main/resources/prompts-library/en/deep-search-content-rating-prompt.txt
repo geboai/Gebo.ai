@@ -42,8 +42,14 @@ OUTPUT RULES
 {format}
 
 INPUTS
-USER_QUERY:
-{question}
+- Last User question:
+ {question}
+
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
 
 CANDIDATES (JSON data):
 {documents}

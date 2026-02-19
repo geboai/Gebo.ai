@@ -54,6 +54,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
@@ -844,5 +845,13 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		this.sessionRepository.save(context);
 		this.fullSessionStateService.save(state);
 		this.shrinkedSessionStateService.save(shrinked);
+	}
+
+	@Override
+	public CSSConsolidatedChatHistory getChatHistoryConsolidation(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+		GUserChatSession context = session(request);
+		ChatFullSessionState state = full(request);
+		ShrinkedChatSessionState shrinked = shrink(request);
+		return shrinked.getChatHistory();
 	}
 }

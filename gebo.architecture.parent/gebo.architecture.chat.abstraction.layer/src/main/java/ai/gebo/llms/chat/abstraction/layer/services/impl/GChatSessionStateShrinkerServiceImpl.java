@@ -37,7 +37,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteractio
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplifiedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatInteractionsConsolidationData;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedDocumentOrigin;
 import ai.gebo.model.DocumentMetaInfos;
@@ -103,32 +103,29 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 						.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 				if (usedChatModel == null)
 					throw new LLMConfigException("No Internal services or default chat model present");
-				out.setConsolidatedInteractions(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
+				out.setChatHistory(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
 						oldVersion, usedChatModel));
-				out.setChatHistory(copyLatest(full.getChatHistory().getValue()));
+
 				out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(full, full.getChatWithDocuments()),
-						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
-						oldVersion.getRelevantChatWithDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.CHAT_WITH_SELECTED));
+						out.getChatHistory(), oldVersion.getRelevantChatWithDocuments(), tokensBudget,
+						usedChatModel, ShrinkedDocumentOrigin.CHAT_WITH_SELECTED));
 				out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(full, full.getRetrievedDocuments()),
-						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
-						oldVersion.getRelevantRetrievedDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.RETRIEVED));
-				out.setRelevantLlmGeneratedDocuments(shrinkDocumentList(
-						untillLatest(full, full.getLlmGeneratedDocuments()), full.getChatHistory().getValue(),
-						out.getConsolidatedInteractions(), oldVersion.getRelevantLlmGeneratedDocuments(), tokensBudget,
-						usedChatModel, ShrinkedDocumentOrigin.GENERATED));
+						out.getChatHistory(), oldVersion.getRelevantRetrievedDocuments(), tokensBudget,
+						usedChatModel, ShrinkedDocumentOrigin.RETRIEVED));
+				out.setRelevantLlmGeneratedDocuments(
+						shrinkDocumentList(untillLatest(full, full.getLlmGeneratedDocuments()),
+								out.getChatHistory(), oldVersion.getRelevantLlmGeneratedDocuments(),
+								tokensBudget, usedChatModel, ShrinkedDocumentOrigin.GENERATED));
 				out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
-						full.getChatHistory().getValue(), out.getConsolidatedInteractions(),
-						oldVersion.getRelevantUploadedDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.UPLOADED));
+						out.getChatHistory(), oldVersion.getRelevantUploadedDocuments(), tokensBudget,
+						usedChatModel, ShrinkedDocumentOrigin.UPLOADED));
 				int tokensSize = out.getTokensSize();
 				CSSReferredContentList latestRequestsChatWithDocuments = afterLatest(full, full.getChatWithDocuments());
 				if (tokensBudget < (tokensSize + latestRequestsChatWithDocuments.getTokensSize())) {
 					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
 							latestRequestsChatWithDocuments, latestRequestsChatWithDocuments.getTokensSize());
-					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
-							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd,
+							out.getChatHistory(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
 							usedChatModel, ShrinkedDocumentOrigin.CHAT_WITH_SELECTED);
 					out.getRelevantChatWithDocuments().addAll(shrinkedDocs);
 				} else {
@@ -140,8 +137,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				if (tokensBudget < (tokensSize + latestRequestsLlmGeneratedDocuments.getTokensSize())) {
 					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
 							latestRequestsLlmGeneratedDocuments, latestRequestsLlmGeneratedDocuments.getTokensSize());
-					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
-							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd,
+							out.getChatHistory(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
 							usedChatModel, ShrinkedDocumentOrigin.GENERATED);
 					out.getRelevantLlmGeneratedDocuments().addAll(shrinkedDocs);
 				} else {
@@ -153,8 +150,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				if (tokensBudget < (tokensSize + latestRequestsRetrievedDocuments.getTokensSize())) {
 					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
 							latestRequestsRetrievedDocuments, latestRequestsRetrievedDocuments.getTokensSize());
-					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
-							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd,
+							out.getChatHistory(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
 							usedChatModel, ShrinkedDocumentOrigin.RETRIEVED);
 					out.getRelevantRetrievedDocuments().addAll(shrinkedDocs);
 				} else {
@@ -165,8 +162,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				if (tokensBudget < (tokensSize + latestRequestsRetrievedDocuments.getTokensSize())) {
 					TokensContainer<CSSReferredContentList> lrcwd = new TokensContainer<CSSReferredContentList>(
 							latestRequestsUploadedDocuments, latestRequestsUploadedDocuments.getTokensSize());
-					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
-							out.getConsolidatedInteractions(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
+					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd,
+							out.getChatHistory(), new CSSfRelevantShrinkedDocumentList(), tokensBudget,
 							usedChatModel, ShrinkedDocumentOrigin.GENERATED);
 					out.getRelevantUploadedDocuments().addAll(shrinkedDocs);
 				} else {
@@ -191,7 +188,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		lastIndex = Math.max(lastIndex, 0);
 		CSSSimplifiedChatHistory newHistory = new CSSSimplifiedChatHistory();
 		for (int i = lastIndex; i < value.getInteractions().size(); i++) {
-			newHistory.getInteractions().add(value.getInteractions().get(i));
+			CSSSimplefiedInteraction entry = value.getInteractions().get(i);
+			entry = (CSSSimplefiedInteraction) entry.clone();
+			entry.setInteractionIndex(i);
+			newHistory.getInteractions().add(entry);
 		}
 		return newHistory;
 	}
@@ -238,19 +238,17 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 	}
 
 	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(TokensContainer<? extends CSSReferredContentList> docs,
-			CSSSimplifiedChatHistory chatHistory, GUserChatInteractionsConsolidationData consolidated,
-			CSSfRelevantShrinkedDocumentList alreadyElaborated, int tokensBudget, IGConfigurableChatModel usedChatModel,
-			ShrinkedDocumentOrigin origin) throws LLMConfigException, IOException {
+			CSSConsolidatedChatHistory consolidated, CSSfRelevantShrinkedDocumentList alreadyElaborated,
+			int tokensBudget, IGConfigurableChatModel usedChatModel, ShrinkedDocumentOrigin origin)
+			throws LLMConfigException, IOException {
 		CSSfRelevantShrinkedDocumentList outList = new CSSfRelevantShrinkedDocumentList();
 
 		if (docs != null && docs.getValue() != null && !docs.getValue().getData().isEmpty()) {
 			Map<String, AIDocumentReferenceItem> refsMap = new HashMap<String, AIDocumentReferenceItem>();
 			StringBuffer lastTurns = new StringBuffer();
-			int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
-					.getLeaveLastInteractionsOnHistoryConsolidation();
-			for (int i = chatHistory.getInteractions().size() - 1; i >= 0
-					&& i >= (chatHistory.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation); i--) {
-				CSSSimplefiedInteraction interaction = chatHistory.getInteractions().get(i);
+
+			for (int i = consolidated.getLatestEntries().getInteractions().size() - 1; i >= 0; i--) {
+				CSSSimplefiedInteraction interaction = consolidated.getLatestEntries().getInteractions().get(i);
 				if (interaction.getUser() != null && interaction.getUser().trim().length() > 0) {
 					lastTurns.append(USER_MSG);
 					lastTurns.append(interaction.getUser());
@@ -339,8 +337,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		return outList;
 	}
 
-	private GUserChatInteractionsConsolidationData consolidateHistory(CSSSimplifiedChatHistory value,
-			int historySizeTarget, ShrinkedChatSessionState oldVersion, IGConfigurableChatModel usedChatModel) {
+	private CSSConsolidatedChatHistory consolidateHistory(CSSSimplifiedChatHistory value, int historySizeTarget,
+			ShrinkedChatSessionState oldVersion, IGConfigurableChatModel usedChatModel) {
 		List<LLMInputDocument> inputs = new ArrayList<BaseLLMSInvokingAndProvidingService.LLMInputDocument>();
 		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 		String prompt = _prompt.getPrompt();
@@ -350,6 +348,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		int leaveLastInteractionsOnHistoryConsolidation = this.chatConfig
 				.getLeaveLastInteractionsOnHistoryConsolidation();
 		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
+
+		CSSConsolidatedChatHistory newConsolidation = new CSSConsolidatedChatHistory();
+		newConsolidation.setLatestEntries(copyLatest(value));
 		if (lastIndex > 0) {
 			for (int i = 0; i < lastIndex; i++) {
 				StringBuffer new_messages = new StringBuffer();
@@ -370,13 +371,14 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
 			String consolidated = callLLMConsolidateText(usedChatModel, prompt, "", existingSummary, params, inputs);
-			GUserChatInteractionsConsolidationData newConsolidation = new GUserChatInteractionsConsolidationData();
+
 			newConsolidation.setConsolidationText(consolidated);
 			newConsolidation.setLastInteractionPointer(lastIndex);
-			newConsolidation.setTokensSize(tokensEstimator.estimate(newConsolidation.getConsolidationText()));
-			return newConsolidation;
-		} else
-			return null;
+			int tokens = (tokensEstimator.estimate(newConsolidation.getConsolidationText()));
+			newConsolidation.setConsolidationTextTokenSize(tokens);
+
+		}
+		return newConsolidation;
 	}
 
 }

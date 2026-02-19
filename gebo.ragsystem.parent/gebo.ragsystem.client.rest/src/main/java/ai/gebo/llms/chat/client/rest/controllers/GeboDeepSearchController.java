@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -133,7 +134,7 @@ public class GeboDeepSearchController {
 
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearchWithChatContext(
-			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException {
+			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchChatResponseEvent.class);
 	}

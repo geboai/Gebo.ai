@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -51,8 +53,18 @@ public class ChatFullSessionState implements ITokensCountable, IChatRequestFacto
 	@Override
 	public LLMChatRequestResources createChatRequestResources(LLMRequestGenerationPolicy pol) {
 		return new LLMChatRequestResources(toDocsSet(chatWithDocuments), toDocsSet(retrievedDocuments),
-				toDocsSet(uploadedDocuments), toDocsSet(llmGeneratedDocuments), null,
-				chatHistory.getValue().getInteractions(), currentRequest.getValue(), pol);
+				toDocsSet(uploadedDocuments), toDocsSet(llmGeneratedDocuments), adaptHistory(),
+				currentRequest.getValue(), pol);
+	}
+
+	private CSSConsolidatedChatHistory adaptHistory() {
+		CSSConsolidatedChatHistory history = new CSSConsolidatedChatHistory();
+		List<CSSSimplefiedInteraction> interactions = this.getChatHistory().getValue().getInteractions();
+		for (CSSSimplefiedInteraction cssSimplefiedInteraction : interactions) {
+			history.getLatestEntries().getInteractions()
+					.add((CSSSimplefiedInteraction) cssSimplefiedInteraction.clone());
+		}
+		return history;
 	}
 
 }

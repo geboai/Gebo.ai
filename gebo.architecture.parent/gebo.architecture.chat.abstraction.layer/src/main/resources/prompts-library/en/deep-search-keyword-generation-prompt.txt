@@ -30,5 +30,11 @@ OUTPUT FORMAT (STRICT)
 {format}
 
 NOW GENERATE KEYWORDS FOR:
-question: {question}
-context: {context}
+- Last User question:
+ {question}
+
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}

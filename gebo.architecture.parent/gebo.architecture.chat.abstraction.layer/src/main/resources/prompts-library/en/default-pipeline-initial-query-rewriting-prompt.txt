@@ -26,9 +26,12 @@ Introduce assumptions or guesses.
 
 INPUTS:
 
-Chat history (recent, latest first): {latestInteractions}
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
 
-Latest user question: {question}
+- Latest user question: {question}
 
 REWRITE RULES:
 

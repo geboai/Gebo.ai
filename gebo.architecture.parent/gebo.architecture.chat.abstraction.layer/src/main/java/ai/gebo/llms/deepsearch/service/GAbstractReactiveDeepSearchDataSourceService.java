@@ -37,7 +37,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
@@ -115,15 +117,17 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps,
-			AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException,
-			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed,
+			DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException {
 		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
 		}
 		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
-
+		final Map<String, Object> chatContextTemplateParams = CommonChatPromptParamsUtil
+				.preparePromptParameters(minimalChatContext);
 		Flux<SearchResultsList> searchFlux = Flux.defer(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deferred generation for handler id: " + getHandlerId());
@@ -131,8 +135,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			SearchResultsList actualResultsSnapshots = new SearchResultsList();
 			DeepSearchDataSourceExtractedSearchQueries searchQueries;
 			try {
-				searchQueries = extractSearchQueries(request, pastSystemsResponses, deepSearchConfig, chatModel,
-						serviceModel, "");
+				searchQueries = extractSearchQueries(request, minimalChatContext, pastSystemsResponses,
+						deepSearchConfig, chatModel, serviceModel, "");
 			} catch (LLMConfigException e) {
 				LOGGER.error("Error exctracting search", e);
 				return Flux.just(actualResultsSnapshots);
@@ -151,7 +155,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 			for (SearchQuery query : searchQueries.getSearchQuery()) {
 				try {
-					List<SearchResult> results = executeSearch(query, request);
+					List<SearchResult> results = executeSearch(query, request, minimalChatContext);
 					if (results.isEmpty())
 						continue;
 					SearchWithResults sr = new SearchWithResults();
@@ -187,7 +191,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 		KeywordsList chunkingKeywordsMatching = callLLMStructuredReturn(serviceModel,
 				promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_KEYWORD_GENERATION_PROMPT).getPrompt(),
-				request.getQuery(), Map.of("context", ""), KeywordsList.class);
+				request.getQuery(), chatContextTemplateParams, KeywordsList.class);
 
 		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
 				chatModel.getContextLength() * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
@@ -211,7 +215,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			}
 			List<SearchResult> nextList = new ArrayList<SearchResult>();
 			try {
-				rankingService.rateReferences(serviceModel, deepSearchConfig, list, request, sharedRatingStructure);
+				rankingService.rateReferences(serviceModel, minimalChatContext, deepSearchConfig, list, request,
+						sharedRatingStructure);
 				int delta = deepSearchDefaultConfig.getPerDataSourceMaxVisited() - doneSteps.intValue();
 				int nExtract = delta;
 				Math.min(delta, deepSearchDefaultConfig.getMaxExternalSourcesSearchResults());
@@ -253,7 +258,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							+ actualSearchResultToLoad.getCode());
 				}
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
-						"", this.customContentExtractionType, aggregator, inputs, true);
+						"", chatContextTemplateParams, this.customContentExtractionType, aggregator, inputs, true);
 			} catch (Throwable th) {
 				LOGGER.error("Error in mapping calling llm", th);
 				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
@@ -311,8 +316,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		});
 		Flux<AbstractDeepSearchEvent> additionalAnalisys = additionalAnalisys(chunksLoadFunction, request, chatModel,
 				deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents, avoidMultipleAccess);
-		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request, chatModel,
-				deepSearchConfig, listedEvents, deepSearchState);
+		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request,
+				chatContextTemplateParams, chatModel, deepSearchConfig, listedEvents, deepSearchState);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamSearch(....) handler=" + getHandlerId());
@@ -366,8 +371,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	}
 
 	private Flux<AbstractDeepSearchEvent> consolidateDeepSearchDataSourceProcessedEvent(DeepSearchRequest request,
-			IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			Vector<AbstractDeepSearchEvent> listedEvents, DeepSearchState deepSearchState) {
+			Map<String, Object> currentChatContextParams, IGConfigurableChatModel chatModel,
+			DeepSearchConfig deepSearchConfig, Vector<AbstractDeepSearchEvent> listedEvents,
+			DeepSearchState deepSearchState) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin consolidateDeepSearchDataSourceProcessedEvent(....)");
 		}
@@ -417,7 +423,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				processed.getOutputData()
 						.setResponse(callLLMConsolidateText(chatModel, promptsDao
 								.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-								request.getQuery(), "", input));
+								request.getQuery(), "", currentChatContextParams, input));
 				processed.getOutputData().setProcessPercentage(deepSearchState.calculateProcessedPercent());
 				outValue = processed;
 			} catch (Throwable th) {
@@ -497,63 +503,20 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
 
-	private DeepSearchDataSourceProcessedEvent consolidate(List<DeepSearchDataSourceDocumentResult> cumulatedAnalisys,
-			DeepSearchRequest request, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
-		List<LLMInputDocument> inputs = cumulatedAnalisys.stream().map(x -> {
-			String documentUrl = null;
-			String title = null;
-			if (x.getAnalyzedSearchResult().getResultReference() != null) {
-				documentUrl = x.getAnalyzedSearchResult().getResultReference().getUri();
-				title = x.getAnalyzedSearchResult().getResultReference().getTitle();
-			}
-			if (x.getAnalyzedSearchResult().getNavigationReference() != null
-					&& x.getAnalyzedSearchResult().getNavigationReference().path != null) {
-				title = x.getAnalyzedSearchResult().getNavigationReference().path.name;
-			}
-			if (title == null) {
-				title = documentUrl;
-			}
-			String documentReference = "extracted from: " + x.getDataSourceDescription() + " document: " + title;
-
-			LLMInputDocument input = new LLMInputDocument(documentReference, documentUrl, title,
-					x.getAnalisysResult());
-			return input;
-		}).toList();
-		DeepSearchDataSourceProcessedEvent event = new DeepSearchDataSourceProcessedEvent();
-		event.setInputData(request);
-		event.setOutputData(new DeepSearchDataSourceResponse());
-		event.getOutputData().setDataSourceDescription(this.getDescription(chatModel, deepSearchConfig, request));
-		event.getOutputData().setHandlerId(getHandlerId());
-		event.getOutputData().setDeepsearchCode(request.getCode());
-		event.getOutputData().setSearchResultsEmpty(cumulatedAnalisys.isEmpty());
-		List<SearchResultReference> dsReferences = new ArrayList<SearchResultReference>();
-		for (DeepSearchDataSourceDocumentResult r : cumulatedAnalisys) {
-			if (r.getAnalyzedSearchResult() != null && r.getAnalyzedSearchResult().getResultReference() != null)
-				dsReferences.add(r.getAnalyzedSearchResult().getResultReference());
-		}
-		event.getOutputData().setDataSourceReferences(dsReferences);
-		if (!cumulatedAnalisys.isEmpty()) {
-			String data = super.callLLMConsolidateText(chatModel,
-					promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-					request.getQuery(), null, inputs);
-			event.getOutputData().setResponse(data);
-		}
-		return event;
-	}
-
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned);
 
-	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
-			throws IOException, SearchServiceException;
+	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request,
+			MinimalChatContext minimalChatContext) throws IOException, SearchServiceException;
 
 	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String consolidatedText)
-			throws LLMConfigException {
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String consolidatedText) throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin extractSearchQueries(...) handler:" + getHandlerId());
 		}
-		String prompt = createExtractSearchQueriesPrompt(request, pastSystemsResponses, deepSearchConfig, serviceModel);
+		String prompt = createExtractSearchQueriesPrompt(request, minimalChatContext, pastSystemsResponses,
+				deepSearchConfig, serviceModel);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
@@ -611,6 +574,6 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	}
 
 	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel);
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel);
 }

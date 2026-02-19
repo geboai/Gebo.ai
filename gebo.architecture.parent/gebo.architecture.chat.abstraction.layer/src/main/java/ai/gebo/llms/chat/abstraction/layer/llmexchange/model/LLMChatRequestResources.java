@@ -13,7 +13,9 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,10 +33,10 @@ public class LLMChatRequestResources implements ITokensCountable {
 	// turns
 	private AIDocumentsSet uploadedDocuments = null;
 	private AIDocumentsSet llmGeneratedDocuments = null;
-	private String chatConsolidation = null;
-	private List<CSSSimplefiedInteraction> lastInteractions = null;
-	private GeboChatRequest lastRequest = null;
+	private CSSConsolidatedChatHistory chathistory = null;
+	private GeboChatRequest currentRequest = null;
 	private LLMRequestGenerationPolicy generationPolicy;
+
 	@AllArgsConstructor
 	static final class InteractionWrapper implements IChatSessionEntry {
 		CSSSimplefiedInteraction interaction = null;
@@ -56,8 +58,8 @@ public class LLMChatRequestResources implements ITokensCountable {
 	public int getTokensSize() {
 		int size = 0;
 		size += ITokensCountable.tokensSize(llmGeneratedDocuments, chatWithDocuments, uploadedDocuments,
-				retrievedDocuments, lastRequest);
-		size += ITokensCountable.tokensSize(lastInteractions);
+				retrievedDocuments, currentRequest);
+		size += ITokensCountable.tokensSize(chathistory);
 		return size;
 	}
 
@@ -66,14 +68,16 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getConsolidatedHistory() {
 
-			return chatConsolidation != null ? chatConsolidation : "";
+			return chathistory != null && chathistory.getConsolidationText() != null
+					? chathistory.getConsolidationText()
+					: "";
 		}
 
 		@Override
 		public List<IChatSessionEntry> getInteractions() {
 			List<IChatSessionEntry> entries = new ArrayList<IChatSessionEntry>();
-			if (lastInteractions != null) {
-				for (CSSSimplefiedInteraction i : lastInteractions) {
+			if (chathistory.getLatestEntries() != null) {
+				for (CSSSimplefiedInteraction i : chathistory.getLatestEntries().getInteractions()) {
 					entries.add(new InteractionWrapper(i));
 				}
 			}
@@ -89,7 +93,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public String getActualUserRequest() {
 
-			return GeboChatRequest.actualQuery(lastRequest);
+			return GeboChatRequest.actualQuery(currentRequest);
 		}
 
 		@Override
@@ -133,6 +137,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 
 	public void removeAIDocumentReferenceByCode(String docId) {
 		AIDocumentsSet.removeAIDocumentReferenceByCode(docId, chatWithDocuments, retrievedDocuments, uploadedDocuments,
-				 llmGeneratedDocuments);
+				llmGeneratedDocuments);
+	}
+
+	public MinimalChatContext createMinimalChatContext() {
+		MinimalChatContext mcc = new MinimalChatContext();
+		mcc.setChatHistory(chathistory);
+		mcc.setCurrentRequest(currentRequest);
+		return mcc;
 	}
 }

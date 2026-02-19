@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
@@ -98,7 +99,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	@Override
-	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request)
+	protected List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request, MinimalChatContext minimalChatContext)
 			throws IOException, SearchServiceException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
@@ -122,8 +123,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 
 	@Override
 	protected String createExtractSearchQueriesPrompt(DeepSearchRequest request,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel) {
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
 
 		String standardPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT).getPrompt();

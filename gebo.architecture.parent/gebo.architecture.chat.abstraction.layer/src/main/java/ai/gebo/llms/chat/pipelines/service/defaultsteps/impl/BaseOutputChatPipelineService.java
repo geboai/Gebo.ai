@@ -27,6 +27,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentSe
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -61,10 +62,10 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 
 		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(runtimeData.getRequestResources().getLastRequest(),
+		AIDocumentsSet documentSet = searchesService.search(runtimeData.getRequestResources().getCurrentRequest(),
 				searchRewritings.getRewrittenSemanticSearchSentences(),
 				searchRewritings.getRewrittenFullTextSearchSentences(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()),
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()),
 				configuration.getGlobalRagTopK(), tokensBudget);
 
 		return documentSet;
@@ -100,8 +101,11 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
 				DefaultPipelineSharedPromptPlaceholders.DOCUMENTS_TEMPLATE_PARAM,
 				DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM);
+		Map<String, Object> chatContextParams = CommonChatPromptParamsUtil
+				.preparePromptParameters(runtimeData.getRequestResources());
+		params.putAll(chatContextParams);
 		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt.getPrompt(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()), params,
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()), params,
 				List.of(DATASOURCES_FIELD, SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD, DOCUMENT_CODES_FIELD));
 		SearchesSuggestions outValue = new SearchesSuggestions();
 		outValue.setDeepSearchDataSources(fieldEntries.get(DATASOURCES_FIELD));
@@ -190,8 +194,8 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				targetChatModel.getContextLength());
 		out = AIDocumentsSet.join(out, searchResult);
 		if (!out.getDocumentItems().isEmpty()) {
-			rc = chatSessionLifecycleService.addRetrievedDocuments(runtimeData.getRequestResources().getLastRequest(),
-					out, targetChatModel, policy);
+			rc = chatSessionLifecycleService.addRetrievedDocuments(
+					runtimeData.getRequestResources().getCurrentRequest(), out, targetChatModel, policy);
 		} else
 			rc = runtimeData.getRequestResources();
 		return rc;

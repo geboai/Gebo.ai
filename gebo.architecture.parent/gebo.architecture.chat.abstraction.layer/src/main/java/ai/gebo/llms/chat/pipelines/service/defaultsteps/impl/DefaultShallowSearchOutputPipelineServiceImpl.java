@@ -11,6 +11,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -54,11 +55,12 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 		if (_choosedSourceId != null && _choosedSourceId instanceof List list && !list.isEmpty()) {
 			choosedSourceId = list.get(0).toString();
 		}
+		MinimalChatContext minimalChatContext = runtimeData.getRequestResources().createMinimalChatContext();
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
 				serviceModel, config, null);
 		try {
-			return executor.execute(handler, runtimeData.getRequestResources().getLastRequest(),
+			return executor.execute(handler, runtimeData.getRequestResources().getCurrentRequest(), minimalChatContext,
 					runtimeData.getChatResponse(), chatModel, serviceModel);
 		} catch (LLMConfigException | IOException | GeboIngestionException | GeboContentHandlerSystemException
 				| SearchServiceException e) {

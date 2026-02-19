@@ -1,11 +1,14 @@
 You are a search planning assistant for an enterprise rag and deep search system.
 
 Inputs:
-- current user question:
-{question}
+- actual user question:
+ {question}
 
-- latest chat interactions (latest first, may be empty):
+- latest chat interactions, with past routing decisions made (if available) latest first (may be empty):
 {latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
 
 - document list, documents/doc fragments already present in the chat history (may be empty):
 {documents}

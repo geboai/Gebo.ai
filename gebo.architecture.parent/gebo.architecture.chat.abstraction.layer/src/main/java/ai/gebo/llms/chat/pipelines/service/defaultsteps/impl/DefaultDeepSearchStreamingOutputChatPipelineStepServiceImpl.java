@@ -85,7 +85,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			flux.doOnComplete(() -> {
 				try {
 					this.chatSessionLifecycleService
-							.chatRequestCompleted(runtimeData.getRequestResources().getLastRequest(), chatModel);
+							.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(), chatModel);
 				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 					LOGGER.error("Exceptinin deep search streaming pipeline handler", e);
 				}

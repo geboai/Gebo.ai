@@ -1,5 +1,6 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,12 +38,14 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
@@ -153,8 +156,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 	}
 
 	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(DeepSearchRequest request,
-			AIDocumentsSet allDocuments, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
-			throws LLMConfigException {
+			MinimalChatContext minimalChatContext, AIDocumentsSet allDocuments, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		return Mono.fromCallable(() -> {
@@ -182,7 +185,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 							"No chat model configured for deep search nor default chat model is configured"));
 				}
 
-				return Prepared.ok(request, configuration, userInfos, embeddingModels, chatModel, serviceModel, null);
+				return Prepared.ok(request, minimalChatContext, configuration, userInfos, embeddingModels, chatModel,
+						serviceModel, null);
 
 			} finally {
 				SecurityContextHolder.clearContext();
@@ -197,9 +201,9 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
-				flow = worker.streamDeepSearch(prep.request, allDocuments, new ArrayList<>(), new DeepSearchState(),
-						prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, prep.serviceModel,
-						deepSearchScheduler, chunkSessionId);
+				flow = worker.streamDeepSearch(prep.request, minimalChatContext, allDocuments, new ArrayList<>(),
+						new DeepSearchState(), prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,
+						prep.serviceModel, deepSearchScheduler, chunkSessionId);
 				if (flow != null) {
 					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
 				}
@@ -238,7 +242,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		out = this.fullReactivestreamDeepSearch(request, new AIDocumentsSet(), chatModel, serviceModel);
+		out = this.fullReactivestreamDeepSearch(request, new MinimalChatContext(), new AIDocumentsSet(), chatModel,
+				serviceModel);
 
 		return out.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
@@ -272,6 +277,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	private static final class Prepared {
 		final DeepSearchRequest request;
+		final MinimalChatContext minimalChatContext;
 		final DeepSearchConfig configuration;
 		final UserInfos userInfos;
 		final List<IGConfigurableEmbeddingModel> embeddingModels;
@@ -279,10 +285,12 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		final IGConfigurableChatModel serviceModel;
 		final AbstractDeepSearchEvent errorEvent;
 
-		private Prepared(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
-				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
-				IGConfigurableChatModel serviceModel, AbstractDeepSearchEvent errorEvent) {
+		private Prepared(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+				DeepSearchConfig configuration, UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels,
+				IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+				AbstractDeepSearchEvent errorEvent) {
 			this.request = request;
+			this.minimalChatContext = minimalChatContext;
 			this.configuration = configuration;
 			this.userInfos = userInfos;
 			this.embeddingModels = embeddingModels;
@@ -291,18 +299,19 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			this.serviceModel = serviceModel;
 		}
 
-		static Prepared ok(DeepSearchRequest request, DeepSearchConfig configuration, UserInfos userInfos,
-				List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
-				IGConfigurableChatModel serviceModel, AbstractDeepSearchEvent errorEvent) {
-			return new Prepared(request, configuration, userInfos, embeddingModels, chatModel, serviceModel,
-					errorEvent);
+		static Prepared ok(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+				DeepSearchConfig configuration, UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels,
+				IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+				AbstractDeepSearchEvent errorEvent) {
+			return new Prepared(request, minimalChatContext, configuration, userInfos, embeddingModels, chatModel,
+					serviceModel, errorEvent);
 		}
 
 		static Prepared error(DeepSearchRequest request, GUserMessage msg) {
 			DeepSearchErrorEvent e = new DeepSearchErrorEvent();
 			e.setInputData(request);
 			e.setOutputData(msg);
-			return new Prepared(request, null, null, null, null, null, e);
+			return new Prepared(request, null, null, null, null, null, null, e);
 		}
 	}
 
@@ -359,41 +368,27 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request)
-			throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException {
+			throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException {
 		if (request.getId() == null) {
 			request.setId(UUID.randomUUID().toString());
 		}
 
 		sessionLifecyCleService.ensureChatSessionExists(request);
+		IGConfigurableChatModel model = sessionLifecyCleService.getSessionChatModel(request);
+		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
+				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		GeboChatResponse cleanResponse = sessionLifecyCleService.createEmptyResponse(request);
-
+		LLMChatRequestResources llmRequest = sessionLifecyCleService.startRequest(request, model,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 		List<GKnowledgeBase> kbList = sessionLifecyCleService.getSessionAvailableKnowledgeBases(request);
 		List<String> knowledgeBasesCodesList = kbList.stream().map(x -> x.getCode()).toList();
 
 		Sinks.One<Void> stopSignal = Sinks.one();
 		activeSearchSignals.put(request.getId(), stopSignal);
 
-		Flux<AbstractDeepSearchEvent> outflux = doStream(request, cleanResponse, knowledgeBasesCodesList);
-		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
-				.takeUntilOther(stopSignal.asMono())
-				.doFinally(signal -> activeSearchSignals.remove(request.getId()))
-				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
-	}
-
-	private Flux<AbstractDeepSearchEvent> doStream(GeboChatRequest request, GeboChatResponse response,
-			List<String> knowledgeBasesCodesList) throws LLMConfigException {
-
-		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
-		deepSearchRequest.setChatRequestCode(request.getId());
-		deepSearchRequest.setKnowledgeBases(knowledgeBasesCodesList);
-		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request));
-		deepSearchRequest.setUserChatContextCode(request.getUserChatContextCode());
-		deepSearchRequest.setDeepSearchDataSources(request.getDeepSearchDataSources());
-		response.setDeepSearchRequestId(deepSearchRequest.getCode());
-		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
-
-		Flux<AbstractDeepSearchEvent> flux = streamDeepSearch(deepSearchRequest);
-		return manageTrailingChatSessionEvents(flux, request, response);
+		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, cleanResponse, model, serviceModel,
+				knowledgeBasesCodesList);
+		return outflux;
 	}
 
 	Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
@@ -478,26 +473,28 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				? defaultDeepsearchConfig.getUsedVariant()
 				: DeepSearchVariant.SINGLE_THREAD;
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
-		deepSearchRequest.setChatRequestCode(request.getLastRequest().getId());
+		deepSearchRequest.setChatRequestCode(request.getCurrentRequest().getId());
 		deepSearchRequest.setKnowledgeBases(createKnowledgeBasesList(request));
-		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request.getLastRequest()));
-		deepSearchRequest.setUserChatContextCode(request.getLastRequest().getUserChatContextCode());
+		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request.getCurrentRequest()));
+		deepSearchRequest.setUserChatContextCode(request.getCurrentRequest().getUserChatContextCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
 		AIDocumentsSet allDocuments = request.allDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;
+		MinimalChatContext minimalChatContext = request.createMinimalChatContext();
+		out = this.fullReactivestreamDeepSearch(deepSearchRequest, minimalChatContext, allDocuments, chatModel,
+				serviceModel);
 
-		out = this.fullReactivestreamDeepSearch(deepSearchRequest, allDocuments, chatModel, serviceModel);
-
-		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(out, request.getLastRequest(),
+		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(out, request.getCurrentRequest(),
 				chatResponse);
 		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
 				.onErrorResume(Common.commonFallBack(deepSearchRequest));
 	}
 
-	private List<String> createKnowledgeBasesList(LLMChatRequestResources request) throws GeboChatSessionLifecycleException {
+	private List<String> createKnowledgeBasesList(LLMChatRequestResources request)
+			throws GeboChatSessionLifecycleException {
 		List<GKnowledgeBase> visibles = this.sessionLifecyCleService
-				.getSessionAvailableKnowledgeBases(request.getLastRequest());
+				.getSessionAvailableKnowledgeBases(request.getCurrentRequest());
 
 		return visibles.stream().map(x -> x.getCode()).toList();
 	}

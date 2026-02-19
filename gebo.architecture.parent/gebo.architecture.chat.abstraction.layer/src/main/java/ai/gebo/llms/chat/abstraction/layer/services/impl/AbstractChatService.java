@@ -396,7 +396,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
-		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
+		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
 				response, requestResources.createChatRequestContext(), null);
 	}
 
@@ -410,7 +410,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
 
-		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
+		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
 				response, requestResources.createChatRequestContext(), shrink, targetSize, null);
 	}
 }

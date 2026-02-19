@@ -34,6 +34,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentSe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -97,7 +98,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
-			List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
+			List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed, MinimalChatContext minimalChatContext) {
 
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();

@@ -17,6 +17,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
@@ -46,7 +47,7 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(IGReactiveDeepSearchDataSourceService service, GeboChatRequest request,
-			GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			MinimalChatContext minimalChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
 			SearchServiceException {
 		String query = GeboChatRequest.actualQuery(request);
@@ -65,7 +66,7 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		AtomicBoolean completed = new AtomicBoolean(false);
 		DeepSearchState deepSearchState = new DeepSearchState();
 		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(chatModel, serviceModel, config, deepSearchRequest,
-				List.of(), chunkSessionId, totalSteps, doneSteps, completed, deepSearchState);
+				minimalChatContext, List.of(), chunkSessionId, totalSteps, doneSteps, completed, deepSearchState);
 		flux = mapDataSourceProcessedToDeepSearchProcessed(flux, deepSearchRequest);
 		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));

@@ -1,5 +1,6 @@
 package ai.gebo.llms.deepsearch.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ import reactor.core.publisher.Flux;
 public interface IGDeepSearchService {
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException;
 
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException;
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException;
 
 	public default DeepSearchResponse search(DeepSearchRequest request) throws LLMConfigException {
 		AbstractDeepSearchEvent last = this.streamDeepSearch(request).blockLast();
