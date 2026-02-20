@@ -194,7 +194,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				request.getQuery(), chatContextTemplateParams, KeywordsList.class);
 
 		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
-				chatModel.getContextLength() * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
+				(serviceModel.getContextLength() / 2) * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
 				chunkingKeywordsMatching.getKeywords(), specs, false, serviceModel.getContextLength() * 50);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("chunkingParams=" + params);
