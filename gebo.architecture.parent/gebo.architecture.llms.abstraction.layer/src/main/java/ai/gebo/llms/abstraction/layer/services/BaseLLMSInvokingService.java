@@ -188,7 +188,7 @@ public class BaseLLMSInvokingService {
 		StringBuffer outBuffer = new StringBuffer();
 		// Following 2 variables have to be updated once a consolidation is re-run
 
-		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+		int fragmentBudget = computeFragmentBudget("", promptLength, contextWindow, additionalParams);
 		List<ConsolidationDocuments> currentBatchesQueue = new ArrayList<ConsolidationDocuments>();
 		do {
 
@@ -251,7 +251,7 @@ public class BaseLLMSInvokingService {
 						outBuffer.append(outValue);
 						outBuffer.append(NEWLINE);
 					}
-					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow);
+					fragmentBudget = computeFragmentBudget("", promptLength, contextWindow, additionalParams);
 				} else {
 					unmanaged.add(consolidationInputBatch);
 				}
@@ -340,8 +340,8 @@ public class BaseLLMSInvokingService {
 
 				if (!alreadySplitted && textTokensLength > fragmentBudget) {
 					// splits will be loaded in currentBatchesQueue
-					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget, fragmentBudget,
-							fragmentBudget, true);
+					TokenTextSplitter splitter = new TokenTextSplitter(fragmentBudget, fragmentBudget / 2,
+							fragmentBudget / 4, Integer.MAX_VALUE, true);
 					Document document = new Document(currentInput.text);
 					List<Document> documents = splitter.split(document);
 					final LLMInputDocument _currentInput = currentInput;
@@ -395,12 +395,18 @@ public class BaseLLMSInvokingService {
 				// if this batch is complete or we are at the end of contents
 				if (consolidationInputBatch.complete || currentInput == null) {
 					StringBuffer currentText = new StringBuffer();
+					int tokens = 0;
 					for (ConsolidationBatchItem d : consolidationInputBatch.inputs) {
 						String thisContent = d.input.text;
+						tokens += d.tokensCount;
 						currentText.append(thisContent);
 						currentText.append(NEWLINE);
 					}
 					T oldConsolidated = consolidated;
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Sending " + tokens
+								+ " tokens to callLLMWithDocumentsAndConsolidationStructuredReturn(..)");
+					}
 					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
 							currentText.toString(), question, _consolidated, additionalParams, type);
 					// eventual handling of consolidation programmable aggregation
@@ -408,7 +414,8 @@ public class BaseLLMSInvokingService {
 						consolidated = aggregator.apply(oldConsolidated, consolidated);
 					}
 					_consolidated = objectMapper.writeValueAsString(consolidated);
-					fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow);
+					fragmentBudget = computeFragmentBudget(_consolidated, promptLength, contextWindow,
+							additionalParams);
 					fragmentBudget -= formatSpecificationLength;
 				}
 			}
@@ -440,7 +447,7 @@ public class BaseLLMSInvokingService {
 		String consolidated = pastConsolidation != null ? pastConsolidation : "";
 		// Following 2 variables have to be updated once a consolidation is re-run
 
-		int fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow);
+		int fragmentBudget = computeFragmentBudget(pastConsolidation, promptLength, contextWindow, additionalParams);
 		do {
 			currentInput = input.get();
 			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
@@ -531,7 +538,8 @@ public class BaseLLMSInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
 							question, consolidated, additionalParams);
-					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
+					fragmentBudget = computeFragmentBudget(pastConsolidation, promptLength, contextWindow,
+							additionalParams);
 				}
 			}
 		} while (currentInput != null);

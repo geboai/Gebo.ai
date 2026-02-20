@@ -258,7 +258,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							+ actualSearchResultToLoad.getCode());
 				}
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
-						"", chatContextTemplateParams, this.customContentExtractionType, aggregator, inputs, true);
+						"", chatContextTemplateParams, this.customContentExtractionType, aggregator, inputs, false);
 			} catch (Throwable th) {
 				LOGGER.error("Error in mapping calling llm", th);
 				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
