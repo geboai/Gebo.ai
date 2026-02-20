@@ -95,10 +95,10 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 	}
 
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
-			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
-			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
-			List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed, MinimalChatContext minimalChatContext) {
+			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
+			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
 
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
