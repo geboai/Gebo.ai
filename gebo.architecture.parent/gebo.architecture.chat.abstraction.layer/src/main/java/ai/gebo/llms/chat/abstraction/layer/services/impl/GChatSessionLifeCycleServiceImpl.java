@@ -51,6 +51,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
@@ -60,6 +61,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDoc
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -89,6 +91,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final IGPromptConfigDao promptsDao;
+	private final IGChatSessionStateShrinkerService shrinkerService;
 
 	@NoArgsConstructor
 
@@ -848,10 +851,22 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	}
 
 	@Override
-	public CSSConsolidatedChatHistory getChatHistoryConsolidation(GeboChatRequest request) throws GeboChatSessionLifecycleException {
+	public MinimalChatContext getMinimalChatContext(GeboChatRequest request, int tokensBudget)
+			throws GeboChatSessionLifecycleException {
 		GUserChatSession context = session(request);
 		ChatFullSessionState state = full(request);
 		ShrinkedChatSessionState shrinked = shrink(request);
-		return shrinked.getChatHistory();
+		CSSConsolidatedChatHistory history = shrinked.getChatHistory();
+		MinimalChatContext mc = new MinimalChatContext();
+		mc.setChatHistory(history);
+		mc.setCurrentRequest(request);
+		if (tokensBudget >= mc.getTokensSize())
+			return mc;
+
+		try {
+			return this.shrinkerService.shrinkedMinimalContext(request.getUserChatContextCode(), mc, tokensBudget);
+		} catch (LLMConfigException | IOException e) {
+			throw new GeboChatSessionLifecycleException("Error shrinking state", e);
+		}
 	}
 }

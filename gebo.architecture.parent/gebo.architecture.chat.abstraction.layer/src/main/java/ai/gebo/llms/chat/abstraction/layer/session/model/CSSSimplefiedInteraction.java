@@ -15,6 +15,7 @@ public class CSSSimplefiedInteraction implements ITokensCountable, Cloneable {
 	private Integer assistantTokenSize = null;
 	private String pipelineRoutingDecision = null;
 	private Integer interactionIndex = null;
+	private String requestId = null;
 
 	@Override
 	public int getTokensSize() {

@@ -102,7 +102,7 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				DefaultPipelineSharedPromptPlaceholders.DOCUMENTS_TEMPLATE_PARAM,
 				DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM);
 		Map<String, Object> chatContextParams = CommonChatPromptParamsUtil
-				.preparePromptParameters(runtimeData.getRequestResources());
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		params.putAll(chatContextParams);
 		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt.getPrompt(),
 				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()), params,

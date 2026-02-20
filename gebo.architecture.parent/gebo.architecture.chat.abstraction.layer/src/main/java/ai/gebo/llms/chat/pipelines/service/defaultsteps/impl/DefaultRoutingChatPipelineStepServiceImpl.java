@@ -35,6 +35,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -113,7 +114,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			throws GeboChatSessionLifecycleException, IOException {
 		String query = runtimeData.getRequestResources().getCurrentRequest().getQuery();
 		Map<String, Object> params = CommonChatPromptParamsUtil
-				.preparePromptParameters(runtimeData.getRequestResources());
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		GPromptConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query, params);
@@ -156,7 +157,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			}
 		};
 		Map<String, Object> params = CommonChatPromptParamsUtil
-				.preparePromptParameters(runtimeData.getRequestResources());
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),

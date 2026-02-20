@@ -7,6 +7,7 @@ import java.util.Map;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,9 +15,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class ChatPipelineExecutionRuntimeData {
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
-			LLMChatRequestResources requestResources, GeboChatResponse chatResponse, boolean streamingOutput) {
+			LLMChatRequestResources requestResources, GeboChatResponse chatResponse,
+			MinimalChatContext minimalChatContext, boolean streamingOutput) {
 		this(configuration, contextWindowSize, contextWindowSize, new ArrayList(), chatResponse, new ArrayList(),
-				streamingOutput, requestResources);
+				streamingOutput, requestResources, minimalChatContext);
 	}
 
 	private final ChatPipelineConfiguration configuration;
@@ -28,5 +30,6 @@ public class ChatPipelineExecutionRuntimeData {
 	private final boolean streamingOutput;
 	private final LLMChatRequestResources requestResources;
 	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
+	private final MinimalChatContext minimalChatContext;
 
 }

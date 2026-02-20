@@ -28,7 +28,7 @@ public class CommonChatPromptParamsUtil {
 	public static final String LATEST_INTERACTIONS_PROMPT_PARAM = "latestInteractions";
 	public static final String CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM = "consolidatedChatHistory";
 
-	public static Map<String, Object> preparePromptParameters(LLMChatRequestResources request) {
+	private static Map<String, Object> preparePromptParameters(LLMChatRequestResources request) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM, renderConsolidatedChatHistory(request));
 		params.put(LATEST_INTERACTIONS_PROMPT_PARAM, renderLatestInteractions(request));

@@ -16,7 +16,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 
 /******************************************************************************************************
  * Mantains the 2 session levels transparently letting adding resources in the
@@ -98,7 +98,7 @@ public interface IGChatSessionLifeCycleService {
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
 
-	public CSSConsolidatedChatHistory getChatHistoryConsolidation(GeboChatRequest request) throws GeboChatSessionLifecycleException;
+	public MinimalChatContext getMinimalChatContext(GeboChatRequest request, int tokensBudget) throws GeboChatSessionLifecycleException;
 
 	public void persist(GeboChatRequest request) throws GeboChatSessionLifecycleException;
 

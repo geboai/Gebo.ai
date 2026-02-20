@@ -73,8 +73,9 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl extends
 			Flux<AbstractDeepSearchEvent> flux = enrichDecision.concatMap(ed -> {
 				List<String> aiChoosedDataSources = ed.getSearchesDecisions().getDeepSearchDataSources();
 				try {
-					return deepSearchService.streamDeepSearch(ed.getRequestResources(), runtimeData.getChatResponse(),
-							chatModel, serviceModel, aiChoosedDataSources);
+					return deepSearchService.streamDeepSearch(ed.getRequestResources(),
+							runtimeData.getMinimalChatContext(), runtimeData.getChatResponse(), chatModel, serviceModel,
+							aiChoosedDataSources);
 				} catch (LLMConfigException | GeboChatSessionLifecycleException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

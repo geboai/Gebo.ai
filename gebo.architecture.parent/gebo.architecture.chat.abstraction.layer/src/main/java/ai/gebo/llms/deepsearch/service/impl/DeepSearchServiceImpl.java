@@ -386,8 +386,10 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		Sinks.One<Void> stopSignal = Sinks.one();
 		activeSearchSignals.put(request.getId(), stopSignal);
 
-		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, cleanResponse, model, serviceModel,
-				knowledgeBasesCodesList);
+		MinimalChatContext minimalChatContext = this.sessionLifecyCleService.getMinimalChatContext(request,
+				serviceModel.getContextLength() / 3);
+		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, minimalChatContext, cleanResponse, model,
+				serviceModel, knowledgeBasesCodesList);
 		return outflux;
 	}
 
@@ -466,8 +468,9 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
-			GeboChatResponse chatResponse, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			List<String> deepSearchDataSources) throws LLMConfigException, GeboChatSessionLifecycleException {
+			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
 
 		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
 				? defaultDeepsearchConfig.getUsedVariant()
@@ -481,7 +484,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
 		AIDocumentsSet allDocuments = request.allDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;
-		MinimalChatContext minimalChatContext = request.createMinimalChatContext();
+
 		out = this.fullReactivestreamDeepSearch(deepSearchRequest, minimalChatContext, allDocuments, chatModel,
 				serviceModel);
 

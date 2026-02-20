@@ -76,6 +76,7 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 		CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction();
 		interaction.setUser(request.getQuery());
 		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
+		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
 		interaction.setAssistant(response.getQueryResponse());
 		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());

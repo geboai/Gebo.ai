@@ -55,7 +55,7 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 		if (_choosedSourceId != null && _choosedSourceId instanceof List list && !list.isEmpty()) {
 			choosedSourceId = list.get(0).toString();
 		}
-		MinimalChatContext minimalChatContext = runtimeData.getRequestResources().createMinimalChatContext();
+		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
 				serviceModel, config, null);

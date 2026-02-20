@@ -140,10 +140,5 @@ public class LLMChatRequestResources implements ITokensCountable {
 				llmGeneratedDocuments);
 	}
 
-	public MinimalChatContext createMinimalChatContext() {
-		MinimalChatContext mcc = new MinimalChatContext();
-		mcc.setChatHistory(chathistory);
-		mcc.setCurrentRequest(currentRequest);
-		return mcc;
-	}
+	
 }

@@ -19,6 +19,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -75,9 +76,10 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		LLMChatRequestResources resources = null;
 		resources = this.chatSessionLifecycleService.startRequest(request, chatModel,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-
+		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
+				serviceModel.getContextLength() / 3);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), resources, response, streaming);
+				chatModel.getContextLength(), resources, response, minimalChatContext, streaming);
 		// putting a sintetic routing decision for the first 2 steps to mantain the
 		// routing coherency
 		runtimeData.getRoutingDecisions()
