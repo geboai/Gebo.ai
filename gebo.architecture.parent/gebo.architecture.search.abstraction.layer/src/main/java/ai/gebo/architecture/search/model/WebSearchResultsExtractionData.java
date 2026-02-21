@@ -1,16 +1,14 @@
-package ai.gebo.googlesearch.handler.model;
+package ai.gebo.architecture.search.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
-import ai.gebo.architecture.search.model.SearchQuery;
 import lombok.Data;
 
 @Data
-public class GoogleSearchResultsExtractionData extends BaseSearchResultsExtractionDataType {
+public class WebSearchResultsExtractionData extends BaseSearchResultsExtractionDataType {
 	@Data
 	public static class RelevantLink {
 		String url = null;

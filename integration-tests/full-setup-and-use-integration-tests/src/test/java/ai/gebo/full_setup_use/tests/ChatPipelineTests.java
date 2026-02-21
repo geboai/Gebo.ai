@@ -60,6 +60,7 @@ public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 			long time = System.currentTimeMillis();
 			LOGGER.info("Running request: " + request.getQuery());
 			GeboChatResponse response = chatPipelineControllerApi.executeDefaultChatPipeline(request);
+			LOGGER.info("Response received in:" + (System.currentTimeMillis() - time) + " ms");
 			assertNotNull(response, "The response cannot be null");
 			assertNotNull(response.getQueryResponse(), "The response content cannot be null");
 			LOGGER.info("Routing decision: " + response.getPipelineRouterDecisionCode());

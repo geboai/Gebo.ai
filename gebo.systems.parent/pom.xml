@@ -32,5 +32,6 @@
 
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
+		<module>gebo.bingsearch.handler</module>
 	</modules>
 </project>

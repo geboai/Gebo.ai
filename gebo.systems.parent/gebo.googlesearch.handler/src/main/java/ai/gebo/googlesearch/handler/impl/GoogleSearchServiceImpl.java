@@ -1,7 +1,6 @@
 package ai.gebo.googlesearch.handler.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -12,16 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,24 +25,23 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
+import ai.gebo.architecture.search.model.WebSearchResultsExtractionData.RelevantLink;
+import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.architecture.search.service.ISearchService;
-import ai.gebo.architecture.search.service.LinkTypeGuesser;
 import ai.gebo.googlesearch.handler.config.GoogleSearchHandlerConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResultItem;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
-import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData;
-import ai.gebo.googlesearch.handler.model.GoogleSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
-import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResultsExtractionData> {
+public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
@@ -100,7 +88,7 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 	@Override
 	public String getDescription() {
 
-		return "Google Search";
+		return "Google Web Search";
 	}
 
 	@Override
@@ -154,155 +142,14 @@ public class GoogleSearchServiceImpl implements ISearchService<GoogleSearchResul
 
 	}
 
-	private String tryArgueContentType(String link) {
-		String contentType = LinkTypeGuesser.tryArgueContentType(link);
-		if (contentType == null)
-			contentType = "text/html";
-		return contentType;
-	}
-
-	private String tryArgueExtension(String link) {
-		String extension = LinkTypeGuesser.tryArgueExtension(link);
-		if (extension == null)
-			extension = ".html";
-		else
-			extension = "." + extension;
-		return extension;
-	}
-
-	@Override
-	public TypedInputStream loadSearchResult(SearchResult result) throws IOException {
-		HttpGet request = createGetRequestFor(result);
-		CloseableHttpClient client = createClient();
-		final HttpResponse response = client.execute(request);
-		int responseCode = response.getStatusLine().getStatusCode();
-
-		if (responseCode >= 200 && responseCode < 400) {
-			String encoding = getEncoding(response);
-			String contentType = "text/html";
-			if (response.getEntity() != null && response.getEntity().getContentType() != null) {
-				contentType = response.getEntity().getContentType().getValue();
-				if (contentType != null) {
-					int idx = 0;
-					if ((idx = contentType.trim().indexOf(";")) > 0) {
-						contentType = contentType.substring(0, idx);
-					}
-				}
-			}
-			encoding = "UTF-8";
-
-			return TypedInputStream.of(response.getEntity().getContent(), contentType, tryArgueExtension(result));
-
-		} else {
-			return TypedInputStream.of(InputStream.nullInputStream(), "text/html", ".html");
-
-		}
-
-	}
-
-	private String tryArgueExtension(SearchResult result) {
-		String url = result.getResultReference() != null ? result.getResultReference().getUri() : null;
-		return url == null ? null : tryArgueExtension(url);
-	}
-
-	private String getEncoding(HttpResponse response) {
-		Header contentType = response.getFirstHeader("content-type");
-		String encoding = "UTF-8";
-		if (contentType.getValue() != null) {
-			int encodingOffset = contentType.getValue().indexOf("charset");
-			if (encodingOffset >= 0) {
-				String remaining = contentType.getValue().substring(encodingOffset);
-				char buffer[] = remaining.toCharArray();
-				for (int index = 0; index < buffer.length; index++) {
-					char ch = buffer[index];
-					if (Character.isLetter(ch)) {
-						encoding = new String(buffer, index, buffer.length - index);
-					}
-				}
-			}
-		}
-		return encoding;
-	}
-
-	static final int SocketTimeout = 20000;
-	static final int ConnectTimeout = 10000;
-
-	private CloseableHttpClient createClient() {
-		RequestConfig globalConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.BEST_MATCH)
-				.setSocketTimeout(SocketTimeout).setConnectTimeout(ConnectTimeout).build();
-		CookieStore cookieStore = new BasicCookieStore();
-		HttpClientContext context = HttpClientContext.create();
-		context.setCookieStore(cookieStore);
-
-		CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(globalConfig)
-				.setDefaultCookieStore(cookieStore).build();
-
-		return httpClient;
-	}
-
-	@Override
-	public Class<GoogleSearchResultsExtractionData> getCustomResultsAggregationDataType() {
-
-		return GoogleSearchResultsExtractionData.class;
-	}
-
-	@Override
-	public GoogleSearchResultsExtractionData aggregate(GoogleSearchResultsExtractionData oldConsolidated,
-			GoogleSearchResultsExtractionData cumulated) {
-		if (oldConsolidated == null && cumulated == null)
-			return new GoogleSearchResultsExtractionData();
-		if (cumulated == null)
-			return oldConsolidated;
-		if (oldConsolidated == null)
-			return cumulated;
-		GoogleSearchResultsExtractionData newResult = new GoogleSearchResultsExtractionData();
-		newResult.setExtractedRelevantContent(cumulated.getExtractedRelevantContent());
-		newResult.setContentIsRelevant(cumulated.getContentIsRelevant());
-		newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
-		newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
-		newResult.getExtractedRelatedSearches().addAll(oldConsolidated.getExtractedRelatedSearches());
-		newResult.getExtractedRelatedSearches().addAll(cumulated.getExtractedRelatedSearches());
-		return newResult;
-	}
-
-	private HttpGet createGetRequestFor(SearchResult result) throws UnsupportedEncodingException {
-		HttpGet getRequest = new HttpGet(result.getResultReference().getUri());
-		String referer = "google.com";
-		getRequest.setHeader("Referer", referer);
-		return getRequest;
-	}
-
+	
 	@Override
 	public String getQueriesExtractionPrompt() {
 
 		return config.getQueryExtractionPrompt();
 	}
 
-	@Override
-	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
-			GoogleSearchResultsExtractionData extractedData) {
-		List<SearchResult> results = new ArrayList<SearchResult>();
-		if (extractedData.getExtractedRelevantLinks() != null) {
-			for (RelevantLink item : extractedData.getExtractedRelevantLinks()) {
-				String link = item.getUrl();
-				String title = item.getTitle();
-				String name = item.getDisplayText();
-				SearchResult result = new SearchResult();
-				result.setDescriptiveText(title);
-				result.setResultReference(new SearchResultReference());
-				result.getResultReference().setId(link);
-				result.getResultReference().setUri(link);
-				result.getResultReference().setName(name);
-				result.getResultReference().setTitle(title);
-				result.getResultReference().setExtension(tryArgueExtension(link));
-				result.getResultReference().setContentType(tryArgueContentType(link));
-				result.setSystemConfigurationCode(GOOGLE_SEARCH_SERVICE);
-				setOriginOn(result);
-				results.add(result);
-			}
-		}
-		return new SearchResultAnalisysOutcome(extractedData.getExtractedRelatedSearches(), results);
-	}
+	
 
 	@Override
 	public String getMessagingModuleId() {
