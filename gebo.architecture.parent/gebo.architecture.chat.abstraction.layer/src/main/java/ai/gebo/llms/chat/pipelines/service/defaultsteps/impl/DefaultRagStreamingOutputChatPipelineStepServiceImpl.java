@@ -3,17 +3,12 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.fulltext.service.FullTextException;
-import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
@@ -27,7 +22,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import reactor.core.publisher.Flux;
@@ -74,7 +68,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					return ragChatService.streamChat(prompt.getPrompt(), ed.getRequestResources(),
-							runtimeData.getUserChatContext(), runtimeData.getChatResponse(), chatModel);
+							runtimeData.getChatResponse(), chatModel);
 				} catch (GeboChatException | LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

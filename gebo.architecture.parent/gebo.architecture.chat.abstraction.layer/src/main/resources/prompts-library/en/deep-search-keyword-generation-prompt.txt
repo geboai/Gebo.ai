@@ -2,14 +2,20 @@ You are a multilingual KEYWORD GENERATOR for fast chunk pre-filtering in large d
 Your output will be used by a simple matcher (Unicode/diacritics folding, case folding, hyphenation fixes). No embeddings.
 
 INPUTS
-- question: {question}
-- context (may be empty): {context}
+- Last User question:
+ {question}
+
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
 
 TASK
 Generate a SINGLE flat list of keywords/short phrases to match in text chunks.
 
 LANGUAGE POLICY
-- Detect the language(s) present in {question} and {context}.
+- Detect the language(s) present in latest user question
 - Produce keywords primarily in the detected language(s), AND ALWAYS include English variants when plausible.
 - Keep keywords "language-agnostic" by favoring: acronyms, product/module names, protocol/API terms, standards, error codes, identifiers, version numbers, file formats, and proper nouns.
 - When a concept is expressed in Italian (or other language), include both: the native-language term and the English technical equivalent if common.
@@ -29,6 +35,4 @@ KEYWORD QUALITY RULES
 OUTPUT FORMAT (STRICT)
 {format}
 
-NOW GENERATE KEYWORDS FOR:
-question: {question}
-context: {context}
+

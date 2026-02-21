@@ -300,7 +300,7 @@ final class RoutingPromptUtil {
 	static final String END_SYSTEM_CATALOG = "END_SYSTEM_CATALOG";
 	private static final String SYSTEM_CATALOG = "SYSTEM_CATALOG";
 	private static final String DESCRIPTION2 = "description:";
-	private static final String SHALLOW_SYSTEM_PREFIX = "shallow";
+	static final String SHALLOW_SYSTEM_PREFIX = "shallow";
 	static final String SPACE = " ";
 	static final String SYSTEM_ID = "systemId:";
 	private static final String END_SHALLOW_SEARCH_SYSTEMS_CATALOG = "END_SHALLOW_SEARCH_SYSTEMS_CATALOG";

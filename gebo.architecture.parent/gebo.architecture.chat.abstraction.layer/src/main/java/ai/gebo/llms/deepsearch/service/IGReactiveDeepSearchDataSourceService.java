@@ -9,6 +9,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
@@ -51,6 +52,7 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * DeepSearchDataSourceResponse
 	 * @param serviceModel TODO
 	 * @param request
+	 * @param minimalChatContext TODO
 	 * @param pastSystemsResponses
 	 * @param chunkingSessionId TODO
 	 * @param totalSteps TODO
@@ -66,7 +68,7 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws SearchServiceException
 	 */
 	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

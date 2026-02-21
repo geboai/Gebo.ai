@@ -27,7 +27,7 @@ import java.util.List;
  * PageDeepSearchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class PageDeepSearchRequest {
   @JsonProperty("totalElements")
@@ -36,20 +36,11 @@ public class PageDeepSearchRequest {
   @JsonProperty("totalPages")
   private Integer totalPages = null;
 
-  @JsonProperty("size")
-  private Integer size = null;
-
-  @JsonProperty("content")
-  private List<DeepSearchRequest> content = null;
-
-  @JsonProperty("number")
-  private Integer number = null;
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
-
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -59,6 +50,15 @@ public class PageDeepSearchRequest {
 
   @JsonProperty("last")
   private Boolean last = null;
+
+  @JsonProperty("size")
+  private Integer size = null;
+
+  @JsonProperty("content")
+  private List<DeepSearchRequest> content = null;
+
+  @JsonProperty("number")
+  private Integer number = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -97,6 +97,96 @@ public class PageDeepSearchRequest {
 
   public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
+  }
+
+  public PageDeepSearchRequest numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+  }
+
+  public PageDeepSearchRequest sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
+  public PageDeepSearchRequest pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
+  }
+
+  public PageDeepSearchRequest first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageDeepSearchRequest last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageDeepSearchRequest size(Integer size) {
@@ -161,96 +251,6 @@ public class PageDeepSearchRequest {
     this.number = number;
   }
 
-  public PageDeepSearchRequest sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
-  public PageDeepSearchRequest numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-  }
-
-  public PageDeepSearchRequest pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
-  public PageDeepSearchRequest first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageDeepSearchRequest last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
-  }
-
   public PageDeepSearchRequest empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -281,20 +281,20 @@ public class PageDeepSearchRequest {
     PageDeepSearchRequest pageDeepSearchRequest = (PageDeepSearchRequest) o;
     return Objects.equals(this.totalElements, pageDeepSearchRequest.totalElements) &&
         Objects.equals(this.totalPages, pageDeepSearchRequest.totalPages) &&
-        Objects.equals(this.size, pageDeepSearchRequest.size) &&
-        Objects.equals(this.content, pageDeepSearchRequest.content) &&
-        Objects.equals(this.number, pageDeepSearchRequest.number) &&
-        Objects.equals(this.sort, pageDeepSearchRequest.sort) &&
         Objects.equals(this.numberOfElements, pageDeepSearchRequest.numberOfElements) &&
+        Objects.equals(this.sort, pageDeepSearchRequest.sort) &&
         Objects.equals(this.pageable, pageDeepSearchRequest.pageable) &&
         Objects.equals(this.first, pageDeepSearchRequest.first) &&
         Objects.equals(this.last, pageDeepSearchRequest.last) &&
+        Objects.equals(this.size, pageDeepSearchRequest.size) &&
+        Objects.equals(this.content, pageDeepSearchRequest.content) &&
+        Objects.equals(this.number, pageDeepSearchRequest.number) &&
         Objects.equals(this.empty, pageDeepSearchRequest.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, size, content, number, sort, numberOfElements, pageable, first, last, empty);
+    return Objects.hash(totalElements, totalPages, numberOfElements, sort, pageable, first, last, size, content, number, empty);
   }
 
 
@@ -305,14 +305,14 @@ public class PageDeepSearchRequest {
     
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    content: ").append(toIndentedString(content)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

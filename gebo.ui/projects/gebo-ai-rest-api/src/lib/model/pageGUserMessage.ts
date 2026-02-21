@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageGUserMessage { 
     totalElements?: number;
     totalPages?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<GUserMessage>;
     number?: number;
-    sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
+    sort?: SortObject;
     pageable?: PageableObject;
     empty?: boolean;
 }

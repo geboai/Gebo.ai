@@ -42,7 +42,12 @@ If inputs are missing or vague:
 - Infer reasonable intents from userGoal.
 - Keep filters null and include broader queries + fallbackQueries.
 
-USER:
-User question:
+INPUTS:
+- Last User question:
+ {question}
 
-{question}
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}

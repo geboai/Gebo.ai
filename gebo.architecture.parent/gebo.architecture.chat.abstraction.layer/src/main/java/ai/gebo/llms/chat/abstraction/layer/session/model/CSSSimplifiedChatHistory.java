@@ -14,6 +14,10 @@ import lombok.NoArgsConstructor;
 public class CSSSimplifiedChatHistory implements ITokensCountable {
 	private List<CSSSimplefiedInteraction> interactions = new ArrayList();
 
+	public CSSSimplifiedChatHistory(CSSSimplifiedChatHistory original) {
+		this.interactions = new ArrayList<CSSSimplefiedInteraction>(original.interactions);
+	}
+
 	@Override
 	public int getTokensSize() {
 		int tokens = 0;

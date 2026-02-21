@@ -34,6 +34,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentSe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -56,7 +57,6 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 
 @Service
@@ -95,10 +95,10 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 	}
 
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
-			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
-			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
-			List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
+			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
+			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
 
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();

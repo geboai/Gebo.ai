@@ -11,7 +11,7 @@
  
 
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { TableContent, TableRow } from '@Gebo.ai/gebo-ai-rest-api';
+
 
 /**
  * AI generated comments
@@ -21,6 +21,17 @@ import { TableContent, TableRow } from '@Gebo.ai/gebo-ai-rest-api';
  * the data changes. It uses the 'view-table.component.html' template to present
  * the table interface to the user.
  */
+interface TableCell {
+  value?:any;
+}
+interface TableContent {
+  tableTitle?:string;
+  header:TableRow;
+  rows:TableRow[];
+};
+interface TableRow{
+  cells:TableCell[];
+};
 @Component({
     selector: 'gebo-ai-view-table-component',
     templateUrl: 'view-table.component.html',

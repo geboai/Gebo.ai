@@ -29,9 +29,8 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	private CSSfRelevantShrinkedDocumentList relevantRetrievedDocuments = new CSSfRelevantShrinkedDocumentList();
 	private CSSfRelevantShrinkedDocumentList relevantLlmGeneratedDocuments = new CSSfRelevantShrinkedDocumentList();
 	@NotNull
-	private GUserChatInteractionsConsolidationData consolidatedInteractions = null;
-	@NotNull
-	private CSSSimplifiedChatHistory chatHistory = new CSSSimplifiedChatHistory();
+	private CSSConsolidatedChatHistory chatHistory = new CSSConsolidatedChatHistory();
+
 	@NotNull
 	private GeboChatRequest currentRequest = null;
 	private int targetTokenBudget = 0;
@@ -41,8 +40,8 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 	public int getTokensSize() {
 		return ITokensCountable.tokensSize(latestRequestsUploadedDocuments, latestRequestsChatWithDocuments,
 				latestRequestsRetrievedDocuments, latestRequestsLlmGeneratedDocuments, relevantChatWithDocuments,
-				relevantUploadedDocuments, relevantRetrievedDocuments, relevantLlmGeneratedDocuments,
-				consolidatedInteractions, chatHistory, currentRequest);
+				relevantUploadedDocuments, relevantRetrievedDocuments, relevantLlmGeneratedDocuments, chatHistory,
+				currentRequest);
 	}
 
 	@Override
@@ -58,9 +57,7 @@ public class ShrinkedChatSessionState implements ITokensCountable, IChatRequestF
 				this.latestRequestsLlmGeneratedDocuments.toAIDocumentsSet(),
 				this.relevantLlmGeneratedDocuments.toAIDocumentsSet());
 		return new LLMChatRequestResources(chatWithDocuments, retrievedDocuments, uploadedDocuments,
-				llmGeneratedDocuments,
-				consolidatedInteractions != null ? consolidatedInteractions.getConsolidationText() : null,
-				chatHistory.getInteractions(), currentRequest, pol);
+				llmGeneratedDocuments, chatHistory, currentRequest, pol);
 	}
 
 	private AIDocumentsSet toDocsSet(CSSfRelevantShrinkedDocumentList relevantUploadedDocuments2) {

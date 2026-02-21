@@ -12,12 +12,9 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +54,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatRe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -66,8 +62,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
-import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
@@ -84,28 +78,17 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	protected final static ObjectMapper mapper = new ObjectMapper(); // JSON object mapper for
 																		// serialization/deserialization
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass()); // Logger for logging events
-
 	final protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model
 																				// configurations
 
 	final protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
-
 	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
-
-	final protected GUserChatSessionRepository userContextRepository; // Repository for user chat context data
-
 	final protected IGPromptConfigDao promptsDao;
-
 	final protected InteractionsContextService interactionsContext;
-
 	final protected IGSecurityService securityService;
-
 	final protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
-
 	final protected IGChatStorageAreaService chatStorageAreaService;
-
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
-
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseSecurityService;
 	final protected IGChatSessionLifeCycleService chatSessionLifecycleService;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -219,7 +202,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param context               Knowledge base context
 	 * @param request               Request object
 	 * @param response              Response object to update
-	 * @param userContext           User chat context to update
 	 * @param chatRequestContext    TODO
 	 * @param showedDocuments       TODO
 	 * @param docrefs               List of document references
@@ -229,13 +211,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
 			final Prompt prompt, final KBContext context, final GeboChatRequest request,
-			final GeboChatResponse response, final GUserChatSession userContext, IChatRequestContext chatRequestContext,
-			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
-			throws LLMConfigException {
+			final GeboChatResponse response, IChatRequestContext chatRequestContext, boolean chatHistoryConsolidation,
+			int historySizeTarget, AIDocumentsSet showedDocuments) throws LLMConfigException {
 
 		try {
 			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, chatRequestContext);
-			return composeFlux(res, context, request, response, userContext, chatRequestContext.getToolsContext(),
+			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
 					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
 		} catch (Throwable th) {
 			LOGGER.error("", th);
@@ -263,9 +244,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
 	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
-			final GeboChatRequest request, final GeboChatResponse response, final GUserChatSession userContext,
-			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget,
-			IGConfigurableChatModel configurableChatModel, AIDocumentsSet showedDocuments) {
+			final GeboChatRequest request, final GeboChatResponse response, final Map<String, Object> toolsContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, IGConfigurableChatModel configurableChatModel,
+			AIDocumentsSet showedDocuments) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
@@ -310,7 +291,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 							for (Media media : medias) {
 								LLMGeneratedResource generatedResource;
 								try {
-									generatedResource = this.chatStorageAreaService.addMedia(media, userContext);
+									generatedResource = this.chatStorageAreaService.addMedia(media,
+											request.getUserChatContextCode());
 									response.getGeneratedResources().add(generatedResource);
 								} catch (Throwable e) {
 									LOGGER.error("Error receiving media", e);
@@ -334,8 +316,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 			return returned;
 		}).onErrorResume(exc -> {
+			final String msg = "Error while streaming chat respose";
+			LOGGER.error(msg, exc);
 			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
-			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", exc);
+			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);			
 			exceptionEnvelope.setContent(userMessage);
 			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
@@ -359,23 +343,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			finalEnvelope.setContent(response); // Use the accumulated text
 			finalEnvelope.setLastMessage(true);
 			try {
-				List<ChatInteractions> interactions = userContext.getInteractions();
-				if (interactions == null) {
-					interactions = new ArrayList<ChatInteractions>();
-				}
-				ChatInteractions interaction = new ChatInteractions();
-				interaction.setRequest(request);
-				interaction.setResponse(response);
-				interactions.add(interaction);
-				GUserChatSession freshCopy = null;
-				userContext.setInteractions(interactions);
-				userContext.setDateModified(new Date());
-				if (userContext.getCode() == null) {
-					freshCopy = persistenceManager.transactionalInsert(userContext);
-				} else {
-					freshCopy = persistenceManager.transactionalUpdate(userContext);
-				}
-				this.chatSessionLifecycleService.addInteractionToState(userContext, request, response);
+
+				this.chatSessionLifecycleService.endRequest(request, response);
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
 			} finally {
@@ -387,7 +356,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
 		responseFlux.doOnComplete(() -> {
 			try {
-				this.chatSessionLifecycleService.chatRequestCompleted(userContext, configurableChatModel);
+				this.chatSessionLifecycleService.chatRequestCompleted(request, configurableChatModel);
 			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 				LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
 			}
@@ -416,124 +385,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return out;
 	}
 
-	@Override
-	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response) {
-		String context = request.getUserChatContextCode();
-		if (context == null || context.trim().length() == 0)
-			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
-		if (contextData.isEmpty()) {
-			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
-		}
-		if (request.getId() == null) {
-			throw new IllegalStateException("User request must have an id");
-		}
-		if (response.getId() == null) {
-			throw new IllegalStateException("Chat response must have an id");
-		}
-		response.setQuery(request.getQuery());
-		response.setUserChatContextCode(context);
-		GUserChatSession chatContext = contextData.get();
-		if (chatContext.getInteractions() != null) {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
-		} else {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>());
-		}
-		boolean addInteraction = false;
-		Optional<ChatInteractions> alredyInInteraction = chatContext.getInteractions().stream()
-				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
-		addInteraction = alredyInInteraction.isEmpty();
-		ChatInteractions interaction = addInteraction ? new ChatInteractions() : alredyInInteraction.get();
-		interaction.setRequest(request);
-		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
-		interaction.setResponse(response);
-		interaction.setResponseNTokens(tokenCountEstimator.estimate(response.getQueryResponse()));
-		if (addInteraction)
-			chatContext.getInteractions().add(interaction);
-		userContextRepository.save(chatContext);
-
-	}
-
-	@Override
-	public void addChatRequestToUserContext(GeboChatRequest request) {
-		String context = request.getUserChatContextCode();
-		if (context == null || context.trim().length() == 0)
-			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
-		if (contextData.isEmpty()) {
-			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
-		}
-		if (request.getId() == null) {
-			throw new IllegalStateException("User request must have an id");
-		}
-		GUserChatSession chatContext = contextData.get();
-		addChatRequestToUserContext(request, chatContext);
-
-	}
-
-	@Override
-	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response,
-			GUserChatSession chatContext) {
-		String context = request.getUserChatContextCode();
-		if (context == null || context.trim().length() == 0)
-			throw new IllegalStateException("User chat context code cannot be null or empty");
-		if (request.getId() == null) {
-			throw new IllegalStateException("User request must have an id");
-		}
-		if (response.getId() == null) {
-			throw new IllegalStateException("Chat response must have an id");
-		}
-		if (chatContext.getInteractions() != null) {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
-		} else {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>());
-		}
-		boolean addInteraction = false;
-		Optional<ChatInteractions> alredyInInteraction = chatContext.getInteractions().stream()
-				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
-		addInteraction = alredyInInteraction.isEmpty();
-		ChatInteractions interaction = addInteraction ? new ChatInteractions() : alredyInInteraction.get();
-		interaction.setRequest(request);
-		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
-		interaction.setResponse(response);
-		interaction.setResponseNTokens(tokenCountEstimator.estimate(response.getQueryResponse()));
-		if (addInteraction)
-			chatContext.getInteractions().add(interaction);
-		userContextRepository.save(chatContext);
-	}
-
-	@Override
-	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatSession chatContext) {
-		if (chatContext.getInteractions() != null) {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
-		} else {
-			chatContext.setInteractions(new ArrayList<ChatInteractions>());
-		}
-		ChatInteractions interaction = new ChatInteractions();
-		interaction.setRequest(request);
-		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
-		chatContext.getInteractions().add(interaction);
-		userContextRepository.save(chatContext);
-	}
-
-	@Override
-	public GeboChatResponse createUnprocessedResponse(GeboChatRequest request) {
-		String context = request.getUserChatContextCode();
-		if (context == null || context.trim().length() == 0)
-			throw new IllegalStateException("User chat context code cannot be null or empty");
-		Optional<GUserChatSession> contextData = userContextRepository.findById(context);
-		if (contextData.isEmpty()) {
-			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
-		}
-		GeboChatResponse response = new GeboChatResponse();
-		if (response.getId() == null) {
-			response.setId(UUID.randomUUID().toString());
-		}
-		response.setQuery(request.getQuery());
-		response.setUserChatContextCode(context);
-		return response;
-	}
-
 	public List<GKnowledgeBase> getVisibleKnowledgeBases() {
 
 		return this.knowledgeBaseSecurityService.allVisibleKnowledgebases();
@@ -541,30 +392,25 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Override
 	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
-			throws GeboChatException, LLMConfigException {
+			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
-		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
-				response, requestResources.createChatRequestContext(), showedDocuments);
+
+		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
+				response, requestResources.createChatRequestContext(), null);
 	}
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GUserChatSession userChatContext, GeboChatResponse response, IGConfigurableChatModel chatModel)
-			throws GeboChatException, LLMConfigException {
+			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 		int tokensLength = requestResources.getTokensSize();
 		final int contextWindow = chatModel.getContextLength();
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
-		AIDocumentsSet showedDocuments = AIDocumentsSet.join(requestResources.getChatWithDocuments(),
-				requestResources.getRetrievedDocuments(), requestResources.getUploadedDocuments());
-		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getLastRequest(),
-				response, userChatContext, requestResources.createChatRequestContext(), shrink, targetSize,
-				showedDocuments);
+
+		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
+				response, requestResources.createChatRequestContext(), shrink, targetSize, null);
 	}
 }

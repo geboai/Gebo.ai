@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,10 +30,12 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -106,66 +110,83 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	}
 
 	private String doRequestRewrite(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String latestInteractions) throws GeboChatSessionLifecycleException, IOException {
-		String query = runtimeData.getRequestResources().getLastRequest().getQuery();
-
+			IGConfigurableChatModel serviceModel, String latestInteractions)
+			throws GeboChatSessionLifecycleException, IOException {
+		String query = runtimeData.getRequestResources().getCurrentRequest().getQuery();
+		Map<String, Object> params = CommonChatPromptParamsUtil
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		GPromptConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
-		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query,
-				Map.of(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM, latestInteractions));
-		runtimeData.getRequestResources().getLastRequest().setRewrittenQuery(rewrited_query);
-		this.chatSessionLifecycleService.updateRequest(runtimeData.getUserChatContext(),
-				runtimeData.getRequestResources().getLastRequest());
+		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query, params);
+		runtimeData.getRequestResources().getCurrentRequest().setRewrittenQuery(rewrited_query);
+		this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
 		return rewrited_query;
 	}
 
 	private RoutingDecision doDecideRoute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
-			String rewrited_query) {
+			String rewrited_query) throws GeboChatSessionLifecycleException {
 		GPromptConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		final String prompt = _prompt.getPrompt();
 		Supplier<Map<String, Object>> paramsProvider = () -> {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Begin Calculating router params to be cached");
+			try {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Begin Calculating router params to be cached");
+				}
+				Map<String, Object> templateParams = new HashMap<String, Object>();
+				String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
+				String toolsList = toolsListPromptPart(chatModel);
+				String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
+				String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
+				templateParams.put(
+						DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
+						internalKnowledgeBaseCatalog);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
+						deepSearchDataSources);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
+						shallowSystemsCatalog);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("End Calculating router params to be cached");
+				}
+				return templateParams;
+			} catch (Throwable th) {
+				LOGGER.error("Error in template params loader", th);
+				throw new RuntimeException("Error in template params loader", th);
 			}
-			Map<String, Object> templateParams = new HashMap<String, Object>();
-			String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
-			String toolsList = toolsListPromptPart(chatModel);
-			String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
-			String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
-					internalKnowledgeBaseCatalog);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
-					deepSearchDataSources);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
-			templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
-					shallowSystemsCatalog);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("End Calculating router params to be cached");
-			}
-			return templateParams;
 		};
-		final Map<String, Object> templateParams = this.promptsParamsCacheService.lookupCache(
-				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT, runtimeData.getUserChatContext().getCode(),
+		Map<String, Object> params = CommonChatPromptParamsUtil
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
+		final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
+				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
+				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
 				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
-		templateParams.put(DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM,
-				latestInteractions);
-		int usedTokens = tokensLength(prompt, latestInteractions, templateParams.toString(), rewrited_query);
+		params.putAll(cachedParams);
+		int usedTokens = tokensLength(prompt, latestInteractions, params.toString(), rewrited_query);
 		int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
 		final int documentsTokenBudget = Math.min(remainingContext,
 				this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 		String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
 				documentsTokenBudget);
-		templateParams.put(DOCUMENTS, documents);
+		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				templateParams, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
-
+				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
+		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
+			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
+			List<String> realCodes = new ArrayList<String>();
+			systems.forEach(x -> {
+				if (x.startsWith(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX)) {
+					realCodes.add(x.substring(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX.length()));
+				}
+			});
+			decisionMap.put(SEARCHED_SYSTEM, realCodes);
+		}
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;
 		final Map<String, Object> environmentMap = new HashMap<String, Object>();
-		environmentMap.putAll(templateParams);
+		environmentMap.putAll(params);
 		environmentMap.putAll(decisionMap);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing decision object:" + decision);
@@ -200,18 +221,18 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
 		RoutingDecision rd = null;
-		if (runtimeData.getRequestResources().getLastRequest() != null
-				&& runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId() != null) {
+		if (runtimeData.getRequestResources().getCurrentRequest() != null
+				&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null) {
 			rd = new RoutingDecision(
-					List.of(runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId()),
+					List.of(runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId()),
 					IChatPipelineStepRuntimeData
 							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
-					runtimeData.getRequestResources().getLastRequest().getChatPipelineProcessId());
+					runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
 
 		} else {
 			try {
-				String latestInteractions = RoutingPromptUtil
-						.latestInteractionsPromptPart(runtimeData.getRequestResources().getLastInteractions());
+				String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
+						runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
 				// Doing a query rewrite
 				String rewrited_query = doRequestRewrite(runtimeData, chatModel, serviceModel, latestInteractions);
 				// if actual resource has chat with documents or uploads with more than actual
@@ -304,20 +325,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		return rd;
 	}
 
-	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData) {
+	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData)
+			throws GeboChatSessionLifecycleException {
 		StringBuffer buffer = new StringBuffer();
-		List<GKnowledgeBase> knowledgeBases = new ArrayList<GKnowledgeBase>();
-		if (runtimeData.getChatProfile() != null) {
-			if (runtimeData.getChatProfile().getUserChoosesKnowledgeBases() != null
-					&& runtimeData.getChatProfile().getUserChoosesKnowledgeBases()) {
-				knowledgeBases.addAll(visibleKnowledgeBasesService.allVisibleKnowledgebases());
-			} else {
-				List<String> list = runtimeData.getChatProfile().getKnowledgeBaseCodes();
-				if (list != null && !list.isEmpty()) {
-					knowledgeBases.addAll(visibleKnowledgeBasesService.visiblesAndChildKnowledgebases(list));
-				}
-			}
-		}
+		List<GKnowledgeBase> knowledgeBases = this.chatSessionLifecycleService
+				.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
+
 		return deepSearchInternalKnowledgeBasePromptPart(knowledgeBases);
 	}
 

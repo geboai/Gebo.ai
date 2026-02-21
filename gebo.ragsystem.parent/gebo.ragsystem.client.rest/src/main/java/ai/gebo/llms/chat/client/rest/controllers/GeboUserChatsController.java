@@ -17,6 +17,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
@@ -51,6 +55,7 @@ public class GeboUserChatsController {
 	final GUserChatSessionRepository repository;
 	final IGSecurityService securityService;
 	final IGChatStorageAreaService chatStorageAreaService;
+	final IGChatSessionLifeCycleService sessionLifeCycleService;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -108,27 +113,6 @@ public class GeboUserChatsController {
 		_page.setPageSize(pageSize);
 
 		return repository.findByUsername(securityService.getCurrentUser().getUsername(), _page.toPageable());
-	}
-
-	/**
-	 * Deletes multiple user chats by their IDs.
-	 * 
-	 * @param ids List of chat IDs to delete
-	 */
-	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteUserChats(@RequestBody List<String> ids) {
-		List<GUserChatSession> data = repository.findAllById(ids);
-		for (GUserChatSession gUserChatContext : data) {
-			securityService.checkBeingCreator(gUserChatContext);
-		}
-		for (GUserChatSession gUserChatContext : data) {
-			try {
-				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
-			} catch (IOException e) {
-
-			}
-			repository.delete(gUserChatContext);
-		}
 	}
 
 	/**
@@ -205,5 +189,28 @@ public class GeboUserChatsController {
 			return GLookupEntry.of(uc);
 		} else
 			throw new IllegalStateException("Chat not found with this code");
+	}
+
+	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByModelCode(
+			@RequestParam(value = "modelCode", required = true) String modelCode) throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode);
+	}
+
+	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByChatProfileCode(
+			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode);
+	}
+
+	@DeleteMapping("deleteChat")
+	public void deleteChat(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
+	}
+	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo suggestChatDescription(@RequestParam("userChatContextCode") String userChatContextCode) throws GeboChatSessionLifecycleException {
+		return this.sessionLifeCycleService.suggestChatDescription(userChatContextCode);
 	}
 }

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,8 +18,8 @@
  * The component implements ControlValueAccessor to integrate with Angular's form controls.
  */
 
-import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Optional, Output, Self, SimpleChanges } from "@angular/core";
+import { ControlValueAccessor, NgControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
@@ -39,18 +39,12 @@ import { SelectChangeEvent } from "primeng/select";
 @Component({
     selector: "geboai-editable-listbox-component",
     templateUrl: "editable-listbox.component.html",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => EditableListboxComponent),
-            multi: true
-        }
-    ],
+
     standalone: false
 })
 export class EditableListboxComponent implements ControlValueAccessor, OnInit, OnChanges {
     /** Unique code to identify when "Create new" option is selected */
-    public  createNewValueCodeConstant: string = "InsertNewRecord@@@@[Gebo.ai]";
+    public createNewValueCodeConstant: string = "InsertNewRecord@@@@[Gebo.ai]";
     /** Object representing the "Create new" option */
     private newRecordSelectable: { code?: string, description?: string } = { code: this.createNewValueCodeConstant, description: "Create new...." };
 
@@ -61,15 +55,15 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
     /** Currently selected option */
     public selectedOption?: { code?: string, description?: string };
     /** Flag indicating if the component is disabled */
-    public disabled:boolean=false;
+    public disabled: boolean = false;
     /** Whether to automatically select an option when there's only one available */
-    @Input() onSingleOptionAutomaticallySelect: boolean = true;    
+    @Input() onSingleOptionAutomaticallySelect: boolean = true;
     /** Placeholder text to display when no option is selected */
     @Input() placeholder?: string;
     /** Flag indicating if the component is in readonly mode */
     @Input() readonly: boolean = false;
 
-    @Input() required?:boolean;
+    @Input() required?: boolean;
     /** The current value of the component */
     public value?: string = undefined;
     /** Observable to fetch options dynamically */
@@ -79,8 +73,8 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
     /** Configuration for creating new records */
     @Input() createNewRecordRequest?: GeboUIActionRequest = undefined;
     /** Event emitted when selection changes */
-    @Output() selectionChanged:EventEmitter<any>=new EventEmitter();
-    
+    @Output() selectionChanged: EventEmitter<any> = new EventEmitter();
+
     /**
      * Determines if the "Create new" option should be available
      * @returns True if the component is configured to support creating new records
@@ -94,8 +88,21 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
      * @param changeDetection Reference to Angular's change detection mechanism
      * @param actionsService Service for routing UI actions
      */
-    constructor(private changeDetection: ChangeDetectorRef, private actionsService?: GeboUIActionRoutingService) {
+    constructor(private changeDetection: ChangeDetectorRef, @Self() @Optional() public ngControl: NgControl, private actionsService?: GeboUIActionRoutingService) {
+        if (this.ngControl) {
+            this.ngControl.valueAccessor = this;
+        }
+    }
 
+    /**
+     * Determines if the field is required based on input or validator
+     */
+    public get isRequired(): boolean {
+        if (this.required) return true;
+        if (this.ngControl?.control?.hasValidator(Validators.required)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -118,9 +125,9 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
                     case GeboActionPerformedType.INSERTED:
                     case GeboActionPerformedType.SAVED: {
                         this.value = event?.target?.code;
-                        if (this.options && (!this.options?.find(y=>y.code===this.value))) {
-                            this.options=[...this.options,event.target];
-                            if (this.data && !this.data?.find(y=>y.code===this.value)) {
+                        if (this.options && (!this.options?.find(y => y.code === this.value))) {
+                            this.options = [...this.options, event.target];
+                            if (this.data && !this.data?.find(y => y.code === this.value)) {
                                 this.data.push(event.target);
                             }
                         }
@@ -139,10 +146,14 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
 
     /**
      * Automatically selects an option if there's only one available and the auto-select flag is enabled
+     * or if the field is required.
      */
     private checkSingleOptionPresent() {
-        if (this.onSingleOptionAutomaticallySelect === true && !this.value && this.options && this.options.length === 1 && this.options[0].code !== this.createNewValueCodeConstant) {
-            this.value = this.options[0].code;
+        const realOptions = this.options?.filter(x => x.code !== this.createNewValueCodeConstant) || [];
+
+        if (realOptions.length === 1 && !this.value && (this.onSingleOptionAutomaticallySelect === true || this.isRequired === true)) {
+            this.value = realOptions[0].code;
+            this.selectCorrectValue();
             if (this.onChange)
                 this.onChange(this.value);
         }
@@ -251,8 +262,8 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
      * @param isDisabled Whether the component should be disabled
      */
     setDisabledState?(isDisabled: boolean): void {
-        this.disabled=isDisabled===true;
-       
+        this.disabled = isDisabled === true;
+
     }
 
     /**

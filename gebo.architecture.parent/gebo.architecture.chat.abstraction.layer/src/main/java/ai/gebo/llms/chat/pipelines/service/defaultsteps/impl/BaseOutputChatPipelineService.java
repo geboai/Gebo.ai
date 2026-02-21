@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -17,11 +15,8 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -32,6 +27,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentSe
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -66,10 +62,11 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 
 		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(searchRewritings.getRewrittenSemanticSearchSentences(),
+		AIDocumentsSet documentSet = searchesService.search(runtimeData.getRequestResources().getCurrentRequest(),
+				searchRewritings.getRewrittenSemanticSearchSentences(),
 				searchRewritings.getRewrittenFullTextSearchSentences(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()),
-				configuration.getGlobalRagTopK(), runtimeData.getUserChatContext(), tokensBudget);
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()),
+				configuration.getGlobalRagTopK(), tokensBudget);
 
 		return documentSet;
 	}
@@ -104,8 +101,11 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
 				DefaultPipelineSharedPromptPlaceholders.DOCUMENTS_TEMPLATE_PARAM,
 				DefaultPipelineSharedPromptPlaceholders.LATEST_INTERACTIONS_TEMPLATE_PARAM);
+		Map<String, Object> chatContextParams = CommonChatPromptParamsUtil
+				.preparePromptParameters(runtimeData.getMinimalChatContext());
+		params.putAll(chatContextParams);
 		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt.getPrompt(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getLastRequest()), params,
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()), params,
 				List.of(DATASOURCES_FIELD, SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD, DOCUMENT_CODES_FIELD));
 		SearchesSuggestions outValue = new SearchesSuggestions();
 		outValue.setDeepSearchDataSources(fieldEntries.get(DATASOURCES_FIELD));
@@ -194,8 +194,8 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 				targetChatModel.getContextLength());
 		out = AIDocumentsSet.join(out, searchResult);
 		if (!out.getDocumentItems().isEmpty()) {
-			rc = chatSessionLifecycleService.addRetrievedDocumentsToState(runtimeData.getUserChatContext(), out,
-					targetChatModel, policy);
+			rc = chatSessionLifecycleService.addRetrievedDocuments(
+					runtimeData.getRequestResources().getCurrentRequest(), out, targetChatModel, policy);
 		} else
 			rc = runtimeData.getRequestResources();
 		return rc;

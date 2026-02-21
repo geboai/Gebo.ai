@@ -57,9 +57,39 @@ public class GeboUserChatsControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteUserChatsTest() {
-        List<String> body = null;
-        api.deleteUserChats(body);
+    public void createCleanChatByChatProfileCodeTest() {
+        String chatProfileCode = null;
+        GUserChatInfo response = api.createCleanChatByChatProfileCode(chatProfileCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createCleanChatByModelCodeTest() {
+        String modelCode = null;
+        GUserChatInfo response = api.createCleanChatByModelCode(modelCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void deleteChatTest() {
+        String userChatContextCode = null;
+        api.deleteChat(userChatContextCode);
 
         // TODO: test validations
     }
@@ -135,6 +165,21 @@ public class GeboUserChatsControllerApiTest {
         Integer page = null;
         Integer pageSize = null;
         PageGUserChatInfo response = api.getMyChatsPaged(page, pageSize);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void suggestChatDescriptionTest() {
+        String userChatContextCode = null;
+        GUserChatInfo response = api.suggestChatDescription(userChatContextCode);
 
         // TODO: test validations
     }

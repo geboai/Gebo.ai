@@ -32,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class GeboDeepSearchControllerApi {
     private ApiClient apiClient;
@@ -635,6 +635,48 @@ public class GeboDeepSearchControllerApi {
 
         ParameterizedTypeReference<PageDeepSearchDocumentAnalisysResultStep> returnType = new ParameterizedTypeReference<PageDeepSearchDocumentAnalisysResultStep>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param deepSearchCode  (required)
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public void stopDeepSearch(String deepSearchCode) throws RestClientException {
+        stopDeepSearchWithHttpInfo(deepSearchCode);
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param deepSearchCode  (required)
+     * @return ResponseEntity&lt;Void&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<Void> stopDeepSearchWithHttpInfo(String deepSearchCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'deepSearchCode' is set
+        if (deepSearchCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'deepSearchCode' when calling stopDeepSearch");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboDeepSearchController/stopDeepSearch").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "deepSearchCode", deepSearchCode));
+
+        final String[] accepts = {  };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 

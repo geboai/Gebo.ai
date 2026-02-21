@@ -76,6 +76,7 @@ import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsLookupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
+import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.GChatModelType;
@@ -200,13 +201,14 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
-		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
-		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);		
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
 		IGConfigurableChatModel chatModel = this.chatModelRuntimeDao.defaultHandler();
-		this.chatLifecycleService.ensureChatSessionExists(data, chatModel);
+		
 		GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT);
 		for (int i = 0; i < INGESTION_FILES.length; i++) {
 			GeboChatRequest request = new GeboChatRequest();
@@ -214,6 +216,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			request.setQuery(interactions.get(i).getUser());
 			request.setUserChatContextCode(cleanChat.getCode());
 			request.setId(UUID.randomUUID().toString());
+			this.chatLifecycleService.ensureChatSessionExists(request);
 			ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
 			response.setId(UUID.randomUUID().toString());
 			response.setUserChatContextCode(data.getCode());
@@ -221,8 +224,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			response.setQueryResponse(interactions.get(i).getAssistant());
 			String file = INGESTION_FILES[i];
 			LOGGER.info("Ingesting and adding file:" + file);
-			LLMChatRequestResources r = this.chatLifecycleService.addRequestToState(data, request, chatModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			LLMChatRequestResources r = this.chatLifecycleService.startRequest(request, chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			try (InputStream is = getClass().getResourceAsStream(file)) {
 				if (is == null)
@@ -238,12 +240,12 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 				if (!ing.isUnmanagedContent()) {
 					AIDocumentsSet set = AIDocumentsSet.from(ing.getStream().toList());
 
-					r = this.chatLifecycleService.addRetrievedDocumentsToState(data, set, chatModel,
+					r = this.chatLifecycleService.addRetrievedDocuments(request, set, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
-					this.chatLifecycleService.addInteractionToState(data, request, response);
-					this.chatService.addChatInteractionToUserContext(request, response, data);
-					this.chatLifecycleService.chatRequestCompleted(data, chatModel);
+					this.chatLifecycleService.endRequest(request, response);
+					
+					this.chatLifecycleService.chatRequestCompleted(request, chatModel);
 					this.showShrinked(data);
 				}
 				ChatFullSessionState fullState = fullSessionService.retrieveState(data);
@@ -273,8 +275,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			interaction.getRequest().setUserChatContextCode(data.getCode());
 			interaction.setRequestNTokens(tokenEstimator.estimate(tChatInteraction.getUser()));
 
-			this.chatLifecycleService.addRequestToState(data, interaction.getRequest(), chatModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			this.chatLifecycleService.startRequest(interaction.getRequest(), chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			interaction.setResponse(new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse());
 			interaction.getResponse().setQueryResponse(tChatInteraction.getAssistant());
 			interaction.getResponse().setUserChatContextCode(data.getCode());
@@ -282,10 +283,9 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			_interactions.add(interaction);
 			data.setInteractions(_interactions);
 			persistentObjectManager.update(data);
-			this.chatLifecycleService.addInteractionToState(data,
-					interaction.getRequest(),
+			this.chatLifecycleService.endRequest(interaction.getRequest(),
 					(ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse) interaction.getResponse());
-			this.chatLifecycleService.chatRequestCompleted(data, chatModel);
+			this.chatLifecycleService.chatRequestCompleted(interaction.getRequest(), chatModel);
 			this.showShrinked(data);
 			ChatFullSessionState fullState = fullSessionService.retrieveState(data);
 			boolean value = fullState.getRetrievedDocuments().getValue().getData().isEmpty();
@@ -317,8 +317,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		assertNotNull(opt.isEmpty(), "Shrinked state must be already being calculated");
 		shrinkedState = opt.get();
-		if (shrinkedState.getConsolidatedInteractions() != null) {
-			LOGGER.info("Consolidated text:" + shrinkedState.getConsolidatedInteractions().getConsolidationText());
+		if (shrinkedState.getChatHistory() != null) {
+			LOGGER.info("Consolidated text:" + shrinkedState.getChatHistory().getConsolidationText());
 		}
 
 		LOGGER.info("Shrinked state:" + shrinkedState);
@@ -352,7 +352,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
-		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
+		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
@@ -399,8 +400,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 
 		assertNotNull(opt.isEmpty(), "Shrinked state must be already being calculated");
 		shrinkedState = opt.get();
-		if (shrinkedState.getConsolidatedInteractions() != null) {
-			LOGGER.info("Consolidated text:" + shrinkedState.getConsolidatedInteractions().getConsolidationText());
+		if (shrinkedState.getChatHistory() != null) {
+			LOGGER.info("Consolidated text:" + shrinkedState.getChatHistory().getConsolidationText());
 		}
 
 		LOGGER.info("Shrinked state:" + shrinkedState);

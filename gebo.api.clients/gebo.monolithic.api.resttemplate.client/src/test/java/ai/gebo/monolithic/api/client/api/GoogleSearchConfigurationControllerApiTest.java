@@ -12,7 +12,9 @@
 
 package ai.gebo.monolithic.api.client.api;
 
+import ai.gebo.monolithic.api.client.model.ComponentSetupStatus;
 import ai.gebo.monolithic.api.client.model.GGoogleSearchApiCredentials;
+import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -41,6 +43,49 @@ public class GoogleSearchConfigurationControllerApiTest {
     public void deleteGGoogleSearchApiCredentialsTest() {
         GGoogleSearchApiCredentials body = null;
         api.deleteGGoogleSearchApiCredentials(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void fastInsertGoogleSearchApiCredentialsTest() {
+        GoogleSearchConfig body = null;
+        GGoogleSearchApiCredentials response = api.fastInsertGoogleSearchApiCredentials(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getGoogleSearchApiCredentialsTest() {
+        List<GGoogleSearchApiCredentials> response = api.getGoogleSearchApiCredentials();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getGoogleSearchStatusTest() {
+        ComponentSetupStatus response = api.getGoogleSearchStatus();
 
         // TODO: test validations
     }

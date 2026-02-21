@@ -5,12 +5,15 @@ All URIs are relative to *http://localhost:12999*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeChatDescription**](GeboUserChatsControllerApi.md#changeChatDescription) | **POST** /api/users/GeboUserChatsController/changeChatDescription | 
-[**deleteUserChats**](GeboUserChatsControllerApi.md#deleteUserChats) | **POST** /api/users/GeboUserChatsController/deleteUserChats | 
+[**createCleanChatByChatProfileCode**](GeboUserChatsControllerApi.md#createCleanChatByChatProfileCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByChatProfileCode | 
+[**createCleanChatByModelCode**](GeboUserChatsControllerApi.md#createCleanChatByModelCode) | **GET** /api/users/GeboUserChatsController/createCleanChatByModelCode | 
+[**deleteChat**](GeboUserChatsControllerApi.md#deleteChat) | **DELETE** /api/users/GeboUserChatsController/deleteChat | 
 [**getChatHistory**](GeboUserChatsControllerApi.md#getChatHistory) | **GET** /api/users/GeboUserChatsController/getChatHistory | 
 [**getChatInfosByCode**](GeboUserChatsControllerApi.md#getChatInfosByCode) | **GET** /api/users/GeboUserChatsController/getChatInfosByCode | 
 [**getChatInfosByQbe**](GeboUserChatsControllerApi.md#getChatInfosByQbe) | **POST** /api/users/GeboUserChatsController/getChatInfosByQbe | 
 [**getMyChats**](GeboUserChatsControllerApi.md#getMyChats) | **GET** /api/users/GeboUserChatsController/getMyChats | 
 [**getMyChatsPaged**](GeboUserChatsControllerApi.md#getMyChatsPaged) | **GET** /api/users/GeboUserChatsController/getMyChatsPaged | 
+[**suggestChatDescription**](GeboUserChatsControllerApi.md#suggestChatDescription) | **GET** /api/users/GeboUserChatsController/suggestChatDescription | 
 
 <a name="changeChatDescription"></a>
 # **changeChatDescription**
@@ -55,9 +58,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-<a name="deleteUserChats"></a>
-# **deleteUserChats**
-> deleteUserChats(body)
+<a name="createCleanChatByChatProfileCode"></a>
+# **createCleanChatByChatProfileCode**
+> GUserChatInfo createCleanChatByChatProfileCode(chatProfileCode)
 
 
 
@@ -69,11 +72,12 @@ No authorization required
 
 
 GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
-List<String> body = Arrays.asList("body_example"); // List<String> | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
-    apiInstance.deleteUserChats(body);
+    GUserChatInfo result = apiInstance.createCleanChatByChatProfileCode(chatProfileCode);
+    System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboUserChatsControllerApi#deleteUserChats");
+    System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByChatProfileCode");
     e.printStackTrace();
 }
 ```
@@ -82,7 +86,92 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**List&lt;String&gt;**](String.md)|  |
+ **chatProfileCode** | **String**|  |
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="createCleanChatByModelCode"></a>
+# **createCleanChatByModelCode**
+> GUserChatInfo createCleanChatByModelCode(modelCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String modelCode = "modelCode_example"; // String | 
+try {
+    GUserChatInfo result = apiInstance.createCleanChatByModelCode(modelCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#createCleanChatByModelCode");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **modelCode** | **String**|  |
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="deleteChat"></a>
+# **deleteChat**
+> deleteChat(userChatContextCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+try {
+    apiInstance.deleteChat(userChatContextCode);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#deleteChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
 
 ### Return type
 
@@ -94,7 +183,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: Not defined
 
 <a name="getChatHistory"></a>
@@ -300,6 +389,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PageGUserChatInfo**](PageGUserChatInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="suggestChatDescription"></a>
+# **suggestChatDescription**
+> GUserChatInfo suggestChatDescription(userChatContextCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
+
+
+GeboUserChatsControllerApi apiInstance = new GeboUserChatsControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+try {
+    GUserChatInfo result = apiInstance.suggestChatDescription(userChatContextCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatsControllerApi#suggestChatDescription");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
+
+### Return type
+
+[**GUserChatInfo**](GUserChatInfo.md)
 
 ### Authorization
 

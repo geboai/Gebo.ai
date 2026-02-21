@@ -1,8 +1,10 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -15,7 +17,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
@@ -30,6 +31,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public class ChatPipelineServiceImpl implements IChatPipelineService {
+	private static Logger LOGGER = LoggerFactory.getLogger(ChatPipelineServiceImpl.class);
 	protected final IChatPipelinesExecutor executor;
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGPersistentObjectManager persistentObjectManager;
@@ -38,42 +40,28 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
 
 	@Override
-	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request) throws ChatPipelineException, GeboChatSessionLifecycleException {
+	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
+		GeboChatResponse response = null;
 		try {
-			GUserChatSession context = null;
-			if (request.getUserChatContextCode() != null) {
-
-				context = persistentObjectManager.findById(GUserChatSession.class, request.getUserChatContextCode());
-
-				if (context == null) {
-					throw new ChatPipelineException("Referred context is not found");
-				}
-				securityService.checkBeingCreator(context);
-			} else {
-				context = new GUserChatSession();
-				context.setUsername(securityService.getCurrentUser().getUsername());
-				context.setChatProfileCode(request.getChatProfileCode());
-				context.setChatModelCode(request.getChatModelCode());
-				context.setRagChat(
-						request.getChatProfileCode() != null && request.getChatProfileCode().trim().length() > 0);
-				context.setCode(UUID.randomUUID().toString());
-				context.setDescription("New chat");
-				context = persistentObjectManager.insert(context);
-
-			}
-			IGConfigurableChatModel chatModel = getContextSpecifiedModelOrDefault(context);
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			
-			String chatProfileCode = context.getChatProfileCode();
-			if (chatProfileCode != null) {
-				IGChatProfileChatModel chatProfile = chatProfileDao.findByCode(chatProfileCode);
-				if (chatProfile != null && chatProfile.getChatModel() != null) {
-					chatModel = chatProfile.getChatModel();
-				}
+			Flux<GeboChatMessageEnvelope> flux = executor.streamingExecute(request, chatModel, serviceModel,
+					pipelineCode);
+			Vector<GeboChatMessageEnvelope> responsesList = new Vector<GeboChatMessageEnvelope>();
+			Flux<GeboChatMessageEnvelope> lastMessageFlux = flux.filter(x -> {
+				responsesList.add(x);
+				return x.isLastMessage() && x.getContent() instanceof GeboChatResponse;
+			});
+			GeboChatMessageEnvelope last = lastMessageFlux.blockLast();
+			if (last!=null && last.getContent() instanceof GeboChatResponse _response) {
+				response = _response;
+			} else {
+				LOGGER.warn("No GeboChatResponse as output");
 			}
-			this.chatSessionLifecycleService.ensureChatSessionExists(context, chatModel);
-			return executor.execute(request, context, chatModel, serviceModel, pipelineCode);
+			return response;
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline";
 			throw new ChatPipelineException(msg, e);
@@ -84,38 +72,11 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		try {
-
-			GUserChatSession context = null;
-			if (request.getUserChatContextCode() != null) {
-				context = persistentObjectManager.findById(GUserChatSession.class, request.getUserChatContextCode());
-				if (context == null) {
-					throw new ChatPipelineException("Referred context is not found");
-				}
-				securityService.checkBeingCreator(context);
-			} else {
-				context = new GUserChatSession();
-				context.setUsername(securityService.getCurrentUser().getUsername());
-				context.setChatProfileCode(request.getChatProfileCode());
-				context.setChatModelCode(request.getChatModelCode());
-				context.setRagChat(
-						request.getChatProfileCode() != null && request.getChatProfileCode().trim().length() > 0);
-				context.setCode(UUID.randomUUID().toString());
-				context.setDescription("New chat");
-				context = persistentObjectManager.insert(context);
-
-			}
-			IGConfigurableChatModel chatModel = getContextSpecifiedModelOrDefault(context);
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			String chatProfileCode = context.getChatProfileCode();
-			if (chatProfileCode != null) {
-				IGChatProfileChatModel chatProfile = chatProfileDao.findByCode(chatProfileCode);
-				if (chatProfile != null && chatProfile.getChatModel() != null) {
-					chatModel = chatProfile.getChatModel();
-				}
-			}
-			this.chatSessionLifecycleService.ensureChatSessionExists(context, chatModel);
-			return executor.streamingExecute(request, context, chatModel, serviceModel, pipelineCode);
+			return executor.streamingExecute(request, chatModel, serviceModel, pipelineCode);
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline (streaming)";
 			throw new ChatPipelineException(msg, e);

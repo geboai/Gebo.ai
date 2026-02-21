@@ -13,13 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * Gebo.ai comment agent
@@ -85,7 +82,7 @@ public interface IGChatService extends IGGenericalChatService {
 	 */
 	public InputStream speech(String text, String modelCode) throws LLMConfigException;
 
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException;
+	
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases();
 }

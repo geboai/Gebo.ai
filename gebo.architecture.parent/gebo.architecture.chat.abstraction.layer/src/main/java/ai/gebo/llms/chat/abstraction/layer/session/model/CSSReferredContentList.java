@@ -9,10 +9,14 @@ import java.util.stream.Stream;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class CSSReferredContentList<T> implements ITokensCountable {
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class NestedArrayList<T> implements ITokensCountable {
 		private ArrayList<CSSInteractionReferredContent<T>> container = new ArrayList();
 
@@ -45,7 +49,7 @@ public class CSSReferredContentList<T> implements ITokensCountable {
 		}
 
 		public int size() {
-			
+
 			return container.size();
 		}
 	}
@@ -66,6 +70,11 @@ public class CSSReferredContentList<T> implements ITokensCountable {
 		}
 		return AIDocumentsSet.fromMap(map);
 	}
+	public CSSReferredContentList() {
+		
+	}
+	public CSSReferredContentList(CSSReferredContentList<T> cssReferredContentList) {
+		this.data = new NestedArrayList<T>(cssReferredContentList.data.container);
+	}
 
-	
 };

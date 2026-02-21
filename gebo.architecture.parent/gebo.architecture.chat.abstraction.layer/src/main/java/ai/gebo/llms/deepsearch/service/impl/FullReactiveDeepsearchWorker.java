@@ -3,6 +3,7 @@ package ai.gebo.llms.deepsearch.service.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,7 +24,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
@@ -35,10 +38,10 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
-import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
+import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -83,7 +86,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	private List<Flux<AbstractDeepSearchEvent>> dataSourcesDeepSearch(DeepSearchRequest request,
-			List<AbstractDeepSearchEvent> history, List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
+			MinimalChatContext minimalChatContext, List<AbstractDeepSearchEvent> history,
+			List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
 			List<IGReactiveDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler,
 			String chunkingSessionId, AtomicBoolean completed) throws LLMConfigException, IOException,
@@ -110,7 +114,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				state.getDataSourcesStatusDoneSteps().put(handler.getHandlerId(), doneSteps);
 
 				nextStepValue = handler.streamSearch(chatModel, serviceModel, deepSearchConfig, request,
-						dataSourcesResults, chunkingSessionId, totalSteps, doneSteps, completed, state);
+						minimalChatContext, dataSourcesResults, chunkingSessionId, totalSteps, doneSteps, completed,
+						state);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 							"Extracting relevant documents",
@@ -139,7 +144,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
 	}
 
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, AIDocumentsSet sessionDocuments,
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request,
+			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
 			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
@@ -170,9 +176,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				if (!handlers.isEmpty()) {
 
 					try {
-						List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesDeepSearch(request, history,
-								dataSourcesResults, state, handlers, chatModel, serviceModel, configuration,
-								deepSearchScheduler, chunkingSessionId, completed);
+						List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesDeepSearch(request,
+								minimalChatContext, history, dataSourcesResults, state, handlers, chatModel,
+								serviceModel, configuration, deepSearchScheduler, chunkingSessionId, completed);
 						sources.addAll(newSources);
 					} catch (Throwable e) {
 						LOGGER.error("Exception accessing deep search data source", e);
@@ -194,8 +200,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
-						.knowledgeBaseDeepSearch(request, sessionDocuments, dataSourcesResults, history, state,
-								configuration, userInfos, chatModel, chunkingSessionId, embeddingModels, completed);
+						.knowledgeBaseDeepSearch(request, minimalChatContext, sessionDocuments, dataSourcesResults,
+								history, state, configuration, userInfos, chatModel, chunkingSessionId, embeddingModels,
+								completed);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -218,17 +225,20 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return event;
 		});
-		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request, history, state,
-				configuration, userInfos, embeddingModels, chatModel, intermediates);
+		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request,
+				minimalChatContext, history, state, configuration, userInfos, embeddingModels, chatModel,
+				intermediates);
 
 		return outFlux;
 
 	}
 
 	private Flux<AbstractDeepSearchEvent> enqueueDeepSearchProcessedEvent(Flux<AbstractDeepSearchEvent> composedFlux,
-			DeepSearchRequest request, List<AbstractDeepSearchEvent> history, DeepSearchState state,
-			DeepSearchConfig configuration, UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels,
-			IGConfigurableChatModel chatModel, Vector<IDeepSearchResult> intermediates) {
+			DeepSearchRequest request, MinimalChatContext minimalChatContext, List<AbstractDeepSearchEvent> history,
+			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
+			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+			Vector<IDeepSearchResult> intermediates) {
+		final Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
 		Mono<AbstractDeepSearchEvent> deferred = Mono.fromCallable(() -> {
 			final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
 			consolidatedResult.setInputData(request);
@@ -243,7 +253,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				}
 				String consolidatedText = callLLMConsolidateText(chatModel,
 						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-						request.getQuery(), "", inputs);
+						request.getQuery(), "", promptParams, inputs);
 				consolidatedResult.getOutputData().setResponse(consolidatedText);
 				consolidatedResult.getOutputData().setProcessPercentage(100);
 				boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;

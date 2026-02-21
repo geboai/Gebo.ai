@@ -27,7 +27,7 @@ import java.util.List;
  * PageGLookupEntry
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class PageGLookupEntry {
   @JsonProperty("totalElements")
@@ -36,20 +36,11 @@ public class PageGLookupEntry {
   @JsonProperty("totalPages")
   private Integer totalPages = null;
 
-  @JsonProperty("size")
-  private Integer size = null;
-
-  @JsonProperty("content")
-  private List<GLookupEntry> content = null;
-
-  @JsonProperty("number")
-  private Integer number = null;
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
-
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -59,6 +50,15 @@ public class PageGLookupEntry {
 
   @JsonProperty("last")
   private Boolean last = null;
+
+  @JsonProperty("size")
+  private Integer size = null;
+
+  @JsonProperty("content")
+  private List<GLookupEntry> content = null;
+
+  @JsonProperty("number")
+  private Integer number = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -97,6 +97,96 @@ public class PageGLookupEntry {
 
   public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
+  }
+
+  public PageGLookupEntry numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+  }
+
+  public PageGLookupEntry sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
+  public PageGLookupEntry pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
+  }
+
+  public PageGLookupEntry first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGLookupEntry last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageGLookupEntry size(Integer size) {
@@ -161,96 +251,6 @@ public class PageGLookupEntry {
     this.number = number;
   }
 
-  public PageGLookupEntry sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
-  public PageGLookupEntry numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-  }
-
-  public PageGLookupEntry pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
-  public PageGLookupEntry first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageGLookupEntry last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
-  }
-
   public PageGLookupEntry empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -281,20 +281,20 @@ public class PageGLookupEntry {
     PageGLookupEntry pageGLookupEntry = (PageGLookupEntry) o;
     return Objects.equals(this.totalElements, pageGLookupEntry.totalElements) &&
         Objects.equals(this.totalPages, pageGLookupEntry.totalPages) &&
-        Objects.equals(this.size, pageGLookupEntry.size) &&
-        Objects.equals(this.content, pageGLookupEntry.content) &&
-        Objects.equals(this.number, pageGLookupEntry.number) &&
-        Objects.equals(this.sort, pageGLookupEntry.sort) &&
         Objects.equals(this.numberOfElements, pageGLookupEntry.numberOfElements) &&
+        Objects.equals(this.sort, pageGLookupEntry.sort) &&
         Objects.equals(this.pageable, pageGLookupEntry.pageable) &&
         Objects.equals(this.first, pageGLookupEntry.first) &&
         Objects.equals(this.last, pageGLookupEntry.last) &&
+        Objects.equals(this.size, pageGLookupEntry.size) &&
+        Objects.equals(this.content, pageGLookupEntry.content) &&
+        Objects.equals(this.number, pageGLookupEntry.number) &&
         Objects.equals(this.empty, pageGLookupEntry.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, size, content, number, sort, numberOfElements, pageable, first, last, empty);
+    return Objects.hash(totalElements, totalPages, numberOfElements, sort, pageable, first, last, size, content, number, empty);
   }
 
 
@@ -305,14 +305,14 @@ public class PageGLookupEntry {
     
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    content: ").append(toIndentedString(content)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

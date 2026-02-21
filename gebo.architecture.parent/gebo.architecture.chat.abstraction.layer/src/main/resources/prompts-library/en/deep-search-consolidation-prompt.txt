@@ -10,18 +10,22 @@ Your job is to update the consolidated report so that:
 - it integrates any truly new information from the partial contribution,
 - it keeps track of all evidence fragment ids.
 
-USER:
-User question:
-<<<
-{question}
->>>
+INPUTS:
+- Last User question:
+ {question}
 
-Current consolidated report (may be empty or null):
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
+
+- Current consolidated report (may be empty or null):
 <<<
 {consolidated}
 >>>
 
-New partial contribution:
+- New partial contribution:
 <<<
 {documents}
 >>>

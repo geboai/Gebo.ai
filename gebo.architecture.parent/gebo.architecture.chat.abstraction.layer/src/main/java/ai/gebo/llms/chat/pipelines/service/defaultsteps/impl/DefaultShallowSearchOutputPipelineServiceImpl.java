@@ -11,10 +11,10 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceExecutor;
@@ -55,12 +55,13 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 		if (_choosedSourceId != null && _choosedSourceId instanceof List list && !list.isEmpty()) {
 			choosedSourceId = list.get(0).toString();
 		}
+		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
 				serviceModel, config, null);
 		try {
-			return executor.execute(handler, runtimeData.getRequestResources().getLastRequest(),
-					runtimeData.getChatResponse(), chatModel, serviceModel, runtimeData.getUserChatContext());
+			return executor.execute(handler, runtimeData.getRequestResources().getCurrentRequest(), minimalChatContext,
+					runtimeData.getChatResponse(), chatModel, serviceModel);
 		} catch (LLMConfigException | IOException | GeboIngestionException | GeboContentHandlerSystemException
 				| SearchServiceException e) {
 			throw new ChatPipelineException("Pipeline broken on search", e);

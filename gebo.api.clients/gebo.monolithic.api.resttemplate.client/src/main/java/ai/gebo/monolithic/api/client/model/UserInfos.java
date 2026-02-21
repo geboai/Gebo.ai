@@ -24,23 +24,77 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-12T12:02:09.212348400+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
 
 public class UserInfos {
+  @JsonProperty("username")
+  private String username = null;
+
+  @JsonProperty("disabled")
+  private Boolean disabled = null;
+
+  @JsonProperty("sourname")
+  private String sourname = null;
+
   @JsonProperty("name")
   private String name = null;
 
   @JsonProperty("roles")
   private List<String> roles = null;
 
-  @JsonProperty("sourname")
-  private String sourname = null;
+  public UserInfos username(String username) {
+    this.username = username;
+    return this;
+  }
 
-  @JsonProperty("disabled")
-  private Boolean disabled = null;
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
 
-  @JsonProperty("username")
-  private String username = null;
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public UserInfos disabled(Boolean disabled) {
+    this.disabled = disabled;
+    return this;
+  }
+
+   /**
+   * Get disabled
+   * @return disabled
+  **/
+  @Schema(description = "")
+  public Boolean isDisabled() {
+    return disabled;
+  }
+
+  public void setDisabled(Boolean disabled) {
+    this.disabled = disabled;
+  }
+
+  public UserInfos sourname(String sourname) {
+    this.sourname = sourname;
+    return this;
+  }
+
+   /**
+   * Get sourname
+   * @return sourname
+  **/
+  @Schema(description = "")
+  public String getSourname() {
+    return sourname;
+  }
+
+  public void setSourname(String sourname) {
+    this.sourname = sourname;
+  }
 
   public UserInfos name(String name) {
     this.name = name;
@@ -86,60 +140,6 @@ public class UserInfos {
     this.roles = roles;
   }
 
-  public UserInfos sourname(String sourname) {
-    this.sourname = sourname;
-    return this;
-  }
-
-   /**
-   * Get sourname
-   * @return sourname
-  **/
-  @Schema(description = "")
-  public String getSourname() {
-    return sourname;
-  }
-
-  public void setSourname(String sourname) {
-    this.sourname = sourname;
-  }
-
-  public UserInfos disabled(Boolean disabled) {
-    this.disabled = disabled;
-    return this;
-  }
-
-   /**
-   * Get disabled
-   * @return disabled
-  **/
-  @Schema(description = "")
-  public Boolean isDisabled() {
-    return disabled;
-  }
-
-  public void setDisabled(Boolean disabled) {
-    this.disabled = disabled;
-  }
-
-  public UserInfos username(String username) {
-    this.username = username;
-    return this;
-  }
-
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -150,16 +150,16 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.name, userInfos.name) &&
-        Objects.equals(this.roles, userInfos.roles) &&
-        Objects.equals(this.sourname, userInfos.sourname) &&
+    return Objects.equals(this.username, userInfos.username) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.username, userInfos.username);
+        Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.name, userInfos.name) &&
+        Objects.equals(this.roles, userInfos.roles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, roles, sourname, disabled, username);
+    return Objects.hash(username, disabled, sourname, name, roles);
   }
 
 
@@ -168,11 +168,11 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
+    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
-    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
-    sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();
   }

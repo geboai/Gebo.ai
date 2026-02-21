@@ -33,6 +33,8 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.base.GObjectRef;
@@ -43,12 +45,12 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentsSearchServiceImpl.class);
 
 	@Override
-	public AIDocumentsSet search(GeboChatRequest chatRequest, GUserChatSession context, int tokensBudget)
+	public AIDocumentsSet search(GeboChatRequest chatRequest, int tokensBudget)
 			throws FullTextException, LLMConfigException {
 		List<String> semanticSearches = new ArrayList<String>();
 		List<String> fullTextSearches = new ArrayList<String>();
 		String userQuery = GeboChatRequest.actualQuery(chatRequest);
-		return this.search(semanticSearches, fullTextSearches, userQuery, tokensBudget, context, tokensBudget);
+		return this.search(null, semanticSearches, fullTextSearches, userQuery, tokensBudget, tokensBudget);
 	}
 
 	@Autowired
@@ -69,15 +71,26 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	IGSecurityService securityService;
 	@Autowired
 	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+	@Autowired
+	GUserChatSessionRepository sessionRepo;
 
 	@Override
-	public AIDocumentsSet search(List<String> semanticSearches, List<String> fullTextSearches, String userQuery,
-			int globalTopK, GUserChatSession context, int tokensBudget) throws FullTextException, LLMConfigException {
+	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, List<String> fullTextSearches,
+			String userQuery, int globalTopK, int tokensBudget) throws FullTextException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(..)");
 		}
 
-		String chatProfileCode = context.getChatProfileCode();
+		String chatProfileCode = request.getChatProfileCode();
+		if (chatProfileCode == null || chatProfileCode.trim().length() == 0) {
+			String id = request.getUserChatContextCode();
+			if (id == null)
+				throw new RuntimeException("The chat session have to be initialized");
+			GUserChatSession session = this.sessionRepo.findById(id).orElseThrow(() -> {
+				throw new RuntimeException("The chat session do not exist");
+			});
+			chatProfileCode = session.getChatProfileCode();
+		}
 		List<String> knowledgeBases = new ArrayList<String>();
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
 		double firstHopThreashold = chatConfigs.getDefaultSimilarityThreshold();

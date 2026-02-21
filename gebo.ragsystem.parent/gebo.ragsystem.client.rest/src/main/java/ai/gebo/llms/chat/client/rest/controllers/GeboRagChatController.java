@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -73,10 +75,13 @@ public class GeboRagChatController {
 	 * @return A flux of server-sent events containing the streaming response
 	 * @throws GeboChatException  If there's an error processing the chat
 	 * @throws LLMConfigException If there's a configuration error with the LLM
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "streamRagResponse", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamRagResponse(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 
 		return chatService.streamChat(request).map(StreamUtil.mappingFunction)
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
@@ -124,27 +129,17 @@ public class GeboRagChatController {
 	 * @return The chat response from the LLM with RAG augmentation
 	 * @throws GeboChatException  If there's an error processing the chat
 	 * @throws LLMConfigException If there's a configuration error with the LLM
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "ragChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboChatResponse ragChat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException {
+	public GeboChatResponse ragChat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 
 		return chatService.chat(request);
 	}
 
-	/**
-	 * Endpoint for rich RAG-based chat interactions that returns a templated
-	 * response
-	 * 
-	 * @param request The chat request containing messages and parameters
-	 * @return A templated chat response with rich formatted content
-	 * @throws GeboChatException  If there's an error processing the chat
-	 * @throws LLMConfigException If there's a configuration error with the LLM
-	 */
-	@PostMapping(value = "richRagChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboTemplatedChatResponse<RichResponse> richRagChat(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
-		return chatService.templatedChat(request, RichResponse.class);
-	}
+	
 
 	/**
 	 * Retrieves user info for a specific chat profile
@@ -164,17 +159,7 @@ public class GeboRagChatController {
 		return chatService.getChatModelUserInfoByChatProfileCode(chatProfileCode);
 	}
 
-	@GetMapping(value = "suggestRagChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo suggestRagChatDescription(@RequestParam("id") @NotNull String id)
-			throws GeboChatException, LLMConfigException {
-		return chatService.suggestChatDescription(id);
-	}
-
-	@GetMapping(value = "createCleanRagChatByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanRagChatByProfileCode(@RequestParam("profileCode") @NotNull String profileCode)
-			throws GeboPersistenceException, LLMConfigException {
-		return chatService.createCleanRagChatByProfileCode(profileCode);
-	}
+	
 
 	@GetMapping(value = "getVisibleKnowledgeBasesByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GBaseObject> getVisibleKnowledgeBasesByProfileCode(

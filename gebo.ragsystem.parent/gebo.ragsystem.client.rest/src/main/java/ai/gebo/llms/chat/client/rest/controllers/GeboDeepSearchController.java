@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -131,7 +134,7 @@ public class GeboDeepSearchController {
 
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearchWithChatContext(
-			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException {
+			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchChatResponseEvent.class);
 	}
@@ -139,6 +142,11 @@ public class GeboDeepSearchController {
 	@GetMapping(value = "getDeepSearchDocumentsCount", produces = MediaType.APPLICATION_JSON_VALUE)
 	public long getDeepSearchDocumentsCount(@RequestParam("deepSearchCode") String deepSearchCode) {
 		return this.deepSearchService.getDeepSearchDocumentsCount(deepSearchCode);
+	}
+
+	@PostMapping(value = "stopDeepSearch", produces = MediaType.APPLICATION_JSON_VALUE)
+	public void stopDeepSearch(@RequestParam("deepSearchCode") String deepSearchCode) {
+		this.deepSearchService.stopDeepSearch(deepSearchCode);
 	}
 
 }

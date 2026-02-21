@@ -12,7 +12,10 @@
 
 package ai.gebo.monolithic.api.client.api;
 
+import ai.gebo.monolithic.api.client.model.DeletableStatus;
 import ai.gebo.monolithic.api.client.model.FormGroupMetaInfo;
+import ai.gebo.monolithic.api.client.model.GObjectRef;
+import ai.gebo.monolithic.api.client.model.SimpleGObjectRef;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -29,6 +32,36 @@ public class GeboAngularFormGroupMetaInfoControllerApiTest {
 
     private final GeboAngularFormGroupMetaInfoControllerApi api = new GeboAngularFormGroupMetaInfoControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void checkDeletableByGObjectRefTest() {
+        GObjectRef body = null;
+        DeletableStatus response = api.checkDeletableByGObjectRef(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void checkDeletableBySimpleObjectRefTest() {
+        SimpleGObjectRef body = null;
+        DeletableStatus response = api.checkDeletableBySimpleObjectRef(body);
+
+        // TODO: test validations
+    }
     /**
      * 
      *

@@ -17,6 +17,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.ratings.DocumentRateRequest;
@@ -36,7 +37,7 @@ public class SearchResultsRankingService extends BaseLLMSInvokingAndProvidingSer
 
 	}
 
-	public void rateReferences(IGConfigurableChatModel chatModel, DeepSearchConfig config,
+	public void rateReferences(IGConfigurableChatModel chatModel, MinimalChatContext minimalChatContext, DeepSearchConfig config,
 			List<SearchResult> searchResults, DeepSearchRequest request, SharedRatingsStructure ratingStructure)
 			throws IOException, LLMConfigException {
 		final String prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONTENT_RATING_PROMPT)

@@ -12,12 +12,15 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import ai.gebo.monolithic.api.client.model.GPromptConfig;
+import ai.gebo.monolithic.api.client.model.PromptFilter;
+import org.junit.Test;
+import org.junit.Ignore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * API tests for GeboAdminPromptsControllerApi
@@ -65,7 +68,12 @@ public class GeboAdminPromptsControllerApiTest {
      * @throws ApiException
      *          if the Api call fails
      */
- 
+    @Test
+    public void getPromptCategoriesTest() {
+        List<String> response = api.getPromptCategories();
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -75,8 +83,9 @@ public class GeboAdminPromptsControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getPromptCategoriesTest() {
-        List<String> response = api.getPromptCategories();
+    public void getPromptConfigByFilterTest() {
+        PromptFilter body = null;
+        GPromptConfig response = api.getPromptConfigByFilter(body);
 
         // TODO: test validations
     }

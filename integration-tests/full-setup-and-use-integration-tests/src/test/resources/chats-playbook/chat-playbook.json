@@ -1,0 +1,14 @@
+[ { "id": "req-00A", "query": "Cerca su internet tramite google che tempo fa domani a Livigno" },
+  { "id": "req-001", "query": "Come configuro Spring Boot 3.5 per usare Redis come cache LRU distribuita in cluster con TTL e fallback?" },
+  { "id": "req-002", "query": "In Spring Boot quando conviene usare @Service vs @Component e quando ha senso @Scope(\"singleton\")?" },
+  { "id": "req-003", "query": "Hibernate: org.hibernate.TransientPropertyValueException in lettura dopo migrazione da Hibernate 3 a 5: cause tipiche e come risolvere?" },
+  { "id": "req-004", "query": "vLLM: come sfruttare KV-cache e quali opzioni posso impostare da Spring AI OpenAI ChatModel per massimizzare throughput?" },
+  { "id": "req-005", "query": "Voglio un prompt che riscriva la user question (query rewrite) usando ultime interazioni, producendo solo una domanda ottimizzata." },
+  { "id": "req-006", "query": "Devo scansionare una cartella nelle resources dentro un JAR: qual è il modo migliore in Java/Spring?" },
+  { "id": "req-007", "query": "Mi fai un confronto tra 2x3090 NVLink e 3x4070 16GB per inferenza LLM: token/sec attesi e limitazioni VRAM?" },
+  { "id": "req-008", "query": "Come disabilito swagger-codegen-maven-plugin dal generare file Gradle e come rimuovo le annotazioni Swagger dai modelli generati?" },
+  { "id": "req-009", "query": "Massima throughput teorica di un SSD NVMe PCIe 4.0 vs PCIe 5.0: cosa la limita realmente?" },
+  { "id": "req-010", "query": "Dammi un esempio di prompt che produce: datasources=[..]\\rsemanticQueries=[..]\\rfullTextQueries=[..] per una knowledge base interna." },
+  { "id": "req-011", "query": "Reactive Spring: ho N Flux<UIEvent> in parallelo, voglio fare merge e consolidare solo alla fine senza serializzare il processing: come?" },
+  { "id": "req-012", "query": "Traduci in italiano: 'it works intermittently' e dammi 3 alternative naturali per contesto tecnico." }
+]

@@ -47,42 +47,12 @@ public class GeboUserChatUploadsController {
 		return uploadsHandler.chatSessionUpload(userSessionCode, files);
 	}
 
-	@PostMapping(value = "chatSessionCreateWithUpload/{modelCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<ChatSessionCreationWithUpload> chatSessionCreateWithUpload(
-			@PathVariable("modelCode") String modelCode, @RequestParam("files[]") List<MultipartFile> files)
-			throws IOException, GeboPersistenceException, LLMConfigException {
-		GUserChatInfo chatsession = chatService.createNewChat(modelCode);
-		OperationStatus<List<UserUploadedContent>> data = uploadsHandler.chatSessionUpload(chatsession.getCode(),
-				files);
-		ChatSessionCreationWithUpload out = new ChatSessionCreationWithUpload(data.getResult(), chatsession);
-		OperationStatus<ChatSessionCreationWithUpload> status = OperationStatus.of(out);
-		if (data.isHasErrorMessages()) {
-			status.setMessages(data.getMessages());
-		}
-		return status;
-	}
-
-	@PostMapping(value = "ragChatSessionCreateWithUpload/{chatProfileCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<ChatSessionCreationWithUpload> ragChatSessionCreateWithUpload(
-			@PathVariable("chatProfileCode") String chatProfileCode, @RequestParam("files[]") List<MultipartFile> files)
-			throws IOException, GeboPersistenceException, LLMConfigException {
-		GUserChatInfo chatsession = ragChatService.createNewChat(chatProfileCode);
-		OperationStatus<List<UserUploadedContent>> data = uploadsHandler.chatSessionUpload(chatsession.getCode(),
-				files);
-		ChatSessionCreationWithUpload out = new ChatSessionCreationWithUpload(data.getResult(), chatsession);
-		OperationStatus<ChatSessionCreationWithUpload> status = OperationStatus.of(out);
-		if (data.isHasErrorMessages()) {
-			status.setMessages(data.getMessages());
-		}
-		return status;
-	}
-
 	@DeleteMapping(value = "deleteSessionUploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(
 			@PathVariable("userSessionCode") String userSessionCode,
 			@NotNull @Valid @RequestBody List<UserUploadedContent> contents) {
 		return uploadsHandler.deleteSessionUploads(userSessionCode, null);
-	} 
+	}
 
 	@GetMapping(value = "serveContent/{userSessionCode}/{uploadedContentId}")
 	public void serveContent(@PathVariable("userSessionCode") String userSessionCode,

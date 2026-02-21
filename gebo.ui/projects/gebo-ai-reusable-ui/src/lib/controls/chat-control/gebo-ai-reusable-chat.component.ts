@@ -313,6 +313,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         private reactiveChatService: ReactiveRagChatService,
         private geboAiTranslationService: GeboAITranslationService,
         private geboChatPipelineService: GeboChatPipelinesControllerService,
+        private userChatControllerService: GeboUserChatsControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -514,7 +515,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             header: "Delete chat action",
             message: "Are you shure you whant to delete this chat?",
             accept: () => {
-                this.geboUserChatsControllerService.deleteUserChats([actualChat.code]).subscribe({
+                this.geboUserChatsControllerService.deleteChat(actualChat.code).subscribe({
                     next: (value) => {
                         this.deleteChatAction.emit(actualChat);
                     },
@@ -657,7 +658,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     if (recvd.content?.chatModel)
                         this.modelName = recvd.content?.chatModel;
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
-                    
+
                 }
                 if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
@@ -679,12 +680,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             interaction.pipelineRouterDecisionCode = undefined;
                             if (suggestChatDescription === true) {
                                 if (response.userChatContextCode) {
-                                    let newChatInfoObservable: Observable<GUserChatInfo>;
-                                    if (this.ragsystem === true) {
-                                        newChatInfoObservable = this.ragChatService.suggestRagChatDescription(response.userChatContextCode);
-                                    } else {
-                                        newChatInfoObservable = this.chatService.suggestChatDescription(response.userChatContextCode);
-                                    }
+                                    const newChatInfoObservable: Observable<GUserChatInfo> = this.userChatControllerService.suggestChatDescription(response.userChatContextCode);
                                     newChatInfoObservable.subscribe({
                                         next: (value: GUserChatInfo) => {
                                             if (this.chatInfo && value?.description) {

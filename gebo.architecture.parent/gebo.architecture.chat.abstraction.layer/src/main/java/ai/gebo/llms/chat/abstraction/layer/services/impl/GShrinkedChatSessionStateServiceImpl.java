@@ -55,10 +55,11 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 	public ShrinkedChatSessionState addInteractionToState(ShrinkedChatSessionState session, GeboChatRequest request,
 			GeboChatResponse response, int index) {
 		session.setCurrentRequest(null);
-		List<CSSSimplefiedInteraction> interactions = session.getChatHistory().getInteractions();
+		List<CSSSimplefiedInteraction> interactions = session.getChatHistory().getLatestEntries().getInteractions();
 		CSSSimplefiedInteraction interaction = new CSSSimplefiedInteraction();
 		interaction.setUser(request.getQuery());
 		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
+		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
 		interaction.setAssistant(response.getQueryResponse());
 		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
