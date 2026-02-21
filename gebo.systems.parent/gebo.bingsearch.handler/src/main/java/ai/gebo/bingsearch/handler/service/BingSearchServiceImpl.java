@@ -1,18 +1,32 @@
 package ai.gebo.bingsearch.handler.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.bingsearch.handler.config.BingSearchHandlerConfig;
+import ai.gebo.bingsearch.handler.model.BingNewsArticle;
+import ai.gebo.bingsearch.handler.model.BingSearchQuery;
+import ai.gebo.bingsearch.handler.model.BingSearchResponse;
+import ai.gebo.bingsearch.handler.model.BingWebPageResult;
+import ai.gebo.bingsearch.handler.model.GBingSearchApiCredentials;
+import ai.gebo.bingsearch.handler.model.ResponseFilters;
 import ai.gebo.bingsearch.handler.repository.GBingSearchApiCredentialsRepository;
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboTokenContent;
+import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -41,6 +55,7 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	private final BingSearchApi bingSearchApi;
 	private final BingSearchHandlerConfig bingConfig;
 	private final GBingSearchApiCredentialsRepository repository;
+	private final IGeboSecretsAccessService secretAccessService;
 
 	@Override
 	public boolean isEnabled() {
@@ -81,8 +96,74 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	@Override
 	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
 			throws IOException, SearchServiceException {
+		List<GBingSearchApiCredentials> configs = this.repository.findAll();
+		if (configs.isEmpty())
+			return List.of();
+		GBingSearchApiCredentials config = configs.get(0);
+		List<SearchResult> resultsList = new ArrayList<SearchResult>();
+		try {
+			AbstractGeboSecretContent secret = this.secretAccessService.getSecretContentById(config.getSecretCode());
+			if (secret instanceof GeboTokenContent tokenContent) {
+				BingSearchQuery searchOptions = new BingSearchQuery();
+				searchOptions.setQuery(query.getQueryText());
+				searchOptions.setTopN(nEntryLimit);
+				searchOptions.setFilters(List.of(ResponseFilters.WEBPAGES, ResponseFilters.NEWS));
+				BingSearchResponse result = this.bingSearchApi.search(tokenContent.getToken(), searchOptions);
 
-		return null;
+				if (result.getNews() != null && result.getNews().getValue() != null) {
+					resultsList.addAll(newsResults(result.getNews().getValue()));
+				}
+				if (result.getWebPages() != null && result.getWebPages().getValue() != null) {
+					resultsList.addAll(webPagesResults(result.getWebPages().getValue()));
+				}
+
+			} else
+				throw new SearchServiceException("Bing credentials of the wrong format");
+		} catch (GeboCryptSecretException | GeboRestIntegrationException e) {
+			throw new SearchServiceException("Error accessing bing searches", e);
+		}
+		return resultsList;
+	}
+
+	private Collection<? extends SearchResult> webPagesResults(List<BingWebPageResult> value) {
+		List<SearchResult> out = new ArrayList<SearchResult>();
+		for (BingWebPageResult bingNewsArticle : value) {
+			SearchResult result = new SearchResult();
+			result.setDescriptiveText(bingNewsArticle.getSnippet());
+			result.setResultReference(new SearchResultReference());
+			result.getResultReference().setId(bingNewsArticle.getUrl());
+			result.getResultReference().setUri(bingNewsArticle.getUrl());
+			result.getResultReference().setName(bingNewsArticle.getName());
+			result.getResultReference().setTitle(
+					bingNewsArticle.getSnippet() != null ? bingNewsArticle.getSnippet() : bingNewsArticle.getName());
+			result.getResultReference().setExtension(tryArgueExtension(bingNewsArticle.getUrl()));
+			result.getResultReference().setContentType(tryArgueContentType(bingNewsArticle.getUrl()));
+			result.setSystemConfigurationCode(BING_SEARCH_SERVICE);
+			setOriginOn(result);
+			out.add(result);
+		}
+		return out;
+	}
+
+	private Collection<? extends SearchResult> newsResults(List<BingNewsArticle> value) {
+		List<SearchResult> out = new ArrayList<SearchResult>();
+		for (BingNewsArticle bingNewsArticle : value) {
+			SearchResult result = new SearchResult();
+			result.setDescriptiveText(bingNewsArticle.getDescription());
+			result.setResultReference(new SearchResultReference());
+			result.getResultReference().setId(bingNewsArticle.getUrl());
+			result.getResultReference().setUri(bingNewsArticle.getUrl());
+			result.getResultReference().setName(bingNewsArticle.getName());
+			result.getResultReference()
+					.setTitle(bingNewsArticle.getDescription() != null ? bingNewsArticle.getDescription()
+							: bingNewsArticle.getName());
+			result.getResultReference().setExtension(tryArgueExtension(bingNewsArticle.getUrl()));
+			result.getResultReference().setContentType(tryArgueContentType(bingNewsArticle.getUrl()));
+			result.setSystemConfigurationCode(BING_SEARCH_SERVICE);
+			setOriginOn(result);
+			out.add(result);
+		}
+		return out;
 	}
 
 	@Override

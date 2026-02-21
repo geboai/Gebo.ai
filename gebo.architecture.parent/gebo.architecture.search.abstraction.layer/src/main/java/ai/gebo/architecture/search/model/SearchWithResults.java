@@ -8,5 +8,6 @@ import lombok.Data;
 @Data
 public class SearchWithResults {
 	SearchQuery searchQuery = null;
+	Object nativeQueryObject = null;
 	List<SearchResult> results = new ArrayList<SearchResult>();
 }

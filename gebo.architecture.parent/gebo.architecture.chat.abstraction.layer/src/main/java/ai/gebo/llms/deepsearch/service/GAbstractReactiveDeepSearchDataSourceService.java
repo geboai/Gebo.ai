@@ -25,7 +25,6 @@ import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
-import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
@@ -42,7 +41,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
-import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
@@ -133,16 +131,17 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				LOGGER.debug("Deferred generation for handler id: " + getHandlerId());
 			}
 			SearchResultsList actualResultsSnapshots = new SearchResultsList();
-			DeepSearchDataSourceExtractedSearchQueries searchQueries;
+			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 			try {
-				searchQueries = extractSearchQueries(request, minimalChatContext, pastSystemsResponses,
-						deepSearchConfig, chatModel, serviceModel, "");
-			} catch (LLMConfigException e) {
-				LOGGER.error("Error exctracting search", e);
-				return Flux.just(actualResultsSnapshots);
+				queryResults = executeSearches(request, minimalChatContext, pastSystemsResponses, deepSearchConfig,
+						chatModel, serviceModel, "");
+			} catch (Throwable e) {
+				LOGGER.error("Exception executing searches", e);
+				throw new RuntimeException("Exception executing searches", e);
+
 			}
 
-			if (searchQueries.getSearchIsUnnecessary() != null && searchQueries.getSearchIsUnnecessary()) {
+			if (queryResults.isEmpty()) {
 				DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
 				returned.setInputData(request);
 				returned.setOutputData(new DeepSearchDataSourceResponse());
@@ -152,20 +151,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				returned.getOutputData().setDeepsearchCode(request.getCode());
 				return Flux.just(actualResultsSnapshots);
 			}
-			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
-			for (SearchQuery query : searchQueries.getSearchQuery()) {
-				try {
-					List<SearchResult> results = executeSearch(query, request, minimalChatContext);
-					if (results.isEmpty())
-						continue;
-					SearchWithResults sr = new SearchWithResults();
-					sr.setResults(flattenResults(results));
-					sr.setSearchQuery(query);
-					queryResults.add(sr);
-				} catch (Throwable th) {
-					LOGGER.error("Error executing search", th);
-				}
-			}
+
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Queries results=>" + queryResults);
 			}
@@ -326,6 +312,11 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		return Flux.concat(outFlux, additionalAnalisys, trail).subscribeOn(threadManager.getBoundedElastic())
 				.onErrorResume(Common.commonFallBack(request));
 	}
+
+	protected abstract List<SearchWithResults> executeSearches(DeepSearchRequest request,
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String string) throws LLMConfigException, IOException, SearchServiceException;
 
 	private Flux<AbstractDeepSearchEvent> additionalAnalisys(
 			Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction,
@@ -505,35 +496,6 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned);
 
-	protected abstract List<SearchResult> executeSearch(SearchQuery query, DeepSearchRequest request,
-			MinimalChatContext minimalChatContext) throws IOException, SearchServiceException;
-
-	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String consolidatedText) throws LLMConfigException {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin extractSearchQueries(...) handler:" + getHandlerId());
-		}
-		String prompt = createExtractSearchQueriesPrompt(request, minimalChatContext, pastSystemsResponses,
-				deepSearchConfig, serviceModel);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Extracting queries with prompt:" + prompt);
-		}
-		Map<String, Object> additionalVariables = new HashMap<String, Object>();
-		// With latest specialized prompt for each data source the following is not
-		// needed
-		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
-		// deepSearchConfig, request));
-		DeepSearchDataSourceExtractedSearchQueries searches = super.callLLMWithConsolidationStructuredReturn(
-				serviceModel, prompt, request.getQuery(), consolidatedText != null ? consolidatedText : "",
-				additionalVariables, DeepSearchDataSourceExtractedSearchQueries.class);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End extractSearchQueries(...) handler:" + getHandlerId() + " returning " + searches);
-		}
-		return searches;
-	}
-
 	private DeepSearchAnalyzedDocument createAnalyzedDocument(SearchResult sr, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
 		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
@@ -573,7 +535,4 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		return doc;
 	}
 
-	protected abstract String createExtractSearchQueriesPrompt(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel);
 }
