@@ -864,7 +864,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			return mc;
 
 		try {
-			return this.shrinkerService.shrinkedMinimalContext(request.getUserChatContextCode(), mc, tokensBudget);
+			mc = this.shrinkerService.shrinkedMinimalContext(request.getUserChatContextCode(), mc, tokensBudget);
+			mc.setCurrentRequest(request);
+			return mc;
 		} catch (LLMConfigException | IOException e) {
 			throw new GeboChatSessionLifecycleException("Error shrinking state", e);
 		}
