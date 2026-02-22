@@ -214,6 +214,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final Function<CustomContentExtractionType, String> consolidationExtractor = (
 				data) -> data != null && data.getExtractedRelevantContent() != null ? data.getExtractedRelevantContent()
 						: "";
+
 		final Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (
 				List<SearchResult> list) -> {
 			List<SearchResult> cleanList = new ArrayList<SearchResult>();
@@ -282,9 +283,16 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							+ docWithRef.getChunk().getTokensSize() + " content of:"
 							+ actualSearchResultToLoad.getCode());
 				}
+				final List<CustomContentExtractionType> iterations = new ArrayList<CustomContentExtractionType>();
+				final Function<CustomContentExtractionType, Boolean> endProcessTriggeringLogic = (content) -> {
+					if (content.getContentIsRelevant() == null || !content.getContentIsRelevant()) {
+						iterations.add(content);
+					}
+					return iterations.size() > 3;
+				};
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
 						"", chatContextTemplateParams, this.customContentExtractionType, aggregator,
-						consolidationExtractor, inputs, false);
+						consolidationExtractor, endProcessTriggeringLogic, inputs, false);
 				/*
 				 * SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps,
 				 * satisfactoryDocuments, completed, satisfactoryDocumentsThreashold,

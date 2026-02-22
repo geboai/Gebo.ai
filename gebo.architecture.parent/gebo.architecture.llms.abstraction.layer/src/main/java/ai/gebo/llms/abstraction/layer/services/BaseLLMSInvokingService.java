@@ -289,35 +289,37 @@ public class BaseLLMSInvokingService {
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
-			Function<T, String> consolidatedExtractor, List<LLMInputDocument> input)
-			throws LLMConfigException, IOException {
+			Function<T, String> consolidatedExtractor, Function<T, Boolean> endProcessTriggeringLogic,
+			List<LLMInputDocument> input) throws LLMConfigException, IOException {
 		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
-				aggregator, consolidatedExtractor, input);
+				aggregator, consolidatedExtractor, endProcessTriggeringLogic, input);
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Class<T> type, BiFunction<T, T, T> aggregator,
-			Function<T, String> consolidatedExtractor, List<LLMInputDocument> input, boolean alreadySplitted)
-			throws LLMConfigException, IOException {
+			Function<T, String> consolidatedExtractor, Function<T, Boolean> endProcessTriggeringLogic,
+			List<LLMInputDocument> input, boolean alreadySplitted) throws LLMConfigException, IOException {
 		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, Map.of(), type,
-				aggregator, consolidatedExtractor, input);
+				aggregator, consolidatedExtractor, endProcessTriggeringLogic, input);
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
-			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor, List<LLMInputDocument> input)
+			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor,
+			Function<T, Boolean> endProcessTriggeringLogic, List<LLMInputDocument> input)
 			throws LLMConfigException, IOException {
 		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
-				type, aggregator, consolidatedExtractor, input, false);
+				type, aggregator, consolidatedExtractor, endProcessTriggeringLogic, input, false);
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
-			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor, List<LLMInputDocument> input,
-			boolean alreadySplitted) throws LLMConfigException, IOException {
+			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor,
+			Function<T, Boolean> endProcessTriggeringLogic, List<LLMInputDocument> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
 		Iterator<LLMInputDocument> iterator = input.iterator();
 		return callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
-				type, aggregator, consolidatedExtractor, () -> {
+				type, aggregator, consolidatedExtractor, endProcessTriggeringLogic, () -> {
 					if (iterator.hasNext())
 						return iterator.next();
 					return null;
@@ -326,16 +328,18 @@ public class BaseLLMSInvokingService {
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
-			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor, Supplier<LLMInputDocument> input)
+			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor,
+			Function<T, Boolean> endProcessTriggeringLogic, Supplier<LLMInputDocument> input)
 			throws LLMConfigException, IOException {
 		return this.callLLMConsolidateStructuredReturn(chatModel, prompt, question, pastConsolidation, additionalParams,
-				type, aggregator, consolidatedExtractor, input, false);
+				type, aggregator, consolidatedExtractor, endProcessTriggeringLogic, input, false);
 	}
 
 	protected <T> T callLLMConsolidateStructuredReturn(IGConfigurableChatModel chatModel, String prompt,
 			String question, String pastConsolidation, Map<String, Object> additionalParams, Class<T> type,
-			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor, Supplier<LLMInputDocument> input,
-			boolean alreadySplitted) throws LLMConfigException, IOException {
+			BiFunction<T, T, T> aggregator, Function<T, String> consolidatedExtractor,
+			Function<T, Boolean> endProcessTriggeringLogic, Supplier<LLMInputDocument> input, boolean alreadySplitted)
+			throws LLMConfigException, IOException {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
 		LLMInputDocument currentInput = null;
@@ -438,6 +442,13 @@ public class BaseLLMSInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
 							currentText.toString(), question, _consolidated, additionalParams, type);
+					boolean exit = endProcessTriggeringLogic != null && endProcessTriggeringLogic.apply(consolidated);
+					if (exit) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Applying iteration shortcut on llm processing");
+						}
+						return consolidated;
+					}
 					// eventual handling of consolidation programmable aggregation
 					if (aggregator != null) {
 						consolidated = aggregator.apply(oldConsolidated, consolidated);
