@@ -1,12 +1,9 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;

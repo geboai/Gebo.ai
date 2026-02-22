@@ -62,6 +62,7 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
 		interaction.setAssistant(response.getQueryResponse());
+		interaction.setUserIntent(request.getUserIntent());
 		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
 		interaction.setAssistantTokenSize(length);
 		interactions.add(interaction);

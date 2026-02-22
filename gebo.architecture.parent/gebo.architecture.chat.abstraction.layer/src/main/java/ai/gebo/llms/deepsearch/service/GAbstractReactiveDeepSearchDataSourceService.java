@@ -56,6 +56,7 @@ import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchOperationEndedEvent;
 import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 import ai.gebo.llms.deepsearch.service.impl.Common;
+import ai.gebo.llms.deepsearch.service.impl.SearchEndingDetectionLogic;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
@@ -114,12 +115,13 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	};
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed,
-			DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
-			GeboContentHandlerSystemException, SearchServiceException {
+	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments,
+			AtomicBoolean completed, int satisfactoryDocumentsThreashold, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
+			List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, DeepSearchState deepSearchState)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
+			SearchServiceException {
 		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
@@ -203,6 +205,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			return this.customStructureConsolidation(actualData, currentConsolidation);
 		};
+		final Function<CustomContentExtractionType, String> consolidationExtractor = (
+				data) -> data != null && data.getExtractedRelevantContent() != null ? data.getExtractedRelevantContent()
+						: "";
 		final Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (
 				List<SearchResult> list) -> {
 			List<SearchResult> cleanList = new ArrayList<SearchResult>();
@@ -272,7 +277,12 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							+ actualSearchResultToLoad.getCode());
 				}
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
-						"", chatContextTemplateParams, this.customContentExtractionType, aggregator, inputs, false);
+						"", chatContextTemplateParams, this.customContentExtractionType, aggregator,
+						consolidationExtractor, inputs, false);
+				SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments, completed,
+						satisfactoryDocumentsThreashold, returned.getExtractedRelevantContent());
+				returned.setExtractedRelevantContent(
+						SearchEndingDetectionLogic.cleanFromTag(returned.getExtractedRelevantContent()));
 			} catch (Throwable th) {
 				LOGGER.error("Error in mapping calling llm", th);
 				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();

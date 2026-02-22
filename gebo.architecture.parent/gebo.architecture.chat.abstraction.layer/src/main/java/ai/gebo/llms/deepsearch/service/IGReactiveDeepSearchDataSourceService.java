@@ -50,14 +50,16 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
-	 * @param serviceModel TODO
 	 * @param request
 	 * @param minimalChatContext TODO
-	 * @param pastSystemsResponses
-	 * @param chunkingSessionId TODO
 	 * @param totalSteps TODO
 	 * @param doneSteps TODO
+	 * @param satisfactoryDocuments TODO
 	 * @param completed TODO
+	 * @param satisfactoryDocumentsThreashold TODO
+	 * @param serviceModel TODO
+	 * @param pastSystemsResponses
+	 * @param chunkingSessionId TODO
 	 * @param deepSearchState TODO
 	 * @param history
 	 * @return
@@ -67,8 +69,8 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws GeboIngestionException
 	 * @throws SearchServiceException
 	 */
-	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments, AtomicBoolean completed, int satisfactoryDocumentsThreashold, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

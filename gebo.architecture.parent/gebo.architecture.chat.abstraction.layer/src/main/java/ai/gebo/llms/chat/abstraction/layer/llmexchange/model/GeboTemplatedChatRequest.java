@@ -55,9 +55,10 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	private String chatPipelineProcessId = null;
 	/** List of documents that are forcibly requested */
 	private List<String> forcedRequestDocuments = new ArrayList<String>();
-	
+
 	private List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 	private List<String> deepSearchDataSources = null;
+	private DeliverableIntent userIntent = DeliverableIntent.UNKNOWN;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
 		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();

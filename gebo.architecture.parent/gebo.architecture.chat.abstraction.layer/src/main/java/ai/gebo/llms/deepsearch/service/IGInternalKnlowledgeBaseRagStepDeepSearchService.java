@@ -2,6 +2,7 @@ package ai.gebo.llms.deepsearch.service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -18,9 +19,9 @@ import reactor.core.publisher.Flux;
 public interface IGInternalKnlowledgeBaseRagStepDeepSearchService {
 
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
-			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
-			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed);
+			MinimalChatContext minimalChatContext, AtomicInteger totalSteps,
+			AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments, AtomicBoolean completed,
+			final int satisfactoryDocumentsThreashold, AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
+			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels);
 
 }

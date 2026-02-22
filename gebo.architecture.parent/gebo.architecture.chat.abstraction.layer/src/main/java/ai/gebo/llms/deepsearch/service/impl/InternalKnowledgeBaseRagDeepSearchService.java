@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,10 +100,12 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
-			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
-			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
+			MinimalChatContext minimalChatContext, AtomicInteger totalSteps, AtomicInteger doneSteps,
+			AtomicInteger satisfactoryDocuments, AtomicBoolean completed, int satisfactoryDocumentsThreashold,
+			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
+			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
+			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
+			List<IGConfigurableEmbeddingModel> embeddingModels) {
 
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
@@ -189,6 +192,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 						try {
 							String result = callLLMConsolidateText(chatModel, analisysPrompt, request.getQuery(), "",
 									inputs);
+							SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments,
+									completed, satisfactoryDocumentsThreashold, result);
+							result = SearchEndingDetectionLogic.cleanFromTag(result);
 							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 							resultStep.setDeepsearchCode(request.getCode());
 							resultStep.setAnalisysResult(result);

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
-import ai.gebo.llms.deepsearch.config.DeepSearchVariant;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
@@ -232,9 +231,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException {
-		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
-				? defaultDeepsearchConfig.getUsedVariant()
-				: DeepSearchVariant.SINGLE_THREAD;
+
 		Flux<AbstractDeepSearchEvent> out = null;
 
 		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
@@ -472,15 +469,13 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
 
-		DeepSearchVariant variant = defaultDeepsearchConfig.getUsedVariant() != null
-				? defaultDeepsearchConfig.getUsedVariant()
-				: DeepSearchVariant.SINGLE_THREAD;
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getCurrentRequest().getId());
 		deepSearchRequest.setKnowledgeBases(createKnowledgeBasesList(request));
 		deepSearchRequest.setQuery(GeboChatRequest.actualQuery(request.getCurrentRequest()));
 		deepSearchRequest.setUserChatContextCode(request.getCurrentRequest().getUserChatContextCode());
 		deepSearchRequest.setDeepSearchDataSources(deepSearchDataSources);
+		deepSearchRequest.setUserIntent(request.getCurrentRequest().getUserIntent());
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
 		AIDocumentsSet allDocuments = request.allDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;

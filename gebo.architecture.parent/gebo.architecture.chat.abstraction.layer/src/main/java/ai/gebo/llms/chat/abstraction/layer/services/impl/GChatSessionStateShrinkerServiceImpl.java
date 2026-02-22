@@ -32,6 +32,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateReposi
 import ai.gebo.llms.chat.abstraction.layer.repository.MinimalChatContextCacheItemRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSRelevantShrinkedDocument;
@@ -40,7 +41,6 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplifiedChatHistor
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
-import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedDocumentOrigin;
 import ai.gebo.model.DocumentMetaInfos;
