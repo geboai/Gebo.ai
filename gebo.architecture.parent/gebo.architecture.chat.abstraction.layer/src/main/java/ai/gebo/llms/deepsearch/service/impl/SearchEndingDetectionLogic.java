@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+
 public class SearchEndingDetectionLogic {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchEndingDetectionLogic.class);
 	public static final String SATISFACTORY_DOCUMENT_TAG = "<IS-COMPLETELY-SATISFACTORY/>";
@@ -19,6 +21,36 @@ public class SearchEndingDetectionLogic {
 			text = text.substring(0, index) + text.substring(index + SATISFACTORY_DOCUMENT_TAG.length());
 		}
 		return text;
+	}
+
+	public static <CustomContentExtractionType extends BaseSearchResultsExtractionDataType> boolean manageTrigger(
+			AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments,
+			AtomicBoolean completed, final int satisfactoryDocumentsThreashold,
+			CustomContentExtractionType actualDocumentAnalisysOutput) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin manageTrigger(...)");
+		}
+		boolean trigger = false;
+		if (!completed.get()) {
+			boolean actualIsSatisfactory = actualDocumentAnalisysOutput.getSatisfactoryAnswer() != null
+					&& actualDocumentAnalisysOutput.getSatisfactoryAnswer();
+
+			if (actualIsSatisfactory) {
+				int nSatisfactories = satisfactoryDocuments.incrementAndGet();
+				if (nSatisfactories >= satisfactoryDocumentsThreashold) {
+					completed.set(true);
+					trigger = true;
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Search ending threashold reached!!! " + nSatisfactories);
+					}
+				}
+			}
+
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End manageTrigger(...) trigger fired=>" + trigger);
+		}
+		return trigger;
 	}
 
 	public static boolean manageTrigger(AtomicInteger totalSteps, AtomicInteger doneSteps,
@@ -38,7 +70,7 @@ public class SearchEndingDetectionLogic {
 					completed.set(true);
 					trigger = true;
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Search ending threashold reached!!! "+nSatisfactories);
+						LOGGER.debug("Search ending threashold reached!!! " + nSatisfactories);
 					}
 				}
 			}

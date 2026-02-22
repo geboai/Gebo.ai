@@ -176,7 +176,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
+				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD));
 
 		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
 			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);

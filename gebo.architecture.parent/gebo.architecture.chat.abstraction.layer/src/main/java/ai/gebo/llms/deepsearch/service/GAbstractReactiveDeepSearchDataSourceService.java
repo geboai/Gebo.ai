@@ -183,8 +183,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			return Flux.just(actualResultsSnapshots);
 		});
 
-		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
-				.getPrompt();
+		final String analisysPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT).getPrompt();
 		final int promptTokens = tokenCountEstimator.estimate(analisysPrompt);
 		final int queryTokens = tokenCountEstimator.estimate(request.getQuery());
 		final double tokensTotalExactBudget = chatModel.getContextLength() - (promptTokens + queryTokens);
@@ -205,7 +205,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			if (currentConsolidation != null) {
 				SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments, completed,
-						satisfactoryDocumentsThreashold, currentConsolidation.getExtractedRelevantContent());
+						satisfactoryDocumentsThreashold, currentConsolidation);
 				currentConsolidation.setExtractedRelevantContent(
 						SearchEndingDetectionLogic.cleanFromTag(currentConsolidation.getExtractedRelevantContent()));
 			}

@@ -34,6 +34,9 @@ ai.gebo.prompts:
     - promptUse: deep-search-file-analisys-prompt
       langCode: en
       reference: /prompts-library/en/deep-search-file-analisys-prompt.txt
+    - promptUse: deep-search-data-sources-file-analisys-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt.txt  
     - promptUse: deep-search-consolidation-prompt
       langCode: en
       reference: /prompts-library/en/deep-search-consolidation-prompt.txt

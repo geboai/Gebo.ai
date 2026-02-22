@@ -10,5 +10,7 @@ public class BaseSearchResultsExtractionDataType {
 	private String extractedRelevantContent = null;
 	@JsonPropertyDescription(value = "True if actual content extraction is relevant for the user question or to enrich related context")
 	private Boolean contentIsRelevant = null;
+	@JsonPropertyDescription(value = "True if actual content extraction is completely sufficient to answer the user question")
+	private Boolean satisfactoryAnswer=null;
 
 }

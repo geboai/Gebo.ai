@@ -6,15 +6,15 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum DeliverableIntent {
-	QA("User wants direct answer, short"), // (direct answer, short)
+	QA("User asked direct short answer or some sinonyms of this in all languages"), // (direct answer, short)
 
-	REPORT("User asked a structured, detailed, multi-section"), // (structured, detailed, multi-section)
+	REPORT("User asked a structured, report, detailed report, an analisys or some sinonyms of these in all languages"), // (structured, detailed, multi-section)
 
-	HOWTO("User asked a step or procedure explanation"), // (steps/procedure)
+	HOWTO("User asked a step or procedure explanation  or some sinonyms of this in all languages"), // (steps/procedure)
 
-	DECISION("User wants a recommendation/tradeoff"), // (recommendation/tradeoffs)
+	DECISION("User asked a recommendation or tradeoff  or some sinonyms of this in all languages"), // (recommendation/tradeoffs)
 
-	SUMMARY("User wants a synthetic outcome"), // (short synthesis)
+	SUMMARY("User wants a synthetic outcome  or some sinonyms of this in all languages"), // (short synthesis)
 
 	UNKNOWN("Fallback, cannot decide clearly the user intent");// (fallback → be conservative)
 	

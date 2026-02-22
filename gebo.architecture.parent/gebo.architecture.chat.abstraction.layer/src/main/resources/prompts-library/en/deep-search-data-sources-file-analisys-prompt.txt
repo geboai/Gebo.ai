@@ -22,7 +22,7 @@ INPUTS:
 
 TASK:
 1. Read the question, chat context,document fragments and consolidated document summary object carefully.
-2. Extract ONLY the information that is clearly relevant to answering the user question.
+2. Extract ONLY the information that is clearly relevant to answering the user question putting it in output in the extractedRelevantContent field.
 3. Organize the extracted information into:
    - A list of text blocks split by topics coherent with the question.
    - Each block must include:
@@ -33,20 +33,14 @@ TASK:
 5. Consider the relevant contents of both the document batch and the consolidated document summary object and combine them to output. 
 
 SATISFACTION EVALUATION:
-After generating the content, evaluate whether the extracted information in THIS batch plus the consolidated document summary 
+After generating the content, evaluate whether the extracted information in THIS batch and the consolidated informations
 are completely sufficient to fully and correctly answer the user question in the current chat context,
 without requiring additional documents.
 
 If and ONLY IF the answer is fully and completely supported by the extracted information in this batch combined with the consolidated summary object,
-append EXACTLY ONCE OF the following string on a new line as the final line of your output in the output summary field or text:
 
-<IS-COMPLETELY-SATISFACTORY/>
+output the satisfactoryAnswer field as true otherwise it will be false
 
-If the information is partial, incomplete, uncertain, or missing important aspects,
-DO NOT output the marker.
+OUTPUT FORMAT:
+{format}
 
-IMPORTANT:
-- The marker must appear alone on its own line.
-- The marker must appear only once.
-- The marker must be the very last line of the output.
-- Never mention or explain the marker in the content.

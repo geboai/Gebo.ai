@@ -108,8 +108,8 @@ searchedSystem rules:
  - Otherwise searchedSystem=NONE.
 
 deliverable rules:
- - choose the user asked deliverable type using the (G) deliverable type list reporting the <type> field value,
-   if unshure output QA
+ - choose the user asked deliverable type using the (G) deliverable type list reporting the intent-type field value
+   
     	 	
 
 CONSTRAINTS:
