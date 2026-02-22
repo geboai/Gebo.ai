@@ -203,6 +203,12 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		}
 		final BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
+			if (currentConsolidation != null) {
+				SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments, completed,
+						satisfactoryDocumentsThreashold, currentConsolidation.getExtractedRelevantContent());
+				currentConsolidation.setExtractedRelevantContent(
+						SearchEndingDetectionLogic.cleanFromTag(currentConsolidation.getExtractedRelevantContent()));
+			}
 			return this.customStructureConsolidation(actualData, currentConsolidation);
 		};
 		final Function<CustomContentExtractionType, String> consolidationExtractor = (
@@ -217,7 +223,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					LOGGER.debug("Handling search operations ending execution step");
 				}
 			}
-			if (list != null && !list.isEmpty() && _completed) {
+			if (list != null && !list.isEmpty() && !_completed) {
 				cleanList = cleanAndRemoveDuplicatedResults(list, avoidMultipleAccess);
 				if (LOGGER.isDebugEnabled()) {
 					List<String> contentsCodes = cleanList.stream().map(x -> x.getCode()).toList();
@@ -279,10 +285,14 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
 						"", chatContextTemplateParams, this.customContentExtractionType, aggregator,
 						consolidationExtractor, inputs, false);
-				SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments, completed,
-						satisfactoryDocumentsThreashold, returned.getExtractedRelevantContent());
-				returned.setExtractedRelevantContent(
-						SearchEndingDetectionLogic.cleanFromTag(returned.getExtractedRelevantContent()));
+				/*
+				 * SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps,
+				 * satisfactoryDocuments, completed, satisfactoryDocumentsThreashold,
+				 * returned.getExtractedRelevantContent());
+				 * returned.setExtractedRelevantContent(
+				 * SearchEndingDetectionLogic.cleanFromTag(returned.getExtractedRelevantContent(
+				 * )));
+				 */
 			} catch (Throwable th) {
 				LOGGER.error("Error in mapping calling llm", th);
 				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
