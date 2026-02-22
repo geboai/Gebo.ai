@@ -114,6 +114,12 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	static class SearchResultsList extends ArrayList<SearchResult> {
 	};
 
+	static class InTopicChunksNotebook {
+		int offTopic = 0;
+		int inTopic = 0;
+		int contiguousOffTopic = 0;
+	}
+
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
 			AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments,
@@ -256,6 +262,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			return chunkingService.streamChunks(nextList, params, chunkingSessionId,
 					deepSearchConfig.getDocumentsParallelism());
 		};
+		final int offTopicChunksSkipDocumentThreashold = this.deepSearchDefaultConfig
+				.getOffTopicChunksSkipDocumentThreashold();
 		// Flux<IDocumentChunkWithRef> loaded =
 		// searchFlux.concatMap(chunksLoadFunction);
 		Flux<IDocumentChunkWithRef> loadedChunks = searchFlux.concatMap(chunksLoadFunction);
@@ -274,7 +282,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 						docWithRef, null, DeepSearchOperationEndedEvent.of(request));
 				return callStep;
 			}
-			CustomContentExtractionType returned;
+			CustomContentExtractionType returned=null;
 			try {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Thread=>" + Thread.currentThread().getName() + " calling llm for chunk:"
@@ -283,12 +291,22 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 							+ docWithRef.getChunk().getTokensSize() + " content of:"
 							+ actualSearchResultToLoad.getCode());
 				}
-				final List<CustomContentExtractionType> iterations = new ArrayList<CustomContentExtractionType>();
+				final InTopicChunksNotebook inTopicChunksNotebook = new InTopicChunksNotebook();
 				final Function<CustomContentExtractionType, Boolean> endProcessTriggeringLogic = (content) -> {
 					if (content.getContentIsRelevant() == null || !content.getContentIsRelevant()) {
-						iterations.add(content);
+						inTopicChunksNotebook.contiguousOffTopic++;
+						inTopicChunksNotebook.offTopic++;
+					} else {
+						inTopicChunksNotebook.inTopic++;
+						inTopicChunksNotebook.contiguousOffTopic = 0;
 					}
-					return iterations.size() > 3;
+					boolean endProcess = inTopicChunksNotebook.contiguousOffTopic >= offTopicChunksSkipDocumentThreashold;
+					if (endProcess && LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Found " + inTopicChunksNotebook.contiguousOffTopic
+								+ " contiguous off topic chunks, skipping the rest of content of:"
+								+ actualSearchResultToLoad);
+					}
+					return endProcess;
 				};
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
 						"", chatContextTemplateParams, this.customContentExtractionType, aggregator,

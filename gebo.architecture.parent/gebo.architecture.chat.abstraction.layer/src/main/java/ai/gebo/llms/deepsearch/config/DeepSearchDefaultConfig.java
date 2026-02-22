@@ -22,6 +22,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	private int maxExternalSourcesSearchResults = 8;
 	private boolean externalSourcesEnabled = false;
 	private boolean deepSearchUIAllowChooseSources = false;
+	private int offTopicChunksSkipDocumentThreashold = 3;
 	private int perDataSourceMaxVisited = 25;
 	private int perDataSourceMaxInputTokens = 5000000;
 	private int perDataSourceMaxOutputTokens = 1000000;

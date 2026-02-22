@@ -23,7 +23,6 @@ import ai.gebo.googledrive.handlers.impl.model.GoogleDriveNavigationCoordinates;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResourceReference;
 import ai.gebo.googledrive.handlers.impl.model.GoogleDriveResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
-import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class GoogleDriveSearchService extends
@@ -74,10 +73,10 @@ public class GoogleDriveSearchService extends
 	@Override
 	public GoogleDriveResultsExtractionData aggregate(GoogleDriveResultsExtractionData oldConsolidated,
 			GoogleDriveResultsExtractionData consolidated) {
-		GoogleDriveResultsExtractionData data = new GoogleDriveResultsExtractionData();
-		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
-		data.setContentIsRelevant(consolidated.getContentIsRelevant());
+		GoogleDriveResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
+				new GoogleDriveResultsExtractionData());
 		return data;
+		
 	}
 
 	@Override

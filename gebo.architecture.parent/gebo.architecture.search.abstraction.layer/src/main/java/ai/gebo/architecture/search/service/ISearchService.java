@@ -11,6 +11,7 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.model.base.TypedInputStream;
 
@@ -72,6 +73,29 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 
 	public CustomSearchResultExtractionDataType aggregate(CustomSearchResultExtractionDataType oldConsolidated,
 			CustomSearchResultExtractionDataType consolidated);
+
+	public default CustomSearchResultExtractionDataType basicAggregate(
+			CustomSearchResultExtractionDataType oldConsolidated, CustomSearchResultExtractionDataType consolidated,
+			CustomSearchResultExtractionDataType newResult) {
+		if (oldConsolidated == null && consolidated == null)
+			return newResult;
+		if (consolidated == null)
+			return oldConsolidated;
+		if (oldConsolidated == null)
+			return consolidated;
+		newResult.setContentIsRelevant(false);
+		if (consolidated.getContentIsRelevant() != null && consolidated.getContentIsRelevant()) {
+			newResult.setExtractedRelevantContent(consolidated.getExtractedRelevantContent());
+			newResult.setContentIsRelevant(consolidated.getContentIsRelevant());
+		} else {
+			if (oldConsolidated != null && oldConsolidated.getContentIsRelevant() != null
+					&& oldConsolidated.getContentIsRelevant()) {
+				newResult.setExtractedRelevantContent(oldConsolidated.getExtractedRelevantContent());
+				newResult.setContentIsRelevant(oldConsolidated.getContentIsRelevant());
+			}
+		}
+		return newResult;
+	}
 
 	public String getQueriesExtractionPrompt();
 

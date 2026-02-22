@@ -442,16 +442,17 @@ public class BaseLLMSInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
 							currentText.toString(), question, _consolidated, additionalParams, type);
+					
+					// eventual handling of consolidation programmable aggregation
+					if (aggregator != null) {
+						consolidated = aggregator.apply(oldConsolidated, consolidated);
+					}
 					boolean exit = endProcessTriggeringLogic != null && endProcessTriggeringLogic.apply(consolidated);
 					if (exit) {
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Applying iteration shortcut on llm processing");
 						}
 						return consolidated;
-					}
-					// eventual handling of consolidation programmable aggregation
-					if (aggregator != null) {
-						consolidated = aggregator.apply(oldConsolidated, consolidated);
 					}
 					if (consolidatedExtractor != null) {
 						_consolidated = consolidatedExtractor.apply(consolidated);
