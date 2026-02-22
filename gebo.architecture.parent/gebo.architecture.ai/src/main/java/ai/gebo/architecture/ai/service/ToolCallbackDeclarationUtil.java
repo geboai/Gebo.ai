@@ -10,28 +10,21 @@
  
  
 
-package ai.gebo.architecture.ai;
+package ai.gebo.architecture.ai.service;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.DefaultToolDefinition;
 import org.springframework.ai.tool.definition.ToolDefinition;
-import org.springframework.ai.tool.execution.ToolCallResultConverter;
 import org.springframework.ai.tool.function.FunctionToolCallback;
-import org.springframework.ai.tool.function.FunctionToolCallback.Builder;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
-import org.springframework.core.ParameterizedTypeReference;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;

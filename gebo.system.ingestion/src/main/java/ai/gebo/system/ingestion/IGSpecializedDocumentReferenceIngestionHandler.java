@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
-import ai.gebo.architecture.ai.IGReadableContentsFormatHandler;
+import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandler;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.system.ingestion.model.IngestionFileType;

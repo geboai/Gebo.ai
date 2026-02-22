@@ -10,12 +10,12 @@
  
  
 
-package ai.gebo.llms.chat.abstraction.layer.repository;
+package ai.gebo.architecture.ai.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptConfig;
+
 
 /**
  * Gebo.ai comment agent

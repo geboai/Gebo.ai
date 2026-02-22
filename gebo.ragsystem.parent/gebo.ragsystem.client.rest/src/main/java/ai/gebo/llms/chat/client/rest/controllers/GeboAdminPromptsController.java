@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

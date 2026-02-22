@@ -12,9 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import lombok.Data;
 
 @Configuration

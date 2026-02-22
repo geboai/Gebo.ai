@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
+import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
+import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptUseInfo;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptUseInfoDao;
-import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptUseInfoProvider;
 
 @Component
 @Scope("singleton")

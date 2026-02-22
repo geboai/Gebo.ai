@@ -1,9 +1,9 @@
-package ai.gebo.llms.chat.abstraction.layer.services;
+package ai.gebo.architecture.ai.service;
 
 import java.util.List;
 
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptUseInfo;
 
 public interface IGPromptUseInfoDao extends IGRuntimeConfigurationDao<GPromptUseInfo> {
 	public List<GPromptUseInfo> findByModule(String module);

@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.architecture.ai.impl;
+package ai.gebo.architecture.ai.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +26,11 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSource;
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 /**

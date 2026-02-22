@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -24,14 +26,12 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.MinimalChatContextCacheItem;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.MinimalChatContextCacheItemRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSRelevantShrinkedDocument;

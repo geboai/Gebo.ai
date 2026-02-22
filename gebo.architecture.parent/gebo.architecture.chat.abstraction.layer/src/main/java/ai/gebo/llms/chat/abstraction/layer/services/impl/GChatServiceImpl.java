@@ -18,9 +18,11 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -36,7 +38,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
@@ -44,7 +45,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -91,10 +91,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
 		this.chatSessionLifecycleService.ensureChatSessionExists(request);
-		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
+		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request
+				);
+		String modelCode = handler != null && handler.getConfig() != null
+				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
+						: null;
 		GeboChatResponse chatResponse = this.chatSessionLifecycleService.createEmptyResponse(request);
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
+		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, true);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
@@ -249,7 +253,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			GeboChatResponse gresponse = chatSessionLifecycleService.createEmptyResponse(request);
 			IGConfigurableChatModel handler = chatSessionLifecycleService.getSessionChatModel(request);
 			// Retrieve default prompt
-			GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
+			String _modelCode = handler != null && handler.getConfig() != null
+					&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
+							: null;
+			GPromptConfig gprompt = promptsDao.defaultChatPrompt(_modelCode, true);
 			if (gprompt == null) {
 				throw new GeboChatException("The system has no default prompt configured");
 			} else {

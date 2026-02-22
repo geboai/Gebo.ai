@@ -1,15 +1,18 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.architecture.ai.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GPromptUseInfo extends GBaseObject {
+public class GPromptUseInfo  {
 	private List<GPromptPlaceholderInfo> placeholders = new ArrayList<GPromptPlaceholderInfo>();
+	@NotNull
+	private String code=null;
+	@NotNull
+	private String description=null;
 	@NotNull
 	private String module = null;
 	public GPromptUseInfo() {

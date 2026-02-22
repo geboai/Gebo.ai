@@ -21,9 +21,9 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSource;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 
 /**

@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.services.impl;
+package ai.gebo.architecture.ai.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,14 +17,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.repository.PromptConfigRepository;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.repository.PromptConfigRepository;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
-import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -131,10 +129,10 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * @return The default GPromptConfig
 	 */
 	@Override
-	public GPromptConfig defaultChatPrompt(GBaseChatModelConfig chatConfiguration, Boolean ragPrompt) {
-		String promptUse = ragPrompt != null && ragPrompt ? GeboPromptsLibrary.PROMPT_USE_STANDARD_RAG_PROMPT
-				: GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT;
-		return findByPromptUse(promptUse, chatConfiguration);
+	public GPromptConfig defaultChatPrompt(String modelCode, Boolean ragPrompt) {
+		String promptUse = ragPrompt != null && ragPrompt ? PROMPT_USE_STANDARD_RAG_PROMPT
+				: PROMPT_USE_STANDARD_CHAT_PROMPT;
+		return findByPromptUse(promptUse, "en", modelCode);
 	}
 
 	/**
@@ -146,8 +144,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 */
 	@Override
 	public GPromptConfig defaultChatPrompt(Boolean ragPrompt) {
-		String promptUse = ragPrompt != null && ragPrompt ? GeboPromptsLibrary.PROMPT_USE_STANDARD_RAG_PROMPT
-				: GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT;
+		String promptUse = ragPrompt != null && ragPrompt ? PROMPT_USE_STANDARD_RAG_PROMPT
+				: PROMPT_USE_STANDARD_CHAT_PROMPT;
 		return findByPromptUse(promptUse);
 	}
 

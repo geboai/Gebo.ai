@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.ai.IGReadableContentsFormatHandlerRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandlerRepositoryPattern;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
