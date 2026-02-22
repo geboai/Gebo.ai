@@ -53,6 +53,7 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchOperationEndedEvent;
 import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 import ai.gebo.llms.deepsearch.service.impl.Common;
 import ai.gebo.model.GUserMessage;
@@ -126,11 +127,22 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
 		final Map<String, Object> chatContextTemplateParams = CommonChatPromptParamsUtil
 				.preparePromptParameters(minimalChatContext);
+		if (completed.get()) {
+			return DeepSearchOperationEndedEvent.justFlux(request);
+		}
 		Flux<SearchResultsList> searchFlux = Flux.defer(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deferred generation for handler id: " + getHandlerId());
 			}
+
 			SearchResultsList actualResultsSnapshots = new SearchResultsList();
+			boolean _completed = completed.get();
+			if (_completed) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Handling search operations ending execution step");
+				}
+				return Flux.just(actualResultsSnapshots);
+			}
 			List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 			try {
 				queryResults = executeSearches(request, minimalChatContext, pastSystemsResponses, deepSearchConfig,
@@ -140,7 +152,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				throw new RuntimeException("Exception executing searches", e);
 
 			}
-
+			if (completed.get()) {
+				return Flux.just(actualResultsSnapshots);
+			}
 			if (queryResults.isEmpty()) {
 				DeepSearchDataSourceProcessedEvent returned = new DeepSearchDataSourceProcessedEvent();
 				returned.setInputData(request);
@@ -192,7 +206,13 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction = (
 				List<SearchResult> list) -> {
 			List<SearchResult> cleanList = new ArrayList<SearchResult>();
-			if (list != null && !list.isEmpty()) {
+			boolean _completed = completed.get();
+			if (_completed) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Handling search operations ending execution step");
+				}
+			}
+			if (list != null && !list.isEmpty() && _completed) {
 				cleanList = cleanAndRemoveDuplicatedResults(list, avoidMultipleAccess);
 				if (LOGGER.isDebugEnabled()) {
 					List<String> contentsCodes = cleanList.stream().map(x -> x.getCode()).toList();
@@ -234,6 +254,14 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					actualSearchResultToLoad.getResultReference().getUri(),
 					actualSearchResultToLoad.getResultReference().getTitle(), docWithRef.getChunk().getChunkData());
 			List<LLMInputDocument> inputs = List.of(cInput);
+			if (completed.get()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Handling search operations ending execution step");
+				}
+				LLMCallStep<CustomContentExtractionType> callStep = new LLMCallStep<CustomContentExtractionType>(null,
+						docWithRef, null, DeepSearchOperationEndedEvent.of(request));
+				return callStep;
+			}
 			CustomContentExtractionType returned;
 			try {
 				if (LOGGER.isDebugEnabled()) {
