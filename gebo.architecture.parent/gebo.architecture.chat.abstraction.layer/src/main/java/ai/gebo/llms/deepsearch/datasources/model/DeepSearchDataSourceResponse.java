@@ -20,7 +20,7 @@ public class DeepSearchDataSourceResponse extends GBaseObject implements IDeepSe
 	@NotNull
 	@HashIndexed
 	private String deepsearchCode = null;
-
+	private String processingModel = null;
 	@NotNull
 	private String response = null;
 	private Boolean searchResultsEmpty = null;

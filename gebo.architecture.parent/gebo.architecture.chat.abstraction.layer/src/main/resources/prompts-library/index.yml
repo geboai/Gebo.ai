@@ -55,3 +55,6 @@ ai.gebo.prompts:
     - promptUse: default-pipeline-search-planner
       langCode: en
       reference: /prompts-library/en/default-pipeline-search-planner.txt  
+    - promptUse: deep-search-empty-results-fallback-prompt
+      langCode: en
+      reference: /prompts-library/en/deep-search-empty-results-fallback-prompt.txt	  

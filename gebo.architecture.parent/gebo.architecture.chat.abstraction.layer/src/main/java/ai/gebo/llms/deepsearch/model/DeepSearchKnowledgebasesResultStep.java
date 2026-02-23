@@ -7,8 +7,9 @@ import lombok.Data;
 public class DeepSearchKnowledgebasesResultStep extends GBaseObject implements IDeepSearchResult {
 	String response = null;
 	Boolean searchResultsEmpty = null;
+	String processingModel = null;
 	String deepsearchCode = null;
 	String dataSourceDescription = null;
-	private double processPercentage=0.0;
+	private double processPercentage = 0.0;
 
 }

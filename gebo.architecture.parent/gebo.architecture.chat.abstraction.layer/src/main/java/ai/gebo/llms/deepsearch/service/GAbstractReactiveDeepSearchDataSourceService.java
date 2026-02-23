@@ -122,10 +122,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicInteger satisfactoryDocuments,
-			AtomicBoolean completed, int satisfactoryDocumentsThreashold, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
-			List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, DeepSearchState deepSearchState)
+			DeepSearchState deepSearchState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId)
 			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
 			SearchServiceException {
 		final Hashtable<String, Boolean> avoidMultipleAccess = new Hashtable<String, Boolean>();
@@ -135,6 +133,11 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
 		final Map<String, Object> chatContextTemplateParams = CommonChatPromptParamsUtil
 				.preparePromptParameters(minimalChatContext);
+		final AtomicInteger totalSteps = deepSearchState.getTotalSteps();
+		final AtomicInteger doneSteps = deepSearchState.getDoneSteps();
+		final AtomicInteger satisfactoryDocuments = deepSearchState.getSatisfactoryDocuments();
+		final AtomicBoolean completed = deepSearchState.getCompleted();
+		final int satisfactoryDocumentsThreashold = deepSearchState.getSatisfactoryDocumentsThreashold();
 		if (completed.get()) {
 			return DeepSearchOperationEndedEvent.justFlux(request);
 		}
@@ -210,8 +213,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final BiFunction<CustomContentExtractionType, CustomContentExtractionType, CustomContentExtractionType> aggregator = (
 				CustomContentExtractionType actualData, CustomContentExtractionType currentConsolidation) -> {
 			if (currentConsolidation != null) {
-				SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments, completed,
-						satisfactoryDocumentsThreashold, currentConsolidation);
+				SearchEndingDetectionLogic.manageTrigger(deepSearchState, currentConsolidation);
 				currentConsolidation.setExtractedRelevantContent(
 						SearchEndingDetectionLogic.cleanFromTag(currentConsolidation.getExtractedRelevantContent()));
 			}
@@ -282,7 +284,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 						docWithRef, null, DeepSearchOperationEndedEvent.of(request));
 				return callStep;
 			}
-			CustomContentExtractionType returned=null;
+			CustomContentExtractionType returned = null;
 			try {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Thread=>" + Thread.currentThread().getName() + " calling llm for chunk:"
@@ -311,14 +313,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				returned = super.callLLMConsolidateStructuredReturn(serviceModel, analisysPrompt, request.getQuery(),
 						"", chatContextTemplateParams, this.customContentExtractionType, aggregator,
 						consolidationExtractor, endProcessTriggeringLogic, inputs, false);
-				/*
-				 * SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps,
-				 * satisfactoryDocuments, completed, satisfactoryDocumentsThreashold,
-				 * returned.getExtractedRelevantContent());
-				 * returned.setExtractedRelevantContent(
-				 * SearchEndingDetectionLogic.cleanFromTag(returned.getExtractedRelevantContent(
-				 * )));
-				 */
+
 			} catch (Throwable th) {
 				LOGGER.error("Error in mapping calling llm", th);
 				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
@@ -351,7 +346,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			_analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
 			_analyzedEvent.getOutputData()
 					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
-
+			_analyzedEvent.getOutputData().processedBy(serviceModel);
 			_analyzedEvent.getOutputData()
 					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
 			_analyzedEvent.getOutputData().setAnalisysResult(returned.getExtractedRelevantContent());
@@ -453,7 +448,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
 			processed.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
 			processed.getOutputData().setDeepsearchCode(request.getCode());
-			List<LLMInputDocument> input = new ArrayList<BaseLLMSInvokingAndProvidingService.LLMInputDocument>();
+			processed.getOutputData().processedBy(chatModel);
+			List<LLMInputDocument> input = new ArrayList<LLMInputDocument>();
 			for (AbstractDeepSearchEvent ev : listedEvents) {
 				if (ev instanceof DeepSearchDataSourceDocumentResultEvent evds) {
 					String docName = null;
@@ -485,10 +481,18 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			}
 
 			try {
-				processed.getOutputData()
-						.setResponse(callLLMConsolidateText(chatModel, promptsDao
-								.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-								request.getQuery(), "", currentChatContextParams, input));
+				processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
+				if (!listedEvents.isEmpty()) {
+					processed.getOutputData()
+							.setResponse(callLLMConsolidateText(chatModel, promptsDao
+									.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
+									request.getQuery(), "", currentChatContextParams, input));
+				} else {
+					String backupText = callLLM(chatModel, promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
+							request.getQuery(), currentChatContextParams);
+					processed.getOutputData().setResponse(backupText);
+				}
 				processed.getOutputData().setProcessPercentage(deepSearchState.calculateProcessedPercent());
 				outValue = processed;
 			} catch (Throwable th) {

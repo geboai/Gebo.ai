@@ -1,13 +1,10 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
-import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,10 +89,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			List<IDeepSearchResult> dataSourcesResults, DeepSearchState state,
 			List<IGReactiveDeepSearchDataSourceService> handlers, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, Scheduler deepSearchScheduler,
-			String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps,
-			AtomicInteger satisfactoryDocuments, AtomicBoolean completed, int satisfactoryDocumentsThreashold)
-			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
-			SearchServiceException {
+			String chunkingSessionId) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin dataSourcesNextStep(....)");
 		}
@@ -107,18 +102,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		for (IGReactiveDeepSearchDataSourceService handler : handlers) {
 			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
 				Flux<AbstractDeepSearchEvent> nextStepValue = null;
-				state.setCurrentDataSourceHandlerRunning(handler.getHandlerId());
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Evaluating first found not yet executed external data source handler step:"
-							+ state.getCurrentDataSourceHandlerRunning());
-				}
-
-				state.getDataSourcesStatusTotalSteps().put(handler.getHandlerId(), totalSteps);
-				state.getDataSourcesStatusDoneSteps().put(handler.getHandlerId(), doneSteps);
-
-				nextStepValue = handler.streamSearch(request, minimalChatContext, totalSteps, doneSteps,
-						satisfactoryDocuments, completed, satisfactoryDocumentsThreashold, chatModel, serviceModel,
-						deepSearchConfig, dataSourcesResults, chunkingSessionId, state);
+				nextStepValue = handler.streamSearch(request, minimalChatContext, state, chatModel, serviceModel,
+						deepSearchConfig, dataSourcesResults, chunkingSessionId);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 							"Extracting relevant documents",
@@ -149,8 +134,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request,
 			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
-			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+			List<AbstractDeepSearchEvent> history, DeepSearchConfig configuration, UserInfos userInfos,
+			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
 			throws LLMConfigException {
 
@@ -161,12 +146,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				|| request.getKnowledgeBases() == null) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or null knowledge bases list");
 		}
-		AtomicInteger totalSteps = new AtomicInteger(0);
-		AtomicInteger doneSteps = new AtomicInteger(0);
-		AtomicInteger satisfactoryDocuments = new AtomicInteger(0);
-		AtomicBoolean completed = new AtomicBoolean(false);
+
 		final int satisfactoryDocumentsThreashold = this.defaultDeepsearchConfig
 				.getInTopicSatisfactoryDocumentsThreashold(request.getUserIntent());
+		DeepSearchState state = new DeepSearchState();
+		state.setSatisfactoryDocumentsThreashold(satisfactoryDocumentsThreashold);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Using satisfactory documents threashold: " + satisfactoryDocumentsThreashold);
 		}
@@ -189,8 +173,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					try {
 						List<Flux<AbstractDeepSearchEvent>> newSources = dataSourcesDeepSearch(request,
 								minimalChatContext, history, dataSourcesResults, state, handlers, chatModel,
-								serviceModel, configuration, deepSearchScheduler, chunkingSessionId, totalSteps,
-								doneSteps, satisfactoryDocuments, completed, satisfactoryDocumentsThreashold);
+								serviceModel, configuration, deepSearchScheduler, chunkingSessionId);
 						sources.addAll(newSources);
 					} catch (Throwable e) {
 						LOGGER.error("Exception accessing deep search data source", e);
@@ -212,9 +195,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
-						.knowledgeBaseDeepSearch(request, minimalChatContext, totalSteps, doneSteps,
-								satisfactoryDocuments, completed, satisfactoryDocumentsThreashold, sessionDocuments,
-								dataSourcesResults, history, state, configuration, userInfos, chatModel,
+						.knowledgeBaseDeepSearch(request, state, minimalChatContext, sessionDocuments,
+								dataSourcesResults, history, configuration, userInfos, chatModel, serviceModel,
 								chunkingSessionId, embeddingModels);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
@@ -257,6 +239,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			consolidatedResult.setInputData(request);
 			consolidatedResult.setOutputData(new DeepSearchResponse());
 			consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
+			consolidatedResult.getOutputData().processedBy(chatModel);
 			if (intermediates != null && !intermediates.isEmpty()) {
 				List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
 				for (IDeepSearchResult x : intermediates) {
@@ -274,7 +257,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				consolidatedResult.getOutputData().setProcessPercentage(100);
 
 			} else {
-				consolidatedResult.getOutputData().setResponse(null);
+				String backupText = callLLM(chatModel, promptsDao
+						.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
+						request.getQuery(), promptParams);
+				consolidatedResult.getOutputData().setResponse(backupText);
 				consolidatedResult.getOutputData().setProcessPercentage(100);
 				consolidatedResult.getOutputData().setSearchResultsEmpty(true);
 

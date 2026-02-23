@@ -65,22 +65,18 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		deepSearchRequest.setUsername(securityService.getCurrentUser().getUsername());
 		this.deepSearchRequestRepository.save(deepSearchRequest);
 		final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getId());
-		AtomicInteger totalSteps = new AtomicInteger(0);
-		AtomicInteger doneSteps = new AtomicInteger(0);
-		AtomicInteger satisfactoryDocuments = new AtomicInteger(0);
-		AtomicBoolean completed = new AtomicBoolean(false);
+
 		DeepSearchState deepSearchState = new DeepSearchState();
-		final int satisfactoryDocumentsThreashold = this.defaultDeepsearchConfig
-				.getInTopicSatisfactoryDocumentsThreashold(request.getUserIntent());
-		
-		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(deepSearchRequest, minimalChatContext, totalSteps,
-				doneSteps, satisfactoryDocuments, completed, satisfactoryDocumentsThreashold, chatModel, serviceModel,
-				config, List.of(), chunkSessionId, deepSearchState);
+		deepSearchState.setSatisfactoryDocumentsThreashold(
+				this.defaultDeepsearchConfig.getInTopicSatisfactoryDocumentsThreashold(request.getUserIntent()));
+		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(deepSearchRequest, minimalChatContext,
+				deepSearchState, chatModel, serviceModel, config, List.of(), chunkSessionId);
 		flux = mapDataSourceProcessedToDeepSearchProcessed(flux, deepSearchRequest);
 		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));
 
-		flux = flux.subscribeOn(threadManager.getScheduler());
+		flux = flux.subscribeOn(threadManager.getScheduler())
+				.doOnNext(evt -> deepSearchServiceImpl.persistSideEffects(evt));
 		// put a chat response at the end
 
 		return deepSearchServiceImpl.mapToChatFlux(flux, DeepSearchChatResponseEvent.class);

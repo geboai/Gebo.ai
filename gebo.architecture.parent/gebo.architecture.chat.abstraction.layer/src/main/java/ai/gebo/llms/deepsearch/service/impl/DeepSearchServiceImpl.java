@@ -201,7 +201,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			Flux<AbstractDeepSearchEvent> flow;
 			try {
 				flow = worker.streamDeepSearch(prep.request, minimalChatContext, allDocuments, new ArrayList<>(),
-						new DeepSearchState(), prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,
+						 prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,
 						prep.serviceModel, deepSearchScheduler, chunkSessionId);
 				if (flow != null) {
 					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));

@@ -99,14 +99,15 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 	}
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, AtomicInteger totalSteps, AtomicInteger doneSteps,
-			AtomicInteger satisfactoryDocuments, AtomicBoolean completed, int satisfactoryDocumentsThreashold,
-			AIDocumentsSet sessionDocuments, List<IDeepSearchResult> dataSourcesResults,
-			List<AbstractDeepSearchEvent> history, DeepSearchState state, DeepSearchConfig configuration,
-			UserInfos userInfos, IGConfigurableChatModel chatModel, String chunkingSessionId,
+	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, DeepSearchState state,
+			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
+			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history,
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String chunkingSessionId,
 			List<IGConfigurableEmbeddingModel> embeddingModels) {
-
+		
+		AtomicBoolean completed = state.getCompleted();
+		
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 
@@ -190,10 +191,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 							inputs.add(cInput);
 						}
 						try {
-							String result = callLLMConsolidateText(chatModel, analisysPrompt, request.getQuery(), "",
+							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
 									inputs);
-							SearchEndingDetectionLogic.manageTrigger(totalSteps, doneSteps, satisfactoryDocuments,
-									completed, satisfactoryDocumentsThreashold, result);
+							SearchEndingDetectionLogic.manageTrigger(state, result);
 							result = SearchEndingDetectionLogic.cleanFromTag(result);
 							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 							resultStep.setDeepsearchCode(request.getCode());
@@ -201,6 +201,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 							resultStep.setIndex(history.size());
 							resultStep.setAnalyzedDocument(analyzed);
 							resultStep.setFragmentsCodes(fragments.stream().map(x -> x.getCode()).toList());
+							resultStep.processedBy(serviceModel);
 							AbstractDeepSearchEvent outEvent = null;
 							if (documentReference != null) {
 								DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
@@ -241,6 +242,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			event.getOutputData().setDataSourceDescription("Knowledge bases");
 			event.getOutputData().setDeepsearchCode(request.getCode());
 			event.getOutputData().setSearchResultsEmpty(results.isEmpty());
+			event.getOutputData().processedBy(chatModel);
 			try {
 				if (!results.isEmpty()) {
 					String result = callLLMConsolidateText(chatModel,
