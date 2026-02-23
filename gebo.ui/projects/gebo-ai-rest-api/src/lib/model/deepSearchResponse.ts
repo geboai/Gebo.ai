@@ -18,6 +18,7 @@ export interface DeepSearchResponse {
     dateModified?: Date;
     dateCreated?: Date;
     deepsearchCode?: string;
+    processingModel?: string;
     response?: string;
     searchResultsEmpty?: boolean;
     processPercentage?: number;

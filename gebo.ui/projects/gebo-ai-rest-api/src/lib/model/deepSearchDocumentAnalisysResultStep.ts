@@ -19,6 +19,7 @@ export interface DeepSearchDocumentAnalisysResultStep {
     dateModified?: Date;
     dateCreated?: Date;
     deepsearchCode: string;
+    processingModel?: string;
     emptyResult?: boolean;
     analisysResult?: string;
     analyzedDocument: DeepSearchAnalyzedDocument;

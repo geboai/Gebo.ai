@@ -26,5 +26,17 @@ export interface GeboChatRequest {
     forcedRequestDocuments?: Array<string>;
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
+    userIntent?: GeboChatRequest.UserIntentEnum;
     tokensSize?: number;
+}
+export namespace GeboChatRequest {
+    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'UNKNOWN';
+    export const UserIntentEnum = {
+        QA: 'QA' as UserIntentEnum,
+        REPORT: 'REPORT' as UserIntentEnum,
+        HOWTO: 'HOWTO' as UserIntentEnum,
+        DECISION: 'DECISION' as UserIntentEnum,
+        SUMMARY: 'SUMMARY' as UserIntentEnum,
+        UNKNOWN: 'UNKNOWN' as UserIntentEnum
+    };
 }

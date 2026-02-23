@@ -63,6 +63,7 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		deepSearchRequest.setDeepSearchDataSources(List.of(service.getHandlerId()));
 		deepSearchRequest.setUserIntent(request.getUserIntent());
 		deepSearchRequest.setUsername(securityService.getCurrentUser().getUsername());
+		response.setDeepSearchRequestId(deepSearchRequest.getCode());
 		this.deepSearchRequestRepository.save(deepSearchRequest);
 		final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getId());
 

@@ -14,15 +14,15 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageDeepSearchRequest { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
+    numberOfElements?: number;
+    pageable?: PageableObject;
     size?: number;
     content?: Array<DeepSearchRequest>;
     number?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     sort?: SortObject;
-    pageable?: PageableObject;
     empty?: boolean;
 }

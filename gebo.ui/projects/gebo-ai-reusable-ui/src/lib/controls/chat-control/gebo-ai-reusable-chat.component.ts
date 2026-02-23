@@ -367,7 +367,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         }
     }
     isDeepSearchResponse(item?: GeboChatResponse) {
-        return (item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" && item?.deepSearchRequestId) ? true : false;
+        return ((item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" || item?.pipelineRouterDecisionCode === "SHALLOW_SEARCH_RESPONSE") && item?.deepSearchRequestId) ? true : false;
     }
     getDeepSearchRequestId(item?: GeboChatResponse) {
         return item?.deepSearchRequestId;

@@ -17,10 +17,22 @@ export interface DeepSearchRequest {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    username?: string;
-    query?: string;
+    username: string;
+    query: string;
     knowledgeBases?: Array<string>;
     userChatContextCode?: string;
     chatRequestCode?: string;
     deepSearchDataSources?: Array<string>;
+    userIntent?: DeepSearchRequest.UserIntentEnum;
+}
+export namespace DeepSearchRequest {
+    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'UNKNOWN';
+    export const UserIntentEnum = {
+        QA: 'QA' as UserIntentEnum,
+        REPORT: 'REPORT' as UserIntentEnum,
+        HOWTO: 'HOWTO' as UserIntentEnum,
+        DECISION: 'DECISION' as UserIntentEnum,
+        SUMMARY: 'SUMMARY' as UserIntentEnum,
+        UNKNOWN: 'UNKNOWN' as UserIntentEnum
+    };
 }

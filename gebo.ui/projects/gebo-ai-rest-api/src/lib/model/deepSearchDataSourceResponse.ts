@@ -20,6 +20,7 @@ export interface DeepSearchDataSourceResponse {
     dateModified?: Date;
     dateCreated?: Date;
     deepsearchCode?: string;
+    processingModel?: string;
     response?: string;
     searchResultsEmpty?: boolean;
     dataSourceReferences?: Array<SearchResultReference>;

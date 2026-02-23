@@ -12,12 +12,8 @@
 import { GPromptPlaceholderInfo } from './gPromptPlaceholderInfo';
 
 export interface GPromptUseInfo { 
-    code?: string;
-    description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
     placeholders?: Array<GPromptPlaceholderInfo>;
+    code: string;
+    description: string;
     module: string;
 }
