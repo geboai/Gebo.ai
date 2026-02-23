@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **deepsearchCode** | **String** |  |  [optional]
+**processingModel** | **String** |  |  [optional]
 **response** | **String** |  |  [optional]
 **searchResultsEmpty** | **Boolean** |  |  [optional]
 **processPercentage** | **Double** |  |  [optional]

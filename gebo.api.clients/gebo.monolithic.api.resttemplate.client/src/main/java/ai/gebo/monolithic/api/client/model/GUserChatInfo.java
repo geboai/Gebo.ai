@@ -23,11 +23,14 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("description")
   private String description = null;
+
+  @JsonProperty("chatCreationDateTime")
+  private Date chatCreationDateTime = null;
 
   @JsonProperty("code")
   private String code = null;
@@ -37,9 +40,6 @@ public class GUserChatInfo {
 
   @JsonProperty("chatModelCode")
   private String chatModelCode = null;
-
-  @JsonProperty("chatCreationDateTime")
-  private Date chatCreationDateTime = null;
 
   @JsonProperty("chatProfileCode")
   private String chatProfileCode = null;
@@ -63,6 +63,24 @@ public class GUserChatInfo {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
+    this.chatCreationDateTime = chatCreationDateTime;
+    return this;
+  }
+
+   /**
+   * Get chatCreationDateTime
+   * @return chatCreationDateTime
+  **/
+  @Schema(description = "")
+  public Date getChatCreationDateTime() {
+    return chatCreationDateTime;
+  }
+
+  public void setChatCreationDateTime(Date chatCreationDateTime) {
+    this.chatCreationDateTime = chatCreationDateTime;
   }
 
   public GUserChatInfo code(String code) {
@@ -119,24 +137,6 @@ public class GUserChatInfo {
     this.chatModelCode = chatModelCode;
   }
 
-  public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
-    this.chatCreationDateTime = chatCreationDateTime;
-    return this;
-  }
-
-   /**
-   * Get chatCreationDateTime
-   * @return chatCreationDateTime
-  **/
-  @Schema(description = "")
-  public Date getChatCreationDateTime() {
-    return chatCreationDateTime;
-  }
-
-  public void setChatCreationDateTime(Date chatCreationDateTime) {
-    this.chatCreationDateTime = chatCreationDateTime;
-  }
-
   public GUserChatInfo chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
@@ -184,17 +184,17 @@ public class GUserChatInfo {
     }
     GUserChatInfo guserChatInfo = (GUserChatInfo) o;
     return Objects.equals(this.description, guserChatInfo.description) &&
+        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
         Objects.equals(this.code, guserChatInfo.code) &&
         Objects.equals(this.username, guserChatInfo.username) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
-        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
         Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.ragChat, guserChatInfo.ragChat);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, code, username, chatModelCode, chatCreationDateTime, chatProfileCode, ragChat);
+    return Objects.hash(description, chatCreationDateTime, code, username, chatModelCode, chatProfileCode, ragChat);
   }
 
 
@@ -204,10 +204,10 @@ public class GUserChatInfo {
     sb.append("class GUserChatInfo {\n");
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
-    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
     sb.append("}");

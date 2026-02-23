@@ -20,146 +20,25 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 /**
  * GPromptUseInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class GPromptUseInfo {
+  @JsonProperty("placeholders")
+  private List<GPromptPlaceholderInfo> placeholders = null;
+
   @JsonProperty("code")
   private String code = null;
 
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("userModified")
-  private String userModified = null;
-
-  @JsonProperty("userCreated")
-  private String userCreated = null;
-
-  @JsonProperty("dateModified")
-  private Date dateModified = null;
-
-  @JsonProperty("dateCreated")
-  private Date dateCreated = null;
-
-  @JsonProperty("placeholders")
-  private List<GPromptPlaceholderInfo> placeholders = null;
-
   @JsonProperty("module")
   private String module = null;
-
-  public GPromptUseInfo code(String code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  public GPromptUseInfo description(String description) {
-    this.description = description;
-    return this;
-  }
-
-   /**
-   * Get description
-   * @return description
-  **/
-  @Schema(description = "")
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public GPromptUseInfo userModified(String userModified) {
-    this.userModified = userModified;
-    return this;
-  }
-
-   /**
-   * Get userModified
-   * @return userModified
-  **/
-  @Schema(description = "")
-  public String getUserModified() {
-    return userModified;
-  }
-
-  public void setUserModified(String userModified) {
-    this.userModified = userModified;
-  }
-
-  public GPromptUseInfo userCreated(String userCreated) {
-    this.userCreated = userCreated;
-    return this;
-  }
-
-   /**
-   * Get userCreated
-   * @return userCreated
-  **/
-  @Schema(description = "")
-  public String getUserCreated() {
-    return userCreated;
-  }
-
-  public void setUserCreated(String userCreated) {
-    this.userCreated = userCreated;
-  }
-
-  public GPromptUseInfo dateModified(Date dateModified) {
-    this.dateModified = dateModified;
-    return this;
-  }
-
-   /**
-   * Get dateModified
-   * @return dateModified
-  **/
-  @Schema(description = "")
-  public Date getDateModified() {
-    return dateModified;
-  }
-
-  public void setDateModified(Date dateModified) {
-    this.dateModified = dateModified;
-  }
-
-  public GPromptUseInfo dateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-    return this;
-  }
-
-   /**
-   * Get dateCreated
-   * @return dateCreated
-  **/
-  @Schema(description = "")
-  public Date getDateCreated() {
-    return dateCreated;
-  }
-
-  public void setDateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-  }
 
   public GPromptUseInfo placeholders(List<GPromptPlaceholderInfo> placeholders) {
     this.placeholders = placeholders;
@@ -185,6 +64,42 @@ public class GPromptUseInfo {
 
   public void setPlaceholders(List<GPromptPlaceholderInfo> placeholders) {
     this.placeholders = placeholders;
+  }
+
+  public GPromptUseInfo code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(required = true, description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public GPromptUseInfo description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @Schema(required = true, description = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public GPromptUseInfo module(String module) {
@@ -215,19 +130,15 @@ public class GPromptUseInfo {
       return false;
     }
     GPromptUseInfo gpromptUseInfo = (GPromptUseInfo) o;
-    return Objects.equals(this.code, gpromptUseInfo.code) &&
+    return Objects.equals(this.placeholders, gpromptUseInfo.placeholders) &&
+        Objects.equals(this.code, gpromptUseInfo.code) &&
         Objects.equals(this.description, gpromptUseInfo.description) &&
-        Objects.equals(this.userModified, gpromptUseInfo.userModified) &&
-        Objects.equals(this.userCreated, gpromptUseInfo.userCreated) &&
-        Objects.equals(this.dateModified, gpromptUseInfo.dateModified) &&
-        Objects.equals(this.dateCreated, gpromptUseInfo.dateCreated) &&
-        Objects.equals(this.placeholders, gpromptUseInfo.placeholders) &&
         Objects.equals(this.module, gpromptUseInfo.module);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, placeholders, module);
+    return Objects.hash(placeholders, code, description, module);
   }
 
 
@@ -236,13 +147,9 @@ public class GPromptUseInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class GPromptUseInfo {\n");
     
+    sb.append("    placeholders: ").append(toIndentedString(placeholders)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    userModified: ").append(toIndentedString(userModified)).append("\n");
-    sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
-    sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
-    sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    placeholders: ").append(toIndentedString(placeholders)).append("\n");
     sb.append("    module: ").append(toIndentedString(module)).append("\n");
     sb.append("}");
     return sb.toString();

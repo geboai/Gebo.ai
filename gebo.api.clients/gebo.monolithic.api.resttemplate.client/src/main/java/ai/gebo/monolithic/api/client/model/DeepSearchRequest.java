@@ -25,7 +25,7 @@ import java.util.List;
  * DeepSearchRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class DeepSearchRequest {
   @JsonProperty("code")
@@ -63,6 +63,44 @@ public class DeepSearchRequest {
 
   @JsonProperty("deepSearchDataSources")
   private List<String> deepSearchDataSources = null;
+
+  /**
+   * Gets or Sets userIntent
+   */
+  public enum UserIntentEnum {
+    QA("QA"),
+    REPORT("REPORT"),
+    HOWTO("HOWTO"),
+    DECISION("DECISION"),
+    SUMMARY("SUMMARY"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    UserIntentEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UserIntentEnum fromValue(String input) {
+      for (UserIntentEnum b : UserIntentEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("userIntent")
+  private UserIntentEnum userIntent = null;
 
   public DeepSearchRequest code(String code) {
     this.code = code;
@@ -181,7 +219,7 @@ public class DeepSearchRequest {
    * Get username
    * @return username
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public String getUsername() {
     return username;
   }
@@ -199,7 +237,7 @@ public class DeepSearchRequest {
    * Get query
    * @return query
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public String getQuery() {
     return query;
   }
@@ -296,6 +334,24 @@ public class DeepSearchRequest {
     this.deepSearchDataSources = deepSearchDataSources;
   }
 
+  public DeepSearchRequest userIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+    return this;
+  }
+
+   /**
+   * Get userIntent
+   * @return userIntent
+  **/
+  @Schema(description = "")
+  public UserIntentEnum getUserIntent() {
+    return userIntent;
+  }
+
+  public void setUserIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -317,12 +373,13 @@ public class DeepSearchRequest {
         Objects.equals(this.knowledgeBases, deepSearchRequest.knowledgeBases) &&
         Objects.equals(this.userChatContextCode, deepSearchRequest.userChatContextCode) &&
         Objects.equals(this.chatRequestCode, deepSearchRequest.chatRequestCode) &&
-        Objects.equals(this.deepSearchDataSources, deepSearchRequest.deepSearchDataSources);
+        Objects.equals(this.deepSearchDataSources, deepSearchRequest.deepSearchDataSources) &&
+        Objects.equals(this.userIntent, deepSearchRequest.userIntent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, username, query, knowledgeBases, userChatContextCode, chatRequestCode, deepSearchDataSources);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, username, query, knowledgeBases, userChatContextCode, chatRequestCode, deepSearchDataSources, userIntent);
   }
 
 
@@ -343,6 +400,7 @@ public class DeepSearchRequest {
     sb.append("    userChatContextCode: ").append(toIndentedString(userChatContextCode)).append("\n");
     sb.append("    chatRequestCode: ").append(toIndentedString(chatRequestCode)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
+    sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
     sb.append("}");
     return sb.toString();
   }

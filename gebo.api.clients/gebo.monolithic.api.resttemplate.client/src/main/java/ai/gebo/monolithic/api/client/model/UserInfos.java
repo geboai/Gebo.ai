@@ -24,23 +24,41 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class UserInfos {
+  @JsonProperty("sourname")
+  private String sourname = null;
+
   @JsonProperty("username")
   private String username = null;
 
   @JsonProperty("disabled")
   private Boolean disabled = null;
 
-  @JsonProperty("sourname")
-  private String sourname = null;
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
   @JsonProperty("name")
   private String name = null;
 
-  @JsonProperty("roles")
-  private List<String> roles = null;
+  public UserInfos sourname(String sourname) {
+    this.sourname = sourname;
+    return this;
+  }
+
+   /**
+   * Get sourname
+   * @return sourname
+  **/
+  @Schema(description = "")
+  public String getSourname() {
+    return sourname;
+  }
+
+  public void setSourname(String sourname) {
+    this.sourname = sourname;
+  }
 
   public UserInfos username(String username) {
     this.username = username;
@@ -78,42 +96,6 @@ public class UserInfos {
     this.disabled = disabled;
   }
 
-  public UserInfos sourname(String sourname) {
-    this.sourname = sourname;
-    return this;
-  }
-
-   /**
-   * Get sourname
-   * @return sourname
-  **/
-  @Schema(description = "")
-  public String getSourname() {
-    return sourname;
-  }
-
-  public void setSourname(String sourname) {
-    this.sourname = sourname;
-  }
-
-  public UserInfos name(String name) {
-    this.name = name;
-    return this;
-  }
-
-   /**
-   * Get name
-   * @return name
-  **/
-  @Schema(description = "")
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public UserInfos roles(List<String> roles) {
     this.roles = roles;
     return this;
@@ -140,6 +122,24 @@ public class UserInfos {
     this.roles = roles;
   }
 
+  public UserInfos name(String name) {
+    this.name = name;
+    return this;
+  }
+
+   /**
+   * Get name
+   * @return name
+  **/
+  @Schema(description = "")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -150,16 +150,16 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.username, userInfos.username) &&
+    return Objects.equals(this.sourname, userInfos.sourname) &&
+        Objects.equals(this.username, userInfos.username) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
-        Objects.equals(this.sourname, userInfos.sourname) &&
-        Objects.equals(this.name, userInfos.name) &&
-        Objects.equals(this.roles, userInfos.roles);
+        Objects.equals(this.roles, userInfos.roles) &&
+        Objects.equals(this.name, userInfos.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, disabled, sourname, name, roles);
+    return Objects.hash(sourname, username, disabled, roles, name);
   }
 
 
@@ -168,11 +168,11 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
+    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
-    sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();
   }

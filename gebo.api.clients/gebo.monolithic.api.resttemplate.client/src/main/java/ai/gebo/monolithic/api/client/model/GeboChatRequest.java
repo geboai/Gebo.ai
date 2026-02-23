@@ -26,7 +26,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -67,6 +67,44 @@ public class GeboChatRequest {
 
   @JsonProperty("deepSearchDataSources")
   private List<String> deepSearchDataSources = null;
+
+  /**
+   * Gets or Sets userIntent
+   */
+  public enum UserIntentEnum {
+    QA("QA"),
+    REPORT("REPORT"),
+    HOWTO("HOWTO"),
+    DECISION("DECISION"),
+    SUMMARY("SUMMARY"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    UserIntentEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UserIntentEnum fromValue(String input) {
+      for (UserIntentEnum b : UserIntentEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("userIntent")
+  private UserIntentEnum userIntent = null;
 
   @JsonProperty("tokensSize")
   private Integer tokensSize = null;
@@ -337,6 +375,24 @@ public class GeboChatRequest {
     this.deepSearchDataSources = deepSearchDataSources;
   }
 
+  public GeboChatRequest userIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+    return this;
+  }
+
+   /**
+   * Get userIntent
+   * @return userIntent
+  **/
+  @Schema(description = "")
+  public UserIntentEnum getUserIntent() {
+    return userIntent;
+  }
+
+  public void setUserIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+  }
+
   public GeboChatRequest tokensSize(Integer tokensSize) {
     this.tokensSize = tokensSize;
     return this;
@@ -378,12 +434,13 @@ public class GeboChatRequest {
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
         Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
         Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
+        Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, tokensSize);
   }
 
 
@@ -405,6 +462,7 @@ public class GeboChatRequest {
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
     sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
+    sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -3,14 +3,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalElements** | **Long** |  |  [optional]
 **totalPages** | **Integer** |  |  [optional]
+**totalElements** | **Long** |  |  [optional]
 **numberOfElements** | **Integer** |  |  [optional]
-**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
-**first** | **Boolean** |  |  [optional]
-**last** | **Boolean** |  |  [optional]
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;GLookupEntry&gt;**](GLookupEntry.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]
+**first** | **Boolean** |  |  [optional]
+**last** | **Boolean** |  |  [optional]
+**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **empty** | **Boolean** |  |  [optional]

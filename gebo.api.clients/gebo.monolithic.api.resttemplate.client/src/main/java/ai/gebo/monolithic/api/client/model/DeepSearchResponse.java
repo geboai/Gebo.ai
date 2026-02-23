@@ -23,7 +23,7 @@ import java.util.Date;
  * DeepSearchResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class DeepSearchResponse {
   @JsonProperty("code")
@@ -46,6 +46,9 @@ public class DeepSearchResponse {
 
   @JsonProperty("deepsearchCode")
   private String deepsearchCode = null;
+
+  @JsonProperty("processingModel")
+  private String processingModel = null;
 
   @JsonProperty("response")
   private String response = null;
@@ -185,6 +188,24 @@ public class DeepSearchResponse {
     this.deepsearchCode = deepsearchCode;
   }
 
+  public DeepSearchResponse processingModel(String processingModel) {
+    this.processingModel = processingModel;
+    return this;
+  }
+
+   /**
+   * Get processingModel
+   * @return processingModel
+  **/
+  @Schema(description = "")
+  public String getProcessingModel() {
+    return processingModel;
+  }
+
+  public void setProcessingModel(String processingModel) {
+    this.processingModel = processingModel;
+  }
+
   public DeepSearchResponse response(String response) {
     this.response = response;
     return this;
@@ -274,6 +295,7 @@ public class DeepSearchResponse {
         Objects.equals(this.dateModified, deepSearchResponse.dateModified) &&
         Objects.equals(this.dateCreated, deepSearchResponse.dateCreated) &&
         Objects.equals(this.deepsearchCode, deepSearchResponse.deepsearchCode) &&
+        Objects.equals(this.processingModel, deepSearchResponse.processingModel) &&
         Objects.equals(this.response, deepSearchResponse.response) &&
         Objects.equals(this.searchResultsEmpty, deepSearchResponse.searchResultsEmpty) &&
         Objects.equals(this.processPercentage, deepSearchResponse.processPercentage) &&
@@ -282,7 +304,7 @@ public class DeepSearchResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, response, searchResultsEmpty, processPercentage, dataSourceDescription);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, processingModel, response, searchResultsEmpty, processPercentage, dataSourceDescription);
   }
 
 
@@ -298,6 +320,7 @@ public class DeepSearchResponse {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    deepsearchCode: ").append(toIndentedString(deepsearchCode)).append("\n");
+    sb.append("    processingModel: ").append(toIndentedString(processingModel)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    searchResultsEmpty: ").append(toIndentedString(searchResultsEmpty)).append("\n");
     sb.append("    processPercentage: ").append(toIndentedString(processPercentage)).append("\n");

@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import java.util.Base64;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 public class HttpBasicAuth implements Authentication {
     private String username;
     private String password;

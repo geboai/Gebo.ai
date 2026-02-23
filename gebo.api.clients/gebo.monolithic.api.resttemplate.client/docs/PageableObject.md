@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sort** | [**SortObject**](SortObject.md) |  |  [optional]
+**unpaged** | **Boolean** |  |  [optional]
 **pageNumber** | **Integer** |  |  [optional]
 **pageSize** | **Integer** |  |  [optional]
-**unpaged** | **Boolean** |  |  [optional]
-**offset** | **Long** |  |  [optional]
 **paged** | **Boolean** |  |  [optional]
+**offset** | **Long** |  |  [optional]
+**sort** | [**SortObject**](SortObject.md) |  |  [optional]

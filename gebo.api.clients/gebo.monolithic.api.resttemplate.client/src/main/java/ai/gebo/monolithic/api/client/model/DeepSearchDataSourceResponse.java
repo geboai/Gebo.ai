@@ -27,7 +27,7 @@ import java.util.List;
  * DeepSearchDataSourceResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-17T15:22:10.855584900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
 
 public class DeepSearchDataSourceResponse {
   @JsonProperty("code")
@@ -50,6 +50,9 @@ public class DeepSearchDataSourceResponse {
 
   @JsonProperty("deepsearchCode")
   private String deepsearchCode = null;
+
+  @JsonProperty("processingModel")
+  private String processingModel = null;
 
   @JsonProperty("response")
   private String response = null;
@@ -199,6 +202,24 @@ public class DeepSearchDataSourceResponse {
 
   public void setDeepsearchCode(String deepsearchCode) {
     this.deepsearchCode = deepsearchCode;
+  }
+
+  public DeepSearchDataSourceResponse processingModel(String processingModel) {
+    this.processingModel = processingModel;
+    return this;
+  }
+
+   /**
+   * Get processingModel
+   * @return processingModel
+  **/
+  @Schema(description = "")
+  public String getProcessingModel() {
+    return processingModel;
+  }
+
+  public void setProcessingModel(String processingModel) {
+    this.processingModel = processingModel;
   }
 
   public DeepSearchDataSourceResponse response(String response) {
@@ -370,6 +391,7 @@ public class DeepSearchDataSourceResponse {
         Objects.equals(this.dateModified, deepSearchDataSourceResponse.dateModified) &&
         Objects.equals(this.dateCreated, deepSearchDataSourceResponse.dateCreated) &&
         Objects.equals(this.deepsearchCode, deepSearchDataSourceResponse.deepsearchCode) &&
+        Objects.equals(this.processingModel, deepSearchDataSourceResponse.processingModel) &&
         Objects.equals(this.response, deepSearchDataSourceResponse.response) &&
         Objects.equals(this.searchResultsEmpty, deepSearchDataSourceResponse.searchResultsEmpty) &&
         Objects.equals(this.dataSourceReferences, deepSearchDataSourceResponse.dataSourceReferences) &&
@@ -382,7 +404,7 @@ public class DeepSearchDataSourceResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, response, searchResultsEmpty, dataSourceReferences, errorMessage, handlerId, dataSourceIndex, dataSourceDescription, processPercentage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, deepsearchCode, processingModel, response, searchResultsEmpty, dataSourceReferences, errorMessage, handlerId, dataSourceIndex, dataSourceDescription, processPercentage);
   }
 
 
@@ -398,6 +420,7 @@ public class DeepSearchDataSourceResponse {
     sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    deepsearchCode: ").append(toIndentedString(deepsearchCode)).append("\n");
+    sb.append("    processingModel: ").append(toIndentedString(processingModel)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    searchResultsEmpty: ").append(toIndentedString(searchResultsEmpty)).append("\n");
     sb.append("    dataSourceReferences: ").append(toIndentedString(dataSourceReferences)).append("\n");

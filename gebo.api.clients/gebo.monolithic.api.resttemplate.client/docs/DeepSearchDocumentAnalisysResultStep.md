@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **deepsearchCode** | **String** |  | 
+**processingModel** | **String** |  |  [optional]
 **emptyResult** | **Boolean** |  |  [optional]
 **analisysResult** | **String** |  |  [optional]
 **analyzedDocument** | [**DeepSearchAnalyzedDocument**](DeepSearchAnalyzedDocument.md) |  | 

@@ -16,4 +16,16 @@ Name | Type | Description | Notes
 **forcedRequestDocuments** | **List&lt;String&gt;** |  |  [optional]
 **userUploadedContents** | [**List&lt;UserUploadedContent&gt;**](UserUploadedContent.md) |  |  [optional]
 **deepSearchDataSources** | **List&lt;String&gt;** |  |  [optional]
+**userIntent** | [**UserIntentEnum**](#UserIntentEnum) |  |  [optional]
 **tokensSize** | **Integer** |  |  [optional]
+
+<a name="UserIntentEnum"></a>
+## Enum: UserIntentEnum
+Name | Value
+---- | -----
+QA | &quot;QA&quot;
+REPORT | &quot;REPORT&quot;
+HOWTO | &quot;HOWTO&quot;
+DECISION | &quot;DECISION&quot;
+SUMMARY | &quot;SUMMARY&quot;
+UNKNOWN | &quot;UNKNOWN&quot;
