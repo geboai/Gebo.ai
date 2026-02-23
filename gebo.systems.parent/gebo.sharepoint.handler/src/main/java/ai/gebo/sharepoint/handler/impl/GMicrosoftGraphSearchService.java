@@ -22,7 +22,6 @@ import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphNavigationCoordinates
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphResourceReference;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftResultsExtractionData;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
-import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class GMicrosoftGraphSearchService extends
@@ -73,9 +72,8 @@ public class GMicrosoftGraphSearchService extends
 	@Override
 	public MicrosoftResultsExtractionData aggregate(MicrosoftResultsExtractionData oldConsolidated,
 			MicrosoftResultsExtractionData consolidated) {
-		MicrosoftResultsExtractionData data = new MicrosoftResultsExtractionData();
-		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
-		data.setContentIsRelevant(consolidated.getContentIsRelevant());
+		MicrosoftResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
+				new MicrosoftResultsExtractionData());
 		return data;
 	}
 

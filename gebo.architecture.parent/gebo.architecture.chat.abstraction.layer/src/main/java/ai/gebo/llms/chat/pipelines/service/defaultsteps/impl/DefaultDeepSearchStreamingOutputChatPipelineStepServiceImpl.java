@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
@@ -19,7 +20,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;

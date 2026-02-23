@@ -26,4 +26,6 @@ public class DefaultPipelineSharedPromptPlaceholders {
 		return out;
 	}
 
+	public static final String DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM = "deliverableTypesList";
+
 }

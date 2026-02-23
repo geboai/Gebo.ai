@@ -32,9 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import ai.gebo.architecture.ai.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;

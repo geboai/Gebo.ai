@@ -1,9 +1,9 @@
-package ai.gebo.llms.chat.abstraction.layer.services;
+package ai.gebo.architecture.ai.service;
 
 import java.io.IOException;
 import java.util.List;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptConfig;
 
 public interface IGStaticPromptsProvider {
 	public List<GPromptConfig> promptsList() throws IOException;

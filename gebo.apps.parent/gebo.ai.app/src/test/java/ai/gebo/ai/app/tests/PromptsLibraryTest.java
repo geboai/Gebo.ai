@@ -2,9 +2,9 @@ package ai.gebo.ai.app.tests;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

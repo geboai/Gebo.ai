@@ -10,15 +10,15 @@
  
  
 
-package ai.gebo.architecture.ai.impl;
+package ai.gebo.architecture.ai.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGReadableContentsFormatHandler;
-import ai.gebo.architecture.ai.IGReadableContentsFormatHandlerRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandler;
+import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandlerRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 /**

@@ -30,11 +30,12 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -61,7 +62,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;

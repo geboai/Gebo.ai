@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -15,7 +16,6 @@ import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;

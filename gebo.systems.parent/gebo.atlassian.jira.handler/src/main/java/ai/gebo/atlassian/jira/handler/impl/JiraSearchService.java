@@ -72,9 +72,7 @@ public class JiraSearchService extends
 	@Override
 	public JiraResultsExtractionData aggregate(JiraResultsExtractionData oldConsolidated,
 			JiraResultsExtractionData consolidated) {
-		JiraResultsExtractionData data = new JiraResultsExtractionData();
-		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
-		data.setContentIsRelevant(consolidated.getContentIsRelevant());
+		JiraResultsExtractionData data = basicAggregate(oldConsolidated, consolidated, new JiraResultsExtractionData());
 		return data;
 	}
 

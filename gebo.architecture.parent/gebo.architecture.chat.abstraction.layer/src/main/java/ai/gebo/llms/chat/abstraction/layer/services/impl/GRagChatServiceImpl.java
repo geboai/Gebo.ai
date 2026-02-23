@@ -17,10 +17,12 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -40,7 +42,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
@@ -50,7 +51,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerSe
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.model.base.GBaseObject;
@@ -69,6 +69,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
 	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	final protected IGDocumentsSearchService ragSearchService;
+
 	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
@@ -124,8 +125,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		this.chatSessionLifecycleService.ensureChatSessionExists(request);
 		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
 		GeboChatResponse chatResponse = this.chatSessionLifecycleService.createEmptyResponse(request);
+		String modelCode = handler != null && handler.getConfig() != null
+				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
+						: null;
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), false);
+		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, false);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
@@ -278,7 +282,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		response.setDocumentsRef(docrefs);
 		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-		GPromptConfig prompt = this.promptsDao.defaultChatPrompt((GBaseChatModelConfig) handler.getConfig(), true);
+		String modelCode = handler != null && handler.getConfig() != null
+				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
+						: null;
+		GPromptConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
 		return this.streamChatClient(handler, new Prompt(prompt.getPrompt()), kbcontext, request, response,
 				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);

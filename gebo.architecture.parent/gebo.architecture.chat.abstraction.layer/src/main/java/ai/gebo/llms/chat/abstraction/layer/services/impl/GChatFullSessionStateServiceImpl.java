@@ -78,6 +78,7 @@ public class GChatFullSessionStateServiceImpl implements IGChatFullSessionStateS
 		int length = ITokensCountable.tokensEstimator.estimate(request.getQuery());
 		interaction.setRequestId(request.getId());
 		interaction.setUserTokenSize(length);
+		interaction.setUserIntent(request.getUserIntent());
 		interaction.setAssistant(response.getQueryResponse());
 		length = ITokensCountable.tokensEstimator.estimate(response.getQueryResponse());
 		interaction.setAssistantTokenSize(length);

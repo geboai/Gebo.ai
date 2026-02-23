@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class CSSSimplefiedInteraction implements ITokensCountable, Cloneable {
 	private String pipelineRoutingDecision = null;
 	private Integer interactionIndex = null;
 	private String requestId = null;
+	private DeliverableIntent userIntent = null;
 
 	@Override
 	public int getTokensSize() {

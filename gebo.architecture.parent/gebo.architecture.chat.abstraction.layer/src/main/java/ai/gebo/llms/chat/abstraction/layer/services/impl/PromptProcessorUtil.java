@@ -14,7 +14,7 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import org.springframework.ai.chat.prompt.PromptTemplate;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptConfig;
 
 /**
  * Utility class for processing and creating prompt templates.

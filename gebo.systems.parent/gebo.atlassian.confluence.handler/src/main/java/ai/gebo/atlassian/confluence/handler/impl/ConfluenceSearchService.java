@@ -381,9 +381,8 @@ public class ConfluenceSearchService extends
 	@Override
 	public ConfluenceResultsExtractionData aggregate(ConfluenceResultsExtractionData oldConsolidated,
 			ConfluenceResultsExtractionData consolidated) {
-		ConfluenceResultsExtractionData data = new ConfluenceResultsExtractionData();
-		data.setExtractedRelevantContent(consolidated != null ? consolidated.getExtractedRelevantContent() : null);
-		data.setContentIsRelevant(consolidated.getContentIsRelevant());
+		ConfluenceResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
+				new ConfluenceResultsExtractionData());
 		return data;
 	}
 

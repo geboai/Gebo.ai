@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptUseInfo;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptUseInfoDao;
+import ai.gebo.architecture.ai.model.GPromptUseInfo;
+import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
 import lombok.AllArgsConstructor;
 
 @RestController

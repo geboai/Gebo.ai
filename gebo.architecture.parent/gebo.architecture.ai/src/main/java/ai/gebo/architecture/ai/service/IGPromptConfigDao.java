@@ -7,11 +7,10 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.services;
+package ai.gebo.architecture.ai.service;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 
 /**
  * Gebo.ai comment agent
@@ -20,7 +19,8 @@ import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
  * that rely in llms for a lot of different uses application.
  */
 public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConfig> {
-
+	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
+	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	/**
 	 * Provides a default prompt configuration based on the specified chat model
 	 * configuration and an optional flag to enable a retrieval-augmented generation
@@ -31,7 +31,7 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 *                          used
 	 * @return the default prompt configuration
 	 */
-	GPromptConfig defaultChatPrompt(GBaseChatModelConfig chatConfiguration, Boolean ragPrompt);
+	GPromptConfig defaultChatPrompt(String modelCode, Boolean ragPrompt);
 
 	/**
 	 * Provides a default prompt configuration based on an optional RAG prompt flag.
@@ -67,9 +67,8 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param config
 	 * @return
 	 */
-	default GPromptConfig findByPromptUse(String promptUse, String langCode, GBaseChatModelConfig config) {
-		return this.findByPromptUse(promptUse, langCode, null,
-				config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null);
+	default GPromptConfig findByPromptUse(String promptUse, String langCode, String modelCode) {
+		return this.findByPromptUse(promptUse, langCode, null, modelCode);
 	}
 
 	/**********************************************************************************
@@ -80,9 +79,8 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param config
 	 * @return
 	 */
-	default GPromptConfig findByPromptUse(String promptUse, GBaseChatModelConfig config) {
-		return this.findByPromptUse(promptUse, "en", null,
-				config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null);
+	default GPromptConfig findByPromptUse(String promptUse, String modelCode) {
+		return this.findByPromptUse(promptUse, "en", null, modelCode);
 	}
 
 	GPromptConfig findByPromptUse(String promptUse, String langCode, String modelProvider, String modelCode);

@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.architecture.ai;
+package ai.gebo.architecture.ai.service;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,11 +7,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -33,7 +35,6 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
@@ -50,7 +51,9 @@ import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchOperationEndedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchUploadedDocumentEvent;
+import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagStepDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
 import ai.gebo.model.DocumentMetaInfos;
@@ -60,7 +63,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
 
 @Service
-public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingAndProvidingService {
+public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingAndProvidingService
+		implements IGInternalKnlowledgeBaseRagStepDeepSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalKnowledgeBaseRagDeepSearchService.class);
 	private final IGPromptConfigDao promptsDao;
 	private final IKnowledgeGraphSearchService graphRagSearchService;
@@ -94,12 +98,16 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 		this.userUploadedRepository = userUploadedRepository;
 	}
 
-	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request,
+	@Override
+	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, DeepSearchState state,
 			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
-			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history, DeepSearchState state,
+			List<IDeepSearchResult> dataSourcesResults, List<AbstractDeepSearchEvent> history,
 			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels, AtomicBoolean completed) {
-
+			IGConfigurableChatModel serviceModel, String chunkingSessionId,
+			List<IGConfigurableEmbeddingModel> embeddingModels) {
+		
+		AtomicBoolean completed = state.getCompleted();
+		
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 
@@ -108,13 +116,21 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deferred knowledge base search");
 			}
-			AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
-			if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
-				AIDocumentsSet searchResult = getSearchResults(request, configuration, userInfos, embeddingModels);
-				consolidatedDaoResult = AIDocumentsSet.join(searchResult, consolidatedDaoResult);
+			boolean _completed = completed.get();
+			if (_completed) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Handling search operations ending execution step");
+				}
 			}
-			if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
-				consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
+			AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet();
+			if (!_completed) {
+				if (request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
+					AIDocumentsSet searchResult = getSearchResults(request, configuration, userInfos, embeddingModels);
+					consolidatedDaoResult = AIDocumentsSet.join(searchResult, consolidatedDaoResult);
+				}
+				if (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty()) {
+					consolidatedDaoResult = AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult);
+				}
 			}
 			return Flux.just(consolidatedDaoResult);
 		});
@@ -122,6 +138,13 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 		ParallelFlux<AbstractDeepSearchEvent> body = documentSearch
 				.flatMap(s -> Flux.fromIterable(s.getDocumentItems())).parallel(configuration.getDocumentsParallelism())
 				.map((refItem) -> {
+					boolean _completed = completed.get();
+					if (_completed) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Handling search operations ending execution step");
+						}
+						return DeepSearchOperationEndedEvent.of(request);
+					}
 					String documentCode = refItem.getCode();
 
 					GDocumentReference documentReference = null;
@@ -168,14 +191,17 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 							inputs.add(cInput);
 						}
 						try {
-							String result = callLLMConsolidateText(chatModel, analisysPrompt, request.getQuery(), "",
+							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
 									inputs);
+							SearchEndingDetectionLogic.manageTrigger(state, result);
+							result = SearchEndingDetectionLogic.cleanFromTag(result);
 							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 							resultStep.setDeepsearchCode(request.getCode());
 							resultStep.setAnalisysResult(result);
 							resultStep.setIndex(history.size());
 							resultStep.setAnalyzedDocument(analyzed);
 							resultStep.setFragmentsCodes(fragments.stream().map(x -> x.getCode()).toList());
+							resultStep.processedBy(serviceModel);
 							AbstractDeepSearchEvent outEvent = null;
 							if (documentReference != null) {
 								DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
@@ -216,6 +242,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			event.getOutputData().setDataSourceDescription("Knowledge bases");
 			event.getOutputData().setDeepsearchCode(request.getCode());
 			event.getOutputData().setSearchResultsEmpty(results.isEmpty());
+			event.getOutputData().processedBy(chatModel);
 			try {
 				if (!results.isEmpty()) {
 					String result = callLLMConsolidateText(chatModel,

@@ -12,9 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.services.IGStaticPromptsProvider;
 import lombok.Data;
 
 @Configuration
@@ -41,13 +41,16 @@ public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 	public static final String DEEP_SEARCH_CONTENT_RATING_PROMPT = "deep-search-content-rating-prompt";
 	public static final String DEEP_SEARCH_CONSOLIDATION_PROMPT = "deep-search-consolidation-prompt";
 	public static final String DEEP_SEARCH_FILE_ANALISYS_PROMPT = "deep-search-file-analisys-prompt";
+	public static final String DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT = "deep-search-data-sources-file-analisys-prompt";
+	public static final String DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT = "deep-search-empty-results-fallback-prompt";
 	public static final List<String> ALL_PROMPT_CODES = List.of(DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT,
 			DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT, DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 			DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT, CHAT_HISTORY_DOCUMENTS_CONSOLIDATION,
 			HISTORY_CONSOLIDATION_PROMPT, PROMPT_TEMPLATE_WIZARD_DEFAULT, SUMMARIZE_CHAT_DESCRIPTION,
 			DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT, DEEP_SEARCH_KEYWORD_GENERATION_PROMPT,
 			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT,
-			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT);
+			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
+			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboPromptsLibrary.class);
 

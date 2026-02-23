@@ -1,7 +1,5 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -29,13 +29,11 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
-import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -54,6 +52,11 @@ import lombok.ToString;
 @Component
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingAndProvidingService
 		implements IRoutingChatPipelineStepService {
+	private static final String DELIVERABLE_FIELD = "deliverable";
+	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
+	private static final String INTENT_TYPE = "intent-type: ";
+	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
+	private static final String DELIVERABLE_TYPES_CATALOG = "DELIVERABLE_TYPES_CATALOG";
 	static final String SEARCHED_SYSTEM = "searchedSystem";
 	private static final String ROUTING_DECISION = "routingDecision";
 	private static final String TOPICS = "topics: ";
@@ -119,7 +122,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query, params);
 		runtimeData.getRequestResources().getCurrentRequest().setRewrittenQuery(rewrited_query);
-		this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
+
 		return rewrited_query;
 	}
 
@@ -147,6 +150,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
 				templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
 						shallowSystemsCatalog);
+				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM,
+						createDeliverableTypesList());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End Calculating router params to be cached");
 				}
@@ -171,7 +176,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM));
+				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD));
+
 		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
 			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
 			List<String> realCodes = new ArrayList<String>();
@@ -182,6 +188,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			});
 			decisionMap.put(SEARCHED_SYSTEM, realCodes);
 		}
+		// extracting user intent
+		DeliverableIntent userIntent = readUserIntent(decisionMap);
+		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;
@@ -216,6 +225,47 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		return new RoutingDecision(routes, routingEntry, decision.name());
 	}
 
+	private String createDeliverableTypesList() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(DELIVERABLE_TYPES_CATALOG);
+		buffer.append(NEWLINE);
+		for (DeliverableIntent intent : DeliverableIntent.values()) {
+			buffer.append(INTENT_TYPE);
+			buffer.append(intent.name());
+			buffer.append(NEWLINE);
+			buffer.append(INTENT_SELECTION_CRITERIA);
+			buffer.append(intent.getExplanation());
+			buffer.append(NEWLINE);
+		}
+		buffer.append(END_DELIVERABLE_TYPES_CATALOG);
+		buffer.append(NEWLINE);
+		return buffer.toString();
+	}
+
+	private DeliverableIntent readUserIntent(Map<String, List<String>> extracted) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin readUserIntent(" + extracted + ")");
+		}
+		List<String> values = extracted.get(DELIVERABLE_FIELD);
+		DeliverableIntent intent = DeliverableIntent.QA;
+		if (values != null && !values.isEmpty()) {
+			String _intent = values.get(0);
+			if (_intent != null) {
+				for (DeliverableIntent i : DeliverableIntent.values()) {
+					if (_intent.toLowerCase().indexOf(i.name().toLowerCase()) >= 0) {
+						intent = i;
+						break;
+					}
+				}
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End readUserIntent(...) output: " + intent.name());
+		}
+		return intent;
+
+	}
+
 	@Override
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
@@ -247,6 +297,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				} else {
 					rd = doDecideRoute(runtimeData, chatModel, serviceModel, latestInteractions, rewrited_query);
 				}
+				this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
 			} catch (Throwable th) {
 				LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
 				rd = new RoutingDecision(
@@ -301,6 +352,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	}
 
 	private RoutingDecision createDeepSearchHeavyDocumentsFixedRoute(ChatPipelineExecutionRuntimeData runtimeData) {
+		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(DeliverableIntent.REPORT);
 		RoutingDecision rd = new RoutingDecision(
 				List.of(DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.DEFAULT_DEEPSEARCH_STREAMING),
 				new IChatPipelineStepRuntimeData() {

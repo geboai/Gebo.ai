@@ -2,8 +2,6 @@ package ai.gebo.llms.deepsearch.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -50,15 +48,12 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
-	 * @param serviceModel TODO
 	 * @param request
 	 * @param minimalChatContext TODO
+	 * @param deepSearchState TODO
+	 * @param serviceModel TODO
 	 * @param pastSystemsResponses
 	 * @param chunkingSessionId TODO
-	 * @param totalSteps TODO
-	 * @param doneSteps TODO
-	 * @param completed TODO
-	 * @param deepSearchState TODO
 	 * @param history
 	 * @return
 	 * @throws LLMConfigException
@@ -67,8 +62,8 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws GeboIngestionException
 	 * @throws SearchServiceException
 	 */
-	public Flux<AbstractDeepSearchEvent> streamSearch(IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			DeepSearchConfig deepSearchConfig, DeepSearchRequest request, MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId, AtomicInteger totalSteps, AtomicInteger doneSteps, AtomicBoolean completed, DeepSearchState deepSearchState) throws LLMConfigException, IOException, GeboIngestionException,
+	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			DeepSearchState deepSearchState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId) throws LLMConfigException, IOException, GeboIngestionException,
 			GeboContentHandlerSystemException, SearchServiceException;
 
 }

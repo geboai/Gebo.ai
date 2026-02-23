@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.architecture.ai.model;
 
 import lombok.Data;
 

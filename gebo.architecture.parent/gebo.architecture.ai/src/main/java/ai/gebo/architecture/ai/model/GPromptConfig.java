@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.chat.abstraction.layer.model;
+package ai.gebo.architecture.ai.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.HashIndexed;

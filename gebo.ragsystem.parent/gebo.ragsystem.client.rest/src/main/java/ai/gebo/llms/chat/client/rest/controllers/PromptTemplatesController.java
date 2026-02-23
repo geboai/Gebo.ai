@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
@@ -22,20 +19,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
-import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 
 /**
  * AI generated comments
  * 
- * REST controller for managing prompt templates.
- * This controller provides endpoints to retrieve default prompts based on various parameters.
- * Access is restricted to users with the ADMIN role.
+ * REST controller for managing prompt templates. This controller provides
+ * endpoints to retrieve default prompts based on various parameters. Access is
+ * restricted to users with the ADMIN role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -44,7 +41,7 @@ public class PromptTemplatesController {
 	/** Data access object for prompt configurations */
 	@Autowired
 	IGPromptConfigDao promptConfigDao;
-	
+
 	/** Manager for persistent objects */
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
@@ -57,12 +54,13 @@ public class PromptTemplatesController {
 	}
 
 	/**
-	 * Parameter class for getting default prompts based on a chat model configuration
+	 * Parameter class for getting default prompts based on a chat model
+	 * configuration
 	 */
 	public static class DefaultPromptForChatModelParam {
 		/** The chat model configuration to get a default prompt for */
 		public @NotNull GBaseChatModelConfig chatModelConfig = null;
-		
+
 		/** Flag indicating whether this is for a RAG prompt */
 		public @NotNull Boolean ragPrompt = null;
 	}
@@ -75,7 +73,7 @@ public class PromptTemplatesController {
 	 */
 	@PostMapping(value = "getDefaultPromptForChatModel", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptConfig getDefaultPromptForChatModel(@RequestBody DefaultPromptForChatModelParam param) {
-		return promptConfigDao.defaultChatPrompt(param.chatModelConfig, param.ragPrompt);
+		return promptConfigDao.defaultChatPrompt(param.ragPrompt);
 	}
 
 	/**
@@ -84,7 +82,7 @@ public class PromptTemplatesController {
 	public static class DefaultPromptForChatModelReferenceParam {
 		/** Reference to the chat model configuration to get a default prompt for */
 		public @NotNull GObjectRef<GBaseChatModelConfig> chatModelConfigReference = null;
-		
+
 		/** Flag indicating whether this is for a RAG prompt */
 		public @NotNull Boolean ragPrompt = null;
 	}
@@ -94,7 +92,8 @@ public class PromptTemplatesController {
 	 * 
 	 * @param param Object containing the chat model reference and RAG prompt flag
 	 * @return The default prompt configuration
-	 * @throws GeboPersistenceException If there's an error retrieving the referenced object
+	 * @throws GeboPersistenceException If there's an error retrieving the
+	 *                                  referenced object
 	 */
 	@PostMapping(value = "getDefaultPromptForChatModelReference", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GPromptConfig getDefaultPromptForChatModelReference(
@@ -102,7 +101,7 @@ public class PromptTemplatesController {
 		GBaseChatModelConfig chatModelConfig = persistentObjectManager.findByReference(param.chatModelConfigReference,
 				GBaseChatModelConfig.class);
 		if (chatModelConfig != null)
-			return promptConfigDao.defaultChatPrompt(chatModelConfig, param.ragPrompt);
+			return promptConfigDao.defaultChatPrompt(param.ragPrompt);
 		else
 			return promptConfigDao.defaultChatPrompt(param.ragPrompt);
 	}

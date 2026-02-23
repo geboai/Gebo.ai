@@ -45,6 +45,7 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 			extension = "." + extension;
 		return extension;
 	}
+
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			WebSearchResultsExtractionData extractedData) {
@@ -74,19 +75,18 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 	@Override
 	public WebSearchResultsExtractionData aggregate(WebSearchResultsExtractionData oldConsolidated,
 			WebSearchResultsExtractionData cumulated) {
-		if (oldConsolidated == null && cumulated == null)
-			return new WebSearchResultsExtractionData();
-		if (cumulated == null)
-			return oldConsolidated;
-		if (oldConsolidated == null)
-			return cumulated;
+
 		WebSearchResultsExtractionData newResult = new WebSearchResultsExtractionData();
-		newResult.setExtractedRelevantContent(cumulated.getExtractedRelevantContent());
-		newResult.setContentIsRelevant(cumulated.getContentIsRelevant());
-		newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
-		newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
-		newResult.getExtractedRelatedSearches().addAll(oldConsolidated.getExtractedRelatedSearches());
-		newResult.getExtractedRelatedSearches().addAll(cumulated.getExtractedRelatedSearches());
+		basicAggregate(oldConsolidated, cumulated, newResult);
+		if (oldConsolidated != null) {
+			newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
+			newResult.getExtractedRelatedSearches().addAll(oldConsolidated.getExtractedRelatedSearches());
+
+		}
+		if (cumulated != null) {
+			newResult.getExtractedRelevantLinks().addAll(cumulated.getExtractedRelevantLinks());
+			newResult.getExtractedRelatedSearches().addAll(cumulated.getExtractedRelatedSearches());
+		}
 		return newResult;
 	}
 

@@ -25,7 +25,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGReadableContentsFormatHandlerRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandlerRepositoryPattern;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
