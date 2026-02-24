@@ -18,11 +18,11 @@ import lombok.Data;
 @PropertySource(value = "classpath:/jira-prompts-library/index.yml", factory = GeboYamlPropertySourceFactory.class)
 public class JiraHandlerConfig extends AbstractStaticPromptsLibraryProvider {
 
-	List<GPromptLibraryReference> library = new ArrayList();
+	List<GPromptLibraryReference> jiraPrompts = new ArrayList();
 
 	@Override
 	protected List<GPromptLibraryReference> getReferences() {
 
-		return getLibrary();
+		return getJiraPrompts();
 	}
 }

@@ -14,43 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.repository.PromptConfigRepository;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
-import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
-import lombok.AllArgsConstructor;
 
-@Service
 public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GPromptConfig> implements IGPromptConfigDao {
-
-	/**
-	 * AI generated comments A dynamic configuration source for GPromptConfig
-	 * entities integrated with PromptConfigRepository.
-	 */
-
-	@AllArgsConstructor
-	public static class GPromptConfigDynamicSource
-
-			implements IGDynamicConfigurationSource<GPromptConfig> {
-		final PromptConfigRepository directRepo;
-
-		@Override
-		public List<GPromptConfig> getConfigurations() {
-			return directRepo.findAll();
-		}
-
-		@Override
-		public GPromptConfig findByCode(String code) {
-			Optional<GPromptConfig> opt = directRepo.findById(code);
-			return opt.isPresent() ? opt.get() : null;
-		}
-		// Inherits all functionality from GDynamicConfigurationSourceAdapter
-	}
 
 	private final PromptConfigRepository directRepo;
 
@@ -62,8 +32,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * @param directRepo PromptConfigRepository for direct repository access
 	 * @throws IOException
 	 */
-	public GPromptConfigDaoImpl(@Autowired(required = false) List<IGStaticPromptsProvider> configs,
-			PromptConfigRepository directRepo) throws IOException {
+	public GPromptConfigDaoImpl(List<IGStaticPromptsProvider> configs, PromptConfigRepository directRepo)
+			throws IOException {
 		super(listPrompts(configs), new GPromptConfigDynamicSource(directRepo));
 		this.directRepo = directRepo;
 	}

@@ -73,7 +73,6 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumi
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
-import jakarta.el.MethodNotFoundException;
 
 /**
  * Implementation of the Confluence virtual filesystem service. Provides access

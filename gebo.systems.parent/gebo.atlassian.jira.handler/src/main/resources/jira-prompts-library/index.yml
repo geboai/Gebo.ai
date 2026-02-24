@@ -1,5 +1,5 @@
 ai.gebo.jira:
-  library:
+  jiraPrompts:
     - promptUse: jira-standard-query-extraction-prompt
       langCode: en
       reference: /jira-prompts-library/en/jira-standard-query-extraction-prompt.txt

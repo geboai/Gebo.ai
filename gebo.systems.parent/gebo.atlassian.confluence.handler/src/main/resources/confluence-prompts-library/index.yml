@@ -1,5 +1,5 @@
 ai.gebo.confluence:
-  library:
+  confluencePrompts:
     - promptUse: confluence-standard-query-extraction-prompt
       langCode: en
       reference: /confluence-prompts-library/en/confluence-standard-query-extraction-prompt.txt

@@ -35,7 +35,6 @@ import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoord
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResultsExtractionData;
 import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearchFilter;
-import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceAttachmentApi;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceContentApi;
 import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceAttachmentItem;
@@ -48,7 +47,6 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
-import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class ConfluenceSearchService extends
@@ -462,7 +460,7 @@ public class ConfluenceSearchService extends
 
 	@Override
 	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData) {
-
+		
 		return Map.of();
 	}
 
