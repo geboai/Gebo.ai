@@ -1,0 +1,9 @@
+ai.gebo.jira:
+  library:
+    - promptUse: jira-standard-query-extraction-prompt
+      langCode: en
+      reference: /jira-prompts-library/en/jira-standard-query-extraction-prompt.txt
+    - promptUse: jira-native-query-extraction-prompt
+      langCode: en
+      reference: /jira-prompts-library/en/jira-native-query-extraction-prompt.txt
+    

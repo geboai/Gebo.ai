@@ -97,7 +97,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 		return newResult;
 	}
 
-	public String getQueriesExtractionPrompt();
+	public String getQueriesGenerationPromptUseCode();
 
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			CustomSearchResultExtractionDataType extractedData);

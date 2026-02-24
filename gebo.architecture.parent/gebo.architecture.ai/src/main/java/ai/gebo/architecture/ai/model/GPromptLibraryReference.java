@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.config;
+package ai.gebo.architecture.ai.model;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

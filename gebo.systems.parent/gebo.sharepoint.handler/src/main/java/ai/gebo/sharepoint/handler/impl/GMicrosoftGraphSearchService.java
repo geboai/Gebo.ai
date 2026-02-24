@@ -83,7 +83,7 @@ public class GMicrosoftGraphSearchService extends
 	}
 
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
 		return config.getQueryExtractionPrompt();
 	}

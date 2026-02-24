@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptLibraryReference;
+import ai.gebo.architecture.ai.service.AbstractStaticPromptsLibraryProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
@@ -21,7 +23,7 @@ import lombok.Data;
 @ConfigurationProperties(value = "ai.gebo.prompts")
 @PropertySource(value = "classpath:/prompts-library/index.yml", factory = GeboYamlPropertySourceFactory.class)
 @Data
-public class GeboPromptsLibrary implements IGStaticPromptsProvider {
+public class GeboPromptsLibrary extends AbstractStaticPromptsLibraryProvider {
 	private List<GPromptLibraryReference> library = new ArrayList<GPromptLibraryReference>();
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
@@ -52,42 +54,10 @@ public class GeboPromptsLibrary implements IGStaticPromptsProvider {
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 
-	private static Logger LOGGER = LoggerFactory.getLogger(GeboPromptsLibrary.class);
-
 	@Override
-	public List<GPromptConfig> promptsList() throws IOException {
-		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
-		for (GPromptLibraryReference reference : library) {
-			LOGGER.info("Loading prompt:" + reference);
-			if (reference.getReference() == null || reference.getReference().trim().length() == 0)
-				throw new RuntimeException("One entry of the prompts library has empty reference field");
-			GPromptConfig prompt = new GPromptConfig();
-			prompt.setPromptUse(reference.getPromptUse());
-			prompt.setLangCode(reference.getLangCode());
-			prompt.setModelProvider(reference.getModelProvider());
-			prompt.setModelCode(reference.getModelCode());
-			try (InputStream is = getClass().getResourceAsStream(reference.getReference())) {
-				if (is == null) {
-					throw new RuntimeException("This entry of the prompts library is impossible to load:" + reference);
-				} else {
-					ByteArrayOutputStream bos = new ByteArrayOutputStream();
-					byte buffer[] = new byte[4096];
-					int read = is.read(buffer);
-					while (read > 0) {
-						bos.write(buffer, 0, read);
-						try {
-							read = is.read(buffer);
-						} catch (IOException e) {
-							break;
-						}
-					}
-					prompt.setPrompt(bos.toString());
-				}
-				out.add(prompt);
-			}
+	protected List<GPromptLibraryReference> getReferences() {
 
-		}
-		return out;
+		return getLibrary();
 	}
 
 }

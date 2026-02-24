@@ -80,7 +80,7 @@ public class GoogleDriveSearchService extends
 	}
 
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
 		return config.getQueryExtractionPrompt();
 	}

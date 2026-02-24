@@ -167,7 +167,7 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	}
 
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
 		return bingConfig.getQueryExtractionPrompt();
 	}

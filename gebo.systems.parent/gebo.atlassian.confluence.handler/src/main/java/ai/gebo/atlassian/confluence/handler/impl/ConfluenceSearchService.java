@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.CleanQueryUtil;
+import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceConnection;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceContentApi;
 import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceAttachmentItem;
@@ -32,6 +34,7 @@ import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNativePositionO
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoordinates;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResultsExtractionData;
+import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearchFilter;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceAttachmentApi;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceContentApi;
@@ -49,12 +52,15 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 
 @Service
 public class ConfluenceSearchService extends
-		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext> {
+		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext>
+		implements INativeSearchService<ConfluenceResultsExtractionData, ConfluenceContentSearchFilter> {
+	public static final String CONFLUENCE_NATIVE_QUERY_EXTRACTION_PROMPT = "confluence-native-query-extraction-prompt";
+	public static final String CONFLUENCE_STANDARD_QUERY_EXTRACTION_PROMPT = "confluence-standard-query-extraction-prompt";
 	private static final String CONFLUENCE = "confluence";
 	private static final String HTML = ".html";
 	private static final String TEXT_HTML = "text/html";
-	final ConfluenceConnectionFactory confluenceConnectionFactory;
-	final ConfluenceHandlerConfig config;
+	private final ConfluenceConnectionFactory confluenceConnectionFactory;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceSearchService.class);
 
 	public ConfluenceSearchService(ConfluenceConnectionFactory confluenceConnectionFactory,
@@ -63,7 +69,6 @@ public class ConfluenceSearchService extends
 			ConfluenceBrowsingService browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.confluenceConnectionFactory = confluenceConnectionFactory;
-		this.config = config;
 	}
 
 	@Override
@@ -387,9 +392,9 @@ public class ConfluenceSearchService extends
 	}
 
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
-		return config.getQueryExtractionPrompt();
+		return CONFLUENCE_STANDARD_QUERY_EXTRACTION_PROMPT;
 	}
 
 	@Override
@@ -403,6 +408,62 @@ public class ConfluenceSearchService extends
 	protected ConfluenceBrowsingContext createBrowsingContext(GConfluenceSystem systemType) {
 
 		return ConfluenceBrowsingContext.of(systemType.getCode());
+	}
+
+	@Override
+	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
+			int nEntryLimit) throws IOException, SearchServiceException {
+		String cql = ConfluenceCqlTranslator.createCqlString(query);
+		if (system.getSystemConfigurationReference() instanceof GConfluenceSystem confluenceSystem) {
+
+			try {
+
+				switch (confluenceSystem.getConfluenceVersion()) {
+				case CLOUD: {
+					CloudConfluenceConnection connection = confluenceConnectionFactory
+							.getCloudConnection(confluenceSystem);
+					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+					CloudConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
+					List<SearchResult> list = encodeCloudResults(data, connection, contentApi);
+					setOriginOn(list);
+					return list;
+
+				}
+				case ONPREMISE7X: {
+					OnPremiseConfluenceConnection connection = confluenceConnectionFactory
+							.getOnPremiseConnection(confluenceSystem);
+					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
+					OnPremiseConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
+					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi);
+					setOriginOn(list);
+					return list;
+				}
+				}
+			} catch (GeboCryptSecretException e) {
+				throw new SearchServiceException("Problems in crypt subsystem", e);
+			} catch (GeboRestIntegrationException e) {
+				throw new SearchServiceException("Problems accessing confluence system", e);
+			}
+
+		}
+		return null;
+	}
+
+	@Override
+	public Class<ConfluenceContentSearchFilter> getNativeSearchDataStructureType() {
+		return ConfluenceContentSearchFilter.class;
+	}
+
+	@Override
+	public String getNativePromptTemplateUseCode() {
+
+		return CONFLUENCE_NATIVE_QUERY_EXTRACTION_PROMPT;
+	}
+
+	@Override
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData) {
+
+		return Map.of();
 	}
 
 }

@@ -155,13 +155,12 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected String createExtractSearchQueriesPrompt(DeepSearchRequest request, MinimalChatContext minimalChatContext,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
+		String useCode = searchService.getQueriesGenerationPromptUseCode();
+		if (useCode == null)
+			useCode = GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT;
+		String prompt = promptsDao.findByPromptUse(useCode).getPrompt();
 
-		String standardPrompt = promptsDao
-				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT).getPrompt();
-		String wrappedServicePrompt = searchService.getQueriesExtractionPrompt();
-
-		return wrappedServicePrompt != null && wrappedServicePrompt.trim().length() > 0 ? wrappedServicePrompt
-				: standardPrompt;
+		return prompt;
 	}
 
 	@Override

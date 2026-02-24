@@ -20,6 +20,12 @@
 		<dependency>
 			
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.patterns</artifactId>
 			<version>${project.version}</version>
 		</dependency>

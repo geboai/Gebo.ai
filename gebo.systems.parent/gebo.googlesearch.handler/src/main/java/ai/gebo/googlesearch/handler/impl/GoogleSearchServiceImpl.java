@@ -45,7 +45,6 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
-	private final GoogleSearchHandlerConfig config;
 	private final RestTemplateWrapperService restTemplateWrapper;
 	private static final GBaseObject SYSTEMTYPE = new GBaseObject();
 	private static final GBaseObject SYSTEM = new GBaseObject();
@@ -142,14 +141,11 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 
 	}
 
-	
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
-		return config.getQueryExtractionPrompt();
+		return GoogleSearchHandlerConfig.GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT;
 	}
-
-	
 
 	@Override
 	public String getMessagingModuleId() {

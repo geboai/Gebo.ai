@@ -40,10 +40,11 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 public class JiraSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService, JiraBrowsingContext>
 		implements INativeSearchService<JiraResultsExtractionData, JiraIssuesSearchFilter> {
+	public static final String JIRA_NATIVE_QUERY_EXTRACTION_PROMPT = "jira-native-query-extraction-prompt";
+	public static final String JIRA_STANDARD_QUERY_EXTRACTION_PROMPT = "jira-standard-query-extraction-prompt";
 	private static final String JQL_PARAM = "jql=";
 	private static final String JIRA = "jira";
 	final JiraApiClientFactory jiraConnectionFactory;
-	final JiraHandlerConfig config;
 
 	public JiraSearchService(JiraApiClientFactory jiraConnectionFactory,
 			GJiraRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
@@ -51,7 +52,6 @@ public class JiraSearchService extends
 			JiraBrowsingService browsingService) {
 		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
 		this.jiraConnectionFactory = jiraConnectionFactory;
-		this.config = config;
 	}
 
 	@Override
@@ -92,9 +92,9 @@ public class JiraSearchService extends
 	}
 
 	@Override
-	public String getQueriesExtractionPrompt() {
+	public String getQueriesGenerationPromptUseCode() {
 
-		return config.getQueryExtractionPrompt();
+		return JIRA_STANDARD_QUERY_EXTRACTION_PROMPT;
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class JiraSearchService extends
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
 			JiraResultsExtractionData extractedData) {
-		
+
 		return null;
 	}
 
@@ -131,7 +131,7 @@ public class JiraSearchService extends
 	@Override
 	public String getNativePromptTemplateUseCode() {
 
-		return null;
+		return JIRA_NATIVE_QUERY_EXTRACTION_PROMPT;
 	}
 
 	@Override
