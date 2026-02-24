@@ -6,25 +6,24 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.jira.handler.impl.model;
 
 import java.util.LinkedHashMap;
 
+import ai.gebo.jira.cloud.client.model.AttachmentMetadata;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
 /**
  * AI generated comments
  * 
- * Represents a Jira attachment with its metadata.
- * This class encapsulates information about files attached to Jira issues,
- * including the file properties and content reference.
+ * Represents a Jira attachment with its metadata. This class encapsulates
+ * information about files attached to Jira issues, including the file
+ * properties and content reference.
  */
-@Getter
+@Data
 @ToString
 public class JiraAttachment {
 
@@ -43,9 +42,13 @@ public class JiraAttachment {
 	/** URL or content reference of the attachment */
 	private String content;
 
+	public JiraAttachment() {
+
+	}
+
 	/**
-	 * Constructs a JiraAttachment object from a map of attachment data.
-	 * Extracts and converts attachment properties from the provided map.
+	 * Constructs a JiraAttachment object from a map of attachment data. Extracts
+	 * and converts attachment properties from the provided map.
 	 *
 	 * @param value A LinkedHashMap containing the attachment data from Jira API
 	 */
@@ -57,7 +60,7 @@ public class JiraAttachment {
 		Object size = value.get("size");
 		Object mimeType = value.get("mimeType");
 		Object content = value.get("content");
-		
+
 		// Safe assignment with null checks
 		if (self != null) {
 			this.self = self.toString();
@@ -80,5 +83,13 @@ public class JiraAttachment {
 		if (content != null) {
 			this.content = content.toString();
 		}
+	}
+
+	public JiraAttachment(AttachmentMetadata attach) {
+		this.setId(attach.getId() != null ? attach.getId().toString() : null);
+		this.setFileName(attach.getFilename());
+		this.setMimeType(attach.getMimeType());
+		this.setSelf(attach.getSelf());
+		this.setSize(attach.getSize());
 	}
 }

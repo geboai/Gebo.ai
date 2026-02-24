@@ -13,7 +13,11 @@
 			<groupId>ai.gebo.integrations.clients</groupId>
 			<artifactId>gebo.atlassian.jira.cloud.client</artifactId>
 			<version>${project.version}</version>
-
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -49,6 +49,7 @@ import ai.gebo.jira.cloud.client.api.IssueSearchApi;
 import ai.gebo.jira.cloud.client.api.IssuesApi;
 import ai.gebo.jira.cloud.client.api.ProjectsApi;
 import ai.gebo.jira.cloud.client.invoker.ApiClient;
+import ai.gebo.jira.cloud.client.model.AttachmentMetadata;
 import ai.gebo.jira.cloud.client.model.Comment;
 import ai.gebo.jira.cloud.client.model.IssueBean;
 import ai.gebo.jira.cloud.client.model.PageOfComments;
@@ -448,20 +449,21 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);
 		ProjectsApi projectApi = new ProjectsApi(apiClient);
 		IssuesApi issueApi = new IssuesApi(apiClient);
-		String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
-		Project project = projectApi.getProject(projectKey, null, null);
-		if (project == null)
-			return List.of();
-		JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
-		nativeRoot.setProject(project);
-		nativePositions.add(nativeRoot);
-
+		IssueAttachmentsApi attachmentApi = new IssueAttachmentsApi(apiClient);
+		if (position.getRoot() != null) {
+			String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
+			Project project = projectApi.getProject(projectKey, null, null);
+			if (project == null)
+				return List.of();
+			JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
+			nativeRoot.setProject(project);
+			nativePositions.add(nativeRoot);
+		}
 		for (JiraPathComponent pos : position.getBrowsingStepsCustom()) {
 			JiraNativePositionObject nativePosition = new JiraNativePositionObject();
-			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
-			if (issue == null)
+			if (!handlePosition(nativePosition, pos, issueApi, attachmentApi)) {
 				return List.of();
-			nativePosition.setIssueAsFolder(issue);
+			}
 			nativePositions.add(nativePosition);
 		}
 		return nativePositions;
@@ -597,24 +599,44 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);
 		ProjectsApi projectApi = new ProjectsApi(apiClient);
 		IssuesApi issueApi = new IssuesApi(apiClient);
-		String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
-		Project project = projectApi.getProject(projectKey, null, null);
-		if (project == null)
-			return List.of();
-		JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
-		nativeRoot.setProject(project);
-		nativePositions.add(nativeRoot);
-
+		IssueAttachmentsApi attachmentApi = new IssueAttachmentsApi(apiClient);
+		if (position.getRoot() != null) {
+			String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
+			Project project = projectApi.getProject(projectKey, null, null);
+			if (project == null)
+				return List.of();
+			JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
+			nativeRoot.setProject(project);
+			nativePositions.add(nativeRoot);
+		}
 		for (JiraPathComponent pos : position.getBrowsingStepsCustom()) {
 			JiraNativePositionObject nativePosition = new JiraNativePositionObject();
-			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
-			if (issue == null)
+			if (!handlePosition(nativePosition, pos, issueApi, attachmentApi)) {
 				return List.of();
-			nativePosition.setIssueAsFolder(issue);
+			}
 			nativePositions.add(nativePosition);
 		}
 		return nativePositions;
 
+	}
+
+	private boolean handlePosition(JiraNativePositionObject nativePosition, JiraPathComponent pos, IssuesApi issueApi,
+			IssueAttachmentsApi attachmentApi) {
+		if (pos.type == JiraPathNodeType.TICKET) {
+			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
+			if (issue == null)
+				return false;
+			nativePosition.setIssueAsFolder(issue);
+		}
+		if (pos.type == JiraPathNodeType.ATTACHMENT) {
+			AttachmentMetadata attach = attachmentApi.getAttachment(pos.id);
+			if (attach == null)
+				return false;
+			JiraAttachment attachment = new JiraAttachment(attach);
+
+			nativePosition.setAttachment(attachment);
+		}
+		return true;
 	}
 
 	@Override
@@ -650,7 +672,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 			_reference.commentContent = extractString(metainfos, COMMENT_CONTENT);
 		}
 		return _reference;
-		
+
 	}
 
 	@Override

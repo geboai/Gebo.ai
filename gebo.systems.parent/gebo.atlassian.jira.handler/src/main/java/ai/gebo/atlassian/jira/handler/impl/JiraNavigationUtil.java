@@ -6,14 +6,11 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.jira.handler.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import ai.gebo.atlassian.jira.handler.impl.model.JiraNativePositionObject;
@@ -31,8 +28,8 @@ import ai.gebo.model.virtualfs.VFilesystemReference;
 /**
  * AI generated comments
  * 
- * Utility class for handling navigation and transformation between Jira entities
- * and virtual filesystem representations.
+ * Utility class for handling navigation and transformation between Jira
+ * entities and virtual filesystem representations.
  */
 public class JiraNavigationUtil {
 	/** Field name constant for issue summary */
@@ -43,6 +40,8 @@ public class JiraNavigationUtil {
 	public static final String PROJECT_PREFIX = "PROJECT-KEY:";
 	/** Prefix used to identify issue keys in paths */
 	public static final String ISSUE_PREFIX = "ISSUE-KEY:";
+
+	public static final String ATTACHMENT_PREFIX = "ATTACHMENT-KEY:";
 	/** Separator used in path construction */
 	public static final String PATH_SEPARATOR = "|";
 	/** List of standard issue fields used for navigation */
@@ -58,9 +57,6 @@ public class JiraNavigationUtil {
 	 * @return A virtual filesystem root representing the project
 	 */
 	static GVirtualFilesystemRoot toRoot(Project project) {
-		project.getId();
-		project.getKey();
-		project.getName();
 		GVirtualFilesystemRoot root = new GVirtualFilesystemRoot();
 		root.setAbsolutePath(PROJECT_PREFIX + project.getKey());
 		root.setCode(PROJECT_PREFIX + project.getKey());
@@ -86,19 +82,20 @@ public class JiraNavigationUtil {
 	 * @return The project code, or null if not a project root
 	 */
 	public static String getProjectCode(GVirtualFilesystemRoot root) {
-		return root.getCode().startsWith(PROJECT_PREFIX) ? root.getCode().substring(PROJECT_PREFIX.length()) : null;
+		return root != null && root.getCode().startsWith(PROJECT_PREFIX)
+				? root.getCode().substring(PROJECT_PREFIX.length())
+				: null;
 	}
 
 	/**
 	 * Converts a Jira issue to a PathInfo object within a filesystem root.
 	 * 
 	 * @param root The filesystem root containing the issue
-	 * @param x The Jira issue to convert
+	 * @param x    The Jira issue to convert
 	 * @return A PathInfo representation of the issue
 	 */
 	public static PathInfo toPathInfo(GVirtualFilesystemRoot root, IssueBean x) {
 		PathInfo pathinfo = new PathInfo();
-		
 		pathinfo.name = getName(x);
 		pathinfo.folder = true;
 		pathinfo.metaType = PathInfoMetaType.FOLDER;
@@ -122,10 +119,11 @@ public class JiraNavigationUtil {
 	}
 
 	/**
-	 * Converts a Jira issue to a PathInfo object within the context of a browse parameter.
+	 * Converts a Jira issue to a PathInfo object within the context of a browse
+	 * parameter.
 	 * 
 	 * @param param The browse parameter providing context
-	 * @param x The Jira issue to convert
+	 * @param x     The Jira issue to convert
 	 * @return A PathInfo representation of the issue
 	 */
 	public static PathInfo toPathInfo(BrowseParam param, IssueBean x) {
@@ -164,6 +162,18 @@ public class JiraNavigationUtil {
 					jiraPathComponent.type = JiraPathNodeType.TICKET;
 					coordinates.getBrowsingStepsCustom().add(jiraPathComponent);
 				}
+				if (token.startsWith(ATTACHMENT_PREFIX)) {
+					String id = token.substring(ATTACHMENT_PREFIX.length());
+					PathInfo pathInfo = new PathInfo();
+					pathInfo.absolutePath = ATTACHMENT_PREFIX + id;
+					pathInfo.name = path.path.name;
+					pathInfo.folder = true;
+					coordinates.getBrowsingSteps().add(pathInfo);
+					JiraPathComponent jiraPathComponent = new JiraPathComponent();
+					jiraPathComponent.id = id;
+					jiraPathComponent.type = JiraPathNodeType.ATTACHMENT;
+					coordinates.getBrowsingStepsCustom().add(jiraPathComponent);
+				}
 			}
 		}
 		return coordinates;
@@ -186,12 +196,19 @@ public class JiraNavigationUtil {
 		coordinates.setRoot(root);
 		for (int i = 1; i < childCoordinates.size(); i++) {
 			JiraNativePositionObject step = childCoordinates.get(i);
-			PathInfo path = new PathInfo();
-			path.absolutePath = ISSUE_PREFIX + step.getCode();
-			coordinates.getBrowsingSteps().add(path);
 			JiraPathComponent customPath = new JiraPathComponent();
-			customPath.type = JiraPathNodeType.TICKET;
-			customPath.id = step.getCode();
+			PathInfo path = new PathInfo();
+			if (step.isAttachment()) {
+				path.absolutePath = ATTACHMENT_PREFIX + step.getCode();
+				coordinates.getBrowsingSteps().add(path);
+				customPath.type = JiraPathNodeType.ATTACHMENT;
+				customPath.id = step.getCode();
+			} else {
+				path.absolutePath = ISSUE_PREFIX + step.getCode();
+				coordinates.getBrowsingSteps().add(path);
+				customPath.type = JiraPathNodeType.TICKET;
+				customPath.id = step.getCode();
+			}
 			coordinates.getBrowsingStepsCustom().add(customPath);
 		}
 		return coordinates;
@@ -212,5 +229,42 @@ public class JiraNavigationUtil {
 				return name.toString();
 		}
 		return "unknown";
+	}
+
+	public static VFilesystemReference toVirtualFilesystemReference(IssueBean issueBean) {
+		VFilesystemReference out = new VFilesystemReference();
+		Object data = issueBean.getFields().get("project");
+		if (data != null && data instanceof Map attributes && !attributes.isEmpty()) {
+			String key = (String) attributes.get("key");
+			String name = (String) attributes.get("name");
+			GVirtualFilesystemRoot root = new GVirtualFilesystemRoot();
+			root.setAbsolutePath(PROJECT_PREFIX + key);
+			root.setCode(PROJECT_PREFIX + key);
+			root.setDescription(name);
+			out.root = root;
+		}
+		out.path = toPathInfo(out.root, issueBean);
+		out.path.metaType = PathInfoMetaType.WEB_PAGE;
+		return out;
+	}
+
+	public static VFilesystemReference toVirtualFilesystemReferenceFromAttachmentId(Object id, Object filename,
+			Object self) {
+		VFilesystemReference out = new VFilesystemReference();
+		out.path = new PathInfo();
+		out.path.metaType = PathInfoMetaType.FILE;
+		out.path.name = filename != null ? filename.toString() : id.toString();
+		out.path.absolutePath = ATTACHMENT_PREFIX + id;
+		return out;
+	}
+
+	public static VFilesystemReference toVirtualFilesystemReferenceFromIssueLink(Object id, Object key, Object summary,
+			Object description) {
+		VFilesystemReference out = new VFilesystemReference();
+		out.path = new PathInfo();
+		out.path.metaType = PathInfoMetaType.FILE;
+		out.path.name = summary != null ? summary.toString() : key != null ? key.toString() : id.toString();
+		out.path.absolutePath = ISSUE_PREFIX + id;
+		return out;
 	}
 }
