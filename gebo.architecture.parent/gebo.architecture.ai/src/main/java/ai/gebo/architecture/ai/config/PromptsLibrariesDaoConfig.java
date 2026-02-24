@@ -15,8 +15,6 @@ import ai.gebo.architecture.ai.service.impl.GPromptConfigDaoImpl;
 
 @Configuration
 public class PromptsLibrariesDaoConfig {
-	;
-
 	@Bean
 	@Scope("singleton")
 	public IGPromptConfigDao promptConfigDao(PromptConfigRepository repository,
