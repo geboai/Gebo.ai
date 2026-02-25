@@ -306,7 +306,7 @@ public class CloudConfluenceContentApi {
 	 */
 	public CloudConfluenceSearchPageResponseSearchResult searchByCql(String cql, Integer limit)
 			throws GeboRestIntegrationException {
-		String relative = "/wiki/rest/api/search?cql=" + URLEncoder.encode(cql) + "&start=0"
+		String relative = "/wiki/rest/api/search?cql=" +(cql) + "&start=0"
 				+ (limit != null ? "&limit=" + limit : "") + "&expand=ancestor,space";
 		String url = api.getBaseUrl() + relative;
 		HttpEntity requestEntity = new HttpEntity<CloudConfluenceSearchPageResponseSearchResult>(api.createHeaders());

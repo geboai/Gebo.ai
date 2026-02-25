@@ -10,7 +10,7 @@ import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearch
 import ai.gebo.atlassian.confluence.handler.search.model.ConfluencePeopleFilter;
 
 class ConfluenceCqlTranslator {
-
+	 
 	 static String createCqlString(ConfluenceContentSearchFilter query) {
 	        if (query == null) return "";
 
