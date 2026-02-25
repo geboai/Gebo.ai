@@ -604,6 +604,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		if (page.get_links() != null) {
 			this.url = page.get_links().getSelf();
 		}
+		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO, cloudConfluenceItemChildrens.getId());
 	}
@@ -627,6 +628,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		if (page.getVersion() != null && page.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(page.getVersion().getWhen());
 		}
+		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO,
 				onPremiseConfluenceListItemChildrens.getId());

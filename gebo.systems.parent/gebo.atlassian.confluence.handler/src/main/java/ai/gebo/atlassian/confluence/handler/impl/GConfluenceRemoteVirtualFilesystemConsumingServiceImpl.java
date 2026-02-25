@@ -1031,6 +1031,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		}
 		try {
 			switch (type) {
+			case PAGE_CONTAINER: {
+			}
+				break;
 			case PAGE: {
 				if (pageId == null) {
 					throw new GeboContentHandlerSystemException(

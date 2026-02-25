@@ -40,11 +40,11 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 	@Override
 	public SearchableSystemMetaData findSystemById(String systemId) {
 		final String prologue = getMessagingModuleId() + "." + getMessagingSystemId()
-		+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
+				+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
 		List<SystemType> configs = contentManagementSystemHandler.getConfigurations();
 		if (configs != null && !configs.isEmpty()) {
 			GContentManagementSystemType ctype = contentManagementSystemHandler.getHandledSystemType();
-			
+
 			Optional<SystemType> found = configs.stream().filter(x -> (prologue + x.getCode()).equals(systemId))
 					.findFirst();
 			if (found.isEmpty())
@@ -83,7 +83,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 				metaData.setSystemType(ctype);
 				metaData.setSystemConfigurationReference(x);
 				final String prologue = getMessagingModuleId() + "." + getMessagingSystemId()
-				+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
+						+ ISearchService.SYSTEM_TYPE_CODE_CONFIG_CODE_SEPARATOR;
 				metaData.setCode(prologue + x.getCode());
 				metaData.setDescription(virtualFileSystemConsumingService.describeSystem(x));
 				return metaData;
@@ -107,6 +107,10 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 					.toNativeCoordinates(navigationPosition, actualSystem, environment);
 			ResourceReferenceType remoteReference = virtualFileSystemConsumingService.getResourceHandle(system,
 					navigationPosition, nativeCoordinates, environment);
+			if (remoteReference == null) {
+				LOGGER.error("Returned null remoteReference for: " + result);
+				return null;
+			}
 			final ImplementativePositionObjectType nativeReference = nativeCoordinates.size() > 0
 					? nativeCoordinates.get(nativeCoordinates.size() - 1)
 					: null;

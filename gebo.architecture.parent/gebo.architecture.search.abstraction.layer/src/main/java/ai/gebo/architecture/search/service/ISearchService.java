@@ -31,7 +31,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 			return null;
 		}
 		Optional<SearchableSystemMetaData> found = systems.stream()
-				.filter(x -> (prologue + x.getCode()).equals(systemId)).findFirst();
+				.filter(x -> (x.getCode()).equals(systemId)).findFirst();
 		if (found.isEmpty()) {
 			return null;
 		} else {
