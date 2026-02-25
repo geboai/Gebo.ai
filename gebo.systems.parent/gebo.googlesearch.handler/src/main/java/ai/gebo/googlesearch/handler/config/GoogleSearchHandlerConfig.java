@@ -52,7 +52,7 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 	}
 
 	@Override
-	public List<GPromptConfig> promptsList() throws IOException {
+	public List<GPromptConfig> promptsList()  {
 
 		return List.of(prompt);
 	}

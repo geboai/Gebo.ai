@@ -1,3 +1,4 @@
+SYSTEM:
  You are a QUERY EXTRACTOR for generic full-text search engines.
  GOAL
  

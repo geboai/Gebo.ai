@@ -18,11 +18,13 @@ import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.repository.PromptConfigRepository;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
+import ai.gebo.architecture.ai.service.IStaticPromptsProviderRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 
 public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GPromptConfig> implements IGPromptConfigDao {
 
 	private final PromptConfigRepository directRepo;
+	private final IStaticPromptsProviderRepositoryPattern implementationsRepoPattern;
 
 	/**
 	 * Constructs a new GPromptConfigDaoImpl.
@@ -32,13 +34,17 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * @param directRepo PromptConfigRepository for direct repository access
 	 * @throws IOException
 	 */
-	public GPromptConfigDaoImpl(List<IGStaticPromptsProvider> configs, PromptConfigRepository directRepo)
-			throws IOException {
-		super(listPrompts(configs), new GPromptConfigDynamicSource(directRepo));
+	public GPromptConfigDaoImpl(PromptConfigRepository directRepo,
+			IStaticPromptsProviderRepositoryPattern implementationsRepoPattern,
+			GPromptConfigDynamicSource dynamicSource) {
+		super(new ArrayList(), dynamicSource);
 		this.directRepo = directRepo;
+		this.implementationsRepoPattern = implementationsRepoPattern;
+		List<IGStaticPromptsProvider> impls = implementationsRepoPattern.getImplementations();
+		staticConfigs = listPrompts(impls);
 	}
 
-	private static List<GPromptConfig> listPrompts(List<IGStaticPromptsProvider> configs) throws IOException {
+	private List<GPromptConfig> listPrompts(List<IGStaticPromptsProvider> configs)  {
 		if (configs == null)
 			return List.of();
 		List<GPromptConfig> out = new ArrayList<GPromptConfig>();
@@ -55,9 +61,10 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 				}
 			}
 		}
-
 		return out;
 	}
+
+	
 
 	/**
 	 * Finds a GPromptConfig by its code.

@@ -55,6 +55,10 @@ public abstract class GAbstractRuntimeConfigurationDao<ConfigTypes> implements I
 		return dynamic != null ? dynamic.getConfigurations() : new ArrayList<ConfigTypes>();
 	}
 
+	protected void setStaticConfigs(List<ConfigTypes> staticConfigs) {
+		this.staticConfigs = staticConfigs;
+	}
+
 	/**
 	 * Combines static and dynamic configurations into a single list. This method
 	 * overrides the corresponding method from the interface.

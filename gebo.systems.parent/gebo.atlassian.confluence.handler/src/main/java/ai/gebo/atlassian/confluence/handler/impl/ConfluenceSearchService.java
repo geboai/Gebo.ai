@@ -103,7 +103,7 @@ public class ConfluenceSearchService extends
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
 							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
 
-					List<SearchResult> list = encodeCloudResults(data, connection, contentApi);
+					List<SearchResult> list = encodeCloudResults(data, connection, contentApi,confluenceSystem);
 					setOriginOn(list);
 					return list;
 
@@ -115,7 +115,7 @@ public class ConfluenceSearchService extends
 					OnPremiseConfluenceSearchPageResponseSearchResult data = isCql
 							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
 							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
-					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi);
+					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi,confluenceSystem);
 					setOriginOn(list);
 					return list;
 				}
@@ -131,7 +131,7 @@ public class ConfluenceSearchService extends
 	}
 
 	private List<SearchResult> encodeOnPremiseResults(OnPremiseConfluenceSearchPageResponseSearchResult data,
-			OnPremiseConfluenceConnection connection, OnPremiseConfluenceContentApi contentApi)
+			OnPremiseConfluenceConnection connection, OnPremiseConfluenceContentApi contentApi, GConfluenceSystem confluenceSystem)
 			throws GeboRestIntegrationException {
 		List<SearchResult> outList = new ArrayList<SearchResult>();
 		if (data != null && data.getResults() != null) {
@@ -139,6 +139,8 @@ public class ConfluenceSearchService extends
 			for (OnPremiseConfluenceSearchResult result : data.getResults()) {
 				if (result.getContent() != null) {
 					SearchResult searchResult = new SearchResult();
+					setOriginOn(searchResult);
+					searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 					searchResult.setDescriptiveText(result.getTitle());
 					searchResult.setResultReference(new SearchResultReference());
 					searchResult.getResultReference().setId(result.getContent().getId());
@@ -168,7 +170,7 @@ public class ConfluenceSearchService extends
 							searchResult.getResultReference().setExtension(HTML);
 							outList.add(searchResult);
 							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
-									contentApi, searchResult.getNavigationReference()));
+									contentApi, searchResult.getNavigationReference(), confluenceSystem));
 						}
 							break;
 						case "blogpost": {
@@ -178,7 +180,7 @@ public class ConfluenceSearchService extends
 							searchResult.getResultReference().setContentType(TEXT_HTML);
 							searchResult.getResultReference().setExtension(HTML);
 							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
-									contentApi, searchResult.getNavigationReference()));
+									contentApi, searchResult.getNavigationReference(), confluenceSystem));
 
 						}
 							break;
@@ -195,7 +197,7 @@ public class ConfluenceSearchService extends
 	}
 
 	private List<SearchResult> encodeOnPremiseChilds(String parentContentId, OnPremiseConfluenceContentApi contentApi,
-			VFilesystemReference vFilesystemReference) throws GeboRestIntegrationException {
+			VFilesystemReference vFilesystemReference, GConfluenceSystem confluenceSystem) throws GeboRestIntegrationException {
 
 		OnPremiseFullContent fullContents = contentApi.getFullContent(parentContentId);
 		List<SearchResult> results = new ArrayList<SearchResult>();
@@ -203,6 +205,8 @@ public class ConfluenceSearchService extends
 		if (fullContents.getRootContent() != null) {
 			PathInfo page = ConfluenceNavigationUtil.encodeAsPage(fullContents.getRootContent());
 			SearchResult searchResult = new SearchResult();
+			setOriginOn(searchResult);
+			searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 			searchResult.setDescriptiveText(page.name);
 			searchResult.setNavigationReference(new VFilesystemReference());
 			searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -220,6 +224,8 @@ public class ConfluenceSearchService extends
 			for (OnPremiseConfluenceAttachmentItem attach : fullContents.getAttachmentsList().getResults()) {
 				PathInfo attachment = ConfluenceNavigationUtil.encodeAsAttachment(attach);
 				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 				searchResult.setDescriptiveText(attachment.name);
 				searchResult.setNavigationReference(new VFilesystemReference());
 				searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -240,6 +246,8 @@ public class ConfluenceSearchService extends
 			for (OnPremiseConfluenceContentItem childpage : fullContents.getChildPagesList().getResults()) {
 				PathInfo page = ConfluenceNavigationUtil.encodeAsPage(childpage);
 				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 				searchResult.setDescriptiveText(page.name);
 				searchResult.setNavigationReference(new VFilesystemReference());
 				searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -256,7 +264,7 @@ public class ConfluenceSearchService extends
 	}
 
 	private List<SearchResult> encodeCloudResults(CloudConfluenceSearchPageResponseSearchResult data,
-			CloudConfluenceConnection connection, CloudConfluenceContentApi contentApi)
+			CloudConfluenceConnection connection, CloudConfluenceContentApi contentApi, GConfluenceSystem confluenceSystem)
 			throws GeboRestIntegrationException {
 		List<SearchResult> outList = new ArrayList<SearchResult>();
 		if (data != null && data.getResults() != null) {
@@ -264,6 +272,8 @@ public class ConfluenceSearchService extends
 			for (CloudConfluenceSearchResult result : data.getResults()) {
 				if (result.getContent() != null) {
 					SearchResult searchResult = new SearchResult();
+					setOriginOn(searchResult);
+					searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 					searchResult.setDescriptiveText(result.getTitle());
 					searchResult.setResultReference(new SearchResultReference());
 					searchResult.getResultReference().setId(result.getContent().getId());
@@ -290,7 +300,7 @@ public class ConfluenceSearchService extends
 									.encodeAsFolder(result.getContent());
 							outList.add(searchResult);
 							searchResult.getChilds().addAll(encodeCloudChilds(result.getContent().getId(), contentApi,
-									searchResult.getNavigationReference()));
+									searchResult.getNavigationReference(),confluenceSystem));
 						}
 							break;
 						case "blogpost": {
@@ -298,7 +308,7 @@ public class ConfluenceSearchService extends
 									.encodeAsFolder(result.getContent());
 							outList.add(searchResult);
 							searchResult.getChilds().addAll(encodeCloudChilds(result.getContent().getId(), contentApi,
-									searchResult.getNavigationReference()));
+									searchResult.getNavigationReference(), confluenceSystem));
 
 						}
 							break;
@@ -315,7 +325,7 @@ public class ConfluenceSearchService extends
 	}
 
 	private Collection<? extends SearchResult> encodeCloudChilds(String parentContentId,
-			CloudConfluenceContentApi contentApi, VFilesystemReference vFilesystemReference)
+			CloudConfluenceContentApi contentApi, VFilesystemReference vFilesystemReference, GConfluenceSystem confluenceSystem)
 			throws GeboRestIntegrationException {
 		CloudConfluenceFullContent fullContents = contentApi.getFullContent(parentContentId);
 		List<SearchResult> results = new ArrayList<SearchResult>();
@@ -323,6 +333,9 @@ public class ConfluenceSearchService extends
 		if (fullContents.getRootContent() != null) {
 			PathInfo page = ConfluenceNavigationUtil.encodeAsPage(fullContents.getRootContent());
 			SearchResult searchResult = new SearchResult();
+			setOriginOn(searchResult);
+			searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+			
 			searchResult.setDescriptiveText(page.name);
 			searchResult.setNavigationReference(new VFilesystemReference());
 			searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -340,6 +353,9 @@ public class ConfluenceSearchService extends
 			for (CloudConfluenceAttachmentItem attach : fullContents.getAttachmentsList().getResults()) {
 				PathInfo attachment = ConfluenceNavigationUtil.encodeAsAttachment(attach);
 				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+				
 				searchResult.setDescriptiveText(attachment.name);
 				searchResult.setNavigationReference(new VFilesystemReference());
 				searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -360,6 +376,8 @@ public class ConfluenceSearchService extends
 			for (CloudConfluenceContentItem childpage : fullContents.getChildPagesList().getResults()) {
 				PathInfo page = ConfluenceNavigationUtil.encodeAsPage(childpage);
 				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
 				searchResult.setDescriptiveText(page.name);
 				searchResult.setNavigationReference(new VFilesystemReference());
 				searchResult.getNavigationReference().root = vFilesystemReference.root;
@@ -422,7 +440,7 @@ public class ConfluenceSearchService extends
 							.getCloudConnection(confluenceSystem);
 					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
 					CloudConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
-					List<SearchResult> list = encodeCloudResults(data, connection, contentApi);
+					List<SearchResult> list = encodeCloudResults(data, connection, contentApi,confluenceSystem);
 					setOriginOn(list);
 					return list;
 
@@ -432,7 +450,7 @@ public class ConfluenceSearchService extends
 							.getOnPremiseConnection(confluenceSystem);
 					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
 					OnPremiseConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
-					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi);
+					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi,confluenceSystem);
 					setOriginOn(list);
 					return list;
 				}

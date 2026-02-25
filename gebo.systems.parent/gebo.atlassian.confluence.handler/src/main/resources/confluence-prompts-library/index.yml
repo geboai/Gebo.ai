@@ -1,9 +1,0 @@
-ai.gebo.confluence:
-  confluencePrompts:
-    - promptUse: confluence-standard-query-extraction-prompt
-      langCode: en
-      reference: /confluence-prompts-library/en/confluence-standard-query-extraction-prompt.txt
-    - promptUse: confluence-native-query-extraction-prompt
-      langCode: en
-      reference: /confluence-prompts-library/en/confluence-native-query-extraction-prompt.txt
-    

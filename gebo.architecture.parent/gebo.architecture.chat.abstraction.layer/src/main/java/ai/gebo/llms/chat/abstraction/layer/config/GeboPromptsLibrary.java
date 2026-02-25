@@ -1,30 +1,25 @@
 package ai.gebo.llms.chat.abstraction.layer.config;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.GPromptLibraryReference;
-import ai.gebo.architecture.ai.service.AbstractStaticPromptsLibraryProvider;
+import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
+import ai.gebo.architecture.ai.service.PromptProvidersImplementation;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.prompts")
-@PropertySource(value = "classpath:/prompts-library/index.yml", factory = GeboYamlPropertySourceFactory.class)
+@PropertySource(value = "classpath:/prompts-library/prompts-library.yml", factory = GeboYamlPropertySourceFactory.class)
 @Data
-public class GeboPromptsLibrary extends AbstractStaticPromptsLibraryProvider {
-	private List<GPromptLibraryReference> library = new ArrayList<GPromptLibraryReference>();
+public class GeboPromptsLibrary {
+	private List<GPromptLibraryReference> library = null;
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
@@ -54,10 +49,16 @@ public class GeboPromptsLibrary extends AbstractStaticPromptsLibraryProvider {
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 
-	@Override
-	protected List<GPromptLibraryReference> getReferences() {
+	@Bean
+	protected IGStaticPromptsProvider standardChatsPromptsProvider() {
 
-		return getLibrary();
+		return new PromptProvidersImplementation(this, library);
+	}
+
+	@Bean
+	protected IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider() {
+
+		return new PromptProvidersImplementation(this, library);
 	}
 
 }

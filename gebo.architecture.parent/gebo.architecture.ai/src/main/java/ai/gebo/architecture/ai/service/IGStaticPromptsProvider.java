@@ -6,7 +6,7 @@ import java.util.List;
 import ai.gebo.architecture.ai.model.GPromptConfig;
 
 public interface IGStaticPromptsProvider {
-	public List<GPromptConfig> promptsList() throws IOException;
+	public List<GPromptConfig> promptsList();
 
 	public default String getId() {
 		return this.getClass().getName();
