@@ -41,6 +41,14 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 public class JiraSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService, JiraBrowsingContext>
 		implements INativeSearchService<JiraResultsExtractionData, JiraIssuesSearchFilter> {
+	private static final String END_JIRA_PROJECTS = "END_JIRA_PROJECTS";
+	private static final String END_JIRA_PROJECT = "END_JIRA_PROJECT";
+	private static final String CODE = "code: ";
+	private static final String DESCRIPTION = "description: ";
+	private static final String NEWLINE = "\r\n";
+	private static final String JIRA_PROJECT = "JIRA_PROJECT";
+	private static final String JIRA_PROJECTS = "JIRA_PROJECTS";
+	private static final String JIRA_PROJECTS_PROMPT_PARAM = "jiraProjects";
 	public static final String JIRA_NATIVE_QUERY_EXTRACTION_PROMPT = "jira-native-query-extraction-prompt";
 	public static final String JIRA_STANDARD_QUERY_EXTRACTION_PROMPT = "jira-standard-query-extraction-prompt";
 	private static final String JQL_PARAM = "jql=";
@@ -136,9 +144,33 @@ public class JiraSearchService extends
 	}
 
 	@Override
-	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData) {
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
 
-		return Map.of();
+		return Map.of(JIRA_PROJECTS_PROMPT_PARAM, renderJiraProjects(cataloguesSample));
+	}
+
+	private Object renderJiraProjects(List<CatalogueSample> cataloguesSample) {
+		StringBuffer buffer = new StringBuffer();
+		if (cataloguesSample != null && !cataloguesSample.isEmpty()) {
+			buffer.append(JIRA_PROJECTS);
+			buffer.append(NEWLINE);
+			for (CatalogueSample catalogueSample : cataloguesSample) {
+				buffer.append(JIRA_PROJECT);
+				buffer.append(NEWLINE);
+				buffer.append(CODE);
+				buffer.append(catalogueSample.getCode());
+				buffer.append(NEWLINE);
+				buffer.append(DESCRIPTION);
+				buffer.append(catalogueSample.getDescription());
+				buffer.append(NEWLINE);
+				buffer.append(END_JIRA_PROJECT);
+				buffer.append(NEWLINE);
+			}
+			buffer.append(END_JIRA_PROJECTS);
+			buffer.append(NEWLINE);
+		}
+		return buffer.toString();
 	}
 
 	private List<SearchResult> executeJql(SearchableSystemMetaData system, String jql, Integer howmany)

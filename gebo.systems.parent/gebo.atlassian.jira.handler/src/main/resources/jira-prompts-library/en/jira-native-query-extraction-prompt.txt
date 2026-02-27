@@ -18,6 +18,9 @@ INPUTS:
 - Consolidated previous chat history (may be empty):
 {consolidatedChatHistory}
 
+- Jira projects catalog (may be empty):
+{jiraProjects}
+
 TASK:
 1) Understand what Jira issues the user wants to find (projects, issue types, keys, status, priority, labels, versions).
 2) Extract text search terms for summary and description (keywords/phrases).

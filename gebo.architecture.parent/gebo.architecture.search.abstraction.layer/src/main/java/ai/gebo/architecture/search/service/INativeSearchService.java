@@ -20,7 +20,7 @@ public interface INativeSearchService<CustomSearchResultExtractionDataType exten
 
 	public String getNativePromptTemplateUseCode();
 
-	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData);
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData, List<CatalogueSample> cataloguesSample);
 
 	
 	

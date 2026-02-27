@@ -18,6 +18,10 @@ INPUTS:
 - Consolidated previous chat history (may be empty):
 {consolidatedChatHistory}
 
+- Confluence spaces catalog (may be empty):
+{confluenceSpaces}
+
+
 TASK:
 1) Understand what Confluence content the user wants to find:
    - space(s) (space keys)

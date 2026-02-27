@@ -194,13 +194,6 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();
 		for (SearchableSystemMetaData searchableSystemMetaData : searchables) {
 			Map<String, Object> systemTemplateCallParams = new HashMap<String, Object>();
-
-			Map<String, Object> specificSystemParams = nativeSearchService
-					.createCustomTemplateParamsMap(searchableSystemMetaData);
-			systemTemplateCallParams.putAll(promptParams);
-			systemTemplateCallParams.putAll(specificSystemParams);
-			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
-					systemTemplateCallParams, nativeSearchServiceDataType);
 			String messagingModuleId=nativeSearchService.getMessagingModuleId();
 			String messageSystemId=nativeSearchService.getMessagingSystemId();
 			String systemCode= null;
@@ -209,6 +202,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				systemCode=baseObject.getCode();
 				cataloguesSample = dataSourcesCatalogsService.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId, messageSystemId, systemCode);
 			} 
+			Map<String, Object> specificSystemParams = nativeSearchService
+					.createCustomTemplateParamsMap(searchableSystemMetaData, cataloguesSample);
+			systemTemplateCallParams.putAll(promptParams);
+			systemTemplateCallParams.putAll(specificSystemParams);
+			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
+					systemTemplateCallParams, nativeSearchServiceDataType);
+			
 				
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
 					maxSearchesReturnedPerSystem, cataloguesSample);

@@ -53,6 +53,14 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchS
 public class ConfluenceSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext>
 		implements INativeSearchService<ConfluenceResultsExtractionData, ConfluenceContentSearchFilter> {
+	private static final String CONFLUENCE_SPACE_DESCRIPTION = "description: ";
+	private static final String CONFLUENCE_SPACE_KEY = "key: ";
+	private static final String CONFLUENCE_END_SPACE = "END_SPACE";
+	private static final String CONFLUENCE_SPACE = "SPACE";
+	private static final String END_CONFLUENCE_SPACES = "END_CONFLUENCE_SPACES";
+	private static final String NEWLINE = "\r\n";
+	private static final String CONFLUENCE_SPACES = "CONFLUENCE_SPACES";
+	public static final String CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM = "confluenceSpaces";
 	public static final String CONFLUENCE_NATIVE_QUERY_EXTRACTION_PROMPT = "confluence-native-query-extraction-prompt";
 	public static final String CONFLUENCE_STANDARD_QUERY_EXTRACTION_PROMPT = "confluence-standard-query-extraction-prompt";
 	private static final String CONFLUENCE = "confluence";
@@ -490,9 +498,34 @@ public class ConfluenceSearchService extends
 	}
 
 	@Override
-	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData) {
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
 
-		return Map.of();
+		return Map.of(CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM, renderConfluenceSpaces(cataloguesSample));
+	}
+
+	private Object renderConfluenceSpaces(List<CatalogueSample> cataloguesSample) {
+		StringBuffer buffer = new StringBuffer();
+		if (cataloguesSample != null && !cataloguesSample.isEmpty()) {
+			buffer.append(CONFLUENCE_SPACES);
+			buffer.append(NEWLINE);
+
+			for (CatalogueSample catalogueSample : cataloguesSample) {
+				buffer.append(CONFLUENCE_SPACE);
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_SPACE_KEY);
+				buffer.append(catalogueSample.getCode());
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_SPACE_DESCRIPTION);
+				buffer.append(catalogueSample.getDescription());
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_END_SPACE);
+				buffer.append(NEWLINE);
+			}
+
+			buffer.append(END_CONFLUENCE_SPACES);
+		}
+		return buffer.toString();
 	}
 
 }
