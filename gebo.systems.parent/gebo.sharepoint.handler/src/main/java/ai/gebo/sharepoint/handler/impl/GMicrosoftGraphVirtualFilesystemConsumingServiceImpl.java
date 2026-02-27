@@ -601,7 +601,7 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	@Override
-	protected List<MicrosoftGraphNativePositionObject> toNativeCoordinates(MicrosoftGraphNavigationCoordinates position,
+	protected List<MicrosoftGraphNativePositionObject> toResourcesNativeCoordinates(MicrosoftGraphNavigationCoordinates position,
 			GSharepointContentManagementSystem system, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub

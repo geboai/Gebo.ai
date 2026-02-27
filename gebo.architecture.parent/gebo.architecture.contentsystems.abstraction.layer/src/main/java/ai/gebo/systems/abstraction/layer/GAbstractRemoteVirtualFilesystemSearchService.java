@@ -104,7 +104,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			SystemType actualSystem = (SystemType) system.getSystemConfigurationReference();
 			Map<String, Object> environment = virtualFileSystemConsumingService.createEnvironment(actualSystem);
 			List<ImplementativePositionObjectType> nativeCoordinates = virtualFileSystemConsumingService
-					.toNativeCoordinates(navigationPosition, actualSystem, environment);
+					.toResourcesNativeCoordinates(navigationPosition, actualSystem, environment);
 			ResourceReferenceType remoteReference = virtualFileSystemConsumingService.getResourceHandle(system,
 					navigationPosition, nativeCoordinates, environment);
 			if (remoteReference == null) {

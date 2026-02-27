@@ -33,6 +33,7 @@ import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 
 public class ConfluenceNativePositionObject extends AbstractNativePositionObject {
 
+	private static final String DEFAULT_CONFLUENCE_CONTENT_TYPE = "text/html";
 	// Basic object properties
 	private String code = null;
 	private String name = null;
@@ -43,7 +44,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	private Date resourceModificationTime;
 	private boolean resource;
 	private Long resourceFileSize = null;
-	
+
 	// Cloud Confluence object references
 	private CloudConfluenceListItem cloudConfluenceItemChildrens = null;
 	private CloudConfluenceListItem cloudConfluencePage = null;
@@ -185,7 +186,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = false;
 		this.code = this.cloudConfluenceItemChildrens.getId();
 		this.name = this.cloudConfluenceItemChildrens.getTitle();
-		this.resourceContentType = "text/html";
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO, cloudConfluenceItemChildrens.getId());
 	}
@@ -238,7 +239,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = true;
 		this.code = this.cloudConfluencePage.getId();
 		this.name = this.cloudConfluencePage.getTitle();
-		this.resourceContentType = "text/html";
+		
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluencePage.getId());
@@ -270,7 +272,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = true;
 		this.code = this.onPremiseConfluencePage.getId();
 		this.name = this.onPremiseConfluencePage.getTitle();
-		this.resourceContentType = "text/html";
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluenceAttachment.getId());
@@ -309,6 +311,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		}
 		this.folder = false;
 		this.resource = true;
+		
 		this.code = this.cloudConfluenceAttachment.getId();
 		this.name = this.cloudConfluenceAttachment.getTitle();
 		if (this.cloudConfluenceAttachment.getExtensions() != null)
@@ -356,6 +359,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = true;
 		this.code = this.onPremiseConfluenceAttachment.getId();
 		this.name = this.onPremiseConfluenceAttachment.getTitle();
+		
 		if (onPremiseConfluenceAttachment.getVersion() != null
 				&& onPremiseConfluenceAttachment.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(onPremiseConfluenceAttachment.getVersion().getWhen());
@@ -547,6 +551,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluencePage.getId());
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.setCloudConfluencePage(this.cloudConfluencePage);
 		if (page.getVersion() != null && page.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(page.getVersion().getWhen());
@@ -566,6 +571,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.name = page.getTitle();
 		this.resource = true;
 		this.folder = false;
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.onPremiseConfluencePage = new OnPremiseConfluenceListItem();
 		this.onPremiseConfluencePage.setId(page.getId());
 		this.onPremiseConfluencePage.setTitle(page.getTitle());

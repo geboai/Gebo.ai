@@ -86,6 +86,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
+		additionalVariables.putAll(CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext));
 		// With latest specialized prompt for each data source the following is not
 		// needed
 		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
@@ -199,7 +200,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
 					maxSearchesReturnedPerSystem);
 			SearchWithResults swr = new SearchWithResults();
-			swr.setResults(data);
+			swr.setResults(flattenSearchResults(data));
 			swr.setNativeQueryObject(resultingQueryObject);
 			allResults.add(swr);
 		}
@@ -221,7 +222,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				if (_results.isEmpty())
 					continue;
 				SearchWithResults sr = new SearchWithResults();
-				sr.setResults(flattenResults(_results));
+				sr.setResults(flattenSearchResults(_results));
 				sr.setSearchQuery(query);
 				queryResults.add(sr);
 			} catch (Throwable th) {
@@ -257,7 +258,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeSearches(...) for " + getHandlerId());
 		}
+
 		return results;
+	}
+
+	private List<SearchWithResults> excludeFolders(List<SearchWithResults> results) {
+
+		return null;
 	}
 
 }

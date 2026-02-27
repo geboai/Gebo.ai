@@ -7,7 +7,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -79,6 +81,10 @@ public class DocumentsChunkServiceImpl
 
 	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
+	private final static Map<String, TokenTextSplitter> splittersCache = new HashMap<String, TokenTextSplitter>();
+	static {
+		get(TextChunkingSpecs.DEFAULT_SPECS);
+	}
 	private final GeboDocumentsCacheConfig cacheConfig;
 	private final IDocumentsCacheService cacheService;
 	private final IGGeboConfigService configService;
@@ -196,8 +202,7 @@ public class DocumentsChunkServiceImpl
 		TokenTextSplitter tokensplitter = null;
 		if (textConfig.get() instanceof TextChunkingSpecs textSpecs) {
 
-			tokensplitter = new TokenTextSplitter(textSpecs.getDefaultChunkSize(), textSpecs.getMinChunkSizeChars(),
-					textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(), textSpecs.isKeepSeparator());
+			tokensplitter = get(textSpecs);
 		}
 		final TokenTextSplitter usedSplitter = tokensplitter;
 
@@ -585,13 +590,17 @@ public class DocumentsChunkServiceImpl
 					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
 					var mapped = chunks.stream().map(x -> IDocumentChunkWithRef.of(x, document)).toList();
 					return Flux.fromIterable(mapped);
-				}));
+				})).onErrorResume(exc -> {
+					String msg = "Error while loading resource to be chunked";
+					LOGGER.error(msg, exc);
+					return Flux.just(IDocumentChunkWithRef.ofError(document, msg, exc));
+				});
 	}
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
-		
+
 		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler)
 				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, chunkSessionId));
 
@@ -671,4 +680,12 @@ public class DocumentsChunkServiceImpl
 
 	}
 
+	static TokenTextSplitter get(TextChunkingSpecs specs) {
+		return splittersCache.computeIfAbsent(specs.toString(), (_specs) -> createTokenizer(specs));
+	}
+
+	static TokenTextSplitter createTokenizer(TextChunkingSpecs textSpecs) {
+		return new TokenTextSplitter(textSpecs.getDefaultChunkSize(), textSpecs.getMinChunkSizeChars(),
+				textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(), textSpecs.isKeepSeparator());
+	}
 }

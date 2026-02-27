@@ -593,7 +593,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	@Override
-	protected List<JiraNativePositionObject> toNativeCoordinates(JiraNavigationCoordinates position, GJiraSystem system,
+	protected List<JiraNativePositionObject> toResourcesNativeCoordinates(JiraNavigationCoordinates position, GJiraSystem system,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		List<JiraNativePositionObject> nativePositions = new ArrayList<>();
 		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);

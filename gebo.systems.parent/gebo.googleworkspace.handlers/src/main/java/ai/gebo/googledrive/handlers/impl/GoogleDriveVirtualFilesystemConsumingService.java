@@ -378,7 +378,7 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	}
 
 	@Override
-	protected List<GoogleDriveNativePositionObject> toNativeCoordinates(GoogleDriveNavigationCoordinates position,
+	protected List<GoogleDriveNativePositionObject> toResourcesNativeCoordinates(GoogleDriveNavigationCoordinates position,
 			GGoogleDriveSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub
 		return null;

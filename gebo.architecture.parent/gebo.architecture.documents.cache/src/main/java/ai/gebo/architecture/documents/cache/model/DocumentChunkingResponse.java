@@ -3,6 +3,7 @@ package ai.gebo.architecture.documents.cache.model;
 import java.util.List;
 import java.util.UUID;
 
+import ai.gebo.model.GUserMessage;
 import lombok.Data;
 
 @Data
@@ -14,5 +15,7 @@ public class DocumentChunkingResponse {
 	private String nextChunkSetId = null;
 	private String chunkingSessionId = null;
 	private boolean empty;
+	private boolean error;
+	private GUserMessage errorMessage = null;
 
 }

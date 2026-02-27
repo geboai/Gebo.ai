@@ -838,7 +838,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	@Override
-	protected List<ConfluenceNativePositionObject> toNativeCoordinates(ConfluenceNavigationCoordinates position,
+	protected List<ConfluenceNativePositionObject> toResourcesNativeCoordinates(ConfluenceNavigationCoordinates position,
 			GConfluenceSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		List<ConfluenceNativePositionObject> natives = new ArrayList<ConfluenceNativePositionObject>();
 		if (position.getRoot() != null) {

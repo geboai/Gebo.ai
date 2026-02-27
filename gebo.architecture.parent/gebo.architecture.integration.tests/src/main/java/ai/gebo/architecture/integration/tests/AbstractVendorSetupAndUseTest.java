@@ -340,6 +340,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				FastSharepointSystemInsertRequest config = new FastSharepointSystemInsertRequest();
 				config.setBaseUri(productSetupInfo.getBasePath());
 				config.setDescription("Sharepoint system");
+				
 				GeboOauth2SecretContent oauth2Credentials = productSetupInfo.getOauth2Credentials();
 				config.setOauth2Credentials(oauth2Credentials);
 				config.setSharepointVersion(SharepointVersionEnum.CLOUD_VERSION);
@@ -356,6 +357,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				config.confluenceVersion(
 						productSetupInfo.getProduct() == Product.CONFLUENCE_CLOUD ? ConfluenceVersionEnum.CLOUD
 								: ConfluenceVersionEnum.ONPREMISE7X);
+				config.setDescription("Confluence system");
 				config.setUsername(productSetupInfo.getUser());
 				config.setPassword(productSetupInfo.getApiKey());
 				config.setToken(productSetupInfo.getApiKey());
