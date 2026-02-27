@@ -40,10 +40,10 @@ import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
-import ai.gebo.llms.deepsearch.service.IDeepSearchDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	private final ChatPipelinesConfiguration chatPipelinesConfig;
 	private final IGDeepSearchService deepSearchService;
 	private final IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo;
-	private final IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
+	private final IDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
 	private final IGKnowledgebaseVisibilityService visibleKnowledgeBasesService;
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
@@ -84,7 +84,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 			DefaultRagStreamingOutputChatPipelineStepServiceImpl defaultRagStreamingOutputChatPipelineStepServiceImpl,
 			ChatPipelinesConfiguration chatPipelinesConfig, IGDeepSearchService deepSearchService,
 			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo,
-			IDeepSearchDataSourcesCatalogsService deepSearchDataSourcesCatalogsService, IGPromptConfigDao promptsDao,
+			IDataSourcesCatalogsService deepSearchDataSourcesCatalogsService, IGPromptConfigDao promptsDao,
 			IGKnowledgebaseVisibilityService visibleKnowledgeBasesService, IGPersistentObjectManager persistentManager,
 			IGPromptsParametersCacheService promptsParamsCacheService,
 			IGChatSessionLifeCycleService chatSessionLifecycleService) {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -109,7 +110,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 		}
 	}
 
-	public List<String> getCataloguesListSample(String configurationCode) throws SearchServiceException;
+	public List<CatalogueSample> getCataloguesListSample(String configurationCode) throws SearchServiceException;
 
 	public default void setOriginOn(List<SearchResult> sr) {
 		if (sr != null) {

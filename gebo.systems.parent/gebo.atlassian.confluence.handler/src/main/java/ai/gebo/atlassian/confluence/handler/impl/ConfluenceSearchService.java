@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -429,7 +430,7 @@ public class ConfluenceSearchService extends
 
 	@Override
 	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
-			int nEntryLimit) throws IOException, SearchServiceException {
+			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nativeSearch(...)");
 		}

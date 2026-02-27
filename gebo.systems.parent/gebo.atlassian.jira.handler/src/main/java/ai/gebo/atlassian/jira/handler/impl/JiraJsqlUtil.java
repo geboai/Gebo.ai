@@ -63,7 +63,7 @@ public class JiraJsqlUtil {
 			return "";
 
 		// Default ordering (optional; remove if you don't want it)
-		return String.join("\nAND ", clauses) + "\nORDER BY updated DESC";
+		return String.join(" OR ", clauses) + " ORDER BY updated DESC";
 	}
 
 	/* ---------------- helpers ---------------- */

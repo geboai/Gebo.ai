@@ -64,7 +64,13 @@ public class JiraNavigationUtil {
 		root.setDateModified(project.getArchivedDate());
 		return root;
 	}
-
+	static String get(IssueBean issueBean, String f) {
+		if (issueBean.getFields() != null && issueBean.getFields().get(f) != null)
+			return (String) issueBean.getFields().get(f);
+		else if (issueBean.getRenderedFields() != null && issueBean.getRenderedFields().get(f) != null)
+			return (String) issueBean.getRenderedFields().get(f);
+		return null;
+	}
 	/**
 	 * Determines if a filesystem root represents a Jira project.
 	 * 
@@ -233,7 +239,7 @@ public class JiraNavigationUtil {
 
 	public static VFilesystemReference toVirtualFilesystemReference(IssueBean issueBean) {
 		VFilesystemReference out = new VFilesystemReference();
-		Object data = issueBean.getFields().get("project");
+		Object data = get(issueBean, "project");
 		if (data != null && data instanceof Map attributes && !attributes.isEmpty()) {
 			String key = (String) attributes.get("key");
 			String name = (String) attributes.get("name");

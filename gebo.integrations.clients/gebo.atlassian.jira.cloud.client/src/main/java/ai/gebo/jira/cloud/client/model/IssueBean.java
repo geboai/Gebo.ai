@@ -48,7 +48,7 @@ public class IssueBean {
 	private String expand = null;
 
 	@JsonProperty("fields")
-	private LinkedHashMap<String, Object> fields = null;
+	private LinkedHashMap<String, Object> fields = new LinkedHashMap<String, Object>();
 
 	@JsonProperty("fieldsToInclude")
 	private IncludedFields fieldsToInclude = null;
@@ -60,19 +60,19 @@ public class IssueBean {
 	private String key = null;
 
 	@JsonProperty("names")
-	private LinkedHashMap<String, String> names = null;
+	private LinkedHashMap<String, String> names = new LinkedHashMap<String, String>();
 
 	@JsonProperty("operations")
 	private AllOfIssueBeanOperations operations = null;
 
 	@JsonProperty("properties")
-	private Map<String, Object> properties = null;
+	private LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>();
 
 	@JsonProperty("renderedFields")
-	private Map<String, Object> renderedFields = null;
+	private LinkedHashMap<String, Object> renderedFields = new LinkedHashMap<String, Object>();
 
 	@JsonProperty("schema")
-	private Map<String, JsonTypeBean> schema = null;
+	private LinkedHashMap<String, JsonTypeBean> schema = new LinkedHashMap<String, JsonTypeBean>();
 
 	@JsonProperty("self")
 	private String self = null;
@@ -81,7 +81,7 @@ public class IssueBean {
 	private List<IssueTransition> transitions = null;
 
 	@JsonProperty("versionedRepresentations")
-	private Map<String, Map<String, Object>> versionedRepresentations = null;
+	private LinkedHashMap<String, Object> versionedRepresentations = new LinkedHashMap<String, Object>();
 
 	/**
 	 * Details of changelogs associated with the issue.
@@ -185,7 +185,7 @@ public class IssueBean {
 	 * @return names
 	 **/
 	@Schema(description = "The ID and name of each field present on the issue.")
-	public Map<String, String> getNames() {
+	public LinkedHashMap<String, String> getNames() {
 		return names;
 	}
 
@@ -205,7 +205,7 @@ public class IssueBean {
 	 * @return properties
 	 **/
 	@Schema(description = "Details of the issue properties identified in the request.")
-	public Map<String, Object> getProperties() {
+	public LinkedHashMap<String, Object> getProperties() {
 		return properties;
 	}
 
@@ -215,7 +215,7 @@ public class IssueBean {
 	 * @return renderedFields
 	 **/
 	@Schema(description = "The rendered value of each field present on the issue.")
-	public Map<String, Object> getRenderedFields() {
+	public LinkedHashMap<String, Object> getRenderedFields() {
 		return renderedFields;
 	}
 
@@ -225,7 +225,7 @@ public class IssueBean {
 	 * @return schema
 	 **/
 	@Schema(description = "The schema describing each field present on the issue.")
-	public Map<String, JsonTypeBean> getSchema() {
+	public LinkedHashMap<String, JsonTypeBean> getSchema() {
 		return schema;
 	}
 
@@ -255,7 +255,7 @@ public class IssueBean {
 	 * @return versionedRepresentations
 	 **/
 	@Schema(description = "The versions of each field on the issue.")
-	public Map<String, Map<String, Object>> getVersionedRepresentations() {
+	public LinkedHashMap<String, Object> getVersionedRepresentations() {
 		return versionedRepresentations;
 	}
 

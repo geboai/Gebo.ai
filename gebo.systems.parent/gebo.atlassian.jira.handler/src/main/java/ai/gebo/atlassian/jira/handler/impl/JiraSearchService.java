@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -117,7 +118,7 @@ public class JiraSearchService extends
 
 	@Override
 	public List<SearchResult> nativeSearch(JiraIssuesSearchFilter query, SearchableSystemMetaData system,
-			int nEntryLimit) throws IOException, SearchServiceException {
+			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException {
 		String jql = JiraJsqlUtil.createJqlString(query);
 		return executeJql(system, jql, nEntryLimit);
 
@@ -148,7 +149,9 @@ public class JiraSearchService extends
 				ApiClient connection = jiraConnectionFactory.getApiClient(jiraSystem);
 				IssueSearchApi searchApi = new IssueSearchApi(connection);
 				SearchAndReconcileResults data = searchApi.searchAndReconsileIssuesUsingJql(jql, null, howmany,
-						List.of("*"), "*", null, null, null, null);
+						List.of("*all"),
+						"fields,renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+						null, null, null, null);
 
 				if (data != null && data.getIssues() != null) {
 					results = toSearchResults(data.getIssues(), jiraSystem);
@@ -168,8 +171,8 @@ public class JiraSearchService extends
 			SearchResult result = new SearchResult();
 			result.setSystemConfigurationCode(jiraSystem.getCode());
 			setOriginOn(result);
-			String summary = get(issueBean, "summary");
-			String description = get(issueBean, "description");
+			String summary = JiraNavigationUtil.get(issueBean, "summary");
+			String description = JiraNavigationUtil.get(issueBean, "description");
 			result.setId(issueBean.getId());
 			result.setNavigationReference(JiraNavigationUtil.toVirtualFilesystemReference(issueBean));
 			result.setDescriptiveText(summary != null ? summary : description);
@@ -262,12 +265,6 @@ public class JiraSearchService extends
 			}
 		}
 
-	}
-
-	private String get(IssueBean issueBean, String f) {
-		if (issueBean.getFields() != null)
-			return (String) issueBean.getFields().get(f);
-		return null;
 	}
 
 }
