@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -425,9 +426,37 @@ public class ConfluenceSearchService extends
 
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
-			ConfluenceResultsExtractionData extractedData) {
-		// TODO Auto-generated method stub
-		return null;
+			ConfluenceResultsExtractionData extractedData) throws IOException, SearchServiceException {
+		SearchResultAnalisysOutcome outcome = null;
+		if (extractedData.getAdditionalConfluenceSearchIdeas() != null) {
+			boolean doneSetAtLeastAField = false;
+			ConfluenceContentSearchFilter searchFilter = new ConfluenceContentSearchFilter();
+			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getLabels(),
+					searchFilter.getContentAttributesFilter()::setLabels);
+			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getTextTerms(),
+					searchFilter.getContentAttributesFilter()::setTextTerms);
+			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
+					searchFilter.getContentAttributesFilter()::setTitleTerms);
+			searchFilter.getContentAttributesFilter()
+					.setLabelsMatchMode(extractedData.getAdditionalConfluenceSearchIdeas().getLabelsMatchMode());
+			searchFilter.getContentAttributesFilter()
+					.setTextTermsMatchMode(extractedData.getAdditionalConfluenceSearchIdeas().getTextTermsMatchMode());
+			searchFilter.getContentAttributesFilter().setTitleTermsMatchMode(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTitleTermsMatchMode());
+			if (doneSetAtLeastAField) {
+				List<SearchableSystemMetaData> systems = this.getSearchableSystems();
+				List<SearchResult> searchResults = new ArrayList<SearchResult>();
+				for (SearchableSystemMetaData searchableSystemMetaData : systems) {
+					List<SearchResult> _searchResults = nativeSearch(searchFilter, searchableSystemMetaData, 50);
+					if (_searchResults != null) {
+						searchResults.addAll(_searchResults);
+					}
+				}
+
+				outcome = new SearchResultAnalisysOutcome(null, searchResults);
+			}
+		}
+		return outcome;
 	}
 
 	@Override
@@ -502,6 +531,15 @@ public class ConfluenceSearchService extends
 			List<CatalogueSample> cataloguesSample) {
 
 		return Map.of(CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM, renderConfluenceSpaces(cataloguesSample));
+	}
+
+	private boolean doneCopy(List<String> list, Consumer<List<String>> consumer) {
+		boolean _doneCopy = false;
+		if (list != null && !list.isEmpty()) {
+			consumer.accept(list);
+			_doneCopy = true;
+		}
+		return _doneCopy;
 	}
 
 	private Object renderConfluenceSpaces(List<CatalogueSample> cataloguesSample) {
