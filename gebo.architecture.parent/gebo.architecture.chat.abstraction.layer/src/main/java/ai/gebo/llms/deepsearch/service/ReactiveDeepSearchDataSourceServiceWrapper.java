@@ -129,12 +129,6 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		return searchService.aggregate(actualData, currentConsolidation);
 	}
 
-	@Override
-	protected List<SearchResult> extractAdditionalReferencesToScan(CustomSearchResultExtractionDataType returned) {
-
-		return List.of();
-	}
-
 	protected List<SearchResult> executeStandardQuerySearch(SearchQuery query, DeepSearchRequest request,
 			MinimalChatContext minimalChatContext) throws IOException, SearchServiceException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
@@ -172,11 +166,16 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,
 			CustomSearchResultExtractionDataType returned, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
-		return searchService
-				.extractRelatedAnalisysReferences(
-						actualSearchResultRef.getActualSearchResult().getOriginComponent().getCompleteComponentId()
-								+ "<-->" + actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
-						returned);
+		SearchResultAnalisysOutcome outcome = null;
+		try {
+			outcome = searchService.extractRelatedAnalisysReferences(
+					actualSearchResultRef.getActualSearchResult().getOriginComponent().getCompleteComponentId() + "<-->"
+							+ actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
+					returned);
+		} catch (Throwable th) {
+			LOGGER.error("Exception while trying to execute an additional search or data retrieve", th);
+		}
+		return outcome;
 	}
 
 	protected <T> List<SearchWithResults> executeNativeSearch(
@@ -194,24 +193,25 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();
 		for (SearchableSystemMetaData searchableSystemMetaData : searchables) {
 			Map<String, Object> systemTemplateCallParams = new HashMap<String, Object>();
-			String messagingModuleId=nativeSearchService.getMessagingModuleId();
-			String messageSystemId=nativeSearchService.getMessagingSystemId();
-			String systemCode= null;
-			List<CatalogueSample> cataloguesSample =List.of();
-			if (searchableSystemMetaData.getSystemConfigurationReference()!=null && searchableSystemMetaData.getSystemConfigurationReference() instanceof GBaseObject baseObject) {
-				systemCode=baseObject.getCode();
-				cataloguesSample = dataSourcesCatalogsService.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId, messageSystemId, systemCode);
-			} 
+			String messagingModuleId = nativeSearchService.getMessagingModuleId();
+			String messageSystemId = nativeSearchService.getMessagingSystemId();
+			String systemCode = null;
+			List<CatalogueSample> cataloguesSample = List.of();
+			if (searchableSystemMetaData.getSystemConfigurationReference() != null) {
+				systemCode = searchableSystemMetaData.getCode();
+				cataloguesSample = dataSourcesCatalogsService
+						.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
+								messagingModuleId, messageSystemId, systemCode);
+			}
 			Map<String, Object> specificSystemParams = nativeSearchService
 					.createCustomTemplateParamsMap(searchableSystemMetaData, cataloguesSample);
 			systemTemplateCallParams.putAll(promptParams);
 			systemTemplateCallParams.putAll(specificSystemParams);
 			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
 					systemTemplateCallParams, nativeSearchServiceDataType);
-			
-				
+
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
-					maxSearchesReturnedPerSystem, cataloguesSample);
+					maxSearchesReturnedPerSystem);
 			SearchWithResults swr = new SearchWithResults();
 			swr.setResults(flattenSearchResults(data));
 			swr.setNativeQueryObject(resultingQueryObject);

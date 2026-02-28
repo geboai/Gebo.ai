@@ -11,9 +11,8 @@ import lombok.Data;
 @JsonClassDescription("Jira issue search filter")
 public class JiraIssuesSearchFilter {
 	@JsonPropertyDescription("filters on issue or task or epic attributes")
-	private JiraIssueAttributeFilter issuesAttributesFilter = null;
+	private JiraIssueAttributeFilter issuesAttributesFilter = new JiraIssueAttributeFilter();
 	@JsonPropertyDescription("filters on people participating the issue lifecycle")
-	private JiraPeopleFilter peopleFilter=null;
-	
-	
+	private JiraPeopleFilter peopleFilter = new JiraPeopleFilter();
+
 }

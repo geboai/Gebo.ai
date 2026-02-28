@@ -14,7 +14,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 public interface INativeSearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType, NativeSearchDataStructure>
 		extends ISearchService<CustomSearchResultExtractionDataType> {
 	public List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
-			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException;
+			int nEntryLimit) throws IOException, SearchServiceException;
 
 	public Class<NativeSearchDataStructure> getNativeSearchDataStructureType();
 

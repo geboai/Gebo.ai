@@ -34,6 +34,7 @@ TASK:
 7) Keep lists small and precise (max ~10 items per list). Prefer exact project keys and issue keys if present.
 8) If the user asks something NOT related to searching Jira issues, output an empty filter object (all null).
 
+
 {format}
 
 IMPORTANT CONSTRAINTS:

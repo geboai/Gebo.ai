@@ -576,7 +576,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
 
-	protected abstract List<SearchResult> extractAdditionalReferencesToScan(CustomContentExtractionType returned);
+	
 
 	private DeepSearchAnalyzedDocument createAnalyzedDocument(SearchResult sr, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {

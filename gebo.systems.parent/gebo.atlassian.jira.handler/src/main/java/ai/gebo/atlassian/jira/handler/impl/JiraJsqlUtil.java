@@ -11,6 +11,22 @@ import ai.gebo.atlassian.jira.handler.search.model.JiraPeopleFilter;
 
 public class JiraJsqlUtil {
 
+	private static final String CREATOR_FIELD = "creator";
+	private static final String REPORTER_FIELD = "reporter";
+	private static final String ASSIGNEE_FIELD = "assignee";
+	private static final String FIX_VERSION_FIELD = "fixVersion";
+	private static final String AFFECTED_VERSION_FIELD = "affectedVersion";
+	private static final String STATUS_FIELD = "status";
+	private static final String PRIORITY_FIELD = "priority";
+	private static final String DESCRIPTION_FIELD = "description";
+	private static final String SUMMARY_FIELD = "summary";
+	private static final String ISSUETYPE_FIELD = "issuetype";
+	private static final String PROJECT_FIELD = "project";
+	private static final String CLOSES_PARENTHESIS = ")";
+	private static final String OPEN_PARENTHESIS = "(";
+	private static final String OR_OPERATOR = " OR ";
+	private static final String AND_OPERATOR = " AND ";
+
 	/**
 	 * Deterministic JQL builder from JiraIssuesSearchFilter. - Across different
 	 * filter groups: AND - Inside lists: ANY => OR, ALL => AND (with parentheses) -
@@ -22,48 +38,67 @@ public class JiraJsqlUtil {
 	 * otherwise it's quoted as a string (e.g., "Alex Doe") unless it already looks
 	 * quoted.
 	 */
-	static String  createJqlString(JiraIssuesSearchFilter query) {
+	static String createJqlString(JiraIssuesSearchFilter query) {
 		if (query == null)
 			return "";
 
 		List<String> clauses = new ArrayList();
-
+		List<String> restrictingClauses = new ArrayList<String>();
 		JiraIssueAttributeFilter a = query.getIssuesAttributesFilter();
 		if (a != null) {
 			// project, issuetype, key
-			addInClause(clauses, "project", a.getProjectCodes(), true);
-			addInClause(clauses, "issuetype", a.getIssuetypeCodes(), true);
+			addInClause(restrictingClauses, PROJECT_FIELD, a.getProjectCodes(), true);
+			addInClause(restrictingClauses, ISSUETYPE_FIELD, a.getIssuetypeCodes(), true);
 			addInClause(clauses, "key", a.getIssueKeys(), true);
 
 			// summary / description text search
-			addTextTermsClause(clauses, "summary", a.getSummaryTerms(), a.getSummaryTermsMatchMode());
+			addTextTermsClause(clauses, SUMMARY_FIELD, a.getSummaryTerms(), a.getSummaryTermsMatchMode());
 
-			addTextTermsClause(clauses, "description", a.getDescriptionTerms(), a.getDescriptionTermsMatchMode());
+			addTextTermsClause(clauses, DESCRIPTION_FIELD, a.getDescriptionTerms(), a.getDescriptionTermsMatchMode());
 
 			// labels (exact match semantics in JQL is labels in (...))
 			addLabelsClause(clauses, a.getLabels(), a.getLabelsMatchMode());
 
 			// priority, status
-			addInClause(clauses, "priority", a.getPriorityCodes(), true);
-			addInClause(clauses, "status", a.getStatusCodes(), true);
+			addInClause(restrictingClauses, PRIORITY_FIELD, a.getPriorityCodes(), true);
+			addInClause(restrictingClauses, STATUS_FIELD, a.getStatusCodes(), true);
 
 			// versions
-			addInClause(clauses, "affectedVersion", a.getAffectedVersions(), true);
-			addInClause(clauses, "fixVersion", a.getFixVersions(), true);
+			addInClause(restrictingClauses, AFFECTED_VERSION_FIELD, a.getAffectedVersions(), true);
+			addInClause(restrictingClauses, FIX_VERSION_FIELD, a.getFixVersions(), true);
 		}
 
 		JiraPeopleFilter p = query.getPeopleFilter();
 		if (p != null) {
-			addUserInClause(clauses, "assignee", p.getAssigneesList());
-			addUserInClause(clauses, "reporter", p.getReportersList());
-			addUserInClause(clauses, "creator", p.getCreatorsList());
+			addUserInClause(restrictingClauses, ASSIGNEE_FIELD, p.getAssigneesList());
+			addUserInClause(restrictingClauses, REPORTER_FIELD, p.getReportersList());
+			addUserInClause(restrictingClauses, CREATOR_FIELD, p.getCreatorsList());
 		}
 
-		if (clauses.isEmpty())
+		if (clauses.isEmpty() && restrictingClauses.isEmpty())
 			return "";
 
 		// Default ordering (optional; remove if you don't want it)
-		return String.join(" OR ", clauses) + " ORDER BY updated DESC";
+		StringBuffer jquery = new StringBuffer();
+		String firstPart = null;
+		if (restrictingClauses != null && !restrictingClauses.isEmpty()) {
+			firstPart = String.join(AND_OPERATOR, restrictingClauses);
+		}
+		String secondPart = null;
+		if (clauses != null && !clauses.isEmpty()) {
+			secondPart = String.join(OR_OPERATOR, clauses);
+		}
+		if (firstPart != null) {
+			jquery.append(OPEN_PARENTHESIS + firstPart + CLOSES_PARENTHESIS);
+		}
+		if (secondPart != null) {
+			if (firstPart != null) {
+				jquery.append(AND_OPERATOR);
+			}
+			jquery.append(OPEN_PARENTHESIS + secondPart + CLOSES_PARENTHESIS);
+		}
+
+		return jquery.toString() + " ORDER BY updated DESC";
 	}
 
 	/* ---------------- helpers ---------------- */
@@ -75,7 +110,7 @@ public class JiraJsqlUtil {
 
 		String joined = v.stream().map(x -> quoteValues ? jqlQuote(x) : x).collect(Collectors.joining(","));
 
-		clauses.add(field + " in (" + joined + ")");
+		clauses.add(field + " in (" + joined + CLOSES_PARENTHESIS);
 	}
 
 	private static void addTextTermsClause(List<String> clauses, String field, List<String> terms,
@@ -84,13 +119,13 @@ public class JiraJsqlUtil {
 		if (t.isEmpty())
 			return;
 
-		String op = (mode == JiraIssueAttributeFilter.TextMatchMode.ALL) ? " AND " : " OR ";
+		String op = (mode == JiraIssueAttributeFilter.TextMatchMode.ALL) ? AND_OPERATOR : OR_OPERATOR;
 
 		// JQL text search: field ~ "term"
 		String inner = t.stream().map(term -> field + " ~ " + jqlQuote(term)).collect(Collectors.joining(op));
 
 		// Always parenthesize multi-term groups
-		clauses.add(t.size() > 1 ? "(" + inner + ")" : inner);
+		clauses.add(t.size() > 1 ? OPEN_PARENTHESIS + inner + CLOSES_PARENTHESIS : inner);
 	}
 
 	private static void addLabelsClause(List<String> clauses, List<String> labels,
@@ -102,14 +137,14 @@ public class JiraJsqlUtil {
 		// For ANY, best is labels in ("a","b")
 		if (mode != JiraIssueAttributeFilter.TextMatchMode.ALL) {
 			String joined = l.stream().map(JqlBuilder::jqlQuote).collect(Collectors.joining(","));
-			clauses.add("labels in (" + joined + ")");
+			clauses.add("labels in (" + joined + CLOSES_PARENTHESIS);
 			return;
 		}
 
 		// For ALL labels: labels = "a" AND labels = "b"
-		String inner = l.stream().map(x -> "labels = " + jqlQuote(x)).collect(Collectors.joining(" AND "));
+		String inner = l.stream().map(x -> "labels = " + jqlQuote(x)).collect(Collectors.joining(AND_OPERATOR));
 
-		clauses.add(l.size() > 1 ? "(" + inner + ")" : inner);
+		clauses.add(l.size() > 1 ? OPEN_PARENTHESIS + inner + CLOSES_PARENTHESIS : inner);
 	}
 
 	private static void addUserInClause(List<String> clauses, String field, List<String> users) {
@@ -119,7 +154,7 @@ public class JiraJsqlUtil {
 
 		String joined = u.stream().map(JqlBuilder::jqlUserOperand).collect(Collectors.joining(","));
 
-		clauses.add(field + " in (" + joined + ")");
+		clauses.add(field + " in (" + joined + CLOSES_PARENTHESIS);
 	}
 
 	private static List<String> normalize(List<String> list) {
@@ -161,7 +196,7 @@ public class JiraJsqlUtil {
 		}
 
 		// Looks like a function call: currentUser(), membersOf("group"), etc.
-		if (t.endsWith(")") && t.contains("(")) {
+		if (t.endsWith(CLOSES_PARENTHESIS) && t.contains(OPEN_PARENTHESIS)) {
 			return t;
 		}
 

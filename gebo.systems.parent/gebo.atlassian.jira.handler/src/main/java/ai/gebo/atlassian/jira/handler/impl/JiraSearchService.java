@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.springframework.stereotype.Service;
 
@@ -113,9 +114,43 @@ public class JiraSearchService extends
 
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
-			JiraResultsExtractionData extractedData) {
+			JiraResultsExtractionData extractedData) throws IOException, SearchServiceException {
+		SearchResultAnalisysOutcome outcome = null;
+		if (extractedData != null && extractedData.getAdditionalJiraSearchIdeas() != null) {
+			JiraIssuesSearchFilter searchFilter = new JiraIssuesSearchFilter();
+			boolean atLeastASearchFieldIsSet = false;
+			atLeastASearchFieldIsSet = doneCopy(extractedData.getAdditionalJiraSearchIdeas().getDescriptionTerms(),
+					searchFilter.getIssuesAttributesFilter()::setDescriptionTerms);
+			atLeastASearchFieldIsSet |= doneCopy(extractedData.getAdditionalJiraSearchIdeas().getIssueKeys(),
+					searchFilter.getIssuesAttributesFilter()::setIssueKeys);
+			atLeastASearchFieldIsSet |= doneCopy(extractedData.getAdditionalJiraSearchIdeas().getSummaryTerms(),
+					searchFilter.getIssuesAttributesFilter()::setSummaryTerms);
+			searchFilter.getIssuesAttributesFilter().setDescriptionTermsMatchMode(
+					extractedData.getAdditionalJiraSearchIdeas().getDescriptionTermsMatchMode());
+			searchFilter.getIssuesAttributesFilter()
+					.setSummaryTermsMatchMode(extractedData.getAdditionalJiraSearchIdeas().getSummaryTermsMatchMode());
+			if (atLeastASearchFieldIsSet) {
+				List<SearchableSystemMetaData> systems = getSearchableSystems();
+				List<SearchResult> searchResults = new ArrayList<SearchResult>();
+				for (SearchableSystemMetaData system : systems) {
+					List<SearchResult> _searchResults = nativeSearch(searchFilter, system, 50);
+					if (_searchResults != null)
+						searchResults.addAll(_searchResults);
+				}
+				outcome = new SearchResultAnalisysOutcome(null, searchResults);
 
-		return null;
+			}
+		}
+		return outcome;
+	}
+
+	private boolean doneCopy(List<String> list, Consumer<List<String>> consumer) {
+		boolean _doneCopy = false;
+		if (list != null && !list.isEmpty()) {
+			consumer.accept(list);
+			_doneCopy = true;
+		}
+		return _doneCopy;
 	}
 
 	@Override
@@ -126,7 +161,7 @@ public class JiraSearchService extends
 
 	@Override
 	public List<SearchResult> nativeSearch(JiraIssuesSearchFilter query, SearchableSystemMetaData system,
-			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException {
+			int nEntryLimit) throws IOException, SearchServiceException {
 		String jql = JiraJsqlUtil.createJqlString(query);
 		return executeJql(system, jql, nEntryLimit);
 

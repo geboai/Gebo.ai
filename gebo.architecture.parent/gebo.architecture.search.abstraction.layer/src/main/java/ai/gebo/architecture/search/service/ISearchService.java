@@ -101,7 +101,7 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public String getQueriesGenerationPromptUseCode();
 
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
-			CustomSearchResultExtractionDataType extractedData);
+			CustomSearchResultExtractionDataType extractedData) throws IOException, SearchServiceException;
 
 	public default void setOriginOn(SearchResult sr) {
 		if (sr != null) {

@@ -438,7 +438,7 @@ public class ConfluenceSearchService extends
 
 	@Override
 	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
-			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException {
+			int nEntryLimit) throws IOException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nativeSearch(...)");
 		}
