@@ -64,6 +64,7 @@ public class JiraNavigationUtil {
 		root.setDateModified(project.getArchivedDate());
 		return root;
 	}
+
 	static String get(IssueBean issueBean, String f) {
 		if (issueBean.getFields() != null && issueBean.getFields().get(f) != null)
 			return (String) issueBean.getFields().get(f);
@@ -71,6 +72,7 @@ public class JiraNavigationUtil {
 			return (String) issueBean.getRenderedFields().get(f);
 		return null;
 	}
+
 	/**
 	 * Determines if a filesystem root represents a Jira project.
 	 * 
@@ -93,6 +95,10 @@ public class JiraNavigationUtil {
 				: null;
 	}
 
+	public static PathInfo toPathInfo(GVirtualFilesystemRoot root, IssueBean x) {
+		return toPathInfo(root, x, true);
+	}
+
 	/**
 	 * Converts a Jira issue to a PathInfo object within a filesystem root.
 	 * 
@@ -100,10 +106,10 @@ public class JiraNavigationUtil {
 	 * @param x    The Jira issue to convert
 	 * @return A PathInfo representation of the issue
 	 */
-	public static PathInfo toPathInfo(GVirtualFilesystemRoot root, IssueBean x) {
+	public static PathInfo toPathInfo(GVirtualFilesystemRoot root, IssueBean x, boolean asFolder) {
 		PathInfo pathinfo = new PathInfo();
 		pathinfo.name = getName(x);
-		pathinfo.folder = true;
+		pathinfo.folder = asFolder;
 		pathinfo.metaType = PathInfoMetaType.FOLDER;
 		pathinfo.absolutePath = ISSUE_PREFIX + x.getKey();
 		return pathinfo;
@@ -237,7 +243,7 @@ public class JiraNavigationUtil {
 		return "unknown";
 	}
 
-	public static VFilesystemReference toVirtualFilesystemReference(IssueBean issueBean) {
+	public static VFilesystemReference toVirtualFilesystemReference(IssueBean issueBean, boolean asFolder) {
 		VFilesystemReference out = new VFilesystemReference();
 		Object data = get(issueBean, "project");
 		if (data != null && data instanceof Map attributes && !attributes.isEmpty()) {
@@ -249,7 +255,7 @@ public class JiraNavigationUtil {
 			root.setDescription(name);
 			out.root = root;
 		}
-		out.path = toPathInfo(out.root, issueBean);
+		out.path = toPathInfo(out.root, issueBean, asFolder);
 		out.path.metaType = PathInfoMetaType.WEB_PAGE;
 		return out;
 	}

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.jira.handler.impl.model;
 
@@ -27,12 +24,14 @@ import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 /**
  * AI generated comments
  * 
- * Represents a Jira object (project, issue, comment, or attachment) in the virtual filesystem.
- * This class extends AbstractNativePositionObject to provide Jira-specific implementation
- * for navigating and accessing Jira resources in a file system-like structure.
+ * Represents a Jira object (project, issue, comment, or attachment) in the
+ * virtual filesystem. This class extends AbstractNativePositionObject to
+ * provide Jira-specific implementation for navigating and accessing Jira
+ * resources in a file system-like structure.
  */
 public class JiraNativePositionObject extends AbstractNativePositionObject {
 
+	private static final String ISSUE_CONTENT_TYPE = "text/html";
 	private String code = null;
 	private String name = null;
 	private String url = null;
@@ -95,8 +94,8 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 	}
 
 	/**
-	 * Checks if this object represents a resource.
-	 * Resources are typically issues, comments, or attachments.
+	 * Checks if this object represents a resource. Resources are typically issues,
+	 * comments, or attachments.
 	 * 
 	 * @return true if this is a resource, false otherwise
 	 */
@@ -107,8 +106,8 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 	}
 
 	/**
-	 * Checks if this object represents a folder.
-	 * Folders are typically projects or issues that contain other items.
+	 * Checks if this object represents a folder. Folders are typically projects or
+	 * issues that contain other items.
 	 * 
 	 * @return true if this is a folder, false otherwise
 	 */
@@ -267,6 +266,7 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 		this.folder = false;
 		this.code = issueAsResource.getKey();
 		this.url = this.issueAsResource.getSelf();
+		this.resourceContentType = ISSUE_CONTENT_TYPE;
 		Object field = issueAsResource.getFields() != null ? issueAsResource.getFields().get("name") : null;
 		this.name = JiraNavigationUtil.getName(issueAsResource);
 		resourceReferenceMetaInfos.put(GJiraRemoteVirtualFilesystemConsumingServiceImpl.ISSUE_CONTENT_REFERENCE,
@@ -307,7 +307,7 @@ public class JiraNativePositionObject extends AbstractNativePositionObject {
 		this.folder = false;
 		this.name = "comment #" + this.comment.getId();
 		this.resourceModificationTime = comment.getUpdated();
-		this.resourceContentType = "text/html";
+		this.resourceContentType = ISSUE_CONTENT_TYPE;
 		resourceReferenceMetaInfos.put(GJiraRemoteVirtualFilesystemConsumingServiceImpl.COMMENT_REFERENCE,
 				this.comment.getId());
 		String content = this.comment.getRenderedBody();

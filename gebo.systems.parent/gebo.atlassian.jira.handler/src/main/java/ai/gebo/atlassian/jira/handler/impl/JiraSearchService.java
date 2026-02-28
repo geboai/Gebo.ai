@@ -157,7 +157,7 @@ public class JiraSearchService extends
 			buffer.append(NEWLINE);
 			for (CatalogueSample catalogueSample : cataloguesSample) {
 				buffer.append(JIRA_PROJECT);
-				buffer.append(NEWLINE);				
+				buffer.append(NEWLINE);
 				buffer.append(catalogueSample.getCode());
 				buffer.append(NEWLINE);
 				buffer.append(DESCRIPTION);
@@ -196,27 +196,33 @@ public class JiraSearchService extends
 		}
 	}
 
+	private SearchResult toSearchResultNode(IssueBean issueBean, GJiraSystem jiraSystem, boolean asFolder) {
+		SearchResult result = new SearchResult();
+		result.setSystemConfigurationCode(jiraSystem.getCode());
+		setOriginOn(result);
+		String summary = JiraNavigationUtil.get(issueBean, "summary");
+		String description = JiraNavigationUtil.get(issueBean, "description");
+		result.setId(issueBean.getId());
+		result.setNavigationReference(JiraNavigationUtil.toVirtualFilesystemReference(issueBean, asFolder));
+		result.setDescriptiveText(summary != null ? summary : description);
+		if (issueBean.getSelf() != null) {
+			result.setResultReference(new SearchResultReference());
+			result.getResultReference().setUri(issueBean.getSelf());
+			result.getResultReference().setName(description);
+			result.getResultReference().setTitle(description);
+			result.getResultReference().setContentType("text/html");
+		}
+		if (result.getChilds() == null) {
+			result.setChilds(new ArrayList<SearchResult>());
+		}
+		return result;
+	}
+
 	private List<SearchResult> toSearchResults(List<IssueBean> issues, GJiraSystem jiraSystem) {
 		List<SearchResult> out = new ArrayList<SearchResult>();
 		for (IssueBean issueBean : issues) {
-			SearchResult result = new SearchResult();
-			result.setSystemConfigurationCode(jiraSystem.getCode());
-			setOriginOn(result);
-			String summary = JiraNavigationUtil.get(issueBean, "summary");
-			String description = JiraNavigationUtil.get(issueBean, "description");
-			result.setId(issueBean.getId());
-			result.setNavigationReference(JiraNavigationUtil.toVirtualFilesystemReference(issueBean));
-			result.setDescriptiveText(summary != null ? summary : description);
-			if (issueBean.getSelf() != null) {
-				result.setResultReference(new SearchResultReference());
-				result.getResultReference().setUri(issueBean.getSelf());
-				result.getResultReference().setName(description);
-				result.getResultReference().setTitle(description);
-				result.getResultReference().setContentType("text/html");
-			}
-			if (result.getChilds() == null) {
-				result.setChilds(new ArrayList<SearchResult>());
-			}
+			SearchResult result = toSearchResultNode(issueBean, jiraSystem, true);
+			result.getChilds().add(toSearchResultNode(issueBean, jiraSystem, false));
 			addAttachments(result.getChilds(), issueBean, jiraSystem);
 			addIssueLinks(result.getChilds(), issueBean, jiraSystem);
 			out.add(result);
