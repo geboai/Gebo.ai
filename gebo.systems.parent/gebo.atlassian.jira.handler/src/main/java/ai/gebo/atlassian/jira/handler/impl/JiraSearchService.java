@@ -157,8 +157,7 @@ public class JiraSearchService extends
 			buffer.append(NEWLINE);
 			for (CatalogueSample catalogueSample : cataloguesSample) {
 				buffer.append(JIRA_PROJECT);
-				buffer.append(NEWLINE);
-				buffer.append(CODE);
+				buffer.append(NEWLINE);				
 				buffer.append(catalogueSample.getCode());
 				buffer.append(NEWLINE);
 				buffer.append(DESCRIPTION);
