@@ -35,6 +35,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
@@ -105,9 +106,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String chunkingSessionId,
 			List<IGConfigurableEmbeddingModel> embeddingModels) {
-		
+
 		AtomicBoolean completed = state.getCompleted();
-		
+
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 
@@ -191,8 +192,10 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 							inputs.add(cInput);
 						}
 						try {
+							Map<String, Object> promptsParameters = CommonChatPromptParamsUtil
+									.preparePromptParameters(minimalChatContext);
 							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
-									inputs);
+									promptsParameters, inputs);
 							SearchEndingDetectionLogic.manageTrigger(state, result);
 							result = SearchEndingDetectionLogic.cleanFromTag(result);
 							DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();

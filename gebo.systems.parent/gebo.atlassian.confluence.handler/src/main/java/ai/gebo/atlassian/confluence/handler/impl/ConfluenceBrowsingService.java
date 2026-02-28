@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.handler.impl;
 
@@ -56,17 +53,17 @@ import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 /**
  * AI generated comments
  * 
- * Service implementation that provides browsing capabilities for Confluence systems.
- * This service handles both Cloud and On-Premise Confluence versions, allowing users
- * to navigate through spaces, pages, and attachments.
+ * Service implementation that provides browsing capabilities for Confluence
+ * systems. This service handles both Cloud and On-Premise Confluence versions,
+ * allowing users to navigate through spaces, pages, and attachments.
  */
 @Service
 public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingService<ConfluenceBrowsingContext> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceBrowsingService.class);
-	
+
 	@Autowired
 	protected ConfluenceSystemRepository systemsRepo;
-	
+
 	@Autowired
 	protected ConfluenceConnectionFactory connectionFactory;
 
@@ -110,7 +107,7 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 				OnPremiseConfluenceConnection connection = connectionFactory.getOnPremiseConnection(system);
 				OnPremiseConfluenceSpaceApi spaceApi = new OnPremiseConfluenceSpaceApi(connection);
 
-				int init = 1;
+				Integer init = null;
 				int limit = 500;
 				OnPremiseConfluenceSpacesList spaces = null;
 				do {
@@ -121,13 +118,16 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 								s.get_expandable());
 						contents.add(item);
 					}
-					init += limit;
+					if (init == null)
+						init = limit;
+					else
+						init += limit;
 				} while (spaces != null && spaces.getResults().size() == limit);
 			}
 				break;
 			case CLOUD: {
 				CloudConfluenceConnection connection = connectionFactory.getCloudConnection(system);
-				int init = 1;
+				Integer init = null;
 				int limit = 500;
 				CloudConfluenceSpaceApi spaceApi = new CloudConfluenceSpaceApi(connection);
 				CloudConfluenceSpacesList spaces = null;
@@ -138,7 +138,10 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 								s.get_expandable());
 						contents.add(item);
 					}
-					init += limit;
+					if (init == null)
+						init = limit;
+					else
+						init += limit;
 				} while (spaces != null && spaces.getResults().size() == limit);
 			}
 				break;
@@ -157,10 +160,11 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 	}
 
 	/**
-	 * Browses a specific path in the Confluence system, retrieving contents like pages and attachments.
-	 * Handles both space-level browsing and sub-page navigation.
+	 * Browses a specific path in the Confluence system, retrieving contents like
+	 * pages and attachments. Handles both space-level browsing and sub-page
+	 * navigation.
 	 * 
-	 * @param param The browsing parameters including path and root information
+	 * @param param      The browsing parameters including path and root information
 	 * @param systemCode The ID of the Confluence system
 	 * @return Operation status containing the list of path information
 	 * @throws VirtualFilesystemBrowsingException if browsing fails
@@ -326,7 +330,7 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 	/**
 	 * Implements the interface method to browse a specific path in Confluence.
 	 * 
-	 * @param param The browsing parameters
+	 * @param param   The browsing parameters
 	 * @param context The Confluence browsing context
 	 * @return Operation status containing the list of path information
 	 * @throws VirtualFilesystemBrowsingException if browsing fails
@@ -353,7 +357,7 @@ public class ConfluenceBrowsingService implements IGVirtualFilesystemBrowsingSer
 	 * Gets the parent reference for a given filesystem reference.
 	 * 
 	 * @param reference The filesystem reference
-	 * @param context The Confluence browsing context
+	 * @param context   The Confluence browsing context
 	 * @return The parent reference
 	 * @throws VirtualFilesystemBrowsingException if browsing fails
 	 */
