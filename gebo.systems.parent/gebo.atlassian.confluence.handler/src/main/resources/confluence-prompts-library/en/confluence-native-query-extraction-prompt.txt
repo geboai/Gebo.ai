@@ -18,14 +18,18 @@ INPUTS:
 - Consolidated previous chat history (may be empty):
 {consolidatedChatHistory}
 
+- Confluence spaces catalog (may be empty):
+{confluenceSpaces}
+
+
 TASK:
 1) Understand what Confluence content the user wants to find:
    - space(s) (space keys)
    - content type(s): page, blogpost, attachment, comment (only if explicitly stated or strongly implied)
    - specific content id(s) or ancestor page id(s) if provided
 2) Extract text search terms:
-   - titleTerms: keywords/phrases that should appear in titles
-   - textTerms: keywords/phrases that should appear in the page/body content
+   - titleTerms: keywords/phrases that should appear in titles, generate at least from 3 to 10 keyword/phrases
+   - textTerms: keywords/phrases that should appear in the page/body content , generate at least from 3 to 10 keyword/phrases
    Keep terms as plain phrases (NO operators like ~, AND, OR).
 3) Extract label constraints:
    - labels: exact labels/tags to filter on (do not invent labels)

@@ -409,7 +409,7 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 	}
 
 	@Override
-	protected List<TestVirtualFilesystemNativeObject> toNativeCoordinates(
+	protected List<TestVirtualFilesystemNativeObject> toResourcesNativeCoordinates(
 			TestVirtualfilesystemNavigationCoordinates position, TestVirtualRemoteSystem system,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub

@@ -11,6 +11,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
@@ -18,6 +19,8 @@ import ai.gebo.model.ExtractedDocumentMetaData;
 
 final class RoutingPromptUtil {
 
+	private static final String END_DEEP_SEARCH_DATA_SOURCE = "END_DEEP_SEARCH_DATA_SOURCE";
+	private static final String DEEP_SEARCH_DATA_SOURCE = "DEEP_SEARCH_DATA_SOURCE";
 	private static final String LIST_ITEM = "-";
 	private static final String END_ROUTING_DECISION = "<<<END_ROUTING_DECISION>>>";
 	private static final String ROUTING_DECISION = "<<<ROUTING_DECISION>>>";
@@ -271,7 +274,10 @@ final class RoutingPromptUtil {
 		if (dataSources != null && !dataSources.isEmpty()) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
+			
 			for (DeepSearchDataSourceMetaInfos obj : dataSources) {
+				buffer.append(DEEP_SEARCH_DATA_SOURCE);
+				buffer.append(NEWLINE);
 				buffer.append(CODE);
 				buffer.append(obj.getHandlerId());
 				buffer.append(NEWLINE);
@@ -281,15 +287,17 @@ final class RoutingPromptUtil {
 				if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
 					buffer.append(MAIN_SECTIONS_SAMPLE);
 					buffer.append(NEWLINE);
-					for (String catalog : obj.getCatalogues()) {
+					for ( CatalogueSample catalog : obj.getCatalogues()) {
 						buffer.append(LIST_ITEM);
 						buffer.append(SPACE);
-						buffer.append(catalog);
+						buffer.append(catalog.getDescription());
 						buffer.append(NEWLINE);
 					}
 					buffer.append(END_MAIN_SECTIONS_SAMPLE);
 					buffer.append(NEWLINE);
 				}
+				buffer.append(END_DEEP_SEARCH_DATA_SOURCE);
+				buffer.append(NEWLINE);
 			}
 			buffer.append(END_DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
@@ -312,6 +320,8 @@ final class RoutingPromptUtil {
 			buffer.append(SHALLOW_SEARCH_SYSTEMS_CATALOG);
 			buffer.append(NEWLINE);
 			for (DeepSearchDataSourceMetaInfos meta : systems) {
+				buffer.append(SYSTEM_CATALOG);
+				buffer.append(NEWLINE);
 				buffer.append(SYSTEM_ID);
 				buffer.append(SPACE);
 				buffer.append(SHALLOW_SYSTEM_PREFIX + meta.getHandlerId());
@@ -320,12 +330,10 @@ final class RoutingPromptUtil {
 				buffer.append(SPACE);
 				buffer.append(meta.getDescription());
 				buffer.append(NEWLINE);
-				buffer.append(SYSTEM_CATALOG);
-				buffer.append(NEWLINE);
-				for (String cat : meta.getCatalogues()) {
+				for (CatalogueSample cat : meta.getCatalogues()) {
 					buffer.append(LIST_ITEM);
 					buffer.append(SPACE);
-					buffer.append(cat);
+					buffer.append(cat.getDescription());
 					buffer.append(NEWLINE);
 				}
 				buffer.append(END_SYSTEM_CATALOG);
@@ -333,7 +341,7 @@ final class RoutingPromptUtil {
 			}
 			buffer.append(END_SHALLOW_SEARCH_SYSTEMS_CATALOG);
 			buffer.append(NEWLINE);
-		}
+		} 
 		return buffer.toString();
 	}
 

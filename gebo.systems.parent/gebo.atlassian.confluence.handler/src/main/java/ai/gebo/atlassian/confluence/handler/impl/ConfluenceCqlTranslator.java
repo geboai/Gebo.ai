@@ -49,7 +49,7 @@ class ConfluenceCqlTranslator {
 	        if (clauses.isEmpty()) return "";
 
 	        // Confluence CQL supports ORDER BY (SQL-like). :contentReference[oaicite:3]{index=3}
-	        return String.join("\nAND ", clauses) + "\nORDER BY lastmodified DESC";
+	        return String.join(" OR ", clauses) + " ORDER BY lastmodified DESC";
 	    }
 
 	    /* ---------------- helpers ---------------- */

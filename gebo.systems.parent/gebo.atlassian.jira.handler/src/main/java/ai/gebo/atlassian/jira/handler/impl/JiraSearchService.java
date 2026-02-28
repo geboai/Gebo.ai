@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -40,6 +41,14 @@ import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
 public class JiraSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<JiraResultsExtractionData, GJiraSystem, GJiraProjectEndpoint, JiraNativePositionObject, JiraNavigationCoordinates, JiraResourceReference, IGJiraVirtualFilesystemConsumingService, JiraBrowsingContext>
 		implements INativeSearchService<JiraResultsExtractionData, JiraIssuesSearchFilter> {
+	private static final String END_JIRA_PROJECTS = "END_JIRA_PROJECTS";
+	private static final String END_JIRA_PROJECT = "END_JIRA_PROJECT";
+	private static final String CODE = "code: ";
+	private static final String DESCRIPTION = "description: ";
+	private static final String NEWLINE = "\r\n";
+	private static final String JIRA_PROJECT = "JIRA_PROJECT";
+	private static final String JIRA_PROJECTS = "JIRA_PROJECTS";
+	private static final String JIRA_PROJECTS_PROMPT_PARAM = "jiraProjects";
 	public static final String JIRA_NATIVE_QUERY_EXTRACTION_PROMPT = "jira-native-query-extraction-prompt";
 	public static final String JIRA_STANDARD_QUERY_EXTRACTION_PROMPT = "jira-standard-query-extraction-prompt";
 	private static final String JQL_PARAM = "jql=";
@@ -117,7 +126,7 @@ public class JiraSearchService extends
 
 	@Override
 	public List<SearchResult> nativeSearch(JiraIssuesSearchFilter query, SearchableSystemMetaData system,
-			int nEntryLimit) throws IOException, SearchServiceException {
+			int nEntryLimit, List<CatalogueSample> cataloguesSample) throws IOException, SearchServiceException {
 		String jql = JiraJsqlUtil.createJqlString(query);
 		return executeJql(system, jql, nEntryLimit);
 
@@ -135,9 +144,32 @@ public class JiraSearchService extends
 	}
 
 	@Override
-	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData) {
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
 
-		return Map.of();
+		return Map.of(JIRA_PROJECTS_PROMPT_PARAM, renderJiraProjects(cataloguesSample));
+	}
+
+	private Object renderJiraProjects(List<CatalogueSample> cataloguesSample) {
+		StringBuffer buffer = new StringBuffer();
+		if (cataloguesSample != null && !cataloguesSample.isEmpty()) {
+			buffer.append(JIRA_PROJECTS);
+			buffer.append(NEWLINE);
+			for (CatalogueSample catalogueSample : cataloguesSample) {
+				buffer.append(JIRA_PROJECT);
+				buffer.append(NEWLINE);
+				buffer.append(catalogueSample.getCode());
+				buffer.append(NEWLINE);
+				buffer.append(DESCRIPTION);
+				buffer.append(catalogueSample.getDescription());
+				buffer.append(NEWLINE);
+				buffer.append(END_JIRA_PROJECT);
+				buffer.append(NEWLINE);
+			}
+			buffer.append(END_JIRA_PROJECTS);
+			buffer.append(NEWLINE);
+		}
+		return buffer.toString();
 	}
 
 	private List<SearchResult> executeJql(SearchableSystemMetaData system, String jql, Integer howmany)
@@ -148,7 +180,9 @@ public class JiraSearchService extends
 				ApiClient connection = jiraConnectionFactory.getApiClient(jiraSystem);
 				IssueSearchApi searchApi = new IssueSearchApi(connection);
 				SearchAndReconcileResults data = searchApi.searchAndReconsileIssuesUsingJql(jql, null, howmany,
-						List.of("*"), "*", null, null, null, null);
+						List.of("*all"),
+						"fields,renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+						null, null, null, null);
 
 				if (data != null && data.getIssues() != null) {
 					results = toSearchResults(data.getIssues(), jiraSystem);
@@ -162,27 +196,33 @@ public class JiraSearchService extends
 		}
 	}
 
+	private SearchResult toSearchResultNode(IssueBean issueBean, GJiraSystem jiraSystem, boolean asFolder) {
+		SearchResult result = new SearchResult();
+		result.setSystemConfigurationCode(jiraSystem.getCode());
+		setOriginOn(result);
+		String summary = JiraNavigationUtil.get(issueBean, "summary");
+		String description = JiraNavigationUtil.get(issueBean, "description");
+		result.setId(issueBean.getId());
+		result.setNavigationReference(JiraNavigationUtil.toVirtualFilesystemReference(issueBean, asFolder));
+		result.setDescriptiveText(summary != null ? summary : description);
+		if (issueBean.getSelf() != null) {
+			result.setResultReference(new SearchResultReference());
+			result.getResultReference().setUri(issueBean.getSelf());
+			result.getResultReference().setName(description);
+			result.getResultReference().setTitle(description);
+			result.getResultReference().setContentType("text/html");
+		}
+		if (result.getChilds() == null) {
+			result.setChilds(new ArrayList<SearchResult>());
+		}
+		return result;
+	}
+
 	private List<SearchResult> toSearchResults(List<IssueBean> issues, GJiraSystem jiraSystem) {
 		List<SearchResult> out = new ArrayList<SearchResult>();
 		for (IssueBean issueBean : issues) {
-			SearchResult result = new SearchResult();
-			result.setSystemConfigurationCode(jiraSystem.getCode());
-			setOriginOn(result);
-			String summary = get(issueBean, "summary");
-			String description = get(issueBean, "description");
-			result.setId(issueBean.getId());
-			result.setNavigationReference(JiraNavigationUtil.toVirtualFilesystemReference(issueBean));
-			result.setDescriptiveText(summary != null ? summary : description);
-			if (issueBean.getSelf() != null) {
-				result.setResultReference(new SearchResultReference());
-				result.getResultReference().setUri(issueBean.getSelf());
-				result.getResultReference().setName(description);
-				result.getResultReference().setTitle(description);
-				result.getResultReference().setContentType("text/html");
-			}
-			if (result.getChilds() == null) {
-				result.setChilds(new ArrayList<SearchResult>());
-			}
+			SearchResult result = toSearchResultNode(issueBean, jiraSystem, true);
+			result.getChilds().add(toSearchResultNode(issueBean, jiraSystem, false));
 			addAttachments(result.getChilds(), issueBean, jiraSystem);
 			addIssueLinks(result.getChilds(), issueBean, jiraSystem);
 			out.add(result);
@@ -262,12 +302,6 @@ public class JiraSearchService extends
 			}
 		}
 
-	}
-
-	private String get(IssueBean issueBean, String f) {
-		if (issueBean.getFields() != null)
-			return (String) issueBean.getFields().get(f);
-		return null;
 	}
 
 }

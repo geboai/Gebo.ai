@@ -417,7 +417,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @return
 	 * @throws GeboContentHandlerSystemException
 	 */
-	protected abstract List<ImplementativePositionObjectType> toNativeCoordinates(PositionsCoordinateType position,
+	protected abstract List<ImplementativePositionObjectType> toResourcesNativeCoordinates(PositionsCoordinateType position,
 			SystemType system, Map<String, Object> environment) throws GeboContentHandlerSystemException;
 
 	/****************************************************************************************************************

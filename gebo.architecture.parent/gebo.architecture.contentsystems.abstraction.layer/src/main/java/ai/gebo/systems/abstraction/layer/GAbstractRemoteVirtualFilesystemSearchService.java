@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -104,7 +105,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			SystemType actualSystem = (SystemType) system.getSystemConfigurationReference();
 			Map<String, Object> environment = virtualFileSystemConsumingService.createEnvironment(actualSystem);
 			List<ImplementativePositionObjectType> nativeCoordinates = virtualFileSystemConsumingService
-					.toNativeCoordinates(navigationPosition, actualSystem, environment);
+					.toResourcesNativeCoordinates(navigationPosition, actualSystem, environment);
 			ResourceReferenceType remoteReference = virtualFileSystemConsumingService.getResourceHandle(system,
 					navigationPosition, nativeCoordinates, environment);
 			if (remoteReference == null) {
@@ -149,7 +150,7 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 	}
 
 	@Override
-	public List<String> getCataloguesListSample(String configurationCode) throws SearchServiceException {
+	public List<CatalogueSample> getCataloguesListSample(String configurationCode) throws SearchServiceException {
 		SearchableSystemMetaData system = findSystemById(configurationCode);
 		if (system == null)
 			throw new SearchServiceException("Unknown system " + configurationCode);
@@ -157,8 +158,8 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			OperationStatus<List<GVirtualFilesystemRoot>> roots = browsingService
 					.getRoots(createBrowsingContext((SystemType) system.getSystemConfigurationReference()));
 			if (!roots.isHasErrorMessages() && roots.getResult() != null) {
-				return roots.getResult().stream().map(x -> x.getDescription())
-						.filter(y -> y != null && y.trim().length() > 0).toList();
+				return roots.getResult().stream().map(x -> new CatalogueSample(x.getCode(), x.getDescription()))
+						.toList();
 			} else {
 				roots.getMessages().forEach(x -> {
 					LOGGER.error(x.getSummary() + " - " + x.getDetail());

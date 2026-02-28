@@ -116,8 +116,8 @@ public class DocumentsCacheServiceImpl
 	}
 
 	private TypedInputStream streamDocumentWithLocalCache(SupplierWithException typedInputStreamSupplier,
-			IGComponentOriginatedDocument reference)
-			throws IOException, DocumentCacheAccessException, GeboContentHandlerSystemException, SearchServiceException {
+			IGComponentOriginatedDocument reference) throws IOException, DocumentCacheAccessException,
+			GeboContentHandlerSystemException, SearchServiceException {
 		Optional<DocumentCacheEntry> inCacheCopy = repository.findById(reference.getCode());
 		boolean loadAndCache = true;
 		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
@@ -151,7 +151,7 @@ public class DocumentsCacheServiceImpl
 		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
 				cacheEntry.getBinaryDocumentName());
 		TypedInputStream tis = typedInputStreamSupplier.get();
-		if (tis != null) {
+		if (tis != null && tis.getInputStream() != null) {
 			Files.copy(tis.getInputStream(), filePath);
 			try {
 				tis.getInputStream().close();

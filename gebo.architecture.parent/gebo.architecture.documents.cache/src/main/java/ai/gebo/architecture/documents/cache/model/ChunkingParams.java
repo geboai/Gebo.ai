@@ -24,5 +24,5 @@ public class ChunkingParams {
 	private boolean enrichWithMetaData;
 	private long tokensPerChunkSet;
 	public final static ChunkingParams defaultParams = new ChunkingParams(ChinkingPolicy.SPLIT_CHUNKS, null, null, null,
-			List.of(new TextChunkingSpecs()), true, 50000);
+			List.of(TextChunkingSpecs.DEFAULT_SPECS), true, 50000);
 }

@@ -9,11 +9,14 @@ import lombok.EqualsAndHashCode;
 
 public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	public final static int MAX_CHUNKS_NUMBERS = 100000;
+	public final static int MIN_CHUNKS_SIZE_CHARS = 10;
+	public final static int MIN_CHUNKS_LENGTH_TO_EMBED = 5;
+	public final static TextChunkingSpecs DEFAULT_SPECS=new TextChunkingSpecs();
 	int defaultChunkSize = 512;
 	// The minimum size of each text chunk in characters
-	int minChunkSizeChars = 350;
+	int minChunkSizeChars = MIN_CHUNKS_SIZE_CHARS;
 	// Discard chunks shorter than this
-	int minChunkLengthToEmbed = 5;
+	int minChunkLengthToEmbed = MIN_CHUNKS_LENGTH_TO_EMBED;
 	// The maximum number of chunks to generate from a text
 	int maxNumChunks = MAX_CHUNKS_NUMBERS;
 	boolean keepSeparator = true;
@@ -26,7 +29,6 @@ public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	public static TextChunkingSpecs of(int chunkingSize, int minChunksLength, int maxNumChunks) {
 		TextChunkingSpecs specs = new TextChunkingSpecs();
 		specs.defaultChunkSize = chunkingSize;
-		specs.minChunkSizeChars = chunkingSize * 5;
 		specs.minChunkLengthToEmbed = minChunksLength;
 		specs.maxNumChunks = maxNumChunks;
 		specs.keepSeparator = true;
@@ -34,10 +36,10 @@ public class TextChunkingSpecs extends AbstractChunkingSpecs {
 	}
 
 	public static TextChunkingSpecs of(int chunkingSize) {
-		return of(chunkingSize, 20, MAX_CHUNKS_NUMBERS);
+		return of(chunkingSize, MIN_CHUNKS_SIZE_CHARS, MAX_CHUNKS_NUMBERS);
 	}
 
 	public static TextChunkingSpecs maximizedLength(int chunkingSize) {
-		return of(chunkingSize, chunkingSize / 2, MAX_CHUNKS_NUMBERS);
+		return of(chunkingSize, MIN_CHUNKS_SIZE_CHARS, MAX_CHUNKS_NUMBERS);
 	}
 }

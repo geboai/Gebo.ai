@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -154,9 +155,10 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	}
 
 	@Override
-	public List<String> getCataloguesListSample(String configurationCode) {
+	public List<CatalogueSample> getCataloguesListSample(String configurationCode) {
+		return List.of(new CatalogueSample(configurationCode,
+				"All publicly available catalogues can be searched over internet using google searches"));
 
-		return List.of("All publicly available catalogues can be searched over internet using google searches");
 	}
 
 }

@@ -261,8 +261,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Total steps incremented to:" + nTotal);
 			}
-			return chunkingService.streamChunks(nextList, params, chunkingSessionId,
-					deepSearchConfig.getDocumentsParallelism());
+			return chunkingService
+					.streamChunks(nextList, params, chunkingSessionId, deepSearchConfig.getDocumentsParallelism());
 		};
 		final int offTopicChunksSkipDocumentThreashold = this.deepSearchDefaultConfig
 				.getOffTopicChunksSkipDocumentThreashold();
@@ -517,13 +517,17 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			SearchResultsStepInfo actualSearchResultRef, CustomContentExtractionType returned,
 			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel);
 
-	protected List<SearchResult> flattenResults(List<SearchResult> results) {
+	protected List<SearchResult> flattenSearchResults(List<SearchResult> results) {
 		List<SearchResult> flattened = new ArrayList<SearchResult>();
 		for (SearchResult entry : results) {
-			flattened.add(entry);
-			flattened.addAll(flattenResults(entry.getChilds()));
+			boolean isNotAFolder = entry.getNavigationReference() == null
+					|| (entry.getNavigationReference().path != null && !entry.getNavigationReference().path.folder);
+			if (isNotAFolder) {
+				flattened.add(entry);
+			}
+			flattened.addAll(flattenSearchResults(entry.getChilds()));
 		}
-		return cleanAndRemoveDuplicatedResults(results, new HashMap<String, Boolean>());
+		return cleanAndRemoveDuplicatedResults(flattened, new HashMap<String, Boolean>());
 	}
 
 	protected List<SearchWithResults> cleanAndRemoveDuplicated(List<SearchWithResults> queryResults) {

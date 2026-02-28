@@ -593,8 +593,8 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	@Override
-	protected List<JiraNativePositionObject> toNativeCoordinates(JiraNavigationCoordinates position, GJiraSystem system,
-			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+	protected List<JiraNativePositionObject> toResourcesNativeCoordinates(JiraNavigationCoordinates position,
+			GJiraSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		List<JiraNativePositionObject> nativePositions = new ArrayList<>();
 		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);
 		ProjectsApi projectApi = new ProjectsApi(apiClient);
@@ -622,11 +622,17 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 
 	private boolean handlePosition(JiraNativePositionObject nativePosition, JiraPathComponent pos, IssuesApi issueApi,
 			IssueAttachmentsApi attachmentApi) {
-		if (pos.type == JiraPathNodeType.TICKET) {
+		if (pos.type == JiraPathNodeType.CONTAINER_TICKET) {
 			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
 			if (issue == null)
 				return false;
 			nativePosition.setIssueAsFolder(issue);
+		}
+		if (pos.type == JiraPathNodeType.TICKET) {
+			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
+			if (issue == null)
+				return false;
+			nativePosition.setIssueAsResource(issue);
 		}
 		if (pos.type == JiraPathNodeType.ATTACHMENT) {
 			AttachmentMetadata attach = attachmentApi.getAttachment(pos.id);
@@ -677,9 +683,9 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 
 	@Override
 	protected InputStream streamResource(GJiraSystem system, JiraResourceReference remoteReference,
-			Map<String, Object> environment) {
-		// TODO Auto-generated method stub
-		return null;
+			Map<String, Object> environment) throws GeboContentHandlerSystemException, IOException {
+		
+		return streamResource(system, null, remoteReference, environment);
 	}
 
 }

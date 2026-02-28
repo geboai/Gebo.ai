@@ -15,6 +15,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
@@ -30,12 +31,14 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
+import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 
@@ -45,7 +48,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected final int maxSearchesReturnedPerSystem;
 	protected final IGDocumentReferenceFactory documentReferenceFactory;
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
-
+	protected final IDataSourcesCatalogsService dataSourcesCatalogsService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
 
@@ -55,8 +58,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
-			IGeboThreadManager threadManager, SearchResultsRankingService rankingService,
-			IGPromptConfigDao promptsDao) {
+			IGeboThreadManager threadManager, SearchResultsRankingService rankingService, IGPromptConfigDao promptsDao,
+			IDataSourcesCatalogsService dataSourcesCatalogsService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
 				threadManager, rankingService, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
@@ -65,6 +68,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		this.ingestionHandler = ingestionHandler;
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
+		this.dataSourcesCatalogsService = dataSourcesCatalogsService;
 	}
 
 	@Override
@@ -86,6 +90,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
+		additionalVariables.putAll(CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext));
 		// With latest specialized prompt for each data source the following is not
 		// needed
 		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
@@ -189,17 +194,26 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();
 		for (SearchableSystemMetaData searchableSystemMetaData : searchables) {
 			Map<String, Object> systemTemplateCallParams = new HashMap<String, Object>();
-
+			String messagingModuleId=nativeSearchService.getMessagingModuleId();
+			String messageSystemId=nativeSearchService.getMessagingSystemId();
+			String systemCode= null;
+			List<CatalogueSample> cataloguesSample =List.of();
+			if (searchableSystemMetaData.getSystemConfigurationReference()!=null && searchableSystemMetaData.getSystemConfigurationReference() instanceof GBaseObject baseObject) {
+				systemCode=baseObject.getCode();
+				cataloguesSample = dataSourcesCatalogsService.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId, messageSystemId, systemCode);
+			} 
 			Map<String, Object> specificSystemParams = nativeSearchService
-					.createCustomTemplateParamsMap(searchableSystemMetaData);
+					.createCustomTemplateParamsMap(searchableSystemMetaData, cataloguesSample);
 			systemTemplateCallParams.putAll(promptParams);
 			systemTemplateCallParams.putAll(specificSystemParams);
 			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
 					systemTemplateCallParams, nativeSearchServiceDataType);
+			
+				
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
-					maxSearchesReturnedPerSystem);
+					maxSearchesReturnedPerSystem, cataloguesSample);
 			SearchWithResults swr = new SearchWithResults();
-			swr.setResults(data);
+			swr.setResults(flattenSearchResults(data));
 			swr.setNativeQueryObject(resultingQueryObject);
 			allResults.add(swr);
 		}
@@ -221,7 +235,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				if (_results.isEmpty())
 					continue;
 				SearchWithResults sr = new SearchWithResults();
-				sr.setResults(flattenResults(_results));
+				sr.setResults(flattenSearchResults(_results));
 				sr.setSearchQuery(query);
 				queryResults.add(sr);
 			} catch (Throwable th) {
@@ -257,7 +271,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeSearches(...) for " + getHandlerId());
 		}
+
 		return results;
+	}
+
+	private List<SearchWithResults> excludeFolders(List<SearchWithResults> results) {
+
+		return null;
 	}
 
 }

@@ -1,4 +1,4 @@
-package ai.gebo.llms.deepsearch.service.impl;
+package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,14 +14,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
+import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceSampledCatalogs;
 import ai.gebo.llms.deepsearch.repository.DeepSearchDataSourceSampledCatalogsRepository;
-import ai.gebo.llms.deepsearch.service.IDeepSearchDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.model.base.GBaseObject;
 import lombok.AllArgsConstructor;
@@ -29,11 +30,11 @@ import lombok.AllArgsConstructor;
 @Component
 @Scope("singleton")
 @AllArgsConstructor
-public class DeepSearchDataSourcesCatalogsService implements IDeepSearchDataSourcesCatalogsService {
+public class DataSourcesCatalogsServiceImpl implements IDataSourcesCatalogsService {
 	private final DeepSearchDataSourceSampledCatalogsRepository deepSearchDataSourceSampletCatalogsRepo;
 	private final ISearchServiceRepositoryPattern searchServicesRepositoryPattern;
 	private final IGDeepSearchService deepSearchService;
-	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchDataSourcesCatalogsService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataSourcesCatalogsServiceImpl.class);
 
 	@Scheduled(initialDelay = 1000, fixedRate = 240 * 60000)
 	public void onTickCheckCatalogueStatus() {
@@ -61,7 +62,7 @@ public class DeepSearchDataSourcesCatalogsService implements IDeepSearchDataSour
 						if (run) {
 							LOGGER.info("Try sampling catalogues list for: " + messagingModuleId + "."
 									+ messagingSystemId + "." + meta.getCode());
-							List<String> catalogues = searchService.getCataloguesListSample(meta.getCode());
+							List<CatalogueSample> catalogues = searchService.getCataloguesListSample(meta.getCode());
 							LOGGER.info("Extracted catalogues:" + catalogues);
 							DeepSearchDataSourceSampledCatalogs catalog = new DeepSearchDataSourceSampledCatalogs();
 							catalog.setMessagingModuleId(messagingModuleId);
@@ -88,12 +89,12 @@ public class DeepSearchDataSourcesCatalogsService implements IDeepSearchDataSour
 	}
 
 	@Override
-	public List<String> findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
+	public List<CatalogueSample> findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
 			String messagingModuleId, String messagingSystemId, String code) {
 		List<DeepSearchDataSourceSampledCatalogs> data = deepSearchDataSourceSampletCatalogsRepo
 				.findByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId,
 						messagingSystemId, code);
-		List<String> catalogue = new ArrayList<String>();
+		List<CatalogueSample> catalogue = new ArrayList<CatalogueSample>();
 		for (DeepSearchDataSourceSampledCatalogs d : data) {
 			if (d.getCatalogs() != null) {
 				catalogue.addAll(d.getCatalogs());

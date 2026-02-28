@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
@@ -173,9 +174,9 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	}
 
 	@Override
-	public List<String> getCataloguesListSample(String configurationCode) throws SearchServiceException {
+	public List<CatalogueSample> getCataloguesListSample(String configurationCode) throws SearchServiceException {
 
-		return List.of("Search internet with bing search engine");
+		return List.of(new CatalogueSample(configurationCode, "Search internet with bing search engine"));
 	}
 
 }
