@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +26,7 @@ import ai.gebo.atlassian.jira.handler.impl.model.JiraNativePositionObject;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraNavigationCoordinates;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResourceReference;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResultsExtractionData;
+import ai.gebo.atlassian.jira.handler.search.model.JiraAdditionalSearchFilter;
 import ai.gebo.atlassian.jira.handler.search.model.JiraIssuesSearchFilter;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.jira.cloud.client.api.IssueSearchApi;
@@ -37,6 +37,7 @@ import ai.gebo.jira.cloud.client.model.SearchAndReconcileResults;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemBrowsingService;
+import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
 
 @Service
 public class JiraSearchService extends
@@ -98,7 +99,30 @@ public class JiraSearchService extends
 	public JiraResultsExtractionData aggregate(JiraResultsExtractionData oldConsolidated,
 			JiraResultsExtractionData consolidated) {
 		JiraResultsExtractionData data = basicAggregate(oldConsolidated, consolidated, new JiraResultsExtractionData());
+		data.setAdditionalJiraSearchIdeas(joinFilters(oldConsolidated, consolidated));
 		return data;
+	}
+
+	private JiraAdditionalSearchFilter joinFilters(JiraResultsExtractionData oldConsolidated,
+			JiraResultsExtractionData consolidated) {
+		JiraAdditionalSearchFilter outData = new JiraAdditionalSearchFilter();
+		join(oldConsolidated, outData);
+		join(consolidated, outData);
+		return outData;
+	}
+
+	private void join(JiraResultsExtractionData container, JiraAdditionalSearchFilter data) {
+		if (container != null && container.getAdditionalJiraSearchIdeas() != null) {
+			join(container.getAdditionalJiraSearchIdeas(), data);
+		}
+	}
+
+	private void join(JiraAdditionalSearchFilter joined, JiraAdditionalSearchFilter data) {
+		DataStructureJoinUtils.join(joined.getDescriptionTerms(), data::getDescriptionTerms, data::setDescriptionTerms);
+		DataStructureJoinUtils.join(joined.getIssueKeys(), data::getIssueKeys, data::setIssueKeys);
+		DataStructureJoinUtils.join(joined.getSummaryTerms(), data::getSummaryTerms, data::setSummaryTerms);
+		data.setDescriptionTermsMatchMode(joined.getDescriptionTermsMatchMode());
+		data.setSummaryTermsMatchMode(joined.getSummaryTermsMatchMode());
 	}
 
 	@Override
@@ -119,11 +143,11 @@ public class JiraSearchService extends
 		if (extractedData != null && extractedData.getAdditionalJiraSearchIdeas() != null) {
 			JiraIssuesSearchFilter searchFilter = new JiraIssuesSearchFilter();
 			boolean atLeastASearchFieldIsSet = false;
-			atLeastASearchFieldIsSet = doneCopy(extractedData.getAdditionalJiraSearchIdeas().getDescriptionTerms(),
+			atLeastASearchFieldIsSet = DataStructureJoinUtils.doneCopy(extractedData.getAdditionalJiraSearchIdeas().getDescriptionTerms(),
 					searchFilter.getIssuesAttributesFilter()::setDescriptionTerms);
-			atLeastASearchFieldIsSet |= doneCopy(extractedData.getAdditionalJiraSearchIdeas().getIssueKeys(),
+			atLeastASearchFieldIsSet |= DataStructureJoinUtils.doneCopy(extractedData.getAdditionalJiraSearchIdeas().getIssueKeys(),
 					searchFilter.getIssuesAttributesFilter()::setIssueKeys);
-			atLeastASearchFieldIsSet |= doneCopy(extractedData.getAdditionalJiraSearchIdeas().getSummaryTerms(),
+			atLeastASearchFieldIsSet |= DataStructureJoinUtils.doneCopy(extractedData.getAdditionalJiraSearchIdeas().getSummaryTerms(),
 					searchFilter.getIssuesAttributesFilter()::setSummaryTerms);
 			searchFilter.getIssuesAttributesFilter().setDescriptionTermsMatchMode(
 					extractedData.getAdditionalJiraSearchIdeas().getDescriptionTermsMatchMode());
@@ -142,15 +166,6 @@ public class JiraSearchService extends
 			}
 		}
 		return outcome;
-	}
-
-	private boolean doneCopy(List<String> list, Consumer<List<String>> consumer) {
-		boolean _doneCopy = false;
-		if (list != null && !list.isEmpty()) {
-			consumer.accept(list);
-			_doneCopy = true;
-		}
-		return _doneCopy;
 	}
 
 	@Override

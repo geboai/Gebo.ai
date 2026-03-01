@@ -36,6 +36,7 @@ import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNativePositionO
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoordinates;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
 import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResultsExtractionData;
+import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceAdditionalSearchFilter;
 import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearchFilter;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
 import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceContentApi;
@@ -49,6 +50,7 @@ import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
 
 @Service
 public class ConfluenceSearchService extends
@@ -415,7 +417,31 @@ public class ConfluenceSearchService extends
 			ConfluenceResultsExtractionData consolidated) {
 		ConfluenceResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
 				new ConfluenceResultsExtractionData());
+		data.setAdditionalConfluenceSearchIdeas(join(oldConsolidated, consolidated));
 		return data;
+	}
+
+	private ConfluenceAdditionalSearchFilter join(ConfluenceResultsExtractionData oldConsolidated,
+			ConfluenceResultsExtractionData consolidated) {
+		ConfluenceAdditionalSearchFilter filter = new ConfluenceAdditionalSearchFilter();
+		join(filter, oldConsolidated);
+		join(filter, consolidated);
+		return filter;
+	}
+
+	private void join(ConfluenceAdditionalSearchFilter filter, ConfluenceResultsExtractionData oldConsolidated) {
+		if (oldConsolidated != null && oldConsolidated.getAdditionalConfluenceSearchIdeas() != null) {
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getLabels(),
+					filter::getLabels, filter::setLabels);
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTextTerms(),
+					filter::getTextTerms, filter::setTextTerms);
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
+					filter::getTitleTerms, filter::setTitleTerms);
+			filter.setLabelsMatchMode(oldConsolidated.getAdditionalConfluenceSearchIdeas().getLabelsMatchMode());
+			filter.setTextTermsMatchMode(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTextTermsMatchMode());
+			filter.setTitleTermsMatchMode(
+					oldConsolidated.getAdditionalConfluenceSearchIdeas().getTitleTermsMatchMode());
+		}
 	}
 
 	@Override
@@ -431,11 +457,14 @@ public class ConfluenceSearchService extends
 		if (extractedData.getAdditionalConfluenceSearchIdeas() != null) {
 			boolean doneSetAtLeastAField = false;
 			ConfluenceContentSearchFilter searchFilter = new ConfluenceContentSearchFilter();
-			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getLabels(),
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getLabels(),
 					searchFilter.getContentAttributesFilter()::setLabels);
-			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getTextTerms(),
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTextTerms(),
 					searchFilter.getContentAttributesFilter()::setTextTerms);
-			doneSetAtLeastAField |= doneCopy(extractedData.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
 					searchFilter.getContentAttributesFilter()::setTitleTerms);
 			searchFilter.getContentAttributesFilter()
 					.setLabelsMatchMode(extractedData.getAdditionalConfluenceSearchIdeas().getLabelsMatchMode());
@@ -531,15 +560,6 @@ public class ConfluenceSearchService extends
 			List<CatalogueSample> cataloguesSample) {
 
 		return Map.of(CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM, renderConfluenceSpaces(cataloguesSample));
-	}
-
-	private boolean doneCopy(List<String> list, Consumer<List<String>> consumer) {
-		boolean _doneCopy = false;
-		if (list != null && !list.isEmpty()) {
-			consumer.accept(list);
-			_doneCopy = true;
-		}
-		return _doneCopy;
 	}
 
 	private Object renderConfluenceSpaces(List<CatalogueSample> cataloguesSample) {
