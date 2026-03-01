@@ -87,7 +87,7 @@ public class GIntegrationSystemContentHandlerImpl
 			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {		
-
+		
 	}
 	@Override
 	public boolean isContentsOnLocalFilesystem() {
