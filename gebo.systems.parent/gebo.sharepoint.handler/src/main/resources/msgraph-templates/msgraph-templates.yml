@@ -1,0 +1,7 @@
+ai.gebo.sharepoint.library:
+    - promptUse: msgraph-native-search-prompts-template
+      langCode: en
+      reference: /msgraph-templates/en/msgraph-native-search-prompts-template.txt
+    - promptUse: msgraph-standard-query-extraction-prompt
+      langCode: en
+      reference: /msgraph-templates/en/msgraph-standard-query-extraction-prompt.txt
