@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.sharepoint.handler.impl;
 
@@ -19,43 +16,48 @@ import java.util.StringTokenizer;
 import com.microsoft.graph.models.BaseSitePage;
 import com.microsoft.graph.models.Drive;
 import com.microsoft.graph.models.DriveItem;
+import com.microsoft.graph.models.ListItem;
 import com.microsoft.graph.models.Site;
 
 import ai.gebo.model.virtualfs.BrowseParam;
 import ai.gebo.model.virtualfs.GVirtualFilesystemRoot;
 import ai.gebo.model.virtualfs.PathInfo;
 import ai.gebo.model.virtualfs.PathInfoMetaType;
+import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphPathComponent;
 import ai.gebo.sharepoint.handler.impl.model.MicrosoftGraphPathNodeType;
 
 /**
  * AI generated comments
  * 
- * Utility class for Microsoft Graph navigation that provides methods for handling and converting
- * paths, components, and items between Microsoft Graph API objects and Gebo's virtual filesystem
- * representation. This class handles the encoding and decoding of path components and navigation
- * through SharePoint and OneDrive resources.
+ * Utility class for Microsoft Graph navigation that provides methods for
+ * handling and converting paths, components, and items between Microsoft Graph
+ * API objects and Gebo's virtual filesystem representation. This class handles
+ * the encoding and decoding of path components and navigation through
+ * SharePoint and OneDrive resources.
  */
 public class GMicrosoftGraphNavigationUtils {
 
-    /** Prefix for folder items in drives */
+	private static final String LIST_ITEM_PREFIX = "LIST-ITEM:";
+
+	/** Prefix for folder items in drives */
 	public static final String DRIVE_ITEM_FOLDER_PREFIX = "DRIVE-ITEM-FOLDER:";
-	
+
 	/** Prefix for file items in drives */
 	public static final String DRIVE_ITEM_PREFIX = "DRIVE-ITEM:";
-	
+
 	/** Prefix for OneDrive resources */
 	static final String DRIVE_PREFIX = "ONE-DRIVE:";
-	
+
 	/** Separator character used in the hierarchy path */
 	static final String HIERARCHY_SEPARATOR = "|";
-	
+
 	/** Prefix for SharePoint list resources */
 	public static final String LIST_PREFIX = "LIST:";
-	
+
 	/** Prefix for SharePoint page resources */
 	public static final String SHAREPOINT_PAGE_PREFIX = "SHAREPOINT-PAGE:";
-	
+
 	/** Prefix for SharePoint site resources */
 	static final String SITE_PREFIX = "SHAREPOINT-SITE:";
 
@@ -89,7 +91,7 @@ public class GMicrosoftGraphNavigationUtils {
 	 * Finds the last path component of the specified type in the path list.
 	 * 
 	 * @param paths List of path components to search
-	 * @param type The type of component to find
+	 * @param type  The type of component to find
 	 * @return The last path component matching the type
 	 * @throws RuntimeException if no component of the specified type is found
 	 */
@@ -154,7 +156,8 @@ public class GMicrosoftGraphNavigationUtils {
 	}
 
 	/**
-	 * Converts a PathInfo object into a list of MicrosoftGraphPathComponent objects.
+	 * Converts a PathInfo object into a list of MicrosoftGraphPathComponent
+	 * objects.
 	 * 
 	 * @param pathInfo The PathInfo to convert
 	 * @return List of path components
@@ -190,7 +193,7 @@ public class GMicrosoftGraphNavigationUtils {
 	 * Removes a prefix from a string.
 	 * 
 	 * @param sPathComponent The string to modify
-	 * @param prefix The prefix to remove
+	 * @param prefix         The prefix to remove
 	 * @return The string without the prefix
 	 */
 	static String removeStarter(String sPathComponent, String prefix) {
@@ -216,7 +219,7 @@ public class GMicrosoftGraphNavigationUtils {
 	/**
 	 * Converts a DriveItem to a PathInfo object with browse context.
 	 * 
-	 * @param param The BrowseParam containing current path context
+	 * @param param     The BrowseParam containing current path context
 	 * @param driveItem The DriveItem to convert
 	 * @return The resulting PathInfo
 	 */
@@ -265,7 +268,7 @@ public class GMicrosoftGraphNavigationUtils {
 	/**
 	 * Converts a Drive to a PathInfo object with root context.
 	 * 
-	 * @param root The virtual filesystem root
+	 * @param root  The virtual filesystem root
 	 * @param drive The Drive to convert
 	 * @return The resulting PathInfo
 	 */
@@ -293,5 +296,26 @@ public class GMicrosoftGraphNavigationUtils {
 				+ (item.getWebUrl() != null ? item.getWebUrl() : ""));
 		root.setAbsolutePath(item.getWebUrl());
 		return root;
+	}
+
+	public static VFilesystemReference toNavigationReference(ListItem li) {
+
+		VFilesystemReference reference = new VFilesystemReference();
+		reference.path = toPathInfo(li);
+		return reference;
+	}
+
+	public static PathInfo toPathInfo(ListItem li) {
+		PathInfo pathInfo = new PathInfo();
+		pathInfo.name = li.getName();
+		pathInfo.absolutePath = LIST_ITEM_PREFIX + li.getId();
+		pathInfo.folder = false;
+		return pathInfo;
+	}
+
+	public static VFilesystemReference toNavigationReference(DriveItem li) {
+		VFilesystemReference reference = new VFilesystemReference();
+		reference.path = toPathInfo(li);
+		return reference;
 	}
 }
