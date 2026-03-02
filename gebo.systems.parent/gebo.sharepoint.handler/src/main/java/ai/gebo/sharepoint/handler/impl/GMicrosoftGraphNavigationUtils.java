@@ -318,4 +318,12 @@ public class GMicrosoftGraphNavigationUtils {
 		reference.path = toPathInfo(li);
 		return reference;
 	}
+
+	public static boolean isDrive(String code) {
+		return code != null && code.startsWith(DRIVE_ITEM_PREFIX);
+	}
+
+	public static boolean isSite(String code) {
+		return code != null && code.startsWith(SITE_PREFIX);
+	}
 }

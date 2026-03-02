@@ -20,7 +20,7 @@ INPUTS:
 - Consolidated previous chat history (may be empty):
 {consolidatedChatHistory}
 
-- Microsoft Graph catalog (preview of available roots; may be empty):
+- Microsoft Graph, Sharepoint, Onedrive catalog (preview of available roots; may be empty):
 {msGraphCatalog}
 
 CATALOG SEMANTICS (msGraphCatalog):

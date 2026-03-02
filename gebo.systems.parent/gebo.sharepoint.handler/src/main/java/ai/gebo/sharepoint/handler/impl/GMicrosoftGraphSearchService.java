@@ -44,11 +44,23 @@ import ai.gebo.sharepoint.handler.impl.model.MicrosoftResultsExtractionData;
 import ai.gebo.sharepoint.handler.search.model.SharePointSearchFilter;
 import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
 import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
+import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
 
 @Service
 public class GMicrosoftGraphSearchService extends
 		GAbstractRemoteVirtualFilesystemSearchService<MicrosoftResultsExtractionData, GSharepointContentManagementSystem, GSharepointProjectEndpoint, MicrosoftGraphNativePositionObject, MicrosoftGraphNavigationCoordinates, MicrosoftGraphResourceReference, IGMicrosoftGraphVirtualFilesystemConsumingService, SharepointBrowsingContext>
 		implements INativeSearchService<MicrosoftResultsExtractionData, SharePointSearchFilter> {
+	private static final String END_ITEMS = "END_ITEMS";
+	private static final String ITEMS = "ITEMS";
+	private static final String END_ONEDRIVE_DRIVE = "END_ONEDRIVE_DRIVE";
+	private static final String ONEDRIVE_DRIVE = "ONEDRIVE_DRIVE";
+	private static final String DESCRIPTION = "description: ";
+	private static final String END_SHAREPOINT_SITE = "END_SHAREPOINT_SITE";
+	private static final String SHAREPOINT_SITE = "SHAREPOINT_SITE";
+	private static final String NEWLINE = "\r\n";
+	private static final String END_MS_GRAPH_CATALOG = "END_MS_GRAPH_CATALOG";
+	private static final String MS_GRAPH_CATALOG = "MS_GRAPH_CATALOG";
+	private static final String MS_GRAPH_CATALOG_TEMPLATE_PARAM = "msGraphCatalog";
 	private static final String MSGRAPH_STANDARD_QUERY_EXTRACTION_PROMPT = "msgraph-standard-query-extraction-prompt";
 	private static final String MSGRAPH_NATIVE_SEARCH_PROMPTS_TEMPLATE = "msgraph-native-search-prompts-template";
 	private static final String SHAREPOINT = "sharepoint";
@@ -98,7 +110,25 @@ public class GMicrosoftGraphSearchService extends
 			MicrosoftResultsExtractionData consolidated) {
 		MicrosoftResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
 				new MicrosoftResultsExtractionData());
+		join(oldConsolidated, data);
+		join(consolidated, data);
 		return data;
+	}
+
+	private void join(MicrosoftResultsExtractionData cons, MicrosoftResultsExtractionData data) {
+		if (cons != null && cons.getAdditionalSharepointSearchIdeas() != null) {
+			DataStructureJoinUtils.join(cons.getAdditionalSharepointSearchIdeas().getTextTerms(),
+					data.getAdditionalSharepointSearchIdeas()::getTextTerms,
+					data.getAdditionalSharepointSearchIdeas()::setTextTerms);
+			DataStructureJoinUtils.join(cons.getAdditionalSharepointSearchIdeas().getTitleTerms(),
+					data.getAdditionalSharepointSearchIdeas()::getTitleTerms,
+					data.getAdditionalSharepointSearchIdeas()::setTitleTerms);
+			data.getAdditionalSharepointSearchIdeas()
+					.setTextTermsMatchMode(cons.getAdditionalSharepointSearchIdeas().getTextTermsMatchMode());
+			data.getAdditionalSharepointSearchIdeas()
+					.setTitleTermsMatchMode(cons.getAdditionalSharepointSearchIdeas().getTitleTermsMatchMode());
+		}
+
 	}
 
 	@Override
@@ -114,9 +144,31 @@ public class GMicrosoftGraphSearchService extends
 
 	@Override
 	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
-			MicrosoftResultsExtractionData extractedData) {
-		// TODO Auto-generated method stub
-		return null;
+			MicrosoftResultsExtractionData extractedData) throws IOException, SearchServiceException {
+		SearchResultAnalisysOutcome outcome = null;
+		if (extractedData != null && extractedData.getAdditionalSharepointSearchIdeas() != null) {
+			SharePointSearchFilter filter = new SharePointSearchFilter();
+			boolean assigned = DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalSharepointSearchIdeas().getTextTerms(),
+					filter.getContentAttributesFilter()::setTextTerms);
+			assigned |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalSharepointSearchIdeas().getTitleTerms(),
+					filter.getContentAttributesFilter()::setTitleTerms);
+			filter.getContentAttributesFilter().setTitleTermsMatchMode(
+					extractedData.getAdditionalSharepointSearchIdeas().getTitleTermsMatchMode());
+			filter.getContentAttributesFilter()
+					.setTextTermsMatchMode(extractedData.getAdditionalSharepointSearchIdeas().getTextTermsMatchMode());
+			if (assigned) {
+				List<SearchResult> results = new ArrayList<SearchResult>();
+				List<SearchableSystemMetaData> systems = getSearchableSystems();
+				for (SearchableSystemMetaData searchableSystemMetaData : systems) {
+					List<SearchResult> data = nativeSearch(filter, searchableSystemMetaData, 20);
+					results.addAll(data);
+				}
+				outcome = new SearchResultAnalisysOutcome(null, results);
+			}
+		}
+		return outcome;
 	}
 
 	@Override
@@ -167,10 +219,11 @@ public class GMicrosoftGraphSearchService extends
 					for (SearchHit hit : container.getHits()) {
 						Entity resource = hit.getResource();
 						if (resource instanceof DriveItem di) {
-							SearchResult sr = toSearchResult(di);
+							SearchResult sr = toSearchResult(di, system);
 							outResults.add(sr);
+
 						} else if (resource instanceof ListItem li) {
-							SearchResult sr = toSearchResult(li);
+							SearchResult sr = toSearchResult(li, system);
 							outResults.add(sr);
 						}
 					}
@@ -184,7 +237,7 @@ public class GMicrosoftGraphSearchService extends
 		return outResults;
 	}
 
-	private SearchResult toSearchResult(ListItem li) {
+	private SearchResult toSearchResult(ListItem li, GSharepointContentManagementSystem system) {
 		SearchResult sr = new SearchResult();
 		sr.setDescriptiveText(li.getDescription() != null ? li.getDescription() : li.getName());
 		sr.setId(li.getId());
@@ -196,6 +249,11 @@ public class GMicrosoftGraphSearchService extends
 		sr.getResultReference().setName(li.getName());
 		sr.getResultReference().setTitle(li.getDescription());
 		sr.getResultReference().setUri(li.getWebUrl());
+		sr.setSystemConfigurationCode(system.getCode());
+		if (li.getDriveItem() != null) {
+			sr.getChilds().add(toSearchResult(li.getDriveItem(), system));
+		}
+		setOriginOn(sr);
 		return sr;
 	}
 
@@ -206,7 +264,7 @@ public class GMicrosoftGraphSearchService extends
 		return Date.from(lastModifiedDateTime.toInstant());
 	}
 
-	private SearchResult toSearchResult(DriveItem li) {
+	private SearchResult toSearchResult(DriveItem li, GSharepointContentManagementSystem system) {
 		SearchResult sr = new SearchResult();
 		sr.setDescriptiveText(li.getDescription() != null ? li.getDescription() : li.getName());
 		sr.setId(li.getId());
@@ -219,6 +277,13 @@ public class GMicrosoftGraphSearchService extends
 		sr.getResultReference().setTitle(li.getDescription());
 		sr.getResultReference().setUri(li.getWebUrl());
 		sr.getResultReference().setExtension(getExtension(li.getName()));
+		sr.setSystemConfigurationCode(system.getCode());
+		if (li.getChildren() != null && !li.getChildren().isEmpty()) {
+			for (DriveItem di : li.getChildren()) {
+				sr.getChilds().add(toSearchResult(di, system));
+			}
+		}
+		setOriginOn(sr);
 		return sr;
 	}
 
@@ -252,7 +317,48 @@ public class GMicrosoftGraphSearchService extends
 	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
 			List<CatalogueSample> cataloguesSample) {
 
-		return null;
+		return Map.of(MS_GRAPH_CATALOG_TEMPLATE_PARAM, renderCatalogues(cataloguesSample));
+	}
+
+	private Object renderCatalogues(List<CatalogueSample> cataloguesSample) {
+		StringBuffer buffer = new StringBuffer();
+		if (cataloguesSample != null && !cataloguesSample.isEmpty()) {
+			buffer.append(MS_GRAPH_CATALOG);
+			buffer.append(NEWLINE);
+			List<CatalogueSample> drives = new ArrayList<CatalogueSample>();
+			List<CatalogueSample> sites = new ArrayList<CatalogueSample>();
+			List<CatalogueSample> uncategorized = new ArrayList<CatalogueSample>();
+			for (CatalogueSample catalogueSample : cataloguesSample) {
+				if (GMicrosoftGraphNavigationUtils.isDrive(catalogueSample.getCode())) {
+					drives.add(catalogueSample);
+				} else if (GMicrosoftGraphNavigationUtils.isSite(catalogueSample.getCode())) {
+					sites.add(catalogueSample);
+				} else {
+					uncategorized.add(catalogueSample);
+				}
+			}
+			iteratePrint(buffer, SHAREPOINT_SITE, END_SHAREPOINT_SITE, sites);
+			iteratePrint(buffer, ONEDRIVE_DRIVE, END_ONEDRIVE_DRIVE, drives);
+			iteratePrint(buffer, ITEMS, END_ITEMS, uncategorized);
+			buffer.append(END_MS_GRAPH_CATALOG);
+		}
+		return buffer.toString();
+	}
+
+	private void iteratePrint(StringBuffer buffer, String initialTag, String finalTag, List<CatalogueSample> cat) {
+		if (cat != null && !cat.isEmpty()) {
+			for (CatalogueSample catalogueSample : cat) {
+				buffer.append(initialTag);
+				buffer.append(NEWLINE);
+				buffer.append(catalogueSample.getCode());
+				buffer.append(NEWLINE);
+				if (catalogueSample.getDescription() != null) {
+					buffer.append(DESCRIPTION + catalogueSample.getDescription());
+				}
+				buffer.append(finalTag);
+				buffer.append(NEWLINE);
+			}
+		}
 	}
 
 }

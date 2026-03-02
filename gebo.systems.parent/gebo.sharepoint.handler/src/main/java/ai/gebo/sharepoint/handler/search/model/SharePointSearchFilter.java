@@ -10,8 +10,8 @@ import lombok.Data;
 public class SharePointSearchFilter {
 
     @JsonPropertyDescription("Filters on SharePoint/OneDrive content attributes")
-    private SharePointContentAttributeFilter contentAttributesFilter = null;
+    private SharePointContentAttributeFilter contentAttributesFilter = new SharePointContentAttributeFilter();
 
     @JsonPropertyDescription("Filters on people participating in the item lifecycle (created/modified/by etc.)")
-    private SharePointPeopleFilter peopleFilter = null;
+    private SharePointPeopleFilter peopleFilter = new SharePointPeopleFilter();
 }
