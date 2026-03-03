@@ -56,7 +56,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 
 		try {
 			Flux<DocumentsEnrichDecision> enrichDecision = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
-					runtimeData, serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+					runtimeData.getRequestResources(), runtimeData.getMinimalChatContext(), serviceModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			Flux<GeboChatMessageEnvelope> flux = enrichDecision.concatMap(ed -> {
 				GPromptConfig prompt = promptsDao
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
