@@ -369,7 +369,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		if (request.getId() == null) {
 			request.setId(UUID.randomUUID().toString());
 		}
-
+		//TODO: COMPLETE THIS, IT DOES NOT SELECT PROPERLY EVENTUAL DATA SOURCES
 		sessionLifecyCleService.ensureChatSessionExists(request);
 		IGConfigurableChatModel model = sessionLifecyCleService.getSessionChatModel(request);
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
@@ -386,7 +386,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		MinimalChatContext minimalChatContext = this.sessionLifecyCleService.getMinimalChatContext(request,
 				serviceModel.getContextLength() / 3);
 		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, minimalChatContext, cleanResponse, model,
-				serviceModel, knowledgeBasesCodesList);
+				serviceModel,List.of());
 		return outflux;
 	}
 

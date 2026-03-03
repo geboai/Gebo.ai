@@ -70,7 +70,7 @@ public interface IGDeepSearchService {
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
+			IGConfigurableChatModel serviceModel,List<String> deepSearchDataSources)
 			throws LLMConfigException, GeboChatSessionLifecycleException;
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,

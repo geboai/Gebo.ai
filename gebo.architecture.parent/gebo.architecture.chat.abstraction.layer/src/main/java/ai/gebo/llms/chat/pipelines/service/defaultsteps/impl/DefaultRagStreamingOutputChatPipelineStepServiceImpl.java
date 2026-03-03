@@ -22,26 +22,20 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.DocumentsEnrichDecision;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
 @Component
-public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOutputChatPipelineService
-		implements IStreamingOutputChatPipelineService {
-
+@AllArgsConstructor
+public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements IStreamingOutputChatPipelineService {
+	private final IInternalKnowledgeLLMAssistedRetrieveService internalKnowledgeLLMAssistedRetriever;
 	private final IGRagChatService ragChatService;
+	private final IGPromptConfigDao promptsDao;
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
-	public DefaultRagStreamingOutputChatPipelineStepServiceImpl(IGAIDocumentsCacheService documentsCacheService,
-			IGChatStorageAreaService chatStorageAreaService, DocumentReferenceRepository docreferenceRepo,
-			UserUploadContentServerSideRepository uploadsRepo, LLMGeneratedResourceRepository generatedRepo,
-			IGChatSessionLifeCycleService chatSessionLifecycleService, ChatPipelinesConfiguration configuration,
-			IGPromptConfigDao promptsDao, IGDocumentsSearchService searchesService, IGRagChatService ragChatService) {
-
-		super(documentsCacheService, chatStorageAreaService, docreferenceRepo, uploadsRepo, generatedRepo,
-				chatSessionLifecycleService, configuration, promptsDao, searchesService);
-		this.ragChatService = ragChatService;
-	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -61,8 +55,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl extends BaseOu
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			Flux<DocumentsEnrichDecision> enrichDecision = super.doDocumentsRetrieve(runtimeData, serviceModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			Flux<DocumentsEnrichDecision> enrichDecision = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
+					runtimeData, serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			Flux<GeboChatMessageEnvelope> flux = enrichDecision.concatMap(ed -> {
 				GPromptConfig prompt = promptsDao
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);

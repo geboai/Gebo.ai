@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
+package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +16,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -35,14 +36,17 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.DocumentsEnrichDecision;
 import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
+import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultPipelineSharedPromptPlaceholders;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import reactor.core.publisher.Flux;
 
 @AllArgsConstructor
-public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
+public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInvokingService
+		implements IInternalKnowledgeLLMAssistedRetrieveService {
 	private static final String DOCUMENT_CODES_FIELD = "documentCodes";
 	private static final String FULL_TEXT_QUERIES_FIELD = "fullTextQueries";
 	private static final String SEMANTIC_QUERIES_FIELD = "semanticQueries";
@@ -56,41 +60,6 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 	protected final ChatPipelinesConfiguration configuration;
 	protected final IGPromptConfigDao promptsDao;
 	private final IGDocumentsSearchService searchesService;
-
-	private AIDocumentsSet search(SearchesSuggestions searchRewritings, ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel targetChatModel, int contextWindowLength)
-			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
-
-		int tokensBudget = contextWindowLength / 4;
-		AIDocumentsSet documentSet = searchesService.search(runtimeData.getRequestResources().getCurrentRequest(),
-				searchRewritings.getRewrittenSemanticSearchSentences(),
-				searchRewritings.getRewrittenFullTextSearchSentences(),
-				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()),
-				configuration.getGlobalRagTopK(), tokensBudget);
-
-		return documentSet;
-	}
-
-	protected Flux<DocumentsEnrichDecision> doDocumentsRetrieve(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
-			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
-		Flux<DocumentsEnrichDecision> flux = Flux.defer(() -> {
-			DocumentsEnrichDecision de = null;
-			LLMChatRequestResources req;
-			try {
-				SearchesSuggestions searchSuggestions = askSearchesSuggestion(runtimeData, targetChatModel);
-				req = this.integrateWithAISuggestedSearchAndDocuments(runtimeData, targetChatModel, searchSuggestions,
-						policy);
-				de = new DocumentsEnrichDecision(req, searchSuggestions);
-			} catch (Throwable e) {
-				String msg = "Error accessing search/llm assisted";
-				LOGGER.error(msg, e);
-				de = new DocumentsEnrichDecision(runtimeData.getRequestResources(), new SearchesSuggestions());
-			}
-			return Flux.just(de);
-		});
-		return flux;
-	}
 
 	private SearchesSuggestions askSearchesSuggestion(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel targetChatModel) {
@@ -118,16 +87,32 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 		return outValue;
 	}
 
-	@AllArgsConstructor
-	@Getter
-	static class DocumentsEnrichDecision {
-		private final LLMChatRequestResources requestResources;
-		private final SearchesSuggestions searchesDecisions;
+	@Override
+	public Flux<DocumentsEnrichDecision> doDocumentsRetrieve(ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
+		Flux<DocumentsEnrichDecision> flux = Flux.defer(() -> {
+			DocumentsEnrichDecision de = null;
+			LLMChatRequestResources req;
+			try {
+				SearchesSuggestions searchSuggestions = askSearchesSuggestion(runtimeData, targetChatModel);
+				req = this.integrateWithAISuggestedSearchAndDocuments(runtimeData, targetChatModel, searchSuggestions,knowledgeBases,
+						policy);
+				de = new DocumentsEnrichDecision(req, searchSuggestions);
+			} catch (Throwable e) {
+				String msg = "Error accessing search/llm assisted";
+				LOGGER.error(msg, e);
+				de = new DocumentsEnrichDecision(runtimeData.getRequestResources(), new SearchesSuggestions());
+			}
+			return Flux.just(de);
+		});
+		return flux;
 	}
 
 	private LLMChatRequestResources integrateWithAISuggestedSearchAndDocuments(
 			ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel targetChatModel,
-			SearchesSuggestions searchSuggestions, LLMRequestGenerationPolicy policy)
+			SearchesSuggestions searchSuggestions, List<GKnowledgeBase> knowledgeBases, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
 
 		List<String> docsList = searchSuggestions.getSuggestedDocuments();
@@ -199,6 +184,20 @@ public class BaseOutputChatPipelineService extends BaseLLMSInvokingService {
 		} else
 			rc = runtimeData.getRequestResources();
 		return rc;
+	}
+
+	private AIDocumentsSet search(SearchesSuggestions searchRewritings, ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel targetChatModel, int contextWindowLength)
+			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
+
+		int tokensBudget = contextWindowLength / 4;
+		AIDocumentsSet documentSet = searchesService.search(runtimeData.getRequestResources().getCurrentRequest(),
+				searchRewritings.getRewrittenSemanticSearchSentences(),
+				searchRewritings.getRewrittenFullTextSearchSentences(),
+				GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest()),
+				configuration.getGlobalRagTopK(), tokensBudget);
+
+		return documentSet;
 	}
 
 }

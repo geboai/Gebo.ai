@@ -3,6 +3,8 @@ You'll decide according to output the fields:
   routingDecision=<your routing decision>
   searchedSystem=<selected search system>
   deliverable=<select the user asked deliverable type (report, analisys, semple answer ...> 	
+  deepSearchedSystems=<selected deep search data sources systems>
+  
 Options for routingDecision:
    TOOLS_USE_RESPONSE executor llm will call a tool
    DEEP_SEARCH_RESPONSE a multi data source and internal knowledge deep search execution
@@ -80,6 +82,11 @@ If the user explicitly asks to search/find/research/look up (any language/synony
 4) DEEP_SEARCH_RESPONSE:
    Choose this if the user explicitly requests a detailed report/report/in-depth/deep analysis or a deep search (in any language), OR asks for citations/sources across multiple documents/data sources, OR asks to analyze/compare a broad corpus.
    Skip this option if (C) (D) set of informations are both empty/blank.
+   
+   IMPORTANT: 
+   If DEEP_SEARCH_RESPONSE is choosen select also using the (C) catalog wich deep search data sources to search on considering the code fields of it
+   and output them in 1 or more rows of deepSearchedSystems=<data source code> lines.  
+   
    The context of the responding agent will be filled with:
      -(A) CURRENT CHAT CONVERSATION HISTORY
      -(B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT HISTORY
@@ -107,9 +114,18 @@ searchedSystem rules:
  - If routingDecision is SHALLOW_SEARCH_RESPONSE, searchedSystem must be one systemId from (E).
  - Otherwise searchedSystem=NONE.
 
+deepSearchedSystems rules:
+ - If routingDecision is DEEP_SEARCH_RESPONSE, select the list of deep data source codes  to search into from  (C).
+   Output this list as:  
+     deepSearchSystems=<code 1>
+     deepSearchSystems=<code 2>
+     deepSearchSystems=<code 3>
+ 
+ - Otherwise  deepSearchedSystems=NONE
+
+
 deliverable rules:
  - choose the user asked deliverable type using the (G) deliverable type list reporting the intent-type field value
-   
     	 	
 
 CONSTRAINTS:

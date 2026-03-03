@@ -37,6 +37,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -76,6 +77,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	private final IRagThreasholdAutotuneService threasholdAutotuneService;
 	private final UserUploadContentServerSideRepository userUploadedRepository;
+	private final IInternalKnowledgeLLMAssistedRetrieveService llmAssistedRetriveService;
 	private final IGeboThreadManager threadManager;
 
 	public InternalKnowledgeBaseRagDeepSearchService(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
@@ -85,7 +87,8 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,
 			DeepSearchDefaultConfig defaultDeepsearchConfig, IRagThreasholdAutotuneService threasholdAutotuneService,
-			UserUploadContentServerSideRepository userUploadedRepository, IGeboThreadManager threadManager) {
+			UserUploadContentServerSideRepository userUploadedRepository,
+			IInternalKnowledgeLLMAssistedRetrieveService llmAssistedRetriveService, IGeboThreadManager threadManager) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.graphRagSearchService = graphRagSearchService;
 		this.promptsDao = promptsDao;
@@ -97,6 +100,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 		this.threadManager = threadManager;
 		this.threasholdAutotuneService = threasholdAutotuneService;
 		this.userUploadedRepository = userUploadedRepository;
+		this.llmAssistedRetriveService = llmAssistedRetriveService;
 	}
 
 	@Override
@@ -113,6 +117,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingA
 				.getPrompt();
 
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
+		
 		Flux<AIDocumentsSet> documentSearch = Flux.defer(() -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Deferred knowledge base search");
