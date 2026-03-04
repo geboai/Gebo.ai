@@ -82,7 +82,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments, DeepSearchConfig configuration,
 			UserInfos userInfos, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels)
-			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+			throws GeboChatSessionLifecycleException, LLMConfigException {
 
 		AtomicBoolean completed = state.getCompleted();
 

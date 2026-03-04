@@ -67,7 +67,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 				}
 			});
 			return flux;
-		} catch (GeboChatException | LLMConfigException | FullTextException e) {
+		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception in finalizing rag chat", e);
 		}
 

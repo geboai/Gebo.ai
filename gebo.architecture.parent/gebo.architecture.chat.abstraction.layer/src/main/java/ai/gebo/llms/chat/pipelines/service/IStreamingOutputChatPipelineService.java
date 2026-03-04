@@ -14,10 +14,7 @@ public interface IStreamingOutputChatPipelineService extends IChatPipelineStepSe
 		return StepType.OUTPUT;
 	}
 
-	
-
-	
-	
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException, FullTextException, LLMConfigException;
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException;
 }

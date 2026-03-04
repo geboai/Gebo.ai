@@ -78,7 +78,7 @@ public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSI
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
-			throws ChatPipelineException, GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+			throws ChatPipelineException, GeboChatSessionLifecycleException,  LLMConfigException {
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		GeboChatResponse response = runtimeData.getChatResponse();
@@ -95,7 +95,6 @@ public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSI
 				deepSearchRequest, new DeepSearchState(), runtimeData.getMinimalChatContext(), forcedDocuments,
 				deepSearchConfigProvider.get(), userInfo, chatModel, serviceModel, chunkSessionId, embeddingModels);
 		Vector<DeepSearchKnowledgeBasesProcessedEvent> resultFiltered = new Vector<DeepSearchKnowledgeBasesProcessedEvent>();
-		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(doAs, flux, request, response);
 		flux = flux.map(x -> {
 			if (x instanceof DeepSearchKnowledgeBasesProcessedEvent processed) {
 				resultFiltered.add(processed);
@@ -104,11 +103,15 @@ public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSI
 		});
 		flux = Flux.concat(flux,
 				trailProcess(resultFiltered, deepSearchRequest, chatModel, runtimeData.getMinimalChatContext()));
+		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(doAs, flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));
 		flux.doOnComplete(() -> {
 			try {
-				this.sessionLifecycleService.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(),
-						chatModel);
+				doAs.<GeboChatSessionLifecycleException, LLMConfigException, IOException>doAsWith3Exceptions(() -> {
+					this.sessionLifecycleService
+							.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(), chatModel);
+					this.chunkingService.disposeChunkingSession(chunkSessionId);
+				});
 			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
 				LOGGER.error("Exceptinin deep search streaming pipeline handler", e);
 			}
