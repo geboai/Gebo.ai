@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.fulltext.service.FullTextException;
@@ -28,9 +30,11 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
+@Component
 @AllArgsConstructor
 public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInvokingService
 		implements IInternalKnowledgeLLMAssistedRetrieveService {
@@ -73,22 +77,28 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
 		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
 				.getSessionAvailableKnowledgeBases(minimalChatContext.getCurrentRequest());
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+
 		Flux<AIDocumentsSet> flux = Flux.defer(() -> {
-			AIDocumentsSet de = null;
+			return runAs.doRunAsWithReturn(() -> {
+				AIDocumentsSet de = null;
 
-			try {
-				SearchesSuggestions searchSuggestions = askSearchesSuggestion(minimalChatContext, targetChatModel);
-				de = this.integrateWithAISuggestedSearch(minimalChatContext, targetChatModel, searchSuggestions, knowledgeBases,
-						policy);
+				try {
+					SearchesSuggestions searchSuggestions = askSearchesSuggestion(minimalChatContext, targetChatModel);
+					de = this.integrateWithAISuggestedSearch(minimalChatContext, targetChatModel, searchSuggestions,
+							knowledgeBases, policy);
 
-			} catch (Throwable e) {
-				String msg = "Error accessing search/llm assisted";
-				LOGGER.error(msg, e);
-				de = new AIDocumentsSet();
-			}
-			return Flux.just(de);
+				} catch (Throwable e) {
+					String msg = "Error accessing search/llm assisted";
+					LOGGER.error(msg, e);
+					de = new AIDocumentsSet();
+				}
+				return Flux.just(de);
+			});
 		});
+
 		return flux;
+
 	}
 
 	private AIDocumentsSet integrateWithAISuggestedSearch(MinimalChatContext minimalChatContext,

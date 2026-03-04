@@ -74,6 +74,7 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import jakarta.annotation.PreDestroy;
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Flux;
@@ -154,18 +155,13 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		deepSearchExecutor.shutdown();
 	}
 
-	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, AIDocumentsSet allDocuments, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) throws LLMConfigException {
+	protected Flux<AbstractDeepSearchEvent> fullReactivestreamDeepSearch(final ReactiveIdentityUtil runAs,
+			DeepSearchRequest request, MinimalChatContext minimalChatContext, AIDocumentsSet allDocuments,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws LLMConfigException {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		return Mono.fromCallable(() -> {
-
-			var sc = SecurityContextHolder.createEmptyContext();
-			sc.setAuthentication(auth);
-			SecurityContextHolder.setContext(sc);
-
-			try {
+			return runAs.doRunAsWithReturn(() -> {
 				final UserInfos userInfos = securityService.getCurrentUser();
 				request.setUsername(userInfos.getUsername());
 				requestsRepository.save(request);
@@ -186,52 +182,53 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 				return Prepared.ok(request, minimalChatContext, configuration, userInfos, embeddingModels, chatModel,
 						serviceModel, null);
+			});
 
-			} finally {
-				SecurityContextHolder.clearContext();
-			}
 		}).subscribeOn(deepSearchScheduler).flatMapMany(prep -> {
-			if (prep.errorEvent != null)
-				return Flux.just(prep.errorEvent);
-			final IDocumentsChunkService chunkService = runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
-			final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getCode());
-			final FullReactiveDeepsearchWorker worker = runtimeBinder
-					.getImplementationOf(FullReactiveDeepsearchWorker.class);
+			return runAs.doRunAsWithReturn(() -> {
+				if (prep.errorEvent != null)
+					return Flux.just(prep.errorEvent);
+				final IDocumentsChunkService chunkService = runtimeBinder
+						.getImplementationOf(IDocumentsChunkService.class);
+				final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getCode());
+				final FullReactiveDeepsearchWorker worker = runtimeBinder
+						.getImplementationOf(FullReactiveDeepsearchWorker.class);
 
-			Flux<AbstractDeepSearchEvent> flow;
-			try {
-				flow = worker.streamDeepSearch(prep.request, minimalChatContext, allDocuments, new ArrayList<>(),
-						 prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel,
-						prep.serviceModel, deepSearchScheduler, chunkSessionId);
-				if (flow != null) {
-					flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
-				}
-			} catch (Throwable e) {
-				DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
-				errorEvent.setInputData(request);
-				errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
-				flow = Flux.just(errorEvent);
-			}
-			if (chunkSessionId != null && flow != null) {
-				Runnable deleteChunkingSessionRunnable = new Runnable() {
-					@Override
-					public void run() {
-						try {
-							chunkService.disposeChunkingSession(chunkSessionId);
-						} catch (Throwable th) {
-							LOGGER.error("Exception disposing", th);
-						}
+				Flux<AbstractDeepSearchEvent> flow;
+				try {
+					flow = worker.streamDeepSearch(prep.request, minimalChatContext, allDocuments, new ArrayList<>(),
+							prep.configuration, prep.userInfos, prep.embeddingModels, prep.chatModel, prep.serviceModel,
+							deepSearchScheduler, chunkSessionId);
+					if (flow != null) {
+						flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
 					}
-				};
-				flow.doAfterTerminate(deleteChunkingSessionRunnable);
-			}
-			return flow;
+				} catch (Throwable e) {
+					DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
+					errorEvent.setInputData(request);
+					errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
+					flow = Flux.just(errorEvent);
+				}
+				if (chunkSessionId != null && flow != null) {
+					Runnable deleteChunkingSessionRunnable = new Runnable() {
+						@Override
+						public void run() {
+							try {
+								chunkService.disposeChunkingSession(chunkSessionId);
+							} catch (Throwable th) {
+								LOGGER.error("Exception disposing", th);
+							}
+						}
+					};
+					flow.doAfterTerminate(deleteChunkingSessionRunnable);
+				}
+				return flow;
+			});
 		});
 	}
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException {
-
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		Flux<AbstractDeepSearchEvent> out = null;
 
 		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
@@ -239,37 +236,40 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		out = this.fullReactivestreamDeepSearch(request, new MinimalChatContext(), new AIDocumentsSet(), chatModel,
-				serviceModel);
+		out = this.fullReactivestreamDeepSearch(runAs, request, new MinimalChatContext(), new AIDocumentsSet(),
+				chatModel, serviceModel);
 
-		return out.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+		return out.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(runAs, evt))
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
 	}
 
-	void persistSideEffects(AbstractDeepSearchEvent step) {
-		if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
-			if (dsDocumentEvent.getOutputData() != null && dsDocumentEvent.getOutputData().getAnalisysResult() != null
-					&& !dsDocumentEvent.getOutputData().getAnalisysResult().trim().isEmpty()
-					&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
-							|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
-				dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
+	public void persistSideEffects(ReactiveIdentityUtil runAs, AbstractDeepSearchEvent step) {
+		runAs.doAs(() -> {
+			if (step instanceof DeepSearchDataSourceDocumentResultEvent dsDocumentEvent) {
+				if (dsDocumentEvent.getOutputData() != null
+						&& dsDocumentEvent.getOutputData().getAnalisysResult() != null
+						&& !dsDocumentEvent.getOutputData().getAnalisysResult().trim().isEmpty()
+						&& (dsDocumentEvent.getOutputData().getEmptyResult() == null
+								|| !dsDocumentEvent.getOutputData().getEmptyResult())) {
+					dataSourceDocumentResultRepository.save(dsDocumentEvent.getOutputData());
+				}
 			}
-		}
-		if (step instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessedEvent) {
-			if (dataSourceProcessedEvent.getOutputData() != null
-					&& dataSourceProcessedEvent.getOutputData().getResponse() != null
-					&& !dataSourceProcessedEvent.getOutputData().getResponse().trim().isEmpty()
-					&& (dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty() == null
-							|| !dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty())) {
-				dataSourceResponseRepository.save(dataSourceProcessedEvent.getOutputData());
+			if (step instanceof DeepSearchDataSourceProcessedEvent dataSourceProcessedEvent) {
+				if (dataSourceProcessedEvent.getOutputData() != null
+						&& dataSourceProcessedEvent.getOutputData().getResponse() != null
+						&& !dataSourceProcessedEvent.getOutputData().getResponse().trim().isEmpty()
+						&& (dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty() == null
+								|| !dataSourceProcessedEvent.getOutputData().getSearchResultsEmpty())) {
+					dataSourceResponseRepository.save(dataSourceProcessedEvent.getOutputData());
+				}
 			}
-		}
-		if (step instanceof DeepSearchDocumentEvent documentEvent) {
-			stepsRepository.save(documentEvent.getOutputData());
-		}
-		if (step instanceof DeepSearchProcessedEvent doneEvent) {
-			responseRepository.save(doneEvent.getOutputData());
-		}
+			if (step instanceof DeepSearchDocumentEvent documentEvent) {
+				stepsRepository.save(documentEvent.getOutputData());
+			}
+			if (step instanceof DeepSearchProcessedEvent doneEvent) {
+				responseRepository.save(doneEvent.getOutputData());
+			}
+		});
 	}
 
 	private static final class Prepared {
@@ -369,7 +369,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		if (request.getId() == null) {
 			request.setId(UUID.randomUUID().toString());
 		}
-		//TODO: COMPLETE THIS, IT DOES NOT SELECT PROPERLY EVENTUAL DATA SOURCES
+		// TODO: COMPLETE THIS, IT DOES NOT SELECT PROPERLY EVENTUAL DATA SOURCES
 		sessionLifecyCleService.ensureChatSessionExists(request);
 		IGConfigurableChatModel model = sessionLifecyCleService.getSessionChatModel(request);
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
@@ -386,20 +386,22 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		MinimalChatContext minimalChatContext = this.sessionLifecyCleService.getMinimalChatContext(request,
 				serviceModel.getContextLength() / 3);
 		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, minimalChatContext, cleanResponse, model,
-				serviceModel,List.of());
+				serviceModel, List.of());
 		return outflux;
 	}
 
-	Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(Flux<AbstractDeepSearchEvent> flux,
-			GeboChatRequest request, GeboChatResponse response) {
+	public Flux<AbstractDeepSearchEvent> manageTrailingChatSessionEvents(ReactiveIdentityUtil runAs,
+			Flux<AbstractDeepSearchEvent> flux, GeboChatRequest request, GeboChatResponse response) {
 		final List<GResponseDocumentRef> documents = new ArrayList<GResponseDocumentRef>();
 
 		Mono<AbstractDeepSearchEvent> trailingFlux = Mono.fromSupplier(() -> {
-			response.setDocumentsRef(documents);
-			DeepSearchChatResponseEvent responseEvent = new DeepSearchChatResponseEvent();
-			responseEvent.setInputData(request);
-			responseEvent.setOutputData(response);
-			return responseEvent;
+			return runAs.doRunAsWithReturn(() -> {
+				response.setDocumentsRef(documents);
+				DeepSearchChatResponseEvent responseEvent = new DeepSearchChatResponseEvent();
+				responseEvent.setInputData(request);
+				responseEvent.setOutputData(response);
+				return responseEvent;
+			});
 		});
 		return flux.map(x -> {
 			if (x instanceof DeepSearchDocumentEvent documentEvent) {
@@ -418,7 +420,10 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 				response.setQueryResponse(responseText);
 
 				try {
-					this.sessionLifecyCleService.endRequest(request, response);
+					runAs.doAsWithException(() -> {
+						this.sessionLifecyCleService.endRequest(request, response);
+					});
+
 				} catch (GeboChatSessionLifecycleException e) {
 					LOGGER.error("Exceptin in trailing event", e);
 				}
@@ -479,13 +484,13 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		chatResponse.setDeepSearchRequestId(deepSearchRequest.getCode());
 		AIDocumentsSet allDocuments = request.allDocuments();
 		Flux<AbstractDeepSearchEvent> out = null;
-
-		out = this.fullReactivestreamDeepSearch(deepSearchRequest, minimalChatContext, allDocuments, chatModel,
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		out = this.fullReactivestreamDeepSearch(runAs, deepSearchRequest, minimalChatContext, allDocuments, chatModel,
 				serviceModel);
 
-		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(out, request.getCurrentRequest(),
+		Flux<AbstractDeepSearchEvent> outflux = manageTrailingChatSessionEvents(runAs, out, request.getCurrentRequest(),
 				chatResponse);
-		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(evt))
+		return outflux.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(runAs, evt))
 				.onErrorResume(Common.commonFallBack(deepSearchRequest));
 	}
 

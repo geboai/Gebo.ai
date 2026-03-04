@@ -374,7 +374,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 
 						return Map.of();
 					}
-				}, RespondingWith.DEEP_SEARCH_RESPONSE.name());
+				}, RespondingWith.DEEP_RAG_RESPONSE.name());
 		return rd;
 	}
 
@@ -470,6 +470,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		}
 		case SHALLOW_SEARCH_RESPONSE: {
 			return List.of(DefaultShallowSearchOutputPipelineServiceImpl.DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT);
+		}
+		case DEEP_RAG_RESPONSE: {
+			return List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

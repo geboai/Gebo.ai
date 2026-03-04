@@ -10,16 +10,21 @@ You must infer intent from:
 
 INPUTS:
 - Last User question:
+
 {question}
 
 - Chat history (recent, latest first, may be empty):
+
 {latestInteractions}
 
 - Consolidated previous chat history (may be empty):
+
 {consolidatedChatHistory}
 
 -(CAT) Jira projects catalog (may be empty):
+
 {jiraProjects}
+
 
 TASK:
 1) Understand what Jira issues the user wants to find (projects, issue types, keys, status, priority, labels, versions).
@@ -33,7 +38,9 @@ TASK:
 6) Only fill fields you are confident about; otherwise leave them null (do not guess).
 7) Keep lists small and precise (max ~10 items per list). Prefer exact project keys and issue keys if present.
 8) If the user asks something NOT related to searching Jira issues, output an empty filter object (all null).
-
+9) If the user asks for all tickets in a project (in all languages) and you discover the project recognizing its code 
+   in (CAT) Jira projects catalog, include in the output structure the project code (field projectCodes) in the output
+   data structure and empty values in all other fields. 
 
 {format}
 

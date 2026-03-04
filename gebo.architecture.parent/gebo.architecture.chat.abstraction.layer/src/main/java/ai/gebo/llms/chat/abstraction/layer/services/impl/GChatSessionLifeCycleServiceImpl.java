@@ -35,6 +35,8 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
@@ -92,6 +94,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatSessionStateShrinkerService shrinkerService;
+	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 
 	@NoArgsConstructor
 
@@ -870,5 +873,43 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		} catch (LLMConfigException | IOException e) {
 			throw new GeboChatSessionLifecycleException("Error shrinking state", e);
 		}
+	}
+
+	protected List<IGConfigurableEmbeddingModel> getEmbeddingModelsListByKnowledgeBases(
+			List<GKnowledgeBase> knowledgeBases) {
+		return this.getEmbeddingModelsListByKnowledgeBases(knowledgeBases, true);
+	}
+
+	protected List<IGConfigurableEmbeddingModel> getEmbeddingModelsListByKnowledgeBases(
+			List<GKnowledgeBase> knowledgeBases, boolean includeDefaultEmbeddingModel) {
+		List<IGConfigurableEmbeddingModel> embeddingModels = new ArrayList<IGConfigurableEmbeddingModel>();
+		IGConfigurableEmbeddingModel defaultEmbeddingModel = embeddingModelsRuntimeDao.defaultHandler();
+		if (defaultEmbeddingModel != null && includeDefaultEmbeddingModel) {
+			embeddingModels.add(defaultEmbeddingModel);
+		}
+
+		knowledgeBases.stream().map(x -> x.getEmbeddingModelReferences()).filter(y -> y != null && !y.isEmpty())
+				.forEach(modelsList -> {
+					modelsList.forEach(modelReference -> {
+						IGConfigurableEmbeddingModel model = embeddingModelsRuntimeDao
+								.findByModelReference(modelReference);
+						if (model != null && model != defaultEmbeddingModel) {
+							if (!embeddingModels.stream()
+									.anyMatch(x -> (x == model || model.getCode().equals(x.getCode())))) {
+								embeddingModels.add(model);
+							}
+						}
+					});
+				});
+		return embeddingModels;
+	}
+	@Override
+	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException {
+		List<GKnowledgeBase> knowledgeBases = getSessionAvailableKnowledgeBases(request);
+		List<IGConfigurableEmbeddingModel> embeddingModels = getEmbeddingModelsListByKnowledgeBases(knowledgeBases,
+				true);
+
+		return embeddingModels;
 	}
 }

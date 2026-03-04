@@ -62,6 +62,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
@@ -563,6 +564,7 @@ public class DocumentsChunkServiceImpl
 
 	private Flux<IDocumentChunkWithRef> streamChunksSingle(IGComponentOriginatedDocument document,
 			ChunkingParams chunkingSpecs, String chunkingSessionId) {
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		checkExistence(chunkingSessionId);
 		boolean enrichWithMetaData = chunkingSpecs.isEnrichWithMetaData();
 		long tokensPerChunkSet = chunkingSpecs.getTokensPerChunkSet();
@@ -571,8 +573,10 @@ public class DocumentsChunkServiceImpl
 		}
 		return Mono.fromCallable(() -> unchecked(() -> {
 			try {
-				DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, chunkingSessionId);
-				return response;
+				return runAs.doRunAsWithReturnAndException(() -> {
+					DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, chunkingSessionId);
+					return response;
+				});
 			} catch (Throwable th) {
 				LOGGER.error("Error in call to prepareChunks(...)", th);
 				return null;
@@ -583,9 +587,11 @@ public class DocumentsChunkServiceImpl
 					if (nextId == null)
 						return Mono.empty();
 
-					return Mono.fromCallable(
-							() -> unchecked(() -> getNextChunkSet(document, resp.getId(), nextId, chunkingSessionId)))
-							.subscribeOn(chunkingScheduler);
+					return Mono.fromCallable(() -> unchecked(() -> {
+						return runAs.doRunAsWithReturnAndException(() -> {
+							return getNextChunkSet(document, resp.getId(), nextId, chunkingSessionId);
+						});
+					})).subscribeOn(chunkingScheduler);
 				}).concatMap(resp -> {
 					var set = resp.getCurrentChunkSet();
 					var chunks = (set != null && set.getChunks() != null) ? set.getChunks() : List.<DocumentChunk>of();
@@ -601,9 +607,12 @@ public class DocumentsChunkServiceImpl
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(List<? extends IGComponentOriginatedDocument> documents,
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
-
-		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler)
-				.flatMap(doc -> streamChunksSingle(doc, chunkingSpecs, chunkSessionId));
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		return Flux.fromIterable(documents).parallel(docConcurrency).runOn(chunkingScheduler).flatMap(doc -> {
+			return runAs.doRunAsWithReturn(() -> {
+				return streamChunksSingle(doc, chunkingSpecs, chunkSessionId);
+			});
+		});
 
 	}
 
@@ -625,9 +634,13 @@ public class DocumentsChunkServiceImpl
 			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		ParallelFlux<IDocumentChunkWithRef> out = Flux.from(documentsPublisher).flatMapIterable(list -> list)
-				.parallel(docConcurrency).runOn(chunkingScheduler)
-				.flatMap(doc -> Flux.defer(() -> streamChunksSingle(doc, chunkingSpecs, chunkSessionId)));
+				.parallel(docConcurrency).runOn(chunkingScheduler).flatMap(doc -> Flux.defer(() -> {
+					return runAs.doRunAsWithReturn(() -> {
+						return streamChunksSingle(doc, chunkingSpecs, chunkSessionId);
+					});
+				}));
 		return out;
 	}
 

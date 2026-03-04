@@ -33,6 +33,7 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceExecutor;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -66,18 +67,18 @@ public class GDeepSearchDataSourceExecutorImpl implements IGDeepSearchDataSource
 		response.setDeepSearchRequestId(deepSearchRequest.getCode());
 		this.deepSearchRequestRepository.save(deepSearchRequest);
 		final String chunkSessionId = chunkService.createChunkingSession("deepsearch:" + request.getId());
-
+		final ReactiveIdentityUtil doAs = ReactiveIdentityUtil.create();
 		DeepSearchState deepSearchState = new DeepSearchState();
 		deepSearchState.setSatisfactoryDocumentsThreashold(
 				this.defaultDeepsearchConfig.getInTopicSatisfactoryDocumentsThreashold(request.getUserIntent()));
 		Flux<AbstractDeepSearchEvent> flux = service.streamSearch(deepSearchRequest, minimalChatContext,
 				deepSearchState, chatModel, serviceModel, config, List.of(), chunkSessionId);
 		flux = mapDataSourceProcessedToDeepSearchProcessed(flux, deepSearchRequest);
-		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(flux, request, response);
+		flux = deepSearchServiceImpl.manageTrailingChatSessionEvents(doAs, flux, request, response);
 		flux = flux.onErrorResume(Common.commonFallBack(deepSearchRequest));
 
 		flux = flux.subscribeOn(threadManager.getScheduler())
-				.doOnNext(evt -> deepSearchServiceImpl.persistSideEffects(evt));
+				.doOnNext(evt -> deepSearchServiceImpl.persistSideEffects(doAs, evt));
 		// put a chat response at the end
 
 		return deepSearchServiceImpl.mapToChatFlux(flux, DeepSearchChatResponseEvent.class);

@@ -240,7 +240,7 @@ ai.gebo.llms.vendors.setup.config:
             - code: Llama-3.3-70B-Instruct
               description: Meta LLama 3.3 70b instruct
               uses: CHAT
-            - code: Qwen3-8B
+            - code: qwen3-8B
               description: Qwen3 8B
               uses: INTERNAL_SERVICES
         #            - code: Llama-3.1-8B-Instruct
