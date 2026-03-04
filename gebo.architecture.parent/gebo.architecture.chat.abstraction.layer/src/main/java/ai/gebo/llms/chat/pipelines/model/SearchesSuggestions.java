@@ -13,9 +13,8 @@ import lombok.Data;
 public class SearchesSuggestions {
 	@JsonPropertyDescription("Semantic searched  sencences related to user question")
 	private List<String> rewrittenSemanticSearchSentences = new ArrayList<String>();
-	@JsonPropertyDescription("full text searched  texts related to user question")
+	@JsonPropertyDescription("Full text searched  texts related to user question")
 	private List<String> rewrittenFullTextSearchSentences = new ArrayList<String>();
-	private List<String> suggestedDocuments = new ArrayList<String>();
-	private List<String> deepSearchDataSources = new ArrayList<String>();
+	
 
 }
