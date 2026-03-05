@@ -22,14 +22,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
  * to provide specific methods for text-to-speech model configurations.
  */
 public interface IGTextToSpeechModelRuntimeConfigurationDao
-        extends IGRuntimeModelConfigurationDao<IGConfigurableTextToSpeechModel> {
+        extends IGRuntimeModelConfigurationDao<IGConfigurableTextToSpeechModel,GBaseTextToSpeachModelConfig> {
 
-    /**
-     * Adds a runtime configuration by using a base text-to-speech model configuration.
-     *
-     * @param config The base configuration for the text-to-speech model.
-     * @throws LLMConfigException If there is an error in the configuration process.
-     */
-    void addRuntimeByConfig(GBaseTextToSpeachModelConfig config) throws LLMConfigException;
+    
 
 }

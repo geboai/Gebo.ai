@@ -12,6 +12,7 @@ package ai.gebo.llms.abstraction.layer.services;
 import java.util.List;
 
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.model.base.GObjectRef;
 
@@ -23,7 +24,7 @@ import ai.gebo.model.base.GObjectRef;
  * 
  * @param <IFacetype> the type of model configuration managed by this DAO
  */
-public interface IGRuntimeModelConfigurationDao<IFacetype extends IGConfigurableModel>
+public interface IGRuntimeModelConfigurationDao<IFacetype extends IGConfigurableModel, ModelConfig extends GBaseModelConfig>
 		extends IGRuntimeConfigurationDao<IFacetype> {
 
 	/**
@@ -61,6 +62,8 @@ public interface IGRuntimeModelConfigurationDao<IFacetype extends IGConfigurable
 		}
 		return defaultConfig;
 	}
+
+	public void addRuntimeByConfig(ModelConfig config) throws LLMConfigException;
 
 	public default IFacetype findByModelReference(GObjectRef<? extends GBaseModelConfig> modelReference) {
 		if (modelReference == null)

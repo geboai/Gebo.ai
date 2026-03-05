@@ -45,7 +45,8 @@ public class ModelRuntimeConfigureHandler {
 	}
 
 	protected void handleDefaultModel(Class<? extends GBaseModelConfig> configType, GBaseModelConfig config,
-			IGRuntimeModelConfigurationDao<? extends IGConfigurableModel> dao) throws GeboPersistenceException {
+			IGRuntimeModelConfigurationDao<? extends IGConfigurableModel, ? extends GBaseModelConfig> dao)
+			throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
 			List<? extends GBaseModelConfig> all = persistentManager.findAllExtendingType(configType);
 			for (GBaseModelConfig gBaseChatModelConfig : all) {
