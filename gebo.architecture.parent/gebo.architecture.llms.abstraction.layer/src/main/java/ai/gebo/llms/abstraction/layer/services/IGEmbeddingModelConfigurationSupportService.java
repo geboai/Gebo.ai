@@ -28,6 +28,6 @@ import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 public interface IGEmbeddingModelConfigurationSupportService<ModelChoice extends GBaseEmbeddingModelChoice, ModelConfig extends GBaseEmbeddingModelConfig>
 		extends
 		IGModelConfigurationSupportService<GEmbeddingModelType, ModelChoice, ModelConfig, IGConfigurableEmbeddingModel> {
-	public IGConfigurableEmbeddingModel create(GBaseEmbeddingModelConfig config) throws LLMConfigException;
+	public IGConfigurableEmbeddingModel create(ModelConfig config) throws LLMConfigException;
 
 }

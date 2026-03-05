@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -201,8 +202,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	 * @throws LLMConfigException If creation fails
 	 */
 	@Override
-	public IGConfigurableEmbeddingModel<GenericOpenAIAPIEmbeddingModelConfig> create(
-			GenericOpenAIAPIEmbeddingModelConfig config) throws LLMConfigException {
+	public IGConfigurableEmbeddingModel create(GenericOpenAIAPIEmbeddingModelConfig config) throws LLMConfigException {
 		GenericOpenAIConfigurableEmbeddingModel model = new GenericOpenAIConfigurableEmbeddingModel();
 		model.initialize(config, type);
 		return model;
@@ -220,7 +220,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
-		if (providerConfig.getBasePath() != null && providerConfig.getBasePath() .trim().length()>0) {
+		if (providerConfig.getBasePath() != null && providerConfig.getBasePath().trim().length() > 0) {
 			providerConfig.setBasePath(type.getBaseUrl());
 		}
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
@@ -258,5 +258,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 
 		return configureHandler.insertAndConfigure(config, type);
 	}
+
+	
 
 }
