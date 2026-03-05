@@ -107,4 +107,6 @@ public interface IGChatSessionLifeCycleService {
 	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException;
 
+	
+
 }

@@ -1,6 +1,5 @@
 package ai.gebo.llms.chat.pipelines.service;
 
-import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;

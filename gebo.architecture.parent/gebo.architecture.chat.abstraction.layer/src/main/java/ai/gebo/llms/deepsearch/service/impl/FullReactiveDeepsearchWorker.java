@@ -38,7 +38,7 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
-import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagStepDeepSearchService;
+import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
@@ -63,12 +63,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	private final IGPromptConfigDao promptsDao;
 	private final IGeboThreadManager threadManager;
-	private final IGInternalKnlowledgeBaseRagStepDeepSearchService internalKnowledgeBaseDeepSearchService;
+	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService;
 
 	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IGeboThreadManager threadManager,
 			IGPromptConfigDao promptsDao,
-			IGInternalKnlowledgeBaseRagStepDeepSearchService internalKnowledgeBaseDeepSearchService,
+			IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService,
 			DeepSearchDefaultConfig defaultDeepsearchConfig,
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,

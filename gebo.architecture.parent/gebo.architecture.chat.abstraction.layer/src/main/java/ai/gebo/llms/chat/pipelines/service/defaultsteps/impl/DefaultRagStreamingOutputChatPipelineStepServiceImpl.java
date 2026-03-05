@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
-import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;

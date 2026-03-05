@@ -1,11 +1,8 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
-import java.net.Authenticator.RequestorType;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 

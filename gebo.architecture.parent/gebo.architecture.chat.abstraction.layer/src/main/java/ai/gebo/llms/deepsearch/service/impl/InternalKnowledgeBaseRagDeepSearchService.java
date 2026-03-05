@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
-import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
@@ -50,7 +49,7 @@ import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEve
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchOperationEndedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchUploadedDocumentEvent;
-import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagStepDeepSearchService;
+import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
 import ai.gebo.model.DocumentMetaInfos;
@@ -63,7 +62,7 @@ import reactor.core.publisher.ParallelFlux;
 @Service
 @AllArgsConstructor
 public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingService
-		implements IGInternalKnlowledgeBaseRagStepDeepSearchService {
+		implements IGInternalKnlowledgeBaseRagDeepSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalKnowledgeBaseRagDeepSearchService.class);
 	private final IGPromptConfigDao promptsDao;
 	private final IKnowledgeGraphSearchService graphRagSearchService;

@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -55,7 +53,6 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
-import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
@@ -103,7 +100,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 	protected final IGRagChatService ragChatService;
 	protected final IGChatService chatService;
 	protected final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-	protected final IGChatSessionLifeCycleService sessionLifecyCleService;
+	protected final IGChatSessionLifeCycleService sessionLifecycleService;
 	protected final IGDeepSearchConfigProvider configProvider;
 	protected final IGeboThreadManager threadManager;
 	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
@@ -146,7 +143,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		this.threadManager = threadManager;
 		this.deepSearchExecutor = threadManager.getExecutorService();
 		this.deepSearchScheduler = threadManager.getBoundedElastic();
-		this.sessionLifecyCleService = sessionLifecyCleService;
+		this.sessionLifecycleService = sessionLifecyCleService;
 		this.configProvider = configProvider;
 	}
 
@@ -159,9 +156,9 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			DeepSearchRequest request, MinimalChatContext minimalChatContext, AIDocumentsSet allDocuments,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
-		final List<GKnowledgeBase> knowledgeBases = this.sessionLifecyCleService
+		final List<GKnowledgeBase> knowledgeBases = this.sessionLifecycleService
 				.getSessionAvailableKnowledgeBases(minimalChatContext.getCurrentRequest());
-		final List<IGConfigurableEmbeddingModel> embeddingModels = this.sessionLifecyCleService
+		final List<IGConfigurableEmbeddingModel> embeddingModels = this.sessionLifecycleService
 				.getSessionEmbeddingModels(minimalChatContext.getCurrentRequest());
 		final UserInfos userInfos = securityService.getCurrentUser();
 		request.setUsername(userInfos.getUsername());
@@ -317,20 +314,20 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			request.setId(UUID.randomUUID().toString());
 		}
 		// TODO: COMPLETE THIS, IT DOES NOT SELECT PROPERLY EVENTUAL DATA SOURCES
-		sessionLifecyCleService.ensureChatSessionExists(request);
-		IGConfigurableChatModel model = sessionLifecyCleService.getSessionChatModel(request);
+		sessionLifecycleService.ensureChatSessionExists(request);
+		IGConfigurableChatModel model = sessionLifecycleService.getSessionChatModel(request);
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		GeboChatResponse cleanResponse = sessionLifecyCleService.createEmptyResponse(request);
-		LLMChatRequestResources llmRequest = sessionLifecyCleService.startRequest(request, model,
+		GeboChatResponse cleanResponse = sessionLifecycleService.createEmptyResponse(request);
+		LLMChatRequestResources llmRequest = sessionLifecycleService.startRequest(request, model,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-		List<GKnowledgeBase> kbList = sessionLifecyCleService.getSessionAvailableKnowledgeBases(request);
+		List<GKnowledgeBase> kbList = sessionLifecycleService.getSessionAvailableKnowledgeBases(request);
 		List<String> knowledgeBasesCodesList = kbList.stream().map(x -> x.getCode()).toList();
 
 		Sinks.One<Void> stopSignal = Sinks.one();
 		activeSearchSignals.put(request.getId(), stopSignal);
 
-		MinimalChatContext minimalChatContext = this.sessionLifecyCleService.getMinimalChatContext(request,
+		MinimalChatContext minimalChatContext = this.sessionLifecycleService.getMinimalChatContext(request,
 				serviceModel.getContextLength() / 3);
 		Flux<AbstractDeepSearchEvent> outflux = streamDeepSearch(llmRequest, minimalChatContext, cleanResponse, model,
 				serviceModel, List.of());
@@ -368,7 +365,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 				try {
 					runAs.doAsWithException(() -> {
-						this.sessionLifecyCleService.endRequest(request, response);
+						this.sessionLifecycleService.endRequest(request, response);
 					});
 
 				} catch (GeboChatSessionLifecycleException e) {
@@ -420,7 +417,6 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
-
 		DeepSearchRequest deepSearchRequest = new DeepSearchRequest();
 		deepSearchRequest.setChatRequestCode(request.getCurrentRequest().getId());
 		deepSearchRequest.setKnowledgeBases(createKnowledgeBasesList(request));
@@ -443,7 +439,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 	private List<String> createKnowledgeBasesList(LLMChatRequestResources request)
 			throws GeboChatSessionLifecycleException {
-		List<GKnowledgeBase> visibles = this.sessionLifecyCleService
+		List<GKnowledgeBase> visibles = this.sessionLifecycleService
 				.getSessionAvailableKnowledgeBases(request.getCurrentRequest());
 
 		return visibles.stream().map(x -> x.getCode()).toList();
