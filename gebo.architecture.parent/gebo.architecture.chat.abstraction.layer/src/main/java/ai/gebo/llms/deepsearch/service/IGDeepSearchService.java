@@ -27,12 +27,13 @@ import ai.gebo.model.base.GBaseObject;
 import reactor.core.publisher.Flux;
 
 public interface IGDeepSearchService {
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request) throws LLMConfigException;
+	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request)
+			throws LLMConfigException, GeboChatSessionLifecycleException;
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request)
 			throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException;
 
-	public default DeepSearchResponse search(DeepSearchRequest request) throws LLMConfigException {
+	public default DeepSearchResponse search(DeepSearchRequest request) throws LLMConfigException, GeboChatSessionLifecycleException {
 		AbstractDeepSearchEvent last = this.streamDeepSearch(request).blockLast();
 		if (last instanceof DeepSearchProcessedEvent result) {
 			return result.getOutputData();
@@ -70,7 +71,7 @@ public interface IGDeepSearchService {
 
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel,List<String> deepSearchDataSources)
+			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
 			throws LLMConfigException, GeboChatSessionLifecycleException;
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,

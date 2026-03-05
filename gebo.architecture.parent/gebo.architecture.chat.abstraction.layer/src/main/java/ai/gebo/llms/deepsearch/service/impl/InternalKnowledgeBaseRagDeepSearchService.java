@@ -89,8 +89,9 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
+		final int topK = this.defaultDeepsearchConfig.getInternalKnowledgeDeepSearchTopK();
 		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
-				chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+				chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
 		Flux<AIDocumentsSet> integratedWithSessionDocuments = retrievedFlux.map(retrieved -> {
 			boolean _completed = completed.get();
 
@@ -109,22 +110,6 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			}
 			return consolidatedDaoResult;
 		});
-		/*
-		 * Flux<AIDocumentsSet> documentSearch = Flux.defer(() -> { if
-		 * (LOGGER.isDebugEnabled()) { LOGGER.debug("Deferred knowledge base search"); }
-		 * boolean _completed = completed.get(); if (_completed) { if
-		 * (LOGGER.isDebugEnabled()) {
-		 * LOGGER.debug("Handling search operations ending execution step"); } }
-		 * AIDocumentsSet consolidatedDaoResult = new AIDocumentsSet(); if (!_completed)
-		 * { if (request.getKnowledgeBases() != null &&
-		 * !request.getKnowledgeBases().isEmpty()) { AIDocumentsSet searchResult =
-		 * getSearchResults(request, configuration, userInfos, embeddingModels);
-		 * consolidatedDaoResult = AIDocumentsSet.join(searchResult,
-		 * consolidatedDaoResult); } if (sessionDocuments != null &&
-		 * !sessionDocuments.getDocumentItems().isEmpty()) { consolidatedDaoResult =
-		 * AIDocumentsSet.join(sessionDocuments, consolidatedDaoResult); } } return
-		 * Flux.just(consolidatedDaoResult); });
-		 */
 
 		ParallelFlux<AbstractDeepSearchEvent> body = integratedWithSessionDocuments
 				.flatMap(s -> Flux.fromIterable(s.getDocumentItems())).parallel(configuration.getDocumentsParallelism())
@@ -137,7 +122,6 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 						return DeepSearchOperationEndedEvent.of(request);
 					}
 					String documentCode = refItem.getCode();
-
 					GDocumentReference documentReference = null;
 					UserUploadedContent uploadedContent = null;
 					DeepSearchAnalyzedDocument analyzed = null;
@@ -258,57 +242,5 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		return Flux.concat(notificationFlux, body, trail).onErrorResume(Common.commonFallBack(request))
 				.subscribeOn(this.threadManager.getScheduler());
 	}
-	/*
-	 * private AIDocumentsSet getSearchResults(DeepSearchRequest request,
-	 * DeepSearchConfig configuration, UserInfos userInfos,
-	 * List<IGConfigurableEmbeddingModel> embeddingModels) { AIDocumentsSet
-	 * consolidatedDaoResult = new AIDocumentsSet(); for
-	 * (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
-	 * OptimizedThreashold optimizedSetting = this.threasholdAutotuneService
-	 * .findByEmbeddingModelCode(embeddingModel.getCode()); AIDocumentsSet
-	 * semanticDaoResult = new AIDocumentsSet(); SearchType searchType =
-	 * configuration.getSearchType(); if (searchType == null) { searchType =
-	 * SearchType.MULTI_HOP; } switch (searchType) { case MULTI_HOP: { double
-	 * firstHopSimilarityThreashold = optimizedSetting != null ?
-	 * optimizedSetting.getFirstHopOptimizedThreashold() :
-	 * defaultDeepsearchConfig.getFirstHopSimilarityThreashold(); double
-	 * secondHopSimilarityThreashold = optimizedSetting != null ?
-	 * optimizedSetting.getSecondHopOptimizedThreashold() :
-	 * defaultDeepsearchConfig.getSecondHopSimilarityThreashold(); if
-	 * (configuration.getManualThreasholdsConfiguration() != null &&
-	 * configuration.getManualThreasholdsConfiguration() &&
-	 * configuration.getFirstHopSimilarityThreashold() != null &&
-	 * configuration.getSecondHopSimilarityThreashold() != null) {
-	 * firstHopSimilarityThreashold =
-	 * configuration.getFirstHopSimilarityThreashold();
-	 * secondHopSimilarityThreashold =
-	 * configuration.getSecondHopSimilarityThreashold(); } semanticDaoResult =
-	 * ragDocumentsCachedDao.multiHopSemanticSearch(request.getQuery(),
-	 * configuration.getRagQueryOptions(), request.getKnowledgeBases(),
-	 * embeddingModel, firstHopSimilarityThreashold, secondHopSimilarityThreashold,
-	 * userInfos); } break; case SINGLE_HOP: { double similarityThreashold =
-	 * optimizedSetting != null ? optimizedSetting.getOptimizedThreashold() :
-	 * defaultDeepsearchConfig.getRagQueryOptions().getSimilarityThreashold();
-	 * RagQueryOptions ragQueryOptions = new
-	 * RagQueryOptions(configuration.getRagQueryOptions());
-	 * ragQueryOptions.setSimilarityThreashold(similarityThreashold);
-	 * semanticDaoResult = ragDocumentsCachedDao.semanticSearch(request.getQuery(),
-	 * ragQueryOptions, request.getKnowledgeBases(), embeddingModel, userInfos); }
-	 * break; }
-	 * 
-	 * consolidatedDaoResult = AIDocumentsSet.join(semanticDaoResult,
-	 * consolidatedDaoResult); }
-	 * 
-	 * if (graphRagSearchService != null &&
-	 * graphRagSearchService.isConfigured(null)) { try {
-	 * 
-	 * List<KnowledgeGraphSearchResult> graphRagResult =
-	 * graphRagSearchService.knowledgeGraphSearch( request.getQuery(),
-	 * request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
-	 * AIDocumentsSet graphragDocumentsResult = graphRagSearchService
-	 * .toRagDocumentsCachedDaoResult(graphRagResult); consolidatedDaoResult =
-	 * AIDocumentsSet.join(consolidatedDaoResult, graphragDocumentsResult); } catch
-	 * (LLMConfigException e) { LOGGER.error("Error calling the graphrag logic", e);
-	 * } } return consolidatedDaoResult; }
-	 */
+	
 }

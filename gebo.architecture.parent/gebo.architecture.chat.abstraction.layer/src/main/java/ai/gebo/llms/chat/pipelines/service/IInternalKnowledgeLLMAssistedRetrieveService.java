@@ -11,6 +11,6 @@ import reactor.core.publisher.Flux;
 
 public interface IInternalKnowledgeLLMAssistedRetrieveService {
 	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK)
 			throws GeboChatSessionLifecycleException, LLMConfigException;
 }

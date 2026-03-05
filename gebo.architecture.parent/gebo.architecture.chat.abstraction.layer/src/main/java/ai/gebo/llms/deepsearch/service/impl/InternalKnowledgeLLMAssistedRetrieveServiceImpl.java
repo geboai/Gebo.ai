@@ -73,7 +73,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 
 	@Override
 	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
-			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy)
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK)
 			throws GeboChatSessionLifecycleException, LLMConfigException {
 		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
 				.getSessionAvailableKnowledgeBases(minimalChatContext.getCurrentRequest());
