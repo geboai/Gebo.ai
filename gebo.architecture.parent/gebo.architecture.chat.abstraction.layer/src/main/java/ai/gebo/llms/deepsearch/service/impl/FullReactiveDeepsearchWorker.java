@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.search.model.SearchServiceException;
@@ -24,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
@@ -36,7 +38,7 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
-import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagStepDeepSearchService;
+import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
@@ -44,6 +46,7 @@ import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLook
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,10 +55,6 @@ import reactor.core.scheduler.Scheduler;
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
 
-	private static final String NEWLINE = "\r\n";
-	private static final String SEARCH_MODULE_NAME = "Search module name:";
-	private static final String END_DEEP_SEARCH_MODULE_RESULT = "[End Deep search module result]\r\n";
-	private static final String BEGIN_DEEP_SEARCH_MODULE_RESULT = "[Begin Deep search module result]\r\n";
 	private final static Logger LOGGER = LoggerFactory.getLogger(FullReactiveDeepsearchWorker.class);
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
 	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
@@ -64,12 +63,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	private final IGPromptConfigDao promptsDao;
 	private final IGeboThreadManager threadManager;
-	private final IGInternalKnlowledgeBaseRagStepDeepSearchService internalKnowledgeBaseDeepSearchService;
+	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService;
 
 	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IGeboThreadManager threadManager,
 			IGPromptConfigDao promptsDao,
-			IGInternalKnlowledgeBaseRagStepDeepSearchService internalKnowledgeBaseDeepSearchService,
+			IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService,
 			DeepSearchDefaultConfig defaultDeepsearchConfig,
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,
@@ -137,7 +136,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			List<AbstractDeepSearchEvent> history, DeepSearchConfig configuration, UserInfos userInfos,
 			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
-			throws LLMConfigException {
+			throws LLMConfigException, GeboChatSessionLifecycleException, FullTextException {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin nextStep(....)");
@@ -195,9 +194,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
-						.knowledgeBaseDeepSearch(request, state, minimalChatContext, sessionDocuments,
-								dataSourcesResults, history, configuration, userInfos, chatModel, serviceModel,
-								chunkingSessionId, embeddingModels);
+						.knowledgeBaseDeepSearch(request, state, minimalChatContext, sessionDocuments, configuration,
+								userInfos, chatModel, serviceModel, chunkingSessionId, embeddingModels);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -233,39 +231,42 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
 			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			Vector<IDeepSearchResult> intermediates) {
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
 		Mono<AbstractDeepSearchEvent> deferred = Mono.fromCallable(() -> {
-			final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
-			consolidatedResult.setInputData(request);
-			consolidatedResult.setOutputData(new DeepSearchResponse());
-			consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
-			consolidatedResult.getOutputData().processedBy(chatModel);
-			if (intermediates != null && !intermediates.isEmpty()) {
-				List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
-				for (IDeepSearchResult x : intermediates) {
-					LLMInputDocument consolidated = new LLMInputDocument(x.getDataSourceDescription(), null, null,
-							x.getResponse());
-					inputs.add(consolidated);
+			return runAs.doRunAsWithReturn(() -> {
+				final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
+				consolidatedResult.setInputData(request);
+				consolidatedResult.setOutputData(new DeepSearchResponse());
+				consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
+				consolidatedResult.getOutputData().processedBy(chatModel);
+				if (intermediates != null && !intermediates.isEmpty()) {
+					List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
+					for (IDeepSearchResult x : intermediates) {
+						LLMInputDocument consolidated = new LLMInputDocument(x.getDataSourceDescription(), null, null,
+								x.getResponse());
+						inputs.add(consolidated);
+					}
+					String consolidatedText = callLLMConsolidateText(chatModel,
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
+							request.getQuery(), "", promptParams, inputs);
+					consolidatedResult.getOutputData().setResponse(consolidatedText);
+					consolidatedResult.getOutputData().setProcessPercentage(100);
+					boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
+					consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
+					consolidatedResult.getOutputData().setProcessPercentage(100);
+
+				} else {
+					String backupText = callLLM(chatModel, promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
+							request.getQuery(), promptParams);
+					consolidatedResult.getOutputData().setResponse(backupText);
+					consolidatedResult.getOutputData().setProcessPercentage(100);
+					consolidatedResult.getOutputData().setSearchResultsEmpty(true);
+
 				}
-				String consolidatedText = callLLMConsolidateText(chatModel,
-						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-						request.getQuery(), "", promptParams, inputs);
-				consolidatedResult.getOutputData().setResponse(consolidatedText);
-				consolidatedResult.getOutputData().setProcessPercentage(100);
-				boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
-				consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
-				consolidatedResult.getOutputData().setProcessPercentage(100);
-
-			} else {
-				String backupText = callLLM(chatModel, promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
-						request.getQuery(), promptParams);
-				consolidatedResult.getOutputData().setResponse(backupText);
-				consolidatedResult.getOutputData().setProcessPercentage(100);
-				consolidatedResult.getOutputData().setSearchResultsEmpty(true);
-
-			}
-			return consolidatedResult;
+				return consolidatedResult;
+			});
 		});
 		return Flux.concat(composedFlux, deferred);
 	}

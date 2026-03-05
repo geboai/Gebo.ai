@@ -52,6 +52,7 @@ import lombok.ToString;
 @Component
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingAndProvidingService
 		implements IRoutingChatPipelineStepService {
+	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = "deliverable";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
@@ -176,7 +177,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD));
+				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD, DEEP_SEARCHED_SYSTEMS));
 
 		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
 			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
@@ -373,7 +374,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 
 						return Map.of();
 					}
-				}, RespondingWith.DEEP_SEARCH_RESPONSE.name());
+				}, RespondingWith.DEEP_RAG_RESPONSE.name());
 		return rd;
 	}
 
@@ -469,6 +470,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		}
 		case SHALLOW_SEARCH_RESPONSE: {
 			return List.of(DefaultShallowSearchOutputPipelineServiceImpl.DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT);
+		}
+		case DEEP_RAG_RESPONSE: {
+			return List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

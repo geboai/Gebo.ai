@@ -8,6 +8,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -98,8 +99,14 @@ public interface IGChatSessionLifeCycleService {
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatSessionLifecycleException;
 
-	public MinimalChatContext getMinimalChatContext(GeboChatRequest request, int tokensBudget) throws GeboChatSessionLifecycleException;
+	public MinimalChatContext getMinimalChatContext(GeboChatRequest request, int tokensBudget)
+			throws GeboChatSessionLifecycleException;
 
 	public void persist(GeboChatRequest request) throws GeboChatSessionLifecycleException;
+
+	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
+			throws GeboChatSessionLifecycleException;
+
+	
 
 }

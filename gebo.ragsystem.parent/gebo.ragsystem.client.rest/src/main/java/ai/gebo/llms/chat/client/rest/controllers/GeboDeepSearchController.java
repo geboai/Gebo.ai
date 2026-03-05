@@ -8,17 +8,29 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.utils.DataPage;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -28,8 +40,13 @@ import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
+import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceExecutor;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.llms.deepsearch.service.IGInternalKnowledgeBaseDeepSearchExecutor;
+import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
+import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.system.ingestion.GeboIngestionException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -41,6 +58,11 @@ import reactor.core.publisher.Flux;
 public class GeboDeepSearchController {
 	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
 	final IGDeepSearchService deepSearchService;
+	final IGDeepSearchDataSourceExecutor dataSourceExecutor;
+	final IGInternalKnowledgeBaseDeepSearchExecutor internalKnowledgeBaseExecutor;
+	final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	final IGChatModelRuntimeConfigurationDao chatModelsConfigurationDao;
+	final IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider;
 
 	@GetMapping(value = "getMyDeepSearchesPaged", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<DeepSearchRequest> getMyDeepSearchesPaged(@RequestParam("page") Integer page,
@@ -104,7 +126,7 @@ public class GeboDeepSearchController {
 
 	@PostMapping(value = "doDeepSearch", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public DeepSearchResponse doDeepSearch(@RequestBody @Valid @NotNull DeepSearchRequest request)
-			throws LLMConfigException {
+			throws LLMConfigException, GeboChatSessionLifecycleException {
 		return this.deepSearchService.search(request);
 	}
 
@@ -116,7 +138,7 @@ public class GeboDeepSearchController {
 
 	@PostMapping(value = "streamDeepSearch", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearch(@Valid @NotNull @RequestBody DeepSearchRequest request)
-			throws LLMConfigException {
+			throws LLMConfigException, GeboChatSessionLifecycleException {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchProcessedEvent.class);
 	}
@@ -132,9 +154,15 @@ public class GeboDeepSearchController {
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 
+	private Flux<ServerSentEvent<String>> streamEnvelopes(Flux<GeboChatMessageEnvelope> flux) {
+		return flux.map(StreamUtil.mappingFunction)
+				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
+	}
+
 	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearchWithChatContext(
-			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException {
+			@Valid @NotNull @RequestBody GeboChatRequest request)
+			throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException {
 		Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(request);
 		return stream(flux, DeepSearchChatResponseEvent.class);
 	}
@@ -149,4 +177,46 @@ public class GeboDeepSearchController {
 		this.deepSearchService.stopDeepSearch(deepSearchCode);
 	}
 
+	@PostMapping(value = "internalKnowledgeBaseDeepSearch", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Flux<ServerSentEvent<String>> internalKnowledgeBaseDeepSearch(
+			@Valid @NotNull @RequestBody GeboChatRequest request)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException, LLMConfigException, IOException,
+			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		this.chatSessionLifecycleService.ensureChatSessionExists(request);
+		IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
+		IGConfigurableChatModel serviceModel = this.chatModelsConfigurationDao
+				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+		LLMChatRequestResources requestData = this.chatSessionLifecycleService.startRequest(request, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
+		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
+				serviceModel.getContextLength() / 3);
+		Flux<GeboChatMessageEnvelope> flux = this.internalKnowledgeBaseExecutor.execute(requestData, minimalChatContext,
+				response, chatModel, serviceModel);
+		return streamEnvelopes(flux);
+	}
+
+	@PostMapping(value = "dataSourceDeepSearch/{dataSourceCode}", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Flux<ServerSentEvent<String>> dataSourceDeepSearch(@PathVariable("dataSourceCode") String dataSourceCode,
+			@Valid @NotNull @RequestBody GeboChatRequest request)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException, LLMConfigException, IOException,
+			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		this.chatSessionLifecycleService.ensureChatSessionExists(request);
+		IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
+		IGConfigurableChatModel serviceModel = this.chatModelsConfigurationDao
+				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+		LLMChatRequestResources requestData = this.chatSessionLifecycleService.startRequest(request, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
+		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
+				serviceModel.getContextLength() / 3);
+		List<IGReactiveDeepSearchDataSourceService> dataSources = dataSourcesProvider.getDynamicDeepSearchServices();
+		IGReactiveDeepSearchDataSourceService dataSourceHandler = dataSources.stream()
+				.filter(x -> x.getHandlerId().equals(dataSourceCode)).findFirst().orElseThrow(() -> {
+					return new GeboChatSessionLifecycleException("No data source found:" + dataSourceCode);
+				});
+		Flux<GeboChatMessageEnvelope> flux = this.dataSourceExecutor.execute(dataSourceHandler, request,
+				minimalChatContext, response, chatModel, serviceModel);
+		return streamEnvelopes(flux);
+	}
 }

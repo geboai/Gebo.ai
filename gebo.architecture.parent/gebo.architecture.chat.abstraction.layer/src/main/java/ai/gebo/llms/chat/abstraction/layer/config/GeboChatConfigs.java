@@ -37,7 +37,7 @@ public class GeboChatConfigs {
     private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
     
     // Default number of top elements to be considered
-    private int defaultTopK = 10;
+    private int defaultTopK = 15;
     
     // Default similarity threshold for comparisons
     private double defaultSimilarityThreshold = 0.50;

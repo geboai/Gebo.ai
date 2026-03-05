@@ -38,7 +38,6 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
-import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 

@@ -17,7 +17,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteractio
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 
-final class RoutingPromptUtil {
+public final class RoutingPromptUtil {
 
 	private static final String END_DEEP_SEARCH_DATA_SOURCE = "END_DEEP_SEARCH_DATA_SOURCE";
 	private static final String DEEP_SEARCH_DATA_SOURCE = "DEEP_SEARCH_DATA_SOURCE";
@@ -85,7 +85,7 @@ final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	static String documentsPromptPart(LLMChatRequestResources requestResources, int documentsTokenBudget) {
+	public static String documentsPromptPart(LLMChatRequestResources requestResources, int documentsTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
 
 		AIDocumentsSet lastDocs = addUntillBudgetLatestDocuments(requestResources, documentsTokenBudget);
@@ -107,7 +107,7 @@ final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	private static AIDocumentsSet addUntillBudgetLatestDocuments(LLMChatRequestResources requestResources,
+	public  static AIDocumentsSet addUntillBudgetLatestDocuments(LLMChatRequestResources requestResources,
 			int documentsTokenBudget) {
 		AtomicInteger tokensBudget = new AtomicInteger(documentsTokenBudget);
 		AIDocumentsSet result = new AIDocumentsSet();
@@ -118,7 +118,7 @@ final class RoutingPromptUtil {
 		return result;
 	}
 
-	private static AIDocumentsSet tryAdd(AIDocumentsSet ds, AIDocumentsSet toBeAdd, AtomicInteger tokensBudget) {
+	public  static AIDocumentsSet tryAdd(AIDocumentsSet ds, AIDocumentsSet toBeAdd, AtomicInteger tokensBudget) {
 		if (toBeAdd != null && tokensBudget.get() >= toBeAdd.getTokensSize()) {
 			ds = AIDocumentsSet.join(ds, toBeAdd);
 			tokensBudget.addAndGet(-1 * toBeAdd.getTokensSize());
@@ -126,7 +126,7 @@ final class RoutingPromptUtil {
 		return ds;
 	}
 
-	private static String fullDocumentRendering(List<AIDocumentReferenceItem> docs) {
+	public  static String fullDocumentRendering(List<AIDocumentReferenceItem> docs) {
 		StringBuffer buffer = new StringBuffer();
 		for (AIDocumentReferenceItem doc : docs) {
 			if (doc.getFragments().isEmpty())
@@ -136,7 +136,7 @@ final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	private static String partialDocumentRendering(List<AIDocumentReferenceItem> docs, int documentsTokenBudget) {
+	public  static String partialDocumentRendering(List<AIDocumentReferenceItem> docs, int documentsTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
 		for (AIDocumentReferenceItem doc : docs) {
 			String _docRendered = documentRendering(doc, documentsTokenBudget);
@@ -168,7 +168,7 @@ final class RoutingPromptUtil {
 	private static final String CONTENT_BEGIN = "CONTENT_BEGIN";
 	private static final String CONTENT_END = "CONTENT_END";
 
-	static String toolsListPromptPart(List<ToolCategoriesTree> tools) {
+	public static String toolsListPromptPart(List<ToolCategoriesTree> tools) {
 		StringBuffer buffer = new StringBuffer();
 		if (tools != null && !tools.isEmpty()) {
 			buffer.append(TOOLS_CATALOG);
@@ -212,7 +212,7 @@ final class RoutingPromptUtil {
 
 	private static final String END_TOOLS_CATALOG = "END_TOOLS_CATALOG";
 
-	static String latestInteractionsPromptPart(List<CSSSimplefiedInteraction> lastInteractions) {
+	public  static String latestInteractionsPromptPart(List<CSSSimplefiedInteraction> lastInteractions) {
 		StringBuffer buffer = new StringBuffer();
 		if (lastInteractions != null) {
 			for (int i = lastInteractions.size() - 1; i >= 0; i--) {
@@ -314,7 +314,7 @@ final class RoutingPromptUtil {
 	private static final String END_SHALLOW_SEARCH_SYSTEMS_CATALOG = "END_SHALLOW_SEARCH_SYSTEMS_CATALOG";
 	private static final String SHALLOW_SEARCH_SYSTEMS_CATALOG = "SHALLOW_SEARCH_SYSTEMS_CATALOG";
 
-	static String shallowSearchSystemsCatalog(List<DeepSearchDataSourceMetaInfos> systems) {
+	public static String shallowSearchSystemsCatalog(List<DeepSearchDataSourceMetaInfos> systems) {
 		StringBuffer buffer = new StringBuffer();
 		if (!systems.isEmpty()) {
 			buffer.append(SHALLOW_SEARCH_SYSTEMS_CATALOG);

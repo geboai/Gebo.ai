@@ -24,6 +24,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	private boolean deepSearchUIAllowChooseSources = false;
 	private int offTopicChunksSkipDocumentThreashold = 3;
 	private int perDataSourceMaxVisited = 25;
+	private int internalKnowledgeDeepSearchTopK = 80;
 	private int perDataSourceMaxInputTokens = 5000000;
 	private int perDataSourceMaxOutputTokens = 1000000;
 	private List<DeepSearchUserIntentThreashold> deepSearchUserIntentThreasholds = new ArrayList<DeepSearchUserIntentThreashold>();

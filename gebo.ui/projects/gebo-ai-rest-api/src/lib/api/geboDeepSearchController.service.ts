@@ -69,6 +69,58 @@ export class GeboDeepSearchControllerService {
      * 
      * 
      * @param body 
+     * @param dataSourceCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public dataSourceDeepSearch(body: GeboChatRequest, dataSourceCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
+    public dataSourceDeepSearch(body: GeboChatRequest, dataSourceCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
+    public dataSourceDeepSearch(body: GeboChatRequest, dataSourceCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
+    public dataSourceDeepSearch(body: GeboChatRequest, dataSourceCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling dataSourceDeepSearch.');
+        }
+
+        if (dataSourceCode === null || dataSourceCode === undefined) {
+            throw new Error('Required parameter dataSourceCode was null or undefined when calling dataSourceDeepSearch.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/event-stream'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDeepSearchController/dataSourceDeepSearch/${encodeURIComponent(String(dataSourceCode))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -658,6 +710,53 @@ export class GeboDeepSearchControllerService {
         return this.httpClient.request<PageDeepSearchDocumentAnalisysResultStep>('get',`${this.basePath}/api/users/GeboDeepSearchController/getMyDeepSearchesStepsPaged`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public internalKnowledgeBaseDeepSearch(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
+    public internalKnowledgeBaseDeepSearch(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
+    public internalKnowledgeBaseDeepSearch(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
+    public internalKnowledgeBaseDeepSearch(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling internalKnowledgeBaseDeepSearch.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/event-stream'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDeepSearchController/internalKnowledgeBaseDeepSearch`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
