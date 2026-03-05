@@ -63,3 +63,24 @@ ai.gebo.llms.generic.config:
       providerId: vllm
       description: VLLM hosted embedding model
       baseUrl:
+
+  imageModelProviders:
+    - code: images-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai image generation model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+  textToSpeechModelProviders:
+    - code: tts-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai text to speech model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+  transcriptModelProviders:
+    - code: transcript-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai transcript model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list

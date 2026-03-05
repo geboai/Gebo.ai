@@ -57,7 +57,7 @@ import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;

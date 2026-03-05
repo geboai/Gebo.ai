@@ -33,8 +33,8 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.openai_compat.config.GenericOpenAICompatibleProvidersConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIEmbeddingModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 

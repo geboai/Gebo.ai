@@ -7,9 +7,10 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.llms.openai_compat.model;
+package ai.gebo.llms.openai_compat.modeltypes;
 
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
 import lombok.Data;
 
 /**

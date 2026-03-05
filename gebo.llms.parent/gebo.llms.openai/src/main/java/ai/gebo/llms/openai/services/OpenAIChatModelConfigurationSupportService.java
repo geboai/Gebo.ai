@@ -76,12 +76,7 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
 	}
 
-	/**
-	 * Available model choices for OpenAI chat models.
-	 */
-	static final List<GOpenAIChatModelChoice> choices = GBaseModelChoice.of(GOpenAIChatModelChoice.class,
-			OpenAiApi.ChatModel.values());
-
+	
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;

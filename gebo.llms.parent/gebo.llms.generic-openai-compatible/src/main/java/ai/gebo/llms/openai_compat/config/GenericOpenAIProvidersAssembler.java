@@ -23,15 +23,24 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIEmbeddingModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIImageModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAITextToSpeechModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAITranscriptModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.annotation.PostConstruct;
@@ -54,6 +63,12 @@ public class GenericOpenAIProvidersAssembler {
 	 * Repository for embedding model configuration support services
 	 */
 	final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingModelProvidersRepo;
+
+	final IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern textToSpeechProvidersRepo;
+
+	final IGTranscriptModelConfigurationSupportServiceRepositoryPattern transcriptsProvidersRepo;
+
+	final IGImageModelConfigurationSupportServiceRepositoryPattern imagesProvidersRepo;
 
 	/**
 	 * Service for accessing secrets required by model providers
@@ -86,6 +101,7 @@ public class GenericOpenAIProvidersAssembler {
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+
 	/**
 	 * Initializes and registers all configured OpenAI-compatible providers. This
 	 * method creates provider instances for both chat and embedding models and adds
@@ -110,6 +126,28 @@ public class GenericOpenAIProvidersAssembler {
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
 						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
 				embeddingModelProvidersRepo.addImplementation(provider);
+			}
+		}
+		if (config.getImageModelProviders() != null) {
+			for (GenericOpenAIImageModelTypeConfig pc : config.getImageModelProviders()) {
+				GenericOpenAIImageModelConfigurationSupportService provider = new GenericOpenAIImageModelConfigurationSupportService(
+						pc, secretService, openaiApiUtil, serviceClientsProviderFactory, configureHandler,
+						modelsListProxyService, llmTypeFiltrerRepoPattern);
+				imagesProvidersRepo.addImplementation(provider);
+			}
+		}
+		if (config.getTextToSpeechModelProviders() != null) {
+			for (GenericOpenAITextToSpeechModelType pc : config.getTextToSpeechModelProviders()) {
+				GenericOpenAITextToSpeechModelConfigurationSupportService service = new GenericOpenAITextToSpeechModelConfigurationSupportService(
+						pc, secretService, openaiApiUtil, modelsListProxyService);
+				textToSpeechProvidersRepo.addImplementation(service);
+			}
+		}
+		if (config.getTranscriptModelProviders() != null) {
+			for (GenericOpenAITranscriptModelType pc : config.getTranscriptModelProviders()) {
+				GenericOpenAITranscriptModelConfigurationSupportService service = new GenericOpenAITranscriptModelConfigurationSupportService(
+						pc, secretService, openaiApiUtil, modelsListProxyService);
+				this.transcriptsProvidersRepo.addImplementation(service);
 			}
 		}
 	}

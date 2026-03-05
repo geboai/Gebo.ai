@@ -6,32 +6,33 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
+
+import org.springframework.ai.audio.tts.TextToSpeechModel;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 
 /**
- * AI generated comments
- * Abstract base class for configurable text-to-speech models.
- * It provides the foundational implementation for handling configuration and model instantiation.
+ * AI generated comments Abstract base class for configurable text-to-speech
+ * models. It provides the foundational implementation for handling
+ * configuration and model instantiation.
  *
- * @param <ModelConfig> The type of configuration used by the model, extending GBaseTextToSpeachModelConfig.
- * @param <ModelObjectType> The type of the model object that will be instantiated and used.
+ * @param <ModelConfig>     The type of configuration used by the model,
+ *                          extending GBaseTextToSpeachModelConfig.
+ * @param <ModelObjectType> The type of the model object that will be
+ *                          instantiated and used.
  */
-public abstract class GAbstractConfigurableTextToSpeechModel<ModelConfig extends GBaseTextToSpeachModelConfig, ModelObjectType>
+public abstract class GAbstractConfigurableTextToSpeechModel<ModelConfig extends GBaseTextToSpeachModelConfig, ModelObjectType extends TextToSpeechModel>
 		implements IGConfigurableTextToSpeechModel<ModelConfig> {
-	
+
 	// Configuration specific to the text-to-speech model.
 	protected ModelConfig config = null;
-	
+
 	// The instantiated text-to-speech model object.
 	protected ModelObjectType model = null;
-	
+
 	// The type of text-to-speech model being used.
 	protected GTextToSpeechModelType type = null;
 
@@ -73,10 +74,11 @@ public abstract class GAbstractConfigurableTextToSpeechModel<ModelConfig extends
 	}
 
 	/**
-	 * Initializes the text-to-speech model with the provided configuration and type.
+	 * Initializes the text-to-speech model with the provided configuration and
+	 * type.
 	 *
 	 * @param config The configuration for the text-to-speech model.
-	 * @param type The type of the text-to-speech model.
+	 * @param type   The type of the text-to-speech model.
 	 * @throws LLMConfigException If an error occurs during the configuration.
 	 */
 	@Override
@@ -87,15 +89,16 @@ public abstract class GAbstractConfigurableTextToSpeechModel<ModelConfig extends
 	}
 
 	/**
-	 * Abstract method for configuring the text-to-speech model.
-	 * Implementing classes must define how the model is instantiated and configured.
+	 * Abstract method for configuring the text-to-speech model. Implementing
+	 * classes must define how the model is instantiated and configured.
 	 *
 	 * @param config The configuration for the text-to-speech model.
-	 * @param type The type of the text-to-speech model.
+	 * @param type   The type of the text-to-speech model.
 	 * @return The configured model object.
 	 * @throws LLMConfigException If an error occurs during configuration.
 	 */
-	protected abstract ModelObjectType configureModel(ModelConfig config, GTextToSpeechModelType type) throws LLMConfigException;
+	protected abstract ModelObjectType configureModel(ModelConfig config, GTextToSpeechModelType type)
+			throws LLMConfigException;
 
 	/**
 	 * Reconfigures the model with a new configuration.

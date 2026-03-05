@@ -10,9 +10,10 @@
  
  
 
-package ai.gebo.llms.openai_compat.model;
+package ai.gebo.llms.openai_compat.modeltypes;
 
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;
 
 /**
  * AI generated comments
