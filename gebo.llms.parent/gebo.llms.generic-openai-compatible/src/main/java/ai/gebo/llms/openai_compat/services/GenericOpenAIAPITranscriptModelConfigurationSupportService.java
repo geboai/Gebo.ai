@@ -37,8 +37,8 @@ import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyI
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.openai_compat.model.GenericOpenAITranscriptModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAITranscriptModelConfig;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITranscriptModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -53,8 +53,8 @@ import lombok.AllArgsConstructor;
  * Whisper model.
  */
 @AllArgsConstructor
-public class GenericOpenAITranscriptModelConfigurationSupportService implements
-		IGTranscriptModelConfigurationSupportService<GenericOpenAITranscriptModelChoice, GenericOpenAITranscriptModelConfig> {
+public class GenericOpenAIAPITranscriptModelConfigurationSupportService implements
+		IGTranscriptModelConfigurationSupportService<GenericOpenAIAPITranscriptModelChoice, GenericOpenAIAPITranscriptModelConfig> {
 
 	/**
 	 * Static transcript model type for OpenAI transcript service
@@ -81,7 +81,7 @@ public class GenericOpenAITranscriptModelConfigurationSupportService implements
 	 * functionality.
 	 */
 	public class GenericOpenAIConfigurableTranscriptModel extends
-			GAbstractConfigurableTranscriptModel<GenericOpenAITranscriptModelConfig, OpenAiAudioTranscriptionModel> {
+			GAbstractConfigurableTranscriptModel<GenericOpenAIAPITranscriptModelConfig, OpenAiAudioTranscriptionModel> {
 
 		/**
 		 * Processes the audio from an input stream and returns the transcribed text
@@ -129,7 +129,7 @@ public class GenericOpenAITranscriptModelConfigurationSupportService implements
 		 *                            access
 		 */
 		@Override
-		protected OpenAiAudioTranscriptionModel configureModel(GenericOpenAITranscriptModelConfig config,
+		protected OpenAiAudioTranscriptionModel configureModel(GenericOpenAIAPITranscriptModelConfig config,
 				GTranscriptModelType type) throws LLMConfigException {
 
 			String apiKey = null;
@@ -163,9 +163,9 @@ public class GenericOpenAITranscriptModelConfigurationSupportService implements
 	 * @return Operation status containing a list of available model choices
 	 */
 	@Override
-	public OperationStatus<List<GenericOpenAITranscriptModelChoice>> getModelChoices(
-			GenericOpenAITranscriptModelConfig config) {
-		GenericOpenAITranscriptModelChoice choice = new GenericOpenAITranscriptModelChoice();
+	public OperationStatus<List<GenericOpenAIAPITranscriptModelChoice>> getModelChoices(
+			GenericOpenAIAPITranscriptModelConfig config) {
+		GenericOpenAIAPITranscriptModelChoice choice = new GenericOpenAIAPITranscriptModelChoice();
 		choice.setCode(WhisperModel.WHISPER_1.value);
 		choice.setDescription("Whisper 1");
 		return OperationStatus.of(List.of(choice));
@@ -179,8 +179,8 @@ public class GenericOpenAITranscriptModelConfigurationSupportService implements
 	 * @return A new OpenAI transcript model configuration with default settings
 	 */
 	@Override
-	public GenericOpenAITranscriptModelConfig createBaseConfiguration(String presetModel) {
-		GenericOpenAITranscriptModelConfig config = new GenericOpenAITranscriptModelConfig();
+	public GenericOpenAIAPITranscriptModelConfig createBaseConfiguration(String presetModel) {
+		GenericOpenAIAPITranscriptModelConfig config = new GenericOpenAIAPITranscriptModelConfig();
 		config.setDescription("OpenAI transcript provider");
 		config.setChoosedModel(getModelChoices(config).getResult().get(0));
 		return config;
@@ -194,16 +194,16 @@ public class GenericOpenAITranscriptModelConfigurationSupportService implements
 	 * @throws LLMConfigException If there is an issue with the configuration
 	 */
 	@Override
-	public IGConfigurableTranscriptModel<GenericOpenAITranscriptModelConfig> create(
-			GenericOpenAITranscriptModelConfig config) throws LLMConfigException {
+	public IGConfigurableTranscriptModel<GenericOpenAIAPITranscriptModelConfig> create(
+			GenericOpenAIAPITranscriptModelConfig config) throws LLMConfigException {
 		GenericOpenAIConfigurableTranscriptModel tModel = new GenericOpenAIConfigurableTranscriptModel();
 		tModel.initialize(config, type);
 		return tModel;
 	}
 
 	@Override
-	public OperationStatus<GenericOpenAITranscriptModelConfig> insertAndConfigure(
-			GenericOpenAITranscriptModelConfig config) {
+	public OperationStatus<GenericOpenAIAPITranscriptModelConfig> insertAndConfigure(
+			GenericOpenAIAPITranscriptModelConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}

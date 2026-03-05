@@ -38,9 +38,9 @@ import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigurationSupportService;
-import ai.gebo.llms.openai_compat.services.GenericOpenAIImageModelConfigurationSupportService;
-import ai.gebo.llms.openai_compat.services.GenericOpenAITextToSpeechModelConfigurationSupportService;
-import ai.gebo.llms.openai_compat.services.GenericOpenAITranscriptModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIImageModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITextToSpeechModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITranscriptModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.annotation.PostConstruct;
@@ -130,7 +130,7 @@ public class GenericOpenAIProvidersAssembler {
 		}
 		if (config.getImageModelProviders() != null) {
 			for (GenericOpenAIImageModelTypeConfig pc : config.getImageModelProviders()) {
-				GenericOpenAIImageModelConfigurationSupportService provider = new GenericOpenAIImageModelConfigurationSupportService(
+				GenericOpenAIAPIImageModelConfigurationSupportService provider = new GenericOpenAIAPIImageModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, serviceClientsProviderFactory, configureHandler,
 						modelsListProxyService, llmTypeFiltrerRepoPattern);
 				imagesProvidersRepo.addImplementation(provider);
@@ -138,14 +138,14 @@ public class GenericOpenAIProvidersAssembler {
 		}
 		if (config.getTextToSpeechModelProviders() != null) {
 			for (GenericOpenAITextToSpeechModelType pc : config.getTextToSpeechModelProviders()) {
-				GenericOpenAITextToSpeechModelConfigurationSupportService service = new GenericOpenAITextToSpeechModelConfigurationSupportService(
+				GenericOpenAIAPITextToSpeechModelConfigurationSupportService service = new GenericOpenAIAPITextToSpeechModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, modelsListProxyService);
 				textToSpeechProvidersRepo.addImplementation(service);
 			}
 		}
 		if (config.getTranscriptModelProviders() != null) {
 			for (GenericOpenAITranscriptModelType pc : config.getTranscriptModelProviders()) {
-				GenericOpenAITranscriptModelConfigurationSupportService service = new GenericOpenAITranscriptModelConfigurationSupportService(
+				GenericOpenAIAPITranscriptModelConfigurationSupportService service = new GenericOpenAIAPITranscriptModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, modelsListProxyService);
 				this.transcriptsProvidersRepo.addImplementation(service);
 			}

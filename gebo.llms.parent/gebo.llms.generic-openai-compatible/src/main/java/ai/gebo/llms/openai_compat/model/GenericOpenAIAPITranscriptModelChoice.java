@@ -21,13 +21,13 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
  * specifically for OpenAI implementation.
  * It provides a container for OpenAI-specific transcript choice data.
  */
-public class GenericOpenAITranscriptModelChoice extends GBaseTranscriptModelChoice {
+public class GenericOpenAIAPITranscriptModelChoice extends GBaseTranscriptModelChoice {
 
 	/**
 	 * Default constructor for GOpenAITranscriptModelChoice.
 	 * Initializes a new empty instance with default values.
 	 */
-	public GenericOpenAITranscriptModelChoice() {
+	public GenericOpenAIAPITranscriptModelChoice() {
 		
 	}
 

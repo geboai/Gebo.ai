@@ -31,8 +31,8 @@ import ai.gebo.llms.abstraction.layer.services.IGModelApiAccessReadUtils.ApiKeyI
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.openai_compat.model.GenericOpenAITextToSpeechModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAITextToSpeechModelConfig;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPITextToSpeechModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -43,8 +43,8 @@ import lombok.AllArgsConstructor;
  * comments
  */
 @AllArgsConstructor
-public class GenericOpenAITextToSpeechModelConfigurationSupportService implements
-		IGTextToSpeechModelConfigurationSupportService<GenericOpenAITextToSpeechModelChoice, GenericOpenAITextToSpeechModelConfig> {
+public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implements
+		IGTextToSpeechModelConfigurationSupportService<GenericOpenAIAPITextToSpeechModelChoice, GenericOpenAIAPITextToSpeechModelConfig> {
 
 	/**
 	 * Static definition of the model type with code and description
@@ -72,7 +72,7 @@ public class GenericOpenAITextToSpeechModelConfigurationSupportService implement
 	 * configurable model.
 	 */
 	class GenericOpenAIConfigurableTextToSpeechModel extends
-			GAbstractConfigurableTextToSpeechModel<GenericOpenAITextToSpeechModelConfig, OpenAiAudioSpeechModel> {
+			GAbstractConfigurableTextToSpeechModel<GenericOpenAIAPITextToSpeechModelConfig, OpenAiAudioSpeechModel> {
 
 		/**
 		 * Converts text to speech and returns the audio as an InputStream.
@@ -97,7 +97,7 @@ public class GenericOpenAITextToSpeechModelConfigurationSupportService implement
 		 * @throws LLMConfigException If the configuration fails
 		 */
 		@Override
-		protected OpenAiAudioSpeechModel configureModel(GenericOpenAITextToSpeechModelConfig config,
+		protected OpenAiAudioSpeechModel configureModel(GenericOpenAIAPITextToSpeechModelConfig config,
 				GTextToSpeechModelType type) throws LLMConfigException {
 			String apiKey = null;
 			if (config.getApiSecretCode()!=null) {
@@ -132,9 +132,9 @@ public class GenericOpenAITextToSpeechModelConfigurationSupportService implement
 	 * @return OperationStatus containing a list of available model choices
 	 */
 	@Override
-	public OperationStatus<List<GenericOpenAITextToSpeechModelChoice>> getModelChoices(
-			GenericOpenAITextToSpeechModelConfig config) {
-		GenericOpenAITextToSpeechModelChoice tts1Model = new GenericOpenAITextToSpeechModelChoice();
+	public OperationStatus<List<GenericOpenAIAPITextToSpeechModelChoice>> getModelChoices(
+			GenericOpenAIAPITextToSpeechModelConfig config) {
+		GenericOpenAIAPITextToSpeechModelChoice tts1Model = new GenericOpenAIAPITextToSpeechModelChoice();
 		tts1Model.setCode("tts-1");
 		tts1Model.setDescription("OpenAI text to speech tts1 model");
 
@@ -148,8 +148,8 @@ public class GenericOpenAITextToSpeechModelConfigurationSupportService implement
 	 * @return A new configuration with default values
 	 */
 	@Override
-	public GenericOpenAITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
-		GenericOpenAITextToSpeechModelConfig config = new GenericOpenAITextToSpeechModelConfig();
+	public GenericOpenAIAPITextToSpeechModelConfig createBaseConfiguration(String presetModel) {
+		GenericOpenAIAPITextToSpeechModelConfig config = new GenericOpenAIAPITextToSpeechModelConfig();
 		config.setChoosedModel(getModelChoices(config).getResult().get(0));
 		return config;
 	}
@@ -162,16 +162,16 @@ public class GenericOpenAITextToSpeechModelConfigurationSupportService implement
 	 * @throws LLMConfigException If configuration fails
 	 */
 	@Override
-	public IGConfigurableTextToSpeechModel<GenericOpenAITextToSpeechModelConfig> create(
-			GenericOpenAITextToSpeechModelConfig config) throws LLMConfigException {
+	public IGConfigurableTextToSpeechModel<GenericOpenAIAPITextToSpeechModelConfig> create(
+			GenericOpenAIAPITextToSpeechModelConfig config) throws LLMConfigException {
 		GenericOpenAIConfigurableTextToSpeechModel model = new GenericOpenAIConfigurableTextToSpeechModel();
 		model.initialize(config, type);
 		return model;
 	}
 
 	@Override
-	public OperationStatus<GenericOpenAITextToSpeechModelConfig> insertAndConfigure(
-			GenericOpenAITextToSpeechModelConfig config) {
+	public OperationStatus<GenericOpenAIAPITextToSpeechModelConfig> insertAndConfigure(
+			GenericOpenAIAPITextToSpeechModelConfig config) {
 		// TODO Auto-generated method stub
 		return null;
 	}

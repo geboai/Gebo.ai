@@ -21,13 +21,13 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
  * It extends the base transcript model configuration class and specializes it
  * for OpenAI-specific transcript model choices.
  */
-public class GenericOpenAITranscriptModelConfig extends GBaseTranscriptModelConfig<GenericOpenAITranscriptModelChoice> {
+public class GenericOpenAIAPITranscriptModelConfig extends GBaseTranscriptModelConfig<GenericOpenAIAPITranscriptModelChoice> {
 
 	/**
 	 * Default constructor for creating a new OpenAI transcript model configuration.
 	 * Initializes an empty configuration object.
 	 */
-	public GenericOpenAITranscriptModelConfig() {
+	public GenericOpenAIAPITranscriptModelConfig() {
 
 	}
 

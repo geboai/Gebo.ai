@@ -22,8 +22,8 @@ import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIImageModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIImageModelConfig;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -33,8 +33,8 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class GenericOpenAIImageModelConfigurationSupportService implements
-		IGImageModelConfigurationSupportService<ai.gebo.llms.openai_compat.model.GenericOpenAIImageModelChoice, ai.gebo.llms.openai_compat.model.GenericOpenAIImageModelConfig> {
+public class GenericOpenAIAPIImageModelConfigurationSupportService implements
+		IGImageModelConfigurationSupportService<ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice, ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig> {
 	final GenericOpenAIImageModelTypeConfig type;
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
@@ -44,10 +44,10 @@ public class GenericOpenAIImageModelConfigurationSupportService implements
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 
 	class GenericOpenAIConfigurableImageModel
-			extends GAbstractConfigurableImageModel<GenericOpenAIImageModelConfig, OpenAiImageModel> {
+			extends GAbstractConfigurableImageModel<GenericOpenAIAPIImageModelConfig, OpenAiImageModel> {
 
 		@Override
-		protected OpenAiImageModel configureModel(GenericOpenAIImageModelConfig config, GImageModelType type)
+		protected OpenAiImageModel configureModel(GenericOpenAIAPIImageModelConfig config, GImageModelType type)
 				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
@@ -95,15 +95,15 @@ public class GenericOpenAIImageModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<List<GenericOpenAIImageModelChoice>> getModelChoices(GenericOpenAIImageModelConfig config) {
+	public OperationStatus<List<GenericOpenAIAPIImageModelChoice>> getModelChoices(GenericOpenAIAPIImageModelConfig config) {
 
 		return null;
 	}
 
 	@Override
-	public GenericOpenAIImageModelConfig createBaseConfiguration(String presetModel) {
-		GenericOpenAIImageModelConfig clean = new GenericOpenAIImageModelConfig();
-		clean.setChoosedModel(new GenericOpenAIImageModelChoice());
+	public GenericOpenAIAPIImageModelConfig createBaseConfiguration(String presetModel) {
+		GenericOpenAIAPIImageModelConfig clean = new GenericOpenAIAPIImageModelConfig();
+		clean.setChoosedModel(new GenericOpenAIAPIImageModelChoice());
 		clean.getChoosedModel().setCode(presetModel);
 		clean.getChoosedModel().setDescription("image generation model " + presetModel);
 		clean.setDescription("Generic OpenAI API image generation model " + presetModel);
@@ -113,7 +113,7 @@ public class GenericOpenAIImageModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GenericOpenAIImageModelConfig> insertAndConfigure(GenericOpenAIImageModelConfig config)
+	public OperationStatus<GenericOpenAIAPIImageModelConfig> insertAndConfigure(GenericOpenAIAPIImageModelConfig config)
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
@@ -121,7 +121,7 @@ public class GenericOpenAIImageModelConfigurationSupportService implements
 	}
 
 	@Override
-	public IGConfigurableImageModel create(GenericOpenAIImageModelConfig config) throws LLMConfigException {
+	public IGConfigurableImageModel create(GenericOpenAIAPIImageModelConfig config) throws LLMConfigException {
 		GenericOpenAIConfigurableImageModel model = new GenericOpenAIConfigurableImageModel();
 		model.initialize(config, type);
 		return model;

@@ -23,14 +23,14 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
  * Currently, this implementation is a skeleton that will likely be expanded
  * to include OpenAI-specific functionality.
  */
-public class GenericOpenAITextToSpeechModelChoice extends GBaseTextToSpeachModelChice {
+public class GenericOpenAIAPITextToSpeechModelChoice extends GBaseTextToSpeachModelChice {
 
     /**
      * Default constructor for the OpenAI text-to-speech model choice.
      * Currently empty but will likely be implemented to set up OpenAI-specific
      * configuration for text-to-speech services.
      */
-	public GenericOpenAITextToSpeechModelChoice() {
+	public GenericOpenAIAPITextToSpeechModelChoice() {
 		// TODO Auto-generated constructor stub
 	}
 

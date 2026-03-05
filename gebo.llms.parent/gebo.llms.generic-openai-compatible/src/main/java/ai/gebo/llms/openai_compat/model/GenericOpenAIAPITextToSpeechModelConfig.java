@@ -21,13 +21,13 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
  * It extends the base text-to-speech model configuration and is specialized for
  * handling OpenAI's specific configuration options through the GOpenAITextToSpeechModelChoice type.
  */
-public class GenericOpenAITextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GenericOpenAITextToSpeechModelChoice> {
+public class GenericOpenAIAPITextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GenericOpenAIAPITextToSpeechModelChoice> {
 
 	/**
 	 * Default constructor for creating a new OpenAI text-to-speech model configuration.
 	 * Initializes an empty configuration that can be populated with specific settings.
 	 */
-	public GenericOpenAITextToSpeechModelConfig() {
+	public GenericOpenAIAPITextToSpeechModelConfig() {
 
 	}
 
