@@ -40,8 +40,12 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
+import ai.gebo.llms.chat.pipelines.service.ICommonOutputPipelineService;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
@@ -72,10 +76,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String DOCUMENTS = "documents";
 	private final static Logger LOGGER = LoggerFactory.getLogger(DefaultRoutingChatPipelineStepServiceImpl.class);
 	private final ChatPipelinesConfiguration chatPipelinesConfig;
-	private final IGDeepSearchService deepSearchService;
+
 	private final IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo;
 	private final IDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
-	private final IGKnowledgebaseVisibilityService visibleKnowledgeBasesService;
+	private final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepoPattern;
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
@@ -254,44 +258,81 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
 		RoutingDecision rd = null;
-		if (runtimeData.getRequestResources().getCurrentRequest() != null
-				&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null) {
-			rd = new RoutingDecision(
-					List.of(runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId()),
-					IChatPipelineStepRuntimeData
-							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
-					runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
 
-		} else {
-			try {
-				String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
-						runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
-				// Doing a query rewrite
-				String rewrited_query = doRequestRewrite(runtimeData, chatModel, serviceModel, latestInteractions);
-				// if actual resource has chat with documents or uploads with more than actual
-				// tokens budget than doing a deep search ONLY on
-				// Documents being in request
-				int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
-						+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
-				int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(
-						chatModel);
-				if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
-					rd = createDeepSearchHeavyDocumentsFixedRoute(runtimeData);
+		try {
+			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
+					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
+			// Doing a query rewrite
+			String rewrited_query = doRequestRewrite(runtimeData, chatModel, serviceModel, latestInteractions);
+			// if actual resource has chat with documents or uploads with more than actual
+			// tokens budget than doing a deep search ONLY on
+			// Documents being in request
+			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
+					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
+			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
+			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
+				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(runtimeData);
+			} else {
+				if (runtimeData.getRequestResources().getCurrentRequest() != null
+						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null
+						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId().trim()
+								.length() > 0) {
+					rd = doHandleUserRequestedRouting(runtimeData);
 				} else {
 					rd = doDecideRoute(runtimeData, chatModel, serviceModel, latestInteractions, rewrited_query);
 				}
-				this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
-			} catch (Throwable th) {
-				LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
-				rd = new RoutingDecision(
-						List.of(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT),
-						IChatPipelineStepRuntimeData
-								.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
-						RespondingWith.PURE_LLM_RESPONSE.name());
 			}
+			this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
+		} catch (Throwable th) {
+			LOGGER.error("Exception in chat pipeline routing falling back to PURE_LLM_RESPONSE", th);
+			rd = new RoutingDecision(List.of(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT),
+					IChatPipelineStepRuntimeData
+							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
+					RespondingWith.PURE_LLM_RESPONSE.name());
 		}
+
 		return rd;
 
+	}
+
+	private RoutingDecision doHandleUserRequestedRouting(ChatPipelineExecutionRuntimeData runtimeData)
+			throws ChatPipelineException {
+		RoutingDecision decision = new RoutingDecision(
+				List.of(runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId()),
+				IChatPipelineStepRuntimeData.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
+				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
+		if (decision.getFutureRoute() != null && !decision.getFutureRoute().isEmpty()) {
+			String outputStepId = decision.getFutureRoute().get(decision.getFutureRoute().size() - 1);
+			IChatPipelineStepService handler = this.pipelineStepsRepoPattern.findByCode(outputStepId);
+			if (handler instanceof ICommonOutputPipelineService commonOutputService) {
+				List<StepEnvironmentParameter> requireds = commonOutputService.getRequiredParameters();
+				for (StepEnvironmentParameter par : requireds) {
+					if (runtimeData.getSharedEnvironment().containsKey(par.getParamName())) {
+						Object paramValue = runtimeData.getSharedEnvironment().get(par.getParamName());
+						switch (par.getParamType()) {
+						case STRING: {
+							if (!(paramValue instanceof String sValue && sValue.trim().length() > 0)) {
+								throw new ChatPipelineException(
+										"The request parameter: " + par.getParamName() + " must be a non empty string");
+							}
+						}
+							break;
+						case STRING_LIST: {
+							if (!(paramValue instanceof List lValue && lValue.size() > 0)) {
+								throw new ChatPipelineException("The request parameter: " + par.getParamName()
+										+ " must be a non empty List<String>");
+							}
+						}
+							break;
+						}
+					} else {
+						throw new ChatPipelineException(
+								"The request does not contain parameter: " + par.getParamName());
+					}
+				}
+			}
+		}
+		return decision;
 	}
 
 	private String shallowSearchSystemsCatalog(ChatPipelineExecutionRuntimeData runtimeData) {
@@ -334,10 +375,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return _out;
 	}
 
-	private RoutingDecision createDeepSearchHeavyDocumentsFixedRoute(ChatPipelineExecutionRuntimeData runtimeData) {
+	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(
+			ChatPipelineExecutionRuntimeData runtimeData) {
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(DeliverableIntent.REPORT);
 		RoutingDecision rd = new RoutingDecision(
-				List.of(DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.DEFAULT_DEEPSEARCH_STREAMING),
+				List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING),
 				new IChatPipelineStepRuntimeData() {
 
 					@Override

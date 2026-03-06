@@ -9,13 +9,12 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 
-public interface IOutputChatPipelineService extends IChatPipelineStepService {
+public interface IOutputChatPipelineService extends IChatPipelineStepService,ICommonOutputPipelineService {
 	@Override
 	default StepType getStepType() {
 		return StepType.OUTPUT;
 	}
-	public PipelineChatMenu getUIMenu();
-	public List<StepEnvironmentParameter> getRequiredParameters();
+	
 	public GeboChatResponse execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException, GeboChatSessionLifecycleException;
 }
