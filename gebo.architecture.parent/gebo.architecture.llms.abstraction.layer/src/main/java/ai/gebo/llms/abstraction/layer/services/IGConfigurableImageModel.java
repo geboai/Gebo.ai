@@ -5,7 +5,6 @@ import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
-import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.GImageModelType;
 
 public interface IGConfigurableImageModel<ModelConfig extends GBaseImageModelConfig>

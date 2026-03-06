@@ -17,26 +17,26 @@ import org.slf4j.LoggerFactory;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
-import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
-import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
-import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
-import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
+import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
 
 /**
- * Abstract base class for CRUD operations on chat model configurations.
+ * Abstract base class for CRUD operations on text to speech model configurations.
  * Provides common functionality for inserting, updating, deleting, and finding
- * chat model configurations.
+ * text to speech model configurations.
  *
- * @param <TranscriptModelConfigType> The type of chat model configuration.
- * @param <ModelChoice>               The type of model choice.
+ * @param <TextToSpeechModelConfigType> The type of text to speech model configuration.
+ * @param <ModelChoice>                 The type of model choice.
  * 
- *                                    AI generated comments
+ *                                      AI generated comments
  */
 @AllArgsConstructor
-public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConfigType extends GBaseTranscriptModelConfig, ModelChoice extends GBaseTranscriptModelChoice, Iface extends IGImageModelConfigurationSupportService> {
+public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModelConfigType extends GBaseTextToSpeachModelConfig, ModelChoice extends GBaseTextToSpeachModelChice, Iface extends IGTextToSpeechModelConfigurationSupportService> {
 
 	// Logger instance for logging operations and exceptions
 	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -45,43 +45,43 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 
 	protected final IGPersistentObjectManager persistentObjectManager;
 
-	// DAO for chat model runtime configuration operations
+	// DAO for text to speech model runtime configuration operations
 
-	protected final IGTranscriptModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
+	protected final IGTextToSpeechModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
 
-	// Type of the chat model configuration
-	protected final Class<TranscriptModelConfigType> type;
+	// Type of the text to speech model configuration
+	protected final Class<TextToSpeechModelConfigType> type;
 
 	protected final Iface supportService;
 
 	/**
-	 * Inserts a new chat model configuration and handles runtime configuration.
+	 * Inserts a new text to speech model configuration and handles runtime configuration.
 	 *
-	 * @param config The chat model configuration to insert.
+	 * @param config The text to speech model configuration to insert.
 	 * @return The operation status containing the inserted configuration or error.
 	 */
-	protected OperationStatus<TranscriptModelConfigType> insert(TranscriptModelConfigType config) {
-		TranscriptModelConfigType out = null;
-		LOGGER.info("Begin chat model configuration insert");
+	protected OperationStatus<TextToSpeechModelConfigType> insert(TextToSpeechModelConfigType config) {
+		TextToSpeechModelConfigType out = null;
+		LOGGER.info("Begin text to speech model configuration insert");
 		try {
 			out = persistentObjectManager.insert(config);
 			handleDefaultModel(out);
 		} catch (Throwable e) {
 			LOGGER.error("Exception while inserting configuration ", e);
-			return OperationStatus.<TranscriptModelConfigType>of(e);
+			return OperationStatus.<TextToSpeechModelConfigType>of(e);
 		}
 		try {
 			this.modelRuntimeConfigurationDao.addRuntimeByConfig(config);
 		} catch (Throwable e) {
-			LOGGER.error("Exception while configuring new chat model ", e);
+			LOGGER.error("Exception while configuring new text to speech model ", e);
 			try {
 				persistentObjectManager.delete(config);
 			} catch (Throwable th) {
-				LOGGER.error("Cannot delete new chat model from mongo ", th);
+				LOGGER.error("Cannot delete new text to speech model from mongo ", th);
 			}
-			return OperationStatus.<TranscriptModelConfigType>of(e);
+			return OperationStatus.<TextToSpeechModelConfigType>of(e);
 		}
-		LOGGER.info("End chat model configuration insert successfully");
+		LOGGER.info("End text to speech model configuration insert successfully");
 		return OperationStatus.of(out);
 	}
 
@@ -92,7 +92,7 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	 * @param config The configuration that may be set as default.
 	 * @throws GeboPersistenceException If a persistence error occurs.
 	 */
-	protected void handleDefaultModel(TranscriptModelConfigType config) throws GeboPersistenceException {
+	protected void handleDefaultModel(TextToSpeechModelConfigType config) throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
 			List<GBaseChatModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class);
 			for (GBaseChatModelConfig gBaseChatModelConfig : all) {
@@ -108,39 +108,39 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	}
 
 	/**
-	 * Updates an existing chat model configuration and reconfigures the runtime
+	 * Updates an existing text to speech model configuration and reconfigures the runtime
 	 * handler.
 	 *
-	 * @param config The chat model configuration to update.
+	 * @param config The text to speech model configuration to update.
 	 * @return The operation status containing the updated configuration or error.
 	 */
-	protected OperationStatus<TranscriptModelConfigType> update(TranscriptModelConfigType config) {
+	protected OperationStatus<TextToSpeechModelConfigType> update(TextToSpeechModelConfigType config) {
 		try {
-			IGConfigurableTranscriptModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
+			IGConfigurableTextToSpeechModel handler = this.modelRuntimeConfigurationDao.findByCode(config.getCode());
 			handler.reconfigure(config);
 		} catch (Throwable e) {
 			LOGGER.error("Exception reconfiguring model", e);
-			return OperationStatus.<TranscriptModelConfigType>of(e);
+			return OperationStatus.<TextToSpeechModelConfigType>of(e);
 		}
-		TranscriptModelConfigType out;
+		TextToSpeechModelConfigType out;
 		try {
 			out = this.persistentObjectManager.update(config);
 			handleDefaultModel(out);
 			return OperationStatus.of(out);
 		} catch (GeboPersistenceException e) {
 			LOGGER.error("Exception saving model", e);
-			return OperationStatus.<TranscriptModelConfigType>of(e);
+			return OperationStatus.<TextToSpeechModelConfigType>of(e);
 		}
 
 	}
 
 	/**
-	 * Deletes a chat model configuration based on its type.
+	 * Deletes a text to speech model configuration based on its type.
 	 *
-	 * @param type The type of the chat model configuration to delete.
+	 * @param type The type of the text to speech model configuration to delete.
 	 * @return Operation status indicating success or with any errors encountered.
 	 */
-	protected OperationStatus<Boolean> delete(TranscriptModelConfigType type) {
+	protected OperationStatus<Boolean> delete(TextToSpeechModelConfigType type) {
 		try {
 			this.modelRuntimeConfigurationDao.deleteByCode(type.getCode());
 			this.persistentObjectManager.delete(type);
@@ -153,24 +153,24 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	}
 
 	/**
-	 * Finds a chat model configuration by its code.
+	 * Finds a text to speech model configuration by its code.
 	 *
-	 * @param code The code of the chat model configuration.
-	 * @return The found chat model configuration.
+	 * @param code The code of the text to speech model configuration.
+	 * @return The found text to speech model configuration.
 	 * @throws GeboPersistenceException If a persistence error occurs.
 	 */
-	protected TranscriptModelConfigType findByCode(String code) throws GeboPersistenceException {
+	protected TextToSpeechModelConfigType findByCode(String code) throws GeboPersistenceException {
 		return this.persistentObjectManager.findById(type, code);
 	}
 
 	/**
-	 * method to obtain model choices based on a chat model configuration. Must be
-	 * implemented by subclasses.
+	 * Abstract method to obtain model choices based on a text to speech model configuration.
+	 * Must be implemented by subclasses.
 	 *
-	 * @param type The chat model configuration.
+	 * @param type The text to speech model configuration.
 	 * @return The operation status containing the list of model choices or error.
 	 */
-	protected OperationStatus<List<ModelChoice>> getModelChoices(TranscriptModelConfigType type) {
+	protected OperationStatus<List<ModelChoice>> getModelChoices(TextToSpeechModelConfigType type) {
 		return supportService.getModelChoices(type);
 	}
 }

@@ -3,8 +3,6 @@ package ai.gebo.llms.abstraction.layer.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.core.convert.converter.Converter;
-
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GObjectRef;

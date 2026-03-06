@@ -27,10 +27,10 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.ai.service.IGToolCallbackSource;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.abstraction.layer.functions.model.VoidObject;
 
 /**
