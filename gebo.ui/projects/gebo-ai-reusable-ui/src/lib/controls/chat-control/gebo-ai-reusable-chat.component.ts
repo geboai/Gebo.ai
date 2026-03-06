@@ -27,7 +27,7 @@ import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
-import { ReactiveRagChatService } from "./reactive-chat.service";
+import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
@@ -743,8 +743,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatStreamingErrorOccurred = false;
 
         if (this.ragsystem === true) {
+            const agenticChatRequest:AgenticChatRequestBody= {
+                request: r,
+                environment: undefined
+            }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
-            this.reactiveChatService.streamAgenticChat(r, messageCallback, errorCallBack);
+            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack);
         } else {
             this.reactiveChatService.streamChat(r, messageCallback, errorCallBack);
         }

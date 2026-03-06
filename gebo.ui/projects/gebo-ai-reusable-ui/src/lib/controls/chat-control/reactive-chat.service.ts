@@ -22,7 +22,10 @@ import { BASE_PATH, GeboChatRequest } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIBaseStreamingService } from "../../services/base-streaming.service";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 
-
+export interface AgenticChatRequestBody {
+    request: GeboChatRequest;
+    environment?:any;
+}
 
 /**
  * Service that handles streaming chat interactions with the Gebo AI API.
@@ -70,7 +73,7 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
         this.internalStreamChat(apiUrl, request, onMessage, onError);
     }
 
-    streamAgenticChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+    streamAgenticChat(request: AgenticChatRequestBody, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
         const apiUrl:string= this.basePath+"/api/users/GeboChatPipelinesController/streamChatPipeline";
          this.internalStreamChat(apiUrl, request, onMessage, onError);
     }

@@ -11,17 +11,17 @@
  */
 
 export interface DocumentReferenceView { 
+    contentType?: string;
     name?: string;
     extension?: string;
-    contentType?: string;
-    code?: string;
     description?: string;
+    deleted?: boolean;
     messagingModuleId?: string;
     parentProjectCode?: string;
     rootKnowledgebaseCode?: string;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
-    deleted?: boolean;
-    modificationDate?: Date;
     creationDate?: Date;
+    relativePath?: string;
+    parentVirtualFolderCode?: string;
+    modificationDate?: Date;
+    code?: string;
 }
