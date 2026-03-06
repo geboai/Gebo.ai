@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +68,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	protected ChatPipelineExecutionRuntimeData executeUntillOutput(GeboChatRequest request, GeboChatResponse response,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode,
-			boolean streaming)
+			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String pipelineCode, boolean streaming)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
@@ -80,6 +81,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				serviceModel.getContextLength() / 3);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
 				chatModel.getContextLength(), resources, response, minimalChatContext, streaming);
+		if (environment != null) {
+			runtimeData.getSharedEnvironment().putAll(environment);
+		}
 		// putting a sintetic routing decision for the first 2 steps to mantain the
 		// routing coherency
 		runtimeData.getRoutingDecisions()
@@ -140,12 +144,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, IGConfigurableChatModel chatModel,
+	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request,
+			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, chatModel, serviceModel,
-				pipelineCode, true);
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, environment, chatModel,
+				serviceModel, pipelineCode, true);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IStreamingOutputChatPipelineService streamingOutputService) {
 			Flux<GeboChatMessageEnvelope> first = Flux
@@ -180,12 +185,12 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	@Override
-	public GeboChatResponse execute(GeboChatRequest request, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String pipelineCode)
+	public GeboChatResponse execute(GeboChatRequest request, LinkedHashMap<String, Object> environment,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, chatModel, serviceModel,
-				pipelineCode, false);
+		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, environment, chatModel,
+				serviceModel, pipelineCode, false);
 		IChatPipelineStepService nextStep = getNextStep(runtimeData);
 		if (nextStep instanceof IOutputChatPipelineService outputService) {
 			return outputService.execute(runtimeData, chatModel, serviceModel);

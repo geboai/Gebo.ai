@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
@@ -13,6 +15,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
@@ -50,6 +54,18 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+
+		return null;
+	}
+
+	@Override
+	public List<StepEnvironmentParameter> getRequiredParameters() {
+
+		return List.of();
 	}
 
 }

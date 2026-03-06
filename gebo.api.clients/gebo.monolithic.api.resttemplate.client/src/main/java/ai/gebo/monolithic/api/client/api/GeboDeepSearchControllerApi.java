@@ -32,7 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-02-23T08:37:45.114718+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-06T16:40:08.739856300+01:00[Europe/Rome]")
 
 public class GeboDeepSearchControllerApi {
     private ApiClient apiClient;
@@ -52,6 +52,61 @@ public class GeboDeepSearchControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param dataSourceCode  (required)
+     * @return List&lt;ServerSentEventString&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<ServerSentEventString> dataSourceDeepSearch(GeboChatRequest body, String dataSourceCode) throws RestClientException {
+        return dataSourceDeepSearchWithHttpInfo(body, dataSourceCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param dataSourceCode  (required)
+     * @return ResponseEntity&lt;List&lt;ServerSentEventString&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<ServerSentEventString>> dataSourceDeepSearchWithHttpInfo(GeboChatRequest body, String dataSourceCode) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling dataSourceDeepSearch");
+        }
+        // verify the required parameter 'dataSourceCode' is set
+        if (dataSourceCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'dataSourceCode' when calling dataSourceDeepSearch");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("dataSourceCode", dataSourceCode);
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboDeepSearchController/dataSourceDeepSearch/{dataSourceCode}").buildAndExpand(uriVariables).toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "text/event-stream"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<ServerSentEventString>> returnType = new ParameterizedTypeReference<List<ServerSentEventString>>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -635,6 +690,52 @@ public class GeboDeepSearchControllerApi {
 
         ParameterizedTypeReference<PageDeepSearchDocumentAnalisysResultStep> returnType = new ParameterizedTypeReference<PageDeepSearchDocumentAnalisysResultStep>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return List&lt;ServerSentEventString&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<ServerSentEventString> internalKnowledgeBaseDeepSearch(GeboChatRequest body) throws RestClientException {
+        return internalKnowledgeBaseDeepSearchWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;List&lt;ServerSentEventString&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<ServerSentEventString>> internalKnowledgeBaseDeepSearchWithHttpInfo(GeboChatRequest body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling internalKnowledgeBaseDeepSearch");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/users/GeboDeepSearchController/internalKnowledgeBaseDeepSearch").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "text/event-stream"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<ServerSentEventString>> returnType = new ParameterizedTypeReference<List<ServerSentEventString>>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 

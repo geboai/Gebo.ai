@@ -1,6 +1,10 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -20,9 +24,15 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelinesExecutor;
+import ai.gebo.llms.chat.pipelines.service.IInputChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,9 +48,10 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	protected final IGSecurityService securityService;
 	protected final IGRuntimeChatProfileChatModelDao chatProfileDao;
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	protected final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepositoryPattern;
 
 	@Override
-	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request)
+	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		GeboChatResponse response = null;
 		try {
@@ -48,15 +59,15 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			Flux<GeboChatMessageEnvelope> flux = executor.streamingExecute(request, chatModel, serviceModel,
-					pipelineCode);
+			Flux<GeboChatMessageEnvelope> flux = executor.streamingExecute(request, environment, chatModel,
+					serviceModel, pipelineCode);
 			Vector<GeboChatMessageEnvelope> responsesList = new Vector<GeboChatMessageEnvelope>();
 			Flux<GeboChatMessageEnvelope> lastMessageFlux = flux.filter(x -> {
 				responsesList.add(x);
 				return x.isLastMessage() && x.getContent() instanceof GeboChatResponse;
 			});
 			GeboChatMessageEnvelope last = lastMessageFlux.blockLast();
-			if (last!=null && last.getContent() instanceof GeboChatResponse _response) {
+			if (last != null && last.getContent() instanceof GeboChatResponse _response) {
 				response = _response;
 			} else {
 				LOGGER.warn("No GeboChatResponse as output");
@@ -69,14 +80,14 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request)
+	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		try {
 			this.chatSessionLifecycleService.ensureChatSessionExists(request);
 			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			return executor.streamingExecute(request, chatModel, serviceModel, pipelineCode);
+			return executor.streamingExecute(request, environment, chatModel, serviceModel, pipelineCode);
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline (streaming)";
 			throw new ChatPipelineException(msg, e);
@@ -89,5 +100,43 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 		if (model == null)
 			model = chatModelsDao.defaultHandler();
 		return model;
+	}
+
+	@Override
+	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode) {
+		List<IChatPipelineStepService> implementations = pipelineStepsRepositoryPattern.getImplementations();
+
+		TreeMap<Integer, List<PipelineChatMenu>> items = new TreeMap<Integer, List<PipelineChatMenu>>();
+		for (IChatPipelineStepService stepService : implementations) {
+			if (stepService instanceof IRoutingChatPipelineStepService routing) {
+				if (pipelineCode == routing.getPipelineId() || (pipelineCode != null && routing.getPipelineId() != null
+						&& pipelineCode.equals(routing.getPipelineId()))) {
+					PipelineChatMenu menuItem = routing.getUIMenu();
+					if (menuItem != null) {
+						if (!items.containsKey(menuItem.getOrder())) {
+							items.put(menuItem.getOrder(), new ArrayList<PipelineChatMenu>());
+						}
+					}
+				}
+			}
+			if (stepService instanceof IStreamingOutputChatPipelineService streamingOutput) {
+				if (pipelineCode == streamingOutput.getPipelineId()
+						|| (pipelineCode != null && streamingOutput.getPipelineId() != null
+								&& pipelineCode.equals(streamingOutput.getPipelineId()))) {
+					PipelineChatMenu menuItem = streamingOutput.getUIMenu();
+					if (menuItem != null) {
+						if (!items.containsKey(menuItem.getOrder())) {
+							items.put(menuItem.getOrder(), new ArrayList<PipelineChatMenu>());
+						}
+					}
+				}
+			}
+		}
+		List<PipelineChatMenu> out = new ArrayList<PipelineChatMenu>();
+		items.values().forEach(x -> {
+			out.addAll(x);
+		});
+
+		return out;
 	}
 }

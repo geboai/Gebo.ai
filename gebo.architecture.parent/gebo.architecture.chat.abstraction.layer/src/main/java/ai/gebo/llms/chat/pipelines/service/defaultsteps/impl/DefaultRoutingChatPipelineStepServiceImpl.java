@@ -25,6 +25,7 @@ import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -39,6 +40,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
@@ -50,7 +52,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Component
-public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingAndProvidingService
+@AllArgsConstructor
+public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = "deliverable";
@@ -79,27 +82,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
-
-	public DefaultRoutingChatPipelineStepServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
-			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao,
-			DefaultRagStreamingOutputChatPipelineStepServiceImpl defaultRagStreamingOutputChatPipelineStepServiceImpl,
-			ChatPipelinesConfiguration chatPipelinesConfig, IGDeepSearchService deepSearchService,
-			IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo,
-			IDataSourcesCatalogsService deepSearchDataSourcesCatalogsService, IGPromptConfigDao promptsDao,
-			IGKnowledgebaseVisibilityService visibleKnowledgeBasesService, IGPersistentObjectManager persistentManager,
-			IGPromptsParametersCacheService promptsParamsCacheService,
-			IGChatSessionLifeCycleService chatSessionLifecycleService) {
-		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
-		this.chatPipelinesConfig = chatPipelinesConfig;
-		this.deepSearchService = deepSearchService;
-		this.toolCallbackSourceRepo = toolCallbackSourceRepo;
-		this.deepSearchDataSourcesCatalogsService = deepSearchDataSourcesCatalogsService;
-		this.promptsDao = promptsDao;
-		this.visibleKnowledgeBasesService = visibleKnowledgeBasesService;
-		this.persistentManager = persistentManager;
-		this.promptsParamsCacheService = promptsParamsCacheService;
-		this.chatSessionLifecycleService = chatSessionLifecycleService;
-	}
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -498,5 +480,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingA
 		}
 		return (int) limit;
 
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

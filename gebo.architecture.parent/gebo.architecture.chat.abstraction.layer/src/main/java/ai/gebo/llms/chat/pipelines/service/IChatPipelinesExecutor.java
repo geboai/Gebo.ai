@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -12,11 +13,11 @@ import reactor.core.publisher.Flux;
 
 public interface IChatPipelinesExecutor {
 
-	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String pipelineCode)
+	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, LinkedHashMap<String, Object> environment,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException;
 
-	public GeboChatResponse execute(GeboChatRequest request, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String pipelineCode)
+	public GeboChatResponse execute(GeboChatRequest request, LinkedHashMap<String, Object> environment,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException;
 }

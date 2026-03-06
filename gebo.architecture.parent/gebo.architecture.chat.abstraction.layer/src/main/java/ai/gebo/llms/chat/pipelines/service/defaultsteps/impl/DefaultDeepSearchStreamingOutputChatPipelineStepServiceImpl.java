@@ -14,6 +14,9 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter.StepEnvironmentType;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
@@ -29,6 +32,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	private static final StepEnvironmentParameter searchedSystems = new StepEnvironmentParameter(
+			DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS, StepEnvironmentType.STRING_LIST);
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.class);
@@ -57,20 +62,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(runtimeData.getRequestResources(),
 					runtimeData.getMinimalChatContext(), runtimeData.getChatResponse(), chatModel, serviceModel,
 					deepSearchDataSources);
-			/*
-			 * Flux<DocumentsEnrichDecision> enrichDecision =
-			 * super.doDocumentsRetrieve(runtimeData, serviceModel,
-			 * LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-			 * 
-			 * enrichDecision.concatMap(ed -> { List<String> aiChoosedDataSources =
-			 * ed.getSearchesDecisions().getDeepSearchDataSources(); try { return
-			 * deepSearchService.streamDeepSearch(ed.getRequestResources(),
-			 * runtimeData.getMinimalChatContext(), runtimeData.getChatResponse(),
-			 * chatModel, serviceModel, aiChoosedDataSources); } catch (LLMConfigException |
-			 * GeboChatSessionLifecycleException e) { String msg =
-			 * "Nested exception in deferred stream creation"; throw new
-			 * RuntimeException(msg, e); } });
-			 */
+
 			Flux<GeboChatMessageEnvelope> mapped = deepSearchService.mapToChatFlux(flux,
 					DeepSearchChatResponseEvent.class);
 			flux.doOnComplete(() -> {
@@ -87,6 +79,18 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 			throw new ChatPipelineException("Error executing deep search", e);
 		}
 
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StepEnvironmentParameter> getRequiredParameters() {
+
+		return List.of(searchedSystems);
 	}
 
 }

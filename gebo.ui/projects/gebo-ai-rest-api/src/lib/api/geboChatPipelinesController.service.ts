@@ -18,8 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GeboChatMessageEnvelope } from '../model/geboChatMessageEnvelope';
-import { GeboChatRequest } from '../model/geboChatRequest';
 import { GeboChatResponse } from '../model/geboChatResponse';
+import { PipelineChatMenu } from '../model/pipelineChatMenu';
+import { PipelineRequestBody } from '../model/pipelineRequestBody';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -65,10 +66,10 @@ export class GeboChatPipelinesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public executeChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
-    public executeChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
-    public executeChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
-    public executeChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public executeChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
+    public executeChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
+    public executeChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
+    public executeChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling executeChatPipeline.');
@@ -119,10 +120,10 @@ export class GeboChatPipelinesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public executeDefaultChatPipeline(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
-    public executeDefaultChatPipeline(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
-    public executeDefaultChatPipeline(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
-    public executeDefaultChatPipeline(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public executeDefaultChatPipeline(body: PipelineRequestBody, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
+    public executeDefaultChatPipeline(body: PipelineRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
+    public executeDefaultChatPipeline(body: PipelineRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
+    public executeDefaultChatPipeline(body: PipelineRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling executeDefaultChatPipeline.');
@@ -162,15 +163,95 @@ export class GeboChatPipelinesControllerService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getDefaultPersonalPipelinesChatMenu(observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
+    public getDefaultPersonalPipelinesChatMenu(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
+    public getDefaultPersonalPipelinesChatMenu(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
+    public getDefaultPersonalPipelinesChatMenu(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<PipelineChatMenu>>('get',`${this.basePath}/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param pipelineCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
+    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<PipelineChatMenu>>('get',`${this.basePath}/api/users/GeboChatPipelinesController/personalPipelinesChatMenu`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param body 
      * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
-    public streamChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
-    public streamChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
-    public streamChatPipeline(body: GeboChatRequest, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public streamChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
+    public streamChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
+    public streamChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
+    public streamChatPipeline(body: PipelineRequestBody, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling streamChatPipeline.');
@@ -221,10 +302,10 @@ export class GeboChatPipelinesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public streamDefaultChatPipeline(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
-    public streamDefaultChatPipeline(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
-    public streamDefaultChatPipeline(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
-    public streamDefaultChatPipeline(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public streamDefaultChatPipeline(body: PipelineRequestBody, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
+    public streamDefaultChatPipeline(body: PipelineRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
+    public streamDefaultChatPipeline(body: PipelineRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
+    public streamDefaultChatPipeline(body: PipelineRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling streamDefaultChatPipeline.');

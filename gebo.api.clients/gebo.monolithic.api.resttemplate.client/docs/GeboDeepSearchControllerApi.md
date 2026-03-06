@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**dataSourceDeepSearch**](GeboDeepSearchControllerApi.md#dataSourceDeepSearch) | **POST** /api/users/GeboDeepSearchController/dataSourceDeepSearch/{dataSourceCode} | 
 [**deleteDeepSearch**](GeboDeepSearchControllerApi.md#deleteDeepSearch) | **DELETE** /api/users/GeboDeepSearchController/deleteDeepSearch | 
 [**doDeepSearch**](GeboDeepSearchControllerApi.md#doDeepSearch) | **POST** /api/users/GeboDeepSearchController/doDeepSearch | 
 [**getDeepSearchDataSources**](GeboDeepSearchControllerApi.md#getDeepSearchDataSources) | **GET** /api/users/GeboDeepSearchController/getDeepSearchDataSources | 
@@ -17,9 +18,55 @@ Method | HTTP request | Description
 [**getMyDeepSearchesPaged**](GeboDeepSearchControllerApi.md#getMyDeepSearchesPaged) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesPaged | 
 [**getMyDeepSearchesSteps**](GeboDeepSearchControllerApi.md#getMyDeepSearchesSteps) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesSteps | 
 [**getMyDeepSearchesStepsPaged**](GeboDeepSearchControllerApi.md#getMyDeepSearchesStepsPaged) | **GET** /api/users/GeboDeepSearchController/getMyDeepSearchesStepsPaged | 
+[**internalKnowledgeBaseDeepSearch**](GeboDeepSearchControllerApi.md#internalKnowledgeBaseDeepSearch) | **POST** /api/users/GeboDeepSearchController/internalKnowledgeBaseDeepSearch | 
 [**stopDeepSearch**](GeboDeepSearchControllerApi.md#stopDeepSearch) | **POST** /api/users/GeboDeepSearchController/stopDeepSearch | 
 [**streamDeepSearch**](GeboDeepSearchControllerApi.md#streamDeepSearch) | **POST** /api/users/GeboDeepSearchController/streamDeepSearch | 
 [**streamDeepSearchWithChatContext**](GeboDeepSearchControllerApi.md#streamDeepSearchWithChatContext) | **POST** /api/users/GeboDeepSearchController/streamDeepSearchWithChatContext | 
+
+<a name="dataSourceDeepSearch"></a>
+# **dataSourceDeepSearch**
+> List&lt;ServerSentEventString&gt; dataSourceDeepSearch(body, dataSourceCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
+
+
+GeboDeepSearchControllerApi apiInstance = new GeboDeepSearchControllerApi();
+GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+String dataSourceCode = "dataSourceCode_example"; // String | 
+try {
+    List<ServerSentEventString> result = apiInstance.dataSourceDeepSearch(body, dataSourceCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboDeepSearchControllerApi#dataSourceDeepSearch");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+ **dataSourceCode** | **String**|  |
+
+### Return type
+
+[**List&lt;ServerSentEventString&gt;**](ServerSentEventString.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream
 
 <a name="deleteDeepSearch"></a>
 # **deleteDeepSearch**
@@ -572,6 +619,49 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
+<a name="internalKnowledgeBaseDeepSearch"></a>
+# **internalKnowledgeBaseDeepSearch**
+> List&lt;ServerSentEventString&gt; internalKnowledgeBaseDeepSearch(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboDeepSearchControllerApi;
+
+
+GeboDeepSearchControllerApi apiInstance = new GeboDeepSearchControllerApi();
+GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+try {
+    List<ServerSentEventString> result = apiInstance.internalKnowledgeBaseDeepSearch(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboDeepSearchControllerApi#internalKnowledgeBaseDeepSearch");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+
+### Return type
+
+[**List&lt;ServerSentEventString&gt;**](ServerSentEventString.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream
 
 <a name="stopDeepSearch"></a>
 # **stopDeepSearch**

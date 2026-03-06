@@ -25,13 +25,14 @@ import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.PageGLookupEntry;
+import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 import ai.gebo.monolithic.app.Main;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 	@Autowired
 	IGRuntimeBinder runtimeBinder;
-
+ 
 	@Test
 	public void runChatPipelineTest() throws IOException, InterruptedException {
 		TestGeboSystemInfo systemInfo = executeSystemSetupBySecret();
@@ -59,7 +60,10 @@ public class ChatPipelineTests extends AbstractVendorSetupAndUseTest {
 			request.setUserChatContextCode(chatInfo.getCode());
 			long time = System.currentTimeMillis();
 			LOGGER.info("Running request: " + request.getQuery());
-			GeboChatResponse response = chatPipelineControllerApi.executeDefaultChatPipeline(request);
+			PipelineRequestBody body=new PipelineRequestBody();
+			body.setRequest(request);
+			
+			GeboChatResponse response = chatPipelineControllerApi.executeDefaultChatPipeline(body);
 			LOGGER.info("Response received in:" + (System.currentTimeMillis() - time) + " ms");
 			assertNotNull(response, "The response cannot be null");
 			assertNotNull(response.getQueryResponse(), "The response content cannot be null");

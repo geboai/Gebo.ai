@@ -15,7 +15,8 @@ public interface IChatPipelineStepService {
 
 	public String getStepId();
 
-	
+	public default String getPipelineId() {
+		return null;
+	}
 
-	
 }

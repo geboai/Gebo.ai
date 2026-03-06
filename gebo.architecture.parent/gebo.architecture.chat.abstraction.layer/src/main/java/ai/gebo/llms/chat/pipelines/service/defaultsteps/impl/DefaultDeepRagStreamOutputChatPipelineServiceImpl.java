@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
@@ -71,6 +75,18 @@ public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSI
 			return Flux.just(new GeboChatMessageEnvelope(errorMessage));
 		}
 
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StepEnvironmentParameter> getRequiredParameters() {
+		
+		return List.of();
 	}
 
 }

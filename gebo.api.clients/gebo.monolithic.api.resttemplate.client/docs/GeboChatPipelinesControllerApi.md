@@ -6,6 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**executeChatPipeline**](GeboChatPipelinesControllerApi.md#executeChatPipeline) | **POST** /api/users/GeboChatPipelinesController/executeChatPipeline | 
 [**executeDefaultChatPipeline**](GeboChatPipelinesControllerApi.md#executeDefaultChatPipeline) | **POST** /api/users/GeboChatPipelinesController/executeDefaultChatPipeline | 
+[**getDefaultPersonalPipelinesChatMenu**](GeboChatPipelinesControllerApi.md#getDefaultPersonalPipelinesChatMenu) | **GET** /api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu | 
+[**getPersonalPipelinesChatMenu**](GeboChatPipelinesControllerApi.md#getPersonalPipelinesChatMenu) | **GET** /api/users/GeboChatPipelinesController/personalPipelinesChatMenu | 
 [**streamChatPipeline**](GeboChatPipelinesControllerApi.md#streamChatPipeline) | **POST** /api/users/GeboChatPipelinesController/streamChatPipeline | 
 [**streamDefaultChatPipeline**](GeboChatPipelinesControllerApi.md#streamDefaultChatPipeline) | **POST** /api/users/GeboChatPipelinesController/streamDefaultChatPipeline | 
 
@@ -23,7 +25,7 @@ Method | HTTP request | Description
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
 String pipelineCode = "pipelineCode_example"; // String | 
 try {
     GeboChatResponse result = apiInstance.executeChatPipeline(body, pipelineCode);
@@ -38,7 +40,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
  **pipelineCode** | **String**|  | [optional]
 
 ### Return type
@@ -68,7 +70,7 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
 try {
     GeboChatResponse result = apiInstance.executeDefaultChatPipeline(body);
     System.out.println(result);
@@ -82,7 +84,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
 
 ### Return type
 
@@ -95,6 +97,88 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getDefaultPersonalPipelinesChatMenu"></a>
+# **getDefaultPersonalPipelinesChatMenu**
+> List&lt;PipelineChatMenu&gt; getDefaultPersonalPipelinesChatMenu()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+try {
+    List<PipelineChatMenu> result = apiInstance.getDefaultPersonalPipelinesChatMenu();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#getDefaultPersonalPipelinesChatMenu");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;PipelineChatMenu&gt;**](PipelineChatMenu.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getPersonalPipelinesChatMenu"></a>
+# **getPersonalPipelinesChatMenu**
+> List&lt;PipelineChatMenu&gt; getPersonalPipelinesChatMenu(pipelineCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+String pipelineCode = "pipelineCode_example"; // String | 
+try {
+    List<PipelineChatMenu> result = apiInstance.getPersonalPipelinesChatMenu(pipelineCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#getPersonalPipelinesChatMenu");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pipelineCode** | **String**|  | [optional]
+
+### Return type
+
+[**List&lt;PipelineChatMenu&gt;**](PipelineChatMenu.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 <a name="streamChatPipeline"></a>
@@ -111,7 +195,7 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
 String pipelineCode = "pipelineCode_example"; // String | 
 try {
     List<GeboChatMessageEnvelope> result = apiInstance.streamChatPipeline(body, pipelineCode);
@@ -126,7 +210,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
  **pipelineCode** | **String**|  | [optional]
 
 ### Return type
@@ -156,7 +240,7 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
-GeboChatRequest body = new GeboChatRequest(); // GeboChatRequest | 
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
 try {
     List<GeboChatMessageEnvelope> result = apiInstance.streamDefaultChatPipeline(body);
     System.out.println(result);
@@ -170,7 +254,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**GeboChatRequest**](GeboChatRequest.md)|  |
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
 
 ### Return type
 

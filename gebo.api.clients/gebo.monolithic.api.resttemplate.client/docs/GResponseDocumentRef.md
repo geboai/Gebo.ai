@@ -18,8 +18,8 @@ Name | Type | Description | Notes
 **loadPercentage** | **Double** |  |  [optional]
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
 **nbytesRelevant** | **Long** |  |  [optional]
-**ntokensRelevant** | **Long** |  |  [optional]
 **ntotalContentTokens** | **Long** |  |  [optional]
+**ntokensRelevant** | **Long** |  |  [optional]
 **shortCode** | **String** |  |  [optional]
 
 <a name="ReferenceTypeEnum"></a>

@@ -1,8 +1,10 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.client.rest.model.PipelineRequestBody;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
 import jakarta.validation.Valid;
@@ -29,31 +32,45 @@ public class GeboChatPipelinesController {
 	protected final IChatPipelineService chatPipelineService;
 
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(
+			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
+			GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
 
-		return chatPipelineService.streamingChat(request);
+		return chatPipelineService.streamingChat(data.getRequest(), data.getEnvironment());
 	}
 
 	@PostMapping(value = "streamChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestBody @NotNull @Valid GeboChatRequest request) throws ChatPipelineException, GeboChatSessionLifecycleException {
+			@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
-		return chatPipelineService.streamingChat(pipelineCode, request);
+		return chatPipelineService.streamingChat(pipelineCode, data.getRequest(), data.getEnvironment());
 	}
 
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid GeboChatRequest request)
+	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid PipelineRequestBody data)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
-		return chatPipelineService.chat(request);
+		return chatPipelineService.chat(data.getRequest(), data.getEnvironment());
 	}
 
 	@PostMapping(value = "executeChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestBody @NotNull @Valid GeboChatRequest request)
-			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
-		return chatPipelineService.chat(pipelineCode, request);
+			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
+			GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+		return chatPipelineService.chat(pipelineCode, data.getRequest(), data.getEnvironment());
+	}
+
+	@GetMapping(value = "defaultPersonalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu() {
+		String pipelineCode = null;
+		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode);
+	}
+
+	@GetMapping(value = "personalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode) {
+		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode);
 	}
 }

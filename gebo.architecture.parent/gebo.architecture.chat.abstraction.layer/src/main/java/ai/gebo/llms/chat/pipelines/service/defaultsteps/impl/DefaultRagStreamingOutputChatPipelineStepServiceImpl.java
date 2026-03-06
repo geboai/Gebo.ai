@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
@@ -17,6 +19,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -73,6 +77,18 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 			throw new ChatPipelineException("Exception in finalizing rag chat", e);
 		}
 
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<StepEnvironmentParameter> getRequiredParameters() {
+
+		return List.of();
 	}
 
 }

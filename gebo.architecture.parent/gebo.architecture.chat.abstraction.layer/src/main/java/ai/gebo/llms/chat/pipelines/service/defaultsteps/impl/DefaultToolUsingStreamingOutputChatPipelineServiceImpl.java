@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -13,6 +14,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
@@ -28,8 +31,8 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 
 	@Override
 	public StepExecutorType getExecutorType() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return StepExecutorType.LLM;
 	}
 
 	@Override
@@ -52,6 +55,18 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception in tools execution output", e);
 		}
+	}
+
+	@Override
+	public PipelineChatMenu getUIMenu() {
+		
+		return null;
+	}
+
+	@Override
+	public List<StepEnvironmentParameter> getRequiredParameters() {
+
+		return List.of();
 	}
 
 }
