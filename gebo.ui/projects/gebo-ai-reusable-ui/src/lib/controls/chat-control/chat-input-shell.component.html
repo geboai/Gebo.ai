@@ -2,11 +2,7 @@
    <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming">
     
    </gebo-ai-chat-stream-events-display>  
-   <!-- 
-  <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest" [mode]="'progress-only'" 
-            (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)" [chatProfileCode]="chatInfo?.chatProfileCode" [nextRequestMode]="nextRequestMode"
-            (errorOccurredEvent)="onErrorOccurred($event)" (skipDeepSearchEvent)="onSkipDeepSearchEvent($event)"></gebo-ai-deep-search-component>
-  -->            
+             
   <form [formGroup]="formGroup"
         (submit)="onSubmit()">
 
@@ -41,7 +37,7 @@
                        appendTo="body" >
         </p-contextMenu>
       </div>
-      <textarea rows="1"
+      <textarea rows="5"
                 pTextarea
                 class="chat-input-shell__frame-input"
                 placeholder="Write a message for the chat bot"

@@ -273,8 +273,12 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	private List<SearchWithResults> excludeFolders(List<SearchWithResults> results) {
-
 		return null;
+	}
+
+	@Override
+	public String getProductId() {
+		return searchService.getProductId();
 	}
 
 }

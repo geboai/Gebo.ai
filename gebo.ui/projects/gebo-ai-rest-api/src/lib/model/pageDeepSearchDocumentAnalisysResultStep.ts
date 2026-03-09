@@ -22,7 +22,7 @@ export interface PageDeepSearchDocumentAnalisysResultStep {
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

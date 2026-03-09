@@ -21,6 +21,9 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenuProviderService {
+	private static final String KNOWLEDGE_BASE_DEEP_SEARCH = "Knowledge base deep search";
+	private static final String KNOWLEDGE_BASE_SEARCH = "Knowledge base search";
+	private static final String INTERNAL_KNOWLEDGE_OPTION = "internalKnowledgeOption";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDeepSearchDataSourceLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
@@ -31,6 +34,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		agenticChatMenu.setDescription("Agentic chat");
 		agenticChatItem.setDefaultOption(true);
 		agenticChatItem.setOptionId("agenticChat");
+		agenticChatItem.setIcon("pi-microchip-ai");
 		agenticChatItem.setDescription("Agentic chat");
 		agenticChatItem.setRouteOption(null);
 		agenticChatMenu.setItems(List.of(agenticChatItem));
@@ -76,25 +80,26 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 				dsMenuItem.setRouteOption(RespondingWith.SHALLOW_SEARCH_RESPONSE.name());
 				dsMenuItem.setOptionId(RespondingWith.SHALLOW_SEARCH_RESPONSE.name() + "." + ds.getHandlerId());
 				dsMenuItem.setDescription(ds.getDescription(deepSearchConfig));
+				dsMenuItem.setProductId(ds.getProductId());
 				PipelineChatMenuItemParameter dsPipelineParameter = new PipelineChatMenuItemParameter();
 				dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM);
-				dsPipelineParameter.setParameterValue(List.of(ds.getHandlerId()));
+				dsPipelineParameter.setParameterValue(ds.getHandlerId());
 				dsMenuItem.getParameters().add(dsPipelineParameter);
 				thisDeepSearchMenu.getItems().add(dsMenuItem);
 			}
 			PipelineChatMenuItem ikMenuItem = new PipelineChatMenuItem();
-			ikMenuItem.setDescription("Knowledge base search");
-			ikMenuItem.setOptionId("internalKnowledgeOption");
+			ikMenuItem.setDescription(KNOWLEDGE_BASE_SEARCH);
+			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
 			thisDeepSearchMenu.getItems().add(ikMenuItem);
 			outMenu.add(thisDeepSearchMenu);
 		} else {
 			PipelineChatMenu ikMenu = new PipelineChatMenu();
-			ikMenu.setDescription("Knowledge base deep search");
-			ikMenu.setMenuId("internalKnowledgeOption");
+			ikMenu.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
+			ikMenu.setMenuId(INTERNAL_KNOWLEDGE_OPTION);
 			PipelineChatMenuItem ikMenuItem = new PipelineChatMenuItem();
-			ikMenuItem.setDescription("Knowledge base deep search");
-			ikMenuItem.setOptionId("internalKnowledgeOption");
+			ikMenuItem.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
+			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);

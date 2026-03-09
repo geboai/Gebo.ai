@@ -76,7 +76,7 @@ public class GoogleDriveSearchService extends
 		GoogleDriveResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
 				new GoogleDriveResultsExtractionData());
 		return data;
-		
+
 	}
 
 	@Override
@@ -101,6 +101,12 @@ public class GoogleDriveSearchService extends
 	protected GoogleDriveSystemContext createBrowsingContext(GGoogleDriveSystem systemType) {
 
 		return GoogleDriveSystemContext.of(systemType.getCode());
+	}
+
+	@Override
+	public String getProductId() {
+
+		return GOOGLE_DRIVE;
 	}
 
 }

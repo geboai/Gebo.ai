@@ -354,4 +354,10 @@ public class JiraSearchService extends
 
 	}
 
+	@Override
+	public String getProductId() {
+		
+		return JIRA;
+	}
+
 }

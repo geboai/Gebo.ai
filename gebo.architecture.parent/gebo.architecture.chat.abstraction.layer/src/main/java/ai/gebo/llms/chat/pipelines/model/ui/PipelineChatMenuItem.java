@@ -11,12 +11,13 @@ import lombok.Data;
 public class PipelineChatMenuItem implements Cloneable {
 	@NotNull
 	private String optionId = null;
+	private String icon = null;
 	@NotNull
 	private String description = null;
 	private boolean defaultOption = false;
 	private String routeOption = null;
-	@NotNull
 	private String pipelineId = null;
+	private String productId = null;
 	private List<PipelineChatMenuItemParameter> parameters = new ArrayList<PipelineChatMenuItemParameter>();
 
 	public Object clone() {

@@ -13,9 +13,11 @@ import { PipelineChatMenuItemParameter } from './pipelineChatMenuItemParameter';
 
 export interface PipelineChatMenuItem { 
     optionId: string;
+    icon?: string;
     description: string;
     defaultOption?: boolean;
     routeOption?: string;
-    pipelineId: string;
+    pipelineId?: string;
+    productId?: string;
     parameters?: Array<PipelineChatMenuItemParameter>;
 }

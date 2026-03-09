@@ -31,8 +31,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 		if (systems == null || systems.isEmpty()) {
 			return null;
 		}
-		Optional<SearchableSystemMetaData> found = systems.stream()
-				.filter(x -> (x.getCode()).equals(systemId)).findFirst();
+		Optional<SearchableSystemMetaData> found = systems.stream().filter(x -> (x.getCode()).equals(systemId))
+				.findFirst();
 		if (found.isEmpty()) {
 			return null;
 		} else {
@@ -44,6 +44,8 @@ public interface ISearchService<CustomSearchResultExtractionDataType extends Bas
 	public SearchableSystemMetaData findSystemById(String systemId) throws SearchServiceException;
 
 	public String getMessagingModuleId();
+
+	public String getProductId();
 
 	public default String getMessagingSystemId() {
 		return getId();
