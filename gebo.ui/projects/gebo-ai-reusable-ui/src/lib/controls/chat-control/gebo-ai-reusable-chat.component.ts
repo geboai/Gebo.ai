@@ -253,7 +253,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
         userUploadedContents: new FormControl(),
-        deepSearchDataSources: new FormControl()
+        deepSearchDataSources: new FormControl(),
+        chatPipelineProcessId: new FormControl()
     });
 
     /**
@@ -701,7 +702,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 chatProfileCode: r.chatProfileCode,
                                 chatModelCode: r.chatModelCode,
                                 userChatContextCode: response.userChatContextCode,
-                                query: null
+                                query: null,
+                                chatPipelineProcessId: null
                             };
                             this.formGroup.patchValue(dataUpdate);
 

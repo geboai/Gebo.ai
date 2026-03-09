@@ -5,7 +5,9 @@ import java.util.List;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 
-public interface ICommonOutputPipelineService {
-	public PipelineChatMenu getUIMenu();
-	public List<StepEnvironmentParameter> getRequiredParameters();
+public interface IPipelineUserMenuProviderService {
+	public String getPipelineId();
+
+	public List<PipelineChatMenu> getUIMenu(String chatProfileCode);
+
 }

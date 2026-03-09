@@ -78,14 +78,8 @@ public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSI
 	}
 
 	@Override
-	public PipelineChatMenu getUIMenu() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {
-		
+
 		return List.of();
 	}
 

@@ -12,7 +12,7 @@ public interface IRoutingChatPipelineStepService extends IChatPipelineStepServic
 		return StepType.ROUTING;
 	}
 
-	public PipelineChatMenu getUIMenu();
+	
 
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel) throws ChatPipelineException;

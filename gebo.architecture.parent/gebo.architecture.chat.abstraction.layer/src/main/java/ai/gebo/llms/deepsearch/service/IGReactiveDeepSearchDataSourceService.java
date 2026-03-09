@@ -32,16 +32,14 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @return
 	 * @throws SearchServiceException
 	 */
-	public boolean isEnabled(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request) throws SearchServiceException;
+	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException;
 
 	/******************************************************************
 	 * Returns a description of the data source
 	 * 
 	 * @return
 	 */
-	public String getDescription(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request);
+	public String getDescription(DeepSearchConfig deepSearchConfig);
 
 	
 

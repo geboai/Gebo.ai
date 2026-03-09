@@ -163,13 +163,23 @@ export class GeboChatPipelinesControllerService {
     /**
      * 
      * 
+     * @param chatProfileCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultPersonalPipelinesChatMenu(observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
-    public getDefaultPersonalPipelinesChatMenu(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
-    public getDefaultPersonalPipelinesChatMenu(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
-    public getDefaultPersonalPipelinesChatMenu(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDefaultPersonalPipelinesChatMenu(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
+    public getDefaultPersonalPipelinesChatMenu(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
+    public getDefaultPersonalPipelinesChatMenu(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
+    public getDefaultPersonalPipelinesChatMenu(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (chatProfileCode === null || chatProfileCode === undefined) {
+            throw new Error('Required parameter chatProfileCode was null or undefined when calling getDefaultPersonalPipelinesChatMenu.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (chatProfileCode !== undefined && chatProfileCode !== null) {
+            queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -188,6 +198,7 @@ export class GeboChatPipelinesControllerService {
 
         return this.httpClient.request<Array<PipelineChatMenu>>('get',`${this.basePath}/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -199,19 +210,27 @@ export class GeboChatPipelinesControllerService {
     /**
      * 
      * 
+     * @param chatProfileCode 
      * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
-    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
-    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
-    public getPersonalPipelinesChatMenu(pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PipelineChatMenu>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PipelineChatMenu>>>;
+    public getPersonalPipelinesChatMenu(chatProfileCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (chatProfileCode === null || chatProfileCode === undefined) {
+            throw new Error('Required parameter chatProfileCode was null or undefined when calling getPersonalPipelinesChatMenu.');
+        }
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (pipelineCode !== undefined && pipelineCode !== null) {
             queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
+        }
+        if (chatProfileCode !== undefined && chatProfileCode !== null) {
+            queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
         }
 
         let headers = this.defaultHeaders;

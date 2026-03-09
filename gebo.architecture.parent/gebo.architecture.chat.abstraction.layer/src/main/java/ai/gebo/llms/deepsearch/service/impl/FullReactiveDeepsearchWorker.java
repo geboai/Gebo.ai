@@ -99,14 +99,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		// find next data source to evaluate end execute
 		for (IGReactiveDeepSearchDataSourceService handler : handlers) {
-			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
+			if (handler.isEnabled(deepSearchConfig)) {
 				Flux<AbstractDeepSearchEvent> nextStepValue = null;
 				nextStepValue = handler.streamSearch(request, minimalChatContext, state, chatModel, serviceModel,
 						deepSearchConfig, dataSourcesResults, chunkingSessionId);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
 							"Extracting relevant documents",
-							handler.getDescription(chatModel, deepSearchConfig, request));
+							handler.getDescription(deepSearchConfig));
 					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
 					nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -164,7 +164,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 				// Streaming search steps from handlers before knowledge base search
 				List<IGReactiveDeepSearchDataSourceService> handlers = enabledDataSourcesLookupService
-						.enabledDataSources(serviceModel, configuration, request);
+						.enabledDataSources(configuration);
 
 				handlers = filterChoosed(handlers, request);
 				if (!handlers.isEmpty()) {
@@ -292,11 +292,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return List.of();
 		final IGConfigurableChatModel fChatModel = chatModel;
 		List<IGReactiveDeepSearchDataSourceService> handlersFullList = this.enabledDataSourcesLookupService
-				.enabledDataSources(fChatModel, configuration, null);
+				.enabledDataSources(configuration);
 		return handlersFullList.stream().map(x -> {
 			GBaseObject ds = new GBaseObject();
 			ds.setCode(x.getHandlerId());
-			ds.setDescription(x.getDescription(fChatModel, configuration, null));
+			ds.setDescription(x.getDescription(configuration));
 			return ds;
 		}).toList();
 	}

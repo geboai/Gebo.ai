@@ -9,7 +9,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 
-public interface IOutputChatPipelineService extends IChatPipelineStepService,ICommonOutputPipelineService {
+public interface IOutputChatPipelineService extends IChatPipelineStepService {
 	@Override
 	default StepType getStepType() {
 		return StepType.OUTPUT;

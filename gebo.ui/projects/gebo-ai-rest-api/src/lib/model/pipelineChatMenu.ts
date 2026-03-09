@@ -9,12 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { PipelineUserChatMenuItem } from './pipelineUserChatMenuItem';
+import { PipelineChatMenuItem } from './pipelineChatMenuItem';
 
 export interface PipelineChatMenu { 
     menuId: string;
     pipelineId?: string;
     description: string;
-    items: Array<PipelineUserChatMenuItem>;
+    items: Array<PipelineChatMenuItem>;
     order: number;
 }

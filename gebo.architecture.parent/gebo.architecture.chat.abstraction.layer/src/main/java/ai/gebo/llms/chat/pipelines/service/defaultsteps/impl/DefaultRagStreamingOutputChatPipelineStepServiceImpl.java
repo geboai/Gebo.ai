@@ -80,12 +80,6 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 	}
 
 	@Override
-	public PipelineChatMenu getUIMenu() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {
 
 		return List.of();

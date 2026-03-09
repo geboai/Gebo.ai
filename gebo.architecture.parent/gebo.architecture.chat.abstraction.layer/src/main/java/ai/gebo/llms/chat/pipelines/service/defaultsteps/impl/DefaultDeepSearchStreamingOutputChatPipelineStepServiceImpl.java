@@ -81,11 +81,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 
 	}
 
-	@Override
-	public PipelineChatMenu getUIMenu() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {

@@ -12,19 +12,21 @@ import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 public interface IChatPipelineService {
-	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException;
+	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException;
 
-	public default GeboChatResponse chat(@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException {
+	public default GeboChatResponse chat(@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		return chat(null, request, environment);
 	}
 
-	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
-			throws ChatPipelineException, GeboChatSessionLifecycleException;
+	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException;
 
-	public default Flux<GeboChatMessageEnvelope> streamingChat(@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
-			throws ChatPipelineException, GeboChatSessionLifecycleException {
+	public default Flux<GeboChatMessageEnvelope> streamingChat(@NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException {
 		return streamingChat(null, request, environment);
 	}
 
-	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode);
+	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode, String chatProfileCode) throws ChatPipelineException;
 }

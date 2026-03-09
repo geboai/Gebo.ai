@@ -17,6 +17,7 @@ import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -42,12 +43,14 @@ import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
+import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItem;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
-import ai.gebo.llms.chat.pipelines.service.ICommonOutputPipelineService;
+import ai.gebo.llms.chat.pipelines.service.IPipelineUserMenuProviderService;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
@@ -79,7 +82,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	private final IGToolCallbackSourceRepositoryPattern toolCallbackSourceRepo;
 	private final IDataSourcesCatalogsService deepSearchDataSourcesCatalogsService;
-	private final IChatPipelineStepServiceRepositoryPattern pipelineStepsRepoPattern;
+	private final IGRuntimeBinder runtimeBinder;
 	private final IGPersistentObjectManager persistentManager;
 	private final IGPromptConfigDao promptsDao;
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
@@ -303,8 +306,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
 		if (decision.getFutureRoute() != null && !decision.getFutureRoute().isEmpty()) {
 			String outputStepId = decision.getFutureRoute().get(decision.getFutureRoute().size() - 1);
-			IChatPipelineStepService handler = this.pipelineStepsRepoPattern.findByCode(outputStepId);
-			if (handler instanceof ICommonOutputPipelineService commonOutputService) {
+			IChatPipelineStepServiceRepositoryPattern pipelineStepsRepoPattern = runtimeBinder
+					.getImplementationOf(IChatPipelineStepServiceRepositoryPattern.class);
+			IChatPipelineStepService handler = pipelineStepsRepoPattern.findByCode(outputStepId);
+			if (handler instanceof IStreamingOutputChatPipelineService commonOutputService) {
 				List<StepEnvironmentParameter> requireds = commonOutputService.getRequiredParameters();
 				for (StepEnvironmentParameter par : requireds) {
 					if (runtimeData.getSharedEnvironment().containsKey(par.getParamName())) {
@@ -524,9 +529,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	}
 
-	@Override
-	public PipelineChatMenu getUIMenu() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+
 }

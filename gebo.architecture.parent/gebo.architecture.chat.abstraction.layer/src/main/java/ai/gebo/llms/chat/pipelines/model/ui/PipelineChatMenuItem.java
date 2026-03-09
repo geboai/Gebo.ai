@@ -3,20 +3,21 @@ package ai.gebo.llms.chat.pipelines.model.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PipelineChatMenu implements Cloneable {
+public class PipelineChatMenuItem implements Cloneable {
 	@NotNull
-	private String menuId = null;
-	private String pipelineId = null;
+	private String optionId = null;
 	@NotNull
 	private String description = null;
+	private boolean defaultOption = false;
+	private String routeOption = null;
 	@NotNull
-	List<PipelineChatMenuItem> items = new ArrayList<PipelineChatMenuItem>();
-	@NotNull
-	private Integer order = null;
+	private String pipelineId = null;
+	private List<PipelineChatMenuItemParameter> parameters = new ArrayList<PipelineChatMenuItemParameter>();
 
 	public Object clone() {
 		try {

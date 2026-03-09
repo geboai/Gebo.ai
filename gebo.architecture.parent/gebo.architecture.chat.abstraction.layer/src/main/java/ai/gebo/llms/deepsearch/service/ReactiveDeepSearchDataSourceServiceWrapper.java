@@ -104,8 +104,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	@Override
-	public boolean isEnabled(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request) throws SearchServiceException {
+	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException {
 		if (searchService.isEnabled()) {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 			return systems != null && !systems.isEmpty();
@@ -114,8 +113,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	@Override
-	public String getDescription(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request) {
+	public String getDescription(DeepSearchConfig deepSearchConfig) {
 
 		return searchService.getDescription();
 	}

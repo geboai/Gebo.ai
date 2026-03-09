@@ -176,7 +176,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					returned.getOutputData().setSearchResultsEmpty(true);
 					returned.getOutputData().setHandlerId(getHandlerId());
 					returned.getOutputData()
-							.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+							.setDataSourceDescription(getDescription(deepSearchConfig));
 					returned.getOutputData().setDeepsearchCode(request.getCode());
 					return Flux.just(actualResultsSnapshots);
 				}
@@ -352,10 +352,10 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			_analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
 			_analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
 			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+					.setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().processedBy(serviceModel);
 			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+					.setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().setAnalisysResult(returned.getExtractedRelevantContent());
 			LLMCallStep<CustomContentExtractionType> out = new LLMCallStep<CustomContentExtractionType>(returned,
 					docWithRef, deepStepAnalisys, _analyzedEvent);
@@ -453,7 +453,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			processed.setInputData(request);
 			processed.setOutputData(new DeepSearchDataSourceResponse());
 			processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
-			processed.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			processed.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			processed.getOutputData().setDeepsearchCode(request.getCode());
 			processed.getOutputData().processedBy(chatModel);
 			List<LLMInputDocument> input = new ArrayList<LLMInputDocument>();
@@ -587,7 +587,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
 		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
 		doc.setDataSourceCode(getHandlerId());
-		doc.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+		doc.setDataSourceDescription(getDescription(deepSearchConfig));
 
 		if (sr != null) {
 			StringBuffer computedCode = new StringBuffer();

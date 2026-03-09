@@ -15,6 +15,6 @@ import { PublishingStatus } from './publishingStatus';
 export interface OperationStatusPublishingStatus { 
     result?: PublishingStatus;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

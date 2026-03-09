@@ -57,11 +57,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 		}
 	}
 
-	@Override
-	public PipelineChatMenu getUIMenu() {
-		
-		return null;
-	}
+	
 
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {

@@ -9,12 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
+import { PipelineChatMenuItemParameter } from './pipelineChatMenuItemParameter';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
-    hasErrorMessages?: boolean;
+export interface PipelineChatMenuItem { 
+    optionId: string;
+    description: string;
+    defaultOption?: boolean;
+    routeOption?: string;
+    pipelineId: string;
+    parameters?: Array<PipelineChatMenuItemParameter>;
 }

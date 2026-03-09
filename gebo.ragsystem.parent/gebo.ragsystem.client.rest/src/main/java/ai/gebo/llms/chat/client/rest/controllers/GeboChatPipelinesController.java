@@ -63,14 +63,16 @@ public class GeboChatPipelinesController {
 	}
 
 	@GetMapping(value = "defaultPersonalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu() {
+	public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu(
+			@RequestParam(name = "chatProfileCode", required = true) String chatProfileCode) throws ChatPipelineException {
 		String pipelineCode = null;
-		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode);
+		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
 	}
 
 	@GetMapping(value = "personalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(
-			@RequestParam(name = "pipelineCode", required = false) String pipelineCode) {
-		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode);
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
+			@RequestParam(name = "chatProfileCode", required = true) String chatProfileCode) throws ChatPipelineException {
+		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
 	}
 }

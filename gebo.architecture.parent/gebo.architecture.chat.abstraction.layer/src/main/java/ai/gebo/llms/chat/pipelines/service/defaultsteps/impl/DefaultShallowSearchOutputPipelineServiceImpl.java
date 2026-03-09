@@ -63,7 +63,7 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
-				serviceModel, config, null);
+				config);
 		try {
 			return executor.execute(handler, runtimeData.getRequestResources().getCurrentRequest(), minimalChatContext,
 					runtimeData.getChatResponse(), chatModel, serviceModel);
@@ -73,12 +73,7 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 		}
 	}
 
-	@Override
-	public PipelineChatMenu getUIMenu() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {
 
