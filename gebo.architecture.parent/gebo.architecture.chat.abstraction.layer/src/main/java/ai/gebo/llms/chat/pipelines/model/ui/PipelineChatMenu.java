@@ -13,6 +13,7 @@ public class PipelineChatMenu implements Cloneable {
 	private String pipelineId = null;
 	@NotNull
 	private String description = null;
+	private String icon=null;
 	@NotNull
 	List<PipelineChatMenuItem> items = new ArrayList<PipelineChatMenuItem>();
 	@NotNull

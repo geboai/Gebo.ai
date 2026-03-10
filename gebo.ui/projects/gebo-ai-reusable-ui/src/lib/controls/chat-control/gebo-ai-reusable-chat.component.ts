@@ -752,6 +752,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 request: r,
                 environment: undefined
             }
+            if (this.currentPipelineRoutingOption) {
+                agenticChatRequest.request.chatPipelineProcessId=this.currentPipelineRoutingOption.chatPipelineProcessId;
+                agenticChatRequest.environment=this.currentPipelineRoutingOption.pipelineParams;
+            }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
             this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack);
         } else {

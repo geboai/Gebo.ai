@@ -17,4 +17,5 @@ export interface PipelineChatMenu {
     description: string;
     items: Array<PipelineChatMenuItem>;
     order: number;
+    icon?:string;
 }

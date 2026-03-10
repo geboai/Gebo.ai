@@ -8,6 +8,7 @@ import { MenuItem } from 'primeng/api';
 import { IGeboChatMessage } from '../../services/gebo-chat-message';
 import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-display.component';
 import { PipelineRoutingOption } from './pipeline-routing-option';
+import { Chip } from 'primeng/chip';
 function iconByProduct(productId: string): string | undefined {
   let out: string | undefined = undefined;
   /* .pi.pi-git,
@@ -40,17 +41,19 @@ function iconByProduct(productId: string): string | undefined {
 }
 
 
-const uploadedDocumentChatMenuItem: PipelineRoutingOption = {
+const uploadedDocumentPipelineOption: PipelineRoutingOption = {
   optionId: "UploadFileMenuItem",
   description: "Uploaded doc. chat",
   chatPipelineProcessId: "ChatWithUploadFile",
+  icon: "pi pi-cloud-upload",
   pipelineParams: undefined,
   defaultOption: false
 };
-const chatWithDocsMenuItem: PipelineRoutingOption = {
+const chatWithDocsPipelineOption: PipelineRoutingOption = {
   optionId: "ChatWithChoosenDocsMenuItem",
   description: "Choosen doc. chat",
   chatPipelineProcessId: "ChatWithChoosenDocs",
+  icon: "pi pi-search",
   pipelineParams: undefined,
   defaultOption: false
 };
@@ -88,6 +91,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Input() openedUploadDocumentsWindow = false;
   @Input() pipelineChatMenu: PipelineChatMenu[] = [];
   protected choosedPipelineRoutingChip?: PipelineRoutingOption;
+  protected defaultPipelineRouting?: PipelineRoutingOption;
   @Output() openedUploadDocumentsWindowChange = new EventEmitter<boolean>();
   // Eventi verso il parent
   @Output() newSessionCreatedOnUpload = new EventEmitter<any>();
@@ -98,6 +102,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
   @Output() nextRoutingChoice: EventEmitter<PipelineRoutingOption> = new EventEmitter();
   @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
+  @ViewChild("actualRoutingChoiceChip") chip!:Chip;
   private staticBehaviorsMenuItems: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -117,7 +122,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     }
   }];
   protected addBehaviorsMenu: MenuItem[] = this.staticBehaviorsMenuItems;
-  private nextPipelineSubmittedParams?: PipelineRoutingOption;
+
   private allPipelineRoutingOptions: PipelineRoutingOption[] = [];
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
   protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
@@ -127,7 +132,17 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   }
   protected setNextPipelineRoute(option: PipelineRoutingOption): void {
     this.choosedPipelineRoutingChip = option;
-
+    
+    this.nextRoutingChoice.emit(option);
+  }
+  protected removeRouteOption(option: PipelineRoutingOption): void {
+    if (this.defaultPipelineRouting) {
+      
+      this.setNextPipelineRoute(this.defaultPipelineRouting);
+      if (this.chip) {
+        this.chip.visible=true;
+      }
+    }
   }
   get submitIcon(): string {
     if (this.loading) {
@@ -169,7 +184,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   }
   private recreateMenuAndRouteOptions(): void {
     const newMenu: MenuItem[] = [...this.staticBehaviorsMenuItems];
-    const allPipelineRoutingOptions: PipelineRoutingOption[] = [uploadedDocumentChatMenuItem, chatWithDocsMenuItem];
+    const allPipelineRoutingOptions: PipelineRoutingOption[] = [uploadedDocumentPipelineOption, chatWithDocsPipelineOption];
     this.pipelineChatMenu.forEach(menuItem => {
       if (menuItem.items && menuItem.items.length === 1) {
         //if single line menu ==> let's flat it directly as menu item with connected action
@@ -182,6 +197,10 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
     });
     this.allPipelineRoutingOptions = allPipelineRoutingOptions;
+    this.defaultPipelineRouting = allPipelineRoutingOptions.find(x => x.defaultOption === true);
+    if (this.defaultPipelineRouting) {
+      this.setNextPipelineRoute(this.defaultPipelineRouting);
+    }
     this.translationService.translateMenuItems("GeboAIChatControlModule", "ChatPipelinesMenu", newMenu).subscribe(items => {
       this.addBehaviorsMenu = items;
     });
@@ -236,6 +255,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       defaultOption: item.defaultOption === true,
       description: item.description,
       optionId: item.optionId,
+      icon: item?.icon ? item.icon : item?.productId ? iconByProduct(item.productId) : undefined,
       pipelineParams: undefined
     };
     if (item?.parameters && item.parameters.length) {
@@ -253,6 +273,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     const item: MenuItem = {
       id: menuItem.menuId,
       label: menuItem.description,
+      icon: menuItem?.icon,
       items: []
     };
     menuItem.items.forEach(node => {
@@ -269,12 +290,17 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       label: leaf.description,
       icon: leaf?.icon ? leaf.icon : leaf?.productId ? iconByProduct(leaf.productId) : undefined,
       command: () => {
-        this.nextPipelineSubmittedParams = option;
-        this.nextRoutingChoice.emit(option)
+        this.setNextPipelineRoute(option);
       }
     };
 
     return item;
+  }
+  onChoosedDocument(e: boolean): void {
+    this.setNextPipelineRoute(chatWithDocsPipelineOption);
+  }
+  onSuccessfullUpload(e: boolean): void {
+    this.setNextPipelineRoute(uploadedDocumentPipelineOption);
   }
   onSubmit() {
     this.onSendClick();

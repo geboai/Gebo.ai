@@ -173,7 +173,7 @@ label {
   background-color: currentColor;
 }
 
-.pi.pi-google,
+//.pi.pi-google,
 .pi.pi-facebook,
 .pi.pi-github,
 .pi.pi-microsoft,
@@ -185,6 +185,7 @@ label {
 .pi.pi-slack,
 .pi.pi-microsoft_multitenant,
 .pi.pi-aws_cognito,
+
 .pi.pi-oauth2_generic {
   display: inline-block;
   width: 3.5em;
@@ -199,7 +200,7 @@ label {
 
 /* URL SVG specifici – scaricati (es. da Simple Icons) in assets/3rdparty */
 /*.pi.pi-google   { background-image: url("assets/oauth2/google.svg"); }*/
-.pi.pi-google {
+.pi.pi-google-oauth2 {
   background-image: url("assets/oauth2/google-logo-search-new-svgrepo-com.svg");
 }
 
@@ -210,6 +211,7 @@ label {
 .pi.pi-github {
   background-image: url("assets/oauth2/github.svg");
 }
+
 
 /*.pi.pi-microsoft{ background-image: url("assets/oauth2/microsoft.svg"); }
 .pi.pi-microsoft_multitenant{ background-image: url("assets/oauth2/microsoft.svg"); }*/

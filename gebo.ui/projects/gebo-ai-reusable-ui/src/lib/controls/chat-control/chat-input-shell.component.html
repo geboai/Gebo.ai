@@ -1,69 +1,54 @@
 <div class="chat-input-shell">
-   <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming">
-    
-   </gebo-ai-chat-stream-events-display>  
-             
-  <form [formGroup]="formGroup"
-        (submit)="onSubmit()">
+  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming">
 
-    <gebo-ai-choose-documents-panel-component *ngIf="ragsystem"
-                                              [interactionDisabled]="loading"
-                                              [knowledgeBaseCodes]="knowledgeBaseCodes"
-                                              [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
-                                              [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-                                              formControlName="forcedRequestDocuments">
+  </gebo-ai-chat-stream-events-display>
+
+  <form [formGroup]="formGroup" (submit)="onSubmit()">
+
+    <gebo-ai-choose-documents-panel-component *ngIf="ragsystem" [interactionDisabled]="loading"
+      [knowledgeBaseCodes]="knowledgeBaseCodes" [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
+      [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
+      (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments">
     </gebo-ai-choose-documents-panel-component>
 
     <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
-                                         formControlName="userUploadedContents"
-                                         [chatModelCode]="chatInfo?.chatModelCode"
-                                         [chatProfileCode]="chatInfo?.chatProfileCode"
-                                         [ragChat]="ragsystem"
-                                         [userSessionCode]="userChatContextCode"
-                                         (newSessionCreatedOnUpload)="onNewSessionCreatedOnUploadInternal($event)">
+      formControlName="userUploadedContents" [chatModelCode]="chatInfo?.chatModelCode"
+      [chatProfileCode]="chatInfo?.chatProfileCode" [ragChat]="ragsystem" [userSessionCode]="userChatContextCode"
+      (successfullUploadDone)="onSuccessfullUpload($event)"
+      (newSessionCreatedOnUpload)="onNewSessionCreatedOnUploadInternal($event)">
     </gebo-ai-upload-chat-documents-files>
     <div class="chat-input-shell__frame">
       <div class="chat-input-shell__frame-buttons button-left">
-        <p-button icon="pi pi-plus-circle"
-                  text
-                  rounded
-                  class="custom-blue-btn"
-                  (click)="contextAddChatBehaviorMenu1.toggle($event)" 
-                  [disabled]="loading">
+        <p-button icon="pi pi-plus-circle" text rounded class="custom-blue-btn"
+          (click)="contextAddChatBehaviorMenu1.toggle($event)" [disabled]="loading">
         </p-button>
 
-        <p-contextMenu #contextAddChatBehaviorMenu1
-                       [model]="addBehaviorsMenu"
-                       appendTo="body" >
+        <p-contextMenu #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu" appendTo="body">
         </p-contextMenu>
       </div>
-      <textarea rows="5"
-                pTextarea
-                class="chat-input-shell__frame-input"
-                placeholder="Write a message for the chat bot"
-                formControlName="query"
-                [autoResize]="true"
-                [required]="true"
-                (keydown.enter)="onSubmit()">
+      <textarea rows="5" pTextarea class="chat-input-shell__frame-input" placeholder="Write a message for the chat bot"
+        formControlName="query" [autoResize]="true" [required]="true" (keydown.enter)="onSubmit()">
       </textarea>
 
       <div class="chat-input-shell__frame-buttons button-right">
         <gebo-ai-audio-component class="flex align-items-center"
-                                 [disabled]="capabilities?.supportsTranscript !== true || loading"
-                                 (onAudioTrack)="onSpeechEventInternal($event)"
-                                 [playAudioTrack]="currentAudioTrack"
-                                 [viewLabels]="true">
+          [disabled]="capabilities?.supportsTranscript !== true || loading"
+          (onAudioTrack)="onSpeechEventInternal($event)" [playAudioTrack]="currentAudioTrack" [viewLabels]="true">
         </gebo-ai-audio-component>
 
-        <p-button [icon]="submitIcon"
-                  rounded
-                  type="submit"
-                  class="custom-bg-blue-btn"
-                  [disabled]="formGroup.invalid || loading">
+        <p-button [icon]="submitIcon" rounded type="submit" class="custom-bg-blue-btn"
+          [disabled]="formGroup.invalid || loading">
         </p-button>
       </div>
-
+     
     </div>
+     <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
+        @if (choosedPipelineRoutingChip) {
+        <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon" [label]="choosedPipelineRoutingChip.description"
+          [removable]="choosedPipelineRoutingChip.defaultOption!==true" (onRemove)="removeRouteOption(choosedPipelineRoutingChip)" />
+        }
+
+      </div>
   </form>
 
 </div>

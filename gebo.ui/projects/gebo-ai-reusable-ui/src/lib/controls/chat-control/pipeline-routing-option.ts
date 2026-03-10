@@ -4,4 +4,5 @@ export interface PipelineRoutingOption {
   pipelineParams?: any;
   description?: string;
   optionId?: string;
+  icon?:string;
 }

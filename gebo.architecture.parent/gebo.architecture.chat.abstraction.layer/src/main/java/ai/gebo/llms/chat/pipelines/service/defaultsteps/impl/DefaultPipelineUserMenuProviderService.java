@@ -34,7 +34,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		agenticChatMenu.setDescription("Agentic chat");
 		agenticChatItem.setDefaultOption(true);
 		agenticChatItem.setOptionId("agenticChat");
-		agenticChatItem.setIcon("pi-microchip-ai");
+		agenticChatItem.setIcon("pi pi-microchip-ai");
 		agenticChatItem.setDescription("Agentic chat");
 		agenticChatItem.setRouteOption(null);
 		agenticChatMenu.setItems(List.of(agenticChatItem));
@@ -47,13 +47,16 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		deepSearchMenu.setMenuId("deepSearch");
 		deepSearchMenu.setPipelineId(null);
 		deepSearchMenu.setDescription("Deep search");
+		deepSearchMenu.setIcon("pi pi-deep-search");
 		deepSearchMenuItem.setOptionId("deepSearch");
+		deepSearchMenuItem.setIcon("pi pi-deep-search");
 		deepSearchMenuItem.setDescription("Multiple sources");
 		deepSearchMenuItem.setRouteOption(RespondingWith.DEEP_SEARCH_RESPONSE.name());
 		ragMenu.setMenuId("rag");
 		ragMenu.setDescription("R.a.g. chat");
 		ragMenuItem.setOptionId("rag");
 		ragMenuItem.setDescription("R.a.g. chat");
+		ragMenuItem.setIcon("pi pi-database");
 		ragMenuItem.setRouteOption(RespondingWith.RAG_LLM_RESPONSE.name());
 		ragMenu.getItems().add(ragMenuItem);
 	}
@@ -91,6 +94,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
+			ikMenuItem.setIcon("pi pi-sitemap");
 			thisDeepSearchMenu.getItems().add(ikMenuItem);
 			outMenu.add(thisDeepSearchMenu);
 		} else {
@@ -101,6 +105,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
+			ikMenuItem.setIcon("pi pi-sitemap");
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
 		}
