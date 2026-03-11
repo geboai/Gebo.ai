@@ -97,7 +97,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 				dsMenuItem.setProductId(ds.getProductId());
 				PipelineChatMenuItemParameter dsPipelineParameter = new PipelineChatMenuItemParameter();
 				dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM);
-				dsPipelineParameter.setParameterValue(ds.getHandlerId());
+				dsPipelineParameter.setParameterValue(List.of(ds.getHandlerId()));
 				dsMenuItem.getParameters().add(dsPipelineParameter);
 				thisDeepSearchMenu.getItems().add(dsMenuItem);
 			}

@@ -1,11 +1,12 @@
 <div class="chat-input-shell">
-  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming">
+  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming" [actualPipelineRoutingOption]="runningPipelineRouting">
 
   </gebo-ai-chat-stream-events-display>
 
   <form [formGroup]="formGroup" (submit)="onSubmit()">
 
     <gebo-ai-choose-documents-panel-component *ngIf="ragsystem" [interactionDisabled]="loading"
+      
       [knowledgeBaseCodes]="knowledgeBaseCodes" [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
       [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
       (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments">

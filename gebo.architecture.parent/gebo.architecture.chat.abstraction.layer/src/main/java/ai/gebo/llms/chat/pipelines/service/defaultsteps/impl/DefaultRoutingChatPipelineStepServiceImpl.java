@@ -62,6 +62,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
+	private static final String REWRITTEN_QUERY_FIELD = "rewrittenQuery";
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
 	private static final String DELIVERABLE_FIELD = "deliverable";
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
@@ -102,17 +103,38 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP;
 	}
 
-	private String doRequestRewrite(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, String latestInteractions)
+	private String doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions)
 			throws GeboChatSessionLifecycleException, IOException {
 		String query = runtimeData.getRequestResources().getCurrentRequest().getQuery();
 		Map<String, Object> params = CommonChatPromptParamsUtil
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
+		params.put(DefaultPipelineSharedPromptPlaceholders.DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM,
+				createDeliverableTypesList());
 		GPromptConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
-		String rewrited_query = callLLM(serviceModel, rewritePrompt.getPrompt(), query, params);
+		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt.getPrompt(),
+				query, params, List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
+		List<String> deliverable = data.get(DELIVERABLE_FIELD);
+		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
 		runtimeData.getRequestResources().getCurrentRequest().setRewrittenQuery(rewrited_query);
+		DeliverableIntent userIntent = DeliverableIntent.QA;
+		if (deliverable != null && !deliverable.isEmpty()) {
 
+			String toSearchInto = deliverable.get(0);
+			if (toSearchInto != null) {
+				toSearchInto = toSearchInto.toLowerCase();
+			} else
+				toSearchInto = "";
+			for (DeliverableIntent di : DeliverableIntent.values()) {
+				if (toSearchInto.indexOf(di.name().toLowerCase()) >= 0) {
+					userIntent = di;
+					break;
+				}
+			}
+		}
+		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
 		return rewrited_query;
 	}
 
@@ -266,7 +288,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
 					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
 			// Doing a query rewrite
-			String rewrited_query = doRequestRewrite(runtimeData, chatModel, serviceModel, latestInteractions);
+			String rewrited_query = doRequestRewriteAndUserIntent(runtimeData, chatModel, serviceModel,
+					latestInteractions);
 			// if actual resource has chat with documents or uploads with more than actual
 			// tokens budget than doing a deep search ONLY on
 			// Documents being in request
@@ -300,8 +323,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	private RoutingDecision doHandleUserRequestedRouting(ChatPipelineExecutionRuntimeData runtimeData)
 			throws ChatPipelineException {
+		String routingDecisionId = runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId();
+		RespondingWith respondingWith = RespondingWith.valueOf(routingDecisionId);
 		RoutingDecision decision = new RoutingDecision(
-				List.of(runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId()),
+				futureRoutes(respondingWith, RespondingWith.PURE_LLM_RESPONSE, true),
 				IChatPipelineStepRuntimeData.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
 				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
 		if (decision.getFutureRoute() != null && !decision.getFutureRoute().isEmpty()) {
@@ -528,7 +553,5 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return (int) limit;
 
 	}
-
-	
 
 }

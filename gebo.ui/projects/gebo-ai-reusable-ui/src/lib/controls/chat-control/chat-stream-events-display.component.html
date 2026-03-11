@@ -2,15 +2,11 @@
 <div class="gebo-ai-reusable-chat_chat-status">
     @if(routingChoiceSelector) {
     <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route_label">
-        <!-- 
-         This shows the initial think about the best way to answer phase or the actual way the AI is responding betweeb deep search, retrieve augmented generation or others
-         -->
-        <gebo-ai-pipline-route-display
-            [pipelineRouterDecisionCode]="routingChoiceSelector"></gebo-ai-pipline-route-display>
+
+             <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
     </div>
     }
-    
-    @if (routingChoiceSelector==='DEEP_SEARCH_RESPONSE' || routingChoiceSelector==='SHALLOW_SEARCH_RESPONSE') {
+    @if ((routingChoiceSelector==='DEEP_SEARCH_RESPONSE' || routingChoiceSelector==='SHALLOW_SEARCH_RESPONSE') && completionPercent>0) {
     <div class="deep-search">
         <div class="deep-search__label">
             <!-- Initial show of deep search untill searching relevant informatins-->
@@ -59,6 +55,12 @@
         </div>
     </div>
 
+   
+
+    } @else {
+        <div class="deep_search_skeleton_wait" >
+            <p-skeleton styleClass="mb-2" />
+        </div>
     }
 </div>
-}
+}  

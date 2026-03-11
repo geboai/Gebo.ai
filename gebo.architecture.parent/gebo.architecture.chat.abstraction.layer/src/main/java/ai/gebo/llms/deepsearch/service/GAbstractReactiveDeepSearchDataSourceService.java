@@ -175,8 +175,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					returned.setOutputData(new DeepSearchDataSourceResponse());
 					returned.getOutputData().setSearchResultsEmpty(true);
 					returned.getOutputData().setHandlerId(getHandlerId());
-					returned.getOutputData()
-							.setDataSourceDescription(getDescription(deepSearchConfig));
+					returned.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 					returned.getOutputData().setDeepsearchCode(request.getCode());
 					return Flux.just(actualResultsSnapshots);
 				}
@@ -351,11 +350,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					chatModel, serviceModel, deepSearchConfig, request));
 			_analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
 			_analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
-			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(deepSearchConfig));
+			_analyzedEvent.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().processedBy(serviceModel);
-			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(deepSearchConfig));
+			_analyzedEvent.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().setAnalisysResult(returned.getExtractedRelevantContent());
 			LLMCallStep<CustomContentExtractionType> out = new LLMCallStep<CustomContentExtractionType>(returned,
 					docWithRef, deepStepAnalisys, _analyzedEvent);
@@ -370,7 +367,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final Vector<SearchResultAnalisysOutcome> furtherAnalisys = new Vector<SearchResultAnalisysOutcome>();
 		Flux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
 			AbstractDeepSearchEvent event = x.getEvent();
-			listedEvents.add(event);
+			if (event != null)
+				listedEvents.add(event);
 			if (x.getAnalisysDeepRefs() != null) {
 				furtherAnalisys.add(x.getAnalisysDeepRefs());
 			}

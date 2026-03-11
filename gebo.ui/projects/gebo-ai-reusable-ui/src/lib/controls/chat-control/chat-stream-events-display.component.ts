@@ -4,6 +4,7 @@ import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
+import { PipelineRoutingOption } from "./pipeline-routing-option";
 
 @Component({
     selector: "gebo-ai-chat-stream-events-display",
@@ -22,6 +23,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
     @Input() streaming: boolean = false;
     protected currentChatMessage?: IGeboChatMessage;
     @Input() routingChoiceSelector?: string;
+    @Input() actualPipelineRoutingOption?:PipelineRoutingOption;
     protected analisysStep?: DeepSearchDocumentAnalisysResultStep;
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;

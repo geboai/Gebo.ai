@@ -9,6 +9,7 @@ import { IGeboChatMessage } from '../../services/gebo-chat-message';
 import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-display.component';
 import { PipelineRoutingOption } from './pipeline-routing-option';
 import { Chip } from 'primeng/chip';
+import { timer } from 'rxjs';
 function iconByProduct(productId: string): string | undefined {
   let out: string | undefined = undefined;
   /* .pi.pi-git,
@@ -90,6 +91,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   @Input() openedUploadDocumentsWindow = false;
   @Input() pipelineChatMenu: PipelineChatMenu[] = [];
+  protected runningPipelineRouting?: PipelineRoutingOption;
   protected choosedPipelineRoutingChip?: PipelineRoutingOption;
   protected defaultPipelineRouting?: PipelineRoutingOption;
   @Output() openedUploadDocumentsWindowChange = new EventEmitter<boolean>();
@@ -102,7 +104,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
   @Output() nextRoutingChoice: EventEmitter<PipelineRoutingOption> = new EventEmitter();
   @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
-  @ViewChild("actualRoutingChoiceChip") chip!:Chip;
+  @ViewChild("actualRoutingChoiceChip") chip!: Chip;
   private staticBehaviorsMenuItems: MenuItem[] = [{
     id: "UploadFileMenuItem",
     icon: "pi pi-cloud-upload",
@@ -132,15 +134,15 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   }
   protected setNextPipelineRoute(option: PipelineRoutingOption): void {
     this.choosedPipelineRoutingChip = option;
-    
+
     this.nextRoutingChoice.emit(option);
   }
   protected removeRouteOption(option: PipelineRoutingOption): void {
     if (this.defaultPipelineRouting) {
-      
+
       this.setNextPipelineRoute(this.defaultPipelineRouting);
       if (this.chip) {
-        this.chip.visible=true;
+        this.chip.visible = true;
       }
     }
   }
@@ -310,14 +312,36 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     if (this.formGroup?.invalid || this.loading) {
       return;
     }
-
+    //set the pipeline route visualizzation that will be runned
+    this.runningPipelineRouting = this.choosedPipelineRoutingChip;
     this.messageSubmit.emit();
+    //set a timer, and in 3 seconds go back to agenti chat
+    timer(3000).subscribe({
+      next: (v) => {
+        if (this.defaultPipelineRouting) {
+
+          this.setNextPipelineRoute(this.defaultPipelineRouting);
+
+        }
+      }
+    });
 
   }
   onStreamError(error: any) {
     //this.streamNotificationsComponent.onError(error);
   }
   onStreamMessage(recvd: IGeboChatMessage) {
+    if (recvd.contentObjectType === "PipelineRoutingInfos") {
+      const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
+      console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
+      //Check if the pipeline routing choosed is different from the one displayed
+      if (pipelineRouterDecisionCode!=="WAITING" && pipelineRouterDecisionCode!==this.runningPipelineRouting?.chatPipelineProcessId) {
+          const runningRoutingChoice=this.allPipelineRoutingOptions.find(x=>pipelineRouterDecisionCode===x?.chatPipelineProcessId);
+          if (runningRoutingChoice) {
+            this.runningPipelineRouting=runningRoutingChoice;
+          }
+      }
+    }
     this.streamNotificationsComponent.onMessage(recvd);
   }
 
