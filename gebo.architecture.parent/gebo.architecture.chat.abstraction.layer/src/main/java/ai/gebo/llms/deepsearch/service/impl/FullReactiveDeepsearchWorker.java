@@ -194,8 +194,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
-						.knowledgeBaseDeepSearch(request, state, minimalChatContext, sessionDocuments, configuration,
-								userInfos, chatModel, serviceModel, chunkingSessionId, embeddingModels);
+						.knowledgeBaseDeepSearch(request, true, state, minimalChatContext, sessionDocuments,
+								configuration, userInfos, chatModel, serviceModel, chunkingSessionId, embeddingModels);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);

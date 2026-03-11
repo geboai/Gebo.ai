@@ -28,6 +28,7 @@ public class GeboPromptsLibrary {
 	public static final String DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT = "default-pipeline-initial-query-rewriting-prompt";
 	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT = "default-pipeline-rag-search-planner";
+	public static final String DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT = "default-pipeline-chat-with-documents-prompt";
 	public static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
 	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
 	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";

@@ -20,16 +20,12 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
-import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
@@ -42,18 +38,14 @@ import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenuItem;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
-import ai.gebo.llms.chat.pipelines.service.IPipelineUserMenuProviderService;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
-import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -409,7 +401,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			ChatPipelineExecutionRuntimeData runtimeData) {
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(DeliverableIntent.REPORT);
 		RoutingDecision rd = new RoutingDecision(
-				List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING),
+				List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING),
 				new IChatPipelineStepRuntimeData() {
 
 					@Override
@@ -428,7 +420,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 						return Map.of();
 					}
-				}, RespondingWith.DEEP_RAG_RESPONSE.name());
+				}, RespondingWith.CHAT_WITH_FILES.name());
 		return rd;
 	}
 
@@ -527,6 +519,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		}
 		case DEEP_RAG_RESPONSE: {
 			return List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING);
+		}
+		case CHAT_WITH_FILES: {
+			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

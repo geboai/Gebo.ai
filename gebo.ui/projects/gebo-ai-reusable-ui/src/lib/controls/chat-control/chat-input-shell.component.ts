@@ -42,22 +42,15 @@ function iconByProduct(productId: string): string | undefined {
 }
 
 
-const uploadedDocumentPipelineOption: PipelineRoutingOption = {
-  optionId: "UploadFileMenuItem",
-  description: "Uploaded doc. chat",
-  chatPipelineProcessId: "ChatWithUploadFile",
-  icon: "pi pi-cloud-upload",
+const chatWithFilesPipelineOption: PipelineRoutingOption = {
+  optionId: "CHAT_WITH_FILES",
+  description: "Chat with file(s)",
+  chatPipelineProcessId: "CHAT_WITH_FILES",
+  icon: "pi pi-file-import",
   pipelineParams: undefined,
   defaultOption: false
 };
-const chatWithDocsPipelineOption: PipelineRoutingOption = {
-  optionId: "ChatWithChoosenDocsMenuItem",
-  description: "Choosen doc. chat",
-  chatPipelineProcessId: "ChatWithChoosenDocs",
-  icon: "pi pi-search",
-  pipelineParams: undefined,
-  defaultOption: false
-};
+
 
 
 @Component({
@@ -186,7 +179,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   }
   private recreateMenuAndRouteOptions(): void {
     const newMenu: MenuItem[] = [...this.staticBehaviorsMenuItems];
-    const allPipelineRoutingOptions: PipelineRoutingOption[] = [uploadedDocumentPipelineOption, chatWithDocsPipelineOption];
+    const allPipelineRoutingOptions: PipelineRoutingOption[] = [chatWithFilesPipelineOption];
     this.pipelineChatMenu.forEach(menuItem => {
       if (menuItem.items && menuItem.items.length === 1) {
         //if single line menu ==> let's flat it directly as menu item with connected action
@@ -251,11 +244,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       this.addBehaviorsMenu = [...this.addBehaviorsMenu];
     }
   }
-  createRoutingOption(item: PipelineChatMenuItem): PipelineRoutingOption {
+  createRoutingOption(item: PipelineChatMenuItem,descriptionPrefix?:string): PipelineRoutingOption {
     const out: PipelineRoutingOption = {
       chatPipelineProcessId: item.routeOption,
       defaultOption: item.defaultOption === true,
-      description: item.description,
+      description: (descriptionPrefix && descriptionPrefix?.length? descriptionPrefix+"/":"" )+ item.description,
       optionId: item.optionId,
       icon: item?.icon ? item.icon : item?.productId ? iconByProduct(item.productId) : undefined,
       pipelineParams: undefined
@@ -271,7 +264,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     }
     return out;
   }
-  createSubMenu(menuItem: PipelineChatMenu, options: PipelineRoutingOption[]): MenuItem {
+  createSubMenu(menuItem: PipelineChatMenu, options: PipelineRoutingOption[],descriptionPrefix?:string): MenuItem {
     const item: MenuItem = {
       id: menuItem.menuId,
       label: menuItem.description,
@@ -299,10 +292,10 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     return item;
   }
   onChoosedDocument(e: boolean): void {
-    this.setNextPipelineRoute(chatWithDocsPipelineOption);
+    this.setNextPipelineRoute(chatWithFilesPipelineOption);
   }
   onSuccessfullUpload(e: boolean): void {
-    this.setNextPipelineRoute(uploadedDocumentPipelineOption);
+    this.setNextPipelineRoute(chatWithFilesPipelineOption);
   }
   onSubmit() {
     this.onSendClick();

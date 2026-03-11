@@ -9,7 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 
 /**
  * Gebo.ai comment agent

@@ -3,7 +3,6 @@ package ai.gebo.llms.chat.pipelines.service;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 
 public interface IRoutingChatPipelineStepService extends IChatPipelineStepService {
 	@Override

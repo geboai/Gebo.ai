@@ -16,7 +16,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.client.rest.model.PipelineRequestBody;
 import ai.gebo.llms.chat.client.rest.model.PipelineRequestBody.PipelineEnvironment;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
@@ -36,7 +36,7 @@ public class GeboChatPipelinesController {
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(
 			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
-			GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+			GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
 
 		return chatPipelineService.streamingChat(data.getRequest(), toLinkedHashMap(data.getEnvironment()));
 	}
@@ -45,7 +45,7 @@ public class GeboChatPipelinesController {
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid PipelineRequestBody data)
-			throws ChatPipelineException, GeboChatSessionLifecycleException {
+			throws ChatPipelineException, GeboChatException {
 
 		return chatPipelineService.streamingChat(pipelineCode, data.getRequest(),
 				toLinkedHashMap(data.getEnvironment()));
@@ -53,7 +53,7 @@ public class GeboChatPipelinesController {
 
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid PipelineRequestBody data)
-			throws ChatPipelineException, GeboChatSessionLifecycleException {
+			throws ChatPipelineException, GeboChatException {
 		return chatPipelineService.chat(data.getRequest(), toLinkedHashMap(data.getEnvironment()));
 	}
 
@@ -69,7 +69,7 @@ public class GeboChatPipelinesController {
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
 			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
-			GeboPersistenceException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+			GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
 		return chatPipelineService.chat(pipelineCode, data.getRequest(), toLinkedHashMap(data.getEnvironment()));
 	}
 

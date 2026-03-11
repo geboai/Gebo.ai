@@ -319,7 +319,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final String msg = "Error while streaming chat respose";
 			LOGGER.error(msg, exc);
 			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
-			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);			
+			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);
 			exceptionEnvelope.setContent(userMessage);
 			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
@@ -410,7 +410,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		boolean shrink = tokensLength > contextWindow / 2;
 		int targetSize = shrink ? contextWindow / 3 : 0;
 
-		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
-				response, requestResources.createChatRequestContext(), shrink, targetSize, null);
+		AIDocumentsSet allDocuments = requestResources.allDocuments();
+		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext,
+				requestResources.getCurrentRequest(), response, requestResources.createChatRequestContext(), shrink,
+				targetSize, allDocuments);
 	}
 }

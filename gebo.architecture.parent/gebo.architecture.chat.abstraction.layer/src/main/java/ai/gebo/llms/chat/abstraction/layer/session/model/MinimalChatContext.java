@@ -1,6 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

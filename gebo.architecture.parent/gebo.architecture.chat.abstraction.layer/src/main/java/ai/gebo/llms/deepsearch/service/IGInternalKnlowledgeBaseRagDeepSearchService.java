@@ -17,10 +17,10 @@ import reactor.core.publisher.Flux;
 
 public interface IGInternalKnlowledgeBaseRagDeepSearchService {
 
-	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, DeepSearchState state,
-			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments, DeepSearchConfig configuration,
-			UserInfos userInfos, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels)
+	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, boolean runSearches,
+			DeepSearchState state, MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels)
 			throws GeboChatSessionLifecycleException, LLMConfigException;
 
 }

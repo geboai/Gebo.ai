@@ -1,6 +1,5 @@
 package ai.gebo.architecture.ai.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;

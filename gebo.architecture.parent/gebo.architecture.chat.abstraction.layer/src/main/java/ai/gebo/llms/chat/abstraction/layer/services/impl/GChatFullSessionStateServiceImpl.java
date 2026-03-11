@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.services.impl.AIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;

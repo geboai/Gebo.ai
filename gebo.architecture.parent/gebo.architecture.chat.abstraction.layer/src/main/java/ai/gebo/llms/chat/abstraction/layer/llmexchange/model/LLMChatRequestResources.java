@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;

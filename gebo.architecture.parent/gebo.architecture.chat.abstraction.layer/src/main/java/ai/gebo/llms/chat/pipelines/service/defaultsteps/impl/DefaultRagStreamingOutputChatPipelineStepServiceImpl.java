@@ -20,7 +20,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;

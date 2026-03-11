@@ -3,7 +3,6 @@ package ai.gebo.llms.chat.pipelines.model.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

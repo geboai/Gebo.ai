@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
