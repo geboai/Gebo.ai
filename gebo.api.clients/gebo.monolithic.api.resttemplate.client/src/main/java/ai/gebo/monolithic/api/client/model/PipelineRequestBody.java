@@ -15,6 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
+import ai.gebo.monolithic.api.client.model.PipelineEnvironment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,11 +24,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PipelineRequestBody
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-06T16:40:08.739856300+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class PipelineRequestBody {
   @JsonProperty("request")
   private GeboChatRequest request = null;
+
+  @JsonProperty("environment")
+  private PipelineEnvironment environment = null;
 
   public PipelineRequestBody request(GeboChatRequest request) {
     this.request = request;
@@ -47,6 +51,24 @@ public class PipelineRequestBody {
     this.request = request;
   }
 
+  public PipelineRequestBody environment(PipelineEnvironment environment) {
+    this.environment = environment;
+    return this;
+  }
+
+   /**
+   * Get environment
+   * @return environment
+  **/
+  @Schema(description = "")
+  public PipelineEnvironment getEnvironment() {
+    return environment;
+  }
+
+  public void setEnvironment(PipelineEnvironment environment) {
+    this.environment = environment;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -57,12 +79,13 @@ public class PipelineRequestBody {
       return false;
     }
     PipelineRequestBody pipelineRequestBody = (PipelineRequestBody) o;
-    return Objects.equals(this.request, pipelineRequestBody.request);
+    return Objects.equals(this.request, pipelineRequestBody.request) &&
+        Objects.equals(this.environment, pipelineRequestBody.environment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(request);
+    return Objects.hash(request, environment);
   }
 
 
@@ -72,6 +95,7 @@ public class PipelineRequestBody {
     sb.append("class PipelineRequestBody {\n");
     
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
+    sb.append("    environment: ").append(toIndentedString(environment)).append("\n");
     sb.append("}");
     return sb.toString();
   }

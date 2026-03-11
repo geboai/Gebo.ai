@@ -27,7 +27,7 @@ import java.util.List;
  * PageGUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-06T16:40:08.739856300+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class PageGUserChatInfo {
   @JsonProperty("totalElements")
@@ -35,6 +35,12 @@ public class PageGUserChatInfo {
 
   @JsonProperty("totalPages")
   private Integer totalPages = null;
+
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -45,20 +51,14 @@ public class PageGUserChatInfo {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
+  @JsonProperty("sort")
+  private SortObject sort = null;
 
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
-
-  @JsonProperty("sort")
-  private SortObject sort = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -97,6 +97,42 @@ public class PageGUserChatInfo {
 
   public void setTotalPages(Integer totalPages) {
     this.totalPages = totalPages;
+  }
+
+  public PageGUserChatInfo first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGUserChatInfo last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
   }
 
   public PageGUserChatInfo size(Integer size) {
@@ -161,40 +197,22 @@ public class PageGUserChatInfo {
     this.number = number;
   }
 
-  public PageGUserChatInfo first(Boolean first) {
-    this.first = first;
+  public PageGUserChatInfo sort(SortObject sort) {
+    this.sort = sort;
     return this;
   }
 
    /**
-   * Get first
-   * @return first
+   * Get sort
+   * @return sort
   **/
   @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
+  public SortObject getSort() {
+    return sort;
   }
 
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageGUserChatInfo last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
+  public void setSort(SortObject sort) {
+    this.sort = sort;
   }
 
   public PageGUserChatInfo numberOfElements(Integer numberOfElements) {
@@ -233,24 +251,6 @@ public class PageGUserChatInfo {
     this.pageable = pageable;
   }
 
-  public PageGUserChatInfo sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
   public PageGUserChatInfo empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -281,20 +281,20 @@ public class PageGUserChatInfo {
     PageGUserChatInfo pageGUserChatInfo = (PageGUserChatInfo) o;
     return Objects.equals(this.totalElements, pageGUserChatInfo.totalElements) &&
         Objects.equals(this.totalPages, pageGUserChatInfo.totalPages) &&
+        Objects.equals(this.first, pageGUserChatInfo.first) &&
+        Objects.equals(this.last, pageGUserChatInfo.last) &&
         Objects.equals(this.size, pageGUserChatInfo.size) &&
         Objects.equals(this.content, pageGUserChatInfo.content) &&
         Objects.equals(this.number, pageGUserChatInfo.number) &&
-        Objects.equals(this.first, pageGUserChatInfo.first) &&
-        Objects.equals(this.last, pageGUserChatInfo.last) &&
+        Objects.equals(this.sort, pageGUserChatInfo.sort) &&
         Objects.equals(this.numberOfElements, pageGUserChatInfo.numberOfElements) &&
         Objects.equals(this.pageable, pageGUserChatInfo.pageable) &&
-        Objects.equals(this.sort, pageGUserChatInfo.sort) &&
         Objects.equals(this.empty, pageGUserChatInfo.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, size, content, number, first, last, numberOfElements, pageable, sort, empty);
+    return Objects.hash(totalElements, totalPages, first, last, size, content, number, sort, numberOfElements, pageable, empty);
   }
 
 
@@ -305,14 +305,14 @@ public class PageGUserChatInfo {
     
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

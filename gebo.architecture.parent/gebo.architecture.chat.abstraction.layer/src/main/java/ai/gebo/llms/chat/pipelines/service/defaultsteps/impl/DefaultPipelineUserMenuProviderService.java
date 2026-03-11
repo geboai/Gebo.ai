@@ -21,6 +21,17 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenuProviderService {
+	private static final String INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON = "pi pi-sitemap";
+	private static final String RAG_CHAT_ICON = "pi pi-database";
+	private static final String MULTIPLE_SOURCES_DEEP_SEARCH_DESCRIPTION = "Multiple sources";
+	private static final String RAG_CHAT_DESCRIPTION = "R.a.g. chat";
+	private static final String RAG_ID = "rag";
+	private static final String DEEP_SEARCH_ID = "deepSearch";
+	private static final String DEEP_SEARCH_ICON = "pi pi-deep-search";
+	private static final String DEEP_SEARCH_DESCRIPTION = "Deep search";
+	private static final String AGENTIC_CHAT_DESCRIPTION = "Agentic chat";
+	private static final String AGENTIC_CHAT_MENU_ID = "agenticChat";
+	private static final String AGENTIC_CHAT_ICON = "pi pi-microchip-ai";
 	private static final String KNOWLEDGE_BASE_DEEP_SEARCH = "Knowledge base deep search";
 	private static final String KNOWLEDGE_BASE_SEARCH = "Knowledge base search";
 	private static final String INTERNAL_KNOWLEDGE_OPTION = "internalKnowledgeOption";
@@ -29,13 +40,13 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem agenticChatItem = new PipelineChatMenuItem();
 	static {
-		agenticChatMenu.setMenuId("agenticChat");
+		agenticChatMenu.setMenuId(AGENTIC_CHAT_MENU_ID);
 		agenticChatMenu.setOrder(1);
-		agenticChatMenu.setDescription("Agentic chat");
+		agenticChatMenu.setDescription(AGENTIC_CHAT_DESCRIPTION);
 		agenticChatItem.setDefaultOption(true);
-		agenticChatItem.setOptionId("agenticChat");
-		agenticChatItem.setIcon("pi pi-microchip-ai");
-		agenticChatItem.setDescription("Agentic chat");
+		agenticChatItem.setOptionId(AGENTIC_CHAT_MENU_ID);
+		agenticChatItem.setIcon(AGENTIC_CHAT_ICON);
+		agenticChatItem.setDescription(AGENTIC_CHAT_DESCRIPTION);
 		agenticChatItem.setRouteOption(null);
 		agenticChatMenu.setItems(List.of(agenticChatItem));
 	}
@@ -44,19 +55,19 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	static final PipelineChatMenu ragMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem ragMenuItem = new PipelineChatMenuItem();
 	static {
-		deepSearchMenu.setMenuId("deepSearch");
+		deepSearchMenu.setMenuId(DEEP_SEARCH_ID);
 		deepSearchMenu.setPipelineId(null);
-		deepSearchMenu.setDescription("Deep search");
-		deepSearchMenu.setIcon("pi pi-deep-search");
-		deepSearchMenuItem.setOptionId("deepSearch");
-		deepSearchMenuItem.setIcon("pi pi-deep-search");
-		deepSearchMenuItem.setDescription("Multiple sources");
+		deepSearchMenu.setDescription(DEEP_SEARCH_DESCRIPTION);
+		deepSearchMenu.setIcon(DEEP_SEARCH_ICON);
+		deepSearchMenuItem.setOptionId(DEEP_SEARCH_ID);
+		deepSearchMenuItem.setIcon(DEEP_SEARCH_ICON);
+		deepSearchMenuItem.setDescription(MULTIPLE_SOURCES_DEEP_SEARCH_DESCRIPTION);
 		deepSearchMenuItem.setRouteOption(RespondingWith.DEEP_SEARCH_RESPONSE.name());
-		ragMenu.setMenuId("rag");
-		ragMenu.setDescription("R.a.g. chat");
-		ragMenuItem.setOptionId("rag");
-		ragMenuItem.setDescription("R.a.g. chat");
-		ragMenuItem.setIcon("pi pi-database");
+		ragMenu.setMenuId(RAG_ID);
+		ragMenu.setDescription(RAG_CHAT_DESCRIPTION);
+		ragMenuItem.setOptionId(RAG_ID);
+		ragMenuItem.setDescription(RAG_CHAT_DESCRIPTION);
+		ragMenuItem.setIcon(RAG_CHAT_ICON);
 		ragMenuItem.setRouteOption(RespondingWith.RAG_LLM_RESPONSE.name());
 		ragMenu.getItems().add(ragMenuItem);
 	}
@@ -94,7 +105,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
-			ikMenuItem.setIcon("pi pi-sitemap");
+			ikMenuItem.setIcon(INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON);
 			thisDeepSearchMenu.getItems().add(ikMenuItem);
 			outMenu.add(thisDeepSearchMenu);
 		} else {
@@ -105,7 +116,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
-			ikMenuItem.setIcon("pi pi-sitemap");
+			ikMenuItem.setIcon(INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON);
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
 		}

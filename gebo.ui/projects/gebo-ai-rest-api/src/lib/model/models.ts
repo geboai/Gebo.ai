@@ -286,6 +286,7 @@ export * from './pathInfo';
 export * from './pipelineChatMenu';
 export * from './pipelineChatMenuItem';
 export * from './pipelineChatMenuItemParameter';
+export * from './pipelineEnvironment';
 export * from './pipelineRequestBody';
 export * from './projectsResearchFilter';
 export * from './promptFilter';

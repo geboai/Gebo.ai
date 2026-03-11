@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-06T16:40:08.739856300+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GeboChatPipelinesControllerApi {
     private ApiClient apiClient;
@@ -144,27 +144,34 @@ public class GeboChatPipelinesControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
      * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu() throws RestClientException {
-        return getDefaultPersonalPipelinesChatMenuWithHttpInfo().getBody();
+    public List<PipelineChatMenu> getDefaultPersonalPipelinesChatMenu(String chatProfileCode) throws RestClientException {
+        return getDefaultPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode).getBody();
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
      * @return ResponseEntity&lt;List&lt;PipelineChatMenu&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<PipelineChatMenu>> getDefaultPersonalPipelinesChatMenuWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<PipelineChatMenu>> getDefaultPersonalPipelinesChatMenuWithHttpInfo(String chatProfileCode) throws RestClientException {
         Object postBody = null;
+        // verify the required parameter 'chatProfileCode' is set
+        if (chatProfileCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatProfileCode' when calling getDefaultPersonalPipelinesChatMenu");
+        }
         String path = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
 
         final String[] accepts = { 
             "application/json"
@@ -182,30 +189,37 @@ public class GeboChatPipelinesControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
      * @param pipelineCode  (optional)
      * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode) throws RestClientException {
-        return getPersonalPipelinesChatMenuWithHttpInfo(pipelineCode).getBody();
+    public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String chatProfileCode, String pipelineCode) throws RestClientException {
+        return getPersonalPipelinesChatMenuWithHttpInfo(chatProfileCode, pipelineCode).getBody();
     }
 
     /**
      * 
      * 
      * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
      * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;List&lt;PipelineChatMenu&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<PipelineChatMenu>> getPersonalPipelinesChatMenuWithHttpInfo(String pipelineCode) throws RestClientException {
+    public ResponseEntity<List<PipelineChatMenu>> getPersonalPipelinesChatMenuWithHttpInfo(String chatProfileCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
+        // verify the required parameter 'chatProfileCode' is set
+        if (chatProfileCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatProfileCode' when calling getPersonalPipelinesChatMenu");
+        }
         String path = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/personalPipelinesChatMenu").build().toUriString();
         
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
 
         final String[] accepts = { 
             "application/json"
