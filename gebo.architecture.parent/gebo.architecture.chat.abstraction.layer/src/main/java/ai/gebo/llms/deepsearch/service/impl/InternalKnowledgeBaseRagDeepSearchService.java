@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
@@ -85,7 +86,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			throws GeboChatSessionLifecycleException, LLMConfigException {
 
 		AtomicBoolean completed = state.getCompleted();
-
+		Map<String, Object> promptsParameters = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
@@ -175,8 +176,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 							inputs.add(cInput);
 						}
 						try {
-							Map<String, Object> promptsParameters = CommonChatPromptParamsUtil
-									.preparePromptParameters(minimalChatContext);
+
 							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
 									promptsParameters, inputs);
 							SearchEndingDetectionLogic.manageTrigger(state, result);
@@ -232,7 +232,12 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				if (!results.isEmpty()) {
 					String result = callLLMConsolidateText(chatModel,
 							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-							request.getQuery(), "", new ArrayList(results));
+							request.getQuery(), "", promptsParameters, new ArrayList(results));
+					event.getOutputData().setResponse(result);
+				} else {
+					String result = callLLM(chatModel, promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
+							request.getQuery(), promptsParameters);
 					event.getOutputData().setResponse(result);
 				}
 				evt = event;

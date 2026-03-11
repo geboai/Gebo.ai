@@ -105,8 +105,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						deepSearchConfig, dataSourcesResults, chunkingSessionId);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
-							"Extracting relevant documents",
-							handler.getDescription(deepSearchConfig));
+							"Extracting relevant documents", handler.getDescription(deepSearchConfig));
 					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
 					nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -213,7 +212,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		composedFlux = Flux.concat(composedFlux, mergedFlux);
 		composedFlux = composedFlux.map(event -> {
 			if (event != null && event.getOutputData() != null
-					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult) {
+					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult
+					&& (intermediateResult.getSearchResultsEmpty() == null
+							|| intermediateResult.getSearchResultsEmpty() == false)) {
 				intermediates.add(intermediateResult);
 			}
 			return event;
@@ -221,7 +222,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request,
 				minimalChatContext, history, state, configuration, userInfos, embeddingModels, chatModel,
 				intermediates);
-
 		return outFlux;
 
 	}

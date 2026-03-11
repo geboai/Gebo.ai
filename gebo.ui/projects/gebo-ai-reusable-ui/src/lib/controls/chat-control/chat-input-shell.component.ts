@@ -41,11 +41,11 @@ function iconByProduct(productId: string): string | undefined {
   return out;
 }
 
-
+const CHAT_WITH_FILES_PIPELINE_ROUTE = "CHAT_WITH_FILES";
 const chatWithFilesPipelineOption: PipelineRoutingOption = {
-  optionId: "CHAT_WITH_FILES",
+  optionId: CHAT_WITH_FILES_PIPELINE_ROUTE,
   description: "Chat with file(s)",
-  chatPipelineProcessId: "CHAT_WITH_FILES",
+  chatPipelineProcessId: CHAT_WITH_FILES_PIPELINE_ROUTE,
   icon: "pi pi-file-import",
   pipelineParams: undefined,
   defaultOption: false
@@ -187,7 +187,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
         allPipelineRoutingOptions.push(option);
         newMenu.push(this.createMenuLeaf(menuItem.items[0], option));
       } else {
-        newMenu.push(this.createSubMenu(menuItem, allPipelineRoutingOptions));
+        newMenu.push(this.createSubMenu(menuItem, allPipelineRoutingOptions, menuItem.description));
       }
 
     });
@@ -228,6 +228,26 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   }
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.formGroup && changes["formGroup"]) {
+      this.formGroup.valueChanges.subscribe({
+        next: (req: GeboChatRequest) => {
+          //if the actual chosen option is chat with documents and the user removes all the uploaded or selected files the 
+          //default modality goest to agentic chat or default mode
+          if (this.choosedPipelineRoutingChip && this.choosedPipelineRoutingChip.chatPipelineProcessId === CHAT_WITH_FILES_PIPELINE_ROUTE) {
+            let hasDocuments: boolean = false;
+            if (req.forcedRequestDocuments && req.forcedRequestDocuments.length) {
+              hasDocuments = true;
+            }
+            if (req.userUploadedContents && req.userUploadedContents.length) {
+              hasDocuments = true;
+            }
+            if (!hasDocuments && this.defaultPipelineRouting) {
+              this.setNextPipelineRoute(this.defaultPipelineRouting);
+            }
+          }
+        }
+      });
+    }
     if (changes["pipelineChatMenu"] && this.pipelineChatMenu) {
       this.recreateMenuAndRouteOptions();
     }
@@ -244,11 +264,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       this.addBehaviorsMenu = [...this.addBehaviorsMenu];
     }
   }
-  createRoutingOption(item: PipelineChatMenuItem,descriptionPrefix?:string): PipelineRoutingOption {
+  createRoutingOption(item: PipelineChatMenuItem, descriptionPrefix?: string): PipelineRoutingOption {
     const out: PipelineRoutingOption = {
       chatPipelineProcessId: item.routeOption,
       defaultOption: item.defaultOption === true,
-      description: (descriptionPrefix && descriptionPrefix?.length? descriptionPrefix+"/":"" )+ item.description,
+      description: (descriptionPrefix && descriptionPrefix?.length ? descriptionPrefix + "/" : "") + item.description,
       optionId: item.optionId,
       icon: item?.icon ? item.icon : item?.productId ? iconByProduct(item.productId) : undefined,
       pipelineParams: undefined
@@ -264,7 +284,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     }
     return out;
   }
-  createSubMenu(menuItem: PipelineChatMenu, options: PipelineRoutingOption[],descriptionPrefix?:string): MenuItem {
+  createSubMenu(menuItem: PipelineChatMenu, options: PipelineRoutingOption[], descriptionPrefix?: string): MenuItem {
     const item: MenuItem = {
       id: menuItem.menuId,
       label: menuItem.description,
@@ -272,7 +292,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       items: []
     };
     menuItem.items.forEach(node => {
-      const option: PipelineRoutingOption = this.createRoutingOption(node);
+      const option: PipelineRoutingOption = this.createRoutingOption(node, descriptionPrefix);
       const menuItem: MenuItem = this.createMenuLeaf(node, option);
       options.push(option);
       item.items?.push(menuItem);
@@ -328,11 +348,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
       console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
       //Check if the pipeline routing choosed is different from the one displayed
-      if (pipelineRouterDecisionCode!=="WAITING" && pipelineRouterDecisionCode!==this.runningPipelineRouting?.chatPipelineProcessId) {
-          const runningRoutingChoice=this.allPipelineRoutingOptions.find(x=>pipelineRouterDecisionCode===x?.chatPipelineProcessId);
-          if (runningRoutingChoice) {
-            this.runningPipelineRouting=runningRoutingChoice;
-          }
+      if (pipelineRouterDecisionCode !== "WAITING" && pipelineRouterDecisionCode !== this.runningPipelineRouting?.chatPipelineProcessId) {
+        const runningRoutingChoice = this.allPipelineRoutingOptions.find(x => pipelineRouterDecisionCode === x?.chatPipelineProcessId);
+        if (runningRoutingChoice) {
+          this.runningPipelineRouting = runningRoutingChoice;
+        }
       }
     }
     this.streamNotificationsComponent.onMessage(recvd);
