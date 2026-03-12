@@ -268,6 +268,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			maximizeInTreeSequence(lowerBound, upperBound, fineIncrement, vectorStore, serviceChatModel, questions,
 					rateOrderedOptimizationThreasholds, cache, topK);
 			AutoTuneRatedThreashold foundThreashold = selectResult(rateOrderedOptimizationThreasholds);
+			if (foundThreashold == null) {
+				LOGGER.error("No found threashold!!");
+				return;
+			}
 			List<AutoTuneRatedThreashold> logrates = new ArrayList<AutoTuneRatedThreashold>();
 			rateOrderedOptimizationThreasholds.values().forEach(x -> {
 				logrates.addAll(x);
@@ -362,27 +366,21 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	private AutoTuneRatedThreashold selectResult(
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
-		if (rateOrderedOptimizationThreasholds.size() > 2) {
-			List<AutoTuneRatedThreashold> values = new ArrayList<AutoTuneRatedThreashold>();
-			List<List<AutoTuneRatedThreashold>> inorder = new ArrayList<List<AutoTuneRatedThreashold>>();
-			for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
-				inorder.add(items);
-			}
-			final int last3 = inorder.size() - 3;
-			for (int i = inorder.size() - 1; i >= last3 && i >= 0; i--) {
-				values.addAll(inorder.get(i));
-			}
-			TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>> byquestionAnswered = new TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>>();
-			for (AutoTuneRatedThreashold item : values) {
+		if (rateOrderedOptimizationThreasholds.isEmpty())
+			return null;
+		TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>> byquestionAnswered = new TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>>();
+		for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
+			for (AutoTuneRatedThreashold item : items) {
 				if (byquestionAnswered.get(item.answeredQuestions) == null) {
 					byquestionAnswered.put(item.answeredQuestions, new TreeMap<Double, AutoTuneRatedThreashold>());
 				}
-				byquestionAnswered.get(item.answeredQuestions).put(item.rating, item);
+				byquestionAnswered.get(item.answeredQuestions).put(item.averageDistance, item);
 			}
-			return byquestionAnswered.lastEntry().getValue().lastEntry().getValue();
+		}
+		// I Take the configuration returning the most high number of answered questions
+		// but with the lower average distance
+		return byquestionAnswered.lastEntry().getValue().firstEntry().getValue();
 
-		} else
-			return rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
 	}
 
 	private static final String EVALUATE_RATING_PROMPT = "You are a strict RAG retrieval judge.\r\n" + "\r\n"
