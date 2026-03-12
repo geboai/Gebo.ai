@@ -459,7 +459,8 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 	protected void printStatus(ComputedWorkflowStatus rootStatus, String prefix) {
 		LOGGER.info(prefix + " stepId:" + rootStatus.getWorkflowStepId() + " input:"
 				+ rootStatus.getBatchDocumentsInput() + " processed:" + rootStatus.getBatchDocumentsProcessed()
-				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors());
+				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors() + " tokens: "
+				+ rootStatus.getTokensProcessed());
 		for (ComputedWorkflowStatus childStatus : rootStatus.getChilds()) {
 			printStatus(childStatus, prefix + prefix);
 		}
