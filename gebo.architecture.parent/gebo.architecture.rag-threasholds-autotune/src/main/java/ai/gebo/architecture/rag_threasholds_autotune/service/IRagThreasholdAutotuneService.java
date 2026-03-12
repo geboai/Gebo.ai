@@ -15,4 +15,5 @@ public interface IRagThreasholdAutotuneService {
 	public void processAutotune(String vectorStoreId);
 
 	public List<AutotuneVectorStoreInfo> getLatestComputedVectorStores();
+	public boolean isRunning();
 }

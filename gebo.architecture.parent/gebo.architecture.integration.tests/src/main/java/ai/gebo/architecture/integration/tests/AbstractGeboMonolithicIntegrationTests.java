@@ -369,7 +369,7 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	 */
 	protected Path copyResource(String classPathElement, String baseFolder) throws IOException {
 
-		InputStream is = getClass().getClassLoader().getResourceAsStream(classPathElement);
+		InputStream is = getClass().getResourceAsStream(classPathElement);
 		if (is == null)
 			throw new RuntimeException("The resource:" + classPathElement + " does not exist");
 		Path file = Path.of(baseFolder, classPathElement);

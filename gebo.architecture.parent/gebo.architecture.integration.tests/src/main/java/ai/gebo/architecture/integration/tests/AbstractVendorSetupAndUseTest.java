@@ -55,6 +55,8 @@ import ai.gebo.monolithic.api.client.api.SharepointSystemsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.AuthResponse;
+import ai.gebo.monolithic.api.client.model.ComputedWorkflowResult;
+import ai.gebo.monolithic.api.client.model.ComputedWorkflowStatus;
 import ai.gebo.monolithic.api.client.model.FastConfluenceSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.FastConfluenceSystemInsertRequest.ConfluenceVersionEnum;
 import ai.gebo.monolithic.api.client.model.FastGoogleDriveSystemInsert;
@@ -68,6 +70,8 @@ import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboOauth2SecretContent;
 import ai.gebo.monolithic.api.client.model.GeboTokenContent;
 import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
+import ai.gebo.monolithic.api.client.model.JobSummary;
+import ai.gebo.monolithic.api.client.model.JobWorkflowStepSummary;
 import ai.gebo.monolithic.api.client.model.LLMAutoconfigureCreationData;
 import ai.gebo.monolithic.api.client.model.LLMCreateModelData.UsesEnum;
 import ai.gebo.monolithic.api.client.model.LLMModelPresetChoice;
@@ -340,7 +344,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				FastSharepointSystemInsertRequest config = new FastSharepointSystemInsertRequest();
 				config.setBaseUri(productSetupInfo.getBasePath());
 				config.setDescription("Sharepoint system");
-				
+
 				GeboOauth2SecretContent oauth2Credentials = productSetupInfo.getOauth2Credentials();
 				config.setOauth2Credentials(oauth2Credentials);
 				config.setSharepointVersion(SharepointVersionEnum.CLOUD_VERSION);
@@ -408,13 +412,13 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 						LOGGER.info("(info) " + msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
-					
+
 					case SUCCESS: {
 						LOGGER.info("(success)" + msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
 					case ERROR:
-					default:{
+					default: {
 						LOGGER.error(msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
@@ -442,6 +446,24 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		ObjectMapper objectMapper = new ObjectMapper();
 		IntegrationTestSetup setup = objectMapper.readValue(jsonSetup, IntegrationTestSetup.class);
 		return executingSystemSetup(setup);
+	}
+
+	protected void printSummary(JobSummary summary) {
+		LOGGER.info("************ LOG FOR JOB:" + summary.getCode()
+				+ " **************************************************");
+		ComputedWorkflowResult status = summary.getWorkflowStatus();
+		printStatus(status.getRootStatus(), "-");
+		LOGGER.info("************************************************************************************************");
+	}
+
+	protected void printStatus(ComputedWorkflowStatus rootStatus, String prefix) {
+		LOGGER.info(prefix + " stepId:" + rootStatus.getWorkflowStepId() + " input:"
+				+ rootStatus.getBatchDocumentsInput() + " processed:" + rootStatus.getBatchDocumentsProcessed()
+				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors());
+		for (ComputedWorkflowStatus childStatus : rootStatus.getChilds()) {
+			printStatus(childStatus, prefix + prefix);
+		}
+
 	}
 
 }
