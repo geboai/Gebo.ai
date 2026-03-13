@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,9 +73,7 @@ import ai.gebo.monolithic.api.client.model.GeboOauth2SecretContent;
 import ai.gebo.monolithic.api.client.model.GeboTokenContent;
 import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
 import ai.gebo.monolithic.api.client.model.JobSummary;
-import ai.gebo.monolithic.api.client.model.JobWorkflowStepSummary;
 import ai.gebo.monolithic.api.client.model.LLMAutoconfigureCreationData;
-import ai.gebo.monolithic.api.client.model.LLMCreateModelData.UsesEnum;
 import ai.gebo.monolithic.api.client.model.LLMModelPresetChoice;
 import ai.gebo.monolithic.api.client.model.LLMSModelsPresets;
 import ai.gebo.monolithic.api.client.model.LLMSModelsPresets.TypeEnum;
@@ -95,8 +95,6 @@ import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import redis.clients.jedis.json.Path;
 
 /****************************************************************************************
  * Base for llm multivendor integration tests, taking admin account, llm vendor
@@ -463,6 +461,24 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				+ rootStatus.getTokensProcessed());
 		for (ComputedWorkflowStatus childStatus : rootStatus.getChilds()) {
 			printStatus(childStatus, prefix + prefix);
+		}
+
+	}
+
+	protected <T> T loadJsonDataModel(String resource, Class<T> type)
+			throws StreamReadException, DatabindException, IOException {
+		InputStream is = getClass().getResourceAsStream(resource);
+		if (is == null)
+			is = getClass().getClassLoader().getResourceAsStream(resource);
+		if (is == null)
+			throw new IllegalStateException("The resource " + resource + " is not found");
+		try {
+			return mapper.readValue(is, type);
+		} finally {
+			try {
+				is.close();
+			} catch (Throwable t) {
+			}
 		}
 
 	}

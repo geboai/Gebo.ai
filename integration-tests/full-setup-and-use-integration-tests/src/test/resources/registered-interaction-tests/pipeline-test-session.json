@@ -1,0 +1,30 @@
+[
+	{
+		"request": {
+			"id": "9234-233243-UXX",
+			"query": "Parlami delle interazioni tra Gesu e Maria Maddalena nella tradizione Gnostica"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE",
+				"DEEP_RAG_RESPONSE",
+				"DEEP_SEARCH_RESPONSE"
+			]
+		}
+	},
+	{
+		"request": {
+			"id": "9234-233243-UY1",
+			"query": "Fai un report dettagliato di tutti gli eventi in cui Maria risponde ai discepoli al posto di Gesu nella tradizione Gnostica"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE",
+				"DEEP_RAG_RESPONSE",
+				"DEEP_SEARCH_RESPONSE"
+			]
+		}
+	}
+]

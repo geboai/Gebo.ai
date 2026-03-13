@@ -111,7 +111,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	public void createChatSession(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
 
-		if (request.getUserChatContextCode() == null && request.getUserChatContextCode().trim().length() == 0) {
+		if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
 			UserInfos user = securityService.getCurrentUser();
 			GUserChatSession s = new GUserChatSession();
 			s.setUsername(user.getUsername());

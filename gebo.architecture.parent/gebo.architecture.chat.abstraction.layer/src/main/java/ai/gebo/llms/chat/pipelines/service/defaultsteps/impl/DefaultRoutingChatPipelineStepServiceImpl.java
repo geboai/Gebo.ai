@@ -308,7 +308,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
 					RespondingWith.PURE_LLM_RESPONSE.name());
 		}
-
+		// Setting the decided routing code
+		runtimeData.getChatResponse().setPipelineRouterDecisionCode(rd.getPipelineRouterDecisionCode());
 		return rd;
 
 	}
