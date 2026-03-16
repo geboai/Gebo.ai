@@ -114,18 +114,27 @@ public class BaseLLMSInvokingService {
 		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
 		loadParams(promptTemplate, params);
 		long time = 0;
-		if (LOGGER.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled() || LOGGER.isTraceEnabled()) {
 			time = System.currentTimeMillis();
 			LOGGER.debug("Calling llm " + chatModel.getCode());
 		}
 		Prompt _renderedPrompt = promptTemplate.create();
+		String _completePrompt = null;
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Prompt: " + _renderedPrompt.getContents());
+			_completePrompt = _renderedPrompt.getContents();
+			LOGGER.trace("Prompt: " + _completePrompt);
 		}
 		ChatResponse response = chatModel.getChatModel().call(_renderedPrompt);
-		if (LOGGER.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled() || LOGGER.isTraceEnabled()) {
 			long delta = System.currentTimeMillis() - time;
-			LOGGER.debug("Called llm " + chatModel.getCode() + " in " + delta + " ms");
+			if (LOGGER.isTraceEnabled()) {
+				int tokens = tokensEstimation.estimate(_completePrompt);
+				double tokenSecs = delta > 0 ? ((double) tokens) / (((double) delta) / 1000.0) : 0;
+				LOGGER.debug("Called llm " + chatModel.getCode() + " tokens: " + tokens + " in " + delta
+						+ " ms, ingested token/sec: " + tokenSecs);
+			} else {
+				LOGGER.debug("Called llm " + chatModel.getCode() + " in " + delta + " ms");
+			}
 		}
 
 		String result = response.getResult().getOutput().getText();
@@ -442,7 +451,7 @@ public class BaseLLMSInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt,
 							currentText.toString(), question, _consolidated, additionalParams, type);
-					
+
 					// eventual handling of consolidation programmable aggregation
 					if (aggregator != null) {
 						consolidated = aggregator.apply(oldConsolidated, consolidated);
