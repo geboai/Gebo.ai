@@ -1,5 +1,6 @@
 package ai.gebo.full_setup_use.tests;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +30,11 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
+import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
+import ai.gebo.llms.deepsearch.model.BaseDeepSearchDocumentAnalisysResult;
+import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
+import ai.gebo.llms.deepsearch.repository.DeepSearchDataSourceDocumentResultRepository;
+import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRepository;
 import ai.gebo.monolithic.api.client.api.FileSystemSharesSettingControllerApi;
 import ai.gebo.monolithic.api.client.api.FileSystemsControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
@@ -43,6 +49,7 @@ import ai.gebo.monolithic.api.client.model.GFileSystemShareReference;
 import ai.gebo.monolithic.api.client.model.GFilesystemProjectEndpoint;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.GObjectRefGProjectEndpoint;
+import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
 import ai.gebo.monolithic.api.client.model.GVirtualFilesystemRoot;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.JobSummary;
@@ -227,8 +234,34 @@ public class FullSetupUseAndPipelineTest extends AbstractVendorSetupAndUseTest {
 
 	private void checkAssertOnDocumentsList(RegisteredInteractionTestModel registeredInteractionTestModel,
 			GeboChatResponse response) {
-		// TODO Auto-generated method stub
+		List<BaseDeepSearchDocumentAnalisysResult> dsDocs = new ArrayList<BaseDeepSearchDocumentAnalisysResult>();
+		if (response.getDeepSearchRequestId() != null && response.getDeepSearchRequestId().trim().length() > 0) {
+			DeepSearchDataSourceDocumentResultRepository deepSearchDSDocumentResultRepo = this.runtimeBinder
+					.getImplementationOf(DeepSearchDataSourceDocumentResultRepository.class);
+			DeepSearchDocumentAnalisysResultStepRepository deepSearchDocumentResultRepo = this.runtimeBinder
+					.getImplementationOf(DeepSearchDocumentAnalisysResultStepRepository.class);
 
+			List<DeepSearchDataSourceDocumentResult> dsds = deepSearchDSDocumentResultRepo
+					.findByDeepsearchCode(response.getDeepSearchRequestId());
+			List<DeepSearchDocumentAnalisysResultStep> dsik = deepSearchDocumentResultRepo
+					.findByDeepsearchCode(response.getDeepSearchRequestId());
+			dsDocs.addAll(dsds);
+			dsDocs.addAll(dsik);
+		}
+		boolean foundDocsRefs = response.getDocumentsRef() != null && !response.getDocumentsRef().isEmpty();
+		boolean foundDeepSearchDocs = !dsDocs.isEmpty();
+		if (foundDocsRefs) {
+			for (GResponseDocumentRef fnd : response.getDocumentsRef()) {
+				LOGGER.info("Found doc:" + fnd.getDocumentCode() + " " + fnd.getName());
+			}
+		}
+		if (foundDeepSearchDocs) {
+			for (BaseDeepSearchDocumentAnalisysResult fnd : dsDocs) {
+				LOGGER.info("Found doc:" + fnd.getAnalyzedDocument());
+			}
+		}
+		assertTrue(foundDeepSearchDocs || foundDocsRefs,
+				"The interaction must include deep search retrieved docs or rag retrieved docs");
 	}
 
 	private void checkAssertOnRoutingDecisionTaken(RegisteredInteractionTestModel registeredInteractionTestModel,

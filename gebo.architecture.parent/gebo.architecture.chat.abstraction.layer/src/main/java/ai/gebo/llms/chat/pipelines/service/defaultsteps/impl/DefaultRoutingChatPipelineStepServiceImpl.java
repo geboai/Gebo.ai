@@ -54,9 +54,12 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
-	private static final String REWRITTEN_QUERY_FIELD = "rewrittenQuery";
+	private static final String DELIVERABLE_EXPLANATION_TEMPLATE_PARAM = "deliverableExplanation";
+	private static final String DELIVERABLE_TEMPLATE_PARAM = "deliverable";
+	private static final String REWRITTEN_QUERY_TEMPLATE_PARAM = "rewrittenQuery";
+	private static final String REWRITTEN_QUERY_FIELD = REWRITTEN_QUERY_TEMPLATE_PARAM;
 	static final String DEEP_SEARCHED_SYSTEMS = "deepSearchedSystems";
-	private static final String DELIVERABLE_FIELD = "deliverable";
+	private static final String DELIVERABLE_FIELD = DELIVERABLE_TEMPLATE_PARAM;
 	private static final String INTENT_SELECTION_CRITERIA = "selection-criteria: ";
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
@@ -126,6 +129,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				}
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("User intent:" + userIntent.name());
+			LOGGER.debug("Rewritten query:" + rewrited_query);
+		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
 		return rewrited_query;
 	}
@@ -167,6 +174,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		};
 		Map<String, Object> params = CommonChatPromptParamsUtil
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
+		params.put(REWRITTEN_QUERY_TEMPLATE_PARAM, rewrited_query);
+		params.put(DELIVERABLE_TEMPLATE_PARAM,
+				runtimeData.getRequestResources().getCurrentRequest().getUserIntent().name());
+		params.put(DELIVERABLE_EXPLANATION_TEMPLATE_PARAM,
+				runtimeData.getRequestResources().getCurrentRequest().getUserIntent().getExplanation());
 		final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 				GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT,
 				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
@@ -193,8 +205,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			decisionMap.put(SEARCHED_SYSTEM, realCodes);
 		}
 		// extracting user intent
-		DeliverableIntent userIntent = readUserIntent(decisionMap);
-		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
+		
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;

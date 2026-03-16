@@ -1,6 +1,18 @@
 [
 	{
 		"request": {
+			"id": "9234-233243-UY9",
+			"query": "Chi é l'arrogante nella pistis sophia?"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedRoutingDecisions": [
+				"RAG_LLM_RESPONSE"
+			]
+		}
+	},
+	{
+		"request": {
 			"id": "9234-233243-UXX",
 			"query": "Parlami delle interazioni tra Gesu e Maria Maddalena nella tradizione Gnostica"
 		},

@@ -7,7 +7,10 @@ import lombok.Getter;
 @Getter
 public enum DeliverableIntent {
 	QA("User asked direct short answer or some sinonyms of this in all languages", "direct short answer"), // (direct
-	REPORT("User asked a structured, report, detailed report, an analisys or some sinonyms of these in all languages",
+	REPORT("*User asked a structured, report, detailed report, an analisys or some sinonyms of these in all languages\r\n"
+			+ "* report / detailed report / in-depth / deep-search / deep analysis / detailed analysis\r\n"
+			+ "* citations/sources across documents\r\n"
+			+ "* compare/analyze a broad corpus",
 			"detailed report"), // (structured, detailed, multi-section)
 	HOWTO("User asked a step or procedure explanation  or some sinonyms of this in all languages",
 			"process step or procedure explanation"), // (steps/procedure)
