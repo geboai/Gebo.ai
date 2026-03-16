@@ -145,13 +145,14 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 									.findById(documentCode);
 							if (updopt.isPresent()) {
 								uploadedContent = new UserUploadedContent(updopt.get());
+								analyzed = new DeepSearchAnalyzedDocument();
+								analyzed.setCode(uploadedContent.getCode());
+								analyzed.setDataSourceCode("User uploaded file");
+								analyzed.setDataSourceDescription("User uploaded file");
+								analyzed.setName(uploadedContent.getFileName());
+								analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);
 							}
-							analyzed = new DeepSearchAnalyzedDocument();
-							analyzed.setCode(uploadedContent.getCode());
-							analyzed.setDataSourceCode("User uploaded file");
-							analyzed.setDataSourceDescription("User uploaded file");
-							analyzed.setName(uploadedContent.getFileName());
-							analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);
+
 						}
 					}
 					if (analyzed != null || uploadedContent != null) {
