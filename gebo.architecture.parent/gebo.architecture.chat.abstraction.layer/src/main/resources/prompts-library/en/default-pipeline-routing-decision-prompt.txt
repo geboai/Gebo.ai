@@ -55,14 +55,24 @@ DECISION RULES (apply in this exact priority order):
 0. GLOBAL TOOL OVERRIDE:
    If the user explicitly asks to use tools or perform an action that requires a tool in (F), choose TOOLS_USE_RESPONSE.
 
-1. DEEP SEARCH SHORTCUT RULE: if the user explicitely asks for a deep search or detailed search or detailed report in any languages or synonims 
-   if a single catalog of the systems in the (E) catalog has topics or titles related to user question or its rewriting choose SHALLOW_SEARCH_RESPONSE and output the choosen system selection.
-   if some of available sources in (C) has topics or titles related to user question or its rewriting choose DEEP_SEARCH_RESPONSE and output choosed sources.
-
-2. CONTEXT SATISFACTORY SHORTCUT RULE: if the context (A) + (B) combined with your training have enough information to answer the user question at the required service level expressed by (G)
+1. CONTEXT SATISFACTORY SHORTCUT RULE: if the context (A) + (B) combined with your training have enough information to answer the user question at the required service level expressed by (G)
    choose PURE_LLM_RESPONSE , if unshure try the following rules.   
 
-3. If (G) IS QA or DECISION:
+2. DEEP SEARCH SHORTCUT RULE: if the user explicitely asks for a deep search or detailed search or detailed report in any languages or synonims 
+   If the user question or rewritten user question is related to (D) INTERNAL RAG KNOWLEDGE BASES CATALOG listed topics 
+   choose DEEP_RAG_RESPONSE .
+   If a single catalog of the systems in the (E) catalog has topics or titles related to user question or its rewriting choose SHALLOW_SEARCH_RESPONSE and output the choosen system selection.
+   If some of available sources in (C) has topics or titles related to user question or its rewriting choose DEEP_SEARCH_RESPONSE and output choosed sources.
+
+3. EXPLICIT DATA SOURCES SEARCH RULE: if the user explicitely asks a search on one or more of the 3rd part products (jira, sharepoint, confluence, google or others...)  in any languages or synonims and the product is listed  
+   If user asks for a search in a single 3rd part product listed in (E) then choose SHALLOW_SEARCH_RESPONSE and output that search system as searchedSystem=<systemId>.
+   If user asks for a search in multiple 3rd part product listed in (C) the choose DEEP_SEARCH_RESPONSE and output choose product codes with multiple lines of deepSearchedSystems=<deep search system code>.
+
+4. EXPLICIT INTERNAL KNOWLEDGE BASE SEARCH RULE: if the user explicitely asks a internal knowledge base search (or internal database search or internal data search)  in any languages or synonims 
+   choose DEEP_RAG_RESPONSE.
+   
+
+4. If (G) IS QA or DECISION:
  
    If the user question or rewritten user question is related to (D) INTERNAL RAG KNOWLEDGE BASES CATALOG listed topics 
    choose RAG_LLM_RESPONSE
@@ -70,7 +80,7 @@ DECISION RULES (apply in this exact priority order):
    If the user question or rewritten user question is related to one of the (E) EXTERNAL SEARCH SYSTEMS CATALOGS then 
    choose SHALLOW_SEARCH_RESPONSE 
    
-3. If (G) is HOWTO or REPORT or SUMMARY :
+5. If (G) is HOWTO or REPORT or SUMMARY :
     
    If the user question or rewritten user question is related to (D) INTERNAL RAG KNOWLEDGE BASES CATALOG listed topics  
    choose DEEP_RAG_RESPONSE
