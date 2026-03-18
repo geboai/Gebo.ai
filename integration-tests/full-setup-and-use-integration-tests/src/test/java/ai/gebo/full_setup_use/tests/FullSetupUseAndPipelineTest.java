@@ -191,6 +191,11 @@ public class FullSetupUseAndPipelineTest extends AbstractVendorSetupAndUseTest {
 			String userChatContext = null;
 			for (RegisteredInteractionTestModel registeredInteractionTestModel : registeredTestSession) {
 				LOGGER.info("Running iteration nr:" + index);
+				LOGGER.info(
+						"**********************************************************************************************************************************************");
+				LOGGER.info("Testing: " + registeredInteractionTestModel.getDescription());
+				LOGGER.info(
+						"**********************************************************************************************************************************************");
 				PipelineRequestBody requestBody = new PipelineRequestBody();
 				requestBody.setRequest(registeredInteractionTestModel.getRequest());
 				requestBody.setEnvironment(getEnvironment(registeredInteractionTestModel));

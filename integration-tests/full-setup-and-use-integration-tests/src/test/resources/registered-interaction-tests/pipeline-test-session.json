@@ -19,16 +19,16 @@
 		"description": "Testing the explicit search rule to answer a question",
 		"request": {
 			"id": "9234-233243-UXW",
-			"query": "Cerca su Google in internet dove é nata Maria Maddalena",
-			"responseTestCriteria": {
-				"checkNotEmptyDocumentsList": true,
-				"allowedDetectedUserIntent": [
-					"QA"
-				],
-				"allowedRoutingDecisions": [
-					"SHALLOW_SEARCH_RESPONSE"
-				]
-			}
+			"query": "Cerca su Google in internet dove é nata Maria Maddalena"
+		},
+		"responseTestCriteria": {
+			"checkNotEmptyDocumentsList": true,
+			"allowedDetectedUserIntent": [
+				"QA"
+			],
+			"allowedRoutingDecisions": [
+				"SHALLOW_SEARCH_RESPONSE"
+			]
 		}
 	},
 	{
