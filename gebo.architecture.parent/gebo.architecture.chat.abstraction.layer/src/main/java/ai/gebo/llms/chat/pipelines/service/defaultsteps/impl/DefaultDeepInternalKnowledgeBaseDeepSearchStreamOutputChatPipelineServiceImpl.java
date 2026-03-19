@@ -31,12 +31,12 @@ import reactor.core.publisher.Flux;
 
 @Service
 @AllArgsConstructor
-public class DefaultDeepRagStreamOutputChatPipelineServiceImpl extends BaseLLMSInvokingService
+public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineServiceImpl extends BaseLLMSInvokingService
 		implements IStreamingOutputChatPipelineService {
 
 	public static final String DEFAULT_DEEPRAG_STREAMING = "default-deeprag-streaming";
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(DefaultDeepRagStreamOutputChatPipelineServiceImpl.class);
+			.getLogger(DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineServiceImpl.class);
 	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseRagStepDeepSearchService;
 	private final IGInternalKnowledgeBaseDeepSearchExecutor executor;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;

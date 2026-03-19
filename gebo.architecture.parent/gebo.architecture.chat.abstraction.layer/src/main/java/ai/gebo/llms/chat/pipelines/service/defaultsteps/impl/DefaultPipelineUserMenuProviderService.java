@@ -91,12 +91,12 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			thisDeepSearchMenu.getItems().add(deepSearchMenuItem);
 			for (IGReactiveDeepSearchDataSourceService ds : enabledDataSources) {
 				PipelineChatMenuItem dsMenuItem = new PipelineChatMenuItem();
-				dsMenuItem.setRouteOption(RespondingWith.SHALLOW_SEARCH_RESPONSE.name());
-				dsMenuItem.setOptionId(RespondingWith.SHALLOW_SEARCH_RESPONSE.name() + "." + ds.getHandlerId());
+				dsMenuItem.setRouteOption(RespondingWith.DEEP_SEARCH_RESPONSE.name());
+				dsMenuItem.setOptionId(RespondingWith.DEEP_SEARCH_RESPONSE.name() + "." + ds.getHandlerId());
 				dsMenuItem.setDescription(ds.getDescription(deepSearchConfig));
 				dsMenuItem.setProductId(ds.getProductId());
 				PipelineChatMenuItemParameter dsPipelineParameter = new PipelineChatMenuItemParameter();
-				dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM);
+				dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
 				dsPipelineParameter.setParameterValue(List.of(ds.getHandlerId()));
 				dsMenuItem.getParameters().add(dsPipelineParameter);
 				thisDeepSearchMenu.getItems().add(dsMenuItem);
@@ -104,19 +104,29 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			PipelineChatMenuItem ikMenuItem = new PipelineChatMenuItem();
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
-			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
+			ikMenuItem.setRouteOption(RespondingWith.DEEP_SEARCH_RESPONSE.name());
 			ikMenuItem.setIcon(INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON);
+			PipelineChatMenuItemParameter dsPipelineParameter = new PipelineChatMenuItemParameter();
+			dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
+			dsPipelineParameter.setParameterValue(
+					List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID));
+			ikMenuItem.getParameters().add(dsPipelineParameter);
 			thisDeepSearchMenu.getItems().add(ikMenuItem);
 			outMenu.add(thisDeepSearchMenu);
 		} else {
-			PipelineChatMenu ikMenu = new PipelineChatMenu();
-			ikMenu.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
-			ikMenu.setMenuId(INTERNAL_KNOWLEDGE_OPTION);
 			PipelineChatMenuItem ikMenuItem = new PipelineChatMenuItem();
 			ikMenuItem.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
 			ikMenuItem.setOptionId(INTERNAL_KNOWLEDGE_OPTION);
-			ikMenuItem.setRouteOption(RespondingWith.DEEP_RAG_RESPONSE.name());
+			ikMenuItem.setRouteOption(RespondingWith.DEEP_SEARCH_RESPONSE.name());
 			ikMenuItem.setIcon(INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON);
+			PipelineChatMenuItemParameter dsPipelineParameter = new PipelineChatMenuItemParameter();
+			dsPipelineParameter.setParameterName(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
+			dsPipelineParameter.setParameterValue(
+					List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID));
+			ikMenuItem.getParameters().add(dsPipelineParameter);
+			PipelineChatMenu ikMenu = new PipelineChatMenu();
+			ikMenu.setDescription(KNOWLEDGE_BASE_DEEP_SEARCH);
+			ikMenu.setMenuId(INTERNAL_KNOWLEDGE_OPTION);
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
 		}

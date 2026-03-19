@@ -31,6 +31,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	private final DefaultSingleSourceDeepSearchOutputPipelineServiceImpl singleSourcePipelineOutput;
+	private final DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineServiceImpl internalKnowledgeBasePipelineOutput;
 	private static final StepEnvironmentParameter searchedSystems = new StepEnvironmentParameter(
 			DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS, StepEnvironmentType.STRING_LIST);
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
@@ -57,7 +59,18 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 				.get(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
 		List<String> deepSearchDataSources = deepSearchedSystems instanceof List list ? list : List.of();
 		try {
-
+			if (!deepSearchDataSources.isEmpty() && deepSearchDataSources.size() == 1) {
+				if (deepSearchDataSources.get(0)
+						.equals(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID)) {
+					return internalKnowledgeBasePipelineOutput.execute(runtimeData, chatModel, serviceModel);
+				} else {
+					return singleSourcePipelineOutput.execute(runtimeData, chatModel, serviceModel);
+				}
+			}
+			if (deepSearchDataSources.isEmpty()) {
+				// TODO: SEARCH ALL IDS
+				deepSearchDataSources.add(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
+			}
 			Flux<AbstractDeepSearchEvent> flux = deepSearchService.streamDeepSearch(runtimeData.getRequestResources(),
 					runtimeData.getMinimalChatContext(), runtimeData.getChatResponse(), chatModel, serviceModel,
 					deepSearchDataSources);
@@ -79,8 +92,6 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 		}
 
 	}
-
-	
 
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {

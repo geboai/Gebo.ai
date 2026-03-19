@@ -30,12 +30,11 @@ import reactor.core.publisher.Flux;
 
 @Service
 @AllArgsConstructor
-public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreamingOutputChatPipelineService {
-	static final Logger LOGGER = LoggerFactory.getLogger(DefaultShallowSearchOutputPipelineServiceImpl.class);
-	static final String CHOOSED_DATASOURCE_HANDLER = "CHOOSED-DATASOURCE-HANDLER";
+public class DefaultSingleSourceDeepSearchOutputPipelineServiceImpl implements IStreamingOutputChatPipelineService {
+	static final Logger LOGGER = LoggerFactory.getLogger(DefaultSingleSourceDeepSearchOutputPipelineServiceImpl.class);
 	static final String DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT = "default-shallow-search-streaming-output";
 	private static final StepEnvironmentParameter searchedSystemParam = new StepEnvironmentParameter(
-			DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM, StepEnvironmentType.STRING_LIST);
+			DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS, StepEnvironmentType.STRING_LIST);
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	private final IGDeepSearchDataSourceExecutor executor;
@@ -58,7 +57,7 @@ public class DefaultShallowSearchOutputPipelineServiceImpl implements IStreaming
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		Object _choosedSourceId = runtimeData.getSharedEnvironment()
-				.get(DefaultRoutingChatPipelineStepServiceImpl.SEARCHED_SYSTEM);
+				.get(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
 		String choosedSourceId = null;
 		if (_choosedSourceId != null && _choosedSourceId instanceof List list && !list.isEmpty()) {
 			choosedSourceId = list.get(0).toString();

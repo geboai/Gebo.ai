@@ -64,7 +64,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
 	private static final String DELIVERABLE_TYPES_CATALOG = "DELIVERABLE_TYPES_CATALOG";
-	static final String SEARCHED_SYSTEM = "searchedSystem";
+	
 	private static final String ROUTING_DECISION = "routingDecision";
 	private static final String TOPICS = "topics: ";
 	private static final String END_KNOWLEDGE_BASE = "END_KNOWLEDGE_BASE";
@@ -85,6 +85,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
+	public static final String INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID = "IKB_SYSTEM";
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -192,20 +193,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD, DEEP_SEARCHED_SYSTEMS));
+				params, List.of(ROUTING_DECISION,  DELIVERABLE_FIELD, DEEP_SEARCHED_SYSTEMS));
 
-		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
-			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
-			List<String> realCodes = new ArrayList<String>();
-			systems.forEach(x -> {
-				if (x.startsWith(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX)) {
-					realCodes.add(x.substring(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX.length()));
-				}
-			});
-			decisionMap.put(SEARCHED_SYSTEM, realCodes);
-		}
-		// extracting user intent
 		
+		// extracting user intent
+
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;
@@ -526,12 +518,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		case TOOLS_USE_RESPONSE: {
 			return List.of(DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING);
 		}
-		case SHALLOW_SEARCH_RESPONSE: {
-			return List.of(DefaultShallowSearchOutputPipelineServiceImpl.DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT);
-		}
-		case DEEP_RAG_RESPONSE: {
-			return List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING);
-		}
+		
 		case CHAT_WITH_FILES: {
 			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
 		}
