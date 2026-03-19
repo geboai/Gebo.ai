@@ -12,7 +12,6 @@ PURE_LLM_RESPONSE a straight direct response from an llm, to be chosen when cont
 RAG_LLM_RESPONSE single-pass internal RAG (semantic + full text) then answer
 DEEP_SEARCH_RESPONSE iterative multi-source deep search (multiple external sources + internal KB), then analysis/report
 
-
 INPUTS:
 
 (A) CURRENT CHAT CONVERSATION HISTORY (WILL BE SENT TO LLM FOR EACH ROUTING OPTION):
@@ -54,17 +53,13 @@ DECISION RULES (apply in this exact priority order):
    choose PURE_LLM_RESPONSE , if unshure try the following rules.   
 
 2. DEEP SEARCH SHORTCUT RULE: if the user explicitely asks for a deep search or detailed search or detailed report in any languages or synonims 
-   If the user question or rewritten user question is related to (D) INTERNAL RAG KNOWLEDGE BASES CATALOG listed topics 
-   choose DEEP_RAG_RESPONSE .
-   If a single catalog of the systems in the (E) catalog has topics or titles related to user question or its rewriting choose SHALLOW_SEARCH_RESPONSE and output the choosen system selection.
-   If some of available sources in (C) has topics or titles related to user question or its rewriting choose DEEP_SEARCH_RESPONSE and output choosed sources.
-
-3. EXPLICIT DATA SOURCES SEARCH RULE: if the user explicitely asks a search on one or more of the 3rd part products (jira, sharepoint, confluence, google or others...)  in any languages or synonims and the product is listed  
-   If user asks for a search in a single 3rd part product listed in (E) then choose DEEP_SEARCH_RESPONSE and output that search system as deepSearchedSystems=<deep search system code>.
-   If user asks for a search in multiple 3rd part product listed in (C) the choose DEEP_SEARCH_RESPONSE and output choose product codes with multiple lines of deepSearchedSystems=<deep search system code>.
+   choose DEEP_SEARCH_RESPONSE and select deepSearchedSystems matching the user question with titles/sections listed in the (D) catalog entries end reporting those system id's.
+    
+3. EXPLICIT DATA SOURCES SEARCH RULE: if the user explicitely asks a search on one or more of the 3rd part products listed in the (D) catalog.  
+   choose DEEP_SEARCH_RESPONSE and select the list of 1 or more product listed in the (D) catalog  reporting those system id's.
 
 4. EXPLICIT INTERNAL KNOWLEDGE BASE SEARCH RULE: if the user explicitely asks a internal knowledge base search (or internal database search or internal data search)  in any languages or synonims 
-   choose DEEP_RAG_RESPONSE.
+   choose DEEP_SEARCH_RESPONSE and deepSearchedSystems=IKB_SYSTEM.
    
 
 4. If (G) IS QA or DECISION:
@@ -72,8 +67,8 @@ DECISION RULES (apply in this exact priority order):
    If the user question or rewritten user question is related to (D) INTERNAL RAG KNOWLEDGE BASES CATALOG listed topics 
    choose RAG_LLM_RESPONSE
 
-   If the user question or rewritten user question is related to one of the (E) EXTERNAL SEARCH SYSTEMS CATALOGS then 
-   choose SHALLOW_SEARCH_RESPONSE 
+   If the user question or rewritten user question is related to one of the (C) EXTERNAL DATA SOURCES LIST then 
+   choose DEEP_SEARCH_RESPONSE 
    
 5. If (G) is HOWTO or REPORT or SUMMARY :
     
@@ -95,7 +90,6 @@ DEEP_SEARCH_RESPONSE
 TOOLS_USE_RESPONSE
 
 
-s
 deepSearchedSystems rules:
 * If routingDecision is DEEP_SEARCH_RESPONSE, deepSearchedSystems must be in output taking one or more deep data source codes rows from (C).
  
