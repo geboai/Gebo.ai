@@ -586,4 +586,10 @@ public class ConfluenceSearchService extends
 		return buffer.toString();
 	}
 
+	@Override
+	public String getProductId() {
+		
+		return CONFLUENCE;
+	}
+
 }

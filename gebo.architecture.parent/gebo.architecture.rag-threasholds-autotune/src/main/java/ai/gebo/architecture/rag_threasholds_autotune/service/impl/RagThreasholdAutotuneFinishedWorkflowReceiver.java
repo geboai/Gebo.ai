@@ -2,6 +2,8 @@ package ai.gebo.architecture.rag_threasholds_autotune.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class RagThreasholdAutotuneFinishedWorkflowReceiver implements IGMessageReceiverFactory {
 	private static final String RAG_THREASHOLD_AUTOTUNE_COMPONENT = "rag-threashold-autotune-component";
 	private static final String RAG_THREASHOLD_AUTOTUNE_MODULE = "rag-threashold-autotune-module";
+	private static final Logger LOGGER = LoggerFactory.getLogger(RagThreasholdAutotuneFinishedWorkflowReceiver.class);
 	final RagThreasholdAutotuneServiceImpl autotuneService;
 
 	@Override
@@ -28,12 +31,15 @@ public class RagThreasholdAutotuneFinishedWorkflowReceiver implements IGMessageR
 
 			@Override
 			public void accept(GMessageEnvelope t) {
-				autotuneService.onTick();
+				LOGGER.info("Threashold autotune system trigger message received");
+				if (!autotuneService.isRunning()) {
+					autotuneService.onTick();
+				}
 			}
 
 			@Override
 			public String getMessagingSystemId() {
-				
+
 				return RagThreasholdAutotuneFinishedWorkflowReceiver.this.getMessagingSystemId();
 			}
 
@@ -44,19 +50,19 @@ public class RagThreasholdAutotuneFinishedWorkflowReceiver implements IGMessageR
 
 			@Override
 			public SystemComponentType getComponentType() {
-				
+
 				return RagThreasholdAutotuneFinishedWorkflowReceiver.this.getComponentType();
 			}
 
 			@Override
 			public boolean isAcceptEveryPayloadType() {
-				
+
 				return false;
 			}
 
 			@Override
 			public List<String> getAcceptedPayloadTypes() {
-				
+
 				return RagThreasholdAutotuneFinishedWorkflowReceiver.this.getAcceptedPayloadTypes();
 			}
 		};

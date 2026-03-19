@@ -24,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,6 +57,8 @@ import ai.gebo.monolithic.api.client.api.SharepointSystemsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import ai.gebo.monolithic.api.client.model.AuthResponse;
+import ai.gebo.monolithic.api.client.model.ComputedWorkflowResult;
+import ai.gebo.monolithic.api.client.model.ComputedWorkflowStatus;
 import ai.gebo.monolithic.api.client.model.FastConfluenceSystemInsertRequest;
 import ai.gebo.monolithic.api.client.model.FastConfluenceSystemInsertRequest.ConfluenceVersionEnum;
 import ai.gebo.monolithic.api.client.model.FastGoogleDriveSystemInsert;
@@ -68,8 +72,8 @@ import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboOauth2SecretContent;
 import ai.gebo.monolithic.api.client.model.GeboTokenContent;
 import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
+import ai.gebo.monolithic.api.client.model.JobSummary;
 import ai.gebo.monolithic.api.client.model.LLMAutoconfigureCreationData;
-import ai.gebo.monolithic.api.client.model.LLMCreateModelData.UsesEnum;
 import ai.gebo.monolithic.api.client.model.LLMModelPresetChoice;
 import ai.gebo.monolithic.api.client.model.LLMSModelsPresets;
 import ai.gebo.monolithic.api.client.model.LLMSModelsPresets.TypeEnum;
@@ -91,8 +95,6 @@ import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import redis.clients.jedis.json.Path;
 
 /****************************************************************************************
  * Base for llm multivendor integration tests, taking admin account, llm vendor
@@ -340,7 +342,7 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 				FastSharepointSystemInsertRequest config = new FastSharepointSystemInsertRequest();
 				config.setBaseUri(productSetupInfo.getBasePath());
 				config.setDescription("Sharepoint system");
-				
+
 				GeboOauth2SecretContent oauth2Credentials = productSetupInfo.getOauth2Credentials();
 				config.setOauth2Credentials(oauth2Credentials);
 				config.setSharepointVersion(SharepointVersionEnum.CLOUD_VERSION);
@@ -408,13 +410,13 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 						LOGGER.info("(info) " + msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
-					
+
 					case SUCCESS: {
 						LOGGER.info("(success)" + msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
 					case ERROR:
-					default:{
+					default: {
 						LOGGER.error(msg.getSummary() + " -> " + msg.getDetail());
 					}
 						break;
@@ -442,6 +444,43 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 		ObjectMapper objectMapper = new ObjectMapper();
 		IntegrationTestSetup setup = objectMapper.readValue(jsonSetup, IntegrationTestSetup.class);
 		return executingSystemSetup(setup);
+	}
+
+	protected void printSummary(JobSummary summary) {
+		LOGGER.info("************ LOG FOR JOB:" + summary.getCode()
+				+ " **************************************************");
+		ComputedWorkflowResult status = summary.getWorkflowStatus();
+		printStatus(status.getRootStatus(), "-");
+		LOGGER.info("************************************************************************************************");
+	}
+
+	protected void printStatus(ComputedWorkflowStatus rootStatus, String prefix) {
+		LOGGER.info(prefix + " stepId:" + rootStatus.getWorkflowStepId() + " input:"
+				+ rootStatus.getBatchDocumentsInput() + " processed:" + rootStatus.getBatchDocumentsProcessed()
+				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors() + " tokens: "
+				+ rootStatus.getTokensProcessed());
+		for (ComputedWorkflowStatus childStatus : rootStatus.getChilds()) {
+			printStatus(childStatus, prefix + prefix);
+		}
+
+	}
+
+	protected <T> T loadJsonDataModel(String resource, Class<T> type)
+			throws StreamReadException, DatabindException, IOException {
+		InputStream is = getClass().getResourceAsStream(resource);
+		if (is == null)
+			is = getClass().getClassLoader().getResourceAsStream(resource);
+		if (is == null)
+			throw new IllegalStateException("The resource " + resource + " is not found");
+		try {
+			return mapper.readValue(is, type);
+		} finally {
+			try {
+				is.close();
+			} catch (Throwable t) {
+			}
+		}
+
 	}
 
 }

@@ -361,4 +361,10 @@ public class GMicrosoftGraphSearchService extends
 		}
 	}
 
+	@Override
+	public String getProductId() {
+
+		return SHAREPOINT;
+	}
+
 }

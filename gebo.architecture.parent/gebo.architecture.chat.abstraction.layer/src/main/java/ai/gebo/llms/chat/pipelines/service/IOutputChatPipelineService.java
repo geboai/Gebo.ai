@@ -1,15 +1,11 @@
 package ai.gebo.llms.chat.pipelines.service;
 
-import java.util.List;
-
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
-import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 
-public interface IOutputChatPipelineService extends IChatPipelineStepService,ICommonOutputPipelineService {
+public interface IOutputChatPipelineService extends IChatPipelineStepService {
 	@Override
 	default StepType getStepType() {
 		return StepType.OUTPUT;

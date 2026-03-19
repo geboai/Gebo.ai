@@ -21,8 +21,8 @@ export interface PageUsersGroup {
     size?: number;
     content?: Array<UsersGroup>;
     number?: number;
+    sort?: SortObject;
     numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }

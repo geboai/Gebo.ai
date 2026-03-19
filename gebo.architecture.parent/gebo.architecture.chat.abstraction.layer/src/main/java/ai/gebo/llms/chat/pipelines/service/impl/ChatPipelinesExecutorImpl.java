@@ -17,6 +17,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -147,7 +148,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request,
 			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException {
+			throws ChatPipelineException, IOException, LLMConfigException, GeboChatException {
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
 		ChatPipelineExecutionRuntimeData runtimeData = executeUntillOutput(request, response, environment, chatModel,
 				serviceModel, pipelineCode, true);

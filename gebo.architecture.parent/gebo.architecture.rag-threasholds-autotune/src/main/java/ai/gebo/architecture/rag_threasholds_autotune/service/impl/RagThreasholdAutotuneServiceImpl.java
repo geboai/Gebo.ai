@@ -53,7 +53,8 @@ import ai.gebo.model.DocumentMetaInfos;
 
 @Component
 @Scope("singleton")
-public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidingService implements IRagThreasholdAutotuneService {
+public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidingService
+		implements IRagThreasholdAutotuneService {
 	private final ThreasholdAutotuneProcessResultRepository resultRepo;
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
@@ -150,21 +151,37 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByVectorStoreId(vectorStoreId);
 		ThreasholdAutotuneProcessResult lastEntry = data.isEmpty() ? null : data.get(0);
 		long count = vectorizedContentsRepository.countByIdVectorStoreId(vectorStoreId);
+		if (count == 0l) {
+			LOGGER.info("No found vectorized entries in " + vectorStoreId + " exiting autotune process");
+			return;
+		}
 		long lastCardinality = lastEntry != null && lastEntry.getVectorStoreVectorizedCount() != null
 				? lastEntry.getVectorStoreVectorizedCount()
 				: 0l;
 		boolean runOptimization = lastEntry == null && count > 0l;
-		if (lastEntry != null && lastEntry.getProcessedDateTime() != null) {
+		if (runOptimization) {
+			LOGGER.info(
+					"Running threashold tuning, because it has been run before lastEntry == null and count = " + count);
+		}
+		if (lastEntry != null && lastEntry.getProcessedDateTime() != null && !runOptimization) {
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.add(GregorianCalendar.DAY_OF_YEAR, -1 * config.getDayElapsedWithoutTuning());
 			Date dateThreashold = calendar.getTime();
-			runOptimization = lastEntry.getProcessedDateTime().after(dateThreashold);
+			runOptimization = lastEntry.getProcessedDateTime().before(dateThreashold);
+			if (runOptimization) {
+				LOGGER.info("Running threashold tuning, because it has been run before "
+						+ config.getDayElapsedWithoutTuning() + " days ago");
+			}
 		}
 		if (!runOptimization && lastEntry != null && lastCardinality > 0l) {
 			double delta = Math.abs(count - lastCardinality);
 			double lastCardinalityD = lastCardinality;
 			double deltaPercent = delta / lastCardinalityD * 100.0;
 			runOptimization = deltaPercent >= config.getDocumentsCardinalityAddedPercentTrigger();
+			if (runOptimization) {
+				LOGGER.info("Running threashold tuning, because the amount of data is aughmented by " + deltaPercent
+						+ " %");
+			}
 		}
 		if (runOptimization) {
 			IGConfigurableEmbeddingModel embeddingModel = embeddingModelsRuntimeDao.findByCode(vectorStoreId);
@@ -248,8 +265,13 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			LOGGER.info("Tuning will go between " + lowerBound + " and " + upperBound);
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds = new TreeMap<Double, List<AutoTuneRatedThreashold>>();
 			Map<String, Double> cache = new HashMap<String, Double>();
-			AutoTuneRatedThreashold foundThreashold = maximizeInTreeSequence(lowerBound, upperBound, fineIncrement,
-					vectorStore, serviceChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
+			maximizeInTreeSequence(lowerBound, upperBound, fineIncrement, vectorStore, serviceChatModel, questions,
+					rateOrderedOptimizationThreasholds, cache, topK);
+			AutoTuneRatedThreashold foundThreashold = selectResult(rateOrderedOptimizationThreasholds);
+			if (foundThreashold == null) {
+				LOGGER.error("No found threashold!!");
+				return;
+			}
 			List<AutoTuneRatedThreashold> logrates = new ArrayList<AutoTuneRatedThreashold>();
 			rateOrderedOptimizationThreasholds.values().forEach(x -> {
 				logrates.addAll(x);
@@ -278,7 +300,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			} catch (Throwable th) {
 			}
 			resultRepo.insert(result);
-
+			LOGGER.info("New threashold=> " + foundThreashold);
+			LOGGER.info("All threasholds data=> " + rateOrderedOptimizationThreasholds);
 		}
 	}
 
@@ -335,29 +358,29 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 						defaultChatModel, questions, rateOrderedOptimizationThreasholds, cache, topK);
 			}
 		}
+		if (maxevaluation == null) {
+			maxevaluation = selectResult(rateOrderedOptimizationThreasholds);
+		}
 		return maxevaluation;
 	}
 
 	private AutoTuneRatedThreashold selectResult(
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
-		if (rateOrderedOptimizationThreasholds.size() > 2) {
-			List<AutoTuneRatedThreashold> values = new ArrayList<AutoTuneRatedThreashold>();
-			List<List<AutoTuneRatedThreashold>> inorder = new ArrayList<List<AutoTuneRatedThreashold>>();
-			for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
-				inorder.add(items);
+		if (rateOrderedOptimizationThreasholds.isEmpty())
+			return null;
+		TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>> byquestionAnswered = new TreeMap<Double, TreeMap<Double, AutoTuneRatedThreashold>>();
+		for (List<AutoTuneRatedThreashold> items : rateOrderedOptimizationThreasholds.values()) {
+			for (AutoTuneRatedThreashold item : items) {
+				if (byquestionAnswered.get(item.answeredQuestions) == null) {
+					byquestionAnswered.put(item.answeredQuestions, new TreeMap<Double, AutoTuneRatedThreashold>());
+				}
+				byquestionAnswered.get(item.answeredQuestions).put(item.averageDistance, item);
 			}
-			final int last3 = inorder.size() - 3;
-			for (int i = inorder.size() - 1; i >= last3 && i >= 0; i--) {
-				values.addAll(inorder.get(i));
-			}
-			TreeMap<Double, AutoTuneRatedThreashold> byquestionAnswered = new TreeMap<Double, AutoTuneRatedThreashold>();
-			for (AutoTuneRatedThreashold item : values) {
-				byquestionAnswered.put(item.answeredQuestions, item);
-			}
-			return byquestionAnswered.lastEntry().getValue();
+		}
+		// I Take the configuration returning the most high number of answered questions
+		// but with the lower average distance
+		return byquestionAnswered.lastEntry().getValue().firstEntry().getValue();
 
-		} else
-			return rateOrderedOptimizationThreasholds.lastEntry().getValue().get(0);
 	}
 
 	private static final String EVALUATE_RATING_PROMPT = "You are a strict RAG retrieval judge.\r\n" + "\r\n"
@@ -607,6 +630,12 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			out.add(vectorStoreInfo);
 		}
 		return out;
+	}
+
+	@Override
+	public boolean isRunning() {
+
+		return runningTuning;
 	}
 
 }

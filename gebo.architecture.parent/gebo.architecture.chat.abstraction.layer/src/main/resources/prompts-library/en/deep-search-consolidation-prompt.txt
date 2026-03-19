@@ -10,6 +10,8 @@ Your job is to update the consolidated report so that:
 - it integrates any truly new information from the partial contribution,
 - it keeps track of all evidence fragment ids.
 
+REGULATE LEVEL OF DETAILS, OUTPUT LENGTH AND COMPLETENESS ACCORDING TO THE USER REQUIRED OUTCOME: {agentDeliverableCompleteness}
+
 INPUTS:
 - Last User question:
  {question}

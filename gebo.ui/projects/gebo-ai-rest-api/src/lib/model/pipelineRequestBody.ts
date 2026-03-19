@@ -10,7 +10,9 @@
  * Do not edit the class manually.
  */
 import { GeboChatRequest } from './geboChatRequest';
+import { PipelineEnvironment } from './pipelineEnvironment';
 
 export interface PipelineRequestBody { 
     request: GeboChatRequest;
+    environment?: PipelineEnvironment;
 }

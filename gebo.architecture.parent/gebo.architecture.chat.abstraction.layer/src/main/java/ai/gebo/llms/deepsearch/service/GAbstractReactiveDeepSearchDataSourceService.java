@@ -175,8 +175,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					returned.setOutputData(new DeepSearchDataSourceResponse());
 					returned.getOutputData().setSearchResultsEmpty(true);
 					returned.getOutputData().setHandlerId(getHandlerId());
-					returned.getOutputData()
-							.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+					returned.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 					returned.getOutputData().setDeepsearchCode(request.getCode());
 					return Flux.just(actualResultsSnapshots);
 				}
@@ -351,11 +350,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					chatModel, serviceModel, deepSearchConfig, request));
 			_analyzedEvent.getOutputData().setDeepsearchCode(request.getCode());
 			_analyzedEvent.getOutputData().setAnalyzedSearchResult(actualSearchResultToLoad);
-			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			_analyzedEvent.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().processedBy(serviceModel);
-			_analyzedEvent.getOutputData()
-					.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			_analyzedEvent.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			_analyzedEvent.getOutputData().setAnalisysResult(returned.getExtractedRelevantContent());
 			LLMCallStep<CustomContentExtractionType> out = new LLMCallStep<CustomContentExtractionType>(returned,
 					docWithRef, deepStepAnalisys, _analyzedEvent);
@@ -370,7 +367,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		final Vector<SearchResultAnalisysOutcome> furtherAnalisys = new Vector<SearchResultAnalisysOutcome>();
 		Flux<AbstractDeepSearchEvent> outFlux = relevantContents.map(x -> {
 			AbstractDeepSearchEvent event = x.getEvent();
-			listedEvents.add(event);
+			if (event != null)
+				listedEvents.add(event);
 			if (x.getAnalisysDeepRefs() != null) {
 				furtherAnalisys.add(x.getAnalisysDeepRefs());
 			}
@@ -453,7 +451,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			processed.setInputData(request);
 			processed.setOutputData(new DeepSearchDataSourceResponse());
 			processed.getOutputData().setSearchResultsEmpty(listedEvents.isEmpty());
-			processed.getOutputData().setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+			processed.getOutputData().setDataSourceDescription(getDescription(deepSearchConfig));
 			processed.getOutputData().setDeepsearchCode(request.getCode());
 			processed.getOutputData().processedBy(chatModel);
 			List<LLMInputDocument> input = new ArrayList<LLMInputDocument>();
@@ -587,7 +585,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
 		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
 		doc.setDataSourceCode(getHandlerId());
-		doc.setDataSourceDescription(getDescription(chatModel, deepSearchConfig, request));
+		doc.setDataSourceDescription(getDescription(deepSearchConfig));
 
 		if (sr != null) {
 			StringBuffer computedCode = new StringBuffer();

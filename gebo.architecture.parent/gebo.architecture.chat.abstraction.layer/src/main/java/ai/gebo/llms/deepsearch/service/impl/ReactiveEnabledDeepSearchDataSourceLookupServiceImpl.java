@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.search.model.SearchServiceException;
-import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
-import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
@@ -24,8 +22,7 @@ public class ReactiveEnabledDeepSearchDataSourceLookupServiceImpl implements IGR
 	private final IGReactiveDeepSearchDataSourceServiceRepositoryPattern staticProvider;
 
 	@Override
-	public List<IGReactiveDeepSearchDataSourceService> enabledDataSources(IGConfigurableChatModel model,
-			DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
+	public List<IGReactiveDeepSearchDataSourceService> enabledDataSources(DeepSearchConfig deepSearchConfig) {
 		List<IGReactiveDeepSearchDataSourceService> dynamicServices = dynamicProvider.getDynamicDeepSearchServices();
 		List<IGReactiveDeepSearchDataSourceService> staticServices = staticProvider.getImplementations();
 		List<IGReactiveDeepSearchDataSourceService> allServices = new ArrayList<IGReactiveDeepSearchDataSourceService>();
@@ -35,7 +32,7 @@ public class ReactiveEnabledDeepSearchDataSourceLookupServiceImpl implements IGR
 		List<IGReactiveDeepSearchDataSourceService> out = new ArrayList<IGReactiveDeepSearchDataSourceService>();
 		for (IGReactiveDeepSearchDataSourceService service : allServices) {
 			try {
-				if (service.isEnabled(model, deepSearchConfig, request)) {
+				if (service.isEnabled(deepSearchConfig)) {
 					out.add(service);
 				}
 			} catch (SearchServiceException e) {

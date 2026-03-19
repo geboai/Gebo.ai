@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
@@ -15,6 +16,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
  * Commonly used prompt templates substitutions regarding chat history
  */
 public class CommonChatPromptParamsUtil {
+	private static final String AGENT_DELIVERABLE_COMPLETENESS_PROMPT_PARAM = "agentDeliverableCompleteness";
 	private static final String ASSISTANT_TURN_END = "<<<END_ASSISTANT>>>";
 	private static final String ASSISTANT_TURN_START = "<<<ASSISTANT>>>";
 	private static final String USER_TURN_END = "<<<END_USER>>>";
@@ -38,6 +40,10 @@ public class CommonChatPromptParamsUtil {
 		params.put(CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM, renderConsolidatedChatHistory(context.getChatHistory()));
 		params.put(LATEST_INTERACTIONS_PROMPT_PARAM, renderLatestInteractions(context.getChatHistory()));
 		params.put(CURRENT_USER_QUESTION_PROMPT_PARAM, renderCurrentUserQuestion(context.getCurrentRequest()));
+		DeliverableIntent requiredCompleteness = context.getCurrentRequest().getUserIntent();
+		if (requiredCompleteness == null)
+			requiredCompleteness = DeliverableIntent.UNKNOWN;
+		params.put(AGENT_DELIVERABLE_COMPLETENESS_PROMPT_PARAM, requiredCompleteness.getAgentDeliverableCompleteness());
 		return params;
 	}
 

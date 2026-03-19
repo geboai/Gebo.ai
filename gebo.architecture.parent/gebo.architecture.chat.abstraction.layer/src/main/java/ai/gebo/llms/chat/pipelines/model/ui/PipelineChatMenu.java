@@ -7,14 +7,23 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PipelineChatMenu {
+public class PipelineChatMenu implements Cloneable {
 	@NotNull
 	private String menuId = null;
 	private String pipelineId = null;
 	@NotNull
 	private String description = null;
+	private String icon=null;
 	@NotNull
-	List<PipelineUserChatMenuItem> items = new ArrayList<PipelineUserChatMenuItem>();
+	List<PipelineChatMenuItem> items = new ArrayList<PipelineChatMenuItem>();
 	@NotNull
 	private Integer order = null;
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("Cloneable problem", e);
+		}
+	}
 }

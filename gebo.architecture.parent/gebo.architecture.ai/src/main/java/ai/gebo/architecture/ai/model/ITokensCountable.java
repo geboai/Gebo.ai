@@ -1,4 +1,4 @@
-package ai.gebo.architecture.rag.support.layer.model;
+package ai.gebo.architecture.ai.model;
 
 import java.util.List;
 

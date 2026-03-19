@@ -85,7 +85,7 @@ export class GeboAITranslationService {
 
         return concat(of(GeboAITranslationService.currentTextResources), this.languageChanges);
     }
-    public translateConfirmation(moduleId: string, entityId: string, confirmation: ExtendedConfirmation): Observable<ExtendedConfirmation|undefined> {
+    public translateConfirmation(moduleId: string, entityId: string, confirmation: ExtendedConfirmation): Observable<ExtendedConfirmation | undefined> {
         const data: UIExistingText[] = [];
         if (confirmation.message) {
             data.push({
@@ -107,7 +107,7 @@ export class GeboAITranslationService {
                 text: confirmation.header
             });
         }
-         if (confirmation.acceptLabel) {
+        if (confirmation.acceptLabel) {
             data.push({
                 moduleId: moduleId,
                 entityId: entityId,
@@ -127,19 +127,19 @@ export class GeboAITranslationService {
                 text: confirmation.rejectLabel
             });
         }
-        return this.translateOnActualLanguage(data).pipe(map(resources=>{
+        return this.translateOnActualLanguage(data).pipe(map(resources => {
             if (resources) {
-                const translations=findMatchingTranlations(data,resources);
+                const translations = findMatchingTranlations(data, resources);
                 if (translations) {
-                    translations.forEach(entry=>{
-                        (confirmation as any)[entry.fieldId]=entry.translation;
+                    translations.forEach(entry => {
+                        (confirmation as any)[entry.fieldId] = entry.translation;
                     });
                 }
                 return confirmation;
-            }else return undefined;
+            } else return undefined;
 
         }));
-    
+
     }
     public translateText(moduleId: string, entityId: string, componentId: string, resources: { fieldId: string, text: string }[]): Observable<{ fieldId: string, translation: string }[] | undefined> {
         const data: UIExistingText[] = [];
@@ -376,7 +376,11 @@ export class GeboAITranslationService {
                                     (menuEntry as any)[fieldTranslation.fieldId] = fieldTranslation.translation;
                             });
                         }
-
+                        if (menuEntry.items && menuEntry.items.length) {
+                            this.translateMenuItems(moduleId, entityId, menuEntry.items).subscribe(outitems => {
+                                menuEntry.items = outitems;
+                            });
+                        }
                     });
                 }
             }

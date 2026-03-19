@@ -21,8 +21,8 @@ export interface PageUserInfos {
     size?: number;
     content?: Array<UserInfos>;
     number?: number;
+    sort?: SortObject;
     numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }

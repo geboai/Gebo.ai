@@ -33,6 +33,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
+	private static final String BING = "bing";
 	private static final String BING_MODULE = "bing-module";
 	public static final String BING_SEARCH_SERVICE = "bing-web-search-service";
 	private static final GBaseObject SYSTEMTYPE = new GBaseObject();
@@ -177,6 +178,12 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	public List<CatalogueSample> getCataloguesListSample(String configurationCode) throws SearchServiceException {
 
 		return List.of(new CatalogueSample(configurationCode, "Search internet with bing search engine"));
+	}
+
+	@Override
+	public String getProductId() {
+		
+		return BING;
 	}
 
 }

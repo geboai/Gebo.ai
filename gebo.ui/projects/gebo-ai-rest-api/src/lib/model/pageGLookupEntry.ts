@@ -21,8 +21,8 @@ export interface PageGLookupEntry {
     size?: number;
     content?: Array<GLookupEntry>;
     number?: number;
+    sort?: SortObject;
     numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }

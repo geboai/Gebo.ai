@@ -43,6 +43,7 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
+	private static final String GOOGLE = "google";
 	public static final String GOOGLE_SEARCH_SERVICE = "google-search-service";
 	private final GoogleSearchConfigDaoImpl googleConfigDao;
 	private final GoogleSearchApi googleSearchApi;
@@ -159,6 +160,12 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 		return List.of(new CatalogueSample(configurationCode,
 				"All publicly available catalogues can be searched over internet using google searches"));
 
+	}
+
+	@Override
+	public String getProductId() {
+		 
+		return GOOGLE;
 	}
 
 }

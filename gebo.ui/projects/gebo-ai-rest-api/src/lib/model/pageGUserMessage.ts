@@ -21,8 +21,8 @@ export interface PageGUserMessage {
     size?: number;
     content?: Array<GUserMessage>;
     number?: number;
+    sort?: SortObject;
     numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }

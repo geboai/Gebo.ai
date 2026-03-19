@@ -82,7 +82,7 @@ public class JiraJsqlUtil {
 		StringBuffer jquery = new StringBuffer();
 		String firstPart = null;
 		if (restrictingClauses != null && !restrictingClauses.isEmpty()) {
-			firstPart = String.join(AND_OPERATOR, restrictingClauses);
+			firstPart = String.join(OR_OPERATOR, restrictingClauses);
 		}
 		String secondPart = null;
 		if (clauses != null && !clauses.isEmpty()) {
@@ -93,7 +93,7 @@ public class JiraJsqlUtil {
 		}
 		if (secondPart != null) {
 			if (firstPart != null) {
-				jquery.append(AND_OPERATOR);
+				jquery.append(OR_OPERATOR);
 			}
 			jquery.append(OPEN_PARENTHESIS + secondPart + CLOSES_PARENTHESIS);
 		}

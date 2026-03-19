@@ -3,7 +3,7 @@ package ai.gebo.llms.chat.abstraction.layer.session.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.architecture.rag.support.layer.model.ITokensCountable;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

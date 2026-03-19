@@ -99,14 +99,13 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		// find next data source to evaluate end execute
 		for (IGReactiveDeepSearchDataSourceService handler : handlers) {
-			if (handler.isEnabled(chatModel, deepSearchConfig, request)) {
+			if (handler.isEnabled(deepSearchConfig)) {
 				Flux<AbstractDeepSearchEvent> nextStepValue = null;
 				nextStepValue = handler.streamSearch(request, minimalChatContext, state, chatModel, serviceModel,
 						deepSearchConfig, dataSourcesResults, chunkingSessionId);
 				if (nextStepValue != null) {
 					Flux<AbstractDeepSearchEvent> notificationFlux = DeepSearchNotificationEvent.flux(request,
-							"Extracting relevant documents",
-							handler.getDescription(chatModel, deepSearchConfig, request));
+							"Extracting relevant documents", handler.getDescription(deepSearchConfig));
 					nextStepValue = Flux.concat(notificationFlux, nextStepValue);
 					nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -164,7 +163,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 				// Streaming search steps from handlers before knowledge base search
 				List<IGReactiveDeepSearchDataSourceService> handlers = enabledDataSourcesLookupService
-						.enabledDataSources(serviceModel, configuration, request);
+						.enabledDataSources(configuration);
 
 				handlers = filterChoosed(handlers, request);
 				if (!handlers.isEmpty()) {
@@ -194,8 +193,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					|| (sessionDocuments != null && !sessionDocuments.getDocumentItems().isEmpty())) {
 
 				Flux<AbstractDeepSearchEvent> nextStepValue = this.internalKnowledgeBaseDeepSearchService
-						.knowledgeBaseDeepSearch(request, state, minimalChatContext, sessionDocuments, configuration,
-								userInfos, chatModel, serviceModel, chunkingSessionId, embeddingModels);
+						.knowledgeBaseDeepSearch(request, true, state, minimalChatContext, sessionDocuments,
+								configuration, userInfos, chatModel, serviceModel, chunkingSessionId, embeddingModels);
 				if (nextStepValue != null) {
 					nextStepValue = nextStepValue.onErrorResume(Common.commonFallBack(request));
 					nextStepValue.subscribeOn(deepSearchScheduler);
@@ -213,7 +212,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		composedFlux = Flux.concat(composedFlux, mergedFlux);
 		composedFlux = composedFlux.map(event -> {
 			if (event != null && event.getOutputData() != null
-					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult) {
+					&& event.getOutputData() instanceof IDeepSearchResult intermediateResult
+					&& (intermediateResult.getSearchResultsEmpty() == null
+							|| intermediateResult.getSearchResultsEmpty() == false)) {
 				intermediates.add(intermediateResult);
 			}
 			return event;
@@ -221,7 +222,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request,
 				minimalChatContext, history, state, configuration, userInfos, embeddingModels, chatModel,
 				intermediates);
-
 		return outFlux;
 
 	}
@@ -292,11 +292,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return List.of();
 		final IGConfigurableChatModel fChatModel = chatModel;
 		List<IGReactiveDeepSearchDataSourceService> handlersFullList = this.enabledDataSourcesLookupService
-				.enabledDataSources(fChatModel, configuration, null);
+				.enabledDataSources(configuration);
 		return handlersFullList.stream().map(x -> {
 			GBaseObject ds = new GBaseObject();
 			ds.setCode(x.getHandlerId());
-			ds.setDescription(x.getDescription(fChatModel, configuration, null));
+			ds.setDescription(x.getDescription(configuration));
 			return ds;
 		}).toList();
 	}

@@ -168,11 +168,12 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	@Container
 	private static OpenSearchContainer opensearch = new OpenSearchContainer("opensearchproject/opensearch:latest");
 	static {
-		//withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "dothesearch1973-Advanced").
-		//.withSecurityEnabled()
-		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node").withEnv("plugins.security.ssl.http.enabled", "false").withEnv("plugins.security.ssl.transport.enabled","true");
-			          
-		
+		// withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "dothesearch1973-Advanced").
+		// .withSecurityEnabled()
+		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node")
+				.withEnv("plugins.security.ssl.http.enabled", "false")
+				.withEnv("plugins.security.ssl.transport.enabled", "true");
+
 	}
 
 	/** ObjectMapper instance for JSON operations. */
@@ -369,7 +370,9 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 	 */
 	protected Path copyResource(String classPathElement, String baseFolder) throws IOException {
 
-		InputStream is = getClass().getClassLoader().getResourceAsStream(classPathElement);
+		InputStream is = getClass().getResourceAsStream(classPathElement);
+		if (is == null)
+			is = getClass().getClassLoader().getResourceAsStream(classPathElement);
 		if (is == null)
 			throw new RuntimeException("The resource:" + classPathElement + " does not exist");
 		Path file = Path.of(baseFolder, classPathElement);

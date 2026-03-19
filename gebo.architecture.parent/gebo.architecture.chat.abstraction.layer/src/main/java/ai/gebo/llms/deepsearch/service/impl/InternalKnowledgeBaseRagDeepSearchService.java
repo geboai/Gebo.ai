@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
@@ -77,20 +78,30 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 	private final IGeboThreadManager threadManager;
 
 	@Override
-	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, DeepSearchState state,
-			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments, DeepSearchConfig configuration,
-			UserInfos userInfos, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String chunkingSessionId, List<IGConfigurableEmbeddingModel> embeddingModels)
+	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, boolean runSearches,
+			DeepSearchState state, MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
+			DeepSearchConfig configuration, UserInfos userInfos, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String chunkingSessionId,
+			List<IGConfigurableEmbeddingModel> embeddingModels)
 			throws GeboChatSessionLifecycleException, LLMConfigException {
 
 		AtomicBoolean completed = state.getCompleted();
-
+		Map<String, Object> promptsParameters = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
 		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
 				.getPrompt();
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
 		final int topK = this.defaultDeepsearchConfig.getInternalKnowledgeDeepSearchTopK();
-		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
-				chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
+		Flux<AIDocumentsSet> retrievedFlux = null;
+		if (runSearches) {
+			// if run searches then the search will run differited
+			retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext, chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
+		} else {
+			// if run searches is false then the initial flux is an empty document singleton
+			// that will be enriched with other documents being in the
+			// actual session
+			retrievedFlux = Flux.just(new AIDocumentsSet());
+		}
 		Flux<AIDocumentsSet> integratedWithSessionDocuments = retrievedFlux.map(retrieved -> {
 			boolean _completed = completed.get();
 
@@ -134,13 +145,14 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 									.findById(documentCode);
 							if (updopt.isPresent()) {
 								uploadedContent = new UserUploadedContent(updopt.get());
+								analyzed = new DeepSearchAnalyzedDocument();
+								analyzed.setCode(uploadedContent.getCode());
+								analyzed.setDataSourceCode("User uploaded file");
+								analyzed.setDataSourceDescription("User uploaded file");
+								analyzed.setName(uploadedContent.getFileName());
+								analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);
 							}
-							analyzed = new DeepSearchAnalyzedDocument();
-							analyzed.setCode(uploadedContent.getCode());
-							analyzed.setDataSourceCode("User uploaded file");
-							analyzed.setDataSourceDescription("User uploaded file");
-							analyzed.setName(uploadedContent.getFileName());
-							analyzed.setSourceType(DeepSearchSourceType.UPLOADED_FILE);
+
 						}
 					}
 					if (analyzed != null || uploadedContent != null) {
@@ -165,8 +177,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 							inputs.add(cInput);
 						}
 						try {
-							Map<String, Object> promptsParameters = CommonChatPromptParamsUtil
-									.preparePromptParameters(minimalChatContext);
+
 							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
 									promptsParameters, inputs);
 							SearchEndingDetectionLogic.manageTrigger(state, result);
@@ -222,7 +233,12 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				if (!results.isEmpty()) {
 					String result = callLLMConsolidateText(chatModel,
 							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-							request.getQuery(), "", new ArrayList(results));
+							request.getQuery(), "", promptsParameters, new ArrayList(results));
+					event.getOutputData().setResponse(result);
+				} else {
+					String result = callLLM(chatModel, promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
+							request.getQuery(), promptsParameters);
 					event.getOutputData().setResponse(result);
 				}
 				evt = event;
@@ -241,5 +257,5 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		return Flux.concat(notificationFlux, body, trail).onErrorResume(Common.commonFallBack(request))
 				.subscribeOn(this.threadManager.getScheduler());
 	}
-	
+
 }

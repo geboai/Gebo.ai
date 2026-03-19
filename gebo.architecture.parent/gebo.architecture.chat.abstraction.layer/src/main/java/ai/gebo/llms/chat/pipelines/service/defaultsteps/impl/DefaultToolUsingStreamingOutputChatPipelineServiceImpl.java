@@ -15,7 +15,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
-import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
@@ -57,11 +56,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 		}
 	}
 
-	@Override
-	public PipelineChatMenu getUIMenu() {
-		
-		return null;
-	}
+	
 
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {

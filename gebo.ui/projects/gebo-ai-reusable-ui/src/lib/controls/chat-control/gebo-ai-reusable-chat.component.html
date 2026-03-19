@@ -168,6 +168,8 @@
       (deepsearchChatResponse)="onExternalModuleResponse($event)" 
       [routingChoiceSelector]="currentPipelineRouterDecisionCode"
       [streaming]="chatStreaming"
+      (nextRoutingChoice)="currentPipelineRoutingOption=$event"
+      [pipelineChatMenu]="chatPipelinesMenu"
       >
     </gebo-ai-chat-input-shell>
 

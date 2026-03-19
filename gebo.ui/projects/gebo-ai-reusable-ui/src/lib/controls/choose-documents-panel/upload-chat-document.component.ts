@@ -39,6 +39,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
     @Input() chatModelCode?: string;
     @Input() chatProfileCode?: string;
     @Output() showUploadChange: EventEmitter<boolean> = new EventEmitter();
+    @Output() successfullUploadDone:EventEmitter<boolean>=new EventEmitter();
     @Input() userSessionCode?: string;
     @Output() newSessionCreatedOnUpload: EventEmitter<GUserChatInfo> = new EventEmitter();
     protected response?: IOperationStatus<UserUploadedContent[] | { uploads?: UserUploadedContent[], chatInfo?: GUserChatInfo } | undefined>;
@@ -155,6 +156,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
                         this.uploadedContents = receivedContents;
                     }
                     this.onChange(this.uploadedContents);
+                    this.successfullUploadDone.emit(true);
                 }
             }
             if (this.response?.messages) {

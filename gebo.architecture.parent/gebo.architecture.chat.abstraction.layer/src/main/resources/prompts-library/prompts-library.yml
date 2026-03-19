@@ -58,3 +58,6 @@ ai.gebo.prompts:
     - promptUse: deep-search-empty-results-fallback-prompt
       langCode: en
       reference: /prompts-library/en/deep-search-empty-results-fallback-prompt.txt	  
+    - promptUse: default-pipeline-chat-with-documents-prompt
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-chat-with-documents-prompt.txt	  

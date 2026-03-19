@@ -12,6 +12,8 @@ package ai.gebo.architecture.rag.support.layer.model;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
+
 /**
  * Gebo.ai comment agent
  * 

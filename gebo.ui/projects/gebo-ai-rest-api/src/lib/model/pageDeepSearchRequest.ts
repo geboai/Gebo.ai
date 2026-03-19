@@ -21,8 +21,8 @@ export interface PageDeepSearchRequest {
     size?: number;
     content?: Array<DeepSearchRequest>;
     number?: number;
+    sort?: SortObject;
     numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }

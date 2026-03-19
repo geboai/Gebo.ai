@@ -14,7 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.PipelineUserChatMenuItem;
+import ai.gebo.monolithic.api.client.model.PipelineChatMenuItem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +25,7 @@ import java.util.List;
  * PipelineChatMenu
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-06T16:40:08.739856300+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class PipelineChatMenu {
   @JsonProperty("menuId")
@@ -37,8 +37,11 @@ public class PipelineChatMenu {
   @JsonProperty("description")
   private String description = null;
 
+  @JsonProperty("icon")
+  private String icon = null;
+
   @JsonProperty("items")
-  private List<PipelineUserChatMenuItem> items = new ArrayList<>();
+  private List<PipelineChatMenuItem> items = new ArrayList<>();
 
   @JsonProperty("order")
   private Integer order = null;
@@ -97,12 +100,30 @@ public class PipelineChatMenu {
     this.description = description;
   }
 
-  public PipelineChatMenu items(List<PipelineUserChatMenuItem> items) {
+  public PipelineChatMenu icon(String icon) {
+    this.icon = icon;
+    return this;
+  }
+
+   /**
+   * Get icon
+   * @return icon
+  **/
+  @Schema(description = "")
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
+
+  public PipelineChatMenu items(List<PipelineChatMenuItem> items) {
     this.items = items;
     return this;
   }
 
-  public PipelineChatMenu addItemsItem(PipelineUserChatMenuItem itemsItem) {
+  public PipelineChatMenu addItemsItem(PipelineChatMenuItem itemsItem) {
     this.items.add(itemsItem);
     return this;
   }
@@ -112,11 +133,11 @@ public class PipelineChatMenu {
    * @return items
   **/
   @Schema(required = true, description = "")
-  public List<PipelineUserChatMenuItem> getItems() {
+  public List<PipelineChatMenuItem> getItems() {
     return items;
   }
 
-  public void setItems(List<PipelineUserChatMenuItem> items) {
+  public void setItems(List<PipelineChatMenuItem> items) {
     this.items = items;
   }
 
@@ -151,13 +172,14 @@ public class PipelineChatMenu {
     return Objects.equals(this.menuId, pipelineChatMenu.menuId) &&
         Objects.equals(this.pipelineId, pipelineChatMenu.pipelineId) &&
         Objects.equals(this.description, pipelineChatMenu.description) &&
+        Objects.equals(this.icon, pipelineChatMenu.icon) &&
         Objects.equals(this.items, pipelineChatMenu.items) &&
         Objects.equals(this.order, pipelineChatMenu.order);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(menuId, pipelineId, description, items, order);
+    return Objects.hash(menuId, pipelineId, description, icon, items, order);
   }
 
 
@@ -169,6 +191,7 @@ public class PipelineChatMenu {
     sb.append("    menuId: ").append(toIndentedString(menuId)).append("\n");
     sb.append("    pipelineId: ").append(toIndentedString(pipelineId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    icon: ").append(toIndentedString(icon)).append("\n");
     sb.append("    items: ").append(toIndentedString(items)).append("\n");
     sb.append("    order: ").append(toIndentedString(order)).append("\n");
     sb.append("}");

@@ -16,8 +16,7 @@ import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 
-public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
-	
+public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
 
 	/**************************************************************************
 	 * Returns a unique identifier for this handler
@@ -32,28 +31,27 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @return
 	 * @throws SearchServiceException
 	 */
-	public boolean isEnabled(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request) throws SearchServiceException;
+	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException;
 
 	/******************************************************************
 	 * Returns a description of the data source
 	 * 
 	 * @return
 	 */
-	public String getDescription(IGConfigurableChatModel chatModel, DeepSearchConfig deepSearchConfig,
-			DeepSearchRequest request);
+	public String getDescription(DeepSearchConfig deepSearchConfig);
 
-	
+	public String getProductId();
 
 	/******************************************************************
 	 * Processes next step, will be iterated untill return null or returns a
 	 * DeepSearchDataSourceResponse
+	 * 
 	 * @param request
-	 * @param minimalChatContext TODO
-	 * @param deepSearchState TODO
-	 * @param serviceModel TODO
+	 * @param minimalChatContext   TODO
+	 * @param deepSearchState      TODO
+	 * @param serviceModel         TODO
 	 * @param pastSystemsResponses
-	 * @param chunkingSessionId TODO
+	 * @param chunkingSessionId    TODO
 	 * @param history
 	 * @return
 	 * @throws LLMConfigException
@@ -63,7 +61,9 @@ public interface IGReactiveDeepSearchDataSourceService< InputType, OutputType, S
 	 * @throws SearchServiceException
 	 */
 	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			DeepSearchState deepSearchState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId) throws LLMConfigException, IOException, GeboIngestionException,
-			GeboContentHandlerSystemException, SearchServiceException;
+			DeepSearchState deepSearchState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId)
+			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
+			SearchServiceException;
 
 }

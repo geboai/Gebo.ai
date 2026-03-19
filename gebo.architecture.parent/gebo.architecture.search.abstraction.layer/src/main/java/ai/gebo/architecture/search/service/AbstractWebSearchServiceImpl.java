@@ -77,7 +77,7 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 			WebSearchResultsExtractionData cumulated) {
 
 		WebSearchResultsExtractionData newResult = new WebSearchResultsExtractionData();
-		basicAggregate(oldConsolidated, cumulated, newResult);
+		newResult = basicAggregate(oldConsolidated, cumulated, newResult);
 		if (oldConsolidated != null) {
 			newResult.getExtractedRelevantLinks().addAll(oldConsolidated.getExtractedRelevantLinks());
 			newResult.getExtractedRelatedSearches().addAll(oldConsolidated.getExtractedRelatedSearches());

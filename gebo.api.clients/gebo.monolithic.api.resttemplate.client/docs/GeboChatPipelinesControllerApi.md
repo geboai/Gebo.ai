@@ -101,7 +101,7 @@ No authorization required
 
 <a name="getDefaultPersonalPipelinesChatMenu"></a>
 # **getDefaultPersonalPipelinesChatMenu**
-> List&lt;PipelineChatMenu&gt; getDefaultPersonalPipelinesChatMenu()
+> List&lt;PipelineChatMenu&gt; getDefaultPersonalPipelinesChatMenu(chatProfileCode)
 
 
 
@@ -113,8 +113,9 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
-    List<PipelineChatMenu> result = apiInstance.getDefaultPersonalPipelinesChatMenu();
+    List<PipelineChatMenu> result = apiInstance.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#getDefaultPersonalPipelinesChatMenu");
@@ -123,7 +124,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **chatProfileCode** | **String**|  |
 
 ### Return type
 
@@ -140,7 +144,7 @@ No authorization required
 
 <a name="getPersonalPipelinesChatMenu"></a>
 # **getPersonalPipelinesChatMenu**
-> List&lt;PipelineChatMenu&gt; getPersonalPipelinesChatMenu(pipelineCode)
+> List&lt;PipelineChatMenu&gt; getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode)
 
 
 
@@ -152,9 +156,10 @@ No authorization required
 
 
 GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+String chatProfileCode = "chatProfileCode_example"; // String | 
 String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    List<PipelineChatMenu> result = apiInstance.getPersonalPipelinesChatMenu(pipelineCode);
+    List<PipelineChatMenu> result = apiInstance.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatPipelinesControllerApi#getPersonalPipelinesChatMenu");
@@ -166,6 +171,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **chatProfileCode** | **String**|  |
  **pipelineCode** | **String**|  | [optional]
 
 ### Return type

@@ -23,7 +23,8 @@ import lombok.ToString;
  */
 @Document
 @ToString
-public class GPromptConfig implements Cloneable {
+public class GPromptConfig implements Cloneable,ITokensCountable {
+	
 	public static final String DEFAULT_LANGUAGE = "en";
 	private static final String SEPARATOR = "-";
 	private static final String FIELD_PLACEHOLDER = "-|-";
@@ -44,6 +45,7 @@ public class GPromptConfig implements Cloneable {
 	@HashIndexed
 	private String modelCode = null;
 	private String promptCategory = null;
+	private int tokensSize = 0;
 	private Boolean configDeclarated;
 
 	private void regenerateCode() {
@@ -110,6 +112,10 @@ public class GPromptConfig implements Cloneable {
 
 	public void setPrompt(String prompt) {
 		this.prompt = prompt;
+		if (prompt != null && prompt.trim().length() > 0) {
+			tokensSize = tokensEstimator.estimate(prompt);
+		} else
+			tokensSize = 0;
 	}
 
 	public String getLangCode() {
@@ -174,5 +180,16 @@ public class GPromptConfig implements Cloneable {
 
 	public GPromptConfig copy() {
 		return (GPromptConfig) this.clone();
+	}
+
+	public int getTokensSize() {
+		if (tokensSize == 0 && prompt != null) {
+			tokensSize = tokensEstimator.estimate(prompt);
+		}
+		return tokensSize;
+	}
+
+	public void setTokensSize(int tokensLength) {
+		this.tokensSize = tokensLength;
 	}
 }
