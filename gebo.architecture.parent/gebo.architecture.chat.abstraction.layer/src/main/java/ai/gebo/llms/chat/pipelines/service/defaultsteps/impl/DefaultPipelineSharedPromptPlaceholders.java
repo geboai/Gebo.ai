@@ -9,7 +9,7 @@ public class DefaultPipelineSharedPromptPlaceholders {
 	public static final String DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM = "deepSearchDataSources";
 	public static final String LATEST_INTERACTIONS_TEMPLATE_PARAM = "latestInteractions";
 	public static final String DOCUMENTS_TEMPLATE_PARAM = "documents";
-	public static final String SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM = "shallowSearchSystems";
+	
 
 	static final String TOOLS_LIST_TEMPLATE_PARAM = "toolsList";
 
