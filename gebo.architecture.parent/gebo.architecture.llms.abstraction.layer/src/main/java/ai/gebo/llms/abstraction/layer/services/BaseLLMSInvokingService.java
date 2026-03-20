@@ -26,6 +26,7 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -286,9 +287,13 @@ public class BaseLLMSInvokingService {
 			int maxNumChunks = 20000; // safety
 
 			boolean keepSeparator = true;
-
-			return new TokenTextSplitter(chunkSize, minChunkSizeChars, minChunkLengthToEmbed, maxNumChunks,
-					keepSeparator);
+			Builder builder = TokenTextSplitter.builder();
+			builder.withChunkSize(chunkSize);
+			builder.withKeepSeparator(keepSeparator);
+			builder.withMaxNumChunks(maxNumChunks);
+			builder.withMinChunkLengthToEmbed(minChunkLengthToEmbed);
+			builder.withMinChunkSizeChars(minChunkSizeChars);
+			return builder.build();
 		});
 	}
 

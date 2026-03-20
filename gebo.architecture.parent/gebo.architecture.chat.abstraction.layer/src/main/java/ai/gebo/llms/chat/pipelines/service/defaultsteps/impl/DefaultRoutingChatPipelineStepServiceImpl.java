@@ -1,7 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +63,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private static final String INTENT_TYPE = "intent-type: ";
 	private static final String END_DELIVERABLE_TYPES_CATALOG = "END_DELIVERABLE_TYPES_CATALOG";
 	private static final String DELIVERABLE_TYPES_CATALOG = "DELIVERABLE_TYPES_CATALOG";
-	static final String SEARCHED_SYSTEM = "searchedSystem";
+
 	private static final String ROUTING_DECISION = "routingDecision";
 	private static final String TOPICS = "topics: ";
 	private static final String END_KNOWLEDGE_BASE = "END_KNOWLEDGE_BASE";
@@ -85,6 +84,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
+	public static final String INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID = "IKB_SYSTEM";
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -148,19 +148,20 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Begin Calculating router params to be cached");
 				}
+				List<GKnowledgeBase> knowledgeBases = this.chatSessionLifecycleService
+						.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
 				Map<String, Object> templateParams = new HashMap<String, Object>();
-				String deepSearchDataSources = deepSearchDataSourcesListPromptPart();
+
 				String toolsList = toolsListPromptPart(chatModel);
-				String internalKnowledgeBaseCatalog = deepSearchInternalKnowledgeBasePromptPart(runtimeData);
-				String shallowSystemsCatalog = shallowSearchSystemsCatalog(runtimeData);
+				String internalKnowledgeBaseCatalog = ragInternalKnowledgeBasePromptPart(knowledgeBases);
+				String deepSearchDataSources = deepSearchDataSourcesListPromptPart(knowledgeBases);
 				templateParams.put(
 						DefaultPipelineSharedPromptPlaceholders.INTERNAL_KNOWLEDGE_BASE_CATALOG_TEMPLATE_PARAM,
 						internalKnowledgeBaseCatalog);
 				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
 						deepSearchDataSources);
 				templateParams.put(DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM, toolsList);
-				templateParams.put(DefaultPipelineSharedPromptPlaceholders.SHALLOW_SEARCH_SYSTEMS_TEMPLATE_PARAM,
-						shallowSystemsCatalog);
+
 				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM,
 						createDeliverableTypesList());
 				if (LOGGER.isDebugEnabled()) {
@@ -192,20 +193,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
-				params, List.of(ROUTING_DECISION, SEARCHED_SYSTEM, DELIVERABLE_FIELD, DEEP_SEARCHED_SYSTEMS));
+				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS));
 
-		if (decisionMap.containsKey(SEARCHED_SYSTEM)) {
-			List<String> systems = decisionMap.get(SEARCHED_SYSTEM);
-			List<String> realCodes = new ArrayList<String>();
-			systems.forEach(x -> {
-				if (x.startsWith(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX)) {
-					realCodes.add(x.substring(RoutingPromptUtil.SHALLOW_SYSTEM_PREFIX.length()));
-				}
-			});
-			decisionMap.put(SEARCHED_SYSTEM, realCodes);
-		}
 		// extracting user intent
-		
+
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
 				? parseDecision(decisionMap.get(ROUTING_DECISION).toString())
 				: RespondingWith.PURE_LLM_RESPONSE;
@@ -257,29 +248,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return buffer.toString();
 	}
 
-	private DeliverableIntent readUserIntent(Map<String, List<String>> extracted) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin readUserIntent(" + extracted + ")");
-		}
-		List<String> values = extracted.get(DELIVERABLE_FIELD);
-		DeliverableIntent intent = DeliverableIntent.QA;
-		if (values != null && !values.isEmpty()) {
-			String _intent = values.get(0);
-			if (_intent != null) {
-				for (DeliverableIntent i : DeliverableIntent.values()) {
-					if (_intent.toLowerCase().indexOf(i.name().toLowerCase()) >= 0) {
-						intent = i;
-						break;
-					}
-				}
-			}
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End readUserIntent(...) output: " + intent.name());
-		}
-		return intent;
-
-	}
+	
 
 	@Override
 	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
@@ -369,12 +338,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return decision;
 	}
 
-	private String shallowSearchSystemsCatalog(ChatPipelineExecutionRuntimeData runtimeData) {
-		List<DeepSearchDataSourceMetaInfos> systems = this.deepSearchDataSourcesCatalogsService
-				.getActiveDeepSearchDataSourceMetaInfos();
-		return RoutingPromptUtil.shallowSearchSystemsCatalog(systems);
-	}
-
 	@AllArgsConstructor
 	@Getter
 	@ToString
@@ -436,16 +399,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return rd;
 	}
 
-	private String deepSearchInternalKnowledgeBasePromptPart(ChatPipelineExecutionRuntimeData runtimeData)
-			throws GeboChatSessionLifecycleException {
-		StringBuffer buffer = new StringBuffer();
-		List<GKnowledgeBase> knowledgeBases = this.chatSessionLifecycleService
-				.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
-
-		return deepSearchInternalKnowledgeBasePromptPart(knowledgeBases);
-	}
-
-	private String deepSearchInternalKnowledgeBasePromptPart(List<GKnowledgeBase> knowledgeBases) {
+	private String ragInternalKnowledgeBasePromptPart(List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
 		if (!knowledgeBases.isEmpty()) {
 			buffer.append(START_INTERNAL_KNOWLEDGEBASE_CATALOG);
@@ -505,11 +459,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return buffer.toString();
 	}
 
-	private String deepSearchDataSourcesListPromptPart() {
+	private String deepSearchDataSourcesListPromptPart(List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
 		List<DeepSearchDataSourceMetaInfos> dataSources = deepSearchDataSourcesCatalogsService
 				.getActiveDeepSearchDataSourceMetaInfos();
-		buffer.append(RoutingPromptUtil.dataSourcesListPromptPart(dataSources));
+		buffer.append(RoutingPromptUtil.dataSourcesListPromptPart(dataSources, knowledgeBases));
 		return buffer.toString();
 	}
 
@@ -526,12 +480,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		case TOOLS_USE_RESPONSE: {
 			return List.of(DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING);
 		}
-		case SHALLOW_SEARCH_RESPONSE: {
-			return List.of(DefaultShallowSearchOutputPipelineServiceImpl.DEFAULT_SHALLOW_SEARCH_STREAMING_OUTPUT);
-		}
-		case DEEP_RAG_RESPONSE: {
-			return List.of(DefaultDeepRagStreamOutputChatPipelineServiceImpl.DEFAULT_DEEPRAG_STREAMING);
-		}
+
 		case CHAT_WITH_FILES: {
 			return List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING);
 		}

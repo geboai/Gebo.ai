@@ -12,6 +12,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
@@ -19,6 +20,7 @@ import ai.gebo.model.ExtractedDocumentMetaData;
 
 public final class RoutingPromptUtil {
 
+	private static final String INTERNAL_KNOWLEDGE_BASE = "internal knowledge base";
 	private static final String END_DEEP_SEARCH_DATA_SOURCE = "END_DEEP_SEARCH_DATA_SOURCE";
 	private static final String DEEP_SEARCH_DATA_SOURCE = "DEEP_SEARCH_DATA_SOURCE";
 	private static final String LIST_ITEM = "-";
@@ -107,7 +109,7 @@ public final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	public  static AIDocumentsSet addUntillBudgetLatestDocuments(LLMChatRequestResources requestResources,
+	public static AIDocumentsSet addUntillBudgetLatestDocuments(LLMChatRequestResources requestResources,
 			int documentsTokenBudget) {
 		AtomicInteger tokensBudget = new AtomicInteger(documentsTokenBudget);
 		AIDocumentsSet result = new AIDocumentsSet();
@@ -118,7 +120,7 @@ public final class RoutingPromptUtil {
 		return result;
 	}
 
-	public  static AIDocumentsSet tryAdd(AIDocumentsSet ds, AIDocumentsSet toBeAdd, AtomicInteger tokensBudget) {
+	public static AIDocumentsSet tryAdd(AIDocumentsSet ds, AIDocumentsSet toBeAdd, AtomicInteger tokensBudget) {
 		if (toBeAdd != null && tokensBudget.get() >= toBeAdd.getTokensSize()) {
 			ds = AIDocumentsSet.join(ds, toBeAdd);
 			tokensBudget.addAndGet(-1 * toBeAdd.getTokensSize());
@@ -126,7 +128,7 @@ public final class RoutingPromptUtil {
 		return ds;
 	}
 
-	public  static String fullDocumentRendering(List<AIDocumentReferenceItem> docs) {
+	public static String fullDocumentRendering(List<AIDocumentReferenceItem> docs) {
 		StringBuffer buffer = new StringBuffer();
 		for (AIDocumentReferenceItem doc : docs) {
 			if (doc.getFragments().isEmpty())
@@ -136,7 +138,7 @@ public final class RoutingPromptUtil {
 		return buffer.toString();
 	}
 
-	public  static String partialDocumentRendering(List<AIDocumentReferenceItem> docs, int documentsTokenBudget) {
+	public static String partialDocumentRendering(List<AIDocumentReferenceItem> docs, int documentsTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
 		for (AIDocumentReferenceItem doc : docs) {
 			String _docRendered = documentRendering(doc, documentsTokenBudget);
@@ -212,7 +214,7 @@ public final class RoutingPromptUtil {
 
 	private static final String END_TOOLS_CATALOG = "END_TOOLS_CATALOG";
 
-	public  static String latestInteractionsPromptPart(List<CSSSimplefiedInteraction> lastInteractions) {
+	public static String latestInteractionsPromptPart(List<CSSSimplefiedInteraction> lastInteractions) {
 		StringBuffer buffer = new StringBuffer();
 		if (lastInteractions != null) {
 			for (int i = lastInteractions.size() - 1; i >= 0; i--) {
@@ -269,12 +271,34 @@ public final class RoutingPromptUtil {
 	private static final String DEEP_SEARCH_DATA_SOURCES_CATALOG = "DEEP_SEARCH_DATA_SOURCES_CATALOG";
 	private static final String END_DEEP_SEARCH_DATA_SOURCES_CATALOG = "END_DEEP_SEARCH_DATA_SOURCES_CATALOG";
 
-	public static Object dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources) {
+	public static String dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources,
+			List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
 		if (dataSources != null && !dataSources.isEmpty()) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
-			
+			if (!knowledgeBases.isEmpty()) {
+				buffer.append(DEEP_SEARCH_DATA_SOURCE);
+				buffer.append(NEWLINE);
+				buffer.append(CODE);
+				buffer.append(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
+				buffer.append(NEWLINE);
+				buffer.append(DESCRIPTION);
+				buffer.append(INTERNAL_KNOWLEDGE_BASE);
+				buffer.append(MAIN_SECTIONS_SAMPLE);
+				buffer.append(NEWLINE);
+				for (GKnowledgeBase catalog : knowledgeBases) {
+					buffer.append(LIST_ITEM);
+					buffer.append(SPACE);
+					buffer.append(catalog.getDescription());
+					buffer.append(NEWLINE);
+				}
+				buffer.append(END_MAIN_SECTIONS_SAMPLE);
+				buffer.append(NEWLINE);
+				buffer.append(NEWLINE);
+				buffer.append(END_DEEP_SEARCH_DATA_SOURCE);
+				buffer.append(NEWLINE);
+			}
 			for (DeepSearchDataSourceMetaInfos obj : dataSources) {
 				buffer.append(DEEP_SEARCH_DATA_SOURCE);
 				buffer.append(NEWLINE);
@@ -287,7 +311,7 @@ public final class RoutingPromptUtil {
 				if (obj.getCatalogues() != null && !obj.getCatalogues().isEmpty()) {
 					buffer.append(MAIN_SECTIONS_SAMPLE);
 					buffer.append(NEWLINE);
-					for ( CatalogueSample catalog : obj.getCatalogues()) {
+					for (CatalogueSample catalog : obj.getCatalogues()) {
 						buffer.append(LIST_ITEM);
 						buffer.append(SPACE);
 						buffer.append(catalog.getDescription());
@@ -306,43 +330,13 @@ public final class RoutingPromptUtil {
 	}
 
 	static final String END_SYSTEM_CATALOG = "END_SYSTEM_CATALOG";
-	private static final String SYSTEM_CATALOG = "SYSTEM_CATALOG";
-	private static final String DESCRIPTION2 = "description:";
-	static final String SHALLOW_SYSTEM_PREFIX = "shallow";
+	
+	
+	
 	static final String SPACE = " ";
-	static final String SYSTEM_ID = "systemId:";
-	private static final String END_SHALLOW_SEARCH_SYSTEMS_CATALOG = "END_SHALLOW_SEARCH_SYSTEMS_CATALOG";
-	private static final String SHALLOW_SEARCH_SYSTEMS_CATALOG = "SHALLOW_SEARCH_SYSTEMS_CATALOG";
+	
+	
 
-	public static String shallowSearchSystemsCatalog(List<DeepSearchDataSourceMetaInfos> systems) {
-		StringBuffer buffer = new StringBuffer();
-		if (!systems.isEmpty()) {
-			buffer.append(SHALLOW_SEARCH_SYSTEMS_CATALOG);
-			buffer.append(NEWLINE);
-			for (DeepSearchDataSourceMetaInfos meta : systems) {
-				buffer.append(SYSTEM_CATALOG);
-				buffer.append(NEWLINE);
-				buffer.append(SYSTEM_ID);
-				buffer.append(SPACE);
-				buffer.append(SHALLOW_SYSTEM_PREFIX + meta.getHandlerId());
-				buffer.append(NEWLINE);
-				buffer.append(DESCRIPTION);
-				buffer.append(SPACE);
-				buffer.append(meta.getDescription());
-				buffer.append(NEWLINE);
-				for (CatalogueSample cat : meta.getCatalogues()) {
-					buffer.append(LIST_ITEM);
-					buffer.append(SPACE);
-					buffer.append(cat.getDescription());
-					buffer.append(NEWLINE);
-				}
-				buffer.append(END_SYSTEM_CATALOG);
-				buffer.append(NEWLINE);
-			}
-			buffer.append(END_SHALLOW_SEARCH_SYSTEMS_CATALOG);
-			buffer.append(NEWLINE);
-		} 
-		return buffer.toString();
-	}
+	
 
 }

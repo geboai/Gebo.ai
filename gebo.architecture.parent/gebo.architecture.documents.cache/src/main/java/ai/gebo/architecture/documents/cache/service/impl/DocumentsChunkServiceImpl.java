@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -706,7 +707,12 @@ public class DocumentsChunkServiceImpl
 	}
 
 	static TokenTextSplitter createTokenizer(TextChunkingSpecs textSpecs) {
-		return new TokenTextSplitter(textSpecs.getDefaultChunkSize(), textSpecs.getMinChunkSizeChars(),
-				textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(), textSpecs.isKeepSeparator());
+		Builder builder = TokenTextSplitter.builder();
+		builder.withChunkSize(textSpecs.getDefaultChunkSize());
+		builder.withKeepSeparator(textSpecs.isKeepSeparator());
+		builder.withMinChunkSizeChars(textSpecs.getMinChunkSizeChars());
+		builder.withMinChunkLengthToEmbed(textSpecs.getMinChunkLengthToEmbed());
+		builder.withMaxNumChunks(textSpecs.getMaxNumChunks());
+		return builder.build();
 	}
 }
