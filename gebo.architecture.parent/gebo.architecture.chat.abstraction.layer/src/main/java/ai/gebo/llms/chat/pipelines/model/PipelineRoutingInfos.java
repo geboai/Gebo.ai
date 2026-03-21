@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
@@ -8,11 +9,12 @@ import lombok.Data;
 
 @Data
 public class PipelineRoutingInfos {
-	List<String> stepIds = new ArrayList<String>();
+	private List<String> stepIds = new ArrayList<String>();
 	@NotNull
-	String pipelineRouterDecisionCode = null;
+	private String pipelineRouterDecisionCode = null;
 	@NotNull
-	String chatModel = null;
+	private String chatModel = null;
 	@NotNull
-	String serviceModel = null;
+	private String serviceModel = null;
+	private LinkedHashMap<String, Object> parameters = new LinkedHashMap<>();
 }

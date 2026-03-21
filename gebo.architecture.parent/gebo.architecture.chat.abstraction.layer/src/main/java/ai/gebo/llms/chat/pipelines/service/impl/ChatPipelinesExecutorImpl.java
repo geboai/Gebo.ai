@@ -31,6 +31,7 @@ import ai.gebo.llms.chat.pipelines.model.IStepContribution;
 import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfos;
 import ai.gebo.llms.chat.pipelines.model.PipelineRoutingInfosMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.RoutingDecision;
+import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
@@ -196,8 +197,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				if (lastStepData
 						.getLastStepService() instanceof IStreamingOutputChatPipelineService streamingOutputService) {
 					return runAs.doRunAsWithReturnAndException(() -> {
-						Flux<GeboChatMessageEnvelope> first = Flux.just(
-								buildRoutingInfos(lastStepData.getRuntimeData(), response, chatModel, serviceModel));
+						Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(lastStepData.getRuntimeData(),
+								streamingOutputService, response, chatModel, serviceModel));
 						Flux<GeboChatMessageEnvelope> out = streamingOutputService
 								.execute(lastStepData.getRuntimeData(), chatModel, serviceModel);
 						return Flux.concat(first, out);
@@ -214,7 +215,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	}
 
 	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData,
-			GeboChatResponse response, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
+			IStreamingOutputChatPipelineService streamingOutputService, GeboChatResponse response,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
 		PipelineRoutingInfosMessageEnvelope data = new PipelineRoutingInfosMessageEnvelope();
 		PipelineRoutingInfos content = new PipelineRoutingInfos();
 		content.setPipelineRouterDecisionCode(response.getPipelineRouterDecisionCode());
@@ -227,7 +229,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 						? serviceModel.getConfig().getChoosedModel().getCode()
 						: null);
 		data.setContent(content);
-
+		if (streamingOutputService != null && !streamingOutputService.getRequiredParameters().isEmpty()) {
+			// Copied parameters to the UI infos
+			for (StepEnvironmentParameter param : streamingOutputService.getRequiredParameters()) {
+				content.getParameters().put(param.getParamName(),
+						runtimeData.getSharedEnvironment().get(param.getParamName()));
+			}
+		}
 		runtimeData.getRoutingDecisions().forEach(x -> {
 			x.getFutureRoute().forEach(stepId -> {
 				data.getContent().getStepIds().add(stepId);
