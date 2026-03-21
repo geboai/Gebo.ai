@@ -27,7 +27,7 @@
 				"QA"
 			],
 			"allowedRoutingDecisions": [
-				"SHALLOW_SEARCH_RESPONSE"
+				"DEEP_SEARCH_RESPONSE"
 			]
 		}
 	},
@@ -57,7 +57,7 @@
 			"checkNotEmptyDocumentsList": false,
 			"allowedRoutingDecisions": [
 				"RAG_LLM_RESPONSE",
-				"DEEP_RAG_RESPONSE"
+				"DEEP_SEARCH_RESPONSE"
 			]
 		}
 	},
@@ -71,7 +71,6 @@
 			"checkNotEmptyDocumentsList": true,
 			"allowedRoutingDecisions": [
 				"RAG_LLM_RESPONSE",
-				"DEEP_RAG_RESPONSE",
 				"DEEP_SEARCH_RESPONSE"
 			]
 		}

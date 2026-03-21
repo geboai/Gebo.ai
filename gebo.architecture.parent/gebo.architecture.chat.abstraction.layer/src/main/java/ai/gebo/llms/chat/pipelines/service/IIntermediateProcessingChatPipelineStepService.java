@@ -6,5 +6,5 @@ import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 
 public interface IIntermediateProcessingChatPipelineStepService extends IChatPipelineStepService {
 	public IChatPipelineStepRuntimeData execute(ChatPipelineExecutionRuntimeData input,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException;
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException;
 }

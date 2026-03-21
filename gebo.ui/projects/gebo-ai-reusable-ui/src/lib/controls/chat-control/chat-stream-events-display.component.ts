@@ -5,7 +5,14 @@ import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepS
 import { ToastMessageOptions } from "primeng/api";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
-
+import { Subscription, timer } from "rxjs";
+interface ChatNotificationContent {
+	code:string;
+	message:string;
+	icon?:string;
+	duration?:number;
+	notificationType:"INFO"|"DEBUG";
+}
 @Component({
     selector: "gebo-ai-chat-stream-events-display",
     templateUrl: "chat-stream-events-display.component.html",
@@ -28,8 +35,9 @@ export class GeboAIChatStreamEventsDisplayComponent {
     protected deepSearchDataSourceDocumentResult?: DeepSearchDataSourceDocumentResult;
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected deepSearchNotification?: { content?: string,dataSourceDescription?:string};
-    
+    protected currentNotification?:ChatNotificationContent;
     protected completionPercent: number = 0;
+    private timer?: Subscription;
     constructor(private messageService: GeboAIRootNotificationService) {
 
     }
@@ -39,17 +47,42 @@ export class GeboAIChatStreamEventsDisplayComponent {
     protected get isDisplayingDeepSearchProcess(): boolean {
         return !this.analisysStep || !this.deepSearchDataSourceDocumentResult || !this.deepSearchDataSourceResponse || !this.deepSearchNotification;
     }
+    private clearNotifiationTimer():void {
+        if (this.timer) {
+            try {
+                this.timer.unsubscribe();
+            }catch(e) {}
+        }
+    }
     private clearEventsDisplay(): void {
-
         this.deepSearchDataSourceDocumentResult = undefined;
         this.deepSearchDataSourceResponse = undefined;
         this.analisysStep = undefined;
         this.deepSearchNotification = undefined;        
-
+        this.currentNotification=undefined;
+        this.clearNotifiationTimer();
+    }
+    private startNotificationTimer(duration: number) {
+        this.timer=timer(duration).subscribe({
+            next:()=>{
+                this.currentNotification=undefined;    
+            }
+        })
+    }
+    public clearUI():void {
+        this.clearEventsDisplay();
+        this.completionPercent=0;
     }
     public onMessage(msg?: IGeboChatMessage) {
         if (msg?.contentObjectType) {
             switch (msg.contentObjectType) {
+                case "ChatNotificationContent": {
+                    this.clearNotifiationTimer();
+                    this.currentNotification= msg.content;
+                    if (this.currentNotification?.duration) {
+                        this.startNotificationTimer(this.currentNotification?.duration);
+                    }
+                } break;
                 case "DeepSearchStep": {
                     this.clearEventsDisplay();
                     this.analisysStep = msg.content;
@@ -106,4 +139,5 @@ export class GeboAIChatStreamEventsDisplayComponent {
             }
         }
     }
+    
 }

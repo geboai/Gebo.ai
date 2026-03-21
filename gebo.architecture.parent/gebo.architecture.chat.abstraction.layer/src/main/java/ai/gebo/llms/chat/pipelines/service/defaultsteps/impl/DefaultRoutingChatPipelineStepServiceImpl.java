@@ -8,6 +8,8 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,10 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -42,6 +47,7 @@ import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
@@ -53,6 +59,16 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
+	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
+	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
+	private static final String EXECUTING_YOUR_CHOOSED_AGENT = "Executing your choosed agent";
+	private static final String USER_CHOOSED_AGENT = "USER_CHOOSED_AGENT";
+	private static final String CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING = "Choosed agentic flow, answering agent running";
+	private static final String CHOOSED_AGENTIC_FLOW = "CHOOSED_AGENTIC_FLOW";
+	private static final String CHOOSING_AGENTIC_FLOW_DESCRIPTION = "Choosing agentic flow";
+	private static final String CHOOSING_AGENTIC_FLOW = "CHOOSING_AGENTIC_FLOW";
+	private static final String I_M_ANALYZING_YOUR_REQUEST = "I'm analyzing your request";
+	private static final String DOING_USER_INTENT_ANALISYS = "DOING_USER_INTENT_ANALISYS";
 	private static final String DELIVERABLE_EXPLANATION_TEMPLATE_PARAM = "deliverableExplanation";
 	private static final String DELIVERABLE_TEMPLATE_PARAM = "deliverable";
 	private static final String REWRITTEN_QUERY_TEMPLATE_PARAM = "rewrittenQuery";
@@ -98,9 +114,17 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP;
 	}
 
-	private String doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
+	private void notifyUser(ISinkUIEmitter emitter, String code, String message, String icon, Long duration,
+			NotificationType notificationType) {
+		ChatNotificationContent content = new ChatNotificationContent(code, message, icon, duration, notificationType);
+		GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(content);
+		emitter.next(envelope);
+	}
+
+	private String doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions)
 			throws GeboChatSessionLifecycleException, IOException {
+		notifyUser(emitter, DOING_USER_INTENT_ANALISYS, I_M_ANALYZING_YOUR_REQUEST, null, 2000l, NotificationType.INFO);
 		String query = runtimeData.getRequestResources().getCurrentRequest().getQuery();
 		Map<String, Object> params = CommonChatPromptParamsUtil
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
@@ -129,6 +153,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				}
 			}
 		}
+		notifyUser(emitter, "SERVICE_LEVEL_DETECTED", "Service level is: " + userIntent.name(), null, 1000l,
+				NotificationType.DEBUG);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("User intent:" + userIntent.name());
 			LOGGER.debug("Rewritten query:" + rewrited_query);
@@ -137,9 +163,11 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return rewrited_query;
 	}
 
-	private RoutingDecision doDecideRoute(ChatPipelineExecutionRuntimeData runtimeData,
+	private RoutingDecision doDecideRoute(ISinkUIEmitter emitter, ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
 			String rewrited_query) throws GeboChatSessionLifecycleException {
+		notifyUser(emitter, CHOOSING_AGENTIC_FLOW, CHOOSING_AGENTIC_FLOW_DESCRIPTION, null, 2000l,
+				NotificationType.INFO);
 		GPromptConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 		final String prompt = _prompt.getPrompt();
@@ -192,6 +220,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
 				documentsTokenBudget);
 		params.put(DOCUMENTS, documents);
+
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
 				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS));
 
@@ -206,6 +235,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing decision object:" + decision);
 		}
+		notifyUser(emitter, CHOOSED_AGENTIC_FLOW, CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING, null, 2000l,
+				NotificationType.INFO);
 		List<String> routes = futureRoutes(decision, RespondingWith.PURE_LLM_RESPONSE, runtimeData.isStreamingOutput());
 		final IChatPipelineStepRuntimeData routingEntry = new IChatPipelineStepRuntimeData() {
 
@@ -248,11 +279,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return buffer.toString();
 	}
 
-	
-
 	@Override
-	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
+	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
 		RoutingDecision rd = null;
 
@@ -260,24 +289,25 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			String latestInteractions = RoutingPromptUtil.latestInteractionsPromptPart(
 					runtimeData.getRequestResources().getChathistory().getLatestEntries().getInteractions());
 			// Doing a query rewrite
-			String rewrited_query = doRequestRewriteAndUserIntent(runtimeData, chatModel, serviceModel,
+			String rewrited_query = doRequestRewriteAndUserIntent(runtimeData, emitter, chatModel, serviceModel,
 					latestInteractions);
 			// if actual resource has chat with documents or uploads with more than actual
 			// tokens budget than doing a deep search ONLY on
-			// Documents being in request
+			// Documents being in requests
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
 					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
 			if (forcedDocumentsTotal >= threasholdForForcedDeepSearch) {
-				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(runtimeData);
+				rd = createKnowledgeBaseSearchHeavyDocumentsFixedRoute(emitter, runtimeData);
 			} else {
 				if (runtimeData.getRequestResources().getCurrentRequest() != null
 						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId() != null
 						&& runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId().trim()
 								.length() > 0) {
-					rd = doHandleUserRequestedRouting(runtimeData);
+					rd = doHandleUserRequestedRouting(emitter, runtimeData);
 				} else {
-					rd = doDecideRoute(runtimeData, chatModel, serviceModel, latestInteractions, rewrited_query);
+					rd = doDecideRoute(emitter, runtimeData, chatModel, serviceModel, latestInteractions,
+							rewrited_query);
 				}
 			}
 			this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());
@@ -294,14 +324,15 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	}
 
-	private RoutingDecision doHandleUserRequestedRouting(ChatPipelineExecutionRuntimeData runtimeData)
-			throws ChatPipelineException {
+	private RoutingDecision doHandleUserRequestedRouting(ISinkUIEmitter emitter,
+			ChatPipelineExecutionRuntimeData runtimeData) throws ChatPipelineException {
 		String routingDecisionId = runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId();
 		RespondingWith respondingWith = RespondingWith.valueOf(routingDecisionId);
 		RoutingDecision decision = new RoutingDecision(
 				futureRoutes(respondingWith, RespondingWith.PURE_LLM_RESPONSE, true),
 				IChatPipelineStepRuntimeData.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
 				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
+		notifyUser(emitter, USER_CHOOSED_AGENT, EXECUTING_YOUR_CHOOSED_AGENT, null, 3000l, NotificationType.INFO);
 		if (decision.getFutureRoute() != null && !decision.getFutureRoute().isEmpty()) {
 			String outputStepId = decision.getFutureRoute().get(decision.getFutureRoute().size() - 1);
 			IChatPipelineStepServiceRepositoryPattern pipelineStepsRepoPattern = runtimeBinder
@@ -360,21 +391,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		return _decision;
 	}
 
-	private String secondRow(String decision) {
-		StringTokenizer tokenizer = new StringTokenizer(decision, "\r");
-		String _out = "";
-		if (tokenizer.hasMoreTokens()) {
-			tokenizer.nextToken();
-			if (tokenizer.hasMoreTokens()) {
-				_out = tokenizer.nextToken();
-			}
-		}
-		return _out;
-	}
-
-	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(
+	private RoutingDecision createKnowledgeBaseSearchHeavyDocumentsFixedRoute(ISinkUIEmitter emitter,
 			ChatPipelineExecutionRuntimeData runtimeData) {
-		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(DeliverableIntent.REPORT);
+		notifyUser(emitter, RUNNING_HEAVY_CHAT_WITH_DOCUMENTS, SCANNING_HUGE_FILE_WITH_LLMS, null, 3000l,
+				NotificationType.INFO);
 		RoutingDecision rd = new RoutingDecision(
 				List.of(DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING),
 				new IChatPipelineStepRuntimeData() {

@@ -13,6 +13,6 @@ public interface IRoutingChatPipelineStepService extends IChatPipelineStepServic
 
 	
 
-	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) throws ChatPipelineException;
+	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException;
 }

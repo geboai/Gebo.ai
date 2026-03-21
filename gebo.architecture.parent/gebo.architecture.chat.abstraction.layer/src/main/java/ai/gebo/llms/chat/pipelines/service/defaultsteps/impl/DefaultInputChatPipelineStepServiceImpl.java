@@ -7,6 +7,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IInputChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 @Component
 public class DefaultInputChatPipelineStepServiceImpl implements IInputChatPipelineStepService {
 
@@ -14,7 +15,7 @@ public class DefaultInputChatPipelineStepServiceImpl implements IInputChatPipeli
 
 	@Override
 	public IChatPipelineStepRuntimeData execute(ChatPipelineExecutionRuntimeData input,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		
 		return IChatPipelineStepRuntimeData.VoidRetun(DEFAULT_INPUT_STEP);
 	}

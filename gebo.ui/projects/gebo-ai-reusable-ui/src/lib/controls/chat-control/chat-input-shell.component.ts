@@ -10,6 +10,16 @@ import { GeboAIChatStreamEventsDisplayComponent } from './chat-stream-events-dis
 import { PipelineRoutingOption } from './pipeline-routing-option';
 import { Chip } from 'primeng/chip';
 import { timer } from 'rxjs';
+function sameStringsIgnoreOrder(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  const aSorted = [...a].sort();
+  const bSorted = [...b].sort();
+
+  return aSorted.every((value, index) => value === bSorted[index]);
+}
 function iconByProduct(productId: string): string | undefined {
   let out: string | undefined = undefined;
   /* .pi.pi-git,
@@ -327,6 +337,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     }
     //set the pipeline route visualizzation that will be runned
     this.runningPipelineRouting = this.choosedPipelineRoutingChip;
+    this.streamNotificationsComponent.clearUI();
     this.messageSubmit.emit();
     //set a timer, and in 3 seconds go back to agenti chat
     timer(3000).subscribe({
@@ -343,16 +354,15 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   onStreamError(error: any) {
     //this.streamNotificationsComponent.onError(error);
   }
+  
   onStreamMessage(recvd: IGeboChatMessage) {
     if (recvd.contentObjectType === "PipelineRoutingInfos") {
       const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
+      const parameters: any = recvd.content?.parameters;
       console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
       //Check if the pipeline routing choosed is different from the one displayed
       if (pipelineRouterDecisionCode !== "WAITING" && pipelineRouterDecisionCode !== this.runningPipelineRouting?.chatPipelineProcessId) {
-        const runningRoutingChoice = this.allPipelineRoutingOptions.find(x => pipelineRouterDecisionCode === x?.chatPipelineProcessId);
-        if (runningRoutingChoice) {
-          this.runningPipelineRouting = runningRoutingChoice;
-        }
+          this.runningPipelineRouting = this.findMatchingRoutingOption(pipelineRouterDecisionCode,parameters);
       }
     }
     this.streamNotificationsComponent.onMessage(recvd);
@@ -380,5 +390,29 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   onSkipDeepSearchEvent(_event: any): void {
     this.setStandardChatMode();
+  }
+  private findMatchingRoutingOption(pipelineRouterDecisionCode: string, parameters: any):PipelineRoutingOption | undefined {
+    let runningRoutingChoice = this.allPipelineRoutingOptions.find(x => pipelineRouterDecisionCode === x?.chatPipelineProcessId);
+    const detailedMatch = this.allPipelineRoutingOptions.find(x => {
+      let matches: boolean = pipelineRouterDecisionCode === x?.chatPipelineProcessId && (x?.pipelineParams && parameters);
+      if (matches === true) {
+        const keys = Object.keys(parameters);
+        keys.forEach(key => {
+          const ref1 = parameters[key];
+          const ref2 = x?.pipelineParams[key];
+          if (ref1 && ref2 && ref1 === ref2) {
+            matches &&= true;
+          } else if (Array.isArray(ref1) && Array.isArray(ref2)) {
+            const arr1 = Array.from(ref1);
+            const arr2 = Array.from(ref2);
+            matches &&= sameStringsIgnoreOrder(arr1, arr2);
+          } else {
+            matches = false;
+          }
+        })
+      }
+      return matches;
+    });
+    return detailedMatch ? detailedMatch: runningRoutingChoice;
   }
 }

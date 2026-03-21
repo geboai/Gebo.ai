@@ -2,23 +2,30 @@
 <div class="gebo-ai-reusable-chat_chat-status">
     @if(routingChoiceSelector) {
     <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route_label">
-
-             <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
+        @if (currentNotification) {
+            <span id="NOTIFICATION" >
+                <span [id]="currentNotification.code" [className]="currentNotification.notificationType" gebo-ai-text>{{currentNotification.message}}</span>
+            </span>
+        } @else {
+        <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i
+            [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
+        }
     </div>
     }
-    @if ((routingChoiceSelector==='DEEP_SEARCH_RESPONSE' || routingChoiceSelector==='SHALLOW_SEARCH_RESPONSE') && completionPercent>0) {
+    @if ((routingChoiceSelector==='DEEP_SEARCH_RESPONSE' ) && completionPercent>0) {
     <div class="deep-search">
         <div class="deep-search__label">
             <!-- Initial show of deep search untill searching relevant informatins-->
             <span *ngIf="inEventsLoop && !isDisplayingDeepSearchProcess" class="deep-search__label"
                 id="DeepSearchProcessingSearch" gebo-ai-text>Searching relevant informations</span>
-            <!-- a document of the internal knowledge base has been analyzed-->    
+            <!-- a document of the internal knowledge base has been analyzed-->
             <span class="deep-search__label" *ngIf="analisysStep"> <span>
                     {{analisysStep?.analyzedDocument?.dataSourceDescription}}
                 </span>&nbsp;<span id="DeepSearchProcessingFile" gebo-ai-text>Analized
                     file</span>&nbsp;<span>{{analisysStep?.analyzedDocument?.name ||
-                    analisysStep?.analyzedDocument?.code}}</span>&nbsp;<span *ngIf="analisysStep?.processingModel" class="deep-search__label_processed-by">({{analisysStep?.processingModel}})</span></span>
-             <!-- a document of one of the external data sources has been analyzed-->           
+                    analisysStep?.analyzedDocument?.code}}</span>&nbsp;<span *ngIf="analisysStep?.processingModel"
+                    class="deep-search__label_processed-by">({{analisysStep?.processingModel}})</span></span>
+            <!-- a document of one of the external data sources has been analyzed-->
             <span class="deep-search__label" *ngIf="deepSearchDataSourceDocumentResult">
                 <span>
                     {{deepSearchDataSourceDocumentResult.dataSourceDescription}}
@@ -31,7 +38,8 @@
                 <span
                     *ngIf="(!deepSearchDataSourceDocumentResult.analyzedSearchResult?.navigationReference) && deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference">{{deepSearchDataSourceDocumentResult.analyzedSearchResult?.resultReference?.uri}}
                 </span>
-                &nbsp;<span *ngIf="deepSearchDataSourceDocumentResult?.processingModel" class="deep-search__label_processed-by">({{deepSearchDataSourceDocumentResult?.processingModel}})</span>
+                &nbsp;<span *ngIf="deepSearchDataSourceDocumentResult?.processingModel"
+                    class="deep-search__label_processed-by">({{deepSearchDataSourceDocumentResult?.processingModel}})</span>
             </span>
             <!-- deep search notification message-->
             <span class="deep-search__label" *ngIf="deepSearchNotification">
@@ -41,7 +49,8 @@
             <span class="deep-search__label" *ngIf="deepSearchDataSourceResponse">
                 <span id="DeepSearchDataSourceProcessing" gebo-ai-text>Analyzed system search result for</span>&nbsp;
                 <span>{{deepSearchDataSourceResponse.dataSourceDescription}}</span>&nbsp;
-                <span *ngIf="deepSearchDataSourceResponse?.processingModel" class="deep-search__label_processed-by">({{deepSearchDataSourceResponse?.processingModel}})</span>
+                <span *ngIf="deepSearchDataSourceResponse?.processingModel"
+                    class="deep-search__label_processed-by">({{deepSearchDataSourceResponse?.processingModel}})</span>
             </span>
             <!-- deep search entire external source has been analyzed -->
             <span class="deep-search__label" *ngIf="completionPercent===100" id="DeepSearchingConsolidating"
@@ -55,12 +64,12 @@
         </div>
     </div>
 
-   
+
 
     } @else {
-        <div class="deep_search_skeleton_wait" >
-            <p-skeleton styleClass="mb-2" />
-        </div>
+    <div class="deep_search_skeleton_wait">
+        <p-skeleton styleClass="mb-2" />
+    </div>
     }
 </div>
-}  
+}
