@@ -42,6 +42,7 @@ import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.chat.pipelines.service.IRoutingChatPipelineStepService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.model.RespondingWith;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
@@ -251,8 +252,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	
 
 	@Override
-	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel) throws ChatPipelineException {
+	public RoutingDecision execute(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 
 		RoutingDecision rd = null;
 
