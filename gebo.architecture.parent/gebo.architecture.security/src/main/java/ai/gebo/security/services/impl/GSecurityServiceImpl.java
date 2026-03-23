@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclAccessCheck;
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
@@ -234,8 +236,15 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	}
 
 	@Override
-	public boolean isCanDoAction(IAclGrantedResource resource, AclGrantType... grantType) throws SecurityException {
-		if (!securityConfig.isUseAcl())
+	public IAclGrantedAccessor getCurrentAclGrantedAccessor(AclGrantType grantType) throws SecurityException {
+		UserInfos user = getCurrentUser();
+		return aclGrantedAccessorService.fromUser(user, grantType);
+	}
+
+	@Override
+	public boolean isCanDoAction(IAclGrantedResource resource, boolean adminCanDoAll, AclGrantType... grantType)
+			throws SecurityException {
+		if (adminCanDoAll && isCurrentUserAdmin())
 			return true;
 		if (grantType == null || grantType.length == 0l)
 			return false;
@@ -246,6 +255,45 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public ContentAccessPolicy getPlatformContentAccessPolicy() {
+		return securityConfig.isUseAcl() ? ContentAccessPolicy.ACL_BASED : ContentAccessPolicy.GROUP_BASED;
+	}
+
+	@Override
+	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDo(Collection<T> objects,
+			boolean adminCanDoAll, AclGrantType... grantType) {
+		switch (getPlatformContentAccessPolicy()) {
+		case ACL_BASED: {
+			final List<IAclGrantedAccess> accesses = new ArrayList<>();
+			for (AclGrantType grant : grantType) {
+				IAclGrantedAccessor grantsAcc = getCurrentAclGrantedAccessor(grant);
+				accesses.addAll(grantsAcc.getAccesses());
+			}
+			IAclGrantedAccessor jointedAccessor = new IAclGrantedAccessor() {
+
+				@Override
+				public List<IAclGrantedAccess> getAccesses() {
+
+					return accesses;
+				}
+			};
+			List<T> out = objects.stream().filter(object -> {
+				for (AclGrantType grant : grantType) {
+					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
+						return true;
+				}
+				return false;
+			}).toList();
+			return out;
+		}
+
+		default:
+			return filterAccessible(objects, adminCanDoAll);
+		}
+
 	}
 
 }

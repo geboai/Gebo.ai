@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.architecture.persistence.IGMongoSequenceService;
@@ -53,6 +54,13 @@ public class AclAliasesDaoImpl implements IAclAliasesDao {
 	@Override
 	public List<Integer> findAliasesByAclGrantedUniqueId(String aclGrantedUniqueId) {
 		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueId(aclGrantedUniqueId);
+		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
+	}
+
+	@Override
+	public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(String aclGrantedUniqueId,
+			AclGrantType grantType) {
+		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueIdAndGrant(aclGrantedUniqueId, grantType);
 		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
 	}
 }
