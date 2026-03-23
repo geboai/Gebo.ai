@@ -32,11 +32,11 @@ public class GeboSecurityConfig {
 	private final Auth auth = new Auth();
 	@NotNull
 	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_INVITATION;
-	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
-	private Boolean oauth2UISetupEnabled=true;
+	private List<Oauth2RuntimeConfiguration> oauth2configs = new ArrayList<Oauth2RuntimeConfiguration>();
+	private Boolean oauth2UISetupEnabled = true;
 	private Boolean oauth2LoginEnabled = true;
-	private Boolean oauth2ResourceServerEnabled=true;
-
+	private Boolean oauth2ResourceServerEnabled = true;
+	private boolean useContentAcl = false;
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token
