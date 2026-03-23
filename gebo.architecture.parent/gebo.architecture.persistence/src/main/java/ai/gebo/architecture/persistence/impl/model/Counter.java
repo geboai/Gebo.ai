@@ -11,5 +11,5 @@ public class Counter {
 	@Id
 	private String id;
 	private long seq;
-	// getters/setters
+	
 }

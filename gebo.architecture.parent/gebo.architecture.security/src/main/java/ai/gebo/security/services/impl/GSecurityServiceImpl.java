@@ -14,37 +14,39 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclAccessCheck;
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.acl.IAclGrantedAccessor;
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
+import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 
 /**
  * Service implementation for security-related functionalities. AI generated
  * comments
  */
 @Service
+@AllArgsConstructor
 public class GSecurityServiceImpl implements IGSecurityService {
-	@Autowired
-	UserRepository usersRepo;
-	@Autowired
-	UsersGroupRepository groupsRepo;
-
-	/**
-	 * Constructor for GSecurityServiceImpl.
-	 */
-	public GSecurityServiceImpl() {
-
-	}
+	final UserRepository usersRepo;
+	final UsersGroupRepository groupsRepo;
+	final IAclGrantedAccessorService aclGrantedAccessorService;
+	final IAclAliasesDao aclAliasesDao;
+	final GeboSecurityConfig securityConfig;
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -223,6 +225,27 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		if (user != null && user.getUsername().equals(o.getUserCreated()))
 			return;
 		throw new SecurityException("The actual user is not the owner of this object");
+	}
+
+	@Override
+	public IAclGrantedAccessor getCurrentAclGrantedAccessor() throws SecurityException {
+		UserInfos user = getCurrentUser();
+		return aclGrantedAccessorService.fromUser(user);
+	}
+
+	@Override
+	public boolean isCanDoAction(IAclGrantedResource resource, AclGrantType... grantType) throws SecurityException {
+		if (!securityConfig.isUseAcl())
+			return true;
+		if (grantType == null || grantType.length == 0l)
+			return false;
+		for (AclGrantType grant : grantType) {
+			boolean ok = AclAccessCheck.hasAccess(aclAliasesDao, getCurrentAclGrantedAccessor(), resource, grant,
+					!securityConfig.isUseAcl());
+			if (ok)
+				return true;
+		}
+		return false;
 	}
 
 }

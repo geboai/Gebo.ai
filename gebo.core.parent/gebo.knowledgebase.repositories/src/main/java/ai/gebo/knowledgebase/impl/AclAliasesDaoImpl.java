@@ -18,6 +18,7 @@ public class AclAliasesDaoImpl implements IAclAliasesDao {
 	private static final String ACL_ENTRY = "aclEntry";
 	final AclEntryRecordRepository repository;
 	final IGMongoSequenceService mongoSequenceService;
+
 	@Override
 	@Transactional
 	public int addAcl(GAclEntry entry) {
@@ -47,5 +48,11 @@ public class AclAliasesDaoImpl implements IAclAliasesDao {
 	@Transactional
 	public void removeAcl(int alias) {
 		repository.deleteById(alias);
+	}
+
+	@Override
+	public List<Integer> findAliasesByAclGrantedUniqueId(String aclGrantedUniqueId) {
+		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueId(aclGrantedUniqueId);
+		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
 	}
 }

@@ -36,7 +36,7 @@ public class GeboSecurityConfig {
 	private Boolean oauth2UISetupEnabled = true;
 	private Boolean oauth2LoginEnabled = true;
 	private Boolean oauth2ResourceServerEnabled = true;
-	private boolean useContentAcl = false;
+	private boolean useAcl = false;
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token
@@ -130,6 +130,14 @@ public class GeboSecurityConfig {
 
 	public void setOauth2ResourceServerEnabled(Boolean oauth2ResourceServerEnabled) {
 		this.oauth2ResourceServerEnabled = oauth2ResourceServerEnabled;
+	}
+
+	public boolean isUseAcl() {
+		return useAcl;
+	}
+
+	public void setUseAcl(boolean useAcl) {
+		this.useAcl = useAcl;
 	}
 
 }

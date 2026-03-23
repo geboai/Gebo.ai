@@ -13,14 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
@@ -30,29 +33,23 @@ import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGUsersAdminService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments Implementation of the IGUsersAdminService interface to
  * handle user and group management.
  */
 @Service
+@AllArgsConstructor
 public class GUsersAdminServiceImpl implements IGUsersAdminService {
 
-	@Autowired
-	UserRepository userRepo; // Repository for user-related database operations
+	final UserRepository userRepo; // Repository for user-related database operations
 
-	@Autowired
-	UsersGroupRepository groupsRepo; // Repository for groups-related database operations
+	final UsersGroupRepository groupsRepo; // Repository for groups-related database operations
 
-	@Autowired
-	PasswordEncoder passwordEncoder; // Encoder for hashing user passwords
-
-	/**
-	 * Default constructor for GUsersAdminServiceImpl.
-	 */
-	public GUsersAdminServiceImpl() {
-
-	}
+	final PasswordEncoder passwordEncoder; // Encoder for hashing user passwords
+	final AclGrantedAccessorServiceImpl grantedAccessorService;
+	final IAclAliasesDao aclAliasesDao;
 
 	/**
 	 * Inserts a new user into the database after validating uniqueness and
@@ -74,7 +71,15 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 		if (password == null || password.trim().length() == 0)
 			throw new IllegalStateException("Empty password forbidden");
 		u.setPassword(passwordEncoder.encode(password));
-		return new EditableUser(userRepo.insert(u));
+		EditableUser out = new EditableUser(u = userRepo.insert(u));
+		String id = grantedAccessorService.getUniqueId(new UserInfosImpl(u));
+		AclGrantType[] allPossibleGrants = AclGrantType.values();
+		for (int i = 0; i < allPossibleGrants.length; i++) {
+			AclGrantType aclGrantType = allPossibleGrants[i];
+			GAclEntry entry = new GAclEntry(id, aclGrantType);
+			aclAliasesDao.addAcl(entry);
+		}
+		return out;
 	}
 
 	/**
@@ -113,7 +118,15 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	 */
 	@Override
 	public UsersGroup insertGroup(UsersGroup group) {
-		return groupsRepo.insert(group);
+		group = groupsRepo.insert(group);
+		String id = grantedAccessorService.getUniqueId(group);
+		AclGrantType[] allPossibleGrants = AclGrantType.values();
+		for (int i = 0; i < allPossibleGrants.length; i++) {
+			AclGrantType aclGrantType = allPossibleGrants[i];
+			GAclEntry entry = new GAclEntry(id, aclGrantType);
+			aclAliasesDao.addAcl(entry);
+		}
+		return group;
 	}
 
 	/**
@@ -215,17 +228,13 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider) {
 		EditableUser user = this.findUserByUsername(email);
 		if (user == null) {
-			User _user = new User();
-			_user.setUsername(email);
-			_user.setRoles(List.of("USER"));
-			_user.setDisabled(false);
-			_user.setEmailVerified(false);
-			_user.setProvider(authProvider);
-			_user.setPassword("NOPASSWORD");
-			userRepo.insert(_user);
-
+			user = new EditableUser();
+			user.setUsername(email);
+			user.setRoles(List.of("USER"));
+			user.setDisabled(false);
+			user.setAuthProvider(authProvider);
+			this.insertUser(user, UUID.randomUUID().toString());
 		}
-
 	}
 
 }
