@@ -126,6 +126,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	@Scheduled(initialDelay = 10000, fixedRate = 240 * 60000)
 	public void onTick() {
+		if (!config.isEnabled())
+			return;
 		if (runningTuning)
 			return;
 		try {
@@ -144,10 +146,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		}
 	}
 
-	private final static int MAXQUESTIONS = 12;
-
 	@Override
 	public void processAutotune(String vectorStoreId) {
+		final int MAXQUESTIONS = this.config.getAutotuneMaxGeneratedQuestions();
 		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByVectorStoreId(vectorStoreId);
 		ThreasholdAutotuneProcessResult lastEntry = data.isEmpty() ? null : data.get(0);
 		long count = vectorizedContentsRepository.countByIdVectorStoreId(vectorStoreId);

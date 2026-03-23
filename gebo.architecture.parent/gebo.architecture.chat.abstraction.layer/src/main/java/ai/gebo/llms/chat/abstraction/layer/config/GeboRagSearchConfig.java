@@ -26,29 +26,38 @@ import lombok.Data;
 @ConfigurationProperties(value = "ai.gebo.ragsearch.config")
 @Data
 public class GeboRagSearchConfig {
-	@Autowired
-	IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
-
-	@Autowired
-	IGSemanticSearchDocumentsCachedDao semanticSearchDao;
-	@Autowired(required = false)
-	IGFullTextSearchService fullTextSearch;
-	@Autowired(required = false)
-	IKnowledgeGraphSearchService knowledgeGraphSearchService;
-	@Autowired
-	IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-	@Autowired
-	ChatProfilesRepository chatProfilesRepository;
-	@Autowired
-	IGSecurityService securityService;
-	@Autowired
-	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
-	@Autowired
-	GUserChatSessionRepository sessionRepo;
+	private final IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
+	private final IGSemanticSearchDocumentsCachedDao semanticSearchDao;
+	private final IGFullTextSearchService fullTextSearch;
+	private final IKnowledgeGraphSearchService knowledgeGraphSearchService;
+	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	private final ChatProfilesRepository chatProfilesRepository;
+	private final IGSecurityService securityService;
+	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+	private final GUserChatSessionRepository sessionRepo;
 	// Default number of top elements to be considered
 	private int defaultTopK = 15;
 	// Default similarity threshold for comparisons
 	private double defaultSimilarityThreshold = 0.50;
+
+	public GeboRagSearchConfig(@Autowired IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
+			@Autowired IGSemanticSearchDocumentsCachedDao semanticSearchDao,
+			@Autowired(required = false) IGFullTextSearchService fullTextSearch,
+			@Autowired(required = false) IKnowledgeGraphSearchService knowledgeGraphSearchService,
+			@Autowired IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
+			@Autowired ChatProfilesRepository chatProfilesRepository, @Autowired IGSecurityService securityService,
+			@Autowired IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao,
+			@Autowired GUserChatSessionRepository sessionRepo) {
+		this.semanticRagThreasholdAutotuneService = semanticRagThreasholdAutotuneService;
+		this.semanticSearchDao = semanticSearchDao;
+		this.fullTextSearch = fullTextSearch;
+		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
+		this.chatProfilesRepository = chatProfilesRepository;
+		this.securityService = securityService;
+		this.embeddingModelsDao = embeddingModelsDao;
+		this.sessionRepo = sessionRepo;
+		this.knowledgeGraphSearchService = knowledgeGraphSearchService;
+	}
 
 	@ConditionalOnMissingBean(IGDocumentsSearchService.class)
 	@Bean

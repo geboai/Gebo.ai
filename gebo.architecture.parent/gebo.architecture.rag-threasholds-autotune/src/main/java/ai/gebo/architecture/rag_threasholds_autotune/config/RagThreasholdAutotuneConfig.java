@@ -14,11 +14,13 @@ public class RagThreasholdAutotuneConfig {
 	private double documentsCardinalityAddedPercentTrigger = 5.0;
 	private int dayElapsedWithoutTuning = 3;
 	private int sampleFragmentsMinTokenLength = 100;
+	private int autotuneMaxGeneratedQuestions = 12;
+	private boolean enabled = true;
 
 	public RagThreasholdAutotuneConfig() {
-		defaultOptimizedThreashold.setFirstHopOptimizedThreashold(0.7);
-		defaultOptimizedThreashold.setSecondHopOptimizedThreashold(0.7);
-		defaultOptimizedThreashold.setOptimizedThreashold(0.7);
+		defaultOptimizedThreashold.setFirstHopOptimizedThreashold(0.6);
+		defaultOptimizedThreashold.setSecondHopOptimizedThreashold(0.6);
+		defaultOptimizedThreashold.setOptimizedThreashold(0.6);
 	}
 
 }
