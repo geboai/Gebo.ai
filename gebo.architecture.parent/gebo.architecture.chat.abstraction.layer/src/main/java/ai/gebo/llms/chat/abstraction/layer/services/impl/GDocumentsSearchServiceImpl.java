@@ -32,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
@@ -40,9 +41,9 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 
-
-@Service
+@AllArgsConstructor
 public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentsSearchServiceImpl.class);
 
@@ -52,29 +53,26 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		List<String> semanticSearches = new ArrayList<String>();
 		List<String> fullTextSearches = new ArrayList<String>();
 		String userQuery = GeboChatRequest.actualQuery(chatRequest);
-		return this.search(null, semanticSearches, fullTextSearches, userQuery, tokensBudget, tokensBudget);
+		return this.search(chatRequest, semanticSearches, fullTextSearches, userQuery, tokensBudget, tokensBudget);
 	}
 
-	@Autowired
-	IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
-	@Autowired
-	GeboChatConfigs chatConfigs;
-	@Autowired
-	IGSemanticSearchDocumentsCachedDao semanticSearchDao;
-	@Autowired(required = false)
-	IGFullTextSearchService fullTextSearch;
-	@Autowired(required = false)
-	IKnowledgeGraphSearchService knowledgeGraphSearchService;
-	@Autowired
-	IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-	@Autowired
-	ChatProfilesRepository chatProfilesRepository;
-	@Autowired
-	IGSecurityService securityService;
-	@Autowired
-	IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
-	@Autowired
-	GUserChatSessionRepository sessionRepo;
+	final IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
+
+	final GeboRagSearchConfig chatConfigs;
+
+	final IGSemanticSearchDocumentsCachedDao semanticSearchDao;
+
+	final IGFullTextSearchService fullTextSearch;
+	final IKnowledgeGraphSearchService knowledgeGraphSearchService;
+
+	final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+
+	final ChatProfilesRepository chatProfilesRepository;
+	final IGSecurityService securityService;
+
+	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+
+	final GUserChatSessionRepository sessionRepo;
 
 	@Override
 	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, List<String> fullTextSearches,

@@ -36,11 +36,7 @@ public class GeboChatConfigs {
     // List of context window length range settings for different strategies
     private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
     
-    // Default number of top elements to be considered
-    private int defaultTopK = 15;
-    
-    // Default similarity threshold for comparisons
-    private double defaultSimilarityThreshold = 0.50;
+   
     private int leaveLastInteractionsOnHistoryConsolidation = 4;
     private float historicDocumentRelevancyThreashold=0.4f;
 

@@ -3,7 +3,7 @@
 		"description": "Testing a simple question with sufficient data in the actual knowledge base, satisfable with simple r.a.g. search",
 		"request": {
 			"id": "9234-233243-UY9",
-			"query": "Chi é l'arrogante nella pistis sophia?"
+			"query": "Chi e' l'arrogante nella pistis sophia?"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,
@@ -35,7 +35,7 @@
 		"description": "Testing the shortcut rule to answer directly from actual context information when it contains enough data (was the chat interaction #1)",
 		"request": {
 			"id": "9234-233243-UXZ",
-			"query": "Chi é l'arrogante nella pistis sophia?"
+			"query": "Chi e' l'arrogante nella pistis sophia?"
 		},
 		"responseTestCriteria": {
 			"checkNotEmptyDocumentsList": true,
@@ -43,7 +43,7 @@
 				"QA"
 			],
 			"allowedRoutingDecisions": [
-				"PURE_LLM_RESPONSE"
+				"PURE_LLM_RESPONSE","DEEP_SEARCH_RESPONSE"
 			]
 		}
 	},

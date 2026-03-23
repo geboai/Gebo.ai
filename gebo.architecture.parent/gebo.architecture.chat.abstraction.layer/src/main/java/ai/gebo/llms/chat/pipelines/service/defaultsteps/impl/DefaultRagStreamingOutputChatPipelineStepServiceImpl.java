@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
@@ -33,7 +35,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 	private final IGRagChatService ragChatService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatSessionLifeCycleService chatSessionLifeCycleService;
-	private final GeboChatConfigs geboChatConfig;
+	private final IGRuntimeBinder runtimeBinder;
+
 	public static final String DEFAULT_RAG_STEP = "default-rag-step";
 
 	@Override
@@ -54,7 +57,8 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			final int topK = this.geboChatConfig.getDefaultTopK();
+			GeboRagSearchConfig ragConfig = runtimeBinder.getImplementationOf(GeboRagSearchConfig.class);
+			final int topK = ragConfig.getDefaultTopK();
 			Flux<AIDocumentsSet> documentSet = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
 					runtimeData.getMinimalChatContext(), serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK);
