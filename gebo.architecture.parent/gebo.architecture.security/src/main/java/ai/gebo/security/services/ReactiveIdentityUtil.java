@@ -1,15 +1,10 @@
 package ai.gebo.security.services;
 
-import java.util.function.Supplier;
-
-import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import reactor.core.publisher.Flux;
 
 public class ReactiveIdentityUtil {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ReactiveIdentityUtil.class);

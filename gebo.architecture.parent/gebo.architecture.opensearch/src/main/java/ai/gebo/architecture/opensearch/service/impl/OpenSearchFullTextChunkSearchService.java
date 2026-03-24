@@ -37,7 +37,8 @@ public class OpenSearchFullTextChunkSearchService {
 		this.client = client;
 	}
 
-	public List<FullTextChunkSearchHit> searchTopKChunks(List<String> q, int topK, MetaDataFilter filter) throws OpenSearchException, IOException {
+	public List<FullTextChunkSearchHit> searchTopKChunks(List<String> q, int topK, MetaDataFilter filter)
+			throws OpenSearchException, IOException {
 
 		if (q == null || q.isEmpty())
 			return List.of();
@@ -112,10 +113,12 @@ public class OpenSearchFullTextChunkSearchService {
 
 	/**
 	 * Search topK chunks with optional filters.
-	 * @throws IOException 
-	 * @throws OpenSearchException 
+	 * 
+	 * @throws IOException
+	 * @throws OpenSearchException
 	 */
-	public List<FullTextChunkSearchHit> searchTopKChunks(String q, int topK, MetaDataFilter filter) throws OpenSearchException, IOException  {
+	public List<FullTextChunkSearchHit> searchTopKChunks(String q, int topK, MetaDataFilter filter)
+			throws OpenSearchException, IOException {
 		if (q == null || q.trim().isEmpty())
 			return List.of();
 		if (topK <= 0)
@@ -143,7 +146,7 @@ public class OpenSearchFullTextChunkSearchService {
 						// promoted metadata
 						"knowledgebase_code", "project_code", "project_endpoint_code", "content_code", "content_page",
 						"content_extension", "content_type", "content_original_url", "language", "language_confidence",
-						"file_treat_as", "file_name", "file_relative_path", "reference_type", "meta")));
+						"file_treat_as", "file_name", "file_relative_path", "reference_type", "meta", "acl_aliases")));
 
 		// Optional: collapse by document_code to avoid too many chunks from same doc
 		if (filter != null && filter.isCollapseByDocument()) {
@@ -155,7 +158,7 @@ public class OpenSearchFullTextChunkSearchService {
 									"position", "document_code", "document_title", "knowledgebase_code", "project_code",
 									"project_endpoint_code", "content_code", "content_page", "content_extension",
 									"content_type", "language", "file_treat_as", "file_relative_path", "reference_type",
-									"meta")))));
+									"meta", "acl_aliases")))));
 
 			// In collapse mode, "size" = number of docs (i.e., distinct document_code)
 			sb.size(topK);
@@ -200,7 +203,7 @@ public class OpenSearchFullTextChunkSearchService {
 		termIfPresent(filters, "language", f.getLanguage());
 		termIfPresent(filters, "file_treat_as", f.getFileTreatAs());
 		termIfPresent(filters, "reference_type", f.getReferenceType());
-
+		termIfPresent(filters, "acl_aliases", f.getAclAliases());
 		// Prefix filter on file path (keyword field)
 		if (f.getFileRelativePathPrefix() != null && !f.getFileRelativePathPrefix().isBlank()) {
 			String prefix = f.getFileRelativePathPrefix().trim();
@@ -225,6 +228,22 @@ public class OpenSearchFullTextChunkSearchService {
 		// tt.value(userTokensAsJsonData)))));
 
 		return filters;
+	}
+
+	private void termIfPresent(List<Query> filters, String field, List<Integer> aclAliases) {
+		if (aclAliases == null || aclAliases.isEmpty()) {
+			return;
+		}
+
+		List<FieldValue> values = aclAliases.stream().filter(Objects::nonNull).distinct()
+				.map(v -> FieldValue.of(v.longValue())).toList();
+
+		if (values.isEmpty()) {
+			return;
+		}
+
+		filters.add(Query.of(q -> q.terms(t -> t.field(field).terms(tt -> tt.value(values)))));
+
 	}
 
 	private static void termsIfPresent(List<Query> filters, String field, List<String> values) {
@@ -391,7 +410,7 @@ public class OpenSearchFullTextChunkSearchService {
 		// Reference / chunk position
 		putBack(meta, DocumentMetaInfos.GEBO_REFERENCE_TYPE, src.get("reference_type"));
 		putBack(meta, DocumentMetaInfos.GEBO_CHUNK_POSITION, src.get("chunk_position_meta"));
-
+		putBack(meta, DocumentMetaInfos.GEBO_ACL_ALIASES, src.get("acl_aliases"));
 		// If you also stored it top-level (I previously commented it out):
 		// putBack(meta, DocumentMetaInfos.GEBO_EMBEDDING_METADATA,
 		// src.get("embedding_meta"));

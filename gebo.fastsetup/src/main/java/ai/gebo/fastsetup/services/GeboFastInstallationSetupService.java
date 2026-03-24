@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.fastsetup.services;
 
@@ -29,55 +26,62 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.config.GeboAISecurityConfig;
 import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.IGUsersAdminService;
 
 /**
- * GeboFastInstallationSetupService provides services to set up
- * a fast installation, including checking for admin user presence
- * and configuring an admin user.
+ * GeboFastInstallationSetupService provides services to set up a fast
+ * installation, including checking for admin user presence and configuring an
+ * admin user.
  * 
  * AI generated comments
  */
 @Service
 public class GeboFastInstallationSetupService {
 
-    // Services and repositories used for cryptography, user management, licence management, and persistence
+	// Services and repositories used for cryptography, user management, licence
+	// management, and persistence
 	@Autowired
 	IGeboCryptingService cryptService;
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
 	GeboLicenceRepository licenceRepository;
-
+	@Autowired
+	IGUsersAdminService userAdminService;
 	@Autowired
 	IGPersistentObjectManager persistenceManager;
 	@Autowired
 	IGChatProfileManagementService chatProfileManagementService;
 
-    /**
-     * Constructor for GeboFastInstallationSetupService.
-     */
+	/**
+	 * Constructor for GeboFastInstallationSetupService.
+	 */
 	public GeboFastInstallationSetupService() {
 
 	}
 
-    /**
-     * Checks the presence of an administrator user in the system.
-     * 
-     * @return an OperationStatus containing a Boolean to indicate if an admin user is present.
-     */
+	/**
+	 * Checks the presence of an administrator user in the system.
+	 * 
+	 * @return an OperationStatus containing a Boolean to indicate if an admin user
+	 *         is present.
+	 */
 	public OperationStatus<Boolean> getInstallationStatus() {
 		OperationStatus<Boolean> admin = checkAdminUserPresence();
 		return admin;
 	}
 
-    /**
-     * Creates a setup with the provided installation data. If admin exists, returns the status; otherwise, configures a new admin user.
-     * 
-     * @param data The FastInstallationSetupData containing setup information.
-     * @return an OperationStatus indicating the success or failure of the setup creation.
-     */
+	/**
+	 * Creates a setup with the provided installation data. If admin exists, returns
+	 * the status; otherwise, configures a new admin user.
+	 * 
+	 * @param data The FastInstallationSetupData containing setup information.
+	 * @return an OperationStatus indicating the success or failure of the setup
+	 *         creation.
+	 */
 	public OperationStatus<Boolean> createSetup(FastInstallationSetupData data) {
 		OperationStatus<Boolean> status = getInstallationStatus();
 		if (status.getResult())
@@ -90,34 +94,33 @@ public class GeboFastInstallationSetupService {
 		}
 	}
 
-    /**
-     * Configures the admin user by creating a new user with administrative privileges and saving the user and licence information.
-     * 
-     * @param data The FastInstallationSetupData containing user credentials and licence information.
-     * @return an OperationStatus indicating the success or failure of the admin user configuration.
-     */
+	/**
+	 * Configures the admin user by creating a new user with administrative
+	 * privileges and saving the user and licence information.
+	 * 
+	 * @param data The FastInstallationSetupData containing user credentials and
+	 *             licence information.
+	 * @return an OperationStatus indicating the success or failure of the admin
+	 *         user configuration.
+	 */
 	private OperationStatus<Boolean> configureAdminUser(FastInstallationSetupData data) {
 		OperationStatus<Boolean> status = OperationStatus.of(false);
 		status.getMessages().clear();
 		try {
-			User user = new User();
+			EditableUser user = new EditableUser();
+			user.setAuthProvider(AuthProvider.local);
 			user.setUsername(data.getUsername().toLowerCase());
-			// Encrypting the user's password
-			user.setPassword(cryptService.crypt(data.getPassword()));
-			user.setEmailVerified(true);
-			user.setProvider(AuthProvider.local);
 			user.setRoles(List.of(GeboAISecurityConfig.ADMIN_ROLE, GeboAISecurityConfig.USER_ROLE));
-			userRepository.insert(user);
-			
+			userAdminService.insertUser(user, data.getPassword());
 			GeboLicence geboLicence = new GeboLicence();
 			// Encrypting the licence agreement
 			geboLicence.setAgreedLicence(cryptService.crypt(data.getLicenceAgreement()));
-			geboLicence.setLicenceType(GeboLicenceType.LIMITED_TRIAL);
+			geboLicence.setLicenceType(GeboLicenceType.COMMON);
 			geboLicence.setCode("SignedLicence");
 			// Encrypting the username for the licence
 			geboLicence.setSignerUser(cryptService.crypt(user.getUsername()));
 			licenceRepository.save(geboLicence);
-			
+
 			status = OperationStatus.of(true);
 			status.getMessages().clear();
 			status.getMessages().add(GUserMessage.successMessage("Admin user created !",
@@ -131,11 +134,12 @@ public class GeboFastInstallationSetupService {
 		return status;
 	}
 
-    /**
-     * Checks if an administrator user is present in the user repository.
-     * 
-     * @return an OperationStatus indicating whether an admin user is present or not.
-     */
+	/**
+	 * Checks if an administrator user is present in the user repository.
+	 * 
+	 * @return an OperationStatus indicating whether an admin user is present or
+	 *         not.
+	 */
 	private OperationStatus<Boolean> checkAdminUserPresence() {
 		OperationStatus<Boolean> value = null;
 		if (userRepository.findByRoles(GeboAISecurityConfig.ADMIN_ROLE).isEmpty()) {

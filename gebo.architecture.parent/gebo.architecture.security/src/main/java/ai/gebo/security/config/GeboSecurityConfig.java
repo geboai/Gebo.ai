@@ -32,11 +32,11 @@ public class GeboSecurityConfig {
 	private final Auth auth = new Auth();
 	@NotNull
 	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_INVITATION;
-	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
-	private Boolean oauth2UISetupEnabled=true;
+	private List<Oauth2RuntimeConfiguration> oauth2configs = new ArrayList<Oauth2RuntimeConfiguration>();
+	private Boolean oauth2UISetupEnabled = true;
 	private Boolean oauth2LoginEnabled = true;
-	private Boolean oauth2ResourceServerEnabled=true;
-
+	private Boolean oauth2ResourceServerEnabled = true;
+	private boolean useAcl = false;
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token
@@ -130,6 +130,14 @@ public class GeboSecurityConfig {
 
 	public void setOauth2ResourceServerEnabled(Boolean oauth2ResourceServerEnabled) {
 		this.oauth2ResourceServerEnabled = oauth2ResourceServerEnabled;
+	}
+
+	public boolean isUseAcl() {
+		return useAcl;
+	}
+
+	public void setUseAcl(boolean useAcl) {
+		this.useAcl = useAcl;
 	}
 
 }

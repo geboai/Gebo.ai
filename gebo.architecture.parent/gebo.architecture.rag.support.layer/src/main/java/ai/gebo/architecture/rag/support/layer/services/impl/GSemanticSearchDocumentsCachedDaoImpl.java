@@ -13,16 +13,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.SearchRequest.Builder;
+import org.springframework.ai.vectorstore.filter.Filter;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder.Op;
+import org.springframework.ai.vectorstore.filter.FilterExpressionTextParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
@@ -42,6 +48,8 @@ import ai.gebo.llms.abstraction.layer.services.IGVectorSearchRestrictingFilterEx
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.IAclGrantedAccessorService;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import jakarta.el.MethodNotFoundException;
@@ -79,12 +87,15 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	@Autowired
 	AIDocumentsCacheService cacheService;
 
-	
 	@Autowired
 	SimilaritySearchService searchService;
 
 	@Autowired(required = false)
 	List<IGVectorSearchRestrictingFilterExpressionFactory> vectorSearchRestrictingFactories;
+	@Autowired
+	IAclGrantedAccessorService accessorService;
+	@Autowired
+	IGSecurityService securityService;
 
 	public GSemanticSearchDocumentsCachedDaoImpl() {
 
@@ -134,24 +145,70 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param filter  The filter expression.
 	 * @return The created SearchRequest.
 	 */
-	private SearchRequest createSimilarityQuery(RagQueryOptions options, String query, String filter) {
-		Builder builder = SearchRequest.builder();
-		builder.filterExpression(filter);
-		builder.query(query);
+	private static final String ACL_ALIASES_METADATA_FIELD = "aclAliases";
+
+	private SearchRequest createSimilarityQuery(RagQueryOptions options, String query, String filter,
+			List<Integer> aclAliases) {
+
+		SearchRequest.Builder builder = SearchRequest.builder().query(query);
+
 		if (options.getTopK() > 0) {
 			builder.topK(options.getTopK());
 		}
+
 		if (options.getSimilarityThreashold() > 0.0) {
 			builder.similarityThreshold(options.getSimilarityThreashold());
 		}
-		SearchRequest searchRequest = builder.build();
-		return searchRequest;
+		boolean filterWithAcl = !securityService.isCurrentUserAdmin()
+				&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		Filter.Expression combinedFilter = buildCombinedFilterExpression(filter, filterWithAcl ? aclAliases : null);
+		if (combinedFilter != null) {
+			builder.filterExpression(combinedFilter);
+		}
+
+		return builder.build();
+	}
+
+	private Filter.Expression buildCombinedFilterExpression(String filter, List<Integer> aclAliases) {
+		Filter.Expression baseExpression = null;
+		if (filter != null && !filter.isBlank()) {
+			baseExpression = new FilterExpressionTextParser().parse(filter);
+		}
+
+		Filter.Expression aclExpression = buildAclOverlapExpression(aclAliases);
+
+		if (baseExpression == null) {
+			return aclExpression;
+		}
+		if (aclExpression == null) {
+			return baseExpression;
+		}
+
+		FilterExpressionBuilder b = new FilterExpressionBuilder();
+		Op exp1 = new FilterExpressionBuilder.Op(baseExpression);
+		Op exp2 = new FilterExpressionBuilder.Op(aclExpression);
+		return b.and(exp1, exp2).build();
+	}
+
+	private Filter.Expression buildAclOverlapExpression(List<Integer> aclAliases) {
+		if (aclAliases == null || aclAliases.isEmpty()) {
+			return null;
+		}
+
+		FilterExpressionBuilder b = new FilterExpressionBuilder();
+
+		Filter.Expression expr = null;
+		for (Integer alias : aclAliases.stream().filter(Objects::nonNull).distinct().toList()) {
+			Filter.Expression single = b.eq(ACL_ALIASES_METADATA_FIELD, alias.longValue()).build();
+			Op singleOp = new Op(single);
+			expr = (expr == null) ? single : b.or(new Op(expr), singleOp).build();
+		}
+		return expr;
 	}
 
 	@Override
-	public AIDocumentsSet chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
-			UserInfos user) {
+	public AIDocumentsSet chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions, List<String> codes,
+			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
 			return new AIDocumentsSet();
 		if (ragQueryOptions.getMaxTokens() > 0) {
@@ -170,8 +227,7 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param user
 	 * @return The result containing full document contents.
 	 */
-	private AIDocumentsSet loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases,
-			UserInfos user) {
+	private AIDocumentsSet loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases, UserInfos user) {
 		try {
 			AIDocumentsSet result = new AIDocumentsSet();
 			final Map<String, GObjectRef<GProjectEndpoint>> endpointsCache = new HashMap<String, GObjectRef<GProjectEndpoint>>();
@@ -212,12 +268,12 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	}
 
 	@Override
-	public AIDocumentsSet semanticSearchOnDocumentsList(String query, RagQueryOptions options,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
-			UserInfos user) {
+	public AIDocumentsSet semanticSearchOnDocumentsList(String query, RagQueryOptions options, List<String> codes,
+			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
 			return new AIDocumentsSet();
 		String condition = filteringConditions(query, user, knowledgeBases, codes);
+		List<Integer> aclAliases = accessorService.fromUser(user).getAllOwnedAclAliases();
 		SearchRequest searchRequest = null;
 		switch (options.getCompleteness()) {
 		case FULL_DOCUMENTS: {
@@ -227,7 +283,7 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 				return loadDocumentsWithTokenBudget(query, options, codes, knowledgeBases, embeddingModel, user);
 		}
 		default: {
-			searchRequest = createSimilarityQuery(options, query, condition);
+			searchRequest = createSimilarityQuery(options, query, condition, aclAliases);
 		}
 		}
 		AIDocumentsSet result = searchService.executeSearch(searchRequest, embeddingModel);
@@ -270,17 +326,18 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	}
 
 	@Override
-	public AIDocumentsSet semanticSearch(String query, RagQueryOptions options,
-			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
+	public AIDocumentsSet semanticSearch(String query, RagQueryOptions options, List<String> knowledgeBases,
+			IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin semanticSearch({" + query.length() + " chars}, " + options + ", " + knowledgeBases
 					+ ",...)");
 		}
 		if (knowledgeBases == null || knowledgeBases.isEmpty())
 			return new AIDocumentsSet();
+		List<Integer> aclAliases = accessorService.fromUser(user).getAllOwnedAclAliases();
 		String condition = filteringConditions(query, user, knowledgeBases, null);
 		SearchRequest searchRequest = null;
-		searchRequest = createSimilarityQuery(options, query, condition);
+		searchRequest = createSimilarityQuery(options, query, condition, aclAliases);
 		CompletenessLevel completeness = options.getCompleteness();
 		if (completeness == null) {
 			completeness = CompletenessLevel.STRICT_QUERY_RELATED;
@@ -332,9 +389,8 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param embeddingModel The embedding model to use.
 	 * @return The adjusted result that fits within the token budget.
 	 */
-	private AIDocumentsSet decreaseSemanticSearchResultWithBudget(String query,
-			AIDocumentsSet result, RagQueryOptions options, List<String> knowledgeBases,
-			IGConfigurableEmbeddingModel<?> embeddingModel) {
+	private AIDocumentsSet decreaseSemanticSearchResultWithBudget(String query, AIDocumentsSet result,
+			RagQueryOptions options, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
 		result.recalculateSize();
 		boolean continueRemoving = result.getTokensSize() > options.getMaxTokens();
 		for (int i = result.getDocumentItems().size() - 1; continueRemoving && i >= 0; i--) {
@@ -362,9 +418,9 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param user
 	 * @return The result containing tokens that fit within the budget.
 	 */
-	private AIDocumentsSet loadDocumentsWithTokenBudget(String query, RagQueryOptions options,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
-			UserInfos user) {
+	private AIDocumentsSet loadDocumentsWithTokenBudget(String query, RagQueryOptions options, List<String> codes,
+			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
+
 		AIDocumentsSet result = loadDocumentsFullContents(codes, knowledgeBases, user);
 
 		// if token budget is set and loaded documents are too heavy
@@ -378,10 +434,10 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 			RagQueryOptions restrictOptions = new RagQueryOptions(options);
 			restrictOptions.setSimilarityThreashold(0.5);
 			restrictOptions.setTopK(4 * codes.size());
+			List<Integer> aclAliases = accessorService.fromUser(user).getAllOwnedAclAliases();
 			// Running a search on the documents base
-			searchRequest = createSimilarityQuery(restrictOptions, query, condition);
-			final AIDocumentsSet partializedResults = searchService.executeSearch(searchRequest,
-					embeddingModel);
+			searchRequest = createSimilarityQuery(restrictOptions, query, condition, aclAliases);
+			final AIDocumentsSet partializedResults = searchService.executeSearch(searchRequest, embeddingModel);
 			// Ordering by token weight in results which is the most significant document
 			// if this ordering fails at least document fragments will be organized with
 			// most relevant document's fragment on top so it is pretty coherent
@@ -439,8 +495,7 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 			options.setSimilarityThreashold(firstSearchThreshold);
 		}
 		// First hop: retrieve fragments most similar to the initial query
-		AIDocumentsSet result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel,
-				user);
+		AIDocumentsSet result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel, user);
 
 		// If there are tokens remaining, use the retrieved content as a basis for a
 		// second query
@@ -458,8 +513,8 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 							secondHopOptions.setSimilarityThreashold(otherSearchThreshold);
 						}
 						secondHopOptions.setMaxTokens(remainingTokens);
-						AIDocumentsSet secondHop = semanticSearch(refinedQuery, secondHopOptions,
-								knowledgeBases, embeddingModel, user);
+						AIDocumentsSet secondHop = semanticSearch(refinedQuery, secondHopOptions, knowledgeBases,
+								embeddingModel, user);
 						result = mergeResults(result, secondHop, options.getMaxTokens());
 						long tokensTotal = result.getTokensSize();
 						remainingTokens = options.getMaxTokens() - tokensTotal;
@@ -506,8 +561,7 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param maxTokens The maximum allowable number of tokens.
 	 * @return The merged result.
 	 */
-	private AIDocumentsSet mergeResults(AIDocumentsSet r1, AIDocumentsSet r2,
-			long maxTokens) {
+	private AIDocumentsSet mergeResults(AIDocumentsSet r1, AIDocumentsSet r2, long maxTokens) {
 		AIDocumentsSet merged = new AIDocumentsSet();
 		Map<String, AIDocumentReferenceItem> map = new HashMap<>();
 		for (AIDocumentReferenceItem item : r1.getDocumentItems()) {
@@ -549,8 +603,8 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 	 * @param result    The result object into which merging is done.
 	 * @param maxTokens The maximum allowable number of tokens.
 	 */
-	private void tryMerge(AIDocumentReferenceItem alreadyIn, AIDocumentReferenceItem item,
-			AIDocumentsSet result, long maxTokens) {
+	private void tryMerge(AIDocumentReferenceItem alreadyIn, AIDocumentReferenceItem item, AIDocumentsSet result,
+			long maxTokens) {
 		Map<String, AIDocumentFragment> fragmentsMap = new HashMap<>();
 		for (AIDocumentFragment frag : alreadyIn.getFragments()) {
 			fragmentsMap.put(frag.toAIDocument().getId(), frag);

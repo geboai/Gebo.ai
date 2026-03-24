@@ -12,6 +12,10 @@ package ai.gebo.security.services;
 import java.util.Collection;
 import java.util.List;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
+import ai.gebo.acl.IAclGrantedAccessor;
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
@@ -63,6 +67,23 @@ public interface IGSecurityService {
 	 */
 	public boolean isCanAccess(IGObjectWithSecurity object, boolean adminCanDoAll);
 
+	public default <T extends IGObjectWithSecurity & IAclGrantedResource> boolean isCanDo(T object,
+			boolean adminCanDoAll, AclGrantType... grantType) {
+		switch (getPlatformContentAccessPolicy()) {
+		case ACL_BASED: {
+			return isCanDoAction(object, adminCanDoAll, grantType);
+		}
+		default:
+			return isCanAccess(object, adminCanDoAll);
+		}
+	}
+
+	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDoAction(Collection<T> objects,
+			boolean adminCanDoAll, AclGrantType... grantType);
+
+	public <T extends IAclGrantedResource> List<T> filterAclCanDoAction(Collection<T> objects, boolean adminCanDoAll,
+			AclGrantType... grantType);
+
 	/**
 	 * Filters a collection of objects to include only those accessible by the
 	 * current user.
@@ -82,4 +103,13 @@ public interface IGSecurityService {
 	 * @throws SecurityException
 	 */
 	public void checkBeingCreator(GBaseObject o) throws SecurityException;
+
+	public IAclGrantedAccessor getCurrentAclGrantedAccessor() throws SecurityException;
+
+	public IAclGrantedAccessor getCurrentAclGrantedAccessor(AclGrantType grantType) throws SecurityException;
+
+	public boolean isCanDoAction(IAclGrantedResource resource, boolean adminCanDoAll, AclGrantType... grantType)
+			throws SecurityException;
+
+	public ContentAccessPolicy getPlatformContentAccessPolicy();
 }

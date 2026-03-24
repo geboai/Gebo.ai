@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
@@ -28,7 +29,7 @@ import lombok.Data;
 public class GeboRagSearchConfig {
 	private final IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
 	private final IGSemanticSearchDocumentsCachedDao semanticSearchDao;
-	private final IGFullTextSearchService fullTextSearch;
+	private final IGFullTextSearchDocumentsCachedDao fullTextSearch;
 	private final IKnowledgeGraphSearchService knowledgeGraphSearchService;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final ChatProfilesRepository chatProfilesRepository;
@@ -42,7 +43,7 @@ public class GeboRagSearchConfig {
 
 	public GeboRagSearchConfig(@Autowired IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
 			@Autowired IGSemanticSearchDocumentsCachedDao semanticSearchDao,
-			@Autowired(required = false) IGFullTextSearchService fullTextSearch,
+			@Autowired(required = false) IGFullTextSearchDocumentsCachedDao fullTextSearch,
 			@Autowired(required = false) IKnowledgeGraphSearchService knowledgeGraphSearchService,
 			@Autowired IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			@Autowired ChatProfilesRepository chatProfilesRepository, @Autowired IGSecurityService securityService,
