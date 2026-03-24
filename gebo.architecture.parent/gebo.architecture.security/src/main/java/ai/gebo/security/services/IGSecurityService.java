@@ -78,8 +78,11 @@ public interface IGSecurityService {
 		}
 	}
 
-	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDo(Collection<T> objects,
+	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDoAction(Collection<T> objects,
 			boolean adminCanDoAll, AclGrantType... grantType);
+
+	public <T extends IAclGrantedResource> List<T> filterAclCanDoAction(Collection<T> objects, boolean adminCanDoAll,
+			AclGrantType... grantType);
 
 	/**
 	 * Filters a collection of objects to include only those accessible by the

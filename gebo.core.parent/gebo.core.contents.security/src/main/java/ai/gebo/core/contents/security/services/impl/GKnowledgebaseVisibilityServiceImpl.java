@@ -10,39 +10,48 @@
 package ai.gebo.core.contents.security.services.impl;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.IAclGrantedAccessor;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.projects.GProject;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
+import ai.gebo.knowledgebase.repositories.ProjectRepository;
+import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
 /**
  * Service implementation for managing the visibility of knowledge bases. AI
  * generated comments
  */
 @Service
+@AllArgsConstructor
 public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisibilityService {
 
 	// Repository for accessing knowledge base data
-	@Autowired
-	KnowledgeBaseRepository kbRepository;
-
+	final KnowledgeBaseRepository kbRepository;
 	// Security service for managing access control
-	@Autowired
-	IGSecurityService securityService;
+	final IGSecurityService securityService;
 
-	/**
-	 * Default constructor.
-	 */
-	public GKnowledgebaseVisibilityServiceImpl() {
+	final ProjectRepository pjRepository;
 
-	}
+	final IGPersistentObjectManager persistentObjectManager;
+	final VirtualFolderRepository virtualFoldersRepository;
+	final DocumentReferenceRepository documentsRepository;
 
 	/**
 	 * Retrieves all knowledge bases that are visible to the current user.
@@ -51,7 +60,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	 */
 	@Override
 	public List<GKnowledgeBase> allVisibleKnowledgebases() {
-		return securityService.filterAccessible(kbRepository.findAll(), true);
+		return securityService.filterCanDoAction(kbRepository.findAll(), true, AclGrantType.READ);
 	}
 
 	/**
@@ -64,7 +73,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GKnowledgeBase> visiblesAndChildKnowledgebases(List<String> rootkbCodes) {
 		List<GKnowledgeBase> list = kbRepository.findByKnowledgeBaseCodesAndChildKnowledgeBases(rootkbCodes);
-		return securityService.filterAccessible(list, true);
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
 	}
 
 	/**
@@ -88,7 +97,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GKnowledgeBase> visiblesRootKnowledgebases(List<String> rootkbCodes) {
 		List<GKnowledgeBase> list = kbRepository.findByCodeInAndParentKnowledgebaseCodeIsNull(rootkbCodes);
-		return securityService.filterAccessible(list, true);
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
 	}
 
 	/**
@@ -99,13 +108,99 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GKnowledgeBase> allVisibleRootKnowledgebases() {
 		List<GKnowledgeBase> list = kbRepository.findByParentKnowledgebaseCodeIsNull();
-		return securityService.filterAccessible(list, true);
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
 	}
 
 	@Override
 	public List<GKnowledgeBase> getVisibleKnowledgeBaseByCodes(@NotNull @NotEmpty List<String> codes) {
 		List<GKnowledgeBase> list = kbRepository.findAllById(codes);
-		return securityService.filterAccessible(list, true);
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
+	}
+
+	@Override
+	public List<GProject> getVisibleProjectsByKnowledgeBaseCode(@NotNull @NotEmpty String kbCode) {
+		Stream<GProject> stream = pjRepository.findByRootKnowledgeBaseCode(kbCode);
+		List<GProject> list = stream.toList();
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
+	}
+
+	@Override
+	public List<GProject> getVisibleProjectsByParentProjectCode(@NotNull @NotEmpty String pjCode) {
+		Stream<GProject> stream = pjRepository.findByParentProjectCode(pjCode);
+		List<GProject> list = stream.toList();
+		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
+	}
+
+	@Override
+	public List<GProjectEndpoint> getVisibleProjectsEndpointByParentProjectCode(@NotNull @NotEmpty String pjCode) {
+		try {
+			List<GProjectEndpoint> endpoints = persistentObjectManager
+					.findAllByQbeSettingFunction(GProjectEndpoint.class, (endpoint) -> {
+						endpoint.setParentProjectCode(pjCode);
+					});
+			return securityService.filterAclCanDoAction(endpoints, true, AclGrantType.READ);
+		} catch (GeboPersistenceException e) {
+			throw new RuntimeException("Exception accessing all endpoints child of: " + pjCode, e);
+		} finally {
+		}
+
+	}
+
+	@Override
+	public List<GVirtualFolder> getVisibleProjectEndpointRootsByParentEndpoint(String code, String className) {
+		switch (securityService.getPlatformContentAccessPolicy()) {
+		case ACL_BASED: {
+			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
+			return virtualFoldersRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNullAndAclAliasesIn(
+							className, code, aclInfos.getAllOwnedAclAliases())
+					.toList();
+		}
+
+		case GROUP_BASED:
+		default: {
+			return virtualFoldersRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
+							className, code)
+					.toList();
+		}
+
+		}
+
+	}
+
+	@Override
+	public List<GVirtualFolder> getVisibleChildVirtualFolders(String parentVirtualFolderCode) {
+		switch (securityService.getPlatformContentAccessPolicy()) {
+		case ACL_BASED: {
+			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
+			return virtualFoldersRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
+					aclInfos.getAllOwnedAclAliases()).toList();
+		}
+
+		case GROUP_BASED:
+		default: {
+			return virtualFoldersRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
+		}
+
+		}
+	}
+
+	@Override
+	public List<GDocumentReference> getVisibleChildDocuments(String parentVirtualFolderCode) {
+		switch (securityService.getPlatformContentAccessPolicy()) {
+		case ACL_BASED: {
+			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
+			return documentsRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
+					aclInfos.getAllOwnedAclAliases()).toList();
+		}
+
+		case GROUP_BASED:
+		default: {
+			return documentsRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
+		}
+
+		}
 	}
 
 }

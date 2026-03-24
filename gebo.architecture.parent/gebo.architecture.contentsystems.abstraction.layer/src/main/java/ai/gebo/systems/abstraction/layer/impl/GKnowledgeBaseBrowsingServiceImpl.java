@@ -44,12 +44,14 @@ import ai.gebo.systems.abstraction.layer.model.KnowledgeBaseBrowsingServiceSelec
 import ai.gebo.systems.abstraction.layer.model.KnowledgeBaseContext;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
 /**
  * Service implementation for browsing knowledge bases within a virtual
  * filesystem context. AI generated comments
  */
 @Service
+@AllArgsConstructor
 public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsingService {
 	public static final String PROJECT = "project";
 	public static final String KNOWLEDGEBASE = "knowledgebase";
