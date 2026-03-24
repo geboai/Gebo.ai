@@ -150,9 +150,18 @@ public class OpenSearchFullTextChunkIndexService {
 
 		putStringFromMeta(doc, "reference_type", m, DocumentMetaInfos.GEBO_REFERENCE_TYPE);
 		putIntegerFromMeta(doc, "chunk_position_meta", m, DocumentMetaInfos.GEBO_CHUNK_POSITION);
-
+		putListIntegerFromMeta(doc, "acl_aliases", m, DocumentMetaInfos.GEBO_ACL_ALIASES);
 		doc.put("meta", m);
 		return doc;
+	}
+
+	private void putListIntegerFromMeta(Map<String, Object> doc, String fieldName, Map<String, Object> m,
+			String mapEntryCode) {
+		if (m.containsKey(mapEntryCode) && m.get(mapEntryCode) instanceof List list && !list.isEmpty()
+				&& list.get(0) instanceof Number) {
+			doc.put(fieldName, list);
+		}
+
 	}
 
 	public void deleteByDocuments(List<FullTextDocument> documents) throws OpenSearchException, IOException {
@@ -189,7 +198,8 @@ public class OpenSearchFullTextChunkIndexService {
 			DeleteByQueryResponse resp = client.deleteByQuery(req);
 			long deleted = resp.deleted() != null ? resp.deleted() : 0L;
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("OpenSearch deleteByDocuments deleted ~{} chunks for document codes {}-{} of {} (index={})",
+				LOGGER.debug(
+						"OpenSearch deleteByDocuments deleted ~{} chunks for document codes {}-{} of {} (index={})",
 						deleted, from, to, total, indexName);
 			}
 

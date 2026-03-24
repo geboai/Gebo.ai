@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
 import ai.gebo.architecture.fulltext.model.MetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
@@ -22,6 +24,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
@@ -57,21 +60,14 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	}
 
 	final IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
-
 	final GeboRagSearchConfig chatConfigs;
-
 	final IGSemanticSearchDocumentsCachedDao semanticSearchDao;
-
-	final IGFullTextSearchService fullTextSearch;
+	final IGFullTextSearchDocumentsCachedDao fullTextSearch;
 	final IKnowledgeGraphSearchService knowledgeGraphSearchService;
-
 	final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-
 	final ChatProfilesRepository chatProfilesRepository;
 	final IGSecurityService securityService;
-
 	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
-
 	final GUserChatSessionRepository sessionRepo;
 
 	@Override
@@ -92,6 +88,11 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			chatProfileCode = session.getChatProfileCode();
 		}
 		List<String> knowledgeBases = new ArrayList<String>();
+		List<Integer> aclAliases = null;
+		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+				&& !securityService.isCurrentUserAdmin()) {
+			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+		}
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
 		double firstHopThreashold = chatConfigs.getDefaultSimilarityThreshold();
 		double secondHopThreashold = chatConfigs.getDefaultSimilarityThreshold();
@@ -213,10 +214,13 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			}
 			if (fullTextSearch != null && !endSearch && !fullTextSearchedQuery.isEmpty()) {
 				MetaDataFilter metaDataFilter = new MetaDataFilter();
-				List<FullTextChunkSearchHit> fullTextResult = fullTextSearch.search(fullTextSearchedQuery,
+				metaDataFilter.setKnowledgebaseCodes(knowledgeBases);
+				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
+						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+				metaDataFilter.setAclAliases(filterWithAcl ? aclAliases : null);
+				AIDocumentsSet fullTextDocSet = fullTextSearch.search(fullTextSearchedQuery,
 						globalTopK - out.countFragments(), metaDataFilter);
-				if (fullTextResult != null && !fullTextResult.isEmpty()) {
-					AIDocumentsSet fullTextDocSet = toAIDocumentsSet(fullTextResult);
+				if (fullTextDocSet != null) {
 					out = AIDocumentsSet.join(fullTextDocSet, out);
 				}
 				endSearch = out.countFragments() >= globalTopK || out.getTokensSize() >= tokensBudget;

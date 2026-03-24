@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -90,6 +92,10 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	 */
 	private Map<String, Object> manageMetaInfo(GDocumentReference reference) {
 		Map<String, Object> meta = new HashMap<String, Object>();
+		if (reference.getCustomMetaInfos() != null) {
+			meta.putAll(sanityzeMap(reference.getCustomMetaInfos()));
+		}
+
 		if (reference.getCode() != null) {
 			meta.put(DocumentMetaInfos.CONTENT_CODE, reference.getCode());
 		}
@@ -131,8 +137,25 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 				meta.put(DocumentMetaInfos.GEBO_ARCHIVE_INTERNALPATH, reference.getArchiveInternalPath());
 			}
 		}
+		if (reference.getAclAliases() != null) {
+			meta.put(DocumentMetaInfos.GEBO_ACL_ALIASES, reference.getAclAliases());
+		}
 		return meta;
 
+	}
+
+	private Map<? extends String, ? extends Object> sanityzeMap(Map<String, Object> customMetaInfos) {
+		Map<String, Object> out = new HashMap<>();
+		if (customMetaInfos != null) {
+			for (Entry<String, Object> entry : customMetaInfos.entrySet()) {
+				if (entry.getValue() != null) {
+					if (entry.getValue() instanceof Number || entry.getValue() instanceof String) {
+						out.put(entry.getKey(), entry.getValue());
+					}
+				}
+			}
+		}
+		return out;
 	}
 
 	/**
@@ -169,7 +192,7 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 			try {
 				languageDetector.addLanguageMetaData(x);
 			} catch (IOException e) {
-				
+
 			}
 			return x;
 		});
