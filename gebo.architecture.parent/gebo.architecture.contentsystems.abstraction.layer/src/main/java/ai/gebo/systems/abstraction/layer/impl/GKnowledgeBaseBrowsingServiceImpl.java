@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -60,24 +61,8 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 	private static final String ENDPOINT_PREFIX = "endpoint:";
 	private static final String VIRTUAL_FOLDER_PREFIX = "vfolder:";
 	private static final String DOCUMENT_PREFIX = "document:";
-
-	// Repositories and managers for accessing data layer
-	@Autowired
-	ProjectRepository projectRepository;
-	@Autowired
-	IGPersistentObjectManager persistenceManager;
-	@Autowired
-	VirtualFolderRepository vFolderRepository;
-	@Autowired
-	DocumentReferenceRepository docReferences;
-
-	/**
-	 * Default constructor.
-	 */
-	public GKnowledgeBaseBrowsingServiceImpl() {
-
-	}
-
+	final IGKnowledgebaseVisibilityService visibilityService;
+	final IGPersistentObjectManager persistenceManager;
 	/**
 	 * Converts a knowledge base to a virtual filesystem root.
 	 */
@@ -152,7 +137,8 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 	 * @return OperationStatus containing a list of path information.
 	 */
 	private OperationStatus<List<PathInfo>> browseKnowledgeBase(String kbCode) {
-		return OperationStatus.of(projectRepository.findByRootKnowledgeBaseCode(kbCode).map(x -> {
+		List<GProject> visibles = visibilityService.getVisibleProjectsByKnowledgeBaseCode(kbCode);
+		return OperationStatus.of(visibles.stream().map(x -> {
 			PathInfo pinfo = new PathInfo();
 			pinfo.absolutePath = PROJECT_PREFIX + x.getCode();
 			pinfo.name = x.getDescription();
@@ -195,23 +181,18 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 	 *                                            operation.
 	 */
 	private OperationStatus<List<PathInfo>> browseProject(String pjCode) throws VirtualFilesystemBrowsingException {
-		try {
-			Stream<GProject> pjstream = projectRepository.findByParentProjectCode(pjCode);
-			List<PathInfo> subProjects = pjstream.map(project2path).toList();
-			List<GProjectEndpoint> endpoints;
 
-			endpoints = persistenceManager.findAllByQbeSettingFunction(GProjectEndpoint.class, (x) -> {
-				x.setParentProjectCode(pjCode);
-			});
+		List<GProject> visiblepjs = visibilityService.getVisibleProjectsByParentProjectCode(pjCode);
+		List<GProjectEndpoint> endpoints = visibilityService.getVisibleProjectsEndpointByParentProjectCode(pjCode);
+		Stream<GProject> pjstream = visiblepjs.stream();
+		List<PathInfo> subProjects = pjstream.map(project2path).toList();
 
-			List<PathInfo> subEndpoints = endpoints.stream().map(gprojectEndpoint2path).toList();
-			List<PathInfo> out = new ArrayList<PathInfo>();
-			out.addAll(subProjects);
-			out.addAll(subEndpoints);
-			return OperationStatus.of(out);
-		} catch (GeboPersistenceException e) {
-			throw new VirtualFilesystemBrowsingException("Exception in browseProject(..)", e);
-		}
+		List<PathInfo> subEndpoints = endpoints.stream().map(gprojectEndpoint2path).toList();
+		List<PathInfo> out = new ArrayList<PathInfo>();
+		out.addAll(subProjects);
+		out.addAll(subEndpoints);
+		return OperationStatus.of(out);
+
 	}
 
 	/**
@@ -233,11 +214,11 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 	 * @return OperationStatus containing a list of path information.
 	 */
 	private OperationStatus<List<PathInfo>> browseVFolder(String vfolderCode) {
-		Stream<? extends GAbstractVirtualFilesystemObject> folderStream = vFolderRepository
-				.findByParentVirtualFolderCode(vfolderCode);
-		Stream<? extends GAbstractVirtualFilesystemObject> filestream = docReferences
-				.findByParentVirtualFolderCode(vfolderCode);
-		Stream<PathInfo> catenation = Stream.concat(folderStream, filestream)
+		List<? extends GAbstractVirtualFilesystemObject> folders = visibilityService
+				.getVisibleChildVirtualFolders(vfolderCode);
+		List<? extends GAbstractVirtualFilesystemObject> documents = visibilityService
+				.getVisibleChildDocuments(vfolderCode);
+		Stream<PathInfo> catenation = Stream.concat(folders.stream(), documents.stream())
 				.filter(x -> x.getDeleted() == null || !x.getDeleted()).map(virtualFilesystemObject2path);
 		return OperationStatus.of(catenation.toList());
 	}
@@ -252,10 +233,9 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 		StringTokenizer tokenizer = new StringTokenizer(endpointCompositCode, ":");
 		String code = tokenizer.nextToken();
 		String className = tokenizer.nextToken();
-		Stream<GVirtualFolder> folders = vFolderRepository
-				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
-						className, code);
-		return OperationStatus.of(folders.map(virtualFilesystemObject2path).toList());
+		List<GVirtualFolder> folders = visibilityService.getVisibleProjectEndpointRootsByParentEndpoint(code,
+				className);
+		return OperationStatus.of(folders.stream().map(virtualFilesystemObject2path).toList());
 	}
 
 	/**

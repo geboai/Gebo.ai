@@ -276,6 +276,8 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDoAction(Collection<T> objects,
 			boolean adminCanDoAll, AclGrantType... grantType) {
+		if (adminCanDoAll && isCurrentUserAdmin())
+			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
@@ -310,6 +312,8 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IAclGrantedResource> List<T> filterAclCanDoAction(Collection<T> objects, boolean adminCanDoAll,
 			AclGrantType... grantType) {
+		if (adminCanDoAll && isCurrentUserAdmin())
+			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();

@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -148,58 +149,47 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 
 	@Override
 	public List<GVirtualFolder> getVisibleProjectEndpointRootsByParentEndpoint(String code, String className) {
-		switch (securityService.getPlatformContentAccessPolicy()) {
-		case ACL_BASED: {
+		boolean isAdmin = securityService.isCurrentUserAdmin();
+		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return virtualFoldersRepository
 					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNullAndAclAliasesIn(
 							className, code, aclInfos.getAllOwnedAclAliases())
 					.toList();
-		}
-
-		case GROUP_BASED:
-		default: {
+		} else {
 			return virtualFoldersRepository
 					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
 							className, code)
 					.toList();
 		}
 
-		}
-
 	}
 
 	@Override
 	public List<GVirtualFolder> getVisibleChildVirtualFolders(String parentVirtualFolderCode) {
-		switch (securityService.getPlatformContentAccessPolicy()) {
-		case ACL_BASED: {
+		boolean isAdmin = securityService.isCurrentUserAdmin();
+		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return virtualFoldersRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
 					aclInfos.getAllOwnedAclAliases()).toList();
-		}
-
-		case GROUP_BASED:
-		default: {
+		} else {
 			return virtualFoldersRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
 		}
 
-		}
 	}
 
 	@Override
 	public List<GDocumentReference> getVisibleChildDocuments(String parentVirtualFolderCode) {
-		switch (securityService.getPlatformContentAccessPolicy()) {
-		case ACL_BASED: {
+		boolean isAdmin = securityService.isCurrentUserAdmin();
+		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return documentsRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
 					aclInfos.getAllOwnedAclAliases()).toList();
-		}
-
-		case GROUP_BASED:
-		default: {
+		} else {
 			return documentsRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
-		}
-
 		}
 	}
 
