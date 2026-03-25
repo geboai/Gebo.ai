@@ -24,6 +24,7 @@ export interface GJiraSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GJiraSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
     secretCode?: string;
 }
 export namespace GJiraSystem {

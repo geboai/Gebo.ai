@@ -259,7 +259,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			}
 		};
 
-		return new RoutingDecision(routes, routingEntry, decision.name());
+		return new RoutingDecision(routes, routingEntry, decision.name(), new HashMap<>(decisionMap));
 	}
 
 	private String createDeliverableTypesList() {
@@ -316,10 +316,13 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			rd = new RoutingDecision(List.of(DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT),
 					IChatPipelineStepRuntimeData
 							.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
-					RespondingWith.PURE_LLM_RESPONSE.name());
+					RespondingWith.PURE_LLM_RESPONSE.name(), Map.of());
 		}
 		// Setting the decided routing code
 		runtimeData.getChatResponse().setPipelineRouterDecisionCode(rd.getPipelineRouterDecisionCode());
+		if (rd.getPipelineParams() != null) {
+			runtimeData.getChatResponse().getPipelineParams().putAll(rd.getPipelineParams());
+		}
 		return rd;
 
 	}
@@ -331,7 +334,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		RoutingDecision decision = new RoutingDecision(
 				futureRoutes(respondingWith, RespondingWith.PURE_LLM_RESPONSE, true),
 				IChatPipelineStepRuntimeData.VoidRetun(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP),
-				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId());
+				runtimeData.getRequestResources().getCurrentRequest().getChatPipelineProcessId(), new HashMap<>());
 		notifyUser(emitter, USER_CHOOSED_AGENT, EXECUTING_YOUR_CHOOSED_AGENT, null, 3000l, NotificationType.INFO);
 		if (decision.getFutureRoute() != null && !decision.getFutureRoute().isEmpty()) {
 			String outputStepId = decision.getFutureRoute().get(decision.getFutureRoute().size() - 1);
@@ -359,6 +362,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 						}
 							break;
 						}
+						decision.getPipelineParams().put(par.getParamName(), paramValue);
 					} else {
 						throw new ChatPipelineException(
 								"The request does not contain parameter: " + par.getParamName());
@@ -415,7 +419,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 						return Map.of();
 					}
-				}, RespondingWith.CHAT_WITH_FILES.name());
+				}, RespondingWith.CHAT_WITH_FILES.name(), Map.of());
 		return rd;
 	}
 

@@ -78,9 +78,10 @@ export class GeboAIChatStreamEventsDisplayComponent {
             switch (msg.contentObjectType) {
                 case "ChatNotificationContent": {
                     this.clearNotifiationTimer();
+                    this.clearEventsDisplay();
                     this.currentNotification= msg.content;
                     if (this.currentNotification?.duration) {
-                        this.startNotificationTimer(this.currentNotification?.duration);
+                        //this.startNotificationTimer(this.currentNotification?.duration);
                     }
                 } break;
                 case "DeepSearchStep": {

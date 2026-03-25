@@ -34,6 +34,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleServic
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.client.rest.config.GeboChatUIConfig;
+import ai.gebo.llms.chat.client.rest.model.ChatUIOptions;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.security.services.IGSecurityService;
@@ -54,6 +56,7 @@ public class GeboUserChatsController {
 	final IGSecurityService securityService;
 	final IGChatStorageAreaService chatStorageAreaService;
 	final IGChatSessionLifeCycleService sessionLifeCycleService;
+	final GeboChatUIConfig uiConfig;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -207,8 +210,15 @@ public class GeboUserChatsController {
 			throws GeboChatSessionLifecycleException {
 		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
 	}
+
 	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo suggestChatDescription(@RequestParam("userChatContextCode") String userChatContextCode) throws GeboChatSessionLifecycleException {
+	public GUserChatInfo suggestChatDescription(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
 		return this.sessionLifeCycleService.suggestChatDescription(userChatContextCode);
+	}
+
+	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ChatUIOptions getUIConfig() {
+		return new ChatUIOptions(uiConfig);
 	}
 }

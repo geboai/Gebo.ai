@@ -10,8 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface SortObject { 
-    empty?: boolean;
-    unsorted?: boolean;
-    sorted?: boolean;
+export interface ChatUIOptions { 
+    enablePureModelChat?: boolean;
+    defaultUILanguage?: string;
 }

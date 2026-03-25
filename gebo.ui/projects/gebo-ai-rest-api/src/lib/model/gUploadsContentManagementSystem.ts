@@ -24,6 +24,7 @@ export interface GUploadsContentManagementSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GUploadsContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
 }
 export namespace GUploadsContentManagementSystem {
     export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';

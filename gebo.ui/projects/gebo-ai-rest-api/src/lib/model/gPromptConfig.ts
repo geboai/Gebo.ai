@@ -19,5 +19,6 @@ export interface GPromptConfig {
     modelProvider?: string;
     modelCode?: string;
     promptCategory?: string;
+    tokensSize?: number;
     configDeclarated?: boolean;
 }

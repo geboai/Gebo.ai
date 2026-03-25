@@ -24,6 +24,7 @@ export interface GFilesystemContentManagementSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GFilesystemContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
 }
 export namespace GFilesystemContentManagementSystem {
     export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';

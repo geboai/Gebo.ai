@@ -40,6 +40,7 @@ const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", 
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
+const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -104,7 +105,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     public knowledgeBaseCodes: string[] = [];
     protected userChatContextCode: string | undefined;
     protected currentPipelineRouterDecisionCode?: string;
-    protected chatPipelinesMenu: PipelineChatMenu[]=[];
+    protected chatPipelinesMenu: PipelineChatMenu[] = [];
 
     /**
      * Determines if any loading operation is currently in progress
@@ -255,9 +256,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
         userUploadedContents: new FormControl(),
-        deepSearchDataSources: new FormControl()       
+        deepSearchDataSources: new FormControl()
     });
-    protected currentPipelineRoutingOption?:PipelineRoutingOption;
+    protected currentPipelineRoutingOption?: PipelineRoutingOption;
     /**
      * Form group for chat information
      */
@@ -382,13 +383,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         if (this.chatInfo && changes["chatInfo"]) {
             this.formGroup.patchValue(this.chatInfo);
             this.chatInfoFormGroup.patchValue(this.chatInfo);
-            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>,Observable<PipelineChatMenu[]>] | null = null;
-            
+            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>, Observable<PipelineChatMenu[]>] | null = null;
+
             if (this.chatInfo.chatProfileCode) {
-                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode),this.geboChatPipelineService.getDefaultPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode)];
+                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode), this.geboChatPipelineService.getDefaultPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode)];
             } else
                 if (this.chatInfo.chatModelCode) {
-                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode),of([])];
+                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode), of([])];
                 }
             if (observables) {
                 this.loadingModelMetaInfo = true;
@@ -397,7 +398,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         this.modelMetaInfos = value[0];
                         this.knowledgeBaseCodes = value[1].knowledgeBases?.map(x => x.code).filter(y => y ? true : false) as string[];
                         this.chatUserInfos = value[1];
-                        this.chatPipelinesMenu=value[2];
+                        this.chatPipelinesMenu = value[2];
                     },
                     complete: () => {
                         this.loadingModelMetaInfo = false;
@@ -442,7 +443,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
                     this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    this.lastInteractionMessages = [chat_history_loaded];
+                    this.lastInteractionMessages = this.interactions && this.interactions?.length>0? [chat_history_loaded]:[clean_chat_loaded];
                     this.scrollToBottom();
 
                 },
@@ -740,21 +741,21 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
-            if (this.currentPipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE") {
-                this.chatInputShell.onStreamError(error);
-            }
+
+            this.chatInputShell.onStreamError(error);
+
         }
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;
 
         if (this.ragsystem === true) {
-            const agenticChatRequest:AgenticChatRequestBody= {
+            const agenticChatRequest: AgenticChatRequestBody = {
                 request: r,
                 environment: undefined
             }
             if (this.currentPipelineRoutingOption) {
-                agenticChatRequest.request.chatPipelineProcessId=this.currentPipelineRoutingOption.chatPipelineProcessId;
-                agenticChatRequest.environment=this.currentPipelineRoutingOption.pipelineParams;
+                agenticChatRequest.request.chatPipelineProcessId = this.currentPipelineRoutingOption.chatPipelineProcessId;
+                agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
             }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
             this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack);

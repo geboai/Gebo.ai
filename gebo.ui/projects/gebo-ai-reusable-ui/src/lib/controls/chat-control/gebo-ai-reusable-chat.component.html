@@ -156,7 +156,7 @@
     <p-button icon="pi pi-arrow-up" rounded *ngIf="showTopButton" severity="secondary" (click)="scrollToTop()">
     </p-button>
   </div>
-  <div class="gebo-ai-reusable-chat__footer">
+  <div [className]="(interactions && interactions?.length)? 'gebo-ai-reusable-chat__footer':'gebo-ai-reusable-chat__clean_chat_middle'">
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
       [userChatContextCode]="userChatContextCode" [capabilities]="capabilities" [currentAudioTrack]="currentAudioTrack"

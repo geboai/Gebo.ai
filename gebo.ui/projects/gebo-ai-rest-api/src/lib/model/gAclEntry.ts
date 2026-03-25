@@ -10,8 +10,15 @@
  * Do not edit the class manually.
  */
 
-export interface SortObject { 
-    empty?: boolean;
-    unsorted?: boolean;
-    sorted?: boolean;
+export interface GAclEntry { 
+    aclGrantedUniqueId?: string;
+    grant?: GAclEntry.GrantEnum;
+}
+export namespace GAclEntry {
+    export type GrantEnum = 'READ' | 'WRITE' | 'EXECUTE';
+    export const GrantEnum = {
+        READ: 'READ' as GrantEnum,
+        WRITE: 'WRITE' as GrantEnum,
+        EXECUTE: 'EXECUTE' as GrantEnum
+    };
 }

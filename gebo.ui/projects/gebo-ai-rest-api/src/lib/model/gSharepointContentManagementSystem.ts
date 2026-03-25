@@ -24,6 +24,7 @@ export interface GSharepointContentManagementSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GSharepointContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
     secretCode: string;
     sharepointVersion: GSharepointContentManagementSystem.SharepointVersionEnum;
 }

@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ChatInfosByQbeParam } from '../model/chatInfosByQbeParam';
+import { ChatUIOptions } from '../model/chatUIOptions';
 import { GLookupEntry } from '../model/gLookupEntry';
 import { GUserChatInfo } from '../model/gUserChatInfo';
 import { PageGUserChatInfo } from '../model/pageGUserChatInfo';
@@ -470,6 +471,42 @@ export class GeboUserChatsControllerService {
         return this.httpClient.request<PageGUserChatInfo>('get',`${this.basePath}/api/users/GeboUserChatsController/getMyChatsPaged`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUIConfig(observe?: 'body', reportProgress?: boolean): Observable<ChatUIOptions>;
+    public getUIConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ChatUIOptions>>;
+    public getUIConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ChatUIOptions>>;
+    public getUIConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<ChatUIOptions>('get',`${this.basePath}/api/users/GeboUserChatsController/getUIConfig`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

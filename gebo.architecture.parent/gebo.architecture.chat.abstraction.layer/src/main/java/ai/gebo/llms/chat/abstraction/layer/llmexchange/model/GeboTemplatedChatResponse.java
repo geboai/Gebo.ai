@@ -11,6 +11,7 @@ package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
@@ -49,6 +50,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
 	private List<LLMGeneratedResource> generatedResources = new ArrayList<>();
 	private String pipelineRouterDecisionCode = null;
+	private LinkedHashMap<String, Object> pipelineParams = new LinkedHashMap<>();
 	private String deepSearchRequestId = null;
 
 	/**

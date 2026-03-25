@@ -401,11 +401,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
           const ref1 = parameters[key];
           const ref2 = x?.pipelineParams[key];
           if (ref1 && ref2 && ref1 === ref2) {
-            matches &&= true;
+            matches = matches && true;
           } else if (Array.isArray(ref1) && Array.isArray(ref2)) {
             const arr1 = Array.from(ref1);
             const arr2 = Array.from(ref2);
-            matches &&= sameStringsIgnoreOrder(arr1, arr2);
+            matches = matches && sameStringsIgnoreOrder(arr1, arr2);
           } else {
             matches = false;
           }

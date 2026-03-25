@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -98,8 +99,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		}
 		// putting a sintetic routing decision for the first 2 steps to mantain the
 		// routing coherency
-		runtimeData.getRoutingDecisions()
-				.add(new RoutingDecision(List.of(config.getStepInputId(), config.getStepRouterId()), null, null));
+		runtimeData.getRoutingDecisions().add(
+				new RoutingDecision(List.of(config.getStepInputId(), config.getStepRouterId()), null, null, Map.of()));
 		if (firstService instanceof IInputChatPipelineStepService inputService) {
 			IChatPipelineStepRuntimeData data = inputService.execute(runtimeData, emitter, chatModel, serviceModel);
 

@@ -31,6 +31,7 @@ export interface GFilesystemProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GFilesystemProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GFilesystemProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     path?: Array<VFilesystemReference>;
 }
 export namespace GFilesystemProjectEndpoint {

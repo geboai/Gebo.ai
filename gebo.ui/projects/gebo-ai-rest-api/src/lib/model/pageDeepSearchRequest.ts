@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageDeepSearchRequest { 
     totalElements?: number;
     totalPages?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<DeepSearchRequest>;
     number?: number;
-    sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

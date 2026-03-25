@@ -85,7 +85,15 @@
     padding-bottom: 0.5rem;
     background-color: #fff;
   }
-
+&__clean_chat_middle {
+    display: inline-block;
+    width: 100%;
+    position: sticky;
+    bottom: 35%;
+    z-index: 1;
+    padding-bottom: 0.5rem;
+    background-color: #fff;
+  }
   &__error {
     display: flex;
     justify-content: center;

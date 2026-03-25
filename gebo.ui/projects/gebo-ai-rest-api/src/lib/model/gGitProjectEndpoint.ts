@@ -30,6 +30,7 @@ export interface GGitProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GGitProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GGitProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     repositoryUri?: string;
     branch?: string;
     identityCode?: string;

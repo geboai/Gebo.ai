@@ -24,6 +24,7 @@ export interface GGitContentManagementSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GGitContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
     publicAccess?: boolean;
     defaultIdentityCode?: string;
 }

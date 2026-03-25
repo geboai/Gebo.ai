@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageDeepSearchDocumentAnalisysResultStep { 
     totalElements?: number;
     totalPages?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<DeepSearchDocumentAnalisysResultStep>;
     number?: number;
-    sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }
