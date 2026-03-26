@@ -391,28 +391,51 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   onSkipDeepSearchEvent(_event: any): void {
     this.setStandardChatMode();
   }
-  private findMatchingRoutingOption(pipelineRouterDecisionCode: string, parameters: any):PipelineRoutingOption | undefined {
+  private findMatchingRoutingOption(pipelineRouterDecisionCode: string, parameters: any): PipelineRoutingOption | undefined {
     let runningRoutingChoice = this.allPipelineRoutingOptions.find(x => pipelineRouterDecisionCode === x?.chatPipelineProcessId);
+
     const detailedMatch = this.allPipelineRoutingOptions.find(x => {
-      let matches: boolean = pipelineRouterDecisionCode === x?.chatPipelineProcessId && (x?.pipelineParams && parameters);
-      if (matches === true) {
-        const keys = Object.keys(parameters);
-        keys.forEach(key => {
-          const ref1 = parameters[key];
-          const ref2 = x?.pipelineParams[key];
-          if (ref1 && ref2 && ref1 === ref2) {
-            matches = matches && true;
-          } else if (Array.isArray(ref1) && Array.isArray(ref2)) {
-            const arr1 = Array.from(ref1);
-            const arr2 = Array.from(ref2);
-            matches = matches && sameStringsIgnoreOrder(arr1, arr2);
-          } else {
+      if (pipelineRouterDecisionCode !== x?.chatPipelineProcessId) {
+        return false;
+      }
+
+      const hasParams1 = parameters && Object.keys(parameters).length > 0;
+      const hasParams2 = x.pipelineParams && Object.keys(x.pipelineParams).length > 0;
+
+      if (!hasParams1 && !hasParams2) {
+        return true;
+      }
+
+      if (hasParams1 !== hasParams2) {
+        return false;
+      }
+
+      const keys1 = Object.keys(parameters);
+      const keys2 = Object.keys(x.pipelineParams);
+
+      if (keys1.length !== keys2.length) {
+        return false;
+      }
+
+      let matches = true;
+      for (const key of keys1) {
+        const ref1 = parameters[key];
+        const ref2 = x.pipelineParams[key];
+        if (Array.isArray(ref1) && Array.isArray(ref2)) {
+          const arr1 = Array.from(ref1) as string[];
+          const arr2 = Array.from(ref2) as string[];
+          if (!sameStringsIgnoreOrder(arr1, arr2)) {
             matches = false;
+            break;
           }
-        })
+        } else if (ref1 !== ref2) {
+          matches = false;
+          break;
+        }
       }
       return matches;
     });
-    return detailedMatch ? detailedMatch: runningRoutingChoice;
+
+    return detailedMatch ? detailedMatch : runningRoutingChoice;
   }
 }
