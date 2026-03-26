@@ -262,6 +262,52 @@ export class GeboChatPipelinesControllerService {
     /**
      * 
      * 
+     * @param userChatContextCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public stopChatPipeline(userChatContextCode: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public stopChatPipeline(userChatContextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public stopChatPipeline(userChatContextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public stopChatPipeline(userChatContextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userChatContextCode === null || userChatContextCode === undefined) {
+            throw new Error('Required parameter userChatContextCode was null or undefined when calling stopChatPipeline.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userChatContextCode !== undefined && userChatContextCode !== null) {
+            queryParameters = queryParameters.set('userChatContextCode', <any>userChatContextCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboChatPipelinesController/stopChatPipeline`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param body 
      * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

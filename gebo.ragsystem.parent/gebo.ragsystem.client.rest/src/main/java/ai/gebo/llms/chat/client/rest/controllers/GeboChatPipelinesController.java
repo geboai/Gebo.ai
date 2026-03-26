@@ -51,6 +51,11 @@ public class GeboChatPipelinesController {
 				toLinkedHashMap(data.getEnvironment()));
 	}
 
+	@GetMapping(value = "stopChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE)
+	public void stopChatPipeline(@RequestParam(name = "userChatContextCode", required = true) String userChatContextCode) throws ChatPipelineException {
+		chatPipelineService.stopPipeline(userChatContextCode);
+	}
+
 	@PostMapping(value = "executeDefaultChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeDefaultChatPipeline(@RequestBody @NotNull @Valid PipelineRequestBody data)
 			throws ChatPipelineException, GeboChatException {

@@ -30,4 +30,6 @@ public interface IChatPipelineService {
 	}
 
 	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode, String chatProfileCode) throws ChatPipelineException;
+
+	public void stopPipeline(String userChatContextCode) throws ChatPipelineException;
 }

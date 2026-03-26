@@ -32,11 +32,14 @@ import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @AllArgsConstructor
 public class ChatPipelineServiceImpl implements IChatPipelineService {
 	private static Logger LOGGER = LoggerFactory.getLogger(ChatPipelineServiceImpl.class);
+	private static final ConcurrentHashMap<String, Sinks.Empty<Void>> activeStreams = new ConcurrentHashMap<>();
 	protected final IChatPipelinesExecutor executor;
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGPersistentObjectManager persistentObjectManager;
@@ -82,7 +85,21 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			return executor.streamingExecute(request, environment, chatModel, serviceModel, pipelineCode);
+
+			String processId = request.getUserChatContextCode();
+			Sinks.Empty<Void> stopSink = Sinks.empty();
+
+			if (processId != null) {
+				activeStreams.put(processId, stopSink);
+			}
+
+			Flux<GeboChatMessageEnvelope> flux = executor.streamingExecute(request, environment, chatModel,
+					serviceModel, pipelineCode);
+
+			if (processId != null) {
+				flux = flux.takeUntilOther(stopSink.asMono()).doFinally(signalType -> activeStreams.remove(processId));
+			}
+			return flux;
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying chat pipeline (streaming)";
 			throw new ChatPipelineException(msg, e);
@@ -95,6 +112,19 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 		if (model == null)
 			model = chatModelsDao.defaultHandler();
 		return model;
+	}
+
+	@Override
+	public void stopPipeline(String userChatContextCode) throws ChatPipelineException {
+		if (userChatContextCode == null)
+			return;
+		Sinks.Empty<Void> sink = activeStreams.remove(userChatContextCode);
+		if (sink != null) {
+			sink.tryEmitEmpty();
+			LOGGER.info("Successfully emitted stop signal for pipeline/process {}", userChatContextCode);
+		} else {
+			LOGGER.warn("No active stream found to stop for context code: {}", userChatContextCode);
+		}
 	}
 
 	@Override
