@@ -9,23 +9,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
-interface IChooseSources {
-    deepSearchDataSources?: string[];
-    knowledgeBases?: string[];
-}
-const atLeastAKnowledgeBaseOrSystemValidator: ValidatorFn = (ctrl) => {
-    const fg: FormGroup = ctrl as FormGroup;
-    const value: IChooseSources = fg.value;
-    const hasKBS: boolean = (value?.knowledgeBases ? true : false) && ((value?.knowledgeBases?.length && value?.knowledgeBases?.length > 0) ? true : false);
-    const hasSRC: boolean = (value?.deepSearchDataSources ? true : false) && ((value?.deepSearchDataSources?.length && value?.deepSearchDataSources?.length > 0) ? true : false);
-    let out: any | null = null;
-    if (!(hasKBS || hasSRC)) {
-        out = {
-            noSourceSelected: "noSrc"
-        };
-    }
-    return out;
-}
+// Validators and interfaces moved to GeboAIDeepSearchSoucesChoiceComponent
 @Component({
     selector: "gebo-ai-deep-search-component",
     templateUrl: "deep-search.component.html",
@@ -48,9 +32,8 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     @Output() skipDeepSearchEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() errorOccurredEvent: EventEmitter<any> = new EventEmitter();
     protected streamingResponse: boolean = false;
-    protected loadingRelatedBackend: boolean = false;
-    protected choosableDataSources: GBaseObject[] = [];
-    protected choosableKnowledgeBases: GBaseObject[] = [];
+    protected selectedDeepSearchDataSources?: string[];
+    protected selectedKnowledgeBases?: string[];
 
 
     protected get loading(): boolean {
@@ -63,10 +46,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         knowledgeBases: new FormControl(),
         deepSearchDataSources: new FormControl()
     });
-    protected chooseDeepSearchDataSourcesFormGroup: FormGroup = new FormGroup({
-        deepSearchDataSources: new FormControl(),
-        knowledgeBases: new FormControl()
-    });
+
 
     protected deepSearchResponse?: DeepSearchResponse;
     protected chatResponse?: GeboChatResponse;
@@ -75,20 +55,11 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected deepSearchNotification?:{content?:string};
     protected completionPercent: number = 0;
-    protected showChooseDataSourceDialog: boolean = false;
-    protected deepSearchUISettings:DeepSearchUISettings= {
-        deepSearchUIAllowChooseSources:false,
-        externalSourcesEnabled:false
-    }
+
     protected programmaticStreaming:boolean=false;
     protected deepSearchStarting:boolean=false;
     constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService,
-        private deepSearchControllerService: GeboDeepSearchControllerService,
-        private knowledgeBaseDataSourcesService: UserKnowledgeBaseBrowsingControllerService,
-        private ragChatService: GeboRagChatControllerService,
-        private chatService: GeboChatControllerService,
         private messageService: GeboAIRootNotificationService) {
-        this.chooseDeepSearchDataSourcesFormGroup.setValidators(atLeastAKnowledgeBaseOrSystemValidator);
     }
     ngOnInit(): void {
 
@@ -193,9 +164,6 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         this.errorOccurredEvent.emit(err);
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["nextRequestMode"] && this.nextRequestMode==="deep-search" && !this.programmaticStreaming) {
-            this.chooseDataSources();
-        }
         if (changes["currentDeepSearchRequest"] && this.currentDeepSearchRequest) {
             this.formGroup.patchValue(this.currentDeepSearchRequest);
 
@@ -205,73 +173,19 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
             }
         }
         if (changes["currentChatRequest"] && this.currentChatRequest) {
-            const choosedDataSourcesObject: IChooseSources = this.chooseDeepSearchDataSourcesFormGroup.value;
-            const deepSearchDataSources = choosedDataSourcesObject?.deepSearchDataSources;
-            const knowledgeBases = choosedDataSourcesObject?.knowledgeBases;
-            this.currentChatRequest.deepSearchDataSources = deepSearchDataSources;
-            this.currentChatRequest.choosedKnowledgeBases = knowledgeBases;
+            this.currentChatRequest.deepSearchDataSources = this.selectedDeepSearchDataSources;
+            this.currentChatRequest.choosedKnowledgeBases = this.selectedKnowledgeBases;
             this.doStreamDeepSearchInChat();
         }
     }
-    private chooseSources(): Observable<[GBaseObject[], GBaseObject[],DeepSearchUISettings]> {
-        const kbObservable: Observable<GBaseObject[]> = (this.chatProfileCode) ? this.ragChatService.getVisibleKnowledgeBasesByProfileCode(this.chatProfileCode) : this.chatService.getVisibleKnowledgeBases();
-        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable,this.deepSearchControllerService.getDeepSearchUISettings()]);
-    }
-    private chooseDataSources(): void {
-        this.chooseDeepSearchDataSourcesFormGroup.reset();
-        this.loadingRelatedBackend = true;
-        this.chooseSources().subscribe({
-            next: (dsList) => {
-                this.choosableDataSources = dsList[0];
-                this.choosableKnowledgeBases = dsList[1];
-                if (dsList[2]) {
-                    this.deepSearchUISettings=dsList[2];
-                }
-                const defaultSelection: IChooseSources = {
-                    deepSearchDataSources: this.choosableDataSources ? this.choosableDataSources.map(x => x.code) as string[] : [],
-                    knowledgeBases: this.choosableKnowledgeBases ? this.choosableKnowledgeBases.map(x => x.code) as string[] : []
-                };
-                if (this.deepSearchUISettings.externalSourcesEnabled!==true) {
-                    defaultSelection.deepSearchDataSources=[];
-                }
-                this.chooseDeepSearchDataSourcesFormGroup.patchValue(defaultSelection);
-                this.loadingRelatedBackend = false;
-                let totalChoices: number = 0;
-                if (this.choosableDataSources?.length) {
-                    totalChoices += this.choosableDataSources.length;
-                }
-                if (this.choosableKnowledgeBases?.length) {
-                    totalChoices += this.choosableKnowledgeBases.length;
-                }
-                //Choice UI has to be viewed only where options for data sources are more than one
-                if (totalChoices > 1 && this.deepSearchUISettings.deepSearchUIAllowChooseSources===true) {
-                    this.showChooseDataSourceDialog = true;
-                }
-            },
-            complete: () => {
-                this.loadingRelatedBackend = false;
-            }
-        });
-    }
-
-    protected doChoosedSources(): void {
-        this.showChooseDataSourceDialog = false;
-        const choosedDataSourcesObject: IChooseSources = this.chooseDeepSearchDataSourcesFormGroup.value;
-        const deepSearchDataSources = choosedDataSourcesObject?.deepSearchDataSources;
-        const knowledgeBases = choosedDataSourcesObject?.knowledgeBases;
-        if (this.currentChatRequest) {
-
-            this.currentChatRequest.deepSearchDataSources = deepSearchDataSources;
-            this.currentChatRequest.choosedKnowledgeBases = knowledgeBases;
-
-        } else {
-            this.formGroup.controls["deepSearchDataSources"].setValue(deepSearchDataSources);
-            this.formGroup.controls["knowledgeBases"].setValue(knowledgeBases);
-
+    protected onSourcesChoosed(): void {
+        if (!this.currentChatRequest) {
+            this.formGroup.controls["deepSearchDataSources"].setValue(this.selectedDeepSearchDataSources);
+            this.formGroup.controls["knowledgeBases"].setValue(this.selectedKnowledgeBases);
         }
     }
+
     protected skipDeepSearchOnDataSourceChoice(): void {
-        this.showChooseDataSourceDialog = false;
         this.skipDeepSearchEvent.emit(true);
     }
     protected doStreamDeepSearch(): void {

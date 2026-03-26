@@ -16,10 +16,11 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { GeboAIDeepSearchDetailsComponent } from "./deep-search-details.component";
 import { MarkdownComponent } from "ngx-markdown";
 import { AccordionModule } from "primeng/accordion";
+import { GeboAIDeepSearchSoucesChoiceComponent } from "./deep-search-sources-choice.component";
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, TabsModule, ButtonModule, FieldsetModule, PanelModule, BlockUIModule, GeboAIFieldTranslationContainerModule, ProgressBarModule, DialogModule, SelectButtonModule, FieldsetModule, GeboAINotificationsModule, MarkdownComponent,AccordionModule],
-    declarations:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent],
-    exports:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent],
+    declarations:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent,GeboAIDeepSearchSoucesChoiceComponent],
+    exports:[GeboAIDeepSearchComponent,GeboAIDeepSearchDetailsComponent,GeboAIDeepSearchSoucesChoiceComponent],
     providers:[GeboAIStreamDeepSearchService]
 })
 export class GeboAIDeepSearchModule {}
