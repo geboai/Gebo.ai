@@ -752,6 +752,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;
 
+        const onCompleteCallback = () => {
+            this.chatStreaming = false;
+            this.loadingChatResponse = false;
+            if (interaction) {
+                interaction.loading = false;
+            }
+        };
+
         if (this.ragsystem === true) {
             const agenticChatRequest: AgenticChatRequestBody = {
                 request: r,
@@ -762,9 +770,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
             }
             //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
-            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack);
+            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack, onCompleteCallback);
         } else {
-            this.reactiveChatService.streamChat(r, messageCallback, errorCallBack);
+            this.reactiveChatService.streamChat(r, messageCallback, errorCallBack, onCompleteCallback);
         }
 
 
@@ -773,6 +781,20 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     onSumbit(): void {
         if (this.formGroup.valid && !this.chatStreaming) {
             this.sendMessage();
+        }
+    }
+
+    stopReactiveChat(userChatContextCode?: string) {
+        const codeToStop = userChatContextCode || this.userChatContextCode;
+        if (codeToStop) {
+            this.geboChatPipelineService.stopChatPipeline(codeToStop).subscribe({
+                next: () => {
+                    console.log("Reactive chat stopped");
+                },
+                error: (err) => {
+                    console.error("Error stopping reactive chat", err);
+                }
+            });
         }
     }
     /**

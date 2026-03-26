@@ -37,8 +37,12 @@
           (onAudioTrack)="onSpeechEventInternal($event)" [playAudioTrack]="currentAudioTrack" [viewLabels]="true">
         </gebo-ai-audio-component>
 
-        <p-button [icon]="submitIcon" rounded type="submit" class="custom-bg-blue-btn"
+        <p-button *ngIf="!streaming" [icon]="submitIcon" rounded type="submit" class="custom-bg-blue-btn"
           [disabled]="formGroup.invalid || loading">
+        </p-button>
+
+        <p-button *ngIf="streaming" icon="pi pi-stop-circle" rounded class="custom-bg-red-btn" severity="danger"
+          (onClick)="stopReactiveChat.emit(userChatContextCode)" type="button">
         </p-button>
       </div>
      

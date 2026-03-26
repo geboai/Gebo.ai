@@ -55,9 +55,9 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
      * @param onMessage - Callback function that processes each received message
      * @param onError - Optional callback function for handling errors
      */
-    streamChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+    streamChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
         const apiUrl: string = this.basePath + "/api/users/GeboDirectModelChatController/streamResponse";
-        this.internalStreamChat(apiUrl, request, onMessage, onError);
+        this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
     /**
@@ -68,14 +68,14 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
      * @param onMessage - Callback function that processes each received message
      * @param onError - Optional callback function for handling errors
      */
-    streamRagChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+    streamRagChat(request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
         const apiUrl: string = this.basePath + "/api/users/GeboChatController/streamRagResponse";
-        this.internalStreamChat(apiUrl, request, onMessage, onError);
+        this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
-    streamAgenticChat(request: AgenticChatRequestBody, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+    streamAgenticChat(request: AgenticChatRequestBody, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
         const apiUrl:string= this.basePath+"/api/users/GeboChatPipelinesController/streamChatPipeline";
-         this.internalStreamChat(apiUrl, request, onMessage, onError);
+         this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
     

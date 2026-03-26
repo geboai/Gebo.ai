@@ -11,7 +11,7 @@ export class GeboAIBaseStreamingService {
          * @param onMessage - Callback function for handling received messages
          * @param onError - Optional callback function for handling errors
          */
-        protected internalStreamChat(apiUrl: string, request: any, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
+        protected internalStreamChat(apiUrl: string, request: any, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
             let auth = getAuthHeader();
             if (!auth) auth={};
             let headers: HeadersInit = {
@@ -41,6 +41,9 @@ export class GeboAIBaseStreamingService {
                         reader.read().then(({ done, value }) => {
                             if (done) {
                                 console.log('Stream completed');
+                                if (onComplete) {
+                                    onComplete();
+                                }
                                 return;
                             }
     

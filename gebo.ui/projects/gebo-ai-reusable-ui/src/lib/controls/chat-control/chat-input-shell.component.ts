@@ -106,6 +106,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   @Output() deepSearchChatRequest: EventEmitter<GeboChatRequest> = new EventEmitter();
   @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
   @Output() nextRoutingChoice: EventEmitter<PipelineRoutingOption> = new EventEmitter();
+  @Output() stopReactiveChat: EventEmitter<string | undefined> = new EventEmitter();
   @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamNotificationsComponent!: GeboAIChatStreamEventsDisplayComponent;
   @ViewChild("actualRoutingChoiceChip") chip!: Chip;
   private staticBehaviorsMenuItems: MenuItem[] = [{

@@ -170,6 +170,7 @@
       [streaming]="chatStreaming"
       (nextRoutingChoice)="currentPipelineRoutingOption=$event"
       [pipelineChatMenu]="chatPipelinesMenu"
+      (stopReactiveChat)="stopReactiveChat($event)"
       >
     </gebo-ai-chat-input-shell>
 
