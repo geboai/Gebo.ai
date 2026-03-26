@@ -726,6 +726,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             interaction.response.queryResponse = "";
                         }
                         interaction.response.queryResponse += recvd.content;
+                        setTimeout(() => this.scrollToBottom(), 10);
                     }
                 }
                 if (recvd.lastMessage === true) {
