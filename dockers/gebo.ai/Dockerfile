@@ -1,4 +1,4 @@
-FROM geboai/platform:2.3
+FROM geboai/platform:2.4
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
