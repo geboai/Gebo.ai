@@ -51,5 +51,12 @@
 
       </div>
   </form>
-
+  <gebo-ai-deep-search-sources-choice
+      *ngIf="showDeepSearchSourcesChoice"
+      [chatProfileCode]="chatInfo?.chatProfileCode"
+      [nextRequestMode]="'deep-search'"
+      [(visible)]="showDeepSearchSourcesChoice"
+      (onChoosed)="onDeepSearchSourcesChoosed($event)"
+      (onSkip)="onDeepSearchSourcesSkipped()">
+  </gebo-ai-deep-search-sources-choice>
 </div>

@@ -131,14 +131,43 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   private allPipelineRoutingOptions: PipelineRoutingOption[] = [];
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
   protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
+  
+  protected pendingDeepSearchRoutingOption?: PipelineRoutingOption;
+  protected showDeepSearchSourcesChoice: boolean = false;
+
   protected clearNextPipelineRoute(): void {
     this.choosedPipelineRoutingChip = undefined;
 
   }
   protected setNextPipelineRoute(option: PipelineRoutingOption): void {
-    this.choosedPipelineRoutingChip = option;
+    if (option.chatPipelineProcessId === 'DEEP_SEARCH_RESPONSE' && 
+        (!option.pipelineParams || Object.keys(option.pipelineParams).length === 0)) {
+       this.pendingDeepSearchRoutingOption = option;
+       this.showDeepSearchSourcesChoice = true;
+       return;
+    }
 
+    this.choosedPipelineRoutingChip = option;
     this.nextRoutingChoice.emit(option);
+  }
+
+  protected onDeepSearchSourcesChoosed(sources: any): void {
+    if (this.pendingDeepSearchRoutingOption) {
+      const newOption = { ...this.pendingDeepSearchRoutingOption };
+      newOption.pipelineParams = { 
+        deepSearchDataSources: sources.deepSearchDataSources,
+        knowledgeBases: sources.knowledgeBases 
+      };
+      this.choosedPipelineRoutingChip = newOption;
+      this.nextRoutingChoice.emit(newOption);
+      this.pendingDeepSearchRoutingOption = undefined;
+    }
+    this.showDeepSearchSourcesChoice = false;
+  }
+
+  protected onDeepSearchSourcesSkipped(): void {
+    this.pendingDeepSearchRoutingOption = undefined;
+    this.showDeepSearchSourcesChoice = false;
   }
   protected removeRouteOption(option: PipelineRoutingOption): void {
     if (this.defaultPipelineRouting) {

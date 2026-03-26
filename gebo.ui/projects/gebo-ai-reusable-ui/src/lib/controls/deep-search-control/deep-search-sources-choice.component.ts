@@ -112,6 +112,8 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
                 if (totalChoices > 1 && this.deepSearchUISettings.deepSearchUIAllowChooseSources === true) {
                     this.visible = true;
                     this.visibleChange.emit(true);
+                } else {
+                    this.doChoosedSources();
                 }
             },
             complete: () => {
