@@ -171,6 +171,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			IGConfigurableChatModel serviceModel, String pipelineCode)
 			throws ChatPipelineException, IOException, LLMConfigException, GeboChatException {
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
+		if (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null) {
+			response.setUsedChatModelCode(chatModel.getConfig().getChoosedModel().getCode());
+		}
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		Sinks.Many<GeboChatMessageEnvelope> sink = Sinks.many().unicast().onBackpressureBuffer();
 		ISinkUIEmitter emitter = new SinkUIEmitterImpl(sink);
