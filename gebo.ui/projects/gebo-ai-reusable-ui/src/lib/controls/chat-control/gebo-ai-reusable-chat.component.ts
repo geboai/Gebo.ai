@@ -50,6 +50,7 @@ interface GeboChatInteraction {
     response?: GeboChatTemplatedResponse;
     loading?: boolean;
     pipelineRouterDecisionCode?: string;
+    streamingModelName?: string;
 };
 
 /**
@@ -660,8 +661,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
                     interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
                     this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
-                    if (recvd.content?.chatModel)
+                    if (recvd.content?.chatModel) {
+                        interaction.streamingModelName = recvd.content?.chatModel;
                         this.modelName = recvd.content?.chatModel;
+                    }
                     console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
 
                 }

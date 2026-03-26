@@ -86,7 +86,7 @@
 
       <div class="gebo-ai-reusable-chat__interaction-item">
         <div class="gebo-ai-reusable-chat__interaction-item-title">
-          {{modelName || interaction?.response?.usedChatModelCode }}
+          {{interaction?.response?.usedChatModelCode || interaction?.streamingModelName || modelName }}
         </div>
         
         <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
