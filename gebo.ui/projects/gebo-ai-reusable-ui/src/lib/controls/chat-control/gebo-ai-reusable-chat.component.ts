@@ -329,7 +329,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     @HostListener('window:scroll')
     onWindowScroll() {
         this.showTopButton = window.scrollY > scrollStart;
-        this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart && this.showTopButton;
+        this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart;
     }
     public scrollToTop(): void {
         window.scrollTo({ top: 0, behavior: 'smooth' });
