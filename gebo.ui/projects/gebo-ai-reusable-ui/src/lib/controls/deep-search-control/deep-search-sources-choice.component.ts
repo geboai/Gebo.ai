@@ -68,6 +68,21 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
     }
 
     ngOnInit(): void {
+        this.chooseDeepSearchDataSourcesFormGroup.controls["deepSearchDataSources"].valueChanges.subscribe((dataSources: string[]) => {
+            const hasIKB = dataSources && dataSources.includes("IKB_SYSTEM");
+            const kbControl = this.chooseDeepSearchDataSourcesFormGroup.controls["knowledgeBases"];
+            if (hasIKB) {
+                if (kbControl.disabled) {
+                    kbControl.enable();
+                    kbControl.setValue(this.choosableKnowledgeBases ? this.choosableKnowledgeBases.map(kb => kb.code) : []);
+                }
+            } else {
+                if (kbControl.enabled) {
+                    kbControl.disable();
+                    kbControl.setValue([]);
+                }
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -86,17 +101,19 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
         this.loadingRelatedBackend = true;
         this.chooseSources().subscribe({
             next: (dsList) => {
-                this.choosableDataSources = dsList[0];
-                this.choosableKnowledgeBases = dsList[1];
+                const ikbSystem: GBaseObject = { code: "IKB_SYSTEM", description: "Internal Knowledge Bases System" };
+                this.choosableDataSources = dsList[0] ? [ikbSystem, ...dsList[0]] : [ikbSystem];
+                this.choosableKnowledgeBases = dsList[1] || [];
+                
                 if (dsList[2]) {
                     this.deepSearchUISettings = dsList[2];
                 }
                 const defaultSelection: IChooseSources = {
-                    deepSearchDataSources: this.choosableDataSources ? this.choosableDataSources.map(x => x.code) as string[] : [],
-                    knowledgeBases: this.choosableKnowledgeBases ? this.choosableKnowledgeBases.map(x => x.code) as string[] : []
+                    deepSearchDataSources: this.choosableDataSources.map(x => x.code) as string[],
+                    knowledgeBases: this.choosableKnowledgeBases.map(x => x.code) as string[]
                 };
                 if (this.deepSearchUISettings.externalSourcesEnabled !== true) {
-                    defaultSelection.deepSearchDataSources = [];
+                    defaultSelection.deepSearchDataSources = defaultSelection.deepSearchDataSources?.filter(code => code === "IKB_SYSTEM") || [];
                 }
                 
                 this.chooseDeepSearchDataSourcesFormGroup.patchValue(defaultSelection);

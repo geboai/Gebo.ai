@@ -131,7 +131,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   private allPipelineRoutingOptions: PipelineRoutingOption[] = [];
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
   protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
-  
+
   protected pendingDeepSearchRoutingOption?: PipelineRoutingOption;
   protected showDeepSearchSourcesChoice: boolean = false;
 
@@ -140,11 +140,11 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
 
   }
   protected setNextPipelineRoute(option: PipelineRoutingOption): void {
-    if (option.chatPipelineProcessId === 'DEEP_SEARCH_RESPONSE' && 
-        (!option.pipelineParams || Object.keys(option.pipelineParams).length === 0)) {
-       this.pendingDeepSearchRoutingOption = option;
-       this.showDeepSearchSourcesChoice = true;
-       return;
+    if (option.chatPipelineProcessId === 'DEEP_SEARCH_RESPONSE' &&
+      (!option.pipelineParams || Object.keys(option.pipelineParams).length === 0)) {
+      this.pendingDeepSearchRoutingOption = option;
+      this.showDeepSearchSourcesChoice = true;
+      return;
     }
 
     this.choosedPipelineRoutingChip = option;
@@ -154,9 +154,9 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   protected onDeepSearchSourcesChoosed(sources: any): void {
     if (this.pendingDeepSearchRoutingOption) {
       const newOption = { ...this.pendingDeepSearchRoutingOption };
-      newOption.pipelineParams = { 
-        deepSearchDataSources: sources.deepSearchDataSources,
-        knowledgeBases: sources.knowledgeBases 
+      newOption.pipelineParams = {
+        deepSearchedSystems: sources.deepSearchDataSources,
+        knowledgeBases: sources.knowledgeBases
       };
       this.choosedPipelineRoutingChip = newOption;
       this.nextRoutingChoice.emit(newOption);
@@ -383,7 +383,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
   onStreamError(error: any) {
     //this.streamNotificationsComponent.onError(error);
   }
-  
+
   onStreamMessage(recvd: IGeboChatMessage) {
     if (recvd.contentObjectType === "PipelineRoutingInfos") {
       const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
@@ -391,7 +391,7 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
       console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
       //Check if the pipeline routing choosed is different from the one displayed
       if (pipelineRouterDecisionCode !== "WAITING" && pipelineRouterDecisionCode !== this.runningPipelineRouting?.chatPipelineProcessId) {
-          this.runningPipelineRouting = this.findMatchingRoutingOption(pipelineRouterDecisionCode,parameters);
+        this.runningPipelineRouting = this.findMatchingRoutingOption(pipelineRouterDecisionCode, parameters);
       }
     }
     this.streamNotificationsComponent.onMessage(recvd);

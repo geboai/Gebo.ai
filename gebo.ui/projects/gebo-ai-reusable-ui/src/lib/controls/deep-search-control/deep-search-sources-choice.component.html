@@ -4,17 +4,18 @@
     <div class="grid" [formGroup]="chooseDeepSearchDataSourcesFormGroup">
         <div class="col-12"><b id="ChooseAtLeastMessage" gebo-ai-text>Choose at least one of the following options</b>
         </div>
+        <p-fieldset *ngIf="choosableDataSources && choosableDataSources.length" id="DataSourceChoicesArea" gebo-ai-label
+            legend="Choosed systems" class="col-12">
+            <p-selectbutton [options]="choosableDataSources" formControlName="deepSearchDataSources" [multiple]="true"
+                optionLabel="description" optionValue="code" />
+        </p-fieldset>
         <p-fieldset *ngIf="choosableKnowledgeBases && choosableKnowledgeBases.length" id="KnowledgeBaseChoicesArea"
             gebo-ai-label legend="Choosed knowledge bases" class="col-12">
             <p-selectbutton [options]="choosableKnowledgeBases" formControlName="knowledgeBases" [multiple]="true"
                 optionLabel="description" optionValue="code" />
 
         </p-fieldset>
-        <p-fieldset *ngIf="choosableDataSources && choosableDataSources.length" id="DataSourceChoicesArea" gebo-ai-label
-            legend="Choosed systems" class="col-12">
-            <p-selectbutton [options]="choosableDataSources" formControlName="deepSearchDataSources" [multiple]="true"
-                optionLabel="description" optionValue="code" />
-        </p-fieldset>
+
     </div>
     <div class="geboButtonsBar" style="vertical-align: baseline;">
         <div class="grid">
