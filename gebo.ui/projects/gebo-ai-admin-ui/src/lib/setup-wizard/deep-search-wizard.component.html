@@ -7,7 +7,8 @@
 
         <div class="col-6">
             <p-button id="AddDeepSearchBtn" gebo-ai-label icon="pi pi-plus" label="Deep search config"
-                styleClass="w-full" [outlined]="true" title="Add a deep search configuration" [disabled]="deepSearchConfig && deepSearchConfig?.length && (deepSearchConfig.length>0)"
+                styleClass="w-full" [outlined]="true" title="Add a deep search configuration"
+                [disabled]="(deepSearchConfig && deepSearchConfig?.length && (deepSearchConfig.length>0))?true:false"
                 (onClick)="createDeepSearchConfig()"></p-button>
         </div>
     </div>

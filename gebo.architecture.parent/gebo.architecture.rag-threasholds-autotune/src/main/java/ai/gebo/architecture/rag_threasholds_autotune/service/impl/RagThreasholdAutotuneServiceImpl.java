@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -95,15 +96,16 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	@Override
 	public OptimizedThreashold findByVectorStoreId(String vectorStoreId) {
-		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByVectorStoreId(vectorStoreId);
-		return data.isEmpty() ? null : data.get(0).getThreasholds();
+
+		ThreasholdAutotuneProcessResult data = internalFindByVectorStoreId(vectorStoreId);
+		return data != null ? data.getThreasholds() : null;
 	}
 
 	@Override
 	public OptimizedThreashold findByEmbeddingModelCode(String embeddingModelCode) {
 
-		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByEmbeddingModelCode(embeddingModelCode);
-		return data.isEmpty() ? null : data.get(0).getThreasholds();
+		ThreasholdAutotuneProcessResult data = internalFindByEmbeddingModelCode(embeddingModelCode);
+		return data != null ? data.getThreasholds() : null;
 	}
 
 	@Override
@@ -149,8 +151,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	@Override
 	public void processAutotune(String vectorStoreId) {
 		final int MAXQUESTIONS = this.config.getAutotuneMaxGeneratedQuestions();
-		List<ThreasholdAutotuneProcessResult> data = resultRepo.findByVectorStoreId(vectorStoreId);
-		ThreasholdAutotuneProcessResult lastEntry = data.isEmpty() ? null : data.get(0);
+
+		ThreasholdAutotuneProcessResult lastEntry = internalFindByVectorStoreId(vectorStoreId);
 		long count = vectorizedContentsRepository.countByIdVectorStoreId(vectorStoreId);
 		if (count == 0l) {
 			LOGGER.info("No found vectorized entries in " + vectorStoreId + " exiting autotune process");
@@ -304,6 +306,26 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			LOGGER.info("New threashold=> " + foundThreashold);
 			LOGGER.info("All threasholds data=> " + rateOrderedOptimizationThreasholds);
 		}
+	}
+
+	private ThreasholdAutotuneProcessResult internalFindByEmbeddingModelCode(String vectorStoreId) {
+		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByEmbeddingModelCode(vectorStoreId);
+		return this.latest(results);
+	}
+
+	private ThreasholdAutotuneProcessResult latest(List<ThreasholdAutotuneProcessResult> results) {
+
+		TreeMap<Date, ThreasholdAutotuneProcessResult> ordered = new TreeMap<>();
+		if (results != null)
+			for (ThreasholdAutotuneProcessResult r : results) {
+				ordered.put(r.getProcessedDateTime(), r);
+			}
+		return !ordered.isEmpty() ? ordered.lastEntry().getValue() : null;
+	}
+
+	private ThreasholdAutotuneProcessResult internalFindByVectorStoreId(String vectorStoreId) {
+		List<ThreasholdAutotuneProcessResult> results = this.resultRepo.findByVectorStoreId(vectorStoreId);
+		return this.latest(results);
 	}
 
 	private AutoTuneRatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,

@@ -65,11 +65,69 @@
                     <div class="col-6" *ngIf="searchType==='SINGLE_HOP'">
 
                     </div>
+
                 </div>
             </p-tabPanel>
             <p-tabPanel id="SecuritySettingsTab" gebo-ai-label header="Security settings">
-                <div class="grid geboDialogContent">
-                    
+                <div class="grid geboDialogContent p-3">
+                    <div class="col-6">
+
+                        <gebo-ai-field id="perDataSourceConfigured" label="Per data source user/groups access"
+                            help="Deep search will be enabled for each external data source and user or group">
+                            <p-checkbox formControlName="perDataSourceConfigured" binary="true" [trueValue]="true"
+                                [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-12">
+                        <p-fieldset id="SIMPLEMODE" legend="Simple per user/group access" gebo-ai-label>
+                            <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                        </p-fieldset>
+                    </div>
+                    <div class="col-12">
+                        <p-fieldset id="PERDATASOURCEMODE" legend="Per data source user/group access" gebo-ai-label>
+                            <p-table [value]="dsAccessRows" styleClass="p-datatable-sm p-datatable-striped"
+                                [tableStyle]="{'min-width': '50rem'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th id="datasource" gebo-ai-text>Data Source</th>
+                                        <th id="accessibleToAll" gebo-ai-text>Accessible to All</th>
+                                        <th id="allowedGroups" gebo-ai-text>Allowed Groups</th>
+                                        <th id="allowedUsers" gebo-ai-text>Allowed Users</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row>
+                                    <tr [formGroup]="row.formGroup">
+                                        <td>{{ row.dataSource.description || row.dataSource.code }}</td>
+                                        <td>
+                                            <p-checkbox formControlName="accessibleToAll" [binary]="true"></p-checkbox>
+                                        </td>
+                                        <td>
+                                            <p-multiSelect [options]="groups" formControlName="accessibleGroups"
+                                                optionLabel="description" optionValue="code" appendTo="body"
+                                                placeholder="Select Groups" styleClass="w-full"></p-multiSelect>
+                                        </td>
+                                        <td>
+                                            <p-multiSelect [options]="row.availableUsers"
+                                                formControlName="accessibleUsers" optionLabel="name"
+                                                optionValue="username" appendTo="body" placeholder="Select Users"
+                                                styleClass="w-full">
+                                                <ng-template let-user pTemplate="item">
+                                                    <div class="flex align-items-center gap-2">
+                                                        <span>{{ user.name }} {{ user.sourname }}</span>
+                                                        <span style="font-size: 0.8em; color: gray;">({{ user.username
+                                                            }})</span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template let-user pTemplate="selectedItem">
+                                                    {{ user.name }} {{ user.sourname }}
+                                                </ng-template>
+                                            </p-multiSelect>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
+                    </div>
                 </div>
 
             </p-tabPanel>

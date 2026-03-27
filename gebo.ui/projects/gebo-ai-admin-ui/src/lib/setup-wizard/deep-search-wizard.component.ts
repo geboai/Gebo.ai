@@ -12,16 +12,16 @@ export class GeboAIDeepSearchWizardComponent extends BaseWizardSectionComponent 
 
     protected deepSearchConfig: DeepSearchConfig[] = [];
 
-    constructor(setupWizardComunicationService: SetupWizardComunicationService, 
+    constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private deepSearchAdminService: GeboDeepSearchAdminControllerService,
-        private actionRouter:GeboUIActionRoutingService) {
+        private actionRouter: GeboUIActionRoutingService) {
         super(setupWizardComunicationService)
     }
     public override reloadData(): void {
         this.loading = true;
-        this.deepSearchAdminService.getDeepSearchDefaultConfig().subscribe({
+        this.deepSearchAdminService.getDeepSeachConfigs().subscribe({
             next: (data) => {
-                this.deepSearchConfig = data ? [data] : [];
+                this.deepSearchConfig = data;
             }, complete: () => {
                 this.loading = false;
             }
@@ -29,28 +29,30 @@ export class GeboAIDeepSearchWizardComponent extends BaseWizardSectionComponent 
     }
     protected editDeepSearchConfig(data: DeepSearchConfig) {
         this.actionRouter.routeEvent({
-            actionType:GeboActionType.OPEN,
-            context:{},
-            contextType:"DeepSearchSetup",
-            target:data,
-            targetType:"DeepSearchConfig",
-            onActionPerformed:(data)=>{
+            actionType: GeboActionType.OPEN,
+            context: {},
+            contextType: "DeepSearchSetup",
+            target: data,
+            targetType: "DeepSearchConfig",
+            onActionPerformed: (data) => {
                 this.reloadData();
             }
         });
     }
     protected createDeepSearchConfig(): void {
-        const data: DeepSearchConfig={
-            searchType:"MULTI_HOP",
-            defaultConfig:true
+        const data: DeepSearchConfig = {
+            searchType: "MULTI_HOP",
+            defaultConfig: true,
+            accessibleToAll: true,
+            perDataSourceConfigured: false
         };
         this.actionRouter.routeEvent({
-            actionType:GeboActionType.NEW,
-            context:{},
-            contextType:"DeepSearchSetup",
-            target:data,
-            targetType:"DeepSearchConfig",
-            onActionPerformed:(data)=>{
+            actionType: GeboActionType.NEW,
+            context: {},
+            contextType: "DeepSearchSetup",
+            target: data,
+            targetType: "DeepSearchConfig",
+            onActionPerformed: (data) => {
                 this.reloadData();
             }
         });
