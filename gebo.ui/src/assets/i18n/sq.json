@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Hyr"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacioni dështoi",
+        "detail" : "Nuk mund të autentikohet me kredencialet e dhëna"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistemi Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Redakto sistemin"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "i çaktivizuar"
+      },
+      "EditGroupBtn" : {
+        "label" : "Redakto"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "përshkrim"
+      },
+      "UsersHeader" : {
+        "label" : "përdoruesit"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Përdorimi i modelit",
         "help" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model.",
         "placeholder" : "Përdorimet për të cilat platforma Gebo.ai do ta konsiderojë këtë model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacioni u krye me sukses"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Shto përmbajtje ose modifiko mënyrën e kërkimit"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Burimet",
+        "help" : "Hap listën e dokumenteve të analizuar"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detajet e përgjigjes deep search dhe burimet"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Rezultati i analizës Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Gabim gjatë kërkimit Confluence Search",
+        "detail" : "Gabim serveri: Probleme me aksesin në sistemin Confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Chat i ri u ngarkua",
+        "detail" : "Chat i ri u ngarkua me sukses"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Zgjidh burimet"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Zgjidh të paktën njërën nga opsionet më poshtë"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Kalo deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Baza e diturisë e zgjedhur"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistemet e zgjedhura"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Shto dokument në listën 'bisedo me' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Duke ekzekutuar deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Duke ekzekutuar retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Duke pyetur llm"
+      },
+      "Waiting" : {
+        "label" : "Duke analizuar planin më të mirë të përgjigjes.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Duke ekzekutuar mjetet"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Kërkim i mundësuar nga AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Skedari i analizuar"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultati i analizuar i kërkimit"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultati i analizuar i kërkimit të sistemit për"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Duke konsoliduar raportin përfundimtar"
+      },
+      "RUNNING" : {
+        "label" : "Duke ekzekutuar "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Po analizoj kërkesën tuaj"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "U zgjodh agentic flow, agjenti për përgjigje po ekzekutohet"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Niveli i shërbimit është: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Duke ekzekutuar agjentin e zgjedhur"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Ngarko skedar(et)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Shfleto/kërko skedarë të kompanisë"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat me dok. e zgjedhur"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Burime të shumëfishta"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Kërkim në bazën e dijes"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat me skedar(et)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Përdoruesi i Google për imitimin",
         "help" : "Përdoruesi që do të imitohet nga këto kredenciale",
         "placeholder" : "Përdoruesi që do të imitohet nga këto kredenciale"
+      },
+      "OK" : {
+        "summary" : "U ruajt me sukses",
+        "detail" : "Përditësimi u krye me sukses"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Dokumente të përpunuara",
         "dataset-2-label" : "Dokumente me gabim",
         "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indeksimi i plotë i tekstit"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Dokumente të patrajtuara",
+        "label-1" : "Gabim në përpunimin e dokumenteve",
+        "label-2" : "Dokumente të përpunuara"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Dokumente të pranuara",
+        "dataset-1-label" : "Dokumente të përpunuara",
+        "dataset-2-label" : "Dokumente me gabim",
+        "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Token të përpunuar",
+        "dataset-1-label" : "Gabim gjatë përpunimit të tokenëve"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Përjashtim gjatë operacionit:Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api",
         "detail" : "Gabim serveri: Anthropic api nuk mund të funksionojë pa konfigurimin e domosdoshëm të çelësit api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "Ofruesi është aktiv dhe i konfiguruar me sukses"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Përjashtim gjatë operacionit:401 UNAUTHORIZED",
+        "detail" : "Gabim serveri: 401 I paautorizuar"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Përjashtim gjatë operacionit:Mungon basePath",
+        "detail" : "Gabim serveri: Mungon basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Përfunduar"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacioni u krye me sukses"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Zgjidh burimet"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Skedari i analizuar"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Pragu i ngjashmërisë së kërkimit",
         "help" : "Pragu i ngjashmërisë semantike (nga 0.5 deri në 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Cilësimet e sigurisë"
+      },
+      "accessibleToAll" : {
+        "label" : "E aksesueshme për të gjithë"
+      },
+      "datasource" : {
+        "label" : "Burimi i të dhënave"
+      },
+      "allowedGroups" : {
+        "label" : "Grupet e lejuara"
+      },
+      "allowedUsers" : {
+        "label" : "Përdorues të lejuar"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Akses për përdorues/grup për çdo burim të dhënash",
+        "help" : "Deep search do të jetë i aktivizuar për çdo burim të jashtëm të dhënash dhe përdorues ose grup"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Akses i thjeshtë për përdorues/grup"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Akses për përdorues/grup për çdo burim të dhënash"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Kredencialet u krijuan",
         "detail" : "Kredencialet u krijuan me sukses"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Gabim gjatë komunikimit me serverin Ollama ",
+        "detail" : "Gabim rrjeti gjatë komunikimit me sistemin e largët duke u qasur tek lista e modeleve\n Gabim me url:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Innskráning"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Aðgerð mistókst",
+        "detail" : "Ekki var hægt að auðkenna með þeim innskráningarupplýsingum sem gefnar voru"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence kerfi"
+      },
+      "EditSystemBtn" : {
+        "label" : "Breyta kerfi"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "óvirkt"
+      },
+      "EditGroupBtn" : {
+        "label" : "Breyta"
+      },
+      "CodeHeader" : {
+        "label" : "kóði"
+      },
+      "DescriptionHeader" : {
+        "label" : "lýsing"
+      },
+      "UsersHeader" : {
+        "label" : "notendur"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Notkun líkans",
         "help" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við.",
         "placeholder" : "Hvaða notkun Gebo.ai vettvangurinn mun tengja þetta líkan við."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Allt í lagi!",
+        "detail" : "Aðgerð tókst"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Bæta efni við eða breyta leitarhegðun"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Heimildir",
+        "help" : "Opna lista yfir greind skjöl"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Nánari svör og heimildir úr djúpleit"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Niðurstaða djúpleitar greiningar"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Villa við leit í Confluence Search",
+        "detail" : "Þjónustuvilla: Vandamál við aðgang að confluence kerfi"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nýtt spjall opnað",
+        "detail" : "Nýtt spjall hefur verið opnað með góðum árangri"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Velja heimildir"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Veldu að minnsta kosti einn af eftirfarandi valkostum"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Sleppa djúpleit"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valdar þekkingargrunnur"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valin kerfi"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Bæta skjali við 'spjalla við' lista"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Keyri djúpleit"
+      },
+      "RagLLMResponse" : {
+        "label" : "Keyri retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Spyr llm"
+      },
+      "Waiting" : {
+        "label" : "Greini bestu svarsáætlunina..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Keyri tól"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Keyri AI hjálpaða leit"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Greindi skrá"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Greind leitarniðurstaða"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Greind leitarniðurstaða úr kerfi fyrir"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Tek saman lokaskýrslu"
+      },
+      "RUNNING" : {
+        "label" : "Keyri "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ég er að greina beiðni þína"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentic ferli valið, svaraþjónn keyrir"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Þjónustustig er: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Keyri valda þjón"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Hlaða upp skrá(m)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Fletta/leita í gagnaskrám fyrirtækis"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Spjall við valda skrá"
+      },
+      "agenticChat" : {
+        "label" : "Agentic spjall"
+      },
+      "rag" : {
+        "label" : "R.a.g. spjall"
+      },
+      "deepSearch" : {
+        "label" : "Djúpleit/margar heimildir"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Djúpleit/Google Web leit"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Djúpleit/Confluence leit"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Djúpleit/Jira leit"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Djúpleit/þekkingargrunnsleit"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Spjall við skrá(r)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Djúpleit/Google Web leit"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Djúpleit/Confluence leit"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Djúpleit/Jira leit"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google notandi sem verður hermt eftir",
         "help" : "Notandinn sem verður hermt eftir með þessum skilríkjum",
         "placeholder" : "Notandinn sem verður hermt eftir með þessum skilríkjum"
+      },
+      "OK" : {
+        "summary" : "Tókst að vista",
+        "detail" : "Uppfærsla tókst"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Unnin skjöl",
         "dataset-2-label" : "Villuskjöl",
         "dataset-3-label" : "Hentu skjölum"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Full texta vísun"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við úrvinnslu skjal",
+        "label-2" : "Unnin skjöl"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villa í skjölum",
+        "dataset-3-label" : "Fleygð skjöl"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Unnir táknar",
+        "dataset-1-label" : "Villa við úrvinnslu tákna"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Undantekning kom upp:Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar",
         "detail" : "Þjónustuvilla: Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjaraðili í lagi",
+        "detail" : "Aðili er til staðar og rétt uppsettur"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Undantekning í aðgerð:401 ÓAUTORISERAÐ",
+        "detail" : "Þjónustuvilla: 401 ÓAUTORISERAÐ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Undantekning í aðgerð:Vantar basePath",
+        "detail" : "Þjónustuvilla: Vantar basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Lokið"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Allt í lagi!",
+        "detail" : "Aðgerð tókst"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Velja uppruna"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Greindi skrá"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Líkindaþröskuldur fyrir leit",
         "help" : "Skynsamleg líkindaþröskuldur (á bilinu 0.5 til 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Öryggisstillingar"
+      },
+      "accessibleToAll" : {
+        "label" : "Aðgengilegt öllum"
+      },
+      "datasource" : {
+        "label" : "Gagnagjafi"
+      },
+      "allowedGroups" : {
+        "label" : "Leyfðar notendahópar"
+      },
+      "allowedUsers" : {
+        "label" : "Leyfðir notendur"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Aðgangur notanda/hóps eftir gagnagjafa",
+        "help" : "Djúpleit verður virkjuð fyrir hverja ytri gagnagjafa og notanda eða hóp"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Einfaldur aðgangur eftir notanda/hópi"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Aðgangur eftir gagnagjafa og notanda/hópi"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Auðkenni búið til",
         "detail" : "Auðkenni voru búin til með góðum árangri"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Villa við samskipti við Ollama þjón",
+        "detail" : "Nettengingarvilla við tengingu við fjartengt kerfi til að nálgast innihald\n lista yfir módel. Villa með url:nullapi/tags"
       }
     }
   },

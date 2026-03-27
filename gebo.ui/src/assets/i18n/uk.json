@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Увійти"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операцію не виконано",
+        "detail" : "Не вдалося автентифікуватися з наданими обліковими даними"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence система"
+      },
+      "EditSystemBtn" : {
+        "label" : "Редагувати систему"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "вимкнено"
+      },
+      "EditGroupBtn" : {
+        "label" : "Редагувати"
+      },
+      "CodeHeader" : {
+        "label" : "код"
+      },
+      "DescriptionHeader" : {
+        "label" : "опис"
+      },
+      "UsersHeader" : {
+        "label" : "користувачі"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Використання моделі",
         "help" : "Використання, для яких платформа Gebo.ai використовуватиме цю модель.",
         "placeholder" : "Використання, для яких платформа Gebo.ai використовуватиме цю модель."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Готово!",
+        "detail" : "Операцію успішно виконано"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Додати вміст або змінити поведінку пошуку"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Джерела",
+        "help" : "Відкрити список проаналізованих документів"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Деталі відповіді та джерел глибокого пошуку"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Результат аналізу глибокого пошуку"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Помилка пошуку Confluence Search",
+        "detail" : "Помилка сервера: Проблеми з доступом до системи confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Новий чат завантажено",
+        "detail" : "Новий чат успішно завантажено"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Вибрати джерела"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Оберіть принаймні один з наступних варіантів"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Пропустити глибокий пошук"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Обрані бази знань"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Обрані системи"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Додати документ до списку \"чат з\" "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Виконується глибокий пошук"
+      },
+      "RagLLMResponse" : {
+        "label" : "Виконується retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Запит до llm"
+      },
+      "Waiting" : {
+        "label" : "Аналізуємо найкращий план відповіді..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Виконуються інструменти"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Виконується AI-пошук"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Проаналізовано файл"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Проаналізовано результат пошуку"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Проаналізовано результат пошуку системи для"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Формування фінального звіту"
+      },
+      "RUNNING" : {
+        "label" : "Виконується "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Аналізую ваш запит"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Обрано agentic flow, виконується агент"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Рівень сервісу: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Виконання обраного вами агента"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Завантажити файл(и)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Огляд/пошук корпоративних файлів"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Чат з обраним документом"
+      },
+      "agenticChat" : {
+        "label" : "Agentic чат"
+      },
+      "rag" : {
+        "label" : "R.a.g. чат"
+      },
+      "deepSearch" : {
+        "label" : "Глибокий пошук/Декілька джерел"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Глибокий пошук/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Глибокий пошук/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Глибокий пошук/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Глибокий пошук/Пошук по базі знань"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Чат із файлами"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Глибокий пошук/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Глибокий пошук/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Глибокий пошук/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Користувач Google для імітації",
         "help" : "Користувач, якого буде імітувати ця облікова інформація",
         "placeholder" : "Користувач, якого буде імітувати ця облікова інформація"
+      },
+      "OK" : {
+        "summary" : "Успішно збережено",
+        "detail" : "Операцію оновлення виконано успішно"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Оброблені документи",
         "dataset-2-label" : "Документи з помилками",
         "dataset-3-label" : "Відхилені документи"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Повнотекстова індексація"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Не оброблені документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Оброблені документи"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Оброблені документи",
+        "dataset-2-label" : "Документи з помилкою",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Оброблені токени",
+        "dataset-1-label" : "Помилка обробки токенів"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Виняток під час операції: Anthropic api не може працювати без потрібного налаштування api-ключа",
         "detail" : "Помилка сервера: Anthropic api не може працювати без потрібного налаштування api-ключа"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI віддалений провайдер OK",
+        "detail" : "Провайдер працює і налаштований успішно"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Виняток під час операції:401 UNAUTHORIZED",
+        "detail" : "Помилка сервера: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Виняток під час операції: Відсутній basePath",
+        "detail" : "Помилка сервера: Відсутній basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Завершено"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Готово!",
+        "detail" : "Операцію успішно виконано"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Обрати джерела"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Проаналізовано файл"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Поріг схожості пошуку",
         "help" : "Поріг семантичної схожості (від 0.5 до 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Налаштування безпеки"
+      },
+      "accessibleToAll" : {
+        "label" : "Доступно для всіх"
+      },
+      "datasource" : {
+        "label" : "Джерело даних"
+      },
+      "allowedGroups" : {
+        "label" : "Дозволені групи"
+      },
+      "allowedUsers" : {
+        "label" : "Дозволені користувачі"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Доступ користувачів/груп до кожного джерела даних",
+        "help" : "Глибокий пошук буде доступний для кожного зовнішнього джерела даних і користувача або групи"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Простий доступ для користувача/групи"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Доступ для користувача/групи по джерелу даних"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Облікові дані створено",
         "detail" : "Облікові дані успішно створено"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Помилка зв'язку з Ollama сервером ",
+        "detail" : "Мережева помилка під час зв'язку з віддаленою системою і доступу до контенту\n список моделей Помилка роботи з url:nullapi/tags"
       }
     }
   },

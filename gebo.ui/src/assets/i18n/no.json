@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Logg inn"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasjon mislyktes",
+        "detail" : "Kan ikke autentisere med oppgitte legitimasjonsopplysninger"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-system"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rediger system"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktivert"
+      },
+      "EditGroupBtn" : {
+        "label" : "Rediger"
+      },
+      "CodeHeader" : {
+        "label" : "kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "beskrivelse"
+      },
+      "UsersHeader" : {
+        "label" : "brukere"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modellbruk",
         "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
         "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble utført"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Legg til innhold eller endre søkeatferd"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Kilder",
+        "help" : "Åpne listen over analyserte dokumenter"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detaljer for dypsøk svar og kilder"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resultat av dypsøksanalyse"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Feil ved søk i Confluence Search",
+        "detail" : "Serverfeil: Problemer med tilgang til confluence-systemet"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Ny chat lastet inn",
+        "detail" : "Ny chat lastet inn"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Velg kilder"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Velg minst ett av følgende alternativer"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hopp over dypsøk"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valgte kunnskapsbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valgte systemer"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Legg til dokument i 'chat med'-listen "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Kjører dypsøk"
+      },
+      "RagLLMResponse" : {
+        "label" : "Kjører augmented generering"
+      },
+      "PureLLMResponse" : {
+        "label" : "Spør llm"
+      },
+      "Waiting" : {
+        "label" : "Analyserer beste svarplan.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Kjører verktøy"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Kjører AI-assistert søk"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysert fil"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysert søkeresultat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysert system søkeresultat for"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliderer sluttrapporten"
+      },
+      "RUNNING" : {
+        "label" : "Kjører "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Jeg analyserer din forespørsel"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Valgt agentisk flyt, agent svarer"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Tjenestenivå er: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Utfører din valgte agent"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Last opp fil(er)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Bla gjennom/søk i bedriftens fil(er)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Valgte dokument chat"
+      },
+      "agenticChat" : {
+        "label" : "Agentisk chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Dypsøk/flere kilder"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dypsøk/Google Nettsøk"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dypsøk/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Dypsøk/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Dypsøk/Kunnskapsbase-søk"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat med fil(er)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dypsøk/Google Nettsøk"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dypsøk/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Dypsøk/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google-bruker som skal etterlignes",
         "help" : "Brukeren som skal etterlignes av de angitte legitimasjonene",
         "placeholder" : "Brukeren som skal etterlignes av de angitte legitimasjonene"
+      },
+      "OK" : {
+        "summary" : "Lagret",
+        "detail" : "Oppdatering utført"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Behandlede dokumenter",
         "dataset-2-label" : "Feil dokumenter",
         "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Fulltekstsindeksering"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feildokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Unntak under operasjon: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon",
         "detail" : "Serverfeil: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ekstern leverandør OK",
+        "detail" : "Leverandør kjører og er riktig konfigurert"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Unntak under operasjon:401 UNAUTHORIZED",
+        "detail" : "Serverfeil: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Unntak under operasjon:Mangler basePath",
+        "detail" : "Serverfeil: Mangler basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Fullført"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble utført"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Velg kilder"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysert fil"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Søkelikhetsgrense",
         "help" : "Semantisk likhetsgrense (mellom 0,5 og 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Sikkerhetsinnstillinger"
+      },
+      "accessibleToAll" : {
+        "label" : "Tilgjengelig for alle"
+      },
+      "datasource" : {
+        "label" : "Datakilde"
+      },
+      "allowedGroups" : {
+        "label" : "Tillatte grupper"
+      },
+      "allowedUsers" : {
+        "label" : "Tillatte brukere"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Tilgang per datakilde for brukere/grupper",
+        "help" : "Dypsøk aktiveres for hver ekstern datakilde og bruker eller gruppe"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Enkel tilgang per bruker/gruppe"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Tilgang per datakilde bruker/gruppe"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Legitimasjon opprettet",
         "detail" : "Legitimasjon opprettet"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Feil ved kommunikasjon med Ollama-server",
+        "detail" : "Nettverksfeil ved kommunikasjon til fjernt system for tilgang til innhold\n modelliste Feil ved arbeid med url:nullapi/tags"
       }
     }
   },

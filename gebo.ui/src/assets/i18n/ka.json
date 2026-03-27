@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "შესვლა"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ოპერაცია ვერ შესრულდა",
+        "detail" : "წარდგენილი სერთიფიკატებით ავთენტიფიკაცია შეუძლებელია"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence სისტემა"
+      },
+      "EditSystemBtn" : {
+        "label" : "სისტემის რედაქტირება"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "გათიშული"
+      },
+      "EditGroupBtn" : {
+        "label" : "რედაქტირება"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერილობა"
+      },
+      "UsersHeader" : {
+        "label" : "მომხმარებლები"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "მოდელის გამოყენება(ები)",
         "help" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს.",
         "placeholder" : "დასახელებები, რისთვისაც Gebo.ai პლატფორმა განიხილავს ამ მოდელს."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "შესრულებულია!",
+        "detail" : "ოპერაცია წარმატებით დასრულდა"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "დაამატეთ შინაარსი ან შეცვალეთ ძებნის მოქმედება"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "წყაროები",
+        "help" : "გახსენით ანალიზირებული დოკუმენტების სია"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ღრმა ძებნის პასუხი და წყაროების დეტალები"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ღრმა ძებნის ანალიზის შედეგი"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence-ში ძიების შეცდომა",
+        "detail" : "სერვერის შეცდომა: Confluence სისტემაზე წვდომის პრობლემა"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ახალი ჩატი ჩაიტვირთა",
+        "detail" : "ახალი ჩატი წარმატებით ჩაიტვირთა"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "აირჩიეთ წყაროები"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "აირჩიეთ მინიმუმ ერთი მოცემული ოპციიდან"
+      },
+      "SkipDeepSearch" : {
+        "label" : "გამოტოვეთ ღრმა ძებნა"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "არჩეული ცოდნის ბაზები"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "არჩეული სისტემები"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "დაუმატეთ დოკუმენტი 'ჩატში დაკავშირებულების' სიას "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "შესრულდება ღრმა ძებნა"
+      },
+      "RagLLMResponse" : {
+        "label" : "ჩატარდება დამატებითი ინფორმაციის გენერაცია"
+      },
+      "PureLLMResponse" : {
+        "label" : "მიმდინარეობს llm-ის კითხვა"
+      },
+      "Waiting" : {
+        "label" : "გაანალიზება საუკეთესო პასუხის სტრატეგიისთვის..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ინსტრუმენტების გაშვება"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI-ით თანადგომილი ძებნა"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "დოკუმენტი გაანალიზდა"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ძებნის შედეგი გაანალიზდა"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "სისტემის ძებნის შედეგი გაანალიზებულია"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "საბოლოო ანგარიშის კონსოლიდაცია"
+      },
+      "RUNNING" : {
+        "label" : "მიმდინარეობს"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ვ ა ნ ა ლ ი ზ ე ბ თქვენს მოთხოვნას"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "არჩეული აგენტური ნაკადი, ელექტრონული ასისტენტი მუშაობს"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "სერვისის დონე არის: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "ასრულებს თქვენს არჩეულ აგენტს"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ფაილების ატვირთვა"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "კომპანიის ფაილების ნახვა/ძიება"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "არჩეულ დოკუმენტთან ჩატი"
+      },
+      "agenticChat" : {
+        "label" : "აგენტური ჩატი"
+      },
+      "rag" : {
+        "label" : "R.a.g. ჩატი"
+      },
+      "deepSearch" : {
+        "label" : "ღრმა ძებნა/მრავალი წყარო"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ღრმა ძებნა/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ღრმა ძებნა/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ღრმა ძებნა/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ღრმა ძებნა/ცოდნის ბაზის ძებნა"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ჩატი ფაილებთან"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ღრმა ძებნა/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ღრმა ძებნა/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ღრმა ძებნა/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google მომხმარებელი, რომელიც უნდა იყოს იმიტირებული",
         "help" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით",
         "placeholder" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით"
+      },
+      "OK" : {
+        "summary" : "წარმატებით შენახულია",
+        "detail" : "განახლების ოპერაცია წარმატებით დასრულდა"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "დამუშავებული დოკუმენტები",
         "dataset-2-label" : "შეცდომიანი დოკუმენტები",
         "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "სრული ტექსტის ინდექსირება"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომის დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "ტოკენების დამუშავების შეცდომა"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ოპერაციის გამონაკლისი: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე",
         "detail" : "სერვერის შეცდომა: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI დისტანციური მიმწოდებელი მზადაა",
+        "detail" : "მომწოდებელი ჩართულია და წარმატებით კონფიგურირებულია"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ოპერაციისას გამონაკლისი: 401 UNAUTHORIZED",
+        "detail" : "სერვერის შეცდომა: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ოპერაციისას გამონაკლისი: basePath არ არის მითითებული",
+        "detail" : "სერვერის შეცდომა: basePath არ არის მითითებული"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "დასრულებულია"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "შესრულებულია!",
+        "detail" : "ოპერაცია წარმატებით დასრულდა"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "აირჩიეთ წყაროები"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "დოკუმენტი გაანალიზდა"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "ძებნის მსგავსების ზღვარი",
         "help" : "სემანტიკური მსგავსების ზღვარი (0.5-დან 1.0-მდე)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "უსაფრთხოების პარამეტრები"
+      },
+      "accessibleToAll" : {
+        "label" : "ყველასთვის ხელმისაწვდომი"
+      },
+      "datasource" : {
+        "label" : "მონაცემთა წყარო"
+      },
+      "allowedGroups" : {
+        "label" : "ნებართული ჯგუფები"
+      },
+      "allowedUsers" : {
+        "label" : "ნებართული მომხმარებლები"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ჯერ მონაცემთა წყაროს ხელმისაწვდომობა მომხმარებლებს/ჯგუფებს",
+        "help" : "ღრმა ძებნა ჩართული იქნება თითოეულ მონაცემთა წყაროსა და მომხმარებელ/ჯგუფზე"
+      },
+      "SIMPLEMODE" : {
+        "label" : "მარტივი ხელმისაწვდომობა მომხმარებელ/ჯგუფზე"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "წყაროს მიხედვით მომხმარებელ/ჯგუფზე ხელმისაწვდომობა"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "ავტორიზაცია შეიქმნა",
         "detail" : "ავტორიზაცია წარმატებით შეიქმნა"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama სერვერთან კავშირის შეცდომა",
+        "detail" : "ქსელის შეცდომა დაშორებულ სისტემასთან დაკავშირებისას\n მოდელების სიის მიღების შეცდომა url:nullapi/tags შესრულებისას"
       }
     }
   },

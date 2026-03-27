@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ورود"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "عملیات ناموفق بود",
+        "detail" : "امکان احراز هویت با اطلاعات وارد شده وجود ندارد"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "سیستم Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "ویرایش سیستم"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "غیرفعال"
+      },
+      "EditGroupBtn" : {
+        "label" : "ویرایش"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "UsersHeader" : {
+        "label" : "کاربران"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "استفاده مدل",
         "help" : "مواردی که پلتفرم Gebo.ai این مدل را برای آن‌ها در نظر می‌گیرد.",
         "placeholder" : "مواردی که پلتفرم Gebo.ai این مدل را برای آن‌ها در نظر می‌گیرد."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "باشه!",
+        "detail" : "عملیات با موفقیت انجام شد"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "افزودن محتوا یا تغییر رفتار جستجو"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "منابع",
+        "help" : "لیست اسناد تحلیل شده را باز کنید"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "جزئیات پاسخ جستجوی عمیق و منابع"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "نتیجه تحلیل جستجوی عمیق"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "خطا در جستجوی Confluence Search",
+        "detail" : "خطای سرور: مشکل در دسترسی به سیستم confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "گفتگوی جدید بارگذاری شد",
+        "detail" : "گفتگوی جدید با موفقیت بارگذاری شد"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "انتخاب منابع"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "حداقل یکی از گزینه‌های زیر را انتخاب کنید"
+      },
+      "SkipDeepSearch" : {
+        "label" : "رد کردن جستجوی عمیق"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "پایگاه‌های دانش انتخاب‌شده"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "سیستم‌های انتخاب‌شده"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "افزودن سند به لیست «گفتگو با»"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "در حال اجرای جستجوی عمیق"
+      },
+      "RagLLMResponse" : {
+        "label" : "اجرای بازیابی محتوای تقویتی"
+      },
+      "PureLLMResponse" : {
+        "label" : "در حال پرسش از llm"
+      },
+      "Waiting" : {
+        "label" : "در حال تحلیل بهترین برنامه پاسخ..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "اجرای ابزارها"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "در حال جستجوی هوشمندانه با کمک هوش مصنوعی"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "فایل تحلیل شده"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "نتیجه جستجوی تحلیل شده"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "نتیجه جستجوی سیستم تحلیل شده برای"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "در حال نهایی‌سازی گزارش"
+      },
+      "RUNNING" : {
+        "label" : "در حال اجرا "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "در حال تحلیل درخواست شما هستم"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "فرایند عامل انتخاب شد، پاسخ‌دهنده فعال است"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "سطح سرویس: پرسش و پاسخ"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "در حال اجرای عامل انتخابی شما"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "بارگذاری فایل(ها)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "جستجو/مرور فایل‌های شرکت"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "گفتگو با اسناد انتخابی"
+      },
+      "agenticChat" : {
+        "label" : "گفتگوی عامل‌محور"
+      },
+      "rag" : {
+        "label" : "گفتگوی R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "جستجوی عمیق/منابع متعدد"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "جستجوی عمیق/جستجوی وب Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "جستجوی عمیق/جستجوی Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "جستجوی عمیق/جستجوی Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "جستجوی عمیق/پایگاه دانش"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "گفتگو با فایل(ها)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "جستجوی عمیق/جستجوی وب Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "جستجوی عمیق/جستجوی Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "جستجوی عمیق/جستجوی Jira"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "کاربر Google برای احراز هویت",
         "help" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود",
         "placeholder" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود"
+      },
+      "OK" : {
+        "summary" : "با موفقیت ذخیره شد",
+        "detail" : "عملیات بروزرسانی با موفقیت انجام شد"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "اسناد پردازش‌شده",
         "dataset-2-label" : "اسناد دارای خطا",
         "dataset-3-label" : "اسناد ردشده"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "نمایه‌سازی متن کامل"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "اسناد پردازش‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافتی",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد خطادار",
+        "dataset-3-label" : "اسناد کنارگذاشته شده"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "استثنا در عملیات: Anthropic api بدون پیکربندی کلید api مورد نیاز کار نمی‌کند",
         "detail" : "خطای سرور: Anthropic api بدون پیکربندی کلید api مورد نیاز کار نمی‌کند"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ارائه‌دهنده راه دور هوش مصنوعی فعال است",
+        "detail" : "ارائه‌دهنده راه‌اندازی و با موفقیت پیکربندی شد"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "خطا حین عملیات:401 مجاز نیست",
+        "detail" : "خطای سرور: 401 مجاز نیست"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "خطا حین عملیات: فقدان basePath",
+        "detail" : "خطای سرور: فقدان basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "تکمیل شد"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "باشه!",
+        "detail" : "عملیات با موفقیت انجام شد"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "انتخاب منابع"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "فایل تحلیل شده"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "آستانه شباهت جستجو",
         "help" : "آستانه شباهت معنایی (بین 0.5 تا 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "تنظیمات امنیتی"
+      },
+      "accessibleToAll" : {
+        "label" : "دسترسی برای همه"
+      },
+      "datasource" : {
+        "label" : "منبع داده"
+      },
+      "allowedGroups" : {
+        "label" : "گروه‌های مجاز"
+      },
+      "allowedUsers" : {
+        "label" : "کاربران مجاز"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "دسترسی کاربران/گروه‌ها به ازای هر منبع داده",
+        "help" : "جستجوی عمیق برای هر منبع داده خارجی و کاربر یا گروه فعال خواهدشد"
+      },
+      "SIMPLEMODE" : {
+        "label" : "دسترسی ساده کاربران/گروه‌ها"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "دسترسی کاربران/گروه‌ها به ازای هر منبع داده"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "اعتبارنامه ایجاد شد",
         "detail" : "اعتبارنامه با موفقیت ایجاد شد"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "خطا در ارتباط با سرور Ollama ",
+        "detail" : "خطای شبکه در ارتباط با سیستم راه دور برای دسترسی به محتوا\n لیست مدل‌ها خطا در کار با url:nullapi/tags"
       }
     }
   },

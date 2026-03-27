@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "登录"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "操作失败",
+        "detail" : "无法使用提供的凭据进行身份验证"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence 系统"
+      },
+      "EditSystemBtn" : {
+        "label" : "编辑系统"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "已禁用"
+      },
+      "EditGroupBtn" : {
+        "label" : "编辑"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "UsersHeader" : {
+        "label" : "用户"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "模型用途",
         "help" : "Gebo.ai 平台将在这些用途上考虑该模型。",
         "placeholder" : "Gebo.ai 平台将在这些用途上考虑该模型。"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "好的！",
+        "detail" : "操作成功完成"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "添加内容或修改搜索行为"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "来源",
+        "help" : "打开已分析文档列表"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "深度检索答案及来源详情"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "深度检索分析结果"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "搜索Confluence时出错",
+        "detail" : "服务器错误：访问confluence系统时出现问题"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "新聊天已加载",
+        "detail" : "新聊天加载成功"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "选择来源"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "请至少选择以下一个选项"
+      },
+      "SkipDeepSearch" : {
+        "label" : "跳过深度检索"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "已选择知识库"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "已选择系统"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "将文档添加到“与...聊天”列表"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "正在进行深度检索"
+      },
+      "RagLLMResponse" : {
+        "label" : "正在执行检索增强生成"
+      },
+      "PureLLMResponse" : {
+        "label" : "正在询问llm"
+      },
+      "Waiting" : {
+        "label" : "正在分析最佳响应方案…"
+      },
+      "ToolsLLMResponse" : {
+        "label" : "正在运行工具"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI辅助搜索中"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "已分析文件"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "已分析的搜索结果"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "已分析系统搜索结果"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "正在整合最终报告"
+      },
+      "RUNNING" : {
+        "label" : "正在运行 "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "正在分析您的请求"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "已选择Agent流程，智能体正在运行"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "服务级别为：QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "正在执行您选择的代理"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "上传文件"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "浏览/搜索公司文件"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "已选文件聊天"
+      },
+      "agenticChat" : {
+        "label" : "Agentic 聊天"
+      },
+      "rag" : {
+        "label" : "R.a.g. 聊天"
+      },
+      "deepSearch" : {
+        "label" : "深度检索/多来源"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "深度检索/Google网页搜索"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "深度检索/Confluence搜索"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "深度检索/Jira搜索"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "深度检索/知识库搜索"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "与文件聊天"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "深度检索/Google网页搜索"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "深度检索/Confluence搜索"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "深度检索/Jira搜索"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "要模拟的 Google 用户",
         "help" : "将由所提供凭证模拟的用户",
         "placeholder" : "将由所提供凭证模拟的用户"
+      },
+      "OK" : {
+        "summary" : "保存成功",
+        "detail" : "更新操作成功完成"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "已处理文档",
         "dataset-2-label" : "出错文档",
         "dataset-3-label" : "已丢弃文档"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "全文索引"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "处理文档出错",
+        "label-2" : "已处理文档"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "已接收文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "已处理tokens",
+        "dataset-1-label" : "处理tokens出错"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "操作异常：Anthropic api 需配置 api key 才可用",
         "detail" : "服务器错误：Anthropic api 需配置 api key 才可用"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI远程服务商正常",
+        "detail" : "服务商已启动并成功配置"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "操作时出现异常:401 UNAUTHORIZED",
+        "detail" : "服务器错误：401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "操作时出现异常:缺少basePath",
+        "detail" : "服务器错误：缺少basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "已完成"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "好的！",
+        "detail" : "操作成功完成"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "选择来源"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "已分析文件"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "搜索相似度阈值",
         "help" : "语义相似度阈值（0.5 至 1.0 之间）"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "安全设置"
+      },
+      "accessibleToAll" : {
+        "label" : "所有人可访问"
+      },
+      "datasource" : {
+        "label" : "数据源"
+      },
+      "allowedGroups" : {
+        "label" : "允许的群组"
+      },
+      "allowedUsers" : {
+        "label" : "允许的用户"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "按数据源配置用户/群组访问",
+        "help" : "深度检索将在每个外部数据源和用户或群组中启用"
+      },
+      "SIMPLEMODE" : {
+        "label" : "按用户/群组简单访问"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "按数据源用户/群组访问"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "凭证已创建",
         "detail" : "凭证创建成功"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "与Ollama服务器通信出错 ",
+        "detail" : "与远程系统通信访问内容时网络错误\n模型列表操作url出错:nullapi/tags"
       }
     }
   },

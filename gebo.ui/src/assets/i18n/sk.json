@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Prihlásiť sa"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operácia zlyhala",
+        "detail" : "Nie je možné overiť prihlásenie pomocou zadaných údajov"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence systém"
+      },
+      "EditSystemBtn" : {
+        "label" : "Upraviť systém"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktivované"
+      },
+      "EditGroupBtn" : {
+        "label" : "Upraviť"
+      },
+      "CodeHeader" : {
+        "label" : "kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "popis"
+      },
+      "UsersHeader" : {
+        "label" : "používatelia"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Použitie modelu",
         "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
         "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia prebehla úspešne"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Zdroje",
+        "help" : "Otvorte zoznam analyzovaných dokumentov"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Podrobnosti odpovede a zdrojov z hĺbkového vyhľadávania"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Výsledok analýzy hĺbkového vyhľadávania"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Chyba pri vyhľadávaní Confluence Search",
+        "detail" : "Chyba servera: Problémy s prístupom do systému Confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nový chat načítaný",
+        "detail" : "Nový chat bol úspešne načítaný"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vybrať zdroje"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vyberte aspoň jednu z nasledujúcich možností"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskočiť hĺbkové vyhľadávanie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Vybrané bázy znalostí"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Vybrané systémy"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Pridať dokument do zoznamu 'chatovať s'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Prebieha hĺbkové vyhľadávanie"
+      },
+      "RagLLMResponse" : {
+        "label" : "Prebieha retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Pýtanie sa llm"
+      },
+      "Waiting" : {
+        "label" : "Analyzujem najlepší plán odpovede..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Spúšťanie nástrojov"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Prebieha AI asistované vyhľadávanie"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyzovaný súbor"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Vyhodnotený výsledok vyhľadávania"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Vyhodnotený výsledok vyhľadávania systému pre"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidujem záverečnú správu"
+      },
+      "RUNNING" : {
+        "label" : "Prebieha"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analyzujem vašu požiadavku"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Zvolený agentický tok, beží odpovedajúci agent"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Úroveň služby je: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Spúšťam zvoleného agenta"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Nahrať súbor(y)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Prehliadať/vyhľadávať firemné súbory"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat s vybraným dokumentom"
+      },
+      "agenticChat" : {
+        "label" : "Agentický chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Hĺbkové vyhľadávanie/Viac zdrojov"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Hĺbkové vyhľadávanie/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Hĺbkové vyhľadávanie/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Hĺbkové vyhľadávanie/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Hĺbkové vyhľadávanie/Vyhľadávanie v báze znalostí"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat so súborom(súbormi)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Hĺbkové vyhľadávanie/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Hĺbkové vyhľadávanie/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Hĺbkové vyhľadávanie/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google používateľ na zosobnenie",
         "help" : "Používateľ, ktorého budú poverenia zosobňovať",
         "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
+      },
+      "OK" : {
+        "summary" : "Úspešne uložené",
+        "detail" : "Aktualizácia prebehla úspešne"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Spracované dokumenty",
         "dataset-2-label" : "Dokumenty s chybou",
         "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexovanie plného textu"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyradené dokumenty"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
         "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ OK",
+        "detail" : "Poskytovateľ je funkčný a úspešne nakonfigurovaný"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Výnimka počas operácie:401 NEAUTORIZOVANÉ",
+        "detail" : "Chyba servera: 401 NEAUTORIZOVANÉ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Výnimka počas operácie:Chýba basePath",
+        "detail" : "Chyba servera: Chýba basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Dokončené"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia prebehla úspešne"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Vybrať zdroje"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyzovaný súbor"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Prah podobnosti vyhľadávania",
         "help" : "Semantický prah podobnosti (medzi 0.5 a 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Nastavenia zabezpečenia"
+      },
+      "accessibleToAll" : {
+        "label" : "Prístupné pre všetkých"
+      },
+      "datasource" : {
+        "label" : "Zdroj dát"
+      },
+      "allowedGroups" : {
+        "label" : "Povolené skupiny"
+      },
+      "allowedUsers" : {
+        "label" : "Povolení používatelia"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Prístup k používateľom/skupinám podľa zdroja dát",
+        "help" : "Hĺbkové vyhľadávanie bude povolené pre každý externý zdroj dát a vybraných používateľov alebo skupiny"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Jednoduchý prístup podľa používateľa/skupiny"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Prístup podľa používateľa/skupiny a zdroja dát"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Prihlasovacie údaje boli vytvorené",
         "detail" : "Prihlasovacie údaje úspešne vytvorené"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Chyba pri komunikácii so serverom Ollama ",
+        "detail" : "Chyba siete pri komunikácii so vzdialeným systémom prístupovým k obsahu\n models list Chyba pri práci s url:nullapi/tags"
       }
     }
   },

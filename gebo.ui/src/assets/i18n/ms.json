@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Log masuk"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasi gagal",
+        "detail" : "Tidak dapat mengesahkan dengan kelayakan yang diberikan"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistem Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edit sistem"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "dinyahaktifkan"
+      },
+      "EditGroupBtn" : {
+        "label" : "Edit"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "deskripsi"
+      },
+      "UsersHeader" : {
+        "label" : "pengguna"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Penggunaan model",
         "help" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini.",
         "placeholder" : "Kegunaan yang akan dipertimbangkan oleh platform Gebo.ai untuk model ini."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berjaya dilakukan"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Tambah kandungan atau ubah cara carian"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Sumber",
+        "help" : "Buka senarai dokumen yang dianalisis"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Perincian jawapan carian mendalam dan sumber"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Keputusan analisis carian mendalam"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Ralat mencari Confluence Search",
+        "detail" : "Ralat pelayan: Masalah mengakses sistem confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Sesi chat baharu dimuatkan",
+        "detail" : "Sesi chat baharu berjaya dimuatkan"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pilih sumber"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pilih sekurang-kurangnya satu pilihan berikut"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Langkau carian mendalam"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Pangkalan pengetahuan dipilih"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistem dipilih"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Tambah dokumen ke senarai 'chat with' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Menjalankan carian mendalam"
+      },
+      "RagLLMResponse" : {
+        "label" : "Menjalankan retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Bertanya llm"
+      },
+      "Waiting" : {
+        "label" : "Menganalisis pelan respons terbaik.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Menjalankan alat"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Menjalankan carian dibantu AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fail dianalisis"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Keputusan carian dianalisis"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Keputusan carian sistem dianalisis untuk"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Menggabungkan laporan akhir"
+      },
+      "RUNNING" : {
+        "label" : "Sedang berjalan "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Saya sedang menganalisis permintaan anda"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Aliran agentik dipilih, agent menjawab sedang berjalan"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Tahap perkhidmatan ialah: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Menjalankan agent pilihan anda"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Muat naik fail"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Layari/cari fail syarikat"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat dokumen dipilih"
+      },
+      "agenticChat" : {
+        "label" : "Chat agentik"
+      },
+      "rag" : {
+        "label" : "Chat r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Carian mendalam/Beberapa sumber"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Carian mendalam/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Carian mendalam/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Carian mendalam/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Carian mendalam/Carian pangkalan pengetahuan"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat dengan fail"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Carian mendalam/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Carian mendalam/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Carian mendalam/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Pengguna Google untuk diwakili",
         "help" : "Pengguna yang akan diwakili oleh credentials yang diberikan",
         "placeholder" : "Pengguna yang akan diwakili oleh credentials yang diberikan"
+      },
+      "OK" : {
+        "summary" : "Berjaya disimpan",
+        "detail" : "Operasi kemas kini berjaya dilakukan"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Dokumen diproses",
         "dataset-2-label" : "Ralat dokumen",
         "dataset-3-label" : "Dokumen dibuang"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Pengindeksan teks penuh"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Ralat memproses dokumen",
+        "label-2" : "Dokumen diproses"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen diproses",
+        "dataset-2-label" : "Dokumen ralat",
+        "dataset-3-label" : "Dokumen ditolak"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Token diproses",
+        "dataset-1-label" : "Ralat memproses token"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Pengecualian semasa operasi: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan",
         "detail" : "Ralat pelayan: Anthropic api tidak dapat berfungsi tanpa konfigurasi kunci api yang diperlukan"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jauh OK",
+        "detail" : "Penyedia berfungsi dengan baik dan berjaya dikonfigurasi"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Pengecualian semasa operasi:401 UNAUTHORIZED",
+        "detail" : "Ralat pelayan: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Pengecualian semasa operasi:Missing basePath",
+        "detail" : "Ralat pelayan: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Selesai"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berjaya dilakukan"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Pilih sumber"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fail dianalisis"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Ambang kesamaan carian",
         "help" : "Ambang kesamaan semantik (antara 0.5 hingga 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Tetapan keselamatan"
+      },
+      "accessibleToAll" : {
+        "label" : "Boleh diakses oleh semua"
+      },
+      "datasource" : {
+        "label" : "Sumber Data"
+      },
+      "allowedGroups" : {
+        "label" : "Kumpulan Dibenarkan"
+      },
+      "allowedUsers" : {
+        "label" : "Pengguna Dibenarkan"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Akses pengguna/kumpulan setiap sumber data",
+        "help" : "Carian mendalam akan diaktifkan untuk setiap sumber data luaran dan pengguna atau kumpulan"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Akses mudah setiap pengguna/kumpulan"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Akses pengguna/kumpulan setiap sumber data"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Kelayakan berjaya dicipta",
         "detail" : "Kelayakan berjaya dicipta"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ralat berkomunikasi dengan Ollama server ",
+        "detail" : "Ralat rangkaian berkomunikasi dengan sistem jauh untuk mengakses kandungan\n senarai model Ralat bekerja dengan url:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Prisijungti"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija nepavyko",
+        "detail" : "Nepavyko autentifikuoti su pateiktais prisijungimo duomenimis"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistema"
+      },
+      "EditSystemBtn" : {
+        "label" : "Redaguoti sistemą"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "išjungtas"
+      },
+      "EditGroupBtn" : {
+        "label" : "Redaguoti"
+      },
+      "CodeHeader" : {
+        "label" : "kodas"
+      },
+      "DescriptionHeader" : {
+        "label" : "aprašymas"
+      },
+      "UsersHeader" : {
+        "label" : "naudotojai"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modelio panaudojimas (-ai)",
         "help" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį.",
         "placeholder" : "Panaudojimai, kuriems Gebo.ai platforma naudos šį modelį."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Gerai!",
+        "detail" : "Operacija sėkmingai atlikta"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Pridėti turinį arba keisti paieškos elgseną"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Šaltiniai",
+        "help" : "Atverti analizuotų dokumentų sąrašą"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Giluminės paieškos atsakymo ir šaltinių detalės"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Giluminės paieškos analizės rezultatas"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Klaida ieškant Confluence Search",
+        "detail" : "Serverio klaida: problemos pasiekiant confluence sistemą"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Naujas pokalbis įkeltas",
+        "detail" : "Naujas pokalbis sėkmingai įkeltas"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pasirinkite šaltinius"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pasirinkite bent vieną iš šių parinkčių"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Praleisti giluminę paiešką"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Pasirinktos žinių bazės"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Pasirinktos sistemos"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Pridėti dokumentą prie 'pokalbių sąrašo' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Vykdoma giluminė paieška"
+      },
+      "RagLLMResponse" : {
+        "label" : "Vykdoma papildytos paieškos generacija"
+      },
+      "PureLLMResponse" : {
+        "label" : "Klausimas llm"
+      },
+      "Waiting" : {
+        "label" : "Analizuojamas geriausias atsakymo planas.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Vykdomi įrankiai"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Vykdoma AI pagalbinė paieška"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizuotas failas"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizuotas paieškos rezultatas"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizuotas sistemos paieškos rezultatas"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliduojama galutinė ataskaita"
+      },
+      "RUNNING" : {
+        "label" : "Vykdoma "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analizuoju jūsų užklausą"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Pasirinktas agentinis srautas, agentas veikia"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Aptarnavimo lygis: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Vykdomas pasirinktas agentas"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Įkelti failą(-us)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Naršyti/ieškoti įmonės failų"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Pasirinkto dokumento pokalbis"
+      },
+      "agenticChat" : {
+        "label" : "Agentinis pokalbis"
+      },
+      "rag" : {
+        "label" : "R.a.g. pokalbis"
+      },
+      "deepSearch" : {
+        "label" : "Giluminė paieška/Keli šaltiniai"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Giluminė paieška/Google Web paieška"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Giluminė paieška/Confluence paieška"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Giluminė paieška/Jira paieška"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Giluminė paieška/Žinių bazės paieška"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Pokalbis su failais"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Giluminė paieška/Google Web paieška"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Giluminė paieška/Confluence paieška"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Giluminė paieška/Jira paieška"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Imituojamas Google naudotojas",
         "help" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis",
         "placeholder" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis"
+      },
+      "OK" : {
+        "summary" : "Sėkmingai išsaugota",
+        "detail" : "Atnaujinimo operacija sėkmingai atlikta"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Apdoroti dokumentai",
         "dataset-2-label" : "Dokumentai su klaidomis",
         "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Pilnas tekstų indeksavimas"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaida",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Apdoroti tokenai",
+        "dataset-1-label" : "Klaida apdorojant tokenus"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Klaida operacijos metu: Anthropic api negali veikti be būtinos api rakto konfigūracijos",
         "detail" : "Serverio klaida: Anthropic api negali veikti be būtinos api rakto konfigūracijos"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI nuotolinis tiekėjas OK",
+        "detail" : "Tiekėjas veikia ir sėkmingai sukonfigūruotas"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Išimtis operacijos metu:401 NEAUTORIZUOTA",
+        "detail" : "Serverio klaida: 401 NEAUTORIZUOTA"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Išimtis operacijos metu: Trūksta basePath",
+        "detail" : "Serverio klaida: Trūksta basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Užbaigta"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Gerai!",
+        "detail" : "Operacija sėkmingai atlikta"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Pasirinkti šaltinius"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizuotas failas"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Paieškos panašumo slenkstis",
         "help" : "Semantinio panašumo slenkstis (nuo 0.5 iki 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Saugos nustatymai"
+      },
+      "accessibleToAll" : {
+        "label" : "Prieinama visiems"
+      },
+      "datasource" : {
+        "label" : "Duomenų šaltinis"
+      },
+      "allowedGroups" : {
+        "label" : "Leidžiamos grupės"
+      },
+      "allowedUsers" : {
+        "label" : "Leidžiami naudotojai"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Naudotojų/grupių prieigos kiekvienam duomenų šaltiniui",
+        "help" : "Giluminė paieška bus įjungta kiekvienam išoriniam duomenų šaltiniui bei naudotojui arba grupei"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Paprasta prieiga pagal naudotoją/grupę"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Prieiga pagal duomenų šaltinį naudotojui/grupei"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Prisijungimai sukurti",
         "detail" : "Prisijungimai sėkmingai sukurti"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Klaida komunikuojant su Ollama serveriu ",
+        "detail" : "Tinklo klaida komunikuojant su nuotoline sistema pasiekiant turinį\n modelių sąrašas Klaida dirbant su url:nullapi/tags"
       }
     }
   },

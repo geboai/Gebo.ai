@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "உள்நுழையவும்"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "இயக்கம் தோல்வியடைந்தது",
+        "detail" : "வழங்கிய நற்சான்றிதழ்களுடன் உள்நுழைய முடியவில்லை"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence அமைப்பு"
+      },
+      "EditSystemBtn" : {
+        "label" : "கணினியைத் திருத்து"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "இயலாமல்"
+      },
+      "EditGroupBtn" : {
+        "label" : "திருத்து"
+      },
+      "CodeHeader" : {
+        "label" : "குறியிடு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "UsersHeader" : {
+        "label" : "பயனர்கள்"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "மாடல் பயன்பாடுகள்",
         "help" : "இந்த மாதிரிக்கு Gebo.ai தளம் பரிசீலிக்கும் பயன்பாடுகள்.",
         "placeholder" : "இந்த மாதிரிக்கு Gebo.ai தளம் பரிசீலிக்கும் பயன்பாடுகள்."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "சரி!",
+        "detail" : "இயக்கம் வெற்றிகரமாக முடிந்தது"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "உள்ளடக்கம் சேர்க்கவும் அல்லது தேடல் செயல்பாட்டை மாற்றவும்"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "மூலங்கள்",
+        "help" : "பகுப்பாய்வு செய்யப்பட்ட ஆவணங்களின் பட்டியலைத் திற"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ஆழமான தேடல் பதில் மற்றும் மூல விவரங்கள்"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ஆழமான தேடல் பகுப்பாய்வு முடிவு"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Search தேடலில் பிழை",
+        "detail" : "சேவையகப் பிழை: confluence கணினியை அணுகும் போது சிரமம்"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "புதிய உரையாடல் ஏற்றப்பட்டது",
+        "detail" : "புதிய உரையாடல் வெற்றிகரமாக ஏற்றப்பட்டது"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "மூலங்களை தேர்ந்தெடு"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "பின்வரும் விருப்பங்களிலிருந்து குறைந்தது ஒன்றைத் தேர்ந்தெடுக்கவும்"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ஆழமான தேடலை தவிர்க்கவும்"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட அறிவு தளங்கள்"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட கணினிகள்"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'உரையாடலுடன்' பட்டியலில் ஆவணத்தை சேர்க்கவும் "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ஆழமான தேடல் நடைபெற்று வருகிறது"
+      },
+      "RagLLMResponse" : {
+        "label" : "Retrieve augmented generation நடைபெற்று வருகிறது"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm-ஐக் கேட்கிறது"
+      },
+      "Waiting" : {
+        "label" : "சிறந்த பதில் திட்டத்தை பகுப்பாய்வு செய்கிறது.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "கருவிகள் இயங்குகின்றன"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI உதவியுடன் தேடல் நடைபெற்று வருகிறது"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "பகுப்பாய்யப்பட்ட கோப்பு"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "பகுப்பாய்யப்பட்ட தேடல் முடிவு"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "கணினி தேடல் முடிவு பகுப்பாய்வு -"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "இறுதிப் புகாரை ஒருங்கிணைத்தல்"
+      },
+      "RUNNING" : {
+        "label" : "நடந்து கொண்டிருக்கிறது "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "உங்கள் கோரிக்கையை பகுப்பாய்வு செய்கிறேன்"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentic flow தேர்ந்தெடுக்கப்பட்டது, பதிலளிக்கும் முகவர் இயங்குகிறது"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "சேவை நிலை: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "உங்கள் தேர்ந்த முகவரை இயக்கு"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "கோப்புகளைப் பதிவேற்று"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "நிறுவனக் கோப்புகளைத் தேடு/உரையாடல்"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "தேர்ந்தெடுத்த ஆவண உரையாடல்"
+      },
+      "agenticChat" : {
+        "label" : "Agentic உரையாடல்"
+      },
+      "rag" : {
+        "label" : "R.a.g. உரையாடல்"
+      },
+      "deepSearch" : {
+        "label" : "ஆழமான தேடல்/பல மூலங்கள்"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ஆழமான தேடல்/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ஆழமான தேடல்/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ஆழமான தேடல்/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ஆழமான தேடல்/அறிவு தளத் தேடல்"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "கோப்புகளுடன் உரையாடுக"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ஆழமான தேடல்/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ஆழமான தேடல்/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ஆழமான தேடல்/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "புரளிக்கப்பட்ட Google பயனர்",
         "help" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்",
         "placeholder" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்"
+      },
+      "OK" : {
+        "summary" : "வெற்றிகரமாக சேமிக்கப்பட்டது",
+        "detail" : "புதுப்பிப்பு இயக்கம் வெற்றிகரமாக முடிந்தது"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
         "dataset-2-label" : "பிழை உள்ள ஆவணங்கள்",
         "dataset-3-label" : "வெளியேற்றப்பட்ட ஆவணங்கள்"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "முழு உரை ஒழுங்குபடுத்துதல்"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "செயல்படுத்தப்படாத ஆவணங்கள்",
+        "label-1" : "ஆவணங்களை செயலாக்கும் போது பிழை",
+        "label-2" : "செயலாக்கப்பட்ட ஆவணங்கள்"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "பெறப்பட்ட ஆவணங்கள்",
+        "dataset-1-label" : "செயலாக்கப்பட்ட ஆவணங்கள்",
+        "dataset-2-label" : "பிழையுள்ள ஆவணங்கள்",
+        "dataset-3-label" : "நிராகரிக்கப்பட்ட ஆவணங்கள்"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "செயலாக்கப்பட்ட டோக்கன்கள்",
+        "dataset-1-label" : "டோக்கன்களை செயலாக்கும் போது பிழை"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "செயல்பாடின்போது தவறு: Anthropic api தேவையான api key அமைப்பு இல்லாமல் இயங்க முடியாது",
         "detail" : "சேவையகப்பிழை: Anthropic api தேவையான api key அமைப்பு இல்லாமல் இயங்க முடியாது"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI தொலைநிலை வழங்குநர் சரி",
+        "detail" : "வழங்குநர் செயல்படுகிறது மற்றும் வெற்றிகரமாக கட்டமைக்கப்பட்டது"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "இயக்கத்தின் போது விதிவிலக்கு:401 அனுமதி இல்லை",
+        "detail" : "சேவையக பிழை: 401 அனுமதி இல்லை"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "இயக்கத்தின் போது விதிவிலக்கு:Missing basePath",
+        "detail" : "சேவையகப் பிழை: basePath காணவில்லை"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "முடிந்தது"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "சரி!",
+        "detail" : "இயக்கம் வெற்றிகரமாக முடிந்தது"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "மூலங்களை தேர்வு செய்யவும்"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "பகுப்பாய்யப்பட்ட கோப்பு"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "தேடல் ஒற்றுமை வரம்பு",
         "help" : "Semantic ஒற்றுமை வரம்பு (0.5 முதல் 1.0 வரை)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "பாதுகாப்பு அமைப்புகள்"
+      },
+      "accessibleToAll" : {
+        "label" : "அனைவருக்கும் அணுகக்கூடியது"
+      },
+      "datasource" : {
+        "label" : "தரவு மூலம்"
+      },
+      "allowedGroups" : {
+        "label" : "அனுமதிக்கப்பட்ட குழுக்கள்"
+      },
+      "allowedUsers" : {
+        "label" : "அனுமதிக்கப்பட்ட பயனர்கள்"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ஒவ்வொரு தரவு மூல பயனர்/குழு அனுமதி",
+        "help" : "ஆழ்ந்த தேடல் தலா வெளியுறவு தரவு மூலத்திற்கு மற்றும் பயனர் அல்லது குழுவிற்கு செயல்படுத்தப்படும்"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ஒவ்வொரு பயனர்/குழு அணுகல் எளிமையானது"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ஒவ்வொரு தரவு மூல பயனர்/குழு அணுகல்"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "ஏடுகள் உருவாக்கப்பட்டது",
         "detail" : "ஏடுகள் வெற்றிகரமாக உருவாக்கப்பட்டது"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama சேவையகத்துடன் தொடர்பு கொள்ளும் பொழுது பிழை",
+        "detail" : "தொலைவிலுள்ள கணினியில் உள்ளடக்கம் அணுகும் போது நெட்வேர்க் பிழை\n மாதிரிகள் பட்டியல் url:nullapi/tags உடன் பணி செய்யும்போது பிழை"
       }
     }
   },

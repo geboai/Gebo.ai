@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Anmelden"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Vorgang fehlgeschlagen",
+        "detail" : "Authentifizierung mit den angegebenen Zugangsdaten nicht möglich"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-System"
+      },
+      "EditSystemBtn" : {
+        "label" : "System bearbeiten"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "Deaktiviert"
+      },
+      "EditGroupBtn" : {
+        "label" : "Bearbeiten"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beschreibung"
+      },
+      "UsersHeader" : {
+        "label" : "Benutzer"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modellnutzung(en)",
         "help" : "Verwendungen, für die die Gebo.ai-Plattform dieses Modell berücksichtigt.",
         "placeholder" : "Verwendungen, für die die Gebo.ai-Plattform dieses Modell berücksichtigt."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Vorgang erfolgreich abgeschlossen"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Inhalt hinzufügen oder Suchverhalten anpassen"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Quellen",
+        "help" : "Liste der analysierten Dokumente öffnen"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Details zur Deep Search Antwort und Quellen"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Ergebnis der Deep Search Analyse"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Fehler bei der Confluence Suche",
+        "detail" : "Serverfehler: Probleme beim Zugriff auf das Confluence System"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Neuer Chat geladen",
+        "detail" : "Neuer Chat erfolgreich geladen"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Quellen auswählen"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Wählen Sie mindestens eine der folgenden Optionen"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Deep Search überspringen"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Ausgewählte Wissensdatenbanken"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Ausgewählte Systeme"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Dokument zur 'Mit Chat' Liste hinzufügen "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Deep Search läuft"
+      },
+      "RagLLMResponse" : {
+        "label" : "Retrieve augmented generation läuft"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM wird angefragt"
+      },
+      "Waiting" : {
+        "label" : "Besten Antwortplan analysieren..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Tools werden ausgeführt"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "KI-unterstützte Suche läuft"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysierte Datei"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysiertes Suchergebnis"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysiertes System-Suchergebnis für"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidiere den Abschlussbericht"
+      },
+      "RUNNING" : {
+        "label" : "Läuft "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ich analysiere Ihre Anfrage"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentic Flow gewählt, Antwort-Agent wird ausgeführt"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Servicelevel: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Ihr gewählter Agent wird ausgeführt"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Datei(en) hochladen"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Unternehmensdateien durchsuchen/suchen"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat mit ausgewähltem Dokument"
+      },
+      "agenticChat" : {
+        "label" : "Agentic Chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. Chat"
+      },
+      "deepSearch" : {
+        "label" : "Deep Search/Mehrere Quellen"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep Search/Google Websuche"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep Search/Confluence Suche"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep Search/Jira Suche"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep Search/Wissensdatenbanken durchsuchen"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat mit Datei(en)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep Search/Google Websuche"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep Search/Confluence Suche"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep Search/Jira Suche"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Zu vertretender Google-Nutzer",
         "help" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird",
         "placeholder" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird"
+      },
+      "OK" : {
+        "summary" : "Erfolgreich gespeichert",
+        "detail" : "Update erfolgreich durchgeführt"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Verarbeitete Dokumente",
         "dataset-2-label" : "Fehlerhafte Dokumente",
         "dataset-3-label" : "Verworfene Dokumente"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Volltextindizierung"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten von Dokumenten",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Verworfene Dokumente"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten von Tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Fehler während der Ausführung: Anthropic API kann ohne erforderliche API-Key-Konfiguration nicht arbeiten",
         "detail" : "Serverfehler: Anthropic API kann ohne erforderliche API-Key-Konfiguration nicht arbeiten"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "KI-Remote-Anbieter OK",
+        "detail" : "Anbieter ist erreichbar und erfolgreich konfiguriert"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Ausnahme beim Vorgang:401 UNAUTHORIZED",
+        "detail" : "Serverfehler: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Ausnahme beim Vorgang:Missing basePath",
+        "detail" : "Serverfehler: basePath fehlt"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Abgeschlossen"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Vorgang erfolgreich abgeschlossen"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Quellen auswählen"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysierte Datei"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Schwellwert für Ähnlichkeit der Suche",
         "help" : "Semantischer Ähnlichkeitsschwellenwert (zwischen 0,5 und 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Sicherheitseinstellungen"
+      },
+      "accessibleToAll" : {
+        "label" : "Für alle zugänglich"
+      },
+      "datasource" : {
+        "label" : "Datenquelle"
+      },
+      "allowedGroups" : {
+        "label" : "Erlaubte Gruppen"
+      },
+      "allowedUsers" : {
+        "label" : "Erlaubte Benutzer"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Zugriff pro Datenquelle für Benutzer/Gruppen",
+        "help" : "Deep Search wird für jede externe Datenquelle sowie Benutzer oder Gruppe aktiviert"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Einfacher Zugriff pro Benutzer/Gruppe"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Zugriff pro Datenquelle und Benutzer/Gruppe"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Anmeldedaten erstellt",
         "detail" : "Anmeldedaten erfolgreich erstellt"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Fehler bei der Kommunikation mit Ollama Server ",
+        "detail" : "Netzwerkfehler bei der Kommunikation mit dem entfernten System beim Zugriff auf Content\n Modells-Liste Fehler bei der Arbeit mit url:nullapi/tags"
       }
     }
   },

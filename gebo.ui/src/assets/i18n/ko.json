@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "로그인"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "작업 실패",
+        "detail" : "제공된 자격 증명으로 인증할 수 없습니다"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence 시스템"
+      },
+      "EditSystemBtn" : {
+        "label" : "시스템 편집"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "비활성화됨"
+      },
+      "EditGroupBtn" : {
+        "label" : "편집"
+      },
+      "CodeHeader" : {
+        "label" : "코드"
+      },
+      "DescriptionHeader" : {
+        "label" : "설명"
+      },
+      "UsersHeader" : {
+        "label" : "사용자"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "모델 사용처",
         "help" : "Gebo.ai 플랫폼에서 이 모델을 사용할 용도를 지정합니다.",
         "placeholder" : "Gebo.ai 플랫폼에서 이 모델을 사용할 용도를 지정합니다."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "확인!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "콘텐츠 추가 또는 검색 동작 수정"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "출처",
+        "help" : "분석된 문서 목록 열기"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "심층 검색 답변 및 출처 세부 정보"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "심층 검색 분석 결과"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence 검색 오류",
+        "detail" : "서버 오류: Confluence 시스템 접근 문제"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "새로운 채팅 불러옴",
+        "detail" : "새로운 채팅을 성공적으로 불러왔습니다"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "출처 선택"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "다음 옵션 중 최소 하나를 선택하세요"
+      },
+      "SkipDeepSearch" : {
+        "label" : "심층 검색 건너뛰기"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "선택된 지식 베이스"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "선택된 시스템"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'채팅 대상' 목록에 문서 추가"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "심층 검색 실행 중"
+      },
+      "RagLLMResponse" : {
+        "label" : "검색 보강 생성 실행 중"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM에 질의 중"
+      },
+      "Waiting" : {
+        "label" : "최적의 응답 계획 분석 중.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "도구 실행 중"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI 보조 검색 실행 중"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "분석된 파일"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "분석된 검색 결과"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "시스템 검색 결과 분석"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "최종 보고서 통합 중"
+      },
+      "RUNNING" : {
+        "label" : "실행 중 "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "요청을 분석 중입니다"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "선택한 에이전트 흐름, 에이전트 실행 중"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "서비스 레벨: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "선택한 에이전트 실행 중"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "파일 업로드"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "회사 파일 찾아보기/검색"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "선택 문서 채팅"
+      },
+      "agenticChat" : {
+        "label" : "에이전트 채팅"
+      },
+      "rag" : {
+        "label" : "R.a.g. 채팅"
+      },
+      "deepSearch" : {
+        "label" : "심층 검색/다중 출처"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "심층 검색/Google 웹 검색"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "심층 검색/Confluence 검색"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "심층 검색/Jira 검색"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "심층 검색/지식 베이스 검색"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "파일과 채팅"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "심층 검색/Google 웹 검색"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "심층 검색/Confluence 검색"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "심층 검색/Jira 검색"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "가상 Google 사용자",
         "help" : "제공된 자격 증명으로 사용할 사용자입니다",
         "placeholder" : "제공된 자격 증명으로 사용할 사용자입니다"
+      },
+      "OK" : {
+        "summary" : "성공적으로 저장됨",
+        "detail" : "업데이트 작업이 성공적으로 완료되었습니다"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "처리된 문서",
         "dataset-2-label" : "오류 문서",
         "dataset-3-label" : "폐기된 문서"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "전체 텍스트 인덱싱"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "처리되지 않은 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "받은 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "삭제된 문서"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "작업 중 예외 발생: Anthropic api는 필수 api 키 구성이 없어 작동 불가",
         "detail" : "서버 오류: Anthropic api는 필수 api 키 구성이 없어 작동 불가"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI 원격 공급자 정상",
+        "detail" : "공급자가 실행 중이며 성공적으로 구성되었습니다"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "작업 중 예외: 401 UNAUTHORIZED",
+        "detail" : "서버 오류: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "작업 중 예외: basePath 누락",
+        "detail" : "서버 오류: basePath 누락"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "완료됨"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "확인!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "소스 선택"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "분석된 파일"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "검색 유사도 임계값",
         "help" : "의미론적 유사도 임계값 (0.5~1.0 사이)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "보안 설정"
+      },
+      "accessibleToAll" : {
+        "label" : "모두 접근 가능"
+      },
+      "datasource" : {
+        "label" : "데이터 소스"
+      },
+      "allowedGroups" : {
+        "label" : "허용된 그룹"
+      },
+      "allowedUsers" : {
+        "label" : "허용된 사용자"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "데이터 소스별 사용자/그룹 접근",
+        "help" : "외부 데이터 소스 및 사용자 또는 그룹마다 심층 검색이 활성화됩니다"
+      },
+      "SIMPLEMODE" : {
+        "label" : "사용자/그룹별 단순 접근"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "데이터 소스별 사용자/그룹 접근"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "인증 정보가 생성됨",
         "detail" : "인증 정보가 성공적으로 생성되었습니다"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama 서버와 통신 오류",
+        "detail" : "원격 시스템과 통신하는 네트워크 오류로 콘텐츠 접근 실패\n모델 목록 URL 작업 오류:nullapi/tags"
       }
     }
   },

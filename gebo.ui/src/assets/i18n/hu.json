@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Bejelentkezés"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "A művelet nem sikerült",
+        "detail" : "Nem sikerült azonosítani a megadott hitelesítő adatokkal"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence rendszer"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rendszer szerkesztése"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "letiltva"
+      },
+      "EditGroupBtn" : {
+        "label" : "Szerkesztés"
+      },
+      "CodeHeader" : {
+        "label" : "kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "leírás"
+      },
+      "UsersHeader" : {
+        "label" : "felhasználók"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modellhasználat(ok)",
         "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
         "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Források",
+        "help" : "Elemezett dokumentumok listájának megnyitása"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Mélykeresési válasz és forrás részletei"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Mélykeresés elemzési eredménye"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Hiba a Confluence keresés során",
+        "detail" : "Szerver hiba: Problémák a confluence rendszer elérésében"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Új csevegés betöltve",
+        "detail" : "Az új csevegés sikeresen betöltve"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Források kiválasztása"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Válasszon legalább egy lehetőséget az alábbiak közül"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Mélykeresés kihagyása"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Kiválasztott tudásbázisok"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Kiválasztott rendszerek"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Dokumentum hozzáadása a 'csevegés ezzel' listához "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Mélykeresés futtatása"
+      },
+      "RagLLMResponse" : {
+        "label" : "Kiegészített generálás futtatása"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM lekérése"
+      },
+      "Waiting" : {
+        "label" : "Legjobb választerv elemzése..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Eszközök futtatása"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI által támogatott keresés futtatása"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Elemzett fájl"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Elemzett keresési eredmény"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Elemzett rendszeri keresési eredmény ehhez:"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "A végső jelentés összeállítása"
+      },
+      "RUNNING" : {
+        "label" : "Fut "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Elemzem a kérését"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Kiválasztott ügynöki folyamat, válaszügynök fut"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Szolgáltatási szint: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "A kiválasztott ügynök végrehajtása"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Fájl(ok) feltöltése"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Vállalati fájl(ok) böngészése/keresése"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Kiválasztott dok. chat"
+      },
+      "agenticChat" : {
+        "label" : "Ügynöki csevegés"
+      },
+      "rag" : {
+        "label" : "R.a.g. csevegés"
+      },
+      "deepSearch" : {
+        "label" : "Mélykeresés/Több forrás"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Mélykeresés/Google webes keresés"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Mélykeresés/Confluence keresés"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Mélykeresés/Jira keresés"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Mélykeresés/Tudásbázis keresés"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat fájl(ok)kal"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Mélykeresés/Google webes keresés"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Mélykeresés/Confluence keresés"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Mélykeresés/Jira keresés"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Impersonálandó Google felhasználó",
         "help" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak",
         "placeholder" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak"
+      },
+      "OK" : {
+        "summary" : "Sikeresen mentve",
+        "detail" : "A frissítés sikeresen megtörtént"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Feldolgozott dokumentumok",
         "dataset-2-label" : "Hibás dokumentumok",
         "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Teljes szöveg indexelés"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dok.",
+        "label-1" : "Hiba a dok. feldolgozásakor",
+        "label-2" : "Feldolgozott dok."
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Fogadott dok.",
+        "dataset-1-label" : "Feldolgozott dok.",
+        "dataset-2-label" : "Hibás dok.",
+        "dataset-3-label" : "Elvetett dok."
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Kivétel történt a művelet során: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül",
         "detail" : "Szerverhiba: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató OK",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálva"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Kivétel a művelet közben:401 NEM ENGEDÉLYEZETT",
+        "detail" : "Szerver hiba: 401 NEM ENGEDÉLYEZETT"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Kivétel a művelet közben: Hiányzik a basePath",
+        "detail" : "Szerver hiba: Hiányzik a basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Kész"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Források kiválasztása"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Elemzett fájl"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Keresési hasonlósági küszöb",
         "help" : "Szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Biztonsági beállítások"
+      },
+      "accessibleToAll" : {
+        "label" : "Mindenki számára elérhető"
+      },
+      "datasource" : {
+        "label" : "Adatforrás"
+      },
+      "allowedGroups" : {
+        "label" : "Engedélyezett csoportok"
+      },
+      "allowedUsers" : {
+        "label" : "Engedélyezett felhasználók"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Felhasználó/csoport hozzáférés adatforrásonként",
+        "help" : "A mélykeresés minden külső adatforrásnál és felhasználónál vagy csoportnál elérhető lesz"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Egyszerű felhasználó/csoport hozzáférés"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Felhasználó/csoport hozzáférés adatforrásonként"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Hitelesítés létrejött",
         "detail" : "A hitelesítés sikeresen létrejött"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Hiba az Ollama szerverrel való kommunikációban ",
+        "detail" : "Hálózati hiba a távoli rendszerhez kapcsolódva a tartalom elérésében\n modellek listája Hiba a következő url-lel való munkában:nullapi/tags"
       }
     }
   },

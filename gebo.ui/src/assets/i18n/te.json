@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "లాగిన్"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "చర్య విఫలంగా ముగిసింది",
+        "detail" : "ఈ క్రెడెన్షియల్స్‌తో ధృవీకరించలేరు"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence సిస్టమ్"
+      },
+      "EditSystemBtn" : {
+        "label" : "సిస్టమ్‌ను సరిచూడండి"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "డిసేబుల్ చేయబడింది"
+      },
+      "EditGroupBtn" : {
+        "label" : "సవరించండి"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "UsersHeader" : {
+        "label" : "వాడుకదారులు"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "మోడల్ వాడుక(ల)",
         "help" : "ఈ మోడల్‌ను Gebo.ai వేదికలో ఎలాంటి వాడుకలకు పరిగణిస్తుందో.",
         "placeholder" : "ఈ మోడల్‌ను Gebo.ai వేదికలో ఎలాంటి వాడుకలకు పరిగణిస్తుందో."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "సరే!",
+        "detail" : "చర్య విజయవంతంగా పూర్తయింది"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "కంటెంట్ జోడించండి లేదా శోధన ప్రవర్తనను మారుస్తుంది"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "మూలాలు",
+        "help" : "విశ్లేషించిన డాక్యుమెంట్ల జాబితాను తీయండి"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "డీప్ సెర్చ్ సమాధానం మరియు మూలాల వివరాలు"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "డీప్ సెర్చ్ విశ్లేషణ ఫలితం"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence సెర్చ్‌లో లోపం",
+        "detail" : "సర్వర్ లోపం: confluence సిస్టమ్ యాక్సెస్‌లో సమస్యలు"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "కొత్త చాట్ లోడయింది",
+        "detail" : "కొత్త చాట్ విజయవంతంగా లోడయింది"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "మూలాలను ఎంచుకోండి"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "దయచేసి కనీసం ఒక ఎంపికను ఎంచుకోండి"
+      },
+      "SkipDeepSearch" : {
+        "label" : "డీప్ సెర్చ్ వదిలివేయండి"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ఎంచుకున్న నాలెడ్జ్ బేస్‌లు"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ఎంచుకున్న సిస్టమ్‌లు"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'చాట్ విత్' జాబితాలో డాక్యుమెంట్ జోడించండి "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "డీప్ సెర్చ్ నడుస్తోంది"
+      },
+      "RagLLMResponse" : {
+        "label" : "ఋత్వంతం రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm అడుగుతోంది"
+      },
+      "Waiting" : {
+        "label" : "ఉత్తమ ప్రతిస్పందన ప్రణాళికను విశ్లేషిస్తోంది.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "పరికరాలు నడుస్తున్నాయి"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI సహాయంతో సెర్చ్ నడుస్తోంది"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "విశ్లేషించిన ఫైల్"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "విశ్లేషించిన సెర్చ్ ఫలితం"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "సిస్టమ్ సెర్చ్ ఫలితాన్ని విశ్లేషించాం"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "తుదివిరిచే రిపోర్ట్‌ను సమీకరిస్తోంది"
+      },
+      "RUNNING" : {
+        "label" : "నడుస్తోంది"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "మీ అభ్యర్థనను విశ్లేషిస్తున్నాను"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "ఎంచుకున్న ఏజెంటిక్ ఫ్లో, సమాధాన ఆధారిత ఏజెంట్ నడుస్తోంది"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "సర్వీస్ స్థాయి: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "మీరు ఎంచుకున్న ఏజెంట్‌ను అమలు చేస్తోంది"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ఫైల్(లు) అప్లోడ్ చేయండి"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "కంపెనీ ఫైల్(లు) బ్రౌజ్/సర్చ్ చేయండి"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ఎంచుకున్న డాక్యుమెంట్ చాట్"
+      },
+      "agenticChat" : {
+        "label" : "ఏజెంటిక్ చాట్"
+      },
+      "rag" : {
+        "label" : "R.a.g. చాట్"
+      },
+      "deepSearch" : {
+        "label" : "డీప్ సెర్చ్/బహుళ మూలాలు"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "డీప్ సెర్చ్/Google వెబ్ సెర్చ్"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "డీప్ సెర్చ్/Confluence సెర్చ్"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "డీప్ సెర్చ్/Jira సెర్చ్"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "డీప్ సెర్చ్/నాలెడ్జ్ బేస్ సెర్చ్"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ఫైల్(లు)తో చాట్ చేయండి"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "డీప్ సెర్చ్/Google వెబ్ సెర్చ్"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "డీప్ సెర్చ్/Confluence సెర్చ్"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "డీప్ సెర్చ్/Jira సెర్చ్"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "అనుకరించాల్సిన Google వినియోగదారు",
         "help" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు",
         "placeholder" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు"
+      },
+      "OK" : {
+        "summary" : "విజయవంతంగా సేవ్ చేయబడింది",
+        "detail" : "అప్‌డేట్ కార్యకలాపం విజయవంతంగా పూర్తయింది"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు",
         "dataset-2-label" : "లోపం వచ్చిన డాక్యుమెంట్లు",
         "dataset-3-label" : "విస్మరించబడిన డాక్యుమెంట్లు"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "పూర్తి పాఠ్య సూచిక"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "చర్య చేయని డాక్స్",
+        "label-1" : "ప్రాసెస్‌లో లోపం డాక్స్",
+        "label-2" : "ప్రాసెస్ అయిన డాక్స్"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "అందిన డాక్స్",
+        "dataset-1-label" : "ప్రాసెస్ అయిన డాక్స్",
+        "dataset-2-label" : "లోపం డాక్స్",
+        "dataset-3-label" : "వదిలివేసిన డాక్స్"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "ప్రాసెస్ చేసిన టోకెన్స్",
+        "dataset-1-label" : "టోకెన్స్ ప్రాసెస్‌లో లోపం"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ప్రక్రియలో దోషం: Anthropic api అవసరమైన api key కాన్ఫిగరేషన్ లేకుండా పనిచేయదు",
         "detail" : "సర్వర్ లోపం: Anthropic api అవసరమైన api key కాన్ఫిగరేషన్ లేకుండా పనిచేయదు"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI రిమోట్ ప్రొవైడర్ సరే",
+        "detail" : "ప్రొవైడర్ ఆన్‌లైన్‌లో ఉంది మరియు విజయవంతంగా కాన్ఫిగర్ చేయబడింది"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "చర్యలో లోపం: 401 UNAUTHORIZED",
+        "detail" : "సర్వర్ లోపం: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "చర్యలో లోపం: Missing basePath",
+        "detail" : "సర్వర్ లోపం: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "పూర్తయింది"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "సరే!",
+        "detail" : "చర్య విజయవంతంగా పూర్తయింది"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "మూలాలను ఎంచుకోండి"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "విశ్లేషించిన ఫైల్"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "శోధన సామాన్యత థ్రెషోల్డ్",
         "help" : "సెమాంటిక్ సామాన్యత థ్రెషోల్డ్ (0.5 నుంచి 1.0 మధ్య)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "భద్రతా సెట్టింగులు"
+      },
+      "accessibleToAll" : {
+        "label" : "అందరికి అందుబాటులో"
+      },
+      "datasource" : {
+        "label" : "డేటా సోర్స్"
+      },
+      "allowedGroups" : {
+        "label" : "అనుమతించిన గ్రూపులు"
+      },
+      "allowedUsers" : {
+        "label" : "అనుమతించిన వాడుకదారులు"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ప్రతి డేటా సోర్స్ యూజర్/గ్రూప్ యాక్సెస్",
+        "help" : "ప్రతి బయటి డేటా సోర్సు మరియు వాడుకరి లేదా గ్రూప్ కోసం డీప్ సెర్చ్ అందుబాటులో ఉంటుంది"
+      },
+      "SIMPLEMODE" : {
+        "label" : "సాధారణ యూజర్/గ్రూప్ యాక్సెస్"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ప్రతి డేటా సోర్స్ యూజర్/గ్రూప్ యాక్సెస్"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "క్రెడెన్షియల్స్ సృష్టించబడ్డాయి",
         "detail" : "క్రెడెన్షియల్స్ విజయవంతంగా సృష్టించబడ్డాయి"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama సర్వర్‌తో కమ్యూనికేషన్ లోపం",
+        "detail" : "రిమోట్ సిస్టమ్‌తో కనెక్ట్ అవుతూ నెట్‌వర్క్ లోపం\nమోడల్స్ జాబితా యాక్సెస్ చేసినప్పుడు లోపం url:nullapi/tags"
       }
     }
   },

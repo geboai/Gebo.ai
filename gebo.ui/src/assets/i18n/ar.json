@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "تسجيل الدخول"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "فشلت العملية",
+        "detail" : "لا يمكن المصادقة باستخدام بيانات الاعتماد المقدمة"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "نظام Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "تعديل النظام"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "معطل"
+      },
+      "EditGroupBtn" : {
+        "label" : "تعديل"
+      },
+      "CodeHeader" : {
+        "label" : "الكود"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "UsersHeader" : {
+        "label" : "المستخدمون"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "استخدامات النموذج",
         "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
         "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تمت العملية بنجاح"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "المصادر",
+        "help" : "فتح قائمة المستندات التي تم تحليلها"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "تفاصيل إجابة البحث المتعمق والمصادر"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "نتيجة تحليل البحث المتعمق"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "خطأ في البحث في Confluence Search",
+        "detail" : "خطأ في الخادم: مشاكل في الوصول إلى نظام confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "تم تحميل محادثة جديدة",
+        "detail" : "تم تحميل المحادثة الجديدة بنجاح"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "اختر المصادر"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "اختر واحدًا على الأقل من الخيارات التالية"
+      },
+      "SkipDeepSearch" : {
+        "label" : "تخطي البحث المتعمق"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "قواعد المعرفة المختارة"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "الأنظمة المختارة"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "إضافة مستند إلى قائمة 'الدردشة مع'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "تشغيل البحث المتعمق"
+      },
+      "RagLLMResponse" : {
+        "label" : "تشغيل استرجاع معزز بالإجابات"
+      },
+      "PureLLMResponse" : {
+        "label" : "سؤال llm"
+      },
+      "Waiting" : {
+        "label" : "تحليل أفضل خطة للرد.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "تشغيل الأدوات"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "تشغيل البحث المدعوم بالذكاء الاصطناعي"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "الملف الذي تم تحليله"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "نتيجة البحث التي تم تحليلها"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "نتيجة بحث النظام التي تم تحليلها لـ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "جاري تجميع التقرير النهائي"
+      },
+      "RUNNING" : {
+        "label" : "قيد التشغيل "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "أحلل طلبك"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "تم اختيار تدفق وكيل، جاري تشغيل الوكيل المجيب"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "مستوى الخدمة هو: سؤال وجواب"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "جاري تنفيذ الوكيل الذي اخترته"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "رفع ملف(ات)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "تصفح/بحث ملفات الشركة"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "محادثة مع المستند المختار"
+      },
+      "agenticChat" : {
+        "label" : "محادثة الوكيل"
+      },
+      "rag" : {
+        "label" : "دردشة r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "بحث متعمق/مصادر متعددة"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "بحث متعمق/بحث جوجل ويب"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "بحث متعمق/بحث Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "بحث متعمق/بحث Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "بحث متعمق/بحث قاعدة المعرفة"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "محادثة مع ملف(ات)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "بحث متعمق/بحث جوجل ويب"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "بحث متعمق/بحث Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "بحث متعمق/بحث Jira"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "مستخدم Google المراد تمثيله",
         "help" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة",
         "placeholder" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة"
+      },
+      "OK" : {
+        "summary" : "تم الحفظ بنجاح",
+        "detail" : "تم تحديث العملية بنجاح"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "المستندات المعالجة",
         "dataset-2-label" : "المستندات ذات الأخطاء",
         "dataset-3-label" : "المستندات المرفوضة"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "فهرسة النص الكامل"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "المستندات المعالجة"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "مستندات بها خطأ",
+        "dataset-3-label" : "المستندات المستبعدة"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "الرموز المعالجة",
+        "dataset-1-label" : "خطأ في معالجة الرموز"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
         "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي البعيد جاهز",
+        "detail" : "المزود نشط وجاهز ومهيأ بنجاح"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "استثناء أثناء العملية:401 غير مصرح",
+        "detail" : "خطأ في الخادم: 401 غير مصرح"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "استثناء أثناء العملية: مسار أساسي مفقود",
+        "detail" : "خطأ في الخادم: مسار أساسي مفقود"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "مكتمل"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تمت العملية بنجاح"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "تحديد المصادر"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "الملف الذي تم تحليله"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "حد تشابه البحث",
         "help" : "حد تشابه الدلالة (بين 0.5 إلى 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "إعدادات الأمان"
+      },
+      "accessibleToAll" : {
+        "label" : "متاح للجميع"
+      },
+      "datasource" : {
+        "label" : "مصدر البيانات"
+      },
+      "allowedGroups" : {
+        "label" : "المجموعات المسموح بها"
+      },
+      "allowedUsers" : {
+        "label" : "المستخدمون المسموح لهم"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "وصول المستخدمين/المجموعات حسب مصدر البيانات",
+        "help" : "سيتم تمكين البحث المتعمق لكل مصدر بيانات خارجي ولكل مستخدم أو مجموعة"
+      },
+      "SIMPLEMODE" : {
+        "label" : "صلاحية بسيطة لكل مستخدم/مجموعة"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "صلاحية لكل مستخدم/مجموعة حسب مصدر البيانات"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "تم إنشاء بيانات الاعتماد",
         "detail" : "تم إنشاء بيانات الاعتماد بنجاح"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "خطأ في التواصل مع خادم Ollama ",
+        "detail" : "خطأ في الشبكة أثناء التواصل مع النظام البعيد للوصول إلى قائمة النماذج \n حدث خطأ أثناء العمل مع url:nullapi/tags"
       }
     }
   },

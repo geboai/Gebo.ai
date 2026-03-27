@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "लॉगिन"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ऑपरेशन अयशस्वी झाले",
+        "detail" : "पुरवलेल्या क्रेडेंशियल्ससह प्रमाणीकरण करू शकत नाही"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence सिस्टम"
+      },
+      "EditSystemBtn" : {
+        "label" : "सिस्टम संपादित करा"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "अकार्यान्वित"
+      },
+      "EditGroupBtn" : {
+        "label" : "संपादित करा"
+      },
+      "CodeHeader" : {
+        "label" : "कोड"
+      },
+      "DescriptionHeader" : {
+        "label" : "वर्णन"
+      },
+      "UsersHeader" : {
+        "label" : "वापरकर्ते"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "मॉडेलचे वापर",
         "help" : "या मॉडेलचा Gebo.ai प्लॅटफॉर्म कोणत्या वापरासाठी विचार करेल ते.",
         "placeholder" : "या मॉडेलचा Gebo.ai प्लॅटफॉर्म कोणत्या वापरासाठी विचार करेल."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ठीक आहे!",
+        "detail" : "ऑपरेशन यशस्वीरित्या पूर्ण झाले"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "सामग्री जोडा किंवा शोध वर्तन बदला"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "स्रोत",
+        "help" : "विश्लेषित दस्तऐवजांची यादी उघडा"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "डीप सर्च उत्तर व स्रोत तपशील"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "डीप सर्च विश्लेषणाचे निकाल"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence शोधताना त्रुटी",
+        "detail" : "सर्व्हर त्रुटी: confluence सिस्टीममध्ये प्रवेश करताना समस्या"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "नवीन चॅट लोड केले",
+        "detail" : "नवीन चॅट यशस्वीरित्या लोड झाले"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "स्रोत निवडा"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "खालीलपैकी किमान एक पर्याय निवडा"
+      },
+      "SkipDeepSearch" : {
+        "label" : "डीप सर्च वगळा"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "निवडलेले नॉलेज बेस"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "निवडलेली प्रणाली"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'चॅटसह' यादीत दस्तऐवज जोडा "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "डीप सर्च चालू आहे"
+      },
+      "RagLLMResponse" : {
+        "label" : "रिट्रीव्ह ऑगमेंटेड जनरेशन चालू आहे"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm ला विचारले जात आहे"
+      },
+      "Waiting" : {
+        "label" : "सर्वोत्तम प्रतिसाद योजनेचे विश्लेषण करत आहे..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "साधने चालवत आहे"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI सहाय्यित शोध चालू आहे"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "विश्लेषित फाइल"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "विश्लेषित शोधाचा निकाल"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "प्रणालीच्या शोधाचा निकाल विश्लेषित केला"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "अंतिम अहवाल एकत्रित करत आहे"
+      },
+      "RUNNING" : {
+        "label" : "चालू आहे "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "मी तुमच्या विनंतीचे विश्लेषण करत आहे"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "एजेंटिक फ्लो निवडले, उत्तर देणारा एजेंट चालू आहे"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "सेवा स्तर: QA आहे"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "तुमचा निवडलेला एजेंट कार्यान्वित करत आहे"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "फाईल(स्) अपलोड करा"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "कंपनीच्या फाईल(स्) ब्राउझ/शोधा"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "निवडलेले दस्तऐवज चॅट"
+      },
+      "agenticChat" : {
+        "label" : "एजेंटिक चॅट"
+      },
+      "rag" : {
+        "label" : "R.a.g. चॅट"
+      },
+      "deepSearch" : {
+        "label" : "डीप सर्च/एकाधिक स्रोत"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "डीप सर्च/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "डीप सर्च/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "डीप सर्च/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "डीप सर्च/नॉलेज बेस शोध"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "फाईल(स्) सह चॅट"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "डीप सर्च/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "डीप सर्च/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "डीप सर्च/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "प्रतिनिधित्व करण्यासाठी Google वापरकर्ता",
         "help" : "ऑपलोड केलेल्या क्रेडेन्शियल्सने ज्याचा प्रतिनिधित्व होईल तो वापरकर्ता",
         "placeholder" : "ऑपलोड केलेल्या क्रेडेन्शियल्सने ज्याचा प्रतिनिधित्व होईल तो वापरकर्ता"
+      },
+      "OK" : {
+        "summary" : "यशस्वीरित्या जतन केले",
+        "detail" : "अपडेट ऑपरेशन यशस्वीरित्या पूर्ण झाले"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "प्रक्रिया केलेले दस्तऐवज",
         "dataset-2-label" : "त्रुटी दस्तऐवज",
         "dataset-3-label" : "फेकून दिलेले दस्तऐवज"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "पूर्ण मजकूर अनुक्रमणिका"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "प्रक्रिया न झालेली कागदपत्रे",
+        "label-1" : "कागदपत्रे प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया केलेली कागदपत्रे"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त कागदपत्रे",
+        "dataset-1-label" : "प्रक्रिया केलेली कागदपत्रे",
+        "dataset-2-label" : "त्रुटी कागदपत्रे",
+        "dataset-3-label" : "वगळलेली कागदपत्रे"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "प्रक्रिया केलेले टोकन",
+        "dataset-1-label" : "टोकन प्रक्रिया करताना त्रुटी"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ऑपरेशन दरम्यान अपवाद: Anthropic api आवश्यक api key कॉन्फिगरेशनशिवाय कार्य करू शकत नाही",
         "detail" : "सर्व्हर त्रुटी: Anthropic api आवश्यक api key कॉन्फिगरेशनशिवाय कार्य करू शकत नाही"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI रिमोट प्रदाता ठीक आहे",
+        "detail" : "प्रदाता कार्यरत आहे आणि यशस्वीरित्या संरचित आहे"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ऑपरेशन दरम्यान अपवाद:401 UNAUTHORIZED",
+        "detail" : "सर्व्हर त्रुटी: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ऑपरेशन दरम्यान अपवाद:Missing basePath",
+        "detail" : "सर्व्हर त्रुटी: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "पूर्ण झाले"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ठीक आहे!",
+        "detail" : "ऑपरेशन यशस्वीरित्या पूर्ण झाले"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "स्रोत निवडा"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "विश्लेषित फाइल"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "शोध सादृश्य थ्रेशोल्ड",
         "help" : "सिमॅंटिक सादृश्य थ्रेशोल्ड (0.5 ते 1.0 दरम्यान)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "सुरक्षा सेटिंग्ज"
+      },
+      "accessibleToAll" : {
+        "label" : "सर्वांसाठी उपलब्ध"
+      },
+      "datasource" : {
+        "label" : "डेटा स्रोत"
+      },
+      "allowedGroups" : {
+        "label" : "परवानगी दिलेल्या गट"
+      },
+      "allowedUsers" : {
+        "label" : "परवानगी दिलेले वापरकर्ते"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "प्रत्येक डेटा स्रोतासाठी वापरकर्ता/गट प्रवेश",
+        "help" : "डीप सर्च प्रत्येक बाह्य डेटा स्रोत व वापरकर्ता किंवा समूहासाठी सक्षम केला जाईल"
+      },
+      "SIMPLEMODE" : {
+        "label" : "सोप्या वापरकर्ता/गट प्रवेश"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "प्रत्येक डेटा स्रोत वापरकर्ता/गट प्रवेश"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "क्रेडेन्शियल्स तयार केले",
         "detail" : "क्रेडेन्शियल्स यशस्वीरित्या तयार केले"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama सर्व्हरशी संवाद साधताना त्रुटी ",
+        "detail" : "रिमोट सिस्टीमशी संवाद साधताना नेटवर्क त्रुटी\n कंटेंटमध्ये प्रवेश करत असताना मॉडेल्स यादी url:nullapi/tags वर कार्य करताना त्रुटी"
       }
     }
   },

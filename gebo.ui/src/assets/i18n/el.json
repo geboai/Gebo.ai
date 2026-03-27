@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Είσοδος"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Η λειτουργία απέτυχε",
+        "detail" : "Αδυναμία πιστοποίησης με τα παρεχόμενα στοιχεία"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence σύστημα"
+      },
+      "EditSystemBtn" : {
+        "label" : "Επεξεργασία συστήματος"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ανενεργό"
+      },
+      "EditGroupBtn" : {
+        "label" : "Επεξεργασία"
+      },
+      "CodeHeader" : {
+        "label" : "κωδικός"
+      },
+      "DescriptionHeader" : {
+        "label" : "περιγραφή"
+      },
+      "UsersHeader" : {
+        "label" : "χρήστες"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Χρήσεις μοντέλου",
         "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
         "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Πηγές",
+        "help" : "Άνοιγμα λίστας αναλυμένων εγγράφων"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Λεπτομέρειες απάντησης deep search και πηγών"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Αποτέλεσμα ανάλυσης Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Σφάλμα κατά την αναζήτηση στο Confluence Search",
+        "detail" : "Σφάλμα διακομιστή: Προβλήματα πρόσβασης στο σύστημα confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Νέα συνομιλία φορτώθηκε",
+        "detail" : "Η νέα συνομιλία φορτώθηκε επιτυχώς"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Επιλογή πηγών"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Επιλέξτε τουλάχιστον μία από τις παρακάτω επιλογές"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Παράκαμψη deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Επιλεγμένες βάσεις γνώσης"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Επιλεγμένα συστήματα"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Προσθήκη εγγράφου στη λίστα 'συνομιλία με'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Εκτέλεση deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Εκτέλεση retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Ερώτημα στο llm"
+      },
+      "Waiting" : {
+        "label" : "Ανάλυση του καλύτερου σχεδίου απάντησης.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Εκτέλεση εργαλείων"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Εκτέλεση αναζήτησης με βοήθεια AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Αναλυμένο αρχείο"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης συστήματος για"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Συνοψίζονται τα τελικά αποτελέσματα"
+      },
+      "RUNNING" : {
+        "label" : "Εκτελείται "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Αναλύω το αίτημά σας"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Επιλέχθηκε agentic flow, εκτελείται agent"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Το επίπεδο υπηρεσίας είναι: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Εκτελείται ο επιλεγμένος agent"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Ανέβασμα αρχείων"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Αναζήτηση/περιήγηση αρχείων εταιρείας"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Συνομιλία με επιλεγμένο έγγραφο"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Πολλαπλές πηγές"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Αναζήτηση βάσης γνώσης"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Συνομιλία με αρχεία"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Χρήστης Google για προσωρινή αντιπροσώπευση",
         "help" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια",
         "placeholder" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια"
+      },
+      "OK" : {
+        "summary" : "Αποθηκεύτηκε με επιτυχία",
+        "detail" : "Η ενημέρωση ολοκληρώθηκε επιτυχώς"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Επεξεργασμένα έγγραφα",
         "dataset-2-label" : "Έγγραφα με σφάλμα",
         "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Ευρετηρίαση πλήρους κειμένου"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα κατά την επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Επεξεργασμένα tokens",
+        "dataset-1-label" : "Σφάλμα κατά την επεξεργασία tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Εξαίρεση κατά τη λειτουργία:Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαιτούμενες ρυθμίσεις κλειδιού api",
         "detail" : "Σφάλμα διακομιστή: Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαραίτητες ρυθμίσεις κλειδιού api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ο πάροχος AI λειτουργεί",
+        "detail" : "Ο πάροχος είναι ενεργός και έχει ρυθμιστεί επιτυχώς"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:401 UNAUTHORIZED",
+        "detail" : "Σφάλμα διακομιστή: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: Λείπει basePath",
+        "detail" : "Σφάλμα διακομιστή: Λείπει basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Ολοκληρώθηκε"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Επιλογή πηγών"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Αναλυμένο αρχείο"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Όριο ομοιότητας αναζήτησης",
         "help" : "Semantic όριο ομοιότητας (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Ρυθμίσεις ασφαλείας"
+      },
+      "accessibleToAll" : {
+        "label" : "Προσβάσιμο σε όλους"
+      },
+      "datasource" : {
+        "label" : "Πηγή Δεδομένων"
+      },
+      "allowedGroups" : {
+        "label" : "Επιτρεπόμενες ομάδες"
+      },
+      "allowedUsers" : {
+        "label" : "Επιτρεπόμενοι χρήστες"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Διαχείριση πρόσβασης χρηστών/ομάδων ανά πηγή δεδομένων",
+        "help" : "To deep search θα ενεργοποιηθεί για κάθε εξωτερική πηγή δεδομένων και χρήστη ή ομάδα"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Απλή πρόσβαση ανά χρήστη/ομάδα"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Πρόσβαση ανά χρήστη/ομάδα και πηγή δεδομένων"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Τα διαπιστευτήρια δημιουργήθηκαν",
         "detail" : "Τα διαπιστευτήρια δημιουργήθηκαν με επιτυχία"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Σφάλμα επικοινωνίας με τον διακομιστή Ollama",
+        "detail" : "Σφάλμα δικτύου κατά την επικοινωνία με το απομακρυσμένο σύστημα προσπέλασης περιεχομένου\n λίστα μοντέλων Σφάλμα με url:nullapi/tags"
       }
     }
   },

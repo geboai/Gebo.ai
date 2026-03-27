@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Daxil ol"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Verilən məlumatlarla təsdiqləmək mümkün olmadı"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistemi"
+      },
+      "EditSystemBtn" : {
+        "label" : "Sistemi redaktə et"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktiv"
+      },
+      "EditGroupBtn" : {
+        "label" : "Redaktə et"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "təsvir"
+      },
+      "UsersHeader" : {
+        "label" : "istifadəçilər"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modelin istifadəsi",
         "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
         "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Mənbələr",
+        "help" : "Analiz edilmiş sənədlərin siyahısını aç"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Dərin axtarış cavabı və mənbə detalları"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Dərin axtarışın nəticəsi"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Axtarışında səhv",
+        "detail" : "Server xətası: Confluence sisteminə girişdə problem"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Yeni çat yükləndi",
+        "detail" : "Yeni çat uğurla yükləndi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Mənbələri seç"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdakılardan ən azı birini seçin"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Dərin axtarışı keç"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilmiş bilik bazaları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilmiş sistemlər"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'Söhbət üçün' siyahısına sənəd əlavə et"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Dərin axtarış işləyir"
+      },
+      "RagLLMResponse" : {
+        "label" : "Retrieve augmented generation işləyir"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM ilə soruşulur"
+      },
+      "Waiting" : {
+        "label" : "Ən yaxşı cavab planı təhlil olunur.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Alətlər işləyir"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI dəstəyi ilə axtarış işləyir"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilmiş fayl"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Təhlil edilmiş axtarış nəticəsi"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Sistemin axtarış nəticəsi təhlil edildi üçün"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Son hesabat hazırlanır"
+      },
+      "RUNNING" : {
+        "label" : "İşləyir "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Sorğunuzu təhlil edirəm"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentik axın seçildi, agent işləyir"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Xidmət səviyyəsi: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Seçilmiş agent icra olunur"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Fayl(lar)ı yüklə"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Şirkət fayl(lar)ını axtar/söhbət et"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Seçilmiş sənədlərlə çat"
+      },
+      "agenticChat" : {
+        "label" : "Agentik çat"
+      },
+      "rag" : {
+        "label" : "R.a.g. çat"
+      },
+      "deepSearch" : {
+        "label" : "Dərin axtarış/Bir neçə mənbə"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dərin axtarış/Google Web axtarış"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dərin axtarış/Confluence Axtarış"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Dərin axtarış/Jira Axtarış"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Dərin axtarış/Bilik bazası axtarışı"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Fayl(lar)la çat"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dərin axtarış/Google Web axtarış"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dərin axtarış/Confluence Axtarış"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Dərin axtarış/Jira Axtarış"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Təqlid ediləcək Google istifadəçisi",
         "help" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi",
         "placeholder" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi"
+      },
+      "OK" : {
+        "summary" : "Uğurla saxlanıldı",
+        "detail" : "Yeniləmə uğurla tamamlandı"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Emal olunmuş sənədlər",
         "dataset-2-label" : "Səhvli sənədlər",
         "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Tam mətn indeksləşməsi"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "İşlənməmiş sənədlər",
+        "label-1" : "Sənədlərin işlənməsində səhv",
+        "label-2" : "İşlənmiş sənədlər"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "İşlənmiş sənədlər",
+        "dataset-2-label" : "Xətalı sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "İşlənmiş tokenlər",
+        "dataset-1-label" : "Tokenlərin işlənməsində səhv"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Əməliyyat zamanı istisna:Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz",
         "detail" : "Server xətası: Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq təminatçısı OK",
+        "detail" : "Təminatçı işlək vəziyyətdədir və uğurla qurulub"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Əməliyyat zamanı istisna:401 UNAUTHORIZED",
+        "detail" : "Server xətası: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Əməliyyat zamanı istisna:BasePath yoxdur",
+        "detail" : "Server xətası: BasePath yoxdur"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Tamamlandı"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Mənbələri seç"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilmiş fayl"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Axtarış oxşarlıq həddi",
         "help" : "Semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Təhlükəsizlik ayarları"
+      },
+      "accessibleToAll" : {
+        "label" : "Hamı üçün əlçatandır"
+      },
+      "datasource" : {
+        "label" : "Məlumat mənbəyi"
+      },
+      "allowedGroups" : {
+        "label" : "İcazə verilən qruplar"
+      },
+      "allowedUsers" : {
+        "label" : "İcazə verilən istifadəçilər"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Məlumat mənbəyi üzrə istifadəçi/qrup girişi",
+        "help" : "Dərin axtarış bütün xarici məlumat mənbələri və istifadəçi/qrup üçün aktiv olacaq"
+      },
+      "SIMPLEMODE" : {
+        "label" : "İstifadəçi/qrup üzrə sadə giriş"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Məlumat mənbəyi üzrə istifadəçi/qrup girişi"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Etimadnamələr yaradıldı",
         "detail" : "Etimadnamələr uğurla yaradıldı"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama serveri ilə əlaqədə səhv",
+        "detail" : "Uzaq sistemlə əlaqədə şəbəkə xətası\n məzmun modellər siyahısı alınarkən url:nullapi/tags ilə işləyərkən xəta baş verdi"
       }
     }
   },

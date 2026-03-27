@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ይግቡ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "እቅድ አልተሳካም",
+        "detail" : "በቀረበው መለያ አይነት መለያየት አልተቻለም"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence ስርዓት"
+      },
+      "EditSystemBtn" : {
+        "label" : "ስርዓቱን አስተካክል"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ተሰናክሏል"
+      },
+      "EditGroupBtn" : {
+        "label" : "አስተካክል"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "UsersHeader" : {
+        "label" : "ተጠቃሚዎች"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "የሞዴሉ አጠቃቀም(ዎች)",
         "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
         "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ!",
+        "detail" : "ተግባሩ በትክክል ተፈጸመ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "ይዘት ያክሉ ወይም የፍለጋ አካላዊነትን ያስተካክሉ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ምንጮች",
+        "help" : "የተተናበውን ሰነዶች ዝርዝር ክፈት"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "የጥልቅ ፍለጋ መልስ እና ዝርዝሮች"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "የጥልቅ ፍለጋ ውጤት ትንተና"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "በConfluence ፍለጋ ላይ ስህተት",
+        "detail" : "የአገልጋይ ስህተት፡ ወደ Confluence ስርዓት መድረስ ችግር"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "አዲስ ውይይት ተጭኗል",
+        "detail" : "አዲስ ውይይት በተሳካ ሁኔታ ተጭኗል"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ምንጮችን ይምረጡ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "የሚከተሉት አንዱን ቢያንስ ይምረጡ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ጥልቅ ፍለጋ ዝለኩ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "የተመረጡ የእውቀት ማዕከላት"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "የተመረጡ ስርዓቶች"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'ለውይይት' ዝርዝር ሰነድ ያክሉ "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ጥልቅ ፍለጋ በመሄድ ላይ"
+      },
+      "RagLLMResponse" : {
+        "label" : "ማሰባሰብ በማስገኛ ልማድ ላይ"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm እየተጠየቀ"
+      },
+      "Waiting" : {
+        "label" : "ምርጥ ምላሽ እቅድ እየተተነቀ"
+      },
+      "ToolsLLMResponse" : {
+        "label" : "መሳሪያዎች በስራ ላይ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "የAI የተደገፈ ፍለጋ በመሄድ ላይ"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ተተናበ የሆነ ፋይል"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ተተናበ የፍለጋ ውጤት"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "በስርዓት ውስጥ የተተናበ የፍለጋ ውጤት"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "የመጨረሻ ሪፖርቱን አንድ አድርጎ እየሰራ"
+      },
+      "RUNNING" : {
+        "label" : "በስራ ላይ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ጥያቄዎን እየተተነቀ ነኝ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "የተመረጠ የagentic ዘዴ፡ ምላሽ ሚሰጥ ውሂብ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "የአገልግሎት ደረጃ፡ QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "የተመረጠውን agent በስራ ላይ እያከናወነዋል"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ፋይሎችን ያስገቡ"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "የኩባንያ ፋይሎችን ይቃኙ/ይፈልጉ"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "የተመረጠው ሰነድ ውይይት"
+      },
+      "agenticChat" : {
+        "label" : "Agentic ውይይት"
+      },
+      "rag" : {
+        "label" : "R.a.g. ውይይት"
+      },
+      "deepSearch" : {
+        "label" : "ጥልቅ ፍለጋ/ብዙ ምንጮች"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ጥልቅ ፍለጋ/Google Web ፍለጋ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ጥልቅ ፍለጋ/Confluence ፍለጋ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ጥልቅ ፍለጋ/Jira ፍለጋ"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ጥልቅ ፍለጋ/የእውቀት ማዕከል ፍለጋ"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ከፋይሎች ጋር ውይይት"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ጥልቅ ፍለጋ/Google Web ፍለጋ"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ጥልቅ ፍለጋ/Confluence ፍለጋ"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ጥልቅ ፍለጋ/Jira ፍለጋ"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "የGoogle ተጠቃሚ እንደተላከው የሚናገረው",
         "help" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ",
         "placeholder" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ"
+      },
+      "OK" : {
+        "summary" : "በተሳካ ሁኔታ ተቀምጧል",
+        "detail" : "የአዘምን ተግባር በትክክል ተፈጸመ"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "ተታድሰ የተሞሉ ሰነዶች",
         "dataset-2-label" : "የስህተት ሰነዶች",
         "dataset-3-label" : "የተጠረጠሩ ሰነዶች"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "ሙሉ ጽሑፍ ቅናሽ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ያልተሰሩ ሰነዶች",
+        "label-1" : "ሰነዶቹን ማቀናበር እንደተሳካ ሳያደርጉበት ስህተት",
+        "label-2" : "የተሰሩ ሰነዶች"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "የደረሱ ሰነዶች",
+        "dataset-1-label" : "የተሰሩ ሰነዶች",
+        "dataset-2-label" : "ስህተት ያጋጠመው ሰነድ",
+        "dataset-3-label" : "የተጣለ ሰነድ"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "የተሰሩ ቶከኖች",
+        "dataset-1-label" : "ቶከኖቹን ማቀናበር ላይ የተፈጠረ ስህተት"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "በእንቅስቃሴ ውስጥ ልዩነት : Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ",
         "detail" : "የአገልጋይ ስህተት፦ Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI የሩቅ አቅራቢ እሺ",
+        "detail" : "የአቅራቢው አገልግሎት በትክክል እየሰራ እና በተሳካ ሁኔታ ተያይዞ አስተካክሏል"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "በተግባር ወቅት ስህተት፡ 401 አልተፈቀደም",
+        "detail" : "የአገልጋይ ስህተት፡ 401 አልተፈቀደም"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "በተግባር ወቅት ስህተት፡ basePath የለም",
+        "detail" : "የአገልጋይ ስህተት፡ basePath የለም"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ተጠናቋል"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ!",
+        "detail" : "ተግባሩ በትክክል ተፈጸመ"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "ምንጮችን ይምረጡ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ተተናበ የሆነ ፋይል"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "የፍለጋ ተመሳሳይነት መጠን",
         "help" : "መስክ ሰማንቲክ ተመሳሳይነት መጠን (0.5 እስከ 1.0 መካከል)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "የደህንነት ቅንብሮች"
+      },
+      "accessibleToAll" : {
+        "label" : "ለሁሉም የሚደርስ"
+      },
+      "datasource" : {
+        "label" : "የውህድ ምንጭ"
+      },
+      "allowedGroups" : {
+        "label" : "የተፈቀዱ ቡድኖች"
+      },
+      "allowedUsers" : {
+        "label" : "የተፈቀዱ ተጠቃሚዎች"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "በየውህድ ምንጭ የተጠቃሚዎች/ቡድኖች መዳረሻ",
+        "help" : "ጥልቅ ፍለጋ በእያንዳንዱ ውጤት ምንጭ እና ተጠቃሚ ወይም ቡድን ላይ ይሰራል"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ቀላል በተጠቃሚ/ቡድን መዳረሻ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "በየውህድ ምንጭ የተጠቃሚ/ቡድን መዳረሻ"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "መረጃ ተፈጥሯል",
         "detail" : "መረጃዎች በትክክል ተፈጥሯል"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "በOllama አገልጋይ ጋር ማይገኝ ስህተት",
+        "detail" : "ለይፋዊ አገልጋይ መገናኘት ላይ አውታረመረብ ችግር፡ ወደ url:nullapi/tags ሲሄዱ ስህተት"
       }
     }
   },

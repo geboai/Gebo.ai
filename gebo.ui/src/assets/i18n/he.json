@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "התחבר"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "הפעולה נכשלה",
+        "detail" : "לא ניתן לבצע אימות עם הפרטים שסופקו"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "מערכת Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "עריכת מערכת"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "מושבת"
+      },
+      "EditGroupBtn" : {
+        "label" : "ערוך"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "UsersHeader" : {
+        "label" : "משתמשים"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "שימושי המודל",
         "help" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה.",
         "placeholder" : "לשימושים ש-Gebo.ai תיקח בחשבון עבור מודל זה."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "הכל תקין!",
+        "detail" : "הפעולה בוצעה בהצלחה"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "הוסף תוכן או שנה את התנהגות החיפוש"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "מקורות",
+        "help" : "פתח את רשימת המסמכים שנותחו"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "פירוט תשובת חיפוש עמוק ומקורות"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "תוצאת ניתוח חיפוש עמוק"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "שגיאה בחיפוש Confluence",
+        "detail" : "שגיאת שרת: בעיות גישה למערכת confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "צ'אט חדש נטען",
+        "detail" : "צ'אט חדש נטען בהצלחה"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "בחר מקורות"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "בחר לפחות אחת מהאפשרויות הבאות"
+      },
+      "SkipDeepSearch" : {
+        "label" : "דלג על חיפוש עמוק"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "בסיסי ידע שנבחרו"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "מערכות שנבחרו"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "הוסף מסמך לרשימת 'שוחח עם'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "מבצע חיפוש עמוק"
+      },
+      "RagLLMResponse" : {
+        "label" : "מפעיל הפקת תשובות מוגברת"
+      },
+      "PureLLMResponse" : {
+        "label" : "פונה ל-llm"
+      },
+      "Waiting" : {
+        "label" : "מנתח את תוכנית התגובה הטובה ביותר.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "מפעיל כלים"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "מפעיל חיפוש מונחה AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "קובץ שנותח"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "תוצאת חיפוש שנותחה"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "תוצאת חיפוש מערכת נותחה עבור"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "מאחד את הדוח הסופי"
+      },
+      "RUNNING" : {
+        "label" : "פועל "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "אני מנתח את הבקשה שלך"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "נבחרה זרימת סוכן, מפעיל סוכן עונה"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "רמת השירות היא: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "מפעיל את הסוכן שנבחר"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "העלה קובץ/ים"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "עיין/חפש קבצי חברה"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "צ'אט לקובץ שנבחר"
+      },
+      "agenticChat" : {
+        "label" : "צ'אט סוכן"
+      },
+      "rag" : {
+        "label" : "צ'אט R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "חיפוש עמוק/ריבוי מקורות"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "חיפוש עמוק/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "חיפוש עמוק/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "חיפוש עמוק/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "חיפוש עמוק/חיפוש בבסיס ידע"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "שוחח עם קובץ/ים"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "חיפוש עמוק/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "חיפוש עמוק/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "חיפוש עמוק/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "משתמש Google לחיקוי",
         "help" : "המשתמש שיזוהה על ידי האישורים שסיפקת",
         "placeholder" : "המשתמש שיזוהה על ידי האישורים שסיפקת"
+      },
+      "OK" : {
+        "summary" : "נשמר בהצלחה",
+        "detail" : "עדכון בוצע בהצלחה"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "מסמכים שעובדו",
         "dataset-2-label" : "מסמכים עם שגיאות",
         "dataset-3-label" : "מסמכים שנפסלו"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "אינדוקס מלא של טקסט"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "מסמכים שלא טופלו",
+        "label-1" : "שגיאה בעיבוד מסמכים",
+        "label-2" : "מסמכים שעובדו"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "מסמכים שהתקבלו",
+        "dataset-1-label" : "מסמכים שעובדו",
+        "dataset-2-label" : "מסמכים עם שגיאות",
+        "dataset-3-label" : "מסמכים שנדחו"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "אסימונים שעובדו",
+        "dataset-1-label" : "שגיאה בעיבוד אסימונים"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "חריגה במהלך פעולה: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת",
         "detail" : "שגיאת שרת: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ספק מרוחק AI תקין",
+        "detail" : "הספק פעיל ומוגדר בהצלחה"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "שגיאה בפעולה:401 לא מורשה",
+        "detail" : "שגיאת שרת: 401 לא מורשה"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "שגיאה בפעולה: חסר basePath",
+        "detail" : "שגיאת שרת: חסר basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "הושלם"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "הכל תקין!",
+        "detail" : "הפעולה בוצעה בהצלחה"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "בחר מקורות"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "קובץ שנותח"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "סף דמיון בחיפוש",
         "help" : "סף דמיון סמנטי (בין 0.5 ל-1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "הגדרות אבטחה"
+      },
+      "accessibleToAll" : {
+        "label" : "נגיש לכולם"
+      },
+      "datasource" : {
+        "label" : "מקור נתונים"
+      },
+      "allowedGroups" : {
+        "label" : "קבוצות מורשות"
+      },
+      "allowedUsers" : {
+        "label" : "משתמשים מורשים"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "הרשאות משתמש/קבוצה לכל מקור נתונים",
+        "help" : "חיפוש עמוק יופעל לכל מקור חיצוני לכל משתמש או קבוצה"
+      },
+      "SIMPLEMODE" : {
+        "label" : "הרשאות פשוטות לפי משתמש/קבוצה"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "הרשאות לפי מקור נתונים/משתמש/קבוצה"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "פרטי גישה נוצרו",
         "detail" : "פרטי הגישה נוצרו בהצלחה"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "שגיאה בתקשורת עם שרת Ollama",
+        "detail" : "שגיאת רשת בתקשורת עם המערכת מרחוק לקבלת רשימת מודלים\nשגיאה עם url:nullapi/tags"
       }
     }
   },

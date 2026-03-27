@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Войти"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операция не выполнена",
+        "detail" : "Не удалось пройти аутентификацию с указанными учетными данными"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Система Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Редактировать систему"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "отключено"
+      },
+      "EditGroupBtn" : {
+        "label" : "Редактировать"
+      },
+      "CodeHeader" : {
+        "label" : "код"
+      },
+      "DescriptionHeader" : {
+        "label" : "описание"
+      },
+      "UsersHeader" : {
+        "label" : "пользователи"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Использование модели",
         "help" : "Для каких задач платформа Gebo.ai будет использовать эту модель.",
         "placeholder" : "Для каких задач платформа Gebo.ai будет использовать эту модель."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Успешно!",
+        "detail" : "Операция выполнена успешно"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Добавьте содержимое или измените поведение поиска"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Источники",
+        "help" : "Открыть список проанализированных документов"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Детали глубокого поиска и источников"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Результат анализа глубокого поиска"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Ошибка поиска Confluence Search",
+        "detail" : "Ошибка сервера: Проблемы с доступом к системе confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Новый чат загружен",
+        "detail" : "Новый чат успешно загружен"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Выбрать источники"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Выберите хотя бы один из следующих вариантов"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Пропустить глубокий поиск"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Выбранные базы знаний"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Выбранные системы"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Добавить документ в список 'чат с'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Выполняется глубокий поиск"
+      },
+      "RagLLMResponse" : {
+        "label" : "Выполняется генерация на основе извлечения"
+      },
+      "PureLLMResponse" : {
+        "label" : "Выполняется запрос к llm"
+      },
+      "Waiting" : {
+        "label" : "Анализируем наилучший план ответа..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Запуск инструментов"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Выполняется поиск с помощью ИИ"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Проанализированный файл"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Проанализированный результат поиска"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Проанализированный результат поиска системы для"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Формируем итоговый отчет"
+      },
+      "RUNNING" : {
+        "label" : "Выполняется "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Анализирую ваш запрос"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Выбран агентный сценарий, агент отвечает"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Определен уровень сервиса: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Запускаю выбранного агента"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Загрузить файл(ы)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Просмотр/поиск файлов компании"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Чат с выбранным док."
+      },
+      "agenticChat" : {
+        "label" : "Агентный чат"
+      },
+      "rag" : {
+        "label" : "Чат R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Глубокий поиск/несколько источников"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Глубокий поиск/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Глубокий поиск/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Глубокий поиск/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Глубокий поиск/поиск по базе знаний"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Чат с файлом(ами)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Глубокий поиск/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Глубокий поиск/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Глубокий поиск/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Пользователь Google для имперсонации",
         "help" : "Пользователь, от имени которого будут использоваться предоставленные учетные данные",
         "placeholder" : "Пользователь, от имени которого будут использоваться предоставленные учетные данные"
+      },
+      "OK" : {
+        "summary" : "Успешно сохранено",
+        "detail" : "Обновление успешно завершено"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Обработанные документы",
         "dataset-2-label" : "Документы с ошибками",
         "dataset-3-label" : "Отбракованные документы"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Полнотекстовое индексирование"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Не обработанные документы",
+        "label-1" : "Ошибка обработки документов",
+        "label-2" : "Обработанные документы"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибками",
+        "dataset-3-label" : "Отклоненные документы"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка обработки токенов"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Ошибка при операции: Anthropic api не может работать без необходимой настройки ключа API",
         "detail" : "Ошибка сервера: Anthropic api не может работать без необходимой настройки ключа API"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Провайдер ИИ в порядке",
+        "detail" : "Провайдер работает и успешно сконфигурирован"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Исключение в ходе операции: 401 UNAUTHORIZED",
+        "detail" : "Ошибка сервера: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Исключение в ходе операции: отсутствует basePath",
+        "detail" : "Ошибка сервера: отсутствует basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Завершено"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Успешно!",
+        "detail" : "Операция выполнена успешно"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Выбрать источники"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Проанализированный файл"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Порог сходства поиска",
         "help" : "Порог семантического сходства (от 0.5 до 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Настройки безопасности"
+      },
+      "accessibleToAll" : {
+        "label" : "Доступно для всех"
+      },
+      "datasource" : {
+        "label" : "Источник данных"
+      },
+      "allowedGroups" : {
+        "label" : "Разрешенные группы"
+      },
+      "allowedUsers" : {
+        "label" : "Разрешенные пользователи"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Доступ для пользователей/групп по источникам данных",
+        "help" : "Глубокий поиск будет включен для каждого внешнего источника данных, пользователя или группы"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Простой доступ по пользователям/группам"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Доступ по пользователям/группам для каждого источника данных"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Данные созданы",
         "detail" : "Учётные данные успешно созданы"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ошибка соединения с сервером Ollama ",
+        "detail" : "Сетевая ошибка при соединении с удаленной системой для доступа\n список моделей Ошибка при работе с url:nullapi/tags"
       }
     }
   },

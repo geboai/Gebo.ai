@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ເຂົ້າລະບົບ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ການດຳເນີນງານລົ້ມເຫລວ",
+        "detail" : "ບໍ່ສາມາດຢືນຢັນຕົວຕົນດ້ວຍຂໍ້ມູນທີ່ຈັດຫາໃຫ້"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "ລະບົບ Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "ແກ້ໄຂລະບົບ"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ປິດການໃຊ້ງານ"
+      },
+      "EditGroupBtn" : {
+        "label" : "ແກ້ໄຂ"
+      },
+      "CodeHeader" : {
+        "label" : "code"
+      },
+      "DescriptionHeader" : {
+        "label" : "description"
+      },
+      "UsersHeader" : {
+        "label" : "users"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "ການໃຊ້ງານຂອງຮູ້ແບບ",
         "help" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້.",
         "placeholder" : "ການໃຊ້ງານທີ່ ແພລດຟອມ Gebo.ai ຈະພິຈາລະນາໃຫ້ຮູບແບບນີ້."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ສຳເລັດ!",
+        "detail" : "ການດຳເນີນງານສຳເລັດສົບຜົນ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "ເພີ່ມເນື້ອຫາ ຫຼື ປັບປຸງພຶດຕິກຳການຄົ້ນຫາ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ແຫຼ່ງຂໍ້ມູນ",
+        "help" : "ເປີດລາຍການເອກະສານທີ່ໄດ້ວິເຄາະ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ລາຍລະອຽດຄຳຕອບການຄົ້ນຫາເຊິ້ງແຫລ່ງຂໍ້ມູນ"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ຜົນການວິເຄາະການຄົ້ນຫາຢ່າງລຶກ"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "ຜິດພາດໃນການຄົ້ນຫາ Confluence Search",
+        "detail" : "ຂໍ້ຜິດພາດເຊີບເວີ: ມີບັນຫາເຂົ້າເຖິງລະບົບ confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ໂຫຼດຫ້ອງສົນທະນາໃໝ່",
+        "detail" : "ໂຫຼດຫ້ອງສົນທະນາໃໝ່ສຳເລັດ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ເລືອກແຫຼ່ງຂໍ້ມູນ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ເລືອກຢ່າງນ້ອຍໜຶ່ງຈາກຕົວເລືອກດ້ານລຸ່ມນີ້"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ຂ້າມການຄົ້ນຫາລຶກ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ຖານຄວາມຮູ້ທີ່ເລືອກ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ລະບົບທີ່ເລືອກ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "ເພີ່ມເອກະສານເຂົ້າກັບລາຍການ 'ສົນທະນາກັບ'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ກຳລັງຄົ້ນຫາຢ່າງລຶກ"
+      },
+      "RagLLMResponse" : {
+        "label" : "ກຳລັງຮັນ retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "ຖາມ llm"
+      },
+      "Waiting" : {
+        "label" : "ກຳລັງວິເຄາະຄົ້ນຫາການຕອບທີ່ດີທີ່ສຸດ.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ກຳລັງຮັນເຄື່ອງມື"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "ກຳລັງຄົ້ນຫາໂດຍ AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ເອກະສານທີ່ວິເຄາະ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ຜົນການຄົ້ນຫາທີ່ວິເຄາະ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ຜົນການຄົ້ນຫາລະບົບທີ່ວິເຄາະສຳລັບ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ກຳລັງລວບລວມລາຍງານສຸດທ້າຍ"
+      },
+      "RUNNING" : {
+        "label" : "ກຳລັງຮັນ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ຂ້ອຍກຳລັງວິເຄາະຄຳຮ້ອງຂໍຂອງທ່ານ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "ເລືອກ agentic flow ແລ້ວ, ກຳລັງຮັນ agent ຕອບ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "ລະດັບບໍລິການແມ່ນ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "ກຳລັງດຳເນີນ agent ທີ່ທ່ານເລືອກ"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ອັບໂຫຼດເອກະສານ"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "ເບິ່ງ/ຄົ້ນຫາເອກະສານບໍລິສັດ"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ສົນທະນາເອກະສານທີ່ເລືອກ"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "ຄົ້ນຫາລຶກ/ຫຼາຍແຫຼ່ງ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ຄົ້ນຫາລຶກ/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ຄົ້ນຫາລຶກ/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ຄົ້ນຫາລຶກ/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ຄົ້ນຫາລຶກ/ຄົ້ນຖານຄວາມຮູ້"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ສົນທະນາກັບເອກະສານ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ຄົ້ນຫາລຶກ/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ຄົ້ນຫາລຶກ/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ຄົ້ນຫາລຶກ/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "ຜູ້ໃຊ້ Google ທີ່ຈະຈໍາລອງ",
         "help" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້",
         "placeholder" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
+      },
+      "OK" : {
+        "summary" : "ບັນທຶກແລ້ວສຳເລັດ",
+        "detail" : "ການອັບເດດສຳເລັດສົບຜົນ"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "ເອກະສານທີ່ປະມວນຜົນແລ້ວ",
         "dataset-2-label" : "ເອກະສານທີ່ຜິດພາດ",
         "dataset-3-label" : "ເອກະສານທີ່ຖືກລະທິ້ງ"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "ດັດສະນີຂໍ້ຄວາມທັງໝົດ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ເອກະສານທີ່ຍັງບໍ່ທຳການ",
+        "label-1" : "ປັນຫາກໍາລັງດຳເນີນເອກະສານ",
+        "label-2" : "ເອກະສານທີ່ດຳເນີນແລ້ວ"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "ເອກະສານທີ່ຮັບໄດ້",
+        "dataset-1-label" : "ເອກະສານທີ່ດຳເນີນແລ້ວ",
+        "dataset-2-label" : "ເອກະສານທີ່ມີຂໍ້ຜິດພາດ",
+        "dataset-3-label" : "ເອກະສານທີ່ຖືກລະທິ້ງ"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "token ທີ່ດຳເນີນແລ້ວ",
+        "dataset-1-label" : "ປັນຫາກໍາລັງດຳເນີນ token"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key",
         "detail" : "Error ຈາກ server: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider ພ້ອມໃຊ້",
+        "detail" : "ຜູ້ໃຫ້ບໍລິການກຳລັງເຮັດວຽກແລະຕັ້ງຄ່າສຳເລັດ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ມີຂໍ້ຜິດພາດຂະນະດຳເນີນ:401 UNAUTHORIZED",
+        "detail" : "ຂໍ້ຜິດພາດເຊີບເວີ: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ມີຂໍ້ຜິດພາດຂະນະດຳເນີນ: Missing basePath",
+        "detail" : "ຂໍ້ຜິດພາດເຊີບເວີ: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ສຳເລັດແລ້ວ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ສຳເລັດ!",
+        "detail" : "ການດຳເນີນງານສຳເລັດສົບຜົນ"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "ເລືອກແຫຼ່ງຂໍ້ມູນ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ເອກະສານທີ່ວິເຄາະ"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "ຄ່າ similarity ການຄົ້ນຫາ",
         "help" : "semantic similarity threashold (ລະຫວ່າງ 0.5 ຫາ 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າຄວາມປອດໄພ"
+      },
+      "accessibleToAll" : {
+        "label" : "ເຂົ້າຫາໄດ້ທຸກຄົນ"
+      },
+      "datasource" : {
+        "label" : "ແຫຼ່ງຂໍ້ມູນ"
+      },
+      "allowedGroups" : {
+        "label" : "ກຸ່ມທີ່ອະນຸຍາດ"
+      },
+      "allowedUsers" : {
+        "label" : "ຜູ້ໃຊ້ທີ່ອະນຸຍາດ"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ການເຂົ້າເຖິງຂໍ້ມູນຜູ້ໃຊ້/ກຸ່ມຕໍ່ແຫຼ່ງຂໍ້ມູນແຕ່ລະອັນ",
+        "help" : "ຊ່ອງຄົ້ນຫາລຶກຈະຖືກເປີດໃຊ້ສຳລັບແຫຼ່ງຂໍ້ມູນພາຍນອກແລະຜູ້ໃຊ້ ຫຼື ກຸ່ມແຕ່ລະອັນ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ການເຂົ້າເຖິງຕາມຜູ້ໃຊ້/ກຸ່ມທີ່ງ່າຍ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ການເຂົ້າເຖິງຜູ້ໃຊ້/ກຸ່ມຕໍ່ແຫຼ່ງຂໍ້ມູນ"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "ສ້າງຄຽດນີ້ສໍາເລັດ",
         "detail" : "ສ້າງຄຽດນີ້ສໍາເລັດ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "ຜິດພາດໃນການຕິດຕໍ່ກັບ Ollama server ",
+        "detail" : "ຜິດພາດເຄືອຂ່າຍໃນການຕິດຕໍ່ລະບົບພາຍນອກເພື່ອເຂົ້າເຖິງລາຍການ\n models ຜິດພາດໃນການເຮັດວຽກກັບ url:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Inicia sessió"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "L'operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials proporcionades"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistema Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edita el sistema"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "desactivat"
+      },
+      "EditGroupBtn" : {
+        "label" : "Edita"
+      },
+      "CodeHeader" : {
+        "label" : "codi"
+      },
+      "DescriptionHeader" : {
+        "label" : "descripció"
+      },
+      "UsersHeader" : {
+        "label" : "usuaris"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Ús del model",
         "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
         "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Afegeix contingut o modifica el comportament de la cerca"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Fonts",
+        "help" : "Obre la llista de documents analitzats"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detalls de la resposta de deep search i fonts"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resultat de l'anàlisi deep search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Error en cercar a Confluence Search",
+        "detail" : "Error del servidor: Problemes per accedir al sistema confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nou xat carregat",
+        "detail" : "Xat carregat correctament"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selecciona fonts"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Tria almenys una de les següents opcions"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Omet deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de coneixement escollides"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistemes escollits"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Afegeix document a la llista 'xatejar amb'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Executant deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Executant retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Preguntant al llm"
+      },
+      "Waiting" : {
+        "label" : "Analitzant el millor pla de resposta..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Executant eines"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Executant cerca assistida per IA"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fitxer analitzat"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Resultat de cerca analitzat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Resultat de cerca del sistema analitzat per a"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidant l'informe final"
+      },
+      "RUNNING" : {
+        "label" : "Executant "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Estic analitzant la teva sol·licitud"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Flux agentic escollit, agent responent en execució"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "El nivell de servei és: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Executant l'agent escollit"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Puja fitxer(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Navega/cerca fitxer(s) de l'empresa"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Xat amb doc. escollit"
+      },
+      "agenticChat" : {
+        "label" : "Xat agentic"
+      },
+      "rag" : {
+        "label" : "Xat R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Fonts múltiples"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Cerca web de Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Cerca de Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Cerca de Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Cerca a base de coneixement"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Xat amb fitxer(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Cerca web de Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Cerca de Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Cerca de Jira"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Usuari de Google a suplantar",
         "help" : "L'usuari que serà suplantat per les credencials proporcionades",
         "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
+      },
+      "OK" : {
+        "summary" : "Desat correctament",
+        "detail" : "Actualització realitzada amb èxit"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Documents processats",
         "dataset-2-label" : "Documents amb error",
         "dataset-3-label" : "Documents descartats"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexació de text complet"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Docs no tractats",
+        "label-1" : "Error processant docs",
+        "label-2" : "Docs processats"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Docs rebuts",
+        "dataset-1-label" : "Docs processats",
+        "dataset-2-label" : "Docs amb error",
+        "dataset-3-label" : "Docs descartats"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error processant tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Excepció durant l'operació: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària",
         "detail" : "Error del servidor: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor remot d'IA OK",
+        "detail" : "El proveïdor està operatiu i configurat correctament"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Excepció durant l'operació:401 NO AUTORITZAT",
+        "detail" : "Error del servidor: 401 NO AUTORITZAT"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Excepció durant l'operació: falta basePath",
+        "detail" : "Error del servidor: falta basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Completat"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Selecciona fonts"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fitxer analitzat"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Llindar de similitud de cerca",
         "help" : "Llindar de similitud semàntica (entre 0,5 i 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Configuració de seguretat"
+      },
+      "accessibleToAll" : {
+        "label" : "Accessible per a tothom"
+      },
+      "datasource" : {
+        "label" : "Font de dades"
+      },
+      "allowedGroups" : {
+        "label" : "Grups permesos"
+      },
+      "allowedUsers" : {
+        "label" : "Usuaris permesos"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Accés d'usuari/grup per font de dades",
+        "help" : "Deep search estarà habilitat per cada font de dades externa i usuari o grup"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Accés simple per usuari/grup"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Accés per font de dades i usuari/grup"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Credencials creades",
         "detail" : "Credencials creades correctament"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Error en comunicar amb el servidor Ollama ",
+        "detail" : "Error de xarxa en comunicar amb el sistema remot accedint al contingut\nllista de models Error treballant amb url:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Đăng nhập"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Thao tác thất bại",
+        "detail" : "Không thể xác thực với thông tin đăng nhập đã cung cấp"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Hệ thống Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Chỉnh sửa hệ thống"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "đã vô hiệu hóa"
+      },
+      "EditGroupBtn" : {
+        "label" : "Chỉnh sửa"
+      },
+      "CodeHeader" : {
+        "label" : "mã"
+      },
+      "DescriptionHeader" : {
+        "label" : "mô tả"
+      },
+      "UsersHeader" : {
+        "label" : "người dùng"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Trường hợp sử dụng mô hình",
         "help" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này.",
         "placeholder" : "Các trường hợp sử dụng mà nền tảng Gebo.ai sẽ xem xét cho mô hình này."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Hoàn thành thao tác thành công"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Thêm nội dung hoặc điều chỉnh hành vi tìm kiếm"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Nguồn tài liệu",
+        "help" : "Mở danh sách các tài liệu đã phân tích"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Chi tiết trả lời và nguồn deep search"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Kết quả phân tích Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Lỗi khi tìm kiếm Confluence Search",
+        "detail" : "Lỗi máy chủ: Gặp sự cố khi truy cập hệ thống confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Đã tải cuộc trò chuyện mới",
+        "detail" : "Tải cuộc trò chuyện mới thành công"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chọn nguồn tài liệu"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chọn ít nhất một trong các tùy chọn dưới đây"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Bỏ qua deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Các kho kiến thức đã chọn"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Các hệ thống đã chọn"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Thêm tài liệu vào danh sách 'trò chuyện với'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Đang chạy deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Đang chạy truy xuất tăng cường"
+      },
+      "PureLLMResponse" : {
+        "label" : "Đang hỏi llm"
+      },
+      "Waiting" : {
+        "label" : "Đang phân tích kế hoạch trả lời tốt nhất.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Đang chạy công cụ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Đang chạy tìm kiếm hỗ trợ AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Tệp đã phân tích"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Kết quả tìm kiếm đã phân tích"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Kết quả tìm kiếm hệ thống đã phân tích cho"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Đang tổng hợp báo cáo cuối cùng"
+      },
+      "RUNNING" : {
+        "label" : "Đang chạy "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Tôi đang phân tích yêu cầu của bạn"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Đã chọn luồng agentic, agent đang chạy"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Mức độ dịch vụ là: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Đang thực thi agent bạn đã chọn"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Tải lên tệp"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Duyệt/tìm kiếm tệp công ty"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Trò chuyện với tài liệu đã chọn"
+      },
+      "agenticChat" : {
+        "label" : "Trò chuyện Agentic"
+      },
+      "rag" : {
+        "label" : "Trò chuyện R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Nhiều nguồn"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Tìm kiếm kho kiến thức"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Trò chuyện với tệp"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Người dùng Google sẽ giả lập",
         "help" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp",
         "placeholder" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp"
+      },
+      "OK" : {
+        "summary" : "Lưu thành công",
+        "detail" : "Cập nhật thành công"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Tài liệu đã xử lý",
         "dataset-2-label" : "Tài liệu lỗi",
         "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Lập chỉ mục toàn văn"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Tài liệu nhận được",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokens đã xử lý",
+        "dataset-1-label" : "Lỗi xử lý tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Lỗi ngoại lệ khi thao tác:Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết",
         "detail" : "Lỗi máy chủ: Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Nhà cung cấp AI từ xa OK",
+        "detail" : "Nhà cung cấp đã sẵn sàng và cấu hình thành công"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Lỗi trong quá trình thao tác:401 KHÔNG ĐƯỢC PHÉP",
+        "detail" : "Lỗi máy chủ: 401 KHÔNG ĐƯỢC PHÉP"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Lỗi trong quá trình thao tác:Thiếu basePath",
+        "detail" : "Lỗi máy chủ: Thiếu basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Hoàn tất"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Hoàn thành thao tác thành công"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Chọn nguồn"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Tệp đã phân tích"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Ngưỡng tương đồng tìm kiếm",
         "help" : "Ngưỡng tương đồng ngữ nghĩa (từ 0.5 đến 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Cài đặt bảo mật"
+      },
+      "accessibleToAll" : {
+        "label" : "Cho phép tất cả truy cập"
+      },
+      "datasource" : {
+        "label" : "Nguồn dữ liệu"
+      },
+      "allowedGroups" : {
+        "label" : "Nhóm được phép"
+      },
+      "allowedUsers" : {
+        "label" : "Người dùng được phép"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Quyền truy cập theo nguồn dữ liệu/người dùng/nhóm",
+        "help" : "Deep search sẽ được bật cho mỗi nguồn dữ liệu ngoài và người dùng hoặc nhóm"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Truy cập đơn giản theo người dùng/nhóm"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Truy cập theo nguồn dữ liệu/người dùng/nhóm"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Đã tạo thông tin xác thực",
         "detail" : "Tạo thông tin xác thực thành công"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Lỗi khi kết nối đến máy chủ Ollama ",
+        "detail" : "Lỗi mạng khi kết nối đến hệ thống từ xa để truy cập nội dung\n danh sách models Lỗi xử lý với url:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Prijava"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija ni uspela",
+        "detail" : "Ni se mogoče prijaviti z navedenimi podatki"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistem"
+      },
+      "EditSystemBtn" : {
+        "label" : "Uredi sistem"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "onemogočeno"
+      },
+      "EditGroupBtn" : {
+        "label" : "Uredi"
+      },
+      "CodeHeader" : {
+        "label" : "koda"
+      },
+      "DescriptionHeader" : {
+        "label" : "opis"
+      },
+      "UsersHeader" : {
+        "label" : "uporabniki"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Uporaba modela",
         "help" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model.",
         "placeholder" : "Uporabe, za katere bo platforma Gebo.ai upoštevala ta model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "V redu!",
+        "detail" : "Operacija je bila uspešna"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Dodajte vsebino ali spremenite obnašanje iskanja"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Viri",
+        "help" : "Odprite seznam analiziranih dokumentov"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Podrobnosti globokega odgovora in virov"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Rezultat analize globokega iskanja"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Napaka pri iskanju Confluence Search",
+        "detail" : "Napaka strežnika: težave pri dostopu do sistema confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nov klepet naložen",
+        "detail" : "Nov klepet je bil uspešno naložen"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izberi vire"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izberite vsaj eno od naslednjih možnosti"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskoči globoko iskanje"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izbrane baze znanja"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izbrani sistemi"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Dodaj dokument na seznam 'klepetaj z' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Izvajanje globokega iskanja"
+      },
+      "RagLLMResponse" : {
+        "label" : "Izvajanje retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Vpraševanje llm"
+      },
+      "Waiting" : {
+        "label" : "Analiziranje najboljšega načrta odgovora.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Zaganjanje orodij"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Izvajanje AI podprtega iskanja"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizirana datoteka"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiziran rezultat iskanja"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultat iskanja analiziranega sistema za"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidiranje končnega poročila"
+      },
+      "RUNNING" : {
+        "label" : "Izvajanje "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analiziram vašo zahtevo"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Izbran agentni tok, agent za odgovarjanje je aktiven"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Stopnja storitve je: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Izvajanje izbranega agenta"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Naloži datoteko(e)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Prebrskaj/poišči podjetniške datoteke"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Klepet z izbranim dokumentom"
+      },
+      "agenticChat" : {
+        "label" : "Agentni klepet"
+      },
+      "rag" : {
+        "label" : "R.a.g. klepet"
+      },
+      "deepSearch" : {
+        "label" : "Globoko iskanje/Več virov"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Globoko iskanje/Google spletno iskanje"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Globoko iskanje/Confluence iskanje"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Globoko iskanje/Jira iskanje"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Globoko iskanje/Iskanje po bazi znanja"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Klepet z datoteko/datotekami"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Globoko iskanje/Google spletno iskanje"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Globoko iskanje/Confluence iskanje"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Globoko iskanje/Jira iskanje"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google uporabnik za prevzem identitete",
         "help" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete",
         "placeholder" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete"
+      },
+      "OK" : {
+        "summary" : "Uspešno shranjeno",
+        "detail" : "Posodobitev je bila uspešna"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Obdelani dokumenti",
         "dataset-2-label" : "Dokumenti z napako",
         "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indeksiranje celotnega besedila"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Neobdelane datoteke",
+        "label-1" : "Napaka pri obdelavi dokumentov",
+        "label-2" : "Obdelani dokumenti"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Prejeti dokumenti",
+        "dataset-1-label" : "Obdelani dokumenti",
+        "dataset-2-label" : "Dokumenti z napako",
+        "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Obdelani žetoni",
+        "dataset-1-label" : "Napaka pri obdelavi žetonov"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Izjema med izvajanjem: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa",
         "detail" : "Napaka strežnika: Anthropic api ne more delovati brez ustrezne konfiguracije api ključa"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI oddaljeni ponudnik OK",
+        "detail" : "Ponudnik je aktiven in uspešno konfiguriran"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Izjema med operacijo:401 NEDOVOLJENO",
+        "detail" : "Napaka strežnika: 401 NEDOVOLJENO"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Izjema med operacijo:Manjka basePath",
+        "detail" : "Napaka strežnika: manjka basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Dokončano"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "V redu!",
+        "detail" : "Operacija je bila uspešna"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Izberi vire"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizirana datoteka"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Prag podobnosti iskanja",
         "help" : "Prag semantične podobnosti (med 0.5 in 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Varnostne nastavitve"
+      },
+      "accessibleToAll" : {
+        "label" : "Dostopno vsem"
+      },
+      "datasource" : {
+        "label" : "Vir podatkov"
+      },
+      "allowedGroups" : {
+        "label" : "Dovoljene skupine"
+      },
+      "allowedUsers" : {
+        "label" : "Dovoljeni uporabniki"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Dostop po uporabnikih/skupinah za vsak vir podatkov",
+        "help" : "Globoko iskanje bo omogočeno za vsak zunanji vir podatkov in uporabnika ali skupino"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Enostaven dostop po uporabnikih/skupinah"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Dostop po uporabnikih/skupinah za vsak vir podatkov"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Poverilnice ustvarjene",
         "detail" : "Poverilnice uspešno ustvarjene"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Napaka pri komunikaciji z Ollama strežnikom",
+        "detail" : "Napaka v omrežju pri komunikaciji z oddaljenim sistemom za dostop do vsebine\n seznam modelov Napaka pri delu z url:nullapi/tags"
       }
     }
   },

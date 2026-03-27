@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ಲಾಗಿನ್"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ಕ್ರಿಯೆ ವಿಫಲವಾಯಿತು",
+        "detail" : "ನೀಡಲಾದ ಅನುಮತಿ ವಿವರಗಳೊಂದಿಗೆ ಪ್ರಮಾಣೀಕರಣ ಸಾಧ್ಯವಿಲ್ಲ"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence ವ್ಯವಸ್ಥೆ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ಸಿಸ್ಟಮ್ ಸಂಪಾದಿಸಿ"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ನಿಷ್ಕ್ರಿಯಗೊಂಡಿದೆ"
+      },
+      "EditGroupBtn" : {
+        "label" : "ಸಂಪಾದಿಸಿ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "UsersHeader" : {
+        "label" : "ಬಳಕೆದಾರರು"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
         "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
         "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಒಪ್ಪಿದೆ!",
+        "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ಆಕರಗಳು",
+        "help" : "ವಿಶ್ಲೇಷಿಸಿರುವ ಡಾಕ್ಯುಮೆಂಟ್ ಪಟ್ಟಿ ತೆರೆ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ಉತ್ತರ ಮತ್ತು ಆಕರಗಳ ವಿವರಗಳು"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ವಿಶ್ಲೇಷಣೆ ಫಲಿತಾಂಶ"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Research ನಲ್ಲಿ ಹುಡುಕುವಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: confluence ಸಿಸ್ಟಮ್ ಗೆ ಪ್ರವೇಶಿಸುವಲ್ಲಿ ಸಮಸ್ಯೆಗಳು"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ಹೊಸ ಚಾಟ್ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ",
+        "detail" : "ಹೊಸ ಚಾಟ್ ಯಶಸ್ವಿಯಾಗಿ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ಆಕರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ಕೆಳಗಿನ ಆಯ್ಕೆಗಳಲ್ಲಿ ಕನಿಷ್ಠ ಒಂದು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ಬಿಡು"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ನೊಲಡ್ಜಿ ಬೇಸ್ ಗಳು"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ಸಿಸ್ಟಮ್ ಗಳು"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'ಚಾಟ್ ವಿತ್' ಪಟ್ಟಿಗೆ ಡಾಕ್ಯುಮೆಂಟ್ ಸೇರಿಸಿ "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ನಡೆಯುತ್ತಿದೆ"
+      },
+      "RagLLMResponse" : {
+        "label" : "ಪೂರ್ಣಗೊಳಿಸಬಲ್ಲ ಉತ್ಪಾದನೆ ನಡೆಯುತ್ತಿದೆ"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm ಗೆ ಕೇಳಲಾಗುತ್ತಿದೆ"
+      },
+      "Waiting" : {
+        "label" : "ಉತ್ತಮ ಪ್ರತಿಕ್ರಿಯೆಗೆ ಯೋಜನೆ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ಟೂಲ್‌ಗಳು ನಡೆಯುತ್ತಿವೆ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI ಸಹಾಯಿತ ಹುಡುಕಾಟ ನಡೆಯುತ್ತಿದೆ"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಿದ ಫೈಲ್"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ವಿಶ್ಲೇಷಿತ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ವಿಶ್ಲೇಷಿತ ಸಿಸ್ಟಮ್ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ಅಂತಿಮ ವರದಿ ಒಕ್ಕೂಸಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "RUNNING" : {
+        "label" : "ಚಾಲನೆಯಲ್ಲಿದೆ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತಿದ್ದೇನೆ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "ಆಯ್ಕೆಯಾದ ಏಜೆಂಟಿಕ್ ಫ್ಲೋ, ಉತ್ತರ ನೀಡುತ್ತಿರುವ ಏಜೆಂಟ್ ಚಾಲನೆಯಲ್ಲಿದೆ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "ಸೇವಾ ಮಟ್ಟ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "ನೀವು ಆಯ್ಕೆಮಾಡಿದ ಏಜೆಂಟ್ ಕಾರ್ಯಗತವಾಗುತ್ತಿದೆ"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ಫೈಲ್(ಗಳು) ಅಪ್‌ಲೋಡ್ ಮಾಡಿ"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "ಕಂಪನಿ ಫೈಲ್(ಗಳು) ಬ್ರೌಸ್/ಹುಡುಕಿ"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ಡಾಕ್ ಚಾಟ್"
+      },
+      "agenticChat" : {
+        "label" : "ಏಜೆಂಟಿಕ್ ಚಾಟ್"
+      },
+      "rag" : {
+        "label" : "R.a.g. ಚಾಟ್"
+      },
+      "deepSearch" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/ಬಹು ಆಕರಗಳು"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Google ವೆಬ್ ಸರ್ಚ್"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Confluence ಹುಡುಕಾಟ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/ನೊಲಡ್ಜಿ ಬೇಸ್ ಹುಡುಕಾಟ"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ಫೈಲ್(ಗಳು) ಜೊತೆಗೆ ಚಾಟ್ ಮಾಡಿ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Google ವೆಬ್ ಸರ್ಚ್"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Confluence ಹುಡುಕಾಟ"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "ನಕಲಿ ಮಾಡಬೇಕಾದ Google ಬಳಕೆದಾರ",
         "help" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ",
         "placeholder" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ"
+      },
+      "OK" : {
+        "summary" : "ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ",
+        "detail" : "ಅಪ್‌ಡೇಟ್ ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
         "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
         "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "ಪೂರ್ಣ ಪಠ್ಯ ಸೂಚ್ಯಂಕಗೊಳಿಸುವಿಕೆ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಿಸದ ಡಾಕ್ಸ್",
+        "label-1" : "ಡಾಕ್ಸ್ ಸಂಸ್ಕರಿಸುವಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಸ್"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಸ್",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಸ್",
+        "dataset-2-label" : "ಎರ್ರರ್ ಡಾಕ್ಸ್",
+        "dataset-3-label" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಡಾಕ್ಸ್"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "ಸಂಸ್ಕರಿಸಿದ ಟೋಕನ್‌ಗಳು",
+        "dataset-1-label" : "ಟೋಕನ್ ಪ್ರೊಸೆಸಿಂಗ್‌ನಲ್ಲಿ ದೋಷ"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
         "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ರಿಮೋಟ್ ಪೂರೈಕೆಕಾರನು ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರನು ಪ್ರಾರಂಭವಾಗಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ಕ್ರಿಯೆಯಲ್ಲಿ ಅಪವಾದ:401 ಅರ್ಹತೆ ಇಲ್ಲ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 401 ಅರ್ಹತೆ ಇಲ್ಲ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ಕ್ರಿಯೆಯಲ್ಲಿ ಅಪವಾದ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ಪೂರ್ಣಗೊಂಡಿದೆ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಒಪ್ಪಿದೆ!",
+        "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "ಮೂಲಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಿದ ಫೈಲ್"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
         "help" : "ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "ಭದ್ರತಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "accessibleToAll" : {
+        "label" : "ಎಲ್ಲರಿಗೂ ಲಭ್ಯ"
+      },
+      "datasource" : {
+        "label" : "ದತ್ತಾಂಶ ಆಕರ"
+      },
+      "allowedGroups" : {
+        "label" : "ಅನುಮತಿಸಲಾದ ಗುಂಪುಗಳು"
+      },
+      "allowedUsers" : {
+        "label" : "ಅನುಮತಿಸಲಾದ ಬಳಕೆದಾರರು"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ಪ್ರತಿ ದತ್ತಾಂಶ ಆಕರ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ",
+        "help" : "ಪ್ರತಿ ಬಾಹ್ಯ ದತ್ತಾಂಶ ಆಕರ ಮತ್ತು ಬಳಕೆದಾರ ಅಥವಾ ಗುಂಪಿಗೆ ಡೀಪ್ ಸರ್ಚ್ ಲಭ್ಯವಾಗುತ್ತದೆ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ಸರಳ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ಪ್ರತಿ ದತ್ತಾಂಶ ಆಕರ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "ಸಂದರ್ಶನಗಳು ರಚಿಸಲಾಗಿದೆ",
         "detail" : "ಸಂದರ್ಶನಗಳು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama ಸರ್ವರ್ ಜೊತೆಗೆ ಸಂವಹನ ದೋಷ",
+        "detail" : "ದೂರಸ್ಥ ಸಿಸ್ಟಮ್ ಜೊತೆ ಸಂವಹನದಲ್ಲಿ ನೆಟ್ವರ್ಕ್ ದೋಷ\nವಿಷಯದ ಅನುವು/ಮಾದರಿಗಳ ಪಟ್ಟಿ url:nullapi/tags ಬಳಸುವಲ್ಲಿ ದೋಷ"
       }
     }
   },

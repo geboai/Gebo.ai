@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Kirjaudu"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Toiminto epäonnistui",
+        "detail" : "Tunnistautuminen annetuilla tunnuksilla epäonnistui"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-järjestelmä"
+      },
+      "EditSystemBtn" : {
+        "label" : "Muokkaa järjestelmää"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "poistettu käytöstä"
+      },
+      "EditGroupBtn" : {
+        "label" : "Muokkaa"
+      },
+      "CodeHeader" : {
+        "label" : "koodi"
+      },
+      "DescriptionHeader" : {
+        "label" : "kuvaus"
+      },
+      "UsersHeader" : {
+        "label" : "käyttäjät"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Mallin käyttötarkoitukset",
         "help" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia.",
         "placeholder" : "Käyttötavat, joihin Gebo.ai -alusta käyttää tätä mallia."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Lisää sisältöä tai muuta hakukäytöstä"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Lähteet",
+        "help" : "Avaa analysoitujen dokumenttien lista"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Deep search -vastaus ja lähteen tiedot"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Syvähaun analyysitulokset"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Virhe haettaessa Confluence Searchia",
+        "detail" : "Palvelinvirhe: Ongelma confluence-järjestelmään yhdistettäessä"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Uusi keskustelu ladattu",
+        "detail" : "Uusi keskustelu ladattu onnistuneesti"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Valitse lähteet"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Valitse vähintään yksi seuraavista vaihtoehdoista"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ohita syvähaku"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valitut tietopohjat"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valitut järjestelmät"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Lisää dokumentti 'keskustele'-listalle "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Suoritetaan syvähakua"
+      },
+      "RagLLMResponse" : {
+        "label" : "Suoritetaan retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Kysytään llm:ltä"
+      },
+      "Waiting" : {
+        "label" : "Analysoidaan parasta vastaussuunnitelmaa..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Suoritetaan työkalut"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI-avusteinen haku käynnissä"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysoitu tiedosto"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysoitu hakutulos"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysoitu järjestelmähaun tulos kohteelle"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidoidaan loppuraporttia"
+      },
+      "RUNNING" : {
+        "label" : "Käynnissä "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analysoin pyyntöäsi"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Valittu agenttivirta, vastaava agentti käynnissä"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Palvelutaso: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Suoritetaan valitsemasi agentti"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Lähetä tiedosto(t)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Selaa/hae yrityksen tiedostoja"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Valitun tiedoston keskustelu"
+      },
+      "agenticChat" : {
+        "label" : "Agenttikeskustelu"
+      },
+      "rag" : {
+        "label" : "R.a.g. keskustelu"
+      },
+      "deepSearch" : {
+        "label" : "Syvähaku/Monet lähteet"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Syvähaku/Google Web -haku"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Syvähaku/Confluence-haku"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Syvähaku/Jira-haku"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Syvähaku/Tietopohjahaku"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Keskustele tiedosto(t) kanssa"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Syvähaku/Google Web -haku"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Syvähaku/Confluence-haku"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Syvähaku/Jira-haku"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google-käyttäjä, jota käytetään valtuutettuna",
         "help" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna",
         "placeholder" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna"
+      },
+      "OK" : {
+        "summary" : "Tallennettu onnistuneesti",
+        "detail" : "Päivitystoiminto suoritettu onnistuneesti"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Käsitellyt dokumentit",
         "dataset-2-label" : "Virheelliset dokumentit",
         "dataset-3-label" : "Hylätyt dokumentit"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Kokotekstin indeksointi"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Käsittelemättömät tiedostot",
+        "label-1" : "Virhe tiedostojen käsittelyssä",
+        "label-2" : "Käsitellyt tiedostot"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut tiedostot",
+        "dataset-1-label" : "Käsitellyt tiedostot",
+        "dataset-2-label" : "Virheelliset tiedostot",
+        "dataset-3-label" : "Hylätyt tiedostot"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Poikkeus toiminnon aikana:Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä",
         "detail" : "Palvelinvirhe: Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-etäpalvelu OK",
+        "detail" : "Palvelu toimii ja konfiguroitiin onnistuneesti"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Poikkeus toiminnon aikana: 401 UNAUTHORIZED",
+        "detail" : "Palvelinvirhe: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Poikkeus toiminnon aikana: basePath puuttuu",
+        "detail" : "Palvelinvirhe: basePath puuttuu"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Valmis"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Valitse lähteet"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysoitu tiedosto"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Haun samankaltaisuuden kynnys",
         "help" : "Semanttisen samankaltaisuuden kynnys (väliltä 0.5–1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Tietoturva-asetukset"
+      },
+      "accessibleToAll" : {
+        "label" : "Saatavilla kaikille"
+      },
+      "datasource" : {
+        "label" : "Tietolähde"
+      },
+      "allowedGroups" : {
+        "label" : "Sallitut ryhmät"
+      },
+      "allowedUsers" : {
+        "label" : "Sallitut käyttäjät"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Käyttäjä-/ryhmäkohtainen pääsy tietolähteittäin",
+        "help" : "Syvähaku on käytössä jokaiselle ulkoiselle tietolähteelle sekä käyttäjälle tai ryhmälle"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Yksinkertainen käyttäjä-/ryhmäkohtainen pääsy"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Tietolähdekohtainen käyttäjä-/ryhmäpääsy"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Tunniste luotu",
         "detail" : "Tunniste luotu onnistuneesti"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Virhe viestinnässä Ollama-palvelimen kanssa ",
+        "detail" : "Verkkovirhe yhdistettäessä etäjärjestelmään sisältöä \n mallilista Virhe url:n kanssa:nullapi/tags"
       }
     }
   },

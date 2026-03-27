@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Ingia"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operesheni imeshindwa",
+        "detail" : "Haiwezekani kuthibitisha kwa vih credentials ulivyotoa"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Mfumo wa Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Hariri mfumo"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "kimezimwa"
+      },
+      "EditGroupBtn" : {
+        "label" : "Hariri"
+      },
+      "CodeHeader" : {
+        "label" : "msimbo"
+      },
+      "DescriptionHeader" : {
+        "label" : "maelezo"
+      },
+      "UsersHeader" : {
+        "label" : "watumiaji"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Matumizi ya mfano",
         "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
         "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Ongeza maudhui au rekebisha tabia ya utafutaji"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Vyanzo",
+        "help" : "Fungua orodha ya nyaraka zilizochambuliwa"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Maelezo ya majibu ya deep search na vyanzo"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Matokeo ya uchambuzi wa Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Hitilafu kutafuta Confluence Search",
+        "detail" : "Hitilafu ya seva: Tatizo kupata mfumo wa confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Chat mpya imepakiwa",
+        "detail" : "Chat mpya imepakiwa kwa mafanikio"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chagua vyanzo"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chagua angalau moja kati ya chaguzi zifuatazo"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ruka deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bodimaarifa zilizochaguliwa"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Mifumo iliyochaguliwa"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ongeza hati kwenye orodha ya 'zungumza na' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Inaendeshwa deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Inaendeshwa retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Inauliza llm"
+      },
+      "Waiting" : {
+        "label" : "Inachambua mpango bora wa majibu.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Inaendesha zana"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Inaendeshwa utafutaji unaosaidiwa na AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Faili iliyochambuliwa"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Matokeo ya utafutaji yaliyopitiwa"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Matokeo ya utafutaji wa mfumo yaliyopitiwa kwa"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Inakamilisha ripoti ya mwisho"
+      },
+      "RUNNING" : {
+        "label" : "Inaendeshwa "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ninachambua ombi lako"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Umepitisha mtiririko wa agentic, agent anayejibu anaendeshwa"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Kiwango cha huduma ni: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Inaendesha agent uliyechagua"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Pakia faili"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Vinjari/tafuta faili za kampuni"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Mazungumzo ya doc iliyochaguliwa"
+      },
+      "agenticChat" : {
+        "label" : "Mazungumzo ya agentic"
+      },
+      "rag" : {
+        "label" : "Mazungumzo ya r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Vyanzo vingi"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Utafutaji wa bodimaarifa"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat na faili"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Mtumiaji wa Google wa kuigwa",
         "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
         "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
+      },
+      "OK" : {
+        "summary" : "Imehifadhiwa kwa mafanikio",
+        "detail" : "Operesheni ya kusasisha imekamilika kwa mafanikio"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Nyaraka zilizochakatwa",
         "dataset-2-label" : "Nyaraka zenye hitilafu",
         "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Uorodheshaji wa maandishi kamili"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nyaraka zisizotibiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizokataliwa"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata tokeni"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
         "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider Sawa",
+        "detail" : "Mtoa huduma anaendelea na amesanidiwa kwa mafanikio"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Isipokuwa wakati wa operesheni:401 HURUHUSIWI",
+        "detail" : "Hitilafu ya seva: 401 HURUHUSIWI"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Isipokuwa wakati wa operesheni:Missing basePath",
+        "detail" : "Hitilafu ya seva: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Imekamilika"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Chagua vyanzo"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Faili iliyochambuliwa"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Kizingiti cha ufanano wa utafutaji",
         "help" : "Kizingiti cha ufanano wa semantic (kati ya 0.5 hadi 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Mipangilio ya usalama"
+      },
+      "accessibleToAll" : {
+        "label" : "Inapatikana kwa Wote"
+      },
+      "datasource" : {
+        "label" : "Chanzo cha data"
+      },
+      "allowedGroups" : {
+        "label" : "Vikundi Vilivyoruhusiwa"
+      },
+      "allowedUsers" : {
+        "label" : "Watumiaji Walioruhusiwa"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Upatikanaji wa mtumiaji/kikundi kwa kila chanzo cha data",
+        "help" : "Deep search itawashwa kwa kila chanzo cha data cha nje na mtumiaji au kikundi"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Upatikanaji rahisi kwa mtumiaji/kikundi"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Upatikanaji kwa kila chanzo cha data mtumiaji/kikundi"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Kitambulisho kimeundwa",
         "detail" : "Kitambulisho kimeundwa kwa mafanikio"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Hitilafu ya kuwasiliana na seva ya Ollama ",
+        "detail" : "Hitilafu ya mtandao kuwasiliana na mfumo wa mbali kupata yaliyomo\n orodha ya models Hitilafu ya kufanya kazi na url:nullapi/tags"
       }
     }
   },

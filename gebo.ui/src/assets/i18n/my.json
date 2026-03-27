@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "လော့ဂ်အင်ဝင်မည်"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "လုပ်ဆောင်မှု မအောင်မြင်ပါ",
+        "detail" : "ပေးသွင်းထားသော တာဝန်ယူသူအချက်အလက် နဲ့ အသုံးပြု၍ ဝင်ရောက်နိုင်မှု မလုပ်ဆောင်နိုင်ပါ"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence စနစ်"
+      },
+      "EditSystemBtn" : {
+        "label" : "စနစ် တည်းဖြတ်မည်"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ဖျက်သိမ်းထားသည်"
+      },
+      "EditGroupBtn" : {
+        "label" : "တည်းဖြတ်မည်"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "UsersHeader" : {
+        "label" : "အသုံးပြုသူများ"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "မော်ဒယ် အသုံးပြုမှု(များ)",
         "help" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။",
         "placeholder" : "Gebo.ai ပလက်ဖောင်းသည် ဤမော်ဒယ်ကို သတ်မှတ်ထားသော အသုံးအများအတွက် အသုံးပြုမည်။"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "အောင်မြင်ပါသည်!",
+        "detail" : "လုပ်ဆောင်မှုအောင်မြင်စွာ ပြီးမြောက်ပါသည်"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "အကြောင်းအရာ ထည့်ခြင်း သို့မဟုတ် ရှာဖွေမှုအပြုအမှု ပြုပြင်ပါ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ရင်းမြစ်များ",
+        "help" : "စိစစ်ပြီးသား စာရွက်စာတမ်းများ စာရင်း ဖွင့်ပါ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "အနက်ရှာဖွေ ဖြေကြားချက်နှင့် ရင်းမြစ်အသေးစိတ်"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "အနက်ရှာဖွေ ချုပ်ညီချက်ရလဒ်"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence ရှာဖွေရေးတွင် အမှားအယွင်း",
+        "detail" : "Server အမှား: Confluence စနစ်သို့ ဝင်ရောက်ရာတွင် ပြဿနာရှိပါသည်"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ချက်သစ် ကို ဖွင့်ပြီးပါပြီ",
+        "detail" : "ချက်သစ်ကို အောင်မြင်စွာ ဖြင့်ဖွင့်ပြီးပါပြီ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ရင်းမြစ်များ ရွေးချယ်ပါ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "အောက်ပါ ရွေးစရာများမှ အနည်းဆုံး တစ်ခု ရွေးပါ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "အနက်ရှာဖွေ လွှလႊားမည်"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ရွေးချယ်ထားသော သိပ္ပံနယ်ပယ်"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ရွေးချယ်ထားသော စနစ်များ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'chat with' စာရင်းသို့ စာရွက်စာတမ်းထည့်ပါ"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "အနက်ရှာဖွေ ခုံသယံဇာတ"
+      },
+      "RagLLMResponse" : {
+        "label" : "Retrieve augmented generation လုပ်ဆောင်နေသည်"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm ကို မေးမြန်းနေသည်"
+      },
+      "Waiting" : {
+        "label" : "အကောင်းဆုံး ဖြေရှင်းမှုအစီအစဉ် ကို ခွဲခြမ်းစိတ်ဖြာနေသည်.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ကိရိယာများ လုပ်ဆောင်နေသည်"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI ဖြင့် ကူညီသော ရှာဖွေမှုကို လုပ်ဆောင်နေသည်"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "စမ်းသပ်ထားသော ဖိုင်"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "စမ်းသပ်ထားသော ရှာဖွေမှုရလဒ်"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "စနစ်ရှာဖွေမှုရလဒ်အတွက် စမ်းသပ်ထားသည်"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "နောက်ဆုံးအစီရင်ခံစာ ညှိနှိုင်းလျက်ရှိသည်"
+      },
+      "RUNNING" : {
+        "label" : "အလုပ် လုပ်ဆောင်နေသည် "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "သင့် တောင်းဆိုချက်ကို စီစစ်နေသည်"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentic flow ကို ရွေးချယ်ပြီး, agent ကို ဖြေကြားနေသည်"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Service level: QA ဖြစ်သည်"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "သင့်ရွေးချယ်ထားသော agent ကို တစ်ဆင့်လုပ်ဆောင်နေသည်"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ဖိုင်များ တင်သွင်းမည်"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "ကုမ္ပဏီဖိုင်များ ရှာဖွေ/ကြည့်ရှု"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ရွေးချယ်ထားသောစာရင်း ဆွေးနွေး"
+      },
+      "agenticChat" : {
+        "label" : "Agentic ဆွေးနွေးပွဲ"
+      },
+      "rag" : {
+        "label" : "R.a.g. ဆွေးနွေးပွဲ"
+      },
+      "deepSearch" : {
+        "label" : "အနက်ရှာဖွေ/ရင်းမြစ်များစုံ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "အနက်ရှာဖွေ/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "အနက်ရှာဖွေ/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "အနက်ရှာဖွေ/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "အနက်ရှာဖွေ/သိပ္ပံနယ်ပယ်ရှာဖွေမှု"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ဖိုင်များနှင့် ဆွေးနွေးမှု"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "အနက်ရှာဖွေ/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "အနက်ရှာဖွေ/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "အနက်ရှာဖွေ/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "ပြောင်းလဲအသုံးပြုမည့် Google အသုံးပြုသူ",
         "help" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ",
         "placeholder" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ"
+      },
+      "OK" : {
+        "summary" : "အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ",
+        "detail" : "ပြင်ဆင်မှု လုပ်ဆောင်မှု အောင်မြင်စွာ ပြီးဆုံးသည်"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "လုပ်ငန်းပြီးစာရွက်စာတမ်းများ",
         "dataset-2-label" : "ပြဿနာရှိသောစာရွက်စာတမ်းများ",
         "dataset-3-label" : "အပယ်တင်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "အပြည့်အစုံ စာသားအညွှန်းပေးခြင်း"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "မလုပ်ဆောင်ရသေးသော docs",
+        "label-1" : "docs ကိုလုပ်ဆောင်ရာတွင် ဖြစ်ပေါ်သောအမှား",
+        "label-2" : "လုပ်ဆောင်ပြီးသော docs"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "လက်ခံရရှိသော docs",
+        "dataset-1-label" : "လုပ်ဆောင်ပြီးသော docs",
+        "dataset-2-label" : "အမှားရှိသော docs",
+        "dataset-3-label" : "တွေ့ရှိလျက် လွှင့်ပယ်သော docs"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "လုပ်ဆောင်ပြီးသော token များ",
+        "dataset-1-label" : "token များကို လုပ်ဆောင်ရာတွင် အမှားရှိသည်"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ",
         "detail" : "Server error: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ဝေးလံသော ပေးသွင်းသူ OK",
+        "detail" : "ပေးသွင်းသူ အသင့်သုံးနိုင်ပြီး အောင်မြင်စွာ ပြင်ဆင်ပြီးသား"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "လုပ်ဆောင်မှုအတွင်း မွားယွင်းမှု:401 UNAUTHORIZED",
+        "detail" : "Server အမှား: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "လုပ်ဆောင်မှုအတွင်း မွားယွင်းမှု:Missing basePath",
+        "detail" : "Server အမှား: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ပြီးဆုံးပါပြီ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "အောင်မြင်ပါသည်!",
+        "detail" : "လုပ်ဆောင်မှုအောင်မြင်စွာ ပြီးမြောက်ပါသည်"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "ရင်းမြစ်များ ရွေးချယ်ပါ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "စမ်းသပ်ထားသော ဖိုင်"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "ရှာဖွေမှု ဆက်စပ်မှုအနုတ်အတွက်",
         "help" : "Semantic ဆက်စပ်မှုအနုတ္တု (0.5 မှ 1.0 အတွင်း)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "လုံခြုံရေး ဆက်တင်များ"
+      },
+      "accessibleToAll" : {
+        "label" : "အားလုံးဝင်ရောက်နိုင်သည်"
+      },
+      "datasource" : {
+        "label" : "အချက်အလက်ရင်းမြစ်"
+      },
+      "allowedGroups" : {
+        "label" : "ခွင့်ပြုသည့် အုပ်စုများ"
+      },
+      "allowedUsers" : {
+        "label" : "ခွင့်ပြုသည့် အသုံးပြုသူများ"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ရင်းမြစ်တိုင်းအလိုက် အသုံးပြုသူ/အုပ်စု ခွင့်ပြုချက်",
+        "help" : "အနက်ရှာဖွေမှုသည် အပြင်အဆင် အချက်အလက်ရင်းမြစ်နှင့် အသုံးပြုသူ သို့မဟုတ် အုပ်စု တစ်ခုစီအတွက် မလိုအပ်ပါ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "အသုံးပြုသူ/အုပ်စု အလိုက် ရိုးရှင်းသောခွင့်ပြုချက်"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ရင်းမြစ်အလိုက် အသုံးပြုသူ/အုပ်စု ခွင့်ပြုချက်"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "လက်မှတ် ဖန်တီးပြီး",
         "detail" : "လက်မှတ်ကို အောင်မြင်စွာဖန်တီးပြီးပါပြီ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama server နှင့် ဆက်သွယ်ရာတွင် အမှားအယွင်း",
+        "detail" : "ဝေးလံသောစနစ်သို့ ချိတ်ဆက်ရာတွင် ချိတ်ဆက်မှု အမှား \n models စာရင်း url:nullapi/tags ကို သုံး၍ အလုပ်လုပ်ရာတွင် ပြဿနာရှိသည်"
       }
     }
   },

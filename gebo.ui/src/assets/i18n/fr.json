@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Se connecter"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Échec de l'opération",
+        "detail" : "Impossible de s'authentifier avec les identifiants fournis"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Système Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Modifier le système"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "désactivé"
+      },
+      "EditGroupBtn" : {
+        "label" : "Modifier"
+      },
+      "CodeHeader" : {
+        "label" : "code"
+      },
+      "DescriptionHeader" : {
+        "label" : "description"
+      },
+      "UsersHeader" : {
+        "label" : "utilisateurs"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Utilisation(s) du modèle",
         "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
         "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Ajouter du contenu ou modifier le comportement de recherche"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Sources",
+        "help" : "Ouvrir la liste des documents analysés"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Détails de la réponse deep search et des sources"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Résultat de l’analyse Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Erreur lors de la recherche Confluence Search",
+        "detail" : "Erreur serveur : Problèmes lors de l'accès au système confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nouveau chat chargé",
+        "detail" : "Nouveau chat chargé avec succès"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Sélectionner les sources"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Choisissez au moins une des options suivantes"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ignorer la deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de connaissances choisies"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Systèmes choisis"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ajouter un document à la liste 'discuter avec'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Recherche approfondie en cours"
+      },
+      "RagLLMResponse" : {
+        "label" : "Exécution du retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Interrogation du llm"
+      },
+      "Waiting" : {
+        "label" : "Analyse du meilleur plan de réponse..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Exécution des outils"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Recherche assistée par IA en cours"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fichier analysé"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Résultat de recherche analysé"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Résultat de recherche du système analysé pour"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidation du rapport final"
+      },
+      "RUNNING" : {
+        "label" : "En cours "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "J’analyse votre demande"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Flux agentique choisi, agent en cours d’exécution"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Le niveau de service est : QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Exécution de l'agent choisi"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Téléverser un (des) fichier(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Parcourir/rechercher un (des) fichier(s) de l'entreprise"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat doc. choisi"
+      },
+      "agenticChat" : {
+        "label" : "Chat agentique"
+      },
+      "rag" : {
+        "label" : "Chat r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Multiples sources"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Recherche Web Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Recherche Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Recherche Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Recherche base de connaissances"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat avec fichier(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Recherche Web Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Recherche Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Recherche Jira"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Utilisateur Google à imiter",
         "help" : "L’utilisateur qui sera imité par les identifiants fournis",
         "placeholder" : "L’utilisateur qui sera imité par les identifiants fournis"
+      },
+      "OK" : {
+        "summary" : "Enregistré avec succès",
+        "detail" : "Mise à jour réalisée avec succès"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Documents traités",
         "dataset-2-label" : "Documents en erreur",
         "dataset-3-label" : "Documents écartés"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexation texte intégral"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Docs non traités",
+        "label-1" : "Erreur de traitement des docs",
+        "label-2" : "Docs traités"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Docs reçus",
+        "dataset-1-label" : "Docs traités",
+        "dataset-2-label" : "Docs en erreur",
+        "dataset-3-label" : "Docs écartés"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Jetons traités",
+        "dataset-1-label" : "Erreur de traitement des jetons"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Exception pendant l’opération : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise",
         "detail" : "Erreur serveur : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Fournisseur AI à distance OK",
+        "detail" : "Le fournisseur est opérationnel et configuré avec succès"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Exception lors de l’opération : 401 NON AUTORISÉ",
+        "detail" : "Erreur serveur : 401 NON AUTORISÉ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Exception lors de l'opération : Missing basePath",
+        "detail" : "Erreur serveur : basePath manquant"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Terminé"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Sélectionner les sources"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fichier analysé"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Seuil de similarité de recherche",
         "help" : "Seuil de similarité sémantique (entre 0,5 et 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Paramètres de sécurité"
+      },
+      "accessibleToAll" : {
+        "label" : "Accessible à tous"
+      },
+      "datasource" : {
+        "label" : "Source de données"
+      },
+      "allowedGroups" : {
+        "label" : "Groupes autorisés"
+      },
+      "allowedUsers" : {
+        "label" : "Utilisateurs autorisés"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Accès utilisateurs/groupes par source de données",
+        "help" : "La deep search sera activée pour chaque source de données externe et utilisateur ou groupe"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Accès simple par utilisateur/groupe"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Accès par source de données et utilisateur/groupe"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Identifiants créés",
         "detail" : "Identifiants créés avec succès"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Erreur de communication avec le serveur Ollama ",
+        "detail" : "Erreur réseau lors de la communication avec le système distant pour accéder à la liste des modèles de contenu\nErreur lors de l'utilisation de l'url : nullapi/tags"
       }
     }
   },

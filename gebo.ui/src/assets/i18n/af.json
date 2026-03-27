@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Meld aan"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasie het misluk",
+        "detail" : "Kan nie met die verskafde geloofsbriewe verifieer nie"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-stelsel"
+      },
+      "EditSystemBtn" : {
+        "label" : "Wysig stelsel"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "gedeaktiveer"
+      },
+      "EditGroupBtn" : {
+        "label" : "Wysig"
+      },
+      "CodeHeader" : {
+        "label" : "kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "beskrywing"
+      },
+      "UsersHeader" : {
+        "label" : "gebruikers"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modelgebruik(e)",
         "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
         "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Bronne",
+        "help" : "Maak die lys van ontlede dokumente oop"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Diep soek antwoord en brondetails"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Diep soek-analise resultaat"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Fout met Confluence-soektog",
+        "detail" : "Bedienerfout: Probleme met toegang tot die Confluence-stelsel"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nuwe klets gelaai",
+        "detail" : "Nuwe klets suksesvol gelaai"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kies bronne"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Kies ten minste een van die volgende opsies"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Slaan diep soek oor"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Gekose kennisbasisse"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Gekose stelsels"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Voeg dokument by 'gesels met' lys"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Besig met diep soek"
+      },
+      "RagLLMResponse" : {
+        "label" : "Besig met retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Vra llm"
+      },
+      "Waiting" : {
+        "label" : "Analiseer die beste reaksieplan..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Besig met gereedskap"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI-ondersteunde soektog loop"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Ontleë lêer"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Ontleë soekresultaat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Ontleë stelsel soekresultaat vir"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolideer finale verslag"
+      },
+      "RUNNING" : {
+        "label" : "Loop"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ek analiseer jou versoek"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Gekose agentiese vloei, agent aan die gang"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Diensvlak is: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Jou gekose agent word uitgevoer"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Laai lêer(s) op"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Blaai/soek maatskappy lêer(s)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Gekose doc. klets"
+      },
+      "agenticChat" : {
+        "label" : "Agentiese klets"
+      },
+      "rag" : {
+        "label" : "R.a.g. klets"
+      },
+      "deepSearch" : {
+        "label" : "Diep soek/Veelvoudige bronne"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Diep soek/Google Web-soektog"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Diep soek/Confluence-soektog"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Diep soek/Jira-soektog"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Diep soek/Kennisbasis-soektog"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Klets met lêer(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Diep soek/Google Web-soektog"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Diep soek/Confluence-soektog"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Diep soek/Jira-soektog"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google gebruiker om voor te doen as",
         "help" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe",
         "placeholder" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe"
+      },
+      "OK" : {
+        "summary" : "Suksesvol gestoor",
+        "detail" : "Opdateringsoperasie suksesvol voltooi"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Verwerkte dokumente",
         "dataset-2-label" : "Foutdokumente",
         "dataset-3-label" : "Wegegooide dokumente"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Volledige teksindeksering"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Onverwerkte dokumente",
+        "label-1" : "Fout tydens verwerking",
+        "label-2" : "Verwerkte dokumente"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout tydens verwerking van tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Uitsondering tydens werking:Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie",
         "detail" : "Bedienerfout: Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-afstandverskaffer OK",
+        "detail" : "Verskaffer is aktief en suksesvol gekonfigureer"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Uitsondering tydens operasie:401 ONGEMAGTIG",
+        "detail" : "Bedienerfout: 401 ONGEMAGTIG"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Uitsondering tydens operasie:Basispad ontbreek",
+        "detail" : "Bedienerfout: Basispad ontbreek"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Voltooi"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Kies bronne"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Ontleë lêer"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Soek se gelyksoortigheid drempelwaarde",
         "help" : "Semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Sekuriteit-instellings"
+      },
+      "accessibleToAll" : {
+        "label" : "Toeganklik vir almal"
+      },
+      "datasource" : {
+        "label" : "Databron"
+      },
+      "allowedGroups" : {
+        "label" : "Toegelate groepe"
+      },
+      "allowedUsers" : {
+        "label" : "Toegelate gebruikers"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Per databron gebruikers/groepe toegang",
+        "help" : "Diep soek sal vir elke eksterne databron en gebruiker of groep beskikbaar wees"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Eenvoudige per gebruiker/groep toegang"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Per databron gebruiker/groep toegang"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Bewyse geskep",
         "detail" : "Bewyse suksesvol geskep"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Fout met kommunikasie met Ollama-bediener",
+        "detail" : "Netwerkfout met toegang tot die afstandsstelsel om inhoud\nmodelliste te laai Fout met url:nullapi/tags"
       }
     }
   },

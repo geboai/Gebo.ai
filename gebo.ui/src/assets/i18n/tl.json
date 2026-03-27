@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Mag-login"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Nabigo ang operasyon",
+        "detail" : "Hindi ma-authenticate gamit ang ibinigay na mga kredensyal"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence system"
+      },
+      "EditSystemBtn" : {
+        "label" : "I-edit ang system"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "hindi pinagana"
+      },
+      "EditGroupBtn" : {
+        "label" : "I-edit"
+      },
+      "CodeHeader" : {
+        "label" : "code"
+      },
+      "DescriptionHeader" : {
+        "label" : "description"
+      },
+      "UsersHeader" : {
+        "label" : "users"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Paggamit ng modelo",
         "help" : "Mga gamit na isasaalang-alang ng Gebo.ai platform para sa modelong ito.",
         "placeholder" : "Mga gamit na isasaalang-alang ng Gebo.ai platform para sa modelong ito."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Magdagdag ng nilalaman o baguhin ang kilos ng paghahanap"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Mga pinagmulan",
+        "help" : "Buksan ang listahan ng mga na-analisa na dokumento"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detalye ng deep search na sagot at mga pinagmulan"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resulta ng deep search analysis"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Error sa paghahanap sa Confluence Search",
+        "detail" : "Server error: May problema sa pag-access ng confluence system"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Bago chat na-load",
+        "detail" : "Matagumpay na na-load ang bagong chat"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Piliin ang mga pinagkukunan"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pumili ng kahit isa sa mga sumusunod na opsyon"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Laktawan ang deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Napiling knowledge bases"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Napiling mga system"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Magdagdag ng dokumento sa 'chat with' na listahan"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Isinasagawa ang deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Isinasagawa ang retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Nagtatanong sa llm"
+      },
+      "Waiting" : {
+        "label" : "Ina-analyze ang pinakamainam na plano ng sagot.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Pinapatakbo ang mga tool"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Isinasagawa ang AI assisted search"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Na-analisa na file"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Na-analisa na resulta ng paghahanap"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Na-analisa na resulta ng paghahanap sa system para sa"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Kini-konsolida ang pangwakas na ulat"
+      },
+      "RUNNING" : {
+        "label" : "Matakbo "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ina-analisa ko ang iyong request"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Napiling agentic flow, pinapatakbo ang answering agent"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Ang service level ay: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Isinasagawa ang napiling agent mo"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Mag-upload ng file(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Mag-browse/maghahanap ng company file(s)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Napiling doc. chat"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Maraming pinagmulan"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Knowledge base search"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat na may file(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google user na gagayahin",
         "help" : "Ang user na gagamitin ng mga ibinigay na credentials",
         "placeholder" : "Ang user na gagamitin ng mga ibinigay na credentials"
+      },
+      "OK" : {
+        "summary" : "Matagumpay na na-save",
+        "detail" : "Matagumpay na naisagawa ang pag-update"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Na-prosesong dokumento",
         "dataset-2-label" : "Nagka-error na dokumento",
         "dataset-3-label" : "Itinapong dokumento"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Full text indexing"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Hindi naiprosesong docs",
+        "label-1" : "Nagkaroon ng error sa pagproseso ng docs",
+        "label-2" : "Naiprosesong docs"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Natanggap na docs",
+        "dataset-1-label" : "Naiprosesong docs",
+        "dataset-2-label" : "Docs na may error",
+        "dataset-3-label" : "Itinapong docs"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Naiprosesong tokens",
+        "dataset-1-label" : "Nagkaroon ng error sa pagproseso ng tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Exception habang gumagana:Hindi makakapagtrabaho ang Anthropic api nang walang api key configuration",
         "detail" : "Server error: Hindi makakapagtrabaho ang Anthropic api nang walang kinakailangang api key configuration"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "OK ang AI remote provider",
+        "detail" : "Tumatakbo at matagumpay na na-configure ang provider"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Exception sa operasyon:401 UNAUTHORIZED",
+        "detail" : "Server error: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Exception sa operasyon:Missing basePath",
+        "detail" : "Server error: Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Tapos na"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Piliin ang sources"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Na-analisa na file"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Search similarity threshold",
         "help" : "Semantic similarity threshold (sa pagitan ng 0.5 hanggang 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Mga setting ng seguridad"
+      },
+      "accessibleToAll" : {
+        "label" : "Accessible sa Lahat"
+      },
+      "datasource" : {
+        "label" : "Pinagmulan ng Data"
+      },
+      "allowedGroups" : {
+        "label" : "Pinapayagang Grupo"
+      },
+      "allowedUsers" : {
+        "label" : "Pinapayagang User"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Per data source user/groups access",
+        "help" : "I-e-enable ang deep search para sa bawat external data source at user o group"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Payak na per user/group access"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Per data source user/group access"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Nagawa ang credentials",
         "detail" : "Matagumpay na nagawa ang credentials"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Error sa komunikasyon sa Ollama server ",
+        "detail" : "Network error sa pakikipag-ugnayan sa remote system na kumukuha ng nilalaman\n models list Error working with url:nullapi/tags"
       }
     }
   },

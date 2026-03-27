@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Logga in"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Åtgärden misslyckades",
+        "detail" : "Kan inte autentisera med angivna uppgifter"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-system"
+      },
+      "EditSystemBtn" : {
+        "label" : "Redigera system"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "inaktiverad"
+      },
+      "EditGroupBtn" : {
+        "label" : "Redigera"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "beskrivning"
+      },
+      "UsersHeader" : {
+        "label" : "användare"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "Modellanvändning(ar)",
         "help" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för.",
         "placeholder" : "Användningsområden som Gebo.ai-plattformen kommer att använda den här modellen för."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden slutfördes"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "Lägg till innehåll eller ändra sökbeteende"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Källor",
+        "help" : "Öppna listan över analyserade dokument"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Deep search svar och källdetaljer"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resultat av deep search analys"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Fel vid sökning Confluence Search",
+        "detail" : "Serverfel: Problem med åtkomst till confluence system"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Ny chatt laddad",
+        "detail" : "Ny chatt laddades"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Välj källor"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Välj minst ett av följande alternativ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hoppa över deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valda kunskapsbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valda system"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Lägg till dokument i 'chatta med'-listan "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Utför deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Utför retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Frågar llm"
+      },
+      "Waiting" : {
+        "label" : "Analyserar bästa svarsalternativ..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Kör verktyg"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Utför AI-assisterad sökning"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyserad fil"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analyserat sökresultat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analyserat systemsökresultat för"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliderar slutrapporten"
+      },
+      "RUNNING" : {
+        "label" : "Kör "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analyserar din förfrågan"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Valt agentic flow, agenten körs"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Service nivå är: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Kör din valda agent"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Ladda upp fil(er)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Bläddra/sök företagsfiler"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chatt för vald dok."
+      },
+      "agenticChat" : {
+        "label" : "Agentchatt"
+      },
+      "rag" : {
+        "label" : "R.a.g.-chatt"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/flera källor"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Sök i kunskapsbas"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chatt med fil(er)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "Google-användare att imitera",
         "help" : "Användaren som kommer att imiteras av de angivna behörigheterna",
         "placeholder" : "Användaren som kommer att imiteras av de angivna behörigheterna"
+      },
+      "OK" : {
+        "summary" : "Sparad",
+        "detail" : "Uppdatering genomförd"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "Behandlade dokument",
         "dataset-2-label" : "Feldokument",
         "dataset-3-label" : "Bortkastade dokument"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Fulltextindexering"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Ej behandlade dok.",
+        "label-1" : "Fel vid behandling av dok.",
+        "label-2" : "Behandlade dok."
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Mottagna dok.",
+        "dataset-1-label" : "Behandlade dok.",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Kasserade dok."
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Behandlade tokens",
+        "dataset-1-label" : "Fel vid behandling av tokens"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Undantag vid operation:Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration",
         "detail" : "Serverfel: Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjärrleverantör OK",
+        "detail" : "Leverantören är igång och korrekt konfigurerad"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Fel under åtgärden:401 UNAUTHORIZED",
+        "detail" : "Serverfel: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Fel under åtgärden: Saknar basePath",
+        "detail" : "Serverfel: saknar basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Klart"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden slutfördes"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "Välj källor"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyserad fil"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "Tröskelvärde för söklikhet",
         "help" : "Semantisk likhetströskel (mellan 0,5 och 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Säkerhetsinställningar"
+      },
+      "accessibleToAll" : {
+        "label" : "Tillgänglig för alla"
+      },
+      "datasource" : {
+        "label" : "Datakälla"
+      },
+      "allowedGroups" : {
+        "label" : "Tillåtna grupper"
+      },
+      "allowedUsers" : {
+        "label" : "Tillåtna användare"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Åtkomst per användare/grupp och källa",
+        "help" : "Deep search aktiveras för varje extern datakälla samt användare eller grupp"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Enkel åtkomst per användare/grupp"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Åtkomst per användare/grupp och källa"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "Inloggning skapad",
         "detail" : "Inloggning skapad"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Fel vid kommunikation med Ollama-servern",
+        "detail" : "Nätverksfel vid kommunikation med det externa systemet för åtkomst till innehåll\nmodellista Fel vid hantering av url:nullapi/tags"
       }
     }
   },

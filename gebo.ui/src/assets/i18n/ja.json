@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ログイン"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "操作に失敗しました",
+        "detail" : "入力された認証情報で認証できません"
       }
     },
     "message" : {
@@ -225,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluenceシステム"
+      },
+      "EditSystemBtn" : {
+        "label" : "システムを編集"
       }
     },
     "JiraWizardComponent" : {
@@ -768,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "無効"
+      },
+      "EditGroupBtn" : {
+        "label" : "編集"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "UsersHeader" : {
+        "label" : "ユーザー"
       }
     }
   },
@@ -1733,6 +1752,10 @@
         "label" : "モデル用途",
         "help" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。",
         "placeholder" : "Gebo.ai プラットフォームがこのモデルを考慮する用途。"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1943,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "コンテンツを追加または検索動作を変更"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ソース",
+        "help" : "解析されたドキュメント一覧を開く"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ディープサーチ回答とソースの詳細"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ディープサーチ解析結果"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence検索中にエラーが発生しました",
+        "detail" : "サーバーエラー：Confluenceシステムへのアクセス時に問題が発生しました"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "新しいチャットが読み込まれました",
+        "detail" : "新しいチャットを正常に読み込みました"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ソースを選択"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "次のオプションのうち少なくとも1つを選択してください"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ディープサーチをスキップ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "選択したナレッジベース"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "選択したシステム"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1987,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "「チャット対象」リストにドキュメントを追加"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ディープサーチ実行中"
+      },
+      "RagLLMResponse" : {
+        "label" : "リトリーブ強化生成を実行中"
+      },
+      "PureLLMResponse" : {
+        "label" : "llmへ問い合わせ中"
+      },
+      "Waiting" : {
+        "label" : "最適な回答プランを解析中…"
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ツール実行中"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI支援検索を実行中"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "解析済みファイル"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "解析済み検索結果"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "解析済みシステム検索結果:"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "最終レポートをまとめています"
+      },
+      "RUNNING" : {
+        "label" : "実行中 "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ご要望を解析しています"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "選択したエージェントフローを実行中"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "サービスレベル：QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "選択したエージェントを実行中"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ファイルをアップロード"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "社内ファイルを閲覧・検索"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "選択ドキュメントチャット"
+      },
+      "agenticChat" : {
+        "label" : "エージェントチャット"
+      },
+      "rag" : {
+        "label" : "R.a.g.チャット"
+      },
+      "deepSearch" : {
+        "label" : "ディープサーチ／複数ソース"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ディープサーチ／Google Web検索"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ディープサーチ／Confluence検索"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ディープサーチ／Jira検索"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ディープサーチ／ナレッジベース検索"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ファイルとチャット"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ディープサーチ／Google Web検索"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ディープサーチ／Confluence検索"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ディープサーチ／Jira検索"
       }
     }
   },
@@ -2221,6 +2370,10 @@
         "label" : "なりすまし用 Google ユーザー",
         "help" : "提供された認証情報でなりすますユーザー",
         "placeholder" : "提供された認証情報でなりすますユーザー"
+      },
+      "OK" : {
+        "summary" : "正常に保存されました",
+        "detail" : "更新操作が正常に完了しました"
       }
     }
   },
@@ -3017,6 +3170,24 @@
         "dataset-1-label" : "処理済みドキュメント",
         "dataset-2-label" : "エラードキュメント",
         "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "全文インデックス作成"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "処理されていないドキュメント",
+        "label-1" : "ドキュメント処理エラー",
+        "label-2" : "処理済みドキュメント"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "受信ドキュメント",
+        "dataset-1-label" : "処理済みドキュメント",
+        "dataset-2-label" : "エラードキュメント",
+        "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "処理済みトークン",
+        "dataset-1-label" : "トークン処理エラー"
       }
     }
   },
@@ -3168,6 +3339,18 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "操作中に例外発生:Anthropic api cannot work without needed api key configuration",
         "detail" : "サーバーエラー: Anthropic api cannot work without needed api key configuration"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AIリモートプロバイダーOK",
+        "detail" : "プロバイダーが稼働中で正常に構成されました"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "操作中に例外発生：401 UNAUTHORIZED",
+        "detail" : "サーバーエラー：401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "操作中に例外発生：Missing basePath",
+        "detail" : "サーバーエラー：Missing basePath"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -3296,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "完了"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
       }
     }
   },
@@ -3471,6 +3658,9 @@
       },
       "SelectSourcesBtn" : {
         "label" : "ソースを選択"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "解析済みファイル"
       }
     }
   },
@@ -3542,6 +3732,31 @@
       "similarityThreashold" : {
         "label" : "検索類似度しきい値",
         "help" : "セマンティック類似度しきい値 (0.5 ～ 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "セキュリティ設定"
+      },
+      "accessibleToAll" : {
+        "label" : "全員にアクセス可能"
+      },
+      "datasource" : {
+        "label" : "データソース"
+      },
+      "allowedGroups" : {
+        "label" : "許可されたグループ"
+      },
+      "allowedUsers" : {
+        "label" : "許可されたユーザー"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "データソースごとのユーザー／グループアクセス",
+        "help" : "各外部データソースとユーザーやグループでディープサーチが有効になります"
+      },
+      "SIMPLEMODE" : {
+        "label" : "シンプルなユーザー／グループアクセス"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "データソースごとのユーザー／グループアクセス"
       }
     }
   },
@@ -3576,6 +3791,10 @@
       "APIKEY_CREATED_OK" : {
         "summary" : "認証情報を作成しました",
         "detail" : "認証情報の作成に成功しました"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollamaサーバーとの通信エラー",
+        "detail" : "リモートシステムへのネットワークエラーによりコンテンツアクセス失敗\nモデルリスト取得時のURLエラー:nullapi/tags"
       }
     }
   },

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ലോഗിൻ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "പ്രവർത്തനം പരാജയപ്പെട്ടു",
+        "detail" : "നൽകിയ ക്രെഡൻഷ്യലുകൾ ഉപയോഗിച്ച് തിരിച്ചറിയാൻ കഴിയില്ല"
       }
     },
     "message" : {
@@ -181,6 +185,33 @@
       "deepSearchApiSetupSection" : {
         "label" : "Deep search ക്രമീകരിക്കുക",
         "description" : "Deep search ഓപ്ഷനുകൾ ക്രമീകരിക്കുക"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ഓട്ടോ ട്യൂൺ",
+        "description" : "സ്വയമാകെയുള്ള റിട്രീവ് ഓഗ്മെന്റഡ് ജനറേഷൻ പാരാമീറ്ററുകൾ ഓഫ്‌റ്റിമൈസ് ചെയ്യുക"
+      },
+      "Description" : {
+        "label" : "വിവരണം"
+      },
+      "LastAutotunedDate" : {
+        "label" : "അവസാനമായ നടത്തിയത്"
+      },
+      "Code" : {
+        "label" : "എംബെഡിംഗ് മോഡൽ/വെക്ടർസ്റ്റോർ കോഡ്"
+      },
+      "ComputedThreashold" : {
+        "label" : "ഗണിച്ച തരംഗം"
+      },
+      "Autotuned" : {
+        "label" : "ഓട്ടോ ട്യൂണുചെയ്തത്"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ഉപയോഗത്തിന്റെ നിർബന്ധിത ഘട്ടങ്ങൾ പൂർത്തിയായി...",
+        "detail" : "നിർബന്ധമായ സെറ്റ്‌അപ്പ് ഘട്ടങ്ങൾ പൂർത്തിയായി, പക്ഷേ ചില മോശം ഘട്ടങ്ങൾ നിങ്ങളുടെ ഓർഗനൈസേഷനെ ഈ സോഫ്റ്റ്‌വെയിൽ നിന്നും ഉത്തമമായ അനുഭവം ലഭിക്കാൻ തടയുന്നു"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai സെറ്റ്‌അപ്പിന്റെ നിർബന്ധമായ ഘട്ടങ്ങൾ കുറവാണ്",
+        "detail" : "സെറ്റ്‌അപ്പിന്റെ ചുവപ്പ് ഘട്ടങ്ങൾ ദയവായി പരിശോധിക്കുക"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -198,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence സിസ്റ്റം"
+      },
+      "EditSystemBtn" : {
+        "label" : "സിസ്റ്റം എഡിറ്റ് ചെയ്യുക"
       }
     },
     "JiraWizardComponent" : {
@@ -273,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms പ്രൊവൈഡർസിന്റെ ആക്‌സസ് സജ്ജീകരിക്കുക"
+      },
+      "ExtensiveStup" : {
+        "label" : "വ്യാപകമായ ഇൻഫ്രാസ్ట్రക്ചർ/സപ്പോളയർ തിരഞ്ഞെടുക്കലുകൾ"
+      },
+      "MainPanelTitle" : {
+        "label" : "ഉപയോഗിക്കുന്ന വലിയ ഭാഷാ മോഡൽ സെറ്റ്‌അഫ് ചെയ്യുക"
+      },
+      "EasySetup" : {
+        "label" : "എളുപ്പമുള്ള പ്രാഥമിക സെറ്റ്‌അപ്പ്/കൺഫിഗരേഷൻ പരിഹാരം"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "വലിയ ഭാഷാ മോഡലുകൾ സെറ്റ്‌അപ്പ് ചെയ്യുക"
       }
     },
     "GraphRagWizardComponent" : {
@@ -729,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "അപ്രാപ്തം"
+      },
+      "EditGroupBtn" : {
+        "label" : "തിരുത്തുക"
+      },
+      "CodeHeader" : {
+        "label" : "കോഡ്"
+      },
+      "DescriptionHeader" : {
+        "label" : "വിവരണം"
+      },
+      "UsersHeader" : {
+        "label" : "ഉപയോക്താക്കൾ"
       }
     }
   },
@@ -1353,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "മോഡൽ ആക്സസ് ക്രമീകരണങ്ങൾ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ദൂരദൃശ സഹായം സജ്ജമാണ്",
+        "detail" : "സേവനം പ്രവർത്തനക്ഷമവും വിജയകരമായി ക്രമീകരിച്ചതുമാണ്"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം: ഈ url-നൊപ്പം പ്രവർത്തിക്കാൻ പിശക്: https://api.openai.com/v1/models",
+        "detail" : "സെർവർ പിശക്: ഈ url-നൊപ്പം പ്രവർത്തിക്കുമ്പോൾ പിശക്: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1387,6 +1458,10 @@
       "defaultModel" : {
         "label" : "ഇത് ഡിഫോൾട്ട് എംബെഡിംഗ് മോഡലായായി സെറ്റ് ചെയ്യുക",
         "help" : "ഇത് സത്യമാണെങ്കിൽ എംബെഡിംഗ് മോഡൽ വ്യക്തമാക്കിയിട്ടില്ലാത്തിടത്ത് ഇത് ഡിഫോൾട്ട് എംബെഡിംഗ് മോഡലായി ഉപയോഗിക്കും"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ദൂരദൃശ സഹായം സജ്ജമാണ്",
+        "detail" : "സേവനം പ്രവർത്തനക്ഷമവും വിജയകരമായി ക്രമീകരിച്ചതുമാണ്"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1426,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama ലൊക്കൽ (അല്ലെങ്കിൽ ലാൻ) സർവർ ചാറ്റ് മോഡൽ കോൺഫിഗറേഷൻ എഡിറ്റിംഗ്"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1470,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ചാറ്റ് മോഡൽ കോൺഫിഗറേഷൻ എഡിറ്റിംഗ്"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1513,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ചാറ്റ് മോഡൽ കോൺഫിഗറേഷൻ എഡിറ്റിംഗ്"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1556,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ചാറ്റ് മോഡൽ കോൺഫിഗറേഷൻ എഡിറ്റിംഗ്"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1600,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "മോഡൽ ആക്സസ് ക്രമീകരണങ്ങൾ"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1647,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "മോഡൽ ആക്സസ് ക്രമീകരണങ്ങൾ"
+      },
+      "forUses" : {
+        "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
+        "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
+        "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ശരി!",
+        "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1857,6 +1966,39 @@
       },
       "ContextMenuBtn" : {
         "help" : "ഉള്ളടക്കം ചേർക്കുക അല്ലെങ്കിൽ തിരച്ചിലിന്റെ സ്വഭാവം മാറ്റുക"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "സ്രോതസുകൾ",
+        "help" : "বিশ্লেষിച്ച ഡോകുമെൻറുകളുടെ പട്ടിക തുറക്കുക"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ഡിীপ് സെയർച്ച് ഉത്തരംയും സ്രോതസുകളുടെ വിശദാംശങ്ങളും"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ഡിീപ് സെയർച്ച് വിശകലന ഫലം"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Searchയിൽ തിരയുന്നതിനിടെ പിശക്",
+        "detail" : "സർവർ പിശക്: Confluence സിസ്റ്റം ആക്സസ് ചെയ്യുന്നത് സംബന്ധിച്ച പ്രശ്നങ്ങൾ"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "പുതിയ ചാറ്റ് ലോഡ് ചെയ്തു",
+        "detail" : "പുതിയ ചാറ്റ് വിജയകരമായി ലോഡ് ചെയ്തു"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "സ്രോതസുകൾ തിരഞ്ഞെടുക്കുക"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "താഴെ നൽകിയിട്ടുള്ളവയിൽ കുറഞ്ഞത് ഒന്ന് എങ്കിലും തിരഞ്ഞെടുക്കുക"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ഡിീപ് സെയർച്ച് ഒഴിവാക്കുക"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "തിരഞ്ഞെടുക്കപ്പെട്ട ബുദ്ധിശേഖരങ്ങൾ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "തിരഞ്ഞെടുക്കപ്പെട്ട സിസ്റ്റങ്ങൾ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1901,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'ചാറ്റ് വിത്' ലിസ്റ്റിലേക്ക് ഡോക്യുമെന്റ് ചേര്‍ക്കുക "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ഡിീപ് സെയർച്ച് നടത്തുന്നു"
+      },
+      "RagLLMResponse" : {
+        "label" : "സമൃദ്ധമായ ജനറേഷൻ നടത്തുന്നു"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm-നോട് ചോദിക്കുന്നു"
+      },
+      "Waiting" : {
+        "label" : "ഊറ്റിയുള്ള ഉത്തരം തയ്യാറാക്കുന്നു.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ഉപകരണങ്ങൾ പ്രവർത്തനസജ്ജമാക്കുന്നു"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI സഹായത്തോടെ തിരയുന്നു"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "വിശകലനം ചെയ്ത ഫയൽ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "വിശകലനം ചെയ്ത തിരയൽ ഫലം"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "സിസ്റ്റം തിരയൽ ഫലങ്ങൾ വിശകലനം ചെയ്തു"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "അന്തിമ റിപ്പോർട്ട് സംയോജിപ്പിക്കുന്നു"
+      },
+      "RUNNING" : {
+        "label" : "നടന്നു കൊണ്ടിരിക്കുന്നു "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "നിങ്ങളുടെ അഭ്യർത്ഥന വിശകലനം ചെയ്യുന്നു"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "തിരഞ്ഞെടുക്കപ്പെട്ട ഏജന്റിക് പ്രവാഹം, ഉത്തരദായ ഏജന്റിന്റെ പ്രവർത്തനം"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "സർവീസ് നില ആണ്: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "നിങ്ങളുടെ തിരഞ്ഞെടുക്കപ്പെട്ട ഏജന്റിനെ പ്രവർത്തിപ്പിക്കുന്നു"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ഫയൽ(കൾ) അപ്ലോഡ് ചെയ്യുക"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "കമ്പനിയുടെ ഫയൽ(കൾ) ബ്രൗസ്/തിരയുക"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "തിരഞ്ഞെടുത്ത ഡോക്യുമെന്റുമായി ചാറ്റ്"
+      },
+      "agenticChat" : {
+        "label" : "ഏജന്റിക് ചാറ്റ്"
+      },
+      "rag" : {
+        "label" : "R.a.g. ചാറ്റ്"
+      },
+      "deepSearch" : {
+        "label" : "ഡിീപ് സെയർച്ച്/കൂടുതൽ സ്രോതസുകൾ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ഡിീപ് സെയർച്ച്/ബുദ്ധിശേഖര തിരയൽ"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ഫയൽ(കൾ) ഉപയോഗിച്ചുള്ള ചാറ്റ്"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ഡിീപ് സെയർച്ച്/Jira Search"
       }
     }
   },
@@ -2135,6 +2370,10 @@
         "label" : "താനതാവുന്ന Google ഉപയോക്താവ്",
         "help" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ",
         "placeholder" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ"
+      },
+      "OK" : {
+        "summary" : "വിജയകരമായി സംരക്ഷിച്ചു",
+        "detail" : "അപ്‌ഡേറ്റ് പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
       }
     }
   },
@@ -2931,6 +3170,24 @@
         "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
         "dataset-2-label" : "പിശക് വന്ന ഡോക്യുമെന്റുകൾ",
         "dataset-3-label" : "വിട്ടുമാക്കിയ ഡോക്യുമെന്റുകൾ"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "മുഴുവൻ എഴുത്ത് अनुനയനം"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "സংশോധനയിലാകാത്ത രേഖകൾ",
+        "label-1" : "പ്രോസസ്സിംഗിൽ പിഴവുള്ള രേഖകൾ",
+        "label-2" : "പൂർത്തിയായി പ്രോസസ്സ് ചെയ്ത രേഖകൾ"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "സ്വീകരിച്ച രേഖകൾ",
+        "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത രേഖകൾ",
+        "dataset-2-label" : "പിശക് രേഖകൾ",
+        "dataset-3-label" : "ഉപേക്ഷിച്ച രേഖകൾ"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "പ്രോസസ്സ് ചെയ്ത ടോക്കനുകൾ",
+        "dataset-1-label" : "ടോക്കനുകൾ പ്രോസസ്സ് ചെയ്യുന്നതിൽ പിശക്"
       }
     }
   },
@@ -3078,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "എല്ലാ ഫംഗ്ഷൻ കോൾസ് സജീവമാക്കുക",
         "help" : "ലഭ്യമായ എല്ലാ ടൂൾസുകളും ഫംഗ്ഷൻ കോൾസും സജീവമാക്കുക, ഇതുവരെ സജ്ജീകരിക്കാത്ത പക്ഷം പിന്നീട് llms അഡ്മിൻ പാനലിൽ അതു സജ്ജീകരിക്കാൻ കഴിയും"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "പ്രവർത്തനത്തിനിടെ അസാധാരണ സംഭവിച്ചു:Anthropic api ആവശ്യമായ api കീ കോൺഫിഗറേഷൻ ഇല്ലാതെ പ്രവർത്തിക്കാൻ കഴിയില്ല",
+        "detail" : "സെർവർ പിശക്: Anthropic api ആവശ്യമായ api കീ കോൺഫിഗറേഷൻ ഇല്ലാതെ പ്രവർത്തിക്കാൻ കഴിയില്ല"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI റിമോട്ട് പ്രൊവൈഡർ സജ്ജമാണ്",
+        "detail" : "പ്രൊവൈഡർ പ്രവർത്തനക്ഷമമാണ്, വിജയകരമായി കോൺഫിഗർ ചെയ്തിട്ടുണ്ട്"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "പ്രവർത്തനത്തിനിടെ അസാധാരണ സംഭവിച്ചു:401 അനധികൃതമാണ്",
+        "detail" : "സെർവർ പിശക്: 401 അനധികൃതമാണ്"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "പ്രവർത്തനത്തിനിടെ അസാധാരണ സംഭവിച്ചു: basePath കാണുന്നില്ല",
+        "detail" : "സെർവർ പിശക്: basePath കാണുന്നില്ല"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "സൃഷ്ടിക്കുകയും സജീവമാക്കുകയും ചെയ്യുക"
+      },
+      "vendorId" : {
+        "label" : "നിങ്ങളുടെ വലിയ ഭാഷാ മോഡൽ വണ്ടർ തിരഞ്ഞെടുക്കുക",
+        "help" : "നിരൂപണ ആവശ്യത്തിന് നിങ്ങളുടെ ആദ്യത്തെ വണ്ടർ തിരഞ്ഞെടുക്കുക"
+      },
+      "secretId" : {
+        "label" : "പ്രൊവൈഡർ ക്രിഡൻഷ്യൽസ് (api കീ) തിരഞ്ഞെടുക്കുക",
+        "help" : "തിരഞ്ഞെടുത്ത llm പ്രൊവൈഡറിനുള്ള നിലവിലുള്ള ക്രിഡൻഷ്യലുകളിൽ ഒന്നിനെയെങ്കിലും തിരഞ്ഞെടുക്കുക"
+      },
+      "InternalServiceModel" : {
+        "label" : "ആന്തരിക സേവനങ്ങൾക്കുള്ള ചാറ്റ് മോഡൽ",
+        "help" : "ആന്തരിക സേവനങ്ങൾക്ക് കോൺഫിഗർ ചെയ്തിരിക്കുന്ന ചാറ്റ് മോഡൽ വിവരങ്ങൾ എടുക്കുന്നതിലും, സംക്ഷിപ്തമായി പറയുന്നതിലും, ആന്താരിക പ്രവർത്തനങ്ങൾ നടപ്പാക്കുന്നതിലും ഉത്തരവാദിയായി പ്രവർത്തിക്കും."
+      },
+      "ChatModel" : {
+        "label" : "ഡിഫോൾട്ട് ചാറ്റ് മോഡൽ",
+        "help" : "ഡിഫോൾട്ട് ചാറ്റ് മോഡൽ ഉപയോക്താക്കളുടെ ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകുന്നതിനും, പ്രത്യേകമായി കോൺഫിഗർ ചെയ്യാത്ത പ്രവർത്തനങ്ങൾ നടപ്പാക്കുന്നതിനും ഉത്തരവാദിയായി പ്രവർത്തിക്കും. ഇത് ശക്തവും വിശ്വസനീയവുമാകണം, ചെലവ്, പ്രവർത്തനം, ഫലം എന്നിവയുടെ ശക്തമായ ബാലൻസ് വേണം."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy കീ ക്രെഡിറ്റ് വാങ്ങാനുള്ള ലിങ്ക്"
+      },
+      "ProviderWWW" : {
+        "label" : "വെബ്‌സൈറ്റ് ലിങ്ക്"
+      },
+      "WebSiteLink" : {
+        "label" : "പ്രൊവൈഡർ വെബ്‌സൈറ്റ്",
+        "help" : "സെർവീസ് സംബന്ധിച്ച പൊതുവായ വിവരങ്ങൾക്കായി ഇവിടെ ക്ലിക്ക് ചെയ്യുക."
+      },
+      "AcquireCreditLink" : {
+        "label" : "പ്രൊവൈഡറുടെ ക്രെഡിറ്റ് വാങ്ങുക",
+        "help" : "നിങ്ങളുടെ api കീ(കൾ)ക്ക് ക്രെഡിറ്റ് വാങ്ങാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക."
+      },
+      "EmbeddingModel" : {
+        "label" : "ഡിഫോൾട്ട് എംബെഡ്ഡിംഗ് മോഡൽ",
+        "help" : "നിങ്ങളുടെ ഡാറ്റയും ഡോക്യുമെന്റുകളും അത്യന്തം തെളിച്ചത്തോടെ സെമാന്റിക് ഇൻഡക്സിംഗിനും (embedding), തിരിച്ചെടുക്കുന്നതിനും ഈ മോഡൽ ഉപയോഗിക്കും"
       }
     }
   },
@@ -3126,6 +3438,14 @@
       "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
         "summary" : "ചാറ്റ് സ്റ്റ്രീം ചെയ്യുമ്പോൾ പിശക്",
         "detail" : "സെർവർ പിശക്: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്‌ട്രീം ചെയ്യുന്നതിനിടയിൽ പിശക്",
+        "detail" : "സെർവർ പിശക്: കണക്ഷൻ റീസെറ്റ് ചെയ്തു"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം: Anthropic api ന് ആവശ്യമായ api കീ കോൺഫിഗറേഷൻ ഇല്ലാതെ പ്രവർത്തിക്കാൻ സാധ്യമല്ല",
+        "detail" : "സെർവർ പിശക്: Anthropic api ആവശ്യമായ api കീ കോൺഫിഗറേഷൻ ഇല്ലാതെ പ്രവർത്തിക്കാൻ സാധ്യമല്ല"
       }
     }
   },
@@ -3151,6 +3471,10 @@
       },
       "CompletedData" : {
         "label" : "പൂർത്തിയായി"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ശരി!",
+        "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയെടുത്തു"
       }
     }
   },
@@ -3308,6 +3632,27 @@
       },
       "DeepSearchDataSourceProcessing" : {
         "label" : "സിസ്റ്റത്തിൽ നിന്ന് പരിശോധിച്ച തിരയൽ ഫലങ്ങൾ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "കണക്കിലുള്ളതില്‍ അക്കമവധി ഓപ്ഷനുകളില്‍ ഒന്ന് തിരഞ്ഞെടുക്കുക"
+      },
+      "LaunchBtn" : {
+        "label" : "തിരയൽ പ്രവർത്തിപ്പിക്കുക"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ഡി.പി തിരയൽ ഒഴിവാക്കുക"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "തിരഞ്ഞെടുത്ത നോളേജ് ബേസുകള്‍"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "തിരഞ്ഞെടുത്ത സിസ്റ്റങ്ങൾ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ഉറവിടങ്ങൾ തിരഞ്ഞെടുക്കുക"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "വിശകലനം ചെയ്ത ഫയല്‍"
       }
     }
   },
@@ -3379,6 +3724,79 @@
       "similarityThreashold" : {
         "label" : "തിരച്ചിൽ സാമാന്യത ത്രെഷോൾഡ്",
         "help" : "സെമാൻറ്റിക് സാമാന്യത ത്രെഷോൾഡ് (0.5 മുതൽ 1.0 വരെ)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "സുരക്ഷാ ക്രമീകരണങ്ങൾ"
+      },
+      "accessibleToAll" : {
+        "label" : "എല്ലാവർക്കും സൗമ്യം"
+      },
+      "datasource" : {
+        "label" : "ഡേറ്റാ സോഴ്‌സ്"
+      },
+      "allowedGroups" : {
+        "label" : "അനുമതിയുള്ള ഗ്രൂപ്പുകൾ"
+      },
+      "allowedUsers" : {
+        "label" : "അനുമതിയുള്ള ഉപയോക്താക്കൾ"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ഓരോ ഡേറ്റാ സോഴ്‌സിനും പ്രത്യേക ഉപയോക്താവ്/ഗ്രൂപ്പ് പ്രവേശനം",
+        "help" : "ഓരോ ബാഹ്യ ഡേറ്റാ സോഴ്‌സിനും ഉപയോക്താവ് അല്ലെങ്കിൽ ഗ്രൂപ്പിനായി ڈیപ്പ് സേർച്ച് പ്രവർത്തിക്കും"
+      },
+      "SIMPLEMODE" : {
+        "label" : "സാധാരണ ഉപയോക്താവ്/ഗ്രൂപ്പ് പ്രവേശനം"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ഓരോ ഡേറ്റാ സോഴ്‌സിനും ഉപയോക്താവ്/ഗ്രൂപ്പ് പ്രവേശനം"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api കീ ക്രെഡൻഷ്യലുകൾ ഉപയോഗിക്കുക അല്ലെങ്കിൽ സൃഷ്ടിക്കുക"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api കീ/ക്രെഡൻഷ്യലുകൾ",
+        "help" : "ഈ നൽകുന്നതിന് api കീ അല്ലെങ്കിൽ ക്രെഡൻഷ്യലുകൾ തിരഞ്ഞെടുക്കുക"
+      },
+      "NewApiKey" : {
+        "label" : "പുതിയ api കീ",
+        "help" : "ഈ നൽകുന്നതിന് ഉപയോഗിക്കാൻ ഒരു പുതിയ api കീ ചേർക്കുക"
+      },
+      "PiSave" : {
+        "label" : "സംരക്ഷിക്കുക"
+      },
+      "NewUserName" : {
+        "label" : "ഉപയോക്തൃ നാമം",
+        "help" : "നൽകുന്ന സേവനങ്ങൾ ഉപയോഗിക്കാൻ ഉപയോഗിക്കുന്ന ഉപയോക്തൃ നാമം"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "നിലവിലുള്ളതോ പുതിയതോ ഉപയോഗിക്കുക",
+        "help" : "ഈ നൽകുന്നതിനായി നിലവിലുള്ളതോ പുതിയതോ ക്രെഡൻഷ്യലുകൾ ഉപയോഗിക്കുക അല്ലെങ്കിൽ സൃഷ്ടിക്കുക"
+      },
+      "newSecretDescription" : {
+        "label" : "ക്രെഡൻഷ്യൽ വിവരണം",
+        "help" : "Api കീ ക്രെഡൻഷ്യലുകളുടെ വിവരണം"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ക്രെഡൻTIAലുകൾ സൃഷ്ടിച്ചു",
+        "detail" : "ക്രെഡൻTIAലുകൾ വിജയകരമായി സൃഷ്ടിച്ചു"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama സർവറുമായി സംവദിക്കുമ്പോൾ പിശക്",
+        "detail" : "വിദൂര സിസ്റ്റവുമായി ബന്ധപ്പെടുമ്പോൾ നെറ്റ്വർക്ക് പിശക്\n കൂടുതലായ സെർവിസുകൾ ഉണ്ടാക്കുമ്പോൾ പിശക് url:nullapi/tags ഉപയോഗിച്ചാണ്"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ഉപയോക്താക്കളുമായി ചാറ്റ് ചെയ്യുക"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ആന്തരിക സേവനങ്ങൾക്ക് ഉപയോഗിക്കുന്ന മോഡൽ"
       }
     }
   }
