@@ -12,6 +12,5 @@ public interface DeepSearchConfigRepository extends IGBaseMongoDBRepository<Deep
 	}
 
 	public DeepSearchConfig findByDefaultConfig(Boolean b);
-
-	public List<DeepSearchConfig> findByChatProfileCode(String chatProfileCode);
+	
 }

@@ -27,6 +27,7 @@ export * from './contentObject';
 export * from './dataPage';
 export * from './deepSearchAnalyzedDocument';
 export * from './deepSearchConfig';
+export * from './deepSearchDataSourceAccess';
 export * from './deepSearchDataSourceDocumentResult';
 export * from './deepSearchDataSourceResponse';
 export * from './deepSearchDocumentAnalisysResultStep';

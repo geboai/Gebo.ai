@@ -10,12 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface GUserChatInfo { 
-    description?: string;
-    username?: string;
-    chatModelCode?: string;
-    chatProfileCode?: string;
-    code?: string;
-    ragChat?: boolean;
-    chatCreationDateTime?: Date;
+export interface DeepSearchDataSourceAccess { 
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    dataSourceId?: string;
 }

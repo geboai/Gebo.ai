@@ -84,8 +84,8 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		DeepSearchConfig deepSearchConfig = deepSearchConfigProvider.get();
 		List<IGReactiveDeepSearchDataSourceService> enabledDataSources = this.enabledDeepSearchDataSourceLookupService
 				.enabledDataSources(deepSearchConfig);
-		outMenu.add(agenticChatMenu);
-		outMenu.add(ragMenu);
+		outMenu.add((PipelineChatMenu) agenticChatMenu.clone());
+		outMenu.add((PipelineChatMenu) ragMenu.clone());
 		if (!enabledDataSources.isEmpty()) {
 			PipelineChatMenu thisDeepSearchMenu = (PipelineChatMenu) deepSearchMenu.clone();
 			thisDeepSearchMenu.getItems().add(deepSearchMenuItem);

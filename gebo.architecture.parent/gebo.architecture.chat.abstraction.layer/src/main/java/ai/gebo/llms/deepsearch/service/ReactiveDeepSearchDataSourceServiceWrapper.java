@@ -35,10 +35,12 @@ import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
+import ai.gebo.llms.deepsearch.model.DeepSearchConfig.DeepSearchDataSourceAccess;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.model.base.GeboComponentInfo;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 
 public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType>
@@ -48,6 +50,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	protected final IGDocumentReferenceFactory documentReferenceFactory;
 	protected final IGDocumentReferenceIngestionHandler ingestionHandler;
 	protected final IDataSourcesCatalogsService dataSourcesCatalogsService;
+	protected final IGSecurityService securityService;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveDeepSearchDataSourceServiceWrapper.class);
 	protected final GeboComponentInfo serviceOriginComponent;
 
@@ -58,7 +61,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
 			IGeboThreadManager threadManager, SearchResultsRankingService rankingService, IGPromptConfigDao promptsDao,
-			IDataSourcesCatalogsService dataSourcesCatalogsService) {
+			IDataSourcesCatalogsService dataSourcesCatalogsService, IGSecurityService securityService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
 				threadManager, rankingService, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
@@ -68,6 +71,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		this.serviceOriginComponent = new GeboComponentInfo(searchService.getMessagingModuleId(),
 				searchService.getMessagingSystemId());
 		this.dataSourcesCatalogsService = dataSourcesCatalogsService;
+		this.securityService = securityService;
 	}
 
 	@Override
@@ -105,7 +109,21 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 
 	@Override
 	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException {
-		if (searchService.isEnabled()) {
+		boolean userCanAccess = securityService.isCanAccess(deepSearchConfig, true);
+		if (userCanAccess) {
+			List<DeepSearchDataSourceAccess> accesses = deepSearchConfig.getDataSourcesAccesses();
+			boolean perDataSourceConfigured = deepSearchConfig.getPerDataSourceConfigured() != null
+					&& deepSearchConfig.getPerDataSourceConfigured();
+			if (accesses != null && !accesses.isEmpty() && !securityService.isCurrentUserAdmin()
+					&& perDataSourceConfigured) {
+				String thisSystemId = getHandlerId();
+				DeepSearchDataSourceAccess gridCell = accesses.stream()
+						.filter(x -> x.getDataSourceId() != null && x.getDataSourceId().equals(thisSystemId))
+						.findFirst().orElse(null);
+				userCanAccess = gridCell != null && securityService.isCanAccess(gridCell, true);
+			}
+		}
+		if (searchService.isEnabled() && userCanAccess) {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 			return systems != null && !systems.isEmpty();
 		}

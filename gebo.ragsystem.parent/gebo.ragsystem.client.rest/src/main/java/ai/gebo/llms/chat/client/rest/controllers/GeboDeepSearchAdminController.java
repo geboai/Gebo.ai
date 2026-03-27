@@ -1,6 +1,8 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,10 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.repository.DeepSearchConfigRepository;
+import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
+import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
+import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
+import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,6 +35,8 @@ public class GeboDeepSearchAdminController {
 	private final DeepSearchDefaultConfig deepSearchDefaultConfig;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final DeepSearchConfigRepository configRepository;
+	private final IGDeepSearchConfigProvider configProvider;
+	private final IGReactiveDynamicDataSourceServicesProvider dynamicDataSourcesProvider;
 
 	@GetMapping(value = "getDeepSearchSystemConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DeepSearchConfig getDeepSearchSystemConfig() {
@@ -40,20 +48,16 @@ public class GeboDeepSearchAdminController {
 		return configRepository.findByDefaultConfig(true);
 	}
 
-	@GetMapping(value = "findDeepSearchDefaultConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public DeepSearchConfig findDeepSearchDefaultConfigByCode(@RequestParam("code") String code)
-			throws GeboPersistenceException {
-		return persistentObjectManager.findById(DeepSearchConfig.class, code);
+	@GetMapping(value = "getDeepSearchDefaultOrSystemConfig", produces = MediaType.APPLICATION_JSON_VALUE)
+	public DeepSearchConfig getDeepSearchDefaultOrSystemConfig() {
+		return configProvider.get();
 	}
 
 	@GetMapping(value = "getDeepSeachConfigs", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<DeepSearchConfig> getDeepSeachConfigs(
-			@RequestParam(value = "chatProfileCode", required = false) String chatProfileCode) {
-		if (chatProfileCode == null) {
-			return configRepository.findAll();
-		} else {
-			return configRepository.findByChatProfileCode(chatProfileCode);
-		}
+	public List<DeepSearchConfig> getDeepSeachConfigs() {
+
+		return configRepository.findAll();
+
 	}
 
 	@PostMapping(value = "insertDeepSearchConfig", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -74,4 +78,17 @@ public class GeboDeepSearchAdminController {
 		persistentObjectManager.delete(deepSearchConfig);
 	}
 
+	@GetMapping("getConfigurableDataSources")
+	public List<GBaseObject> getConfigurableDataSources() {
+		List<IGReactiveDeepSearchDataSourceService> services = dynamicDataSourcesProvider
+				.getDynamicDeepSearchServices();
+		TreeMap<String, GBaseObject> ordered = new TreeMap<>();
+		services.stream().forEach(x -> {
+			GBaseObject ds = new GBaseObject();
+			ds.setCode(x.getHandlerId());
+			ds.setDescription(x.getDescription(deepSearchDefaultConfig));
+			ordered.put(ds.getDescription(), ds);
+		});
+		return new ArrayList<>(ordered.values());
+	}
 }

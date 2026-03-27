@@ -67,56 +67,9 @@
                     </div>
                 </div>
             </p-tabPanel>
-            <p-tabPanel id="LLmsSettingsTab" gebo-ai-label header="Large language model setting">
+            <p-tabPanel id="SecuritySettingsTab" gebo-ai-label header="Security settings">
                 <div class="grid geboDialogContent">
-                    <div class="col-6">
-                        <gebo-ai-field id="chatModelConfiguration" label="Used llm" help="Specify large language model used for Deep search, default one will be
-                                    used if none is selected.">
-                            <p-select gebo-ai-field-element styleClass="w-full" formControlName="chatModelConfiguration"
-                                styleClass="w-full" id="chatModelConfiguration" [options]="chatModelsData"
-                                optionLabel="description"></p-select>
-                        </gebo-ai-field>
-
-                    </div>
-                    <div class="col-6"
-                        *ngIf="formGroup.controls['chatModelConfiguration']?.value?false:true && defaultChatModel">
-                        <gebo-ai-field id="defaultModel" label="Default large language model"
-                            help="The default large language model will be used for Deep search processing">
-                            <label id="defaultModel">{{defaultChatModel?.description}}</label>
-                        </gebo-ai-field>
-
-                    </div>
-                    <div class="col-12">
-                        <gebo-ai-field id="analisysPrompt" label="Documents analisys prompt"
-                            help="Edit the prompt that will be used for documents fragment relevant information extraction.">
-                            <textarea rows="6" cols="250" pTextarea id="analisysPromptCtrl" gebo-ai-label
-                                placeholder="Insert prompt for documents relevant information extraction"
-                                formControlName="analisysPrompt" gebo-ai-field-element></textarea>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-3">
-                        <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup"
-                            deliveryPromptControlName="analisysPrompt"
-                            [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
-                    </div>
-                    <div class="col-9">
-
-                    </div>
-                    <div class="col-12">
-                        <gebo-ai-field id="consolidationPrompt" label="Extracted informations consolidation prompt"
-                            help="Edit the prompt that will be used to consolidate in a single report rilevant informations extracted from retrieved documents.">
-                            <textarea rows="6" cols="250" pTextarea id="consolidationPromptCtrl" gebo-ai-label
-                                placeholder="Insert prompt for extracted relevant information consolidation" formControlName="consolidationPrompt" gebo-ai-field-element></textarea>
-                        </gebo-ai-field>
-                    </div>
-                    <div class="col-3">
-                        <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup"
-                            deliveryPromptControlName="consolidationPrompt"
-                            [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
-                    </div>
-                    <div class="col-9">
-
-                    </div>
+                    
                 </div>
 
             </p-tabPanel>

@@ -14,14 +14,14 @@ export interface DocumentReferenceView {
     contentType?: string;
     name?: string;
     extension?: string;
-    creationDate?: Date;
-    deleted?: boolean;
     description?: string;
-    relativePath?: string;
-    parentVirtualFolderCode?: string;
     modificationDate?: Date;
-    code?: string;
+    deleted?: boolean;
     messagingModuleId?: string;
-    rootKnowledgebaseCode?: string;
+    code?: string;
+    parentVirtualFolderCode?: string;
+    relativePath?: string;
     parentProjectCode?: string;
+    rootKnowledgebaseCode?: string;
+    creationDate?: Date;
 }

@@ -215,7 +215,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 
 		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
 		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
-		IGConfigurableChatModel chatModel = getChatModel(configuration.getChatModelConfiguration());
+		IGConfigurableChatModel chatModel = getChatModel(null);
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		out = this.executeStreamDeepSearch(runAs, request, new MinimalChatContext(), new AIDocumentsSet(),

@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
+import { DeepSearchDataSourceAccess } from './deepSearchDataSourceAccess';
 import { RagQueryOptions } from './ragQueryOptions';
 
 export interface DeepSearchConfig { 
@@ -27,9 +27,12 @@ export interface DeepSearchConfig {
     tokensLimit?: number;
     documentsParallelism?: number;
     manualThreasholdsConfiguration?: boolean;
-    chatModelConfiguration?: GObjectRefGBaseChatModelConfig;
     defaultConfig?: boolean;
-    chatProfileCode?: string;
+    accessibleGroups?: Array<string>;
+    accessibleUsers?: Array<string>;
+    accessibleToAll?: boolean;
+    dataSourcesAccesses?: Array<DeepSearchDataSourceAccess>;
+    perDataSourceConfigured?: boolean;
 }
 export namespace DeepSearchConfig {
     export type SearchTypeEnum = 'SINGLE_HOP' | 'MULTI_HOP';

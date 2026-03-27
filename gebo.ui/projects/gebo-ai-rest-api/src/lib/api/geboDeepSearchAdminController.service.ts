@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { DeepSearchConfig } from '../model/deepSearchConfig';
+import { GBaseObject } from '../model/gBaseObject';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -104,29 +105,19 @@ export class GeboDeepSearchAdminControllerService {
     /**
      * 
      * 
-     * @param code 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findDeepSearchDefaultConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<DeepSearchConfig>;
-    public findDeepSearchDefaultConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeepSearchConfig>>;
-    public findDeepSearchDefaultConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeepSearchConfig>>;
-    public findDeepSearchDefaultConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findDeepSearchDefaultConfigByCode.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (code !== undefined && code !== null) {
-            queryParameters = queryParameters.set('code', <any>code);
-        }
+    public getConfigurableDataSources(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getConfigurableDataSources(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getConfigurableDataSources(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
+    public getConfigurableDataSources(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            'application/json'
+            '*/*'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -137,9 +128,8 @@ export class GeboDeepSearchAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<DeepSearchConfig>('get',`${this.basePath}/api/admin/GeboDeepSearchAdminController/findDeepSearchDefaultConfigByCode`,
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboDeepSearchAdminController/getConfigurableDataSources`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -151,20 +141,13 @@ export class GeboDeepSearchAdminControllerService {
     /**
      * 
      * 
-     * @param chatProfileCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDeepSeachConfigs(chatProfileCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<DeepSearchConfig>>;
-    public getDeepSeachConfigs(chatProfileCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DeepSearchConfig>>>;
-    public getDeepSeachConfigs(chatProfileCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DeepSearchConfig>>>;
-    public getDeepSeachConfigs(chatProfileCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (chatProfileCode !== undefined && chatProfileCode !== null) {
-            queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
-        }
+    public getDeepSeachConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<DeepSearchConfig>>;
+    public getDeepSeachConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DeepSearchConfig>>>;
+    public getDeepSeachConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DeepSearchConfig>>>;
+    public getDeepSeachConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -183,7 +166,6 @@ export class GeboDeepSearchAdminControllerService {
 
         return this.httpClient.request<Array<DeepSearchConfig>>('get',`${this.basePath}/api/admin/GeboDeepSearchAdminController/getDeepSeachConfigs`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -219,6 +201,42 @@ export class GeboDeepSearchAdminControllerService {
         ];
 
         return this.httpClient.request<DeepSearchConfig>('get',`${this.basePath}/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultConfig`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getDeepSearchDefaultOrSystemConfig(observe?: 'body', reportProgress?: boolean): Observable<DeepSearchConfig>;
+    public getDeepSearchDefaultOrSystemConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeepSearchConfig>>;
+    public getDeepSearchDefaultOrSystemConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeepSearchConfig>>;
+    public getDeepSearchDefaultOrSystemConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<DeepSearchConfig>('get',`${this.basePath}/api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultOrSystemConfig`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

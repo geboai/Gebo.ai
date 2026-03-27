@@ -43,7 +43,6 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.firstHopSimilarityThreashold = 0.5;
 		this.secondHopSimilarityThreashold = 0.5;
 		this.searchType = SearchType.MULTI_HOP;
-		this.chatModelConfiguration = null;
 		this.documentsParallelism = 2;
 		this.ragQueryOptions = new RagQueryOptions(1000000, CompletenessLevel.STRICT_QUERY_RELATED);
 		this.ragQueryOptions.setTopK(100);
@@ -58,6 +57,8 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.deepSearchUserIntentThreasholds.add(lowerLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(midLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(highLevelsThreashold);
+		this.setAccessibleToAll(true);
+		this.setPerDataSourceConfigured(false);
 	}
 
 	public int getInTopicSatisfactoryDocumentsThreashold(DeliverableIntent intent) {

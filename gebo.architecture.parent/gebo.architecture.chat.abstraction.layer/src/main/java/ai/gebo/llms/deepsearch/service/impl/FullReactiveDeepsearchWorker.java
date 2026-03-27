@@ -282,9 +282,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		if (!defaultDeepsearchConfig.isExternalSourcesEnabled())
 			return List.of();
 		IGConfigurableChatModel chatModel = null;
-		if (configuration.getChatModelConfiguration() != null) {
-			chatModel = chatModelsConfigDao.findByModelReference(configuration.getChatModelConfiguration());
-		}
+
 		if (chatModel == null) {
 			chatModel = chatModelsConfigDao.defaultHandler();
 		}
