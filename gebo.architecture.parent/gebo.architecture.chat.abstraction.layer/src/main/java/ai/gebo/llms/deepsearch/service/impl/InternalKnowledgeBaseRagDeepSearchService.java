@@ -66,17 +66,11 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		implements IGInternalKnlowledgeBaseRagDeepSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalKnowledgeBaseRagDeepSearchService.class);
 	private final IGPromptConfigDao promptsDao;
-	private final IKnowledgeGraphSearchService graphRagSearchService;
-	private final IGSemanticSearchDocumentsCachedDao ragDocumentsCachedDao;
 	private final DocumentReferenceRepository documentRepo;
-	private final IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern;
-	private final IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider;
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
-	private final IRagThreasholdAutotuneService threasholdAutotuneService;
 	private final UserUploadContentServerSideRepository userUploadedRepository;
 	private final IInternalKnowledgeLLMAssistedRetrieveService llmAssistedRetriveService;
 	private final IGeboThreadManager threadManager;
-
 	@Override
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, boolean runSearches,
 			DeepSearchState state, MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
