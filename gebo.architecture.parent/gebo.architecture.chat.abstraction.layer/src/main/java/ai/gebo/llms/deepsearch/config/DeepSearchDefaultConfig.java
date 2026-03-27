@@ -20,8 +20,7 @@ import lombok.NoArgsConstructor;
 public class DeepSearchDefaultConfig extends DeepSearchConfig {
 
 	private int maxExternalSourcesSearchResults = 20;
-	private boolean externalSourcesEnabled = false;
-	private boolean deepSearchUIAllowChooseSources = false;
+	
 	private int offTopicChunksSkipDocumentThreashold = 3;
 	private int perDataSourceMaxVisited = 25;
 	private int internalKnowledgeDeepSearchTopK = 80;

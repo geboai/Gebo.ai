@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboDeepSearchControllerService, GeboRagChatControllerService, GKnowledgeBase, GResponseDocumentRef, GUserChatInfo, UserKnowledgeBaseBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FormControl, FormGroup } from "@angular/forms";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 
 
-import { forkJoin, Observable, of } from "rxjs";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";

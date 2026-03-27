@@ -33,7 +33,6 @@ export * from './deepSearchDataSourceResponse';
 export * from './deepSearchDocumentAnalisysResultStep';
 export * from './deepSearchRequest';
 export * from './deepSearchResponse';
-export * from './deepSearchUISettings';
 export * from './defaultPromptForChatModelParam';
 export * from './defaultPromptForChatModelReferenceParam';
 export * from './deletableStatus';

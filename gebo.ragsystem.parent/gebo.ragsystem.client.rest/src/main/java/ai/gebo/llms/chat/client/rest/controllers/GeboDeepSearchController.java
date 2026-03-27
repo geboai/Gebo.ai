@@ -36,7 +36,6 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
-import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
@@ -143,10 +142,7 @@ public class GeboDeepSearchController {
 		return stream(flux, DeepSearchProcessedEvent.class);
 	}
 
-	@GetMapping(value = "getDeepSearchUISettings", produces = MediaType.APPLICATION_JSON_VALUE)
-	public DeepSearchUISettings getDeepSearchUISettings() {
-		return deepSearchService.getDeepSearchUISettings();
-	}
+	
 
 	private Flux<ServerSentEvent<String>> stream(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType) {

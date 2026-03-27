@@ -152,7 +152,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Using satisfactory documents threashold: " + satisfactoryDocumentsThreashold);
 		}
-		boolean externalSourcesEnabled = defaultDeepsearchConfig.isExternalSourcesEnabled();
+		boolean externalSourcesEnabled = true;
 		List<IDeepSearchResult> dataSourcesResults = new ArrayList<IDeepSearchResult>();
 		Flux<AbstractDeepSearchEvent> composedFlux = DeepSearchNotificationEvent.flux(request,
 				"Accessing data sources and internal knowledge base", "");
@@ -279,8 +279,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	}
 
 	public List<GBaseObject> getDeepSearchActiveHandlers(DeepSearchConfig configuration) {
-		if (!defaultDeepsearchConfig.isExternalSourcesEnabled())
-			return List.of();
+		
 		IGConfigurableChatModel chatModel = null;
 
 		if (chatModel == null) {

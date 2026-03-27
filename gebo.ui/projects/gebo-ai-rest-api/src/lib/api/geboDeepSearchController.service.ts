@@ -22,7 +22,6 @@ import { DeepSearchDataSourceResponse } from '../model/deepSearchDataSourceRespo
 import { DeepSearchDocumentAnalisysResultStep } from '../model/deepSearchDocumentAnalisysResultStep';
 import { DeepSearchRequest } from '../model/deepSearchRequest';
 import { DeepSearchResponse } from '../model/deepSearchResponse';
-import { DeepSearchUISettings } from '../model/deepSearchUISettings';
 import { GBaseObject } from '../model/gBaseObject';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { PageDeepSearchDocumentAnalisysResultStep } from '../model/pageDeepSearchDocumentAnalisysResultStep';
@@ -285,42 +284,6 @@ export class GeboDeepSearchControllerService {
         return this.httpClient.request<number>('get',`${this.basePath}/api/users/GeboDeepSearchController/getDeepSearchDocumentsCount`,
             {
                 params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDeepSearchUISettings(observe?: 'body', reportProgress?: boolean): Observable<DeepSearchUISettings>;
-    public getDeepSearchUISettings(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeepSearchUISettings>>;
-    public getDeepSearchUISettings(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeepSearchUISettings>>;
-    public getDeepSearchUISettings(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<DeepSearchUISettings>('get',`${this.basePath}/api/users/GeboDeepSearchController/getDeepSearchUISettings`,
-            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

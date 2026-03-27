@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { DeepSearchUISettings, GBaseObject, GeboChatControllerService, GeboDeepSearchControllerService, GeboRagChatControllerService } from '@Gebo.ai/gebo-ai-rest-api';
+import { GBaseObject, GeboChatControllerService, GeboDeepSearchControllerService, GeboRagChatControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { forkJoin, Observable } from 'rxjs';
 
 export interface IChooseSources {
@@ -49,10 +49,7 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
     protected choosableKnowledgeBases: GBaseObject[] = [];
     protected loadingRelatedBackend: boolean = false;
     
-    protected deepSearchUISettings: DeepSearchUISettings = {
-        deepSearchUIAllowChooseSources: false,
-        externalSourcesEnabled: false
-    };
+    
 
     protected chooseDeepSearchDataSourcesFormGroup: FormGroup = new FormGroup({
         deepSearchDataSources: new FormControl(),
@@ -91,9 +88,9 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
         }
     }
 
-    private chooseSources(): Observable<[GBaseObject[], GBaseObject[], DeepSearchUISettings]> {
+    private chooseSources(): Observable<[GBaseObject[], GBaseObject[]]> {
         const kbObservable: Observable<GBaseObject[]> = (this.chatProfileCode) ? this.ragChatService.getVisibleKnowledgeBasesByProfileCode(this.chatProfileCode) : this.chatService.getVisibleKnowledgeBases();
-        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable, this.deepSearchControllerService.getDeepSearchUISettings()]);
+        return forkJoin([this.deepSearchControllerService.getDeepSearchDataSources(), kbObservable]);
     }
 
     private chooseDataSources(): void {
@@ -105,16 +102,14 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
                 this.choosableDataSources = dsList[0] ? [ikbSystem, ...dsList[0]] : [ikbSystem];
                 this.choosableKnowledgeBases = dsList[1] || [];
                 
-                if (dsList[2]) {
-                    this.deepSearchUISettings = dsList[2];
-                }
+                
                 const defaultSelection: IChooseSources = {
                     deepSearchDataSources: this.choosableDataSources.map(x => x.code) as string[],
                     knowledgeBases: this.choosableKnowledgeBases.map(x => x.code) as string[]
                 };
-                if (this.deepSearchUISettings.externalSourcesEnabled !== true) {
-                    defaultSelection.deepSearchDataSources = defaultSelection.deepSearchDataSources?.filter(code => code === "IKB_SYSTEM") || [];
-                }
+                
+                defaultSelection.deepSearchDataSources = defaultSelection.deepSearchDataSources?defaultSelection.deepSearchDataSources: [];
+                
                 
                 this.chooseDeepSearchDataSourcesFormGroup.patchValue(defaultSelection);
                 this.loadingRelatedBackend = false;
@@ -126,7 +121,7 @@ export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges 
                     totalChoices += this.choosableKnowledgeBases.length;
                 }
                 //Choice UI has to be viewed only where options for data sources are more than one
-                if (totalChoices > 1 && this.deepSearchUISettings.deepSearchUIAllowChooseSources === true) {
+                if (totalChoices > 1) {
                     this.visible = true;
                     this.visibleChange.emit(true);
                 } else {

@@ -53,7 +53,6 @@ import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
-import ai.gebo.llms.deepsearch.model.DeepSearchUISettings;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchDocumentEvent;
@@ -406,11 +405,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 		return worker.getDeepSearchActiveHandlers(configuration);
 	}
 
-	@Override
-	public DeepSearchUISettings getDeepSearchUISettings() {
-
-		return DeepSearchUISettings.of(defaultDeepsearchConfig);
-	}
+	
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
