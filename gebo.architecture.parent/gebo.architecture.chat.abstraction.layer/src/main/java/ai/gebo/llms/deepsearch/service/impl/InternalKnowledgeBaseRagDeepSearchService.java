@@ -71,6 +71,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 	private final UserUploadContentServerSideRepository userUploadedRepository;
 	private final IInternalKnowledgeLLMAssistedRetrieveService llmAssistedRetriveService;
 	private final IGeboThreadManager threadManager;
+
 	@Override
 	public Flux<AbstractDeepSearchEvent> knowledgeBaseDeepSearch(DeepSearchRequest request, boolean runSearches,
 			DeepSearchState state, MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
@@ -116,8 +117,8 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		});
 
 		ParallelFlux<AbstractDeepSearchEvent> body = integratedWithSessionDocuments
-				.flatMap(s -> Flux.fromIterable(s.getDocumentItems())).parallel(configuration.getDocumentsParallelism())
-				.map((refItem) -> {
+				.flatMap(s -> Flux.fromIterable(s.getDocumentItems()))
+				.parallel(defaultDeepsearchConfig.getDocumentsParallelism()).map((refItem) -> {
 					boolean _completed = completed.get();
 					if (_completed) {
 						if (LOGGER.isDebugEnabled()) {

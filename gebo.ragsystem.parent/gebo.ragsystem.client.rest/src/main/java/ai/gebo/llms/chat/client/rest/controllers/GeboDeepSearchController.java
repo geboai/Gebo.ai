@@ -55,7 +55,6 @@ import reactor.core.publisher.Flux;
 @RequestMapping(path = "api/users/GeboDeepSearchController")
 @AllArgsConstructor
 public class GeboDeepSearchController {
-	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
 	final IGDeepSearchService deepSearchService;
 	final IGDeepSearchDataSourceExecutor dataSourceExecutor;
 	final IGInternalKnowledgeBaseDeepSearchExecutor internalKnowledgeBaseExecutor;

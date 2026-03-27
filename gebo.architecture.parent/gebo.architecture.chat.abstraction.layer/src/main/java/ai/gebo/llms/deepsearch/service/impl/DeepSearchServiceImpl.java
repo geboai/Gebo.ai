@@ -84,7 +84,8 @@ import reactor.core.scheduler.Scheduler;
 
 public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService implements IGDeepSearchService {
 
-	static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
+	private static final String ERROR_DOING_DEEP_SEARCH = "Error doing deep search";
+static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
 	protected final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	protected final DeepSearchConfigRepository configRepository;
 	protected final IGRuntimeBinder runtimeBinder;
@@ -180,9 +181,10 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 						flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
 					}
 				} catch (Throwable e) {
+					LOGGER.error(ERROR_DOING_DEEP_SEARCH,e);
 					DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
 					errorEvent.setInputData(request);
-					errorEvent.setOutputData(GUserMessage.errorMessage("Error doing deep search", e));
+					errorEvent.setOutputData(GUserMessage.errorMessage(ERROR_DOING_DEEP_SEARCH, e));
 					flow = Flux.just(errorEvent);
 				}
 				if (chunkSessionId != null && flow != null) {

@@ -28,6 +28,7 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 		implements IStreamingOutputChatPipelineService {
+	private static final String ERROR_EXECUTING_DEEP_SEARCH = "Error executing deep search";
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
@@ -88,7 +89,8 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 			mapped.subscribeOn(threadManager.getScheduler());
 			return mapped;
 		} catch (LLMConfigException e) {
-			throw new ChatPipelineException("Error executing deep search", e);
+			LOGGER.error(ERROR_EXECUTING_DEEP_SEARCH, e);
+			throw new ChatPipelineException(ERROR_EXECUTING_DEEP_SEARCH, e);
 		}
 
 	}

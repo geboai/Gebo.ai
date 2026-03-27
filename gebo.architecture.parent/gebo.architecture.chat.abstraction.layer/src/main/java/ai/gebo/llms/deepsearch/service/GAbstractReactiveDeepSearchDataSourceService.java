@@ -267,7 +267,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 					LOGGER.debug("Total steps incremented to:" + nTotal);
 				}
 				return chunkingService.streamChunks(nextList, params, chunkingSessionId,
-						deepSearchConfig.getDocumentsParallelism());
+						deepSearchDefaultConfig.getDocumentsParallelism());
 			});
 		};
 		final int offTopicChunksSkipDocumentThreashold = this.deepSearchDefaultConfig
