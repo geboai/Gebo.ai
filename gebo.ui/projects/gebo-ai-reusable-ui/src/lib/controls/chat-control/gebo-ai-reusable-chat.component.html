@@ -88,16 +88,16 @@
         <div class="gebo-ai-reusable-chat__interaction-item-title">
           {{interaction?.response?.usedChatModelCode || interaction?.streamingModelName || modelName }}
         </div>
-        
+
         <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
       </div>
       @if (isDeepSearchResponse(interaction?.response)) {
-        <div class="gebo-ai-reusable-chat_interactin-deep-search-details">
-          <gebo-ai-deep-search-details [deepSearchRequestCode]="getDeepSearchRequestId(interaction?.response)">
-            
-          </gebo-ai-deep-search-details>
-        </div>
+      <div class="gebo-ai-reusable-chat_interactin-deep-search-details">
+        <gebo-ai-deep-search-details [deepSearchRequestCode]="getDeepSearchRequestId(interaction?.response)">
+
+        </gebo-ai-deep-search-details>
+      </div>
       }
       @if(ragsystem && interaction?.response?.documentsRef?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
@@ -146,7 +146,8 @@
 
   </div>
   @if(chatInfo?.code && isChatStreamingProbabilyFailing) {
-  <div class="gebo-ai-reusable-chat__error">
+  <div id="chatStreamingError" class="gebo-ai-reusable-chat__error">
+
     <p-button icon="pi pi-undo" size="large" [text]="true" (onClick)="loadChatHistory()" severity="danger"></p-button>
   </div>
   }
@@ -156,7 +157,8 @@
     <p-button icon="pi pi-arrow-up" rounded *ngIf="showTopButton" severity="secondary" (click)="scrollToTop()">
     </p-button>
   </div>
-  <div [className]="(interactions && interactions?.length)? 'gebo-ai-reusable-chat__footer':'gebo-ai-reusable-chat__clean_chat_middle'">
+  <div
+    [className]="(interactions && interactions?.length)? 'gebo-ai-reusable-chat__footer':'gebo-ai-reusable-chat__clean_chat_middle'">
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
       [userChatContextCode]="userChatContextCode" [capabilities]="capabilities" [currentAudioTrack]="currentAudioTrack"
@@ -165,13 +167,10 @@
       (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)" (speechEvent)="onSpeechEvent($event)"
       (messageSubmit)="onSumbit()" (messageSend)="sendMessage()" (loadingChange)="loadingChatResponse=$event"
       (deepSearchChatRequest)="onExternalModuleRequest($event)"
-      (deepsearchChatResponse)="onExternalModuleResponse($event)" 
-      [routingChoiceSelector]="currentPipelineRouterDecisionCode"
-      [streaming]="chatStreaming"
-      (nextRoutingChoice)="currentPipelineRoutingOption=$event"
-      [pipelineChatMenu]="chatPipelinesMenu"
-      (stopReactiveChat)="stopReactiveChat($event)"
-      >
+      (deepsearchChatResponse)="onExternalModuleResponse($event)"
+      [routingChoiceSelector]="currentPipelineRouterDecisionCode" [streaming]="chatStreaming"
+      (nextRoutingChoice)="currentPipelineRoutingOption=$event" [pipelineChatMenu]="chatPipelinesMenu"
+      (stopReactiveChat)="stopReactiveChat($event)">
     </gebo-ai-chat-input-shell>
 
     <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"

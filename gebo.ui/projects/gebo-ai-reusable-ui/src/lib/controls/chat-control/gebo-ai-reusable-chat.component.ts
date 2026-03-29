@@ -654,7 +654,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 if (recvd.contentObjectType === "GUserMessage") {
                     const message = recvd.content as ToastMessageOptions;
                     this.lastInteractionMessages = [message];
-                    this.chatStreamingErrorOccurred = true;
+                    if (message.severity === 'error') {
+                        this.chatStreamingErrorOccurred = true;
+                    }
 
                 }
                 if (recvd.contentObjectType === "PipelineRoutingInfos") {
