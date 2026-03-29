@@ -444,7 +444,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
                     this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    this.lastInteractionMessages = this.interactions && this.interactions?.length>0? [chat_history_loaded]:[clean_chat_loaded];
+                    this.lastInteractionMessages = this.interactions && this.interactions?.length > 0 ? [chat_history_loaded] : [clean_chat_loaded];
                     this.scrollToBottom();
 
                 },
@@ -654,7 +654,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 if (recvd.contentObjectType === "GUserMessage") {
                     const message = recvd.content as ToastMessageOptions;
                     this.lastInteractionMessages = [message];
-                    if (message.severity === 'error') {
+                    if (message.severity === 'error' || message.severity === 'ERROR') {
                         this.chatStreamingErrorOccurred = true;
                     }
 
