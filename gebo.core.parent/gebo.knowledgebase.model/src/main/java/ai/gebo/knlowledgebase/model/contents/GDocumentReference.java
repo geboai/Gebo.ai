@@ -9,6 +9,8 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -82,5 +84,11 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	private String artificiallyGeneratedContent = null;
 	@NotNull
 	private GeboComponentInfo originComponent = null;
+	@HashIndexed
+	private List<GDocumentAttributeValue> attributesValues = null;
+	@HashIndexed
+	private String langCode = null;
+	@HashIndexed
+	private String translationOfDocumentCode = null;
 
 }
