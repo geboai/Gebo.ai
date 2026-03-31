@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -152,4 +153,5 @@ public final class GeboDocument implements JSonDuplicableObject<GeboDocument> {
 			}
 		};
 	}
+	
 }
