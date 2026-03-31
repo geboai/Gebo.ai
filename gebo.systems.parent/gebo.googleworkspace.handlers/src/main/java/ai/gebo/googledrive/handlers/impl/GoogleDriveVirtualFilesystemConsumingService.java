@@ -140,7 +140,7 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	 */
 	@Override
 	protected GoogleDriveNavigationCoordinates getPositionCoordinate(
-			List<GoogleDriveNativePositionObject> childCoordinates) throws GeboContentHandlerSystemException {
+			List<GoogleDriveNativePositionObject> childCoordinates, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		GoogleDriveNavigationCoordinates coordinates = new GoogleDriveNavigationCoordinates();
 
 		PathInfo currentPath = null;
@@ -313,7 +313,7 @@ public class GoogleDriveVirtualFilesystemConsumingService extends
 	 * @return Google Drive navigation coordinates
 	 */
 	@Override
-	protected GoogleDriveNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected GoogleDriveNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		return GoogleDriveNavigationUtil.toCoordinates(path);
 	}

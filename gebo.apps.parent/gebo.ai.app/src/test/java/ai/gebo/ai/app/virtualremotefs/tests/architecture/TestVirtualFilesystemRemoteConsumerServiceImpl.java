@@ -148,7 +148,7 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 	 */
 	@Override
 	protected TestVirtualfilesystemNavigationCoordinates getPositionCoordinate(
-			List<TestVirtualFilesystemNativeObject> childCoordinates) throws GeboContentHandlerSystemException {
+			List<TestVirtualFilesystemNativeObject> childCoordinates, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		TestVirtualfilesystemNavigationCoordinates coords = new TestVirtualfilesystemNavigationCoordinates();
 		// Assume the first item is the root. Initiating with the first root element.
 		TestVirtualFilesystemNativeObject root = childCoordinates.get(0);
@@ -315,7 +315,7 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 	 * @throws GeboContentHandlerSystemException if any error occurs in content handling
 	 */
 	@Override
-	protected TestVirtualfilesystemNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected TestVirtualfilesystemNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		String id = null;
 		if (path.path != null) {

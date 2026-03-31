@@ -186,4 +186,6 @@ public interface IGDocumentReferenceIngestionHandler {
 	public GeboDocument handleDocument(GDocumentReference reference, InputStream is)
 			throws GeboIngestionException, IOException;
 
+	public IngestionHandlerData handleContent(GDocumentReference reference, GeboDocument geboDocument);
+
 }

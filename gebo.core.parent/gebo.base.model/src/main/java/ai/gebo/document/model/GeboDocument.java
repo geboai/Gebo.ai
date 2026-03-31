@@ -9,6 +9,10 @@
 
 package ai.gebo.document.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import jakarta.el.MethodNotFoundException;
 import lombok.Data;
@@ -28,7 +37,9 @@ import lombok.Data;
  */
 @Data
 public final class GeboDocument implements JSonDuplicableObject<GeboDocument> {
-
+	public static final String GEBO_FILE_EXTENSION = ".gebo";
+	public static final String GEBO_DOCUMENT_CONTENT_TYPE = "text/ai.gebo.document";
+	private static final ObjectMapper objectMapper = new ObjectMapper();
 	// Unique identifier of the document.
 	private String id = null;
 
@@ -114,5 +125,31 @@ public final class GeboDocument implements JSonDuplicableObject<GeboDocument> {
 		GeboDocument document = new GeboDocument();
 		document.getTexts().add(GeboTextDocumentFragment.plainText(text));
 		return document;
+	}
+
+	public TypedInputStream toTypedInputStream() throws IOException {
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		objectMapper.writeValue(bos, this);
+		bos.flush();
+		final ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+		return new TypedInputStream() {
+			@Override
+			public String getContentType() {
+
+				return GEBO_DOCUMENT_CONTENT_TYPE;
+			}
+
+			@Override
+			public String getExtension() {
+
+				return GEBO_FILE_EXTENSION;
+			}
+
+			@Override
+			public InputStream getInputStream() throws UnsupportedOperationException, IOException {
+
+				return bis;
+			}
+		};
 	}
 }

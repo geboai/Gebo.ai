@@ -129,6 +129,10 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	public GeboDocument readDocument(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException;
 
+	public default boolean isIngestedAsGeboDocument() {
+		return false;
+	}
+
 	/**
 	 * Checks the status of virtual filesystem objects to determine if they are
 	 * updated or deleted.

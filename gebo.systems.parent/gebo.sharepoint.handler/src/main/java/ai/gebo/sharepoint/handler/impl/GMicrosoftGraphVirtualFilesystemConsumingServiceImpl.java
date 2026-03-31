@@ -140,7 +140,7 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 	 * @throws GeboContentHandlerSystemException If there's an error in the conversion
 	 */
 	@Override
-	protected MicrosoftGraphNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected MicrosoftGraphNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		MicrosoftGraphNavigationCoordinates coordinates = new MicrosoftGraphNavigationCoordinates();
 		coordinates.setRoot(path.root);
@@ -394,14 +394,14 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 
 	/**
 	 * Gets the position coordinates from native path objects.
-	 * 
 	 * @param nativepath The list of native position objects
+	 * 
 	 * @return The navigation coordinates
 	 * @throws GeboContentHandlerSystemException If there's an error getting the coordinates
 	 */
 	@Override
 	protected MicrosoftGraphNavigationCoordinates getPositionCoordinate(
-			List<MicrosoftGraphNativePositionObject> nativepath) throws GeboContentHandlerSystemException {
+			List<MicrosoftGraphNativePositionObject> nativepath, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		MicrosoftGraphNavigationCoordinates coordinate = new MicrosoftGraphNavigationCoordinates();
 		if (!nativepath.isEmpty()) {
 			MicrosoftGraphNativePositionObject firstItem = nativepath.get(0);
@@ -426,7 +426,7 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 				}
 				reference.path = pathInfo;
 			}
-			coordinate = toNavigationPosition(reference);
+			coordinate = toNavigationPosition(reference, environment);
 		}
 		return coordinate;
 

@@ -262,7 +262,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 *                                           conversion
 	 */
 	@Override
-	protected JiraNavigationCoordinates getPositionCoordinate(List<JiraNativePositionObject> childCoordinates)
+	protected JiraNavigationCoordinates getPositionCoordinate(List<JiraNativePositionObject> childCoordinates, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		return JiraNavigationUtil.toJiraNavigationCoordinates(childCoordinates);
 	}
@@ -516,7 +516,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 *                                           conversion
 	 */
 	@Override
-	protected JiraNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected JiraNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 
 		return JiraNavigationUtil.toJiraNavigationCoordinats(path);

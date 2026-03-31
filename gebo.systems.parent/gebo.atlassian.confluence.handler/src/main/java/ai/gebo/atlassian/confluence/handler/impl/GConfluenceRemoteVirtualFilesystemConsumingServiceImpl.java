@@ -270,7 +270,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 */
 	@Override
 	protected ConfluenceNavigationCoordinates getPositionCoordinate(
-			List<ConfluenceNativePositionObject> childCoordinates) throws GeboContentHandlerSystemException {
+			List<ConfluenceNativePositionObject> childCoordinates, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 
 		return ConfluenceNavigationUtil.toNavigationCoordinates(childCoordinates);
 	}
@@ -756,7 +756,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * @throws GeboContentHandlerSystemException If conversion fails
 	 */
 	@Override
-	protected ConfluenceNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected ConfluenceNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		ConfluenceNavigationCoordinates coordinates = new ConfluenceNavigationCoordinates();
 		coordinates.setRoot(path.root);

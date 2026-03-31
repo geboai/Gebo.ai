@@ -99,11 +99,16 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 		if (navigationReference == null)
 			throw new RuntimeException("NavigationReference cannot be null");
 		PositionsCoordinateType navigationPosition;
+		Map<String, Object> environment = null;
+		SearchableSystemMetaData system = null;
+		SystemType actualSystem = null;
 		try {
-			navigationPosition = virtualFileSystemConsumingService.toNavigationPosition(navigationReference);
-			SearchableSystemMetaData system = findSystemBySearchResult(result);
-			SystemType actualSystem = (SystemType) system.getSystemConfigurationReference();
-			Map<String, Object> environment = virtualFileSystemConsumingService.createEnvironment(actualSystem);
+
+			system = findSystemBySearchResult(result);
+			actualSystem = (SystemType) system.getSystemConfigurationReference();
+			environment = virtualFileSystemConsumingService.createEnvironment(actualSystem);
+			navigationPosition = virtualFileSystemConsumingService.toNavigationPosition(navigationReference,
+					environment);
 			List<ImplementativePositionObjectType> nativeCoordinates = virtualFileSystemConsumingService
 					.toResourcesNativeCoordinates(navigationPosition, actualSystem, environment);
 			ResourceReferenceType remoteReference = virtualFileSystemConsumingService.getResourceHandle(system,
@@ -122,6 +127,11 @@ public abstract class GAbstractRemoteVirtualFilesystemSearchService<ExtractionRe
 			return outStream;
 		} catch (GeboContentHandlerSystemException e) {
 			throw new SearchServiceException("Exception in loadSearchResult(..)", e);
+		} finally {
+			try {
+				virtualFileSystemConsumingService.clearEnvironment(environment, actualSystem, null);
+			} catch (Throwable th) {
+			}
 		}
 
 	}

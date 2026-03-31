@@ -20,6 +20,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.tokenizer.TokenCountEstimator;
 
+import ai.gebo.document.model.GeboDocument;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
@@ -75,4 +76,10 @@ public class AIDocumentCacheItem extends GBaseObject {
         item.bytesSize = Long.valueOf(item.text.length() * 2); // Estimates the byte size assuming 2 bytes per character
         return item;
     }
+
+
+	public static AIDocumentCacheItem of(GeboDocument geboDocument) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

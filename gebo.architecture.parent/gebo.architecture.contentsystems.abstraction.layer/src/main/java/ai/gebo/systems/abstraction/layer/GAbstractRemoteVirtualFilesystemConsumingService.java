@@ -108,7 +108,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		if (endpoint.getPaths() != null) {
 			for (VFilesystemReference path : endpoint.getPaths()) {
 				try {
-					PositionsCoordinateType position = toNavigationPosition(path);
+					PositionsCoordinateType position = toNavigationPosition(path, environment);
 					List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
 							endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
 					if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
@@ -191,7 +191,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param messageSystemId          TODO
 	 * @return A GDocumentReference representing the consumed document reference
 	 */
-	protected final GDocumentReference createAndConsumeDocumentReference(
+	protected GDocumentReference createAndConsumeDocumentReference(
 			List<ImplementativePositionObjectType> previusFolderCoordinates, ImplementativePositionObjectType resource,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
@@ -294,7 +294,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 						final String msg = "VFolder reference generated=>" + childFolder.getCode();
 						LOGGER.debug(msg);
 					}
-					PositionsCoordinateType childPosition = getPositionCoordinate(completeCoordinates);
+					PositionsCoordinateType childPosition = getPositionCoordinate(completeCoordinates, environment);
 					consumeChilds(completeCoordinates, childPosition, system, endpoint, childFolder, consumer,
 							messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
 				} else {
@@ -314,12 +314,14 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * UI navigation
 	 * 
 	 * @param childCoordinates List of child coordinates in native format
+	 * @param environment      TODO
 	 * @return PositionsCoordinateType result of the translation
 	 * @throws GeboContentHandlerSystemException If a coordinate cannot be
 	 *                                           translated
 	 */
 	protected abstract PositionsCoordinateType getPositionCoordinate(
-			List<ImplementativePositionObjectType> childCoordinates) throws GeboContentHandlerSystemException;
+			List<ImplementativePositionObjectType> childCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException;
 
 	/********************************************************************************************************************
 	 * Retrieve the list of childs of a specific native navigation coordinates
@@ -355,7 +357,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param environment       Operational environment
 	 * @return GVirtualFolder representing the created nodes
 	 */
-	protected final GVirtualFolder createAndConsumeVirtualFolderNodes(
+	protected GVirtualFolder createAndConsumeVirtualFolderNodes(
 			List<ImplementativePositionObjectType> nativeCoordinates, PositionsCoordinateType position,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
@@ -378,7 +380,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param endpoint Endpoint used
 	 * @return GVirtualFolder representing the virtual folder
 	 */
-	protected final GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder root,
+	protected GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder root,
 			SystemType system, EndpointType endpoint) {
 		String code = node.getCode();
 		String name = node.getName();
@@ -417,8 +419,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @return
 	 * @throws GeboContentHandlerSystemException
 	 */
-	protected abstract List<ImplementativePositionObjectType> toResourcesNativeCoordinates(PositionsCoordinateType position,
-			SystemType system, Map<String, Object> environment) throws GeboContentHandlerSystemException;
+	protected abstract List<ImplementativePositionObjectType> toResourcesNativeCoordinates(
+			PositionsCoordinateType position, SystemType system, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException;
 
 	/****************************************************************************************************************
 	 * Creates a runtime environment map that binds all required
@@ -461,11 +464,12 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Transforms a memorized VFilesystemReference to a root with navigation steps
 	 * navigation coordinates infos
 	 * 
-	 * @param path Filesystem reference path
+	 * @param path        Filesystem reference path
+	 * @param environment TODO
 	 * @return PositionsCoordinateType representing navigation coordinates
 	 */
-	protected abstract PositionsCoordinateType toNavigationPosition(VFilesystemReference path)
-			throws GeboContentHandlerSystemException;
+	protected abstract PositionsCoordinateType toNavigationPosition(VFilesystemReference path,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException;
 
 	/******************************************************************************************************************
 	 * Utility method to create a child virtual folder
