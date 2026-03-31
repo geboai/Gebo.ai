@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,10 +62,12 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 
 public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
@@ -636,17 +639,19 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 
 	/**
 	 * Streams content based on a document reference.
-	 *
+	 * 
 	 * @param reference The document reference.
 	 * @param cache     A cache of objects.
+	 *
 	 * @return An InputStream for the document content.
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           streaming.
 	 * @throws IOException                       If an IO exception occurs.
 	 */
 	@Override
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
+		InputStream is = null;
 		if (reference.getNestedInArchive() != null && reference.getNestedInArchive()) {
 			final ZipFile zipFile = new ZipFile(reference.getAbsoluteArchivePath());
 			ZipEntry entry = zipFile.getEntry(reference.getArchiveInternalPath());
@@ -664,15 +669,16 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 					}
 				};
 			};
-			return zipFile.getInputStream(entry);
+			is = zipFile.getInputStream(entry);
 		} else if (reference.getArtificiallyGeneratedContent() != null
 				&& reference.getArtificiallyGeneratedContent().trim().length() > 0) {
-			return new ByteArrayInputStream(reference.getArtificiallyGeneratedContent().getBytes());
+			is = new ByteArrayInputStream(reference.getArtificiallyGeneratedContent().getBytes());
 		} else if (reference.getAbsolutePath() != null) {
 			Path path = Path.of(reference.getAbsolutePath());
-			return Files.newInputStream(path, StandardOpenOption.READ);
+			is = Files.newInputStream(path, StandardOpenOption.READ);
 		} else
 			return null;
+		return TypedInputStream.of(is, reference.getContentType(), reference.getExtension());
 	}
 
 	/**
@@ -789,8 +795,10 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	public GeboDocument readDocument(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException {
 		if (ingestionHandler.isHandled(reference)) {
-			InputStream stream = streamContent(reference, cache);
-			return ingestionHandler.handleDocument(reference, stream);
+			TypedInputStream stream = streamContent(StreamingPurpose.SERVING, reference, cache);
+			if (stream == null || stream.getInputStream() == null)
+				return null;
+			return ingestionHandler.handleDocument(reference, stream != null ? stream.getInputStream() : null);
 		}
 		return null;
 	}

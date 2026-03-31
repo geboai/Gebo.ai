@@ -42,6 +42,7 @@ import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.impl.repository.ContentHandshakeDataRepository;
 import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * AI generated comments Implementation of the IGContentDispatchingEvaluator
@@ -215,7 +216,7 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 			GDocumentReference reference, IGContentManagementSystemHandler handler, Map<String, Object> handlerCache)
 			throws GeboIngestionException, IOException, GeboContentHandlerSystemException, NoSuchAlgorithmException {
 		IngestionHandlerData data = ingestionHandler.handleContent(reference,
-				handler.streamContent(reference, handlerCache));
+				handler.streamContent(StreamingPurpose.INGESTING, reference, handlerCache));
 		if (data.isUnmanagedContent()) {
 			reference.setUnmanagedContentType(true);
 			return null;
@@ -300,7 +301,8 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 			GeboDocument geboDocument = handler.readDocument(reference, cache);
 			data = ingestionHandler.handleContent(reference, geboDocument);
 		} else {
-			data = ingestionHandler.handleContent(reference, handler.streamContent(reference, cache));
+			data = ingestionHandler.handleContent(reference,
+					handler.streamContent(StreamingPurpose.INGESTING, reference, cache));
 
 		}
 		if (data.isUnmanagedContent()) {

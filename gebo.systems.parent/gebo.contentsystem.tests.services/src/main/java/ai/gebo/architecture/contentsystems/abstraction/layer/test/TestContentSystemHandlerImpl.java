@@ -32,12 +32,14 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.GAbstractContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationDao;
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * AI generated comments
@@ -208,14 +210,15 @@ public class TestContentSystemHandlerImpl
 	 * 
 	 * @param reference The document reference
 	 * @param cache     The cache map
+	 * 
 	 * @return An input stream for the content
 	 * @throws GeboContentHandlerSystemException If an error occurs with the content
 	 *                                           system
 	 * @throws IOException                       If an I/O error occurs
 	 */
 	@Override
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
 		if (reference.getUri() != null && reference.getUri().startsWith(CLASSPATH_RESOURCE_PREFIX)) {
 			// Handle classpath resources
 			String _resource = reference.getUri().substring(CLASSPATH_RESOURCE_PREFIX.length());
@@ -225,9 +228,9 @@ public class TestContentSystemHandlerImpl
 						"Test error: the resource " + reference.getUri() + " is not in the classpath");
 
 			}
-			return is;
+			return TypedInputStream.of(is, reference.getContentType(), reference.getExtension());
 		} else
-			return super.streamContent(reference, cache);
+			return super.streamContent(streamingPurpose, reference, cache);
 	}
 
 	@Override

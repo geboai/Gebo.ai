@@ -10,7 +10,6 @@
 package ai.gebo.systems.abstraction.layer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -25,7 +24,9 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * AI generated comments Handler interface for managing interactions with
@@ -103,15 +104,16 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 
 	/**
 	 * Streams content from a given document reference.
-	 *
+	 * @param streamingPurpose TODO
 	 * @param reference The document reference for the content to stream.
 	 * @param cache     A map to cache previously accessed content.
+	 *
 	 * @return An InputStream to stream the document content.
 	 * @throws GeboContentHandlerSystemException If an error occurs accessing the
 	 *                                           content.
 	 * @throws IOException                       If an I/O error occurs.
 	 */
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException;
 
 	/**

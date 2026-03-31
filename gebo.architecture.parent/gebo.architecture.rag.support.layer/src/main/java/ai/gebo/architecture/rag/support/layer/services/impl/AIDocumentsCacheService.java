@@ -35,11 +35,13 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import lombok.AllArgsConstructor;
 
 /**
@@ -184,7 +186,7 @@ public class AIDocumentsCacheService implements IGAIDocumentsCacheService {
 			GProjectEndpoint endpoint, AIDocumentsSet result, Map handlerWorkCache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException, GeboPersistenceException {
 		// Stream content of the document
-		InputStream is = handler.streamContent(document, handlerWorkCache);
+		TypedInputStream is = handler.streamContent(StreamingPurpose.INGESTING, document, handlerWorkCache);
 		// Handle content ingestion
 		IngestionHandlerData readData = ingestionHandler.handleContent(document, is);
 		if (!readData.isUnmanagedContent()) {

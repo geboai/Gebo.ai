@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.document.model.GeboTextDocumentFragment;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.config.GeboContentReadingConfig;
@@ -321,5 +322,11 @@ public class GTikaFailBackContentHandler implements IGSpecializedDocumentReferen
 		});
 		doc.getTexts().add(GeboTextDocumentFragment.plainText(buffer.toString()));
 		return doc;
+	}
+
+	@Override
+	public boolean canManageContent(TypedInputStream streamContent) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

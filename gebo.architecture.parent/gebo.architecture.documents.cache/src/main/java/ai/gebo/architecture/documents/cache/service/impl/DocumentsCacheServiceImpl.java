@@ -35,6 +35,7 @@ import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 @Service
 public class DocumentsCacheServiceImpl
@@ -78,8 +79,9 @@ public class DocumentsCacheServiceImpl
 	}
 
 	@Override
-	public TypedInputStream streamDocument(IGComponentOriginatedDocument reference) throws DocumentCacheAccessException,
-			GeboContentHandlerSystemException, SearchServiceException, IOException {
+	public TypedInputStream streamDocument(StreamingPurpose streamingPurpose, IGComponentOriginatedDocument reference)
+			throws DocumentCacheAccessException, GeboContentHandlerSystemException, SearchServiceException,
+			IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ");");
 		}
@@ -89,16 +91,14 @@ public class DocumentsCacheServiceImpl
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming from local filesystem");
 				}
-				return TypedInputStream.of(handler.streamContent(docreference, new HashMap()),
-						docreference.getContentType(), docreference.getExtension());
+				return handler.streamContent(streamingPurpose, docreference, new HashMap());
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming and cache remote system");
 			}
 			SupplierWithException isSupplier = () -> {
 
-				return TypedInputStream.of(handler.streamContent(docreference, new HashMap()),
-						docreference.getContentType(), docreference.getExtension());
+				return handler.streamContent(streamingPurpose, docreference, new HashMap());
 
 			};
 			return streamDocumentWithLocalCache(isSupplier, reference);

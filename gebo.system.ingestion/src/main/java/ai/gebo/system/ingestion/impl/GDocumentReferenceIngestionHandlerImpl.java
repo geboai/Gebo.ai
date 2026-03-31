@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGLanguageDetector;
@@ -369,6 +370,41 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		} else
 			out.setStream(Stream.of());
 		return out;
+	}
+
+	@Override
+	public IngestionHandlerData handleContent(GDocumentReference reference, TypedInputStream streamContent)
+			throws GeboIngestionException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin handleContent([" + reference.getCode() + ",...)");
+		}
+		Stream<Document> outContents = Stream.of();
+		IGSpecializedDocumentReferenceIngestionHandler handler = repoPattern.findByCanManage(streamContent);
+		IngestionHandlerData data = new IngestionHandlerData();
+		if (handler != null && streamContent != null && streamContent.getInputStream() != null) {
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Specific content handler=>" + handler.getCode());
+			}
+			data.setSingleMessageRappresentable(handler.isSingleMessageRappresentable());
+			data.setHashableContent(handler.isHashbleContent());
+			outContents = handler.handleContent(reference, streamContent.getInputStream(), manageMetaInfo(reference));
+		} else {
+			data.setUnmanagedContent(true);
+		}
+		outContents = outContents.map(x -> {
+			try {
+				languageDetector.addLanguageMetaData(x);
+			} catch (IOException e) {
+
+			}
+			return x;
+		});
+		data.setStream(outContents);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End handleContent([" + reference.getCode() + ",...)");
+		}
+		return data;
 	}
 
 }

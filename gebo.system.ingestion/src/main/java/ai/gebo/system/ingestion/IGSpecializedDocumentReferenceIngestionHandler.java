@@ -23,6 +23,7 @@ import org.springframework.ai.document.Document;
 import ai.gebo.architecture.ai.service.IGReadableContentsFormatHandler;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 
 /**
@@ -40,7 +41,7 @@ public interface IGSpecializedDocumentReferenceIngestionHandler extends IGReadab
 	 * @return true if this handler can manage the content, false otherwise
 	 */
 	public boolean canManageContent(GDocumentReference reference);
-
+	
 	/**
 	 * Gets the unique code identifier for this handler.
 	 *
@@ -142,4 +143,6 @@ public interface IGSpecializedDocumentReferenceIngestionHandler extends IGReadab
 			Map<String, Object> manageMetainfo) throws GeboIngestionException, IOException {
 		return this.handleTextOnlyContent(reference, is, manageMetainfo);
 	}
+
+	public boolean canManageContent(TypedInputStream streamContent);
 }

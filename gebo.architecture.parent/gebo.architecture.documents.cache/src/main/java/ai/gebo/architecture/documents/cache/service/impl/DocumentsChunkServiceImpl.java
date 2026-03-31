@@ -69,6 +69,7 @@ import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
@@ -213,7 +214,7 @@ public class DocumentsChunkServiceImpl
 		// We ask the cacheService to stream the document
 		TypedInputStream is = null;
 		try {
-			is = this.cacheService.streamDocument(document);
+			is = this.cacheService.streamDocument(StreamingPurpose.INGESTING, document);
 
 			if (is != null && is.getInputStream() != null) {
 				if (LOGGER.isDebugEnabled()) {

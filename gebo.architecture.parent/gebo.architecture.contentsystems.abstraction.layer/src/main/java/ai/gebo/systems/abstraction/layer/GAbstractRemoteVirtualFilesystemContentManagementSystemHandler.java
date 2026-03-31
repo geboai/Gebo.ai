@@ -32,6 +32,7 @@ import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * Abstract class providing a framework for implementing remote virtual
@@ -123,16 +124,17 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	/**
 	 * Streams content associated with a document reference, leveraging caching
 	 * mechanisms for performance optimization and managing remote resources.
-	 *
+	 * 
 	 * @param reference The reference of the document to be streamed.
 	 * @param cache     Cache containing context-specific values.
+	 *
 	 * @return InputStream The stream of the content.
 	 * @throws GeboContentHandlerSystemException For handler related exceptions.
 	 * @throws IOException                       If IO operation fails.
 	 */
 	@Override
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
 
 		// Check if the reference is null
 		if (reference == null)
@@ -178,7 +180,11 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 			LOGGER.debug("Getting stream for [" + reference.getUri() + "] native remote reference=> " + remoteReference
 					+ " document code:" + reference.getCode() + reference.getCustomMetaInfos());
 		}
-		return consumingService.streamResource(system, endpoint, remoteReference, cache);
+		InputStream is = consumingService.streamResource(system, endpoint, remoteReference, cache);
+
+		if (is == null)
+			return null;
+		return TypedInputStream.of(is, reference.getContentType(), reference.getExtension());
 	}
 
 	/**
