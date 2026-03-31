@@ -339,4 +339,36 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 			return handler.handleDocument(reference, is, manageMetaInfo(reference));
 	}
 
+	private Map<String, Object> add(Map<String, Object>... m1) {
+		Map<String, Object> m = new HashMap<>();
+		if (m1 != null && m1.length > 0) {
+			for (Map<String, Object> map : m1) {
+				if (map != null) {
+					m.putAll(map);
+				}
+			}
+		}
+		return m;
+	}
+
+	@Override
+	public IngestionHandlerData handleContent(GDocumentReference reference, GeboDocument geboDocument) {
+		IngestionHandlerData out = new IngestionHandlerData();
+		out.setHashableContent(true);
+		out.setSingleMessageRappresentable(true);
+		out.setUnmanagedContent(false);
+		if (geboDocument != null) {
+			Map<String, Object> metainfos = manageMetaInfo(reference);
+			Map<String, Object> additional = geboDocument.getAdditionalAttributes();
+			Map<String, Object> custom = geboDocument.getCustomMetaData();
+			final Map<String, Object> joined = add(metainfos, additional, custom);
+			out.setStream(geboDocument.getTexts().stream()
+					.filter(x -> x.getContent() != null && x.getContent().trim().length() > 0)
+					.map(fragment -> new Document(fragment.getUniqueCode(), fragment.getContent(),
+							add(joined, fragment.getCustomMetaData()))));
+		} else
+			out.setStream(Stream.of());
+		return out;
+	}
+
 }
