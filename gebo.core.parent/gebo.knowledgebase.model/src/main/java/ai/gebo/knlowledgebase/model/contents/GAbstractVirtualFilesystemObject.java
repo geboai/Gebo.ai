@@ -122,6 +122,8 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	private String lastesJobId = null;
 	@HashIndexed
 	private List<Integer> aclAliases = null;
+	@HashIndexed
+	private String extIntegrationCode = null;
 
 	/**
 	 * Default constructor.
@@ -149,8 +151,8 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 		this.uri = o.uri;
 		this.setModificationDate(o.getModificationDate());
 		this.setCreationDate(o.getCreationDate());
-
 		this.aclAliases = o.aclAliases;
+		this.extIntegrationCode = o.extIntegrationCode;
 	}
 
 }

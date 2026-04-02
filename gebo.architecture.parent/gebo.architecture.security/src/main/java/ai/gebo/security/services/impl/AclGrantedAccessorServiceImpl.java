@@ -30,6 +30,10 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		final String uniqueId = getUniqueId(group);
 		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueId(uniqueId);
 		return new IAclGrantedAccessor() {
+			@Override
+			public String getMainAclUniqueId() {
+				return uniqueId;
+			}
 
 			@Override
 			public List<IAclGrantedAccess> getAccesses() {
@@ -102,6 +106,11 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		}
 		return new IAclGrantedAccessor() {
 			@Override
+			public String getMainAclUniqueId() {
+				return uniqueId;
+			}
+
+			@Override
 			public List<IAclGrantedAccess> getAccesses() {
 				return accesses;
 			}
@@ -113,6 +122,10 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		final String uniqueId = getUniqueId(group);
 		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
 		return new IAclGrantedAccessor() {
+			@Override
+			public String getMainAclUniqueId() {
+				return uniqueId;
+			}
 
 			@Override
 			public List<IAclGrantedAccess> getAccesses() {
@@ -175,6 +188,12 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 			accesses.addAll(groupLevel.getAccesses());
 		}
 		return new IAclGrantedAccessor() {
+			@Override
+			public String getMainAclUniqueId() {
+
+				return uniqueId;
+			}
+
 			@Override
 			public List<IAclGrantedAccess> getAccesses() {
 				return accesses;

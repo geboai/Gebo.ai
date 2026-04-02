@@ -281,11 +281,20 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
+			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
 				IAclGrantedAccessor grantsAcc = getCurrentAclGrantedAccessor(grant);
+				if (firstGrantsAcc == null)
+					firstGrantsAcc = grantsAcc;
 				accesses.addAll(grantsAcc.getAccesses());
 			}
+			final IAclGrantedAccessor sampledGrantsAcc = firstGrantsAcc;
 			IAclGrantedAccessor jointedAccessor = new IAclGrantedAccessor() {
+				@Override
+				public String getMainAclUniqueId() {
+
+					return sampledGrantsAcc != null ? sampledGrantsAcc.getMainAclUniqueId() : "UNKNOWN";
+				}
 
 				@Override
 				public List<IAclGrantedAccess> getAccesses() {
@@ -317,11 +326,19 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
+			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
 				IAclGrantedAccessor grantsAcc = getCurrentAclGrantedAccessor(grant);
+				if (firstGrantsAcc == null)
+					firstGrantsAcc = grantsAcc;
 				accesses.addAll(grantsAcc.getAccesses());
 			}
+			final IAclGrantedAccessor sampledGrantsAcc = firstGrantsAcc;
 			IAclGrantedAccessor jointedAccessor = new IAclGrantedAccessor() {
+				@Override
+				public String getMainAclUniqueId() {
+					return sampledGrantsAcc != null ? sampledGrantsAcc.getMainAclUniqueId() : "UNKNOWN";
+				}
 
 				@Override
 				public List<IAclGrantedAccess> getAccesses() {

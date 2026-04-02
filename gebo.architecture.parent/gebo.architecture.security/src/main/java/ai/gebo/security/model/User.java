@@ -49,6 +49,8 @@ public class User {
 
 	private List<String> roles = new ArrayList<String>();
 
+	private String langCode = null;
+
 	/**
 	 * Gets the name of the user.
 	 * 
@@ -280,7 +282,7 @@ public class User {
 	 */
 	public void assignValues(EditableUser u) {
 		if (this.username == null)
-			this.username = u.getUsername()!=null?u.getUsername().toLowerCase():null;
+			this.username = u.getUsername() != null ? u.getUsername().toLowerCase() : null;
 		else {
 			// Check if the username is consistent or non-empty
 			if (this.username != null && ((u.getUsername() == null || u.getUsername().trim().length() == 0)
@@ -294,5 +296,14 @@ public class User {
 		this.sourname = u.getSourname();
 		this.disabled = u.getDisabled();
 		this.roles = u.getRoles();
+		this.langCode = u.getLangCode();
+	}
+
+	public String getLangCode() {
+		return langCode;
+	}
+
+	public void setLangCode(String langCode) {
+		this.langCode = langCode;
 	}
 }

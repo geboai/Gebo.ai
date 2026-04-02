@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IAclGrantedAccessor {
+	public String getMainAclUniqueId();
 	public List<IAclGrantedAccess> getAccesses();
 
 	public default List<Integer> getAllOwnedAclAliases() {

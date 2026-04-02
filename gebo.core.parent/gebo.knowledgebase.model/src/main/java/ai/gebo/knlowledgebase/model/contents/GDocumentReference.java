@@ -90,5 +90,7 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	private String langCode = null;
 	@HashIndexed
 	private String translationOfDocumentCode = null;
+	@HashIndexed
+	private List<String> categoryCodes = null;
 
 }

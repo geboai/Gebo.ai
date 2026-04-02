@@ -170,6 +170,10 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 	public Stream<Type> findByParentVirtualFolderCodeAndAclAliasesIn(String parentVirtualFolderCode,
 			List<Integer> allOwnedAclAliases);
 
+	public List<Type> findByExtIntegrationCode(String extIntegrationCode);
+
+	public List<Type> findByExtIntegrationCodeIn(List<String> extIntegrationCodeList);
+
 	/**
 	 * Deletes all objects by the parent project's code.
 	 *
