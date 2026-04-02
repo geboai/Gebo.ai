@@ -172,7 +172,7 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 
 	public List<Type> findByExtIntegrationCode(String extIntegrationCode);
 
-	public List<Type> findByExtIntegrationCodeIn(List<String> extIntegrationCodeList);
+	public Stream<Type> findByExtIntegrationCodeIn(List<String> extIntegrationCodeList);
 
 	/**
 	 * Deletes all objects by the parent project's code.
