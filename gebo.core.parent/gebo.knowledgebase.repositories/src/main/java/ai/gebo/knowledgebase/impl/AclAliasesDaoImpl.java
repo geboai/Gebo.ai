@@ -63,4 +63,17 @@ public class AclAliasesDaoImpl implements IAclAliasesDao {
 		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueIdAndGrant(aclGrantedUniqueId, grantType);
 		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
 	}
+
+	@Override
+	public List<Integer> findAliasesByAclGrantedUniqueIdIn(List<String> aclGrantedUniqueId) {
+		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueIdIn(aclGrantedUniqueId);
+		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
+	}
+
+	@Override
+	public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(List<String> aclGrantedUniqueId,
+			AclGrantType grantType) {
+		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueIdInAndGrant(aclGrantedUniqueId, grantType);
+		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
+	}
 }

@@ -12,6 +12,11 @@ public interface IAclAliasesDao {
 	public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(String aclGrantedUniqueId,
 			AclGrantType grantType);
 
+	public List<Integer> findAliasesByAclGrantedUniqueIdIn(List<String> aclGrantedUniqueId);
+
+	public List<Integer> findAliasesByAclGrantedUniqueIdInAndAclGrantType(List<String> aclGrantedUniqueId,
+			AclGrantType grantType);
+
 	public Integer findAlias(GAclEntry entry);
 
 	public void removeAcl(int alias);

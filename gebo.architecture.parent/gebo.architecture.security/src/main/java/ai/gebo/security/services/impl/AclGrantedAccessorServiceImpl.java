@@ -201,4 +201,18 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		};
 	}
 
+	@Override
+	public List<Integer> aliasesfromGroups(List<UsersGroup> group) {
+		List<String> groupIds = group.stream().map(x -> getUniqueId(x)).toList();
+		List<Integer> data = this.aliasesDao.findAliasesByAclGrantedUniqueIdIn(groupIds);
+		return data;
+	}
+
+	@Override
+	public List<Integer> aliasesfromGroups(List<UsersGroup> group, AclGrantType grantType) {
+		List<String> groupIds = group.stream().map(x -> getUniqueId(x)).toList();
+		List<Integer> data = this.aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(groupIds, grantType);
+		return data;
+	}
+
 }

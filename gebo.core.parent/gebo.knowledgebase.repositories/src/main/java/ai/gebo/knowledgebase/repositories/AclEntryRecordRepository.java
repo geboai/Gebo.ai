@@ -15,4 +15,6 @@ public interface AclEntryRecordRepository extends MongoRepository<AclEntryRecord
 	List<AclEntryRecord> findByAclGrantedUniqueIdInAndGrant(List<String> uniqueIds, AclGrantType grant);
 
 	void deleteByAclGrantedUniqueId(String uniqueId);
+
+	List<AclEntryRecord> findByAclGrantedUniqueIdIn(List<String> aclGrantedUniqueId);
 }
