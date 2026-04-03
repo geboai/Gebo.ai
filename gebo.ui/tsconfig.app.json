@@ -3,7 +3,21 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "@Gebo.ai/gebo-ai-rest-api": [
+        "./projects/gebo-ai-rest-api/src/public-api"
+      ],
+      "@Gebo.ai/gebo-ai-chat-ui": [
+        "./projects/gebo-ai-chat-ui/src/public-api"
+      ],
+      "@Gebo.ai/gebo-ai-admin-ui": [
+        "./projects/gebo-ai-admin-ui/src/public-api"
+      ],
+      "@Gebo.ai/reusable-ui": [
+        "./projects/gebo-ai-reusable-ui/src/public-api"
+      ]
+    }
   },
   "files": [
     "src/main.ts"

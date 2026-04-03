@@ -32,3 +32,16 @@ export * from "./lib/setup-wizard/setup-wizards.module";
 
 // Export the setup wizards routing module for navigation within the setup wizard flow
 export * from "./lib/setup-wizard/setup-wizards-routing.module";
+
+// Missing components exported to allow isolated partial compilation without NG3001/NG8001 errors
+export * from "./lib/admin-ui/gebo-ai-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-entity-editing-launcher/gebo-ai-entity-editing-launcher.component";
+export * from "./lib/admin-ui/main-panels/users-management/users-management.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-confluence-system-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-drive-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-sharepoint-admin/gebo-ai-sharepoint-system-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-fast.component";
+export * from "./lib/setup-wizard/llms-setup-wizard.component";
+export * from "./lib/setup-wizard/setup-wizards.component";
+export * from "./lib/setup-wizard/vectorstore-wizard.component";
+export * from "./lib/setup-wizard/work-folder-wizard.component";

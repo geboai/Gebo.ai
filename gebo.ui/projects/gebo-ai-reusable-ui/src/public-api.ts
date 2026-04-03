@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /*
  * Public API Surface of gebo-ai-reusable-ui
@@ -19,10 +19,10 @@
  */
 
 export * from "./lib/architecture/actions.model";
-export * from  "./lib/architecture/gebo-form-groups.service";
-export * from  "./lib/architecture/gebo-ui-action-routing.service";
-export * from  "./lib/architecture/gebo-ui-output-forwarding.service";
-export * from  "./lib/architecture/gebo-ui-entity-form-config";
+export * from "./lib/architecture/gebo-form-groups.service";
+export * from "./lib/architecture/gebo-ui-action-routing.service";
+export * from "./lib/architecture/gebo-ui-output-forwarding.service";
+export * from "./lib/architecture/gebo-ui-entity-form-config";
 export * from "./lib/architecture/gebo-ui-architecture.module";
 export * from "./lib/architecture/gebo-ui-modal-opener.component";
 export * from "./lib/controls/base-entity-editing-component/base-entity-editing.component";
@@ -100,3 +100,39 @@ export * from "./lib/notifications/notifications.module";
 export * from "./lib/notifications/root-notification.service";
 export * from "./lib/notifications/notification-layer";
 export * from "./lib/controls/chat-model-use-component/chat-model-use.module";
+export * from "./lib/controls/choose-documents-panel/search-documents.component";
+export * from "./lib/controls/choose-documents-panel/documents-list-panel.component";
+export * from "./lib/controls/userspace-files-component/userspace-files.component";
+export * from "./lib/controls/deep-search-control/deep-search-details.component";
+export * from "./lib/controls/deep-search-control/deep-search-sources-choice.component";
+export * from "./lib/directives/translable/translable.directive";
+export * from "./lib/setup-wizard/setup-wizard-panel.component";
+export * from "./lib/controls/add-project-endpoint-component/project-add-context-menu.component";
+export * from "./lib/controls/strings-list-table-control/string-list.component";
+export * from "./lib/controls/prompt-editing-component/prompt-editing.component";
+export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.component";
+export * from "./lib/controls/content-selection-filter-component/content-selection-filter.component";
+export * from "./lib/controls/choose-llm-functions/choose-llm-functions.component";
+export * from "./lib/controls/api-key-component/api-key.component";
+export * from "./lib/controls/chat-model-use-component/chat-model-use.component";
+export * from "./lib/controls/field-translation-container/language-choice.component";
+export * from "./lib/architecture/gebo-ui-entity-forms-launcher.component";
+export * from "./lib/architecture/gebo-ui-modal.component";
+export * from "./lib/controls/field-translation-container/field-container.component";
+export * from "./lib/controls/field-translation-container/field-container.directive";
+export * from "./lib/controls/field-translation-container/primeng-components-multilanguage-adapters.directive";
+export * from "./lib/controls/field-translation-container/label.directive";
+export * from "./lib/controls/field-translation-container/text.directive";
+export * from "./lib/controls/field-translation-container/language-resources-download.component";
+export * from "./lib/controls/field-translation-container/main-language-choice.component";
+export * from "./lib/controls/field-translation-container/primeng-components-obsolete-multilanguage-adapters.directive";
+export * from "./lib/notifications/notification.component";
+export * from "./lib/notifications/display-messages.component";
+export * from "./lib/controls/editable-listbox-component/editable-listbox-bound-object-adapter.component";
+export * from "./lib/controls/deep-search-control/deep-search.component";
+export * from "./lib/controls/content-viewer/gebo-ai-content-viewer.component";
+export * from "./lib/controls/content-viewer/code-editor-wrapper.component";
+export * from "./lib/controls/content-viewer/document-opener-button.component";
+export * from "./lib/controls/browse-content-component/view-html-content.component";
+export * from "./lib/controls/audio-control/audio-control.component";
+export * from "./lib/controls/choose-documents-panel/choose-documents-panel.component";

@@ -42,7 +42,7 @@ import { CheckboxModule } from "primeng/checkbox";
 import { WorkFolderWizardComponent, WorkFolderWizardEnabledService, WorkFolderWizardStatusService } from "./work-folder-wizard.component";
 import { SharedFilesystemAlreadySetupService, SharedFilesystemEnabledService, SharedFilesystemWizardComponent } from "./shared-filesystem-wizard.component";
 import { KnowledgeBasePresentService, KnowledgeBaseWizardComponent } from "./knowledge-base-wizard.component";
-import { GeboAiAdminModule } from "@Gebo.ai/gebo-ai-admin-ui";
+import { GeboAiAdminModule } from "../admin-ui/gebo-ai-admin.module";
 import { GeboSetupWizardService } from "./gebo-setup-wizards.service";
 import { ChatProfileStatusService, ChatProfileWizardComponent } from "./chat-profile-wizard.component";
 import { PaginatorModule } from "primeng/paginator";

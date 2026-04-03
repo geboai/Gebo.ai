@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { DeepSearchDataSourceDocumentResult, DeepSearchDocumentAnalisysResultStep, DeepSearchResponse, GeboDeepSearchControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { EnrichedDocumentReferenceViewRetrieveService } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
 @Component({

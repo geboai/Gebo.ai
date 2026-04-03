@@ -5,9 +5,7 @@
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
-    
     "paths": {
-
       "gebo-ai-admin-ui": [
         "./dist/gebo-ai-admin-ui"
       ],
@@ -20,12 +18,18 @@
       "gebo-ai-reusable-ui": [
         "./dist/gebo-ai-reusable-ui"
       ],
-      "@Gebo.ai/gebo-ai-rest-api": ["./projects/gebo-ai-rest-api/src/public-api"],
-
-      "@Gebo.ai/gebo-ai-chat-ui": ["./projects/gebo-ai-chat-ui/src/public-api"],
-
-      "@Gebo.ai/gebo-ai-admin-ui": ["./projects/gebo-ai-admin-ui/src/public-api"],
-      "@Gebo.ai/reusable-ui": ["./projects/gebo-ai-reusable-ui/src/public-api"]
+      "@Gebo.ai/gebo-ai-rest-api": [
+        "./projects/gebo-ai-rest-api/src/public-api"
+      ],
+      "@Gebo.ai/gebo-ai-chat-ui": [
+        "./projects/gebo-ai-chat-ui/src/public-api"
+      ],
+      "@Gebo.ai/gebo-ai-admin-ui": [
+        "./projects/gebo-ai-admin-ui/src/public-api"
+      ],
+      "@Gebo.ai/reusable-ui": [
+        "./projects/gebo-ai-reusable-ui/src/public-api"
+      ]
     },
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
