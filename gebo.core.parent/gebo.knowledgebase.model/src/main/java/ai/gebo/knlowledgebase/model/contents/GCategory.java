@@ -10,8 +10,12 @@ import lombok.Data;
 
 @Data
 public class GCategory extends GBaseObject implements IAclGrantedResource {
-	private String parentCategory = null;
+
 	private TranslatedAttribute multilanguageDescription = null;
 	@HashIndexed
 	private List<Integer> aclAliases = null;
+	@HashIndexed
+	private List<String> childCategories = null;
+	@HashIndexed
+	private Boolean rootCategory = null;
 }

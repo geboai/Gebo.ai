@@ -10,4 +10,8 @@ public interface CategoryRepository extends IGBaseMongoDBRepository<GCategory> {
 	default Class<GCategory> getManagedType() {
 		return GCategory.class;
 	}
+
+	public Stream<GCategory> findByChildCategoriesIn(String code);
+
+	public Stream<GCategory> findByRootCategoryIsTrue();
 }
