@@ -246,7 +246,11 @@ public class GEmbedderImpl implements IGEmbedder {
 
 					// Add tokenized documents to vector store
 					if (!tokenizeddocuments.isEmpty()) {
+						long time = System.currentTimeMillis();
+						LOGGER.info("VECTORIZING: Start vectorizing " + tokenizeddocuments.size() + " fragments");
 						embedder.getVectorStore().add(tokenizeddocuments);
+						LOGGER.info("VECTORIZING: Vectorized " + tokenizeddocuments.size() + " fragments in "
+								+ (System.currentTimeMillis() - time) + " (msec)");
 					}
 
 					if (LOGGER.isDebugEnabled()) {
