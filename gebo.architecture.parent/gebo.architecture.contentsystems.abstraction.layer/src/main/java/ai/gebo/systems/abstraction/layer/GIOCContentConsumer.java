@@ -214,7 +214,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				Stream<GAbstractVirtualFilesystemObject> updated = handler.checkUpdatedOrDeleted(endpoint,
 						Stream.concat(documents, folders), errorConsumer);
 				final Map<String, Boolean> deletedDocsCodes = new HashMap<String, Boolean>();
-				updated.forEach((x) -> {
+				updated.filter(d -> d != null).forEach((x) -> {
+
 					x.setLastesJobId(jobStatus.getCode());
 					x.setDateModified(new Date());
 					if (x.getDeleted() == null || !x.getDeleted()) {
