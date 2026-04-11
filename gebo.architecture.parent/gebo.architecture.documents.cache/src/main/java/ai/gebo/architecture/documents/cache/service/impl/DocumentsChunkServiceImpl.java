@@ -223,14 +223,14 @@ public class DocumentsChunkServiceImpl
 
 				IngestionHandlerData content = null;
 				if (document instanceof GDocumentReference dr) {
-					content = ingestionHandler.handleContent(dr, is.getInputStream());
+					content = ingestionHandler.handleContent(dr, is);
 				} else if (document instanceof SearchResult searchResult) {
 
 					GDocumentReference fakeDr = docReferenceFactory.createReference(searchResult.getCode(),
 							searchResult.getCode(), is.getContentType(), is.getExtension(), null,
 							document.getOriginComponent().getMessagingModuleId(),
 							document.getOriginComponent().getMessagingComponentId());
-					content = ingestionHandler.handleContent(fakeDr, is.getInputStream());
+					content = ingestionHandler.handleContent(fakeDr, is);
 				} else
 					throw new RuntimeException("Unknown reference object type");
 
