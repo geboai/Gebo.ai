@@ -116,6 +116,7 @@ public class SystemInitializationLLMService {
 										credentials.setBaseUrl(baseUrl);
 										credentials.setNewUserName(username);
 										credentials.setNewApiSecret(apiKey);
+
 										String serviceHandler = null;
 										boolean doModelsLookup = false;
 										if (chatModelConfig != null && chatModelConfig.getModelCode() != null) {
@@ -123,13 +124,16 @@ public class SystemInitializationLLMService {
 											if (chatPreset.isPresent()) {
 												serviceHandler = chatPreset.get().getServiceHandler();
 												doModelsLookup = chatPreset.get().isDoModelsLookup();
+												credentials.setType(ModelType.CHAT);
 											}
+
 										} else if (embeddingModelConfig != null
 												&& embeddingModelConfig.getModelCode() != null) {
 
 											if (embeddingPreset.isPresent()) {
 												serviceHandler = embeddingPreset.get().getServiceHandler();
 												doModelsLookup = embeddingPreset.get().isDoModelsLookup();
+												credentials.setType(ModelType.EMBEDDING);
 											}
 										}
 										credentials.setServiceHandler(serviceHandler);

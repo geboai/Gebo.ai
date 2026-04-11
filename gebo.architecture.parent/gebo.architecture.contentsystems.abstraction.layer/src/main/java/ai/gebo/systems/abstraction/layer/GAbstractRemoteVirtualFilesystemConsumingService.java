@@ -363,8 +363,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		GVirtualFolder currentFolder = root;
-		for (ImplementativePositionObjectType microsoftGraphNativePositionObject : nativeCoordinates) {
-			currentFolder = createVirtualFolder(microsoftGraphNativePositionObject, root, system, endpoint);
+		for (ImplementativePositionObjectType positionObject : nativeCoordinates) {
+			currentFolder = createVirtualFolder(positionObject, currentFolder, system, endpoint);
 			consumer.accept(currentFolder);
 		}
 		return currentFolder;
@@ -380,12 +380,12 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param endpoint Endpoint used
 	 * @return GVirtualFolder representing the virtual folder
 	 */
-	protected GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder root,
+	protected GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder parent,
 			SystemType system, EndpointType endpoint) {
 		String code = node.getCode();
 		String name = node.getName();
 		String url = node.getUrl();
-		GVirtualFolder child = createChildItem(root, endpoint, code, name, name, url,
+		GVirtualFolder child = createChildItem(parent, endpoint, code, name, name, url,
 				node.getResourceReferenceMetaInfos());
 		return child;
 	}
@@ -494,7 +494,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		childItem.setName(name);
 		childItem.setRelativePath((parent.getRelativePath() != null ? (parent.getRelativePath() + "/") : "") + urlPart);
 		childItem.setProjectEndpointReference(GObjectRef.of(endpoint));
-		childItem.setMessagingModuleId(GStandardModulesConstraints.SHAREPOINT_MODULE);
+		childItem.setMessagingModuleId(getMessagingModuleId());
 		childItem.setUri(webUrl);
 		childItem.setCustomMetaInfos(customMap != null ? customMap : new HashMap<String, Object>());
 		return childItem;
