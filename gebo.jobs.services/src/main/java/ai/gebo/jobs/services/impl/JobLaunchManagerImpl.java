@@ -12,6 +12,7 @@ package ai.gebo.jobs.services.impl;
 import java.util.List;
 import ai.gebo.jobs.services.controllers.JobLauncherController;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 
@@ -160,8 +161,9 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 				// Find the endpoint from the reference
 				GProjectEndpoint endpoint = persistentObjectManager.findByReference(payload.getProjectEndpoint(),
 						GProjectEndpoint.class);
+				AbstractContentConsumingSessionParam sessionParam = payload.getSessionParam();
 				// Create a new asynchronous job for the endpoint
-				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint,
+				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint, sessionParam,
 						envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
 						envelope.getWorkflowId());
 				// Create an acknowledgment message

@@ -21,6 +21,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
@@ -53,14 +54,15 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 * consumers.
 	 *
 	 * @param projectEndpoint  The endpoint from which to consume content.
+	 * @param sessionParam TODO
 	 * @param consumer         The content consumer to handle the content.
 	 * @param messagesConsumer The consumer to handle user messages.
 	 * @param errorConsumer    The consumer to handle access errors.
 	 * @throws GeboContentHandlerSystemException If an error occurs during content
 	 *                                           consumption.
 	 */
-	public void consume(ProjectEndpointType projectEndpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+	public void consume(ProjectEndpointType projectEndpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException;
 
 	/**

@@ -45,6 +45,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReferenceSnapshot;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -216,12 +217,12 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 *                                           error occurs
 	 */
 	@Override
-	public void dispatchContents(ProjectEndpointType endpoint, GJobStatus jobStatus)
+	public void dispatchContents(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException {
-		Consumers consumers = dispatchContentsConsumers(endpoint, jobStatus);
+		Consumers consumers = dispatchContentsConsumers(endpoint, sessionParam, jobStatus);
 		try {
-			this.handler.consume(endpoint, consumers.getContentConsumer(), consumers.getUserMessagesConsumer(),
-					consumers.getErrorConsumer());
+			this.handler.consume(endpoint, sessionParam, consumers.getContentConsumer(),
+					consumers.getUserMessagesConsumer(), consumers.getErrorConsumer());
 		} finally {
 			consumers.getContentConsumer().endConsuming();
 			consumers.getUserMessagesConsumer().endConsuming();
@@ -243,7 +244,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 *                                           error occurs
 	 */
 	@Override
-	public Consumers dispatchContentsConsumers(final ProjectEndpointType endpoint, final GJobStatus jobStatus)
+	public Consumers dispatchContentsConsumers(final ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, final GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException {
 		final IGContentsAccessErrorConsumer errorConsumer = IGContentsAccessErrorConsumer.defaultImplementation();
 		final boolean indexingServiceOnline = broker.checkReceivingComponentPresent(

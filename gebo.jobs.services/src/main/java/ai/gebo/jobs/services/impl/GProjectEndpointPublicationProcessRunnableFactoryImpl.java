@@ -21,6 +21,8 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGProjectEndpointPublicationProcessRunnableFactory;
+import ai.gebo.jobs.services.ProjectendPointSession;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 
@@ -47,8 +49,8 @@ public class GProjectEndpointPublicationProcessRunnableFactoryImpl
 	 * @return The GProjectEndpoint class
 	 */
 	@Override
-	public Class<GProjectEndpoint> getEntityClass() {
-		return GProjectEndpoint.class;
+	public Class<ProjectendPointSession> getEntityClass() {
+		return ProjectendPointSession.class;
 	}
 
 	/**
@@ -59,8 +61,9 @@ public class GProjectEndpointPublicationProcessRunnableFactoryImpl
 	 * @return A runnable factory that creates publication process runnables
 	 */
 	@Override
-	public IGRunnableFactory createFactory(GProjectEndpoint object) {
-		final GObjectRef<GProjectEndpoint> ref = GObjectRef.of(object);
+	public IGRunnableFactory createFactory(ProjectendPointSession object) {
+		final GObjectRef<? extends GProjectEndpoint> ref = GObjectRef.of(object.getEndpoint());
+		final AbstractContentConsumingSessionParam param = object.getSessionParam();
 		return new IGRunnableFactory() {
 
 			/**
@@ -78,9 +81,9 @@ public class GProjectEndpointPublicationProcessRunnableFactoryImpl
 				IGGeboIngestionJobQueueService service = runtimeBinder
 						.getImplementationOf(IGGeboIngestionJobQueueService.class);
 				try {
-					return service.createPublicationRunnable(ref, GWorkflowType.STANDARD.name(),
+					return service.createPublicationRunnable(ref, param, GWorkflowType.STANDARD.name(),
 							GStandardWorkflow.INGESTION.name());
-				} catch (GeboJobServiceException | GeboPersistenceException e) {
+				} catch (GeboJobServiceException | GeboPersistenceException | ClassNotFoundException e) {
 					throw new RuntimeException("Exception creating publication runnable task", e);
 				}
 			}

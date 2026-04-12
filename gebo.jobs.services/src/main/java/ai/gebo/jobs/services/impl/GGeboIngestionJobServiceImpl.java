@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -29,30 +26,31 @@ import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 
 /**
  * AI generated comments
  * 
- * Implementation of the IGGeboIngestionJobService interface.
- * This singleton component manages ingestion jobs for content processing,
- * supporting both synchronous and asynchronous job execution.
+ * Implementation of the IGGeboIngestionJobService interface. This singleton
+ * component manages ingestion jobs for content processing, supporting both
+ * synchronous and asynchronous job execution.
  */
 @Component()
 @Scope("singleton")
 public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 	/** Logger for this class */
 	static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobServiceImpl.class);
-	
+
 	/** Manager for ingestion processes */
 	@Autowired
 	GeboIngestionManager ingestionManager;
-	
+
 	/** Thread manager for executing asynchronous tasks */
 	@Autowired
 	IGeboThreadManager taskExecutor;
-	
+
 	/** Map to track job status by job code */
 	static Map<String, GJobStatus> statusMap = new HashMap<String, GJobStatus>();
 
@@ -65,16 +63,16 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 
 	/**
 	 * Inner class implementing IGUserMonitorableRunnable for content reading jobs.
-	 * Provides a runnable implementation for asynchronous content ingestion that can be
-	 * monitored by users.
+	 * Provides a runnable implementation for asynchronous content ingestion that
+	 * can be monitored by users.
 	 */
 	public class GGeboContentReadingRunnable implements IGUserMonitorableRunnable {
 		/** The status of the job being executed */
-		GJobStatus status;
-		
+		final GJobStatus status;
+		final AbstractContentConsumingSessionParam sessionParam;
 		/** Consumer of content being processed */
 		IGContentConsumer contentConsumer;
-		
+
 		/** Flag indicating if the job is currently running */
 		boolean running = false;
 
@@ -83,8 +81,9 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 		 * 
 		 * @param status The job status object for the content reading task
 		 */
-		public GGeboContentReadingRunnable(GJobStatus status) {
+		public GGeboContentReadingRunnable(GJobStatus status, AbstractContentConsumingSessionParam sessionParam) {
 			this.status = status;
+			this.sessionParam = sessionParam;
 
 		}
 
@@ -95,7 +94,7 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 		public void run() {
 			try {
 				running = true;
-				completeSyncJob(status);
+				completeSyncJob(status, sessionParam);
 			} catch (Throwable th) {
 				LOGGER.error("While running", th);
 			} finally {
@@ -172,8 +171,9 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 	 * @throws GeboJobServiceException if there is an error starting the job
 	 */
 	@Override
-	public void completeAsyncJob(GJobStatus status) throws GeboJobServiceException {
-		taskExecutor.run(createAsyncJob(status));
+	public <SessionParamType extends AbstractContentConsumingSessionParam> void completeAsyncJob(GJobStatus status,
+			SessionParamType sessionParam) throws GeboJobServiceException {
+		taskExecutor.run(createAsyncJob(status, sessionParam));
 	}
 
 	/**
@@ -184,9 +184,10 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 	 * @throws GeboJobServiceException if there is an error during job execution
 	 */
 	@Override
-	public GJobStatus completeSyncJob(final GJobStatus status) throws GeboJobServiceException {
+	public <SessionParamType extends AbstractContentConsumingSessionParam> GJobStatus completeSyncJob(
+			final GJobStatus status, SessionParamType sessionParam) throws GeboJobServiceException {
 
-		return ingestionManager.internalReadAndVectorizeContents(status);
+		return ingestionManager.internalReadAndVectorizeContents(status, sessionParam);
 	}
 
 	/**
@@ -196,7 +197,9 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 	 * @return true if a job is running for the endpoint, false otherwise
 	 */
 	@Override
-	public boolean isJobRunning(GObjectRef<GProjectEndpoint> endpoint) {
+	public <EndpointType extends GProjectEndpoint> boolean isJobRunning(GObjectRef<EndpointType> endpoint)
+
+	{
 
 		return ingestionManager.isJobRunning(endpoint);
 	}
@@ -208,9 +211,10 @@ public class GGeboIngestionJobServiceImpl implements IGGeboIngestionJobService {
 	 * @return An IGRunnable implementation that can be executed asynchronously
 	 */
 	@Override
-	public IGRunnable createAsyncJob(GJobStatus status) {
+	public <SessionParamType extends AbstractContentConsumingSessionParam> IGRunnable createAsyncJob(GJobStatus status,
+			SessionParamType sessionParam) {
 
-		return new GGeboContentReadingRunnable(status);
+		return new GGeboContentReadingRunnable(status, sessionParam);
 	}
 
 }

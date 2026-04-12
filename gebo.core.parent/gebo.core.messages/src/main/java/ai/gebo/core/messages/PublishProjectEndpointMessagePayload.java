@@ -6,33 +6,33 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.messages;
 
 import ai.gebo.application.messaging.model.GBaseMessagePayload;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
 
 /**
- * AI generated comments
- * This class represents the payload for a message that is used to publish a project endpoint.
- * It extends the GBaseMessagePayload class and includes information specific to the project endpoint being published.
+ * AI generated comments This class represents the payload for a message that is
+ * used to publish a project endpoint. It extends the GBaseMessagePayload class
+ * and includes information specific to the project endpoint being published.
  */
 @Data
 public class PublishProjectEndpointMessagePayload extends GBaseMessagePayload {
-    
-    /**
-     * A reference to the project endpoint that is being published.
-     */
-    private GObjectRef<GProjectEndpoint> projectEndpoint = null;
-    
-    /**
-     * An optional correlation ID that can be used to link the message to a specific request or workflow.
-     */
-    private String correlationId = null;
+
+	/**
+	 * A reference to the project endpoint that is being published.
+	 */
+	private GObjectRef<GProjectEndpoint> projectEndpoint = null;
+	private AbstractContentConsumingSessionParam sessionParam = null;
+
+	/**
+	 * An optional correlation ID that can be used to link the message to a specific
+	 * request or workflow.
+	 */
+	private String correlationId = null;
 
 }

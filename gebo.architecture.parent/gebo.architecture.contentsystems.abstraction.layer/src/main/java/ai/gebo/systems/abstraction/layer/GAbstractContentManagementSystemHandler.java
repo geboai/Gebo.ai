@@ -53,6 +53,7 @@ import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.BuildSystemRef;
@@ -391,17 +392,17 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	/**
 	 * Consumes content from a project endpoint, processing with a consumer and
 	 * handling messages and errors.
-	 *
-	 * @param endpoint         The project endpoint.
 	 * @param consumer         The content consumer.
 	 * @param messagesConsumer The messages consumer.
 	 * @param errorConsumer    The error consumer.
+	 * @param endpoint         The project endpoint.
+	 *
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           consumption.
 	 */
 	@Override
-	public void consume(ProjectEndpointType endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+	public void consume(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 
 		SystemIntegrationType contentManagementSystem = getSystem(endpoint);

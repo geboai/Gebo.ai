@@ -1,4 +1,4 @@
-package ai.gebo.systems.abstraction.layer;
+package ai.gebo.knlowledgebase.model.projects;
 
 import java.io.Serializable;
 import java.util.UUID;

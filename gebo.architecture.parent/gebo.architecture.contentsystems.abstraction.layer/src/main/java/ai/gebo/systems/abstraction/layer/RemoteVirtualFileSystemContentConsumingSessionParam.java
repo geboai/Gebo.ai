@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -57,6 +57,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.systems.abstraction.layer.controllers.GAbstractSystemsArchitectureController;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
 import ai.gebo.userspace.handler.GUserspaceFile;
@@ -460,8 +461,8 @@ public class UserspaceService {
 					"Wait some minutes to try to publish again"));
 		} else {
 			try {
-				GJobStatus job = this.jobQueueService.createNewAsyncJob(endpoint, GWorkflowType.STANDARD.name(),
-						GStandardWorkflow.INGESTION.name());
+				GJobStatus job = this.jobQueueService.createNewAsyncJob(endpoint, new NoContentConsumingSessionParam(),
+						GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
 				status.jobId = job.getCode();
 				status.underPubishingAlgorithm = true;
 				status.hasBeenPublished = true;

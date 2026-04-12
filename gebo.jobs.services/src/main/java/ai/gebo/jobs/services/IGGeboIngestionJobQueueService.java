@@ -13,6 +13,7 @@ import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 
@@ -33,7 +34,8 @@ public interface IGGeboIngestionJobQueueService {
 	 * @return The status of the newly created job
 	 * @throws GeboJobServiceException If job creation fails
 	 */
-	public GJobStatus createNewAsyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> GJobStatus createNewAsyncJob(
+			EndpointType item, SessionParameterType sessionParam, String workflowType, String workflowId)
 			throws GeboJobServiceException;
 
 	/**
@@ -54,7 +56,8 @@ public interface IGGeboIngestionJobQueueService {
 	 * @return The final status of the executed job
 	 * @throws GeboJobServiceException If job execution fails
 	 */
-	public GJobStatus executeSyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> GJobStatus executeSyncJob(
+			EndpointType item, SessionParameterType sessionParam, String workflowType, String workflowId)
 			throws GeboJobServiceException;
 
 	/**
@@ -93,9 +96,11 @@ public interface IGGeboIngestionJobQueueService {
 	 * @return A runnable task that can be submitted to an executor
 	 * @throws GeboJobServiceException  If the runnable cannot be created
 	 * @throws GeboPersistenceException If there are persistence-related issues
+	 * @throws ClassNotFoundException 
 	 */
-	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint, String workflowType,
-			String workflowId) throws GeboJobServiceException, GeboPersistenceException;
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> IGRunnable createPublicationRunnable(
+			GObjectRef<EndpointType> endpoint, SessionParameterType sessionParam, String workflowType,
+			String workflowId) throws GeboJobServiceException, GeboPersistenceException, ClassNotFoundException;
 
 	/**
 	 * Retrieves detailed information about a specific job. By default, includes all

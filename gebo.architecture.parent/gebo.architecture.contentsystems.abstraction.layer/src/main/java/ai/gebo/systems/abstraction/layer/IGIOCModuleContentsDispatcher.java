@@ -18,6 +18,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 
@@ -87,21 +88,23 @@ public interface IGIOCModuleContentsDispatcher<SystemIntegrationType extends GCo
      * Dispatches contents to a given project endpoint based on the provided job status.
      *
      * @param endpoint the project endpoint where contents are dispatched
+     * @param sessionParam TODO
      * @param jobStatus the job status associated with the dispatch operation
      * @throws GeboContentHandlerSystemException if an error occurs during content handling
      */
-	public void dispatchContents(ProjectEndpointType endpoint, GJobStatus jobStatus)
+	public void dispatchContents(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException;
 
     /**
      * Retrieves the consumers for content dispatch to a specified project endpoint.
      * 
      * @param endpoint the project endpoint 
+     * @param sessionParam TODO
      * @param jobStatus the job status associated with the consumers
      * @return a Consumers object containing content, user messages, and error consumers
      * @throws GeboContentHandlerSystemException if an error occurs while obtaining consumers
      */
-	public Consumers dispatchContentsConsumers(ProjectEndpointType endpoint, GJobStatus jobStatus)
+	public Consumers dispatchContentsConsumers(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException;
 
     /**
