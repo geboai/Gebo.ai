@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.filesystem.content.handler.impl;
 
@@ -30,39 +27,39 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
- * AI generated comments
- * Configuration class for the Filesystem Contents Dispatcher.
- * This class extends SingletonBuilder to create and configure a GIOCModuleContentsDispatcher
- * specific to filesystem content management.
+ * AI generated comments Configuration class for the Filesystem Contents
+ * Dispatcher. This class extends SingletonBuilder to create and configure a
+ * GIOCModuleContentsDispatcher specific to filesystem content management.
  */
 @Configuration
-public class GFilesystemContentsDispatcherConfig
-		extends SingletonBuilder<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint> {
+public class GFilesystemContentsDispatcherConfig extends
+		SingletonBuilder<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
-	 * Constructor for GFilesystemContentsDispatcherConfig.
-	 * Initializes the parent SingletonBuilder with all necessary dependencies
-	 * for handling filesystem content.
+	 * Constructor for GFilesystemContentsDispatcherConfig. Initializes the parent
+	 * SingletonBuilder with all necessary dependencies for handling filesystem
+	 * content.
 	 *
-	 * @param handler The filesystem content management system handler
-	 * @param broker Message broker for communication
-	 * @param consumerFactory Factory for creating content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enrichers
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The filesystem content management system handler
+	 * @param broker            Message broker for communication
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enrichers
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
-	 * @param  workflowRouter 
+	 * @param workflowRouter
 	 */
 	public GFilesystemContentsDispatcherConfig(IGFilesystemContentManagementSystemHandler handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
 			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
-			 DocumentReferenceRepository documentsRepo,
-			VirtualFolderRepository virtualFolderRepo, IWorkflowRouter  workflowRouter) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo,  documentsRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
 				virtualFolderRepo, workflowRouter);
 
 	}
@@ -70,12 +67,13 @@ public class GFilesystemContentsDispatcherConfig
 	/**
 	 * Creates a singleton bean for the filesystem contents dispatcher.
 	 * 
-	 * @return A configured GIOCModuleContentsDispatcher for handling filesystem content
+	 * @return A configured GIOCModuleContentsDispatcher for handling filesystem
+	 *         content
 	 */
 	@Bean
 	@Scope("singleton")
 	@Qualifier("filesystemContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint> getFilesystemContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> getFilesystemContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

@@ -27,6 +27,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -38,7 +39,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  */
 @Configuration
 public class GIOCGitContentsModuleDispatcherConfig
-		extends SingletonBuilder<GGitContentManagementSystem, GGitProjectEndpoint> {
+		extends SingletonBuilder<GGitContentManagementSystem, GGitProjectEndpoint, NoContentConsumingSessionParam> {
 
 	/**
 	 * Constructor for the Git contents module dispatcher configuration.
@@ -76,7 +77,7 @@ public class GIOCGitContentsModuleDispatcherConfig
 	@Bean
 	@Scope("singleton")
 	@Qualifier("gitContentsModuleDispatcher")
-	public GIOCModuleContentsDispatcher<GGitContentManagementSystem, GGitProjectEndpoint> getGitContentsModuleDispatcher() {
+	public GIOCModuleContentsDispatcher<GGitContentManagementSystem, GGitProjectEndpoint, NoContentConsumingSessionParam> getGitContentsModuleDispatcher() {
 
 		return super.getDispatcher();
 	}

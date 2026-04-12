@@ -13,6 +13,7 @@
 package ai.gebo.filesystem.content.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -26,6 +27,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * adding additional method requirements.
  */
 public interface IGFilesystemContentManagementSystemHandler
-		extends IGContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint> {
+		extends IGVirtualFilesystemContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint> {
 
 }

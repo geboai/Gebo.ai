@@ -30,7 +30,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
  * 
  * AI generated comments
  */
-public interface IGIOCModuleContentsDispatcher<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
+public interface IGIOCModuleContentsDispatcher<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint,ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
 		extends IGMessageEmitter, IGMessageReceiver {
 	
     /**

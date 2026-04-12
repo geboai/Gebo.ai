@@ -51,7 +51,7 @@ import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
  *                                AI generated comments
  */
 public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GVirtualFilesystemProjectEndpoint, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemIntegrationType, ProjectEndpointType, ResourceReferenceType>>
-		extends GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> {
+		extends GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	// The consuming service responsible for managing interaction with the remote
 	// virtual filesystem.

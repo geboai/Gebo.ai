@@ -24,6 +24,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
@@ -35,7 +36,7 @@ import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
  */
 @Configuration
 public class GUploadsModuleContentsDispatcherConfig
-		extends SingletonBuilder<GUploadsContentManagementSystem, GUploadsProjectEndpoint> {
+		extends SingletonBuilder<GUploadsContentManagementSystem, GUploadsProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
 	 * Constructor for GUploadsModuleContentsDispatcherConfig. Initializes the
@@ -72,7 +73,7 @@ public class GUploadsModuleContentsDispatcherConfig
 	@Bean
 	@Scope("singleton")
 	@Qualifier("uploadsContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GUploadsContentManagementSystem, GUploadsProjectEndpoint> getUploadsContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GUploadsContentManagementSystem, GUploadsProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> getUploadsContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

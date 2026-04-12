@@ -13,6 +13,7 @@
 package ai.gebo.ai.app.virtualremotefs.tests.architecture;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -22,6 +23,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * for the `TestVirtualRemoteSystem` and `TestVirtualRemoteProjectEndpoint` types.
  */
 public interface IGTestVirtualFilesystemContentHandler
-        extends IGContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint> {
+        extends IGContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint,NoContentConsumingSessionParam> {
 
 }

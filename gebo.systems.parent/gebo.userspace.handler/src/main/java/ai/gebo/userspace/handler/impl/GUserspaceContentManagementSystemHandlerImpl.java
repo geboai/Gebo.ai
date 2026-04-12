@@ -40,6 +40,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
 import ai.gebo.userspace.handler.GUserspaceFile;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
@@ -54,7 +55,7 @@ import ai.gebo.userspace.handler.repository.UserspaceProjectEndpointRepository;
  */
 @Service
 public class GUserspaceContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint>
+		extends GAbstractContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint,NoContentConsumingSessionParam>
 		implements IGUserspaceContentManagementSystemHandler {
 
 	/**

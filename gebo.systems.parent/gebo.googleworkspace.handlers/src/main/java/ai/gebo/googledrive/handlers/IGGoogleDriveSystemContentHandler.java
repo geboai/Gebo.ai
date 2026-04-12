@@ -13,6 +13,7 @@
 package ai.gebo.googledrive.handlers;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -22,6 +23,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * By extending IGContentManagementSystemHandler with GGoogleDriveSystem and GGoogleDriveProjectEndpoint types,
  * it ensures type safety for Google Drive specific implementations.
  */
-public interface IGGoogleDriveSystemContentHandler extends IGContentManagementSystemHandler<GGoogleDriveSystem, GGoogleDriveProjectEndpoint>{
+public interface IGGoogleDriveSystemContentHandler extends IGVirtualFilesystemContentManagementSystemHandler<GGoogleDriveSystem, GGoogleDriveProjectEndpoint>{
 
 }

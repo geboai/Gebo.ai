@@ -42,6 +42,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
@@ -56,7 +57,7 @@ import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
  */
 @Service
 public class GUploadsContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint>
+		extends GAbstractContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGUploadsContentManagementSystemHandler {
 
 	/**

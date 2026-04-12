@@ -27,6 +27,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments Configuration class responsible for setting up the
@@ -36,7 +37,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  */
 @Configuration
 public class GIntegrationContentsDispatcherConfig
-		extends SingletonBuilder<GIntegrationContentSystem, GIntegrationProjectEndpoint> {
+		extends SingletonBuilder<GIntegrationContentSystem, GIntegrationProjectEndpoint,NoContentConsumingSessionParam> {
 
 	/**
 	 * Constructor that initializes the 3rd party integration contents dispatcher
@@ -74,7 +75,7 @@ public class GIntegrationContentsDispatcherConfig
 	@Scope("singleton")
 	@Qualifier("integrationContentsDispatcher")
 
-	public GIOCModuleContentsDispatcher<GIntegrationContentSystem, GIntegrationProjectEndpoint> getIntegrationContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GIntegrationContentSystem, GIntegrationProjectEndpoint,NoContentConsumingSessionParam> getIntegrationContentsDispatcher() {
 
 		return super.getDispatcher();
 	}

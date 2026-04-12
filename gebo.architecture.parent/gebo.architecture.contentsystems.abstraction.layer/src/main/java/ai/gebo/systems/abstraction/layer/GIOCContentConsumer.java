@@ -47,10 +47,10 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.E
  * @param <SystemIntegrationType>
  * @param <ProjectEndpointType>
  */
-class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
+class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
 		implements IGContentConsumer {
 	private final IWorkflowRouter workflowRouter;
-	private final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler;
+	private final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> handler;
 	private final SendEvaluationPolicy evaluationPolicy = SendEvaluationPolicy.TIMESTAMP_HASH_POLICY;
 	private final IGContentDispatchingEvaluator evaluator;
 	private final ProjectEndpointType endpoint;
@@ -69,9 +69,9 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final WorkflowContext workflowContext;
 
 	GIOCContentConsumer(EnricherMappers enrich, GJobStatus jobStatus, IGContentDispatchingEvaluator evaluator,
-			IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler,
+			IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> handler,
 			ProjectEndpointType endpoint, IWorkflowRouter workflowRouter,
-			GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> dispatcher,
+			GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> dispatcher,
 			IGUserMessagesConsumer userMessagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			IGContentConsumer documentConsumer, IGMessageBroker broker,
 			DocumentReferenceRepository documentReferenceRepository, VirtualFolderRepository virtualFolderRepository) {
@@ -92,7 +92,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				jobStatus.getProjectEndpointReference());
 	}
 
-	private final GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> dispatcher;
+	private final GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> dispatcher;
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(GIOCContentConsumer.class);
 

@@ -29,8 +29,8 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
  * @param <SystemIntegrationType> The type of content management system integration.
  * @param <ProjectEndpointType>   The type of project endpoint being handled.
  */
-public interface IGWriteableContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
-        extends IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> {
+public interface IGWriteableContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
+        extends IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType> {
 
     /**
      * Writes a GeboDocument to the specified project endpoint.

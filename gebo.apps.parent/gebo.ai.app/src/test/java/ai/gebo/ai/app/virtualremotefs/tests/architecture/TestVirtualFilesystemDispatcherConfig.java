@@ -29,6 +29,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 
 /**
@@ -45,7 +46,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  */
 @Configuration
 public class TestVirtualFilesystemDispatcherConfig
-		extends SingletonBuilder<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint> {
+		extends SingletonBuilder<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint,NoContentConsumingSessionParam> {
 
 	/**
 	 * Constructs a new configuration instance for the test virtual filesystem
@@ -63,7 +64,7 @@ public class TestVirtualFilesystemDispatcherConfig
 	 * @param workflowRouter 
 	 */
 	public TestVirtualFilesystemDispatcherConfig(
-			IGContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint> handler,
+			IGContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint,NoContentConsumingSessionParam> handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
 			IGDocumentReferenceEnricherMapFactory mapperFactory,
 			DocumentReferenceSnapshotRepository documentsReferenceSnapshotRepository,
@@ -87,7 +88,7 @@ public class TestVirtualFilesystemDispatcherConfig
 	 */
 	@Bean
 	@Scope("singleton")
-	public GIOCModuleContentsDispatcher<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint> getTestRemoteVirtualFilesystemDispatcher() {
+	public GIOCModuleContentsDispatcher<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint,NoContentConsumingSessionParam> getTestRemoteVirtualFilesystemDispatcher() {
 
 		// Utilize the superclass's dispatcher setup
 		return super.getDispatcher();

@@ -36,6 +36,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * Implementation of the Google Search content management system handler.
@@ -44,7 +45,7 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
  */
 @Service
 public class GoogleSearchContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint> {
+		extends GAbstractContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 	
 	/**
 	 * Static content management system type definition

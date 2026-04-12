@@ -70,8 +70,8 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 
-public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
-		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType>,
+public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint,ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
+		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>,
 		IGRuntimeModuleComponent {
 
 	// Logger for the handler
