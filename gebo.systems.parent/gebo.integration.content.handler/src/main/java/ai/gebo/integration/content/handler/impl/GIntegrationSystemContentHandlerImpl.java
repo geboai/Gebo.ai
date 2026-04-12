@@ -86,9 +86,9 @@ public class GIntegrationSystemContentHandlerImpl extends
 
 	@Override
 	protected void consumeImplementation(GIntegrationContentSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {
+			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, NoContentConsumingSessionParam param,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 
 	}
 

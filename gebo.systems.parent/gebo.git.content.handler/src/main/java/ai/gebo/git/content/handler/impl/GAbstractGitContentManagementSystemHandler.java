@@ -126,7 +126,7 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationConfigType contentManagementConfig,
-			List<GBuildSystem> buildSystems, EndpointConfigType endpoint, IGContentConsumer consumer,
+			List<GBuildSystem> buildSystems, EndpointConfigType endpoint,NoContentConsumingSessionParam param, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 		if (LOGGER.isDebugEnabled()) {

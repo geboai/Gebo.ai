@@ -56,8 +56,8 @@ import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsuming
  * handling operations like file discovery, consumption, and change tracking.
  */
 @Service
-public class GFilesystemContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam>
+public class GFilesystemContentManagementSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGFilesystemContentManagementSystemHandler {
 
 	/**
@@ -125,7 +125,8 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	 */
 	@Override
 	protected void consumeImplementation(GFilesystemContentManagementSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GFilesystemProjectEndpoint endpoint, IGContentConsumer consumer,
+			List<GBuildSystem> buildSystems, GFilesystemProjectEndpoint endpoint,
+			RemoteVirtualFileSystemContentConsumingSessionParam param, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 

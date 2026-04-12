@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.googlesearch.handler.impl;
 
@@ -39,24 +36,24 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
 import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
- * Implementation of the Google Search content management system handler.
- * This class handles Google Search related content management operations.
- * AI generated comments
+ * Implementation of the Google Search content management system handler. This
+ * class handles Google Search related content management operations. AI
+ * generated comments
  */
 @Service
-public class GoogleSearchContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
-	
+public class GoogleSearchContentManagementSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> {
+
 	/**
 	 * Static content management system type definition
 	 */
 	static GContentManagementSystemType type = new GContentManagementSystemType();
-	
+
 	/**
 	 * Static Google Search system instance
 	 */
 	static GGoogleSearchSystem system = new GGoogleSearchSystem();
-	
+
 	/**
 	 * Static initializer to configure the system type and instance
 	 */
@@ -69,8 +66,8 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Configuration DAO for Google Search content management system
-	 * Provides configuration data access for the Google Search system
+	 * Configuration DAO for Google Search content management system Provides
+	 * configuration data access for the Google Search system
 	 */
 	@Service
 	public static class GGoogleSearchContentManagementSystemConfigurationDao
@@ -86,6 +83,7 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 
 		/**
 		 * Finds a Google Search system by code
+		 * 
 		 * @param code The code to search for
 		 * @return The Google Search system instance
 		 */
@@ -96,8 +94,8 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Project endpoint DAO for Google Search
-	 * Handles access to Google Search project endpoints
+	 * Project endpoint DAO for Google Search Handles access to Google Search
+	 * project endpoints
 	 */
 	@Service
 	public static class GGoogleSearchNoEntriesProjectEndpointDao
@@ -106,6 +104,7 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 
 		/**
 		 * Finds a Google Search project endpoint by code
+		 * 
 		 * @param code The code to search for
 		 * @return null since this is a no-entries implementation
 		 */
@@ -119,13 +118,13 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	 * Constructor for the Google Search content management system handler
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param configurationsDao DAO for system configurations
-	 * @param endpointsDao DAO for project endpoints
-	 * @param localFolderDiscoveryService Service for local folder discovery
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for messaging
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for document references
+	 * @param configurationsDao            DAO for system configurations
+	 * @param endpointsDao                 DAO for project endpoints
+	 * @param localFolderDiscoveryService  Service for local folder discovery
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for messaging
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public GoogleSearchContentManagementSystemHandlerImpl(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
@@ -133,14 +132,15 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 			IGContentManagementSystemConfigurationDao<GGoogleSearchSystem> configurationsDao,
 			IGProjectEndpointRuntimeConfigurationDao<GGoogleSearchProjectEndpoint> endpointsDao,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
-			IGPersistentObjectManager persistentObjectManager, 
-			IGMessageBroker messageBroker, IGDocumentReferenceIngestionHandler ingestionHandler) {
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
+			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler, configurationsDao, endpointsDao,
 				localFolderDiscoveryService, persistentObjectManager, messageBroker, ingestionHandler);
 	}
 
 	/**
 	 * Returns the content management system type handled by this handler
+	 * 
 	 * @return The Google Search system type
 	 */
 	@Override
@@ -151,7 +151,7 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	/**
 	 * Finds a project endpoint by system code and endpoint code
 	 * 
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The Google Search project endpoint, or null if not found
 	 * @throws GeboContentHandlerSystemException If an error occurs during lookup
@@ -175,6 +175,7 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 
 	/**
 	 * Gets the messaging module ID for this handler
+	 * 
 	 * @return The module ID string
 	 */
 	@Override
@@ -190,7 +191,8 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	 * @throws GeboContentHandlerSystemException If an error occurs
 	 */
 	@Override
-	public GGoogleSearchSystem getSystem(GGoogleSearchProjectEndpoint projectEndPoint) throws GeboContentHandlerSystemException {
+	public GGoogleSearchSystem getSystem(GGoogleSearchProjectEndpoint projectEndPoint)
+			throws GeboContentHandlerSystemException {
 		return null;
 	}
 
@@ -198,19 +200,22 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 	 * Implementation of the content consumption process
 	 * 
 	 * @param contentManagementConfig The content management system configuration
-	 * @param buildSystems List of build systems
-	 * @param endpoint The project endpoint
-	 * @param consumer The content consumer
-	 * @param messagesConsumer The user messages consumer
-	 * @param errorConsumer The error consumer
-	 * @throws GeboContentHandlerSystemException If an error occurs during consumption
+	 * @param buildSystems            List of build systems
+	 * @param endpoint                The project endpoint
+	 * @param consumer                The content consumer
+	 * @param messagesConsumer        The user messages consumer
+	 * @param errorConsumer           The error consumer
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           consumption
 	 */
 	@Override
 	protected void consumeImplementation(GGoogleSearchSystem contentManagementConfig, List<GBuildSystem> buildSystems,
-			GGoogleSearchProjectEndpoint endpoint, IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {
+			GGoogleSearchProjectEndpoint endpoint, RemoteVirtualFileSystemContentConsumingSessionParam param,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub
 	}
+
 	@Override
 	public boolean isContentsOnLocalFilesystem() {
 

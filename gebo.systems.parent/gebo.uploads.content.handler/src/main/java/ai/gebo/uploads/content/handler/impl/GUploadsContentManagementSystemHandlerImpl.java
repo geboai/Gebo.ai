@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.uploads.content.handler.impl;
 
@@ -50,27 +47,28 @@ import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 /**
  * AI generated comments
  * 
- * Implementation of a content management system handler for file uploads.
- * This class handles processing of file uploads as part of the Gebo AI system.
- * It extends the abstract content management system handler and implements
- * the uploads-specific interface.
+ * Implementation of a content management system handler for file uploads. This
+ * class handles processing of file uploads as part of the Gebo AI system. It
+ * extends the abstract content management system handler and implements the
+ * uploads-specific interface.
  */
 @Service
-public class GUploadsContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam>
+public class GUploadsContentManagementSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGUploadsContentManagementSystemHandler {
 
 	/**
 	 * Constructor for the uploads content management system handler.
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param configurationsDao Data access object for content management system configurations
-	 * @param endpointsDao Data access object for project endpoints
-	 * @param localFolderDiscoveryService Service to discover local folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for system messaging
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for document references
+	 * @param configurationsDao            Data access object for content management
+	 *                                     system configurations
+	 * @param endpointsDao                 Data access object for project endpoints
+	 * @param localFolderDiscoveryService  Service to discover local folders
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for system messaging
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public GUploadsContentManagementSystemHandlerImpl(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
@@ -87,9 +85,9 @@ public class GUploadsContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Inner class that provides a singleton configuration data access object for uploads.
-	 * Extends the abstract runtime configuration DAO and implements the content management
-	 * system configuration DAO interface.
+	 * Inner class that provides a singleton configuration data access object for
+	 * uploads. Extends the abstract runtime configuration DAO and implements the
+	 * content management system configuration DAO interface.
 	 */
 	@Service
 	public static class GSingletonUploadsConfigurationDao
@@ -112,7 +110,7 @@ public class GUploadsContentManagementSystemHandlerImpl
 	// Static configuration for the uploads content management system type
 	private static final GContentManagementSystemType handledSystemType = new GContentManagementSystemType();
 	private static final GUploadsContentManagementSystem system = new GUploadsContentManagementSystem();
-	
+
 	/**
 	 * Static initializer to set up the system type and configuration
 	 */
@@ -138,20 +136,22 @@ public class GUploadsContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Implementation of the content consumption process.
-	 * This method processes content from the specified endpoint and passes it to the consumer.
+	 * Implementation of the content consumption process. This method processes
+	 * content from the specified endpoint and passes it to the consumer.
 	 * 
 	 * @param contentManagementConfig Configuration of the content management system
-	 * @param buildSystems List of build systems
-	 * @param endpoint The project endpoint to consume content from
-	 * @param consumer Consumer that will receive content
-	 * @param messagesConsumer Consumer for user messages
-	 * @param errorConsumer Consumer for error messages
-	 * @throws GeboContentHandlerSystemException If there's an error during content consumption
+	 * @param buildSystems            List of build systems
+	 * @param endpoint                The project endpoint to consume content from
+	 * @param consumer                Consumer that will receive content
+	 * @param messagesConsumer        Consumer for user messages
+	 * @param errorConsumer           Consumer for error messages
+	 * @throws GeboContentHandlerSystemException If there's an error during content
+	 *                                           consumption
 	 */
 	@Override
 	protected void consumeImplementation(GUploadsContentManagementSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GUploadsProjectEndpoint endpoint, IGContentConsumer consumer,
+			List<GBuildSystem> buildSystems, GUploadsProjectEndpoint endpoint,
+			RemoteVirtualFileSystemContentConsumingSessionParam param, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 
@@ -170,7 +170,7 @@ public class GUploadsContentManagementSystemHandlerImpl
 				return true;
 			}
 		};
-		
+
 		// Verify the path exists before consuming
 		if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
 			this.consume(rootItem, contentManagementConfig, buildSystems, endpoint, file, predicate, consumer,
@@ -182,7 +182,7 @@ public class GUploadsContentManagementSystemHandlerImpl
 	/**
 	 * Finds a project endpoint by system code and endpoint code.
 	 * 
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The uploads project endpoint
 	 * @throws GeboContentHandlerSystemException If the endpoint can't be found
@@ -230,6 +230,7 @@ public class GUploadsContentManagementSystemHandlerImpl
 
 		return GStandardModulesConstraints.UPLOADS_MODULE;
 	}
+
 	@Override
 	public boolean isContentsOnLocalFilesystem() {
 
