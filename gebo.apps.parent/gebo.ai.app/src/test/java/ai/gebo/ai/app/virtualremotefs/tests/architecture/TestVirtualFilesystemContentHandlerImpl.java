@@ -35,7 +35,7 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
  */
 @Service
 public class TestVirtualFilesystemContentHandlerImpl extends
-		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint, TestVirtualFilesystemRemoteReference, IGTestVirtualFilesystemRemoteConsumerService> {
+		GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint, TestVirtualFilesystemRemoteReference, IGTestVirtualFilesystemRemoteConsumerService> implements IGTestVirtualFilesystemContentHandler {
 
 	/** Constant for defining the test module name. */
 	public static final String TEST_MODULE = "TEST-MODULE";
