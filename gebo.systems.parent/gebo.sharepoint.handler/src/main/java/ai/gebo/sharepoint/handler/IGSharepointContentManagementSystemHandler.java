@@ -13,6 +13,7 @@
 package ai.gebo.sharepoint.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -25,6 +26,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * the parent interface, but provides type parameters specific to Sharepoint implementations.
  */
 public interface IGSharepointContentManagementSystemHandler
-		extends IGContentManagementSystemHandler<GSharepointContentManagementSystem, GSharepointProjectEndpoint> {
+		extends IGVirtualFilesystemContentManagementSystemHandler<GSharepointContentManagementSystem, GSharepointProjectEndpoint> {
 	
 }

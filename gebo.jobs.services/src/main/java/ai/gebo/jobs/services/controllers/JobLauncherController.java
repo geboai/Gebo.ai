@@ -99,8 +99,8 @@ public class JobLauncherController {
 							"Let's view the status in the log page or try relaunch publishing later"));
 			return status;
 		} else
-			return OperationStatus.of(jobQueueService.createNewAsyncJob(endpointObject, GWorkflowType.STANDARD.name(),
-					GStandardWorkflow.INGESTION.name()));
+			return OperationStatus.of(jobQueueService.createNewAsyncJob(endpointObject, null,
+					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name()));
 	}
 
 	/**

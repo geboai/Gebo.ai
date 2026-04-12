@@ -30,6 +30,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -39,7 +40,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  */
 @Configuration
 public class GSharepointModuleContentsDispatcherConfig
-		extends SingletonBuilder<GSharepointContentManagementSystem, GSharepointProjectEndpoint> {
+		extends SingletonBuilder<GSharepointContentManagementSystem, GSharepointProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
 	 * Constructor that initializes the Sharepoint module contents dispatcher configuration.
@@ -69,7 +70,7 @@ public class GSharepointModuleContentsDispatcherConfig
 	@Bean
 	@Scope("singleton")
 	@Qualifier("sharepointContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GSharepointContentManagementSystem, GSharepointProjectEndpoint> getSharepointContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GSharepointContentManagementSystem, GSharepointProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> getSharepointContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

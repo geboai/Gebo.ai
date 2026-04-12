@@ -28,6 +28,7 @@ import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus.JobType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatusItem;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -86,8 +87,8 @@ class GeboIngestionManager {
 	 * @return A new GJobStatus instance representing the created job
 	 * @throws GeboPersistenceException
 	 */
-	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GProjectEndpoint item, String workflowType,
-			String workflowId) throws GeboPersistenceException {
+	<EndpointType extends GProjectEndpoint> GJobStatus internalCreateContentsExtractionAndVectorizationStatus(
+			EndpointType item, String workflowType, String workflowId) throws GeboPersistenceException {
 		GJobStatus status = new GJobStatus();
 		status.setCode(UUID.randomUUID().toString());
 		status.setDescription("Job to complete reading and LLM embedding contents of " + item.getDescription() + " ["
@@ -118,7 +119,8 @@ class GeboIngestionManager {
 	 * @return The updated job status after processing
 	 * @throws GeboJobServiceException If an error occurs during processing
 	 */
-	GJobStatus internalReadAndVectorizeContents(GJobStatus status) throws GeboJobServiceException {
+	<SessionParam extends AbstractContentConsumingSessionParam, EndpointType extends GProjectEndpoint> GJobStatus internalReadAndVectorizeContents(
+			GJobStatus status, SessionParam sessionParam) throws GeboJobServiceException {
 		long ts = System.currentTimeMillis();
 		LOGGER.info("Start read & vectorize contents "
 				+ (status.getProjectEndpointReference() != null ? status.getProjectEndpointReference().toString()
@@ -127,12 +129,13 @@ class GeboIngestionManager {
 			synchronized (statusMap) {
 				statusMap.put(key(status.getProjectEndpointReference()), status);
 			}
-			GProjectEndpoint endpoint = persistentObjectManager.findByReference(status.getProjectEndpointReference(),
-					GProjectEndpoint.class);
-			IGIOCModuleContentsDispatcher handler = iocRepositoryPattern.findByProjectEndpoint(endpoint);
+			EndpointType endpoint = (EndpointType) persistentObjectManager
+					.findByReference(status.getProjectEndpointReference(), GProjectEndpoint.class);
+			IGIOCModuleContentsDispatcher<?, EndpointType, SessionParam> handler = iocRepositoryPattern
+					.findByProjectEndpoint(endpoint);
 			if (handler == null)
 				throw new GeboJobServiceException("Required IGIOCModuleContentsDispatcher not found");
-			handler.dispatchContents(endpoint, status);
+			handler.dispatchContents(endpoint, sessionParam, status);
 		} catch (GeboContentHandlerSystemException | GeboPersistenceException e) {
 			throw new GeboJobServiceException(
 					"exception streaming with endpoint=>" + status.getProjectEndpointReference(), e);
@@ -156,7 +159,7 @@ class GeboIngestionManager {
 	 * @param endpoint The project endpoint reference to check
 	 * @return true if a job is running for the endpoint, false otherwise
 	 */
-	boolean isJobRunning(GObjectRef<GProjectEndpoint> endpoint) {
+	<EndpointType extends GProjectEndpoint> boolean isJobRunning(GObjectRef<EndpointType> endpoint) {
 		if (geboConfig != null && geboConfig.getClustered() != null && geboConfig.getClustered()) {
 			// For clustered environments, check the repository for active jobs
 			List<GJobStatusItem> stream = jobStatusRepository
@@ -174,7 +177,7 @@ class GeboIngestionManager {
 	 * @param endpoint The project endpoint reference
 	 * @return A string key composed of className and code
 	 */
-	static private String key(GObjectRef<GProjectEndpoint> endpoint) {
+	static private <EndpointType extends GProjectEndpoint> String key(GObjectRef<EndpointType> endpoint) {
 		return endpoint.getClassName() + "-" + endpoint.getCode();
 	}
 
@@ -188,10 +191,13 @@ class GeboIngestionManager {
 	 * @return The created job status
 	 * @throws GeboPersistenceException If an error occurs while retrieving the
 	 *                                  endpoint
+	 * @throws ClassNotFoundException
 	 */
-	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GObjectRef<GProjectEndpoint> endpoint,
-			String workflowType, String workflowId) throws GeboPersistenceException {
-		GProjectEndpoint ep = persistentObjectManager.findByReference(endpoint, GProjectEndpoint.class);
+	<EndpointType extends GProjectEndpoint> GJobStatus internalCreateContentsExtractionAndVectorizationStatus(
+			GObjectRef<EndpointType> endpoint, String workflowType, String workflowId)
+			throws GeboPersistenceException, ClassNotFoundException {
+		Class<EndpointType> type = (Class<EndpointType>) Class.forName(endpoint.getClassName());
+		EndpointType ep = persistentObjectManager.findByReference(endpoint, type);
 		return internalCreateContentsExtractionAndVectorizationStatus(ep, workflowType, workflowId);
 	}
 

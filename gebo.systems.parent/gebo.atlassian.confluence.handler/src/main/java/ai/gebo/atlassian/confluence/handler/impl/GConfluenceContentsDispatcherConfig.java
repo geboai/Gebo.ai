@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.handler.impl;
 
@@ -30,34 +27,36 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
- * AI generated comments
- * Configuration class for Confluence content dispatcher.
+ * AI generated comments Configuration class for Confluence content dispatcher.
  * This class extends the SingletonBuilder to provide a content dispatcher
  * specific to Confluence systems and endpoints.
  */
 @Configuration
-public class GConfluenceContentsDispatcherConfig
-		extends SingletonBuilder<GConfluenceSystem, GConfluenceProjectEndpoint> {
+public class GConfluenceContentsDispatcherConfig extends
+		SingletonBuilder<GConfluenceSystem, GConfluenceProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
 	 * Constructor for the GConfluenceContentsDispatcherConfig.
 	 * 
-	 * @param handler The Confluence content management handler
-	 * @param broker Message broker for communication
-	 * @param consumerFactory Factory for creating content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enricher maps
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The Confluence content management handler
+	 * @param broker            Message broker for communication
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enricher maps
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
-	 * @param workflowRouter 
+	 * @param workflowRouter
 	 */
-	public GConfluenceContentsDispatcherConfig(IGConfluenceContentManagementHandler handler,
-			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,  DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo, IWorkflowRouter workflowRouter) {
+	public GConfluenceContentsDispatcherConfig(IGConfluenceContentManagementHandler handler, IGMessageBroker broker,
+			IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
 		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
 				virtualFolderRepo, workflowRouter);
 
@@ -65,14 +64,15 @@ public class GConfluenceContentsDispatcherConfig
 
 	/**
 	 * Creates and provides a singleton bean for the Confluence contents dispatcher.
-	 * This dispatcher handles content operations between Confluence systems and project endpoints.
+	 * This dispatcher handles content operations between Confluence systems and
+	 * project endpoints.
 	 * 
 	 * @return A configured GIOCModuleContentsDispatcher for Confluence
 	 */
 	@Bean
 	@Scope("singleton")
 	@Qualifier("confluenceContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GConfluenceSystem, GConfluenceProjectEndpoint> getConfluenceContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GConfluenceSystem, GConfluenceProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> getConfluenceContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

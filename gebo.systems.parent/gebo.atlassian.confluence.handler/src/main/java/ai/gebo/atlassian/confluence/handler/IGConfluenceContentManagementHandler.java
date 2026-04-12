@@ -13,6 +13,7 @@
 package ai.gebo.atlassian.confluence.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -26,6 +27,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * but specializes the generic type parameters to work with Confluence-specific system and endpoint types.
  */
 public interface IGConfluenceContentManagementHandler
-		extends IGContentManagementSystemHandler<GConfluenceSystem, GConfluenceProjectEndpoint> {
+		extends IGVirtualFilesystemContentManagementSystemHandler<GConfluenceSystem, GConfluenceProjectEndpoint> {
 
 }

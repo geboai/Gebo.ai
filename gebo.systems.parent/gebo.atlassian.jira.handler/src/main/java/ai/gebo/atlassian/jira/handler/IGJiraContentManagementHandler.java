@@ -13,6 +13,7 @@
 package ai.gebo.atlassian.jira.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -25,6 +26,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * and the Jira-specific implementation.
  */
 public interface IGJiraContentManagementHandler
-		extends IGContentManagementSystemHandler<GJiraSystem, GJiraProjectEndpoint> {
+		extends IGVirtualFilesystemContentManagementSystemHandler<GJiraSystem, GJiraProjectEndpoint> {
 
 }

@@ -51,7 +51,8 @@ import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
  *                                AI generated comments
  */
 public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GVirtualFilesystemProjectEndpoint, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemIntegrationType, ProjectEndpointType, ResourceReferenceType>>
-		extends GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> {
+		extends
+		GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType, RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	// The consuming service responsible for managing interaction with the remote
 	// virtual filesystem.
@@ -105,7 +106,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationType contentManagementConfig, List<GBuildSystem> buildSystems,
-			ProjectEndpointType endpoint, IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			ProjectEndpointType endpoint, RemoteVirtualFileSystemContentConsumingSessionParam sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 
 		// Create a root item for the virtual folder structure and consume it
@@ -113,8 +115,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 		consumer.accept(root);
 
 		// Delegate further consumption to the consuming service
-		consumingService.consumeAll(contentManagementConfig, endpoint, root, consumer, messagesConsumer, errorConsumer,
-				getMessagingModuleId(), getMessagingSystemId());
+		consumingService.consumeAll(contentManagementConfig, endpoint, sessionParam, root, consumer, messagesConsumer,
+				errorConsumer, getMessagingModuleId(), getMessagingSystemId());
 	}
 
 	// Constant keys used for caching

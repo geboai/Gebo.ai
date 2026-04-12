@@ -23,8 +23,9 @@ package ai.gebo.architecture.contentsystems.abstraction.layer.test;
  * parent interface, but provides specific type parameters for the test environment.
  */
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 public interface ITestContentSystemHandler
-		extends IGContentManagementSystemHandler<TestContentManagementSystem, TestProjectEndpoint> {
+		extends IGContentManagementSystemHandler<TestContentManagementSystem, TestProjectEndpoint,NoContentConsumingSessionParam> {
 	
 }

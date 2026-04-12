@@ -23,7 +23,9 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
+import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.systems.abstraction.layer.IGIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.IGIOCModuleContentsDispatcher.Consumers;
@@ -90,7 +92,8 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 	 *                                 dispatcher throws an exception
 	 */
 	@Override
-	public GConsumers getConsumer(GProjectEndpoint endpoint) throws GeboJobServiceException {
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> GConsumers getConsumer(
+			EndpointType endpoint, SessionParameterType sessionParam) throws GeboJobServiceException {
 		IGIOCModuleContentsDispatcher handler = iocRepositoryPattern.findByProjectEndpoint(endpoint);
 		if (handler == null)
 			throw new GeboJobServiceException("Required IGIOCModuleContentsDispatcher not found");
@@ -99,7 +102,7 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 		try {
 			GJobStatus jobStatus = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
 					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
-			consumers = handler.dispatchContentsConsumers(endpoint, jobStatus);
+			consumers = handler.dispatchContentsConsumers(endpoint, sessionParam, jobStatus);
 		} catch (GeboContentHandlerSystemException | GeboPersistenceException e) {
 			throw new GeboJobServiceException("Exception in  handler.dispatchContentsConsumers(...)", e);
 		}

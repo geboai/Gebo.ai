@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.userspace.handler.impl;
 
@@ -27,55 +24,59 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
 import ai.gebo.userspace.handler.IGUserspaceContentManagementSystemHandler;
 
 /**
- * Configuration class for the userspace module contents dispatcher.
- * This class extends the SingletonBuilder to create a dispatcher for userspace content management.
- * It handles configuration for dispatching content between the userspace content management system
- * and project endpoints.
+ * Configuration class for the userspace module contents dispatcher. This class
+ * extends the SingletonBuilder to create a dispatcher for userspace content
+ * management. It handles configuration for dispatching content between the
+ * userspace content management system and project endpoints.
  * 
  * AI generated comments
  */
 @Configuration
-public class GUserspaceModuleContentsDispatcherConfig
-		extends SingletonBuilder<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint> {
+public class GUserspaceModuleContentsDispatcherConfig extends
+		SingletonBuilder<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint, NoContentConsumingSessionParam> {
 
 	/**
-	 * Constructor for GUserspaceModuleContentsDispatcherConfig.
-	 * Initializes the dispatcher with all necessary dependencies for content management
-	 * in the userspace module.
+	 * Constructor for GUserspaceModuleContentsDispatcherConfig. Initializes the
+	 * dispatcher with all necessary dependencies for content management in the
+	 * userspace module.
 	 * 
-	 * @param handler The userspace content management system handler
-	 * @param broker The message broker for communication
-	 * @param consumerFactory Factory for creating content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enricher maps
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for the content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The userspace content management system handler
+	 * @param broker            The message broker for communication
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enricher maps
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for the content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
-	 * @param workflowRouter 
+	 * @param workflowRouter
 	 */
 	public GUserspaceModuleContentsDispatcherConfig(IGUserspaceContentManagementSystemHandler handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo, IWorkflowRouter workflowRouter) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, documentsRepo, virtualFolderRepo,workflowRouter);
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
 	}
 
 	/**
-	 * Creates a singleton bean for the userspace contents dispatcher.
-	 * This dispatcher handles the routing of content between the userspace content management
-	 * system and the project endpoints.
+	 * Creates a singleton bean for the userspace contents dispatcher. This
+	 * dispatcher handles the routing of content between the userspace content
+	 * management system and the project endpoints.
 	 * 
 	 * @return A configured GIOCModuleContentsDispatcher for userspace content
 	 */
 	@Bean
 	@Scope("singleton")
 	@Qualifier("userspaceContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint> getUserspaceContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint,NoContentConsumingSessionParam> getUserspaceContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

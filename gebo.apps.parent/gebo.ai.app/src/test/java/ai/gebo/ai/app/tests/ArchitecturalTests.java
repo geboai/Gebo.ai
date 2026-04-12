@@ -34,28 +34,28 @@ import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 public class ArchitecturalTests extends AbstractBaseTestLLmsIntegrationTests {
 
 	/**
-     * Test running a job with no contents to be read and embedded.
-     * This test verifies the handling of an empty content scenario.
-     * 
-     * @throws GeboJobServiceException if a job service error occurs
-     * @throws GeboPersistenceException if a persistence error occurs
-     * @throws InstantiationException if instantiation of a class fails
-     * @throws IllegalAccessException if access to a class or its methods fails
-     */
-    @Test
-    public void runNoContentsReadingAndEmbedding()
-            throws GeboJobServiceException, GeboPersistenceException, InstantiationException, IllegalAccessException {
-        LOGGER.info("Running no contents full contents reading and vectorizing test");
+	 * Test running a job with no contents to be read and embedded. This test
+	 * verifies the handling of an empty content scenario.
+	 * 
+	 * @throws GeboJobServiceException  if a job service error occurs
+	 * @throws GeboPersistenceException if a persistence error occurs
+	 * @throws InstantiationException   if instantiation of a class fails
+	 * @throws IllegalAccessException   if access to a class or its methods fails
+	 */
+	@Test
+	public void runNoContentsReadingAndEmbedding()
+			throws GeboJobServiceException, GeboPersistenceException, InstantiationException, IllegalAccessException {
+		LOGGER.info("Running no contents full contents reading and vectorizing test");
 
-        TestProjectEndpoint endpoint = createAndPersist(
-                "Running no contents full contents reading and vectorizing test", TestProjectEndpoint.class);
-        endpoint.setTestType(TestEndpointType.CONTAINED_CONTENTS);
-        endpoint = persistentObjectManager.update(endpoint);
-        LOGGER.info("Saved no contents endpoint, running syncronous job");
-        GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+		TestProjectEndpoint endpoint = createAndPersist(
+				"Running no contents full contents reading and vectorizing test", TestProjectEndpoint.class);
+		endpoint.setTestType(TestEndpointType.CONTAINED_CONTENTS);
+		endpoint = persistentObjectManager.update(endpoint);
+		LOGGER.info("Saved no contents endpoint, running syncronous job");
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
-        cleanPersistent(endpoint);
-    }
+		cleanPersistent(endpoint);
+	}
 
 	/**
 	 * Test reading and embedding a single PDF file content.

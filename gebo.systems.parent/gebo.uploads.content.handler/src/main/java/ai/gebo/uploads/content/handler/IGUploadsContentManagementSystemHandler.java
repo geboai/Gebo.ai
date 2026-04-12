@@ -13,6 +13,7 @@
 package ai.gebo.uploads.content.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -25,6 +26,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * types for the uploads content management system and project endpoint.
  */
 public interface IGUploadsContentManagementSystemHandler
-		extends IGContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint> {
+		extends IGContentManagementSystemHandler<GUploadsContentManagementSystem, GUploadsProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 }

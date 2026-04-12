@@ -25,10 +25,12 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 @Service
-public class GIntegrationSystemContentHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint> implements IGIntegrationSystemContentHandler {
+public class GIntegrationSystemContentHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint, NoContentConsumingSessionParam>
+		implements IGIntegrationSystemContentHandler {
 	public final static GContentManagementSystemType type = new GContentManagementSystemType();
 	static final GIntegrationContentSystem system = new GIntegrationContentSystem();
 	static {
@@ -84,11 +86,12 @@ public class GIntegrationSystemContentHandlerImpl
 
 	@Override
 	protected void consumeImplementation(GIntegrationContentSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {		
-		
+			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, NoContentConsumingSessionParam param,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+
 	}
+
 	@Override
 	public boolean isContentsOnLocalFilesystem() {
 

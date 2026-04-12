@@ -36,6 +36,7 @@ import ai.gebo.filesystem.content.handler.repositories.FilesystemProjectEndpoint
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -160,7 +161,7 @@ public class GFilesystemChangesHandlingService
 				if (e.folder.getAbsolutePath().equals(directory.getAbsolutePath())) {
 					GConsumers consumers = null;
 					try {
-						consumers = iocService.getConsumer(e.endpoint);
+						consumers = iocService.getConsumer(e.endpoint, new NoContentConsumingSessionParam());
 						handler.consume(e.endpoint, consumers.getContentConsumer(), consumers.getMessagesConsumer(),
 								consumers.getErrorConsumer(),changedFiles);
 					} catch (Throwable e1) {

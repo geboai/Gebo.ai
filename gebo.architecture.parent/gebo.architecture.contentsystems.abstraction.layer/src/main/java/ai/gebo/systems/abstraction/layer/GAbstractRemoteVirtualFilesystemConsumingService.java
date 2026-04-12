@@ -37,6 +37,8 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam.OperationType;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam.VirtualFileSystemOperation;
 import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 import ai.gebo.systems.abstraction.layer.model.AbstractNavigationCoordinates;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
@@ -93,7 +95,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	}
 
 	@Override
-	public final void consumeAll(SystemType system, EndpointType endpoint, GVirtualFolder root,
+	public final void consumeAll(SystemType system, EndpointType endpoint,
+			RemoteVirtualFileSystemContentConsumingSessionParam sessionParam, GVirtualFolder root,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
 			IGContentsAccessErrorConsumer errorConsumer, String messageModuleId, String messageSystemId)
 			throws GeboContentHandlerSystemException {
@@ -104,68 +107,80 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				"System accessed, starting integrating data source:"
 						+ describeProjectEndpoint(system, endpoint, environment),
 				"Start listing resources", messagesConsumer);
-
+		List<VFilesystemReference> paths = new ArrayList<>();
+		List<VFilesystemReference> deleted = new ArrayList<>();
 		if (endpoint.getPaths() != null) {
-			for (VFilesystemReference path : endpoint.getPaths()) {
-				try {
-					PositionsCoordinateType position = toNavigationPosition(path, environment);
-					List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
-							endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
-					if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
-						List<ImplementativePositionObjectType> previusFolderCoordinates = nativeCoordinates.subList(0,
-								nativeCoordinates.size() - 1);
-						ImplementativePositionObjectType resource = nativeCoordinates.get(nativeCoordinates.size() - 1);
-						if (resource.getPath() == null) {
-							String msg = "Node=>" + resource.toString() + " does not have an associated path";
-							LOGGER.warn(msg);
-						} else {
-							if (resource.getPath().folder != resource.isFolder()) {
-								String msg = "Node=>" + resource.toString()
-										+ " folder attributes differs from navigation to native implementation ";
-								LOGGER.error(msg);
-								throw new GeboContentHandlerSystemException(msg);
-							}
-							if (resource.getPath().folder && resource.isResource()) {
-								String msg = "Node=>" + resource.toString()
-										+ " reported to be a folder in navigation but is a resource in implementative object ";
-								LOGGER.error(msg);
-								throw new GeboContentHandlerSystemException(msg);
-							}
-						}
-						if (resource.isFolder()) {
-							logInfoStep(
-									"Listing resource(s) of "
-											+ describeObject(nativeCoordinates, system, endpoint, environment),
-									"Listing resources", messagesConsumer);
-							GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(nativeCoordinates, position,
-									system, endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
-							consumeChilds(nativeCoordinates, position, system, endpoint, parentNode, consumer,
-									messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
-						} else if (resource.isResource()) {
-							logInfoStep(
-									"Listing resource  "
-											+ describeObject(nativeCoordinates, system, endpoint, environment),
-									"Listing resource", messagesConsumer);
-							GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(previusFolderCoordinates,
-									position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
-									environment);
-							createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
-									parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
-									messageSystemId);
-						} else
-							throw new GeboContentHandlerSystemException(
-									"The node=>" + resource.toString() + " is not a resource nor a folder");
-					} else {
-						LOGGER.error("The path: " + path.toString() + " does not lead to a native rappresentation");
-					}
-				} catch (GeboContentHandlerSystemException exc) {
-					LOGGER.error("Exception while managing:" + path.toString(), exc);
-				} catch (Throwable th) {
-					LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
-					errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+			paths.addAll(endpoint.getPaths());
+		}
+		if (sessionParam != null && sessionParam.getOperations() != null) {
+			for (VirtualFileSystemOperation op : sessionParam.getOperations()) {
+				if (op.getOperation() == null || op.getOperation() == OperationType.ADD) {
+					paths.add(op.getReference());
+				} else if (op.getOperation() == OperationType.REMOVE) {
+					deleted.add(op.getReference());
 				}
 			}
 		}
+
+		for (VFilesystemReference path : paths) {
+			try {
+				PositionsCoordinateType position = toNavigationPosition(path, environment);
+				List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
+						endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
+				if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
+					List<ImplementativePositionObjectType> previusFolderCoordinates = nativeCoordinates.subList(0,
+							nativeCoordinates.size() - 1);
+					ImplementativePositionObjectType resource = nativeCoordinates.get(nativeCoordinates.size() - 1);
+					if (resource.getPath() == null) {
+						String msg = "Node=>" + resource.toString() + " does not have an associated path";
+						LOGGER.warn(msg);
+					} else {
+						if (resource.getPath().folder != resource.isFolder()) {
+							String msg = "Node=>" + resource.toString()
+									+ " folder attributes differs from navigation to native implementation ";
+							LOGGER.error(msg);
+							throw new GeboContentHandlerSystemException(msg);
+						}
+						if (resource.getPath().folder && resource.isResource()) {
+							String msg = "Node=>" + resource.toString()
+									+ " reported to be a folder in navigation but is a resource in implementative object ";
+							LOGGER.error(msg);
+							throw new GeboContentHandlerSystemException(msg);
+						}
+					}
+					if (resource.isFolder()) {
+						logInfoStep(
+								"Listing resource(s) of "
+										+ describeObject(nativeCoordinates, system, endpoint, environment),
+								"Listing resources", messagesConsumer);
+						GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(nativeCoordinates, position,
+								system, endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
+						consumeChilds(nativeCoordinates, position, system, endpoint, parentNode, consumer,
+								messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
+					} else if (resource.isResource()) {
+						logInfoStep(
+								"Listing resource  " + describeObject(nativeCoordinates, system, endpoint, environment),
+								"Listing resource", messagesConsumer);
+						GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(previusFolderCoordinates,
+								position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
+								environment);
+						createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
+								parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
+								messageSystemId);
+					} else
+						throw new GeboContentHandlerSystemException(
+								"The node=>" + resource.toString() + " is not a resource nor a folder");
+				} else {
+					LOGGER.error("The path: " + path.toString() + " does not lead to a native rappresentation");
+				}
+			} catch (GeboContentHandlerSystemException exc) {
+				LOGGER.error("Exception while managing:" + path.toString(), exc);
+			} catch (Throwable th) {
+				LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
+				errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+			}
+		}
+
 		clearEnvironment(environment, system, endpoint);
 		logInfoStep("End of listing resources through " + describeSystem(system), "End of listing phase",
 				messagesConsumer);

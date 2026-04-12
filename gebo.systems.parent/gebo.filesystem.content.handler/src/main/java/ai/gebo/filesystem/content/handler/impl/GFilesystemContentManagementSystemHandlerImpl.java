@@ -46,6 +46,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -55,8 +56,8 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
  * handling operations like file discovery, consumption, and change tracking.
  */
 @Service
-public class GFilesystemContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint>
+public class GFilesystemContentManagementSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GFilesystemContentManagementSystem, GFilesystemProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam>
 		implements IGFilesystemContentManagementSystemHandler {
 
 	/**
@@ -124,7 +125,8 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	 */
 	@Override
 	protected void consumeImplementation(GFilesystemContentManagementSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GFilesystemProjectEndpoint endpoint, IGContentConsumer consumer,
+			List<GBuildSystem> buildSystems, GFilesystemProjectEndpoint endpoint,
+			RemoteVirtualFileSystemContentConsumingSessionParam param, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 

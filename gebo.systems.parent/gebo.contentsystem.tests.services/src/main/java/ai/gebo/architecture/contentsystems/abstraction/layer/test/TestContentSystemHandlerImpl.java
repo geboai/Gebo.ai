@@ -39,6 +39,8 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
@@ -49,8 +51,8 @@ import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
  * and supports different test types for content consumption.
  */
 @Service
-public class TestContentSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<TestContentManagementSystem, TestProjectEndpoint>
+public class TestContentSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<TestContentManagementSystem, TestProjectEndpoint, NoContentConsumingSessionParam>
 		implements ITestContentSystemHandler {
 	/** Prefix for classpath resources */
 	public static final String CLASSPATH_RESOURCE_PREFIX = "classpath:";
@@ -169,9 +171,9 @@ public class TestContentSystemHandlerImpl
 	 */
 	@Override
 	protected void consumeImplementation(TestContentManagementSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, TestProjectEndpoint endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {
+			List<GBuildSystem> buildSystems, TestProjectEndpoint endpoint, NoContentConsumingSessionParam sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 		if (endpoint.getTestType() == null)
 			throw new GeboContentHandlerSystemException("Test type unknown");
 		switch (endpoint.getTestType()) {
@@ -238,4 +240,5 @@ public class TestContentSystemHandlerImpl
 
 		return true;
 	}
+
 }

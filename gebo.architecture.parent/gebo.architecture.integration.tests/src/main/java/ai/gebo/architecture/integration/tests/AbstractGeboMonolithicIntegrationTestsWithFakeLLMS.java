@@ -187,7 +187,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		graphragConfig.setUsedModelConfiguration(GObjectRef.of((GBaseChatModelConfig) model.getConfig()));
 		graphragConfig.setDescription("Specific knowledge extraction model");
 		graphragConfig.setProcessEveryDocument(true);
-		graphragConfig.setGraphRagAllSources(false);		
+		graphragConfig.setGraphRagAllSources(false);
 		graphragConfig.setKnowledgeBaseCode(kb.getCode());
 		graphragConfig.setProjectCode(project.getCode());
 		graphragConfig.setEndpoint(GObjectRef.of(endpoint));
@@ -326,7 +326,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		// Maximum number of cycles to wait for job completion
@@ -448,7 +448,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 

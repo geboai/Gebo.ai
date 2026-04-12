@@ -53,6 +53,7 @@ import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.BuildSystemRef;
@@ -70,8 +71,8 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 
-public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
-		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType>,
+public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint,ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
+		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>,
 		IGRuntimeModuleComponent {
 
 	// Logger for the handler
@@ -391,17 +392,17 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	/**
 	 * Consumes content from a project endpoint, processing with a consumer and
 	 * handling messages and errors.
-	 *
-	 * @param endpoint         The project endpoint.
 	 * @param consumer         The content consumer.
 	 * @param messagesConsumer The messages consumer.
 	 * @param errorConsumer    The error consumer.
+	 * @param endpoint         The project endpoint.
+	 *
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           consumption.
 	 */
 	@Override
-	public void consume(ProjectEndpointType endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+	public void consume(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 
 		SystemIntegrationType contentManagementSystem = getSystem(endpoint);
@@ -419,8 +420,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			}
 		}
 
-		consumeImplementation(contentManagementSystem, buildSystems, endpoint, consumer, messagesConsumer,
-				errorConsumer);
+		consumeImplementation(contentManagementSystem, buildSystems, endpoint, sessionParam, consumer,
+				messagesConsumer, errorConsumer);
 	}
 
 	/**
@@ -429,6 +430,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 * @param contentManagementConfig The content management configuration.
 	 * @param buildSystems            The list of build systems.
 	 * @param endpoint                The project endpoint.
+	 * @param sessionParam TODO
 	 * @param consumer                The content consumer.
 	 * @param messagesConsumer        The messages consumer.
 	 * @param errorConsumer           The error consumer.
@@ -436,8 +438,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 *                                           implementation.
 	 */
 	abstract protected void consumeImplementation(SystemIntegrationType contentManagementConfig,
-			List<GBuildSystem> buildSystems, ProjectEndpointType endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+			List<GBuildSystem> buildSystems, ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException;
 
 	/**

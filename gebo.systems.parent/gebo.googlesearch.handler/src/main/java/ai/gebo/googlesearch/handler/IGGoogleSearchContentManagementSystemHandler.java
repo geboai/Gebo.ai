@@ -13,6 +13,7 @@
 package ai.gebo.googlesearch.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.IGVirtualFilesystemContentManagementSystemHandler;
 
 /**
  * AI generated comments
@@ -25,6 +26,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * content through the Gebo abstraction layer.
  */
 public interface IGGoogleSearchContentManagementSystemHandler
-		extends IGContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint> {
+		extends IGVirtualFilesystemContentManagementSystemHandler<GGoogleSearchSystem, GGoogleSearchProjectEndpoint> {
 
 }

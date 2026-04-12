@@ -38,6 +38,7 @@ import ai.gebo.jobs.services.model.JobWorkflowStepSummary;
 import ai.gebo.jobs.services.model.JobWorkflowStepSummaryTimeSlotStats;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -65,11 +66,10 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	private final ContentsBatchProcessedRepository contentsBatchRepo;
 	private final IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
 	private final JobStatusEmitter statusEmitter;
-	
+
 	private final static long STATS_TIME_SLOT = 1000 * 60;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
-	
 	/**
 	 * Creates a new asynchronous ingestion job for the specified endpoint
 	 * 
@@ -78,7 +78,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboJobServiceException If a job is already running for the endpoint
 	 */
 	@Override
-	public GJobStatus createNewAsyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> GJobStatus createNewAsyncJob(
+			EndpointType item, SessionParameterType sessionParam, String workflowType, String workflowId)
 			throws GeboJobServiceException {
 		if (ingestionManager.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
@@ -89,7 +90,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			statusEmitter.broadcastStarted(status);
 			synchronized (statusMap) {
 				statusMap.put(status.getCode(), status);
-				readingService.completeAsyncJob(status);
+				readingService.completeAsyncJob(status, sessionParam);
 
 			}
 			return status;
@@ -117,7 +118,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboJobServiceException If a job is already running for the endpoint
 	 */
 	@Override
-	public GJobStatus executeSyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> GJobStatus executeSyncJob(
+			EndpointType item, SessionParameterType sessionParam, String workflowType, String workflowId)
 			throws GeboJobServiceException {
 		if (readingService.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
@@ -125,7 +127,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item,
 					workflowType, workflowId);
 			statusEmitter.broadcastStarted(status);
-			return ingestionManager.internalReadAndVectorizeContents(status);
+			return ingestionManager.internalReadAndVectorizeContents(status, sessionParam);
 		} catch (GeboPersistenceException e) {
 			throw new GeboJobServiceException("Exception on persistence access", e);
 		}
@@ -182,10 +184,12 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @return A runnable task for async execution
 	 * @throws GeboJobServiceException  If a job is already running
 	 * @throws GeboPersistenceException If there's an issue with persistence
+	 * @throws ClassNotFoundException
 	 */
 	@Override
-	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint, String workflowType,
-			String workflowId) throws GeboJobServiceException, GeboPersistenceException {
+	public <EndpointType extends GProjectEndpoint, SessionParameterType extends AbstractContentConsumingSessionParam> IGRunnable createPublicationRunnable(
+			GObjectRef<EndpointType> endpoint, SessionParameterType sessionParam, String workflowType,
+			String workflowId) throws GeboJobServiceException, GeboPersistenceException, ClassNotFoundException {
 		if (readingService.isJobRunning(endpoint))
 			throw new GeboJobServiceException("Already running sync on " + endpoint.getCode());
 		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
@@ -194,7 +198,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		synchronized (statusMap) {
 			statusMap.put(status.getCode(), status);
 		}
-		return readingService.createAsyncJob(status);
+		return readingService.createAsyncJob(status, sessionParam);
 
 	}
 
