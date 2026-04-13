@@ -1,10 +1,8 @@
-package ai.gebo.llms.deepsearch.service.impl;
+package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -34,7 +32,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
-@Component
+
 @AllArgsConstructor
 public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInvokingService
 		implements IInternalKnowledgeLLMAssistedRetrieveService {
