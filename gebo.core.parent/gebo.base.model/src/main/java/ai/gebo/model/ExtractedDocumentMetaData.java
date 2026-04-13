@@ -109,6 +109,7 @@ public class ExtractedDocumentMetaData {
 	public static ExtractedDocumentMetaData of(Map<String, Object> metadata) {
 		if (metadata == null)
 			return null;
+		
 		return new ExtractedDocumentMetaData(getValue(DocumentMetaInfos.CONTENT_CODE, metadata),
 				getValue(DocumentMetaInfos.CONTENT_EXTENSION, metadata),
 				getValue(DocumentMetaInfos.CONTENT_ORIGINAL_URL, metadata),
@@ -124,6 +125,7 @@ public class ExtractedDocumentMetaData {
 				getNumericValue(DocumentMetaInfos.GEBO_CHUNKS_COUNT, metadata),
 				getValue(DocumentMetaInfos.LANGUAGE, metadata));
 	}
+	
 
 	/**
 	 * Determines if the document is enriched with additional metadata header
