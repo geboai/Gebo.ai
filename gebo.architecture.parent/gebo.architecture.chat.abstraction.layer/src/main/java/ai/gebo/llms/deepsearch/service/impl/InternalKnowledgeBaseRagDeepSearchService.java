@@ -89,7 +89,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 		Flux<AIDocumentsSet> retrievedFlux = null;
 		if (runSearches) {
 			// if run searches then the search will run differited
-			retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext, chatModel,
+			retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext, serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
 		} else {
 			// if run searches is false then the initial flux is an empty document singleton
