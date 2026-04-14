@@ -12,10 +12,14 @@
 
 package ai.gebo.security.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Gebo.ai comment agent
@@ -40,7 +44,8 @@ public class UsersGroup {
      * A list containing the user IDs that belong to this group.
      */
     List<String> userIds = null;
-
+    @JsonIgnore
+    private Map<String, Object> customInfos=new HashMap<>();
     /**
      * Default constructor for UsersGroup.
      */
@@ -101,5 +106,13 @@ public class UsersGroup {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Map<String, Object> getCustomInfos() {
+		return customInfos;
+	}
+
+	public void setCustomInfos(Map<String, Object> customInfos) {
+		this.customInfos = customInfos;
+	}
 
 }

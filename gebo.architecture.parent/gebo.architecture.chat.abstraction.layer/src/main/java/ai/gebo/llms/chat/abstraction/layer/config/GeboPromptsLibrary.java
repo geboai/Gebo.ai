@@ -51,13 +51,13 @@ public class GeboPromptsLibrary {
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 
 	@Bean
-	protected IGStaticPromptsProvider standardChatsPromptsProvider() {
+	public IGStaticPromptsProvider standardChatsPromptsProvider() {
 
 		return new PromptProvidersImplementation(this, library);
 	}
 
 	@Bean
-	protected IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider() {
+	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider() {
 
 		return new PromptProvidersImplementation(this, library);
 	}

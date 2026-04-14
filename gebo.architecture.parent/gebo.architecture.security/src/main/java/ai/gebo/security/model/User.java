@@ -10,7 +10,9 @@
 package ai.gebo.security.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -50,7 +52,8 @@ public class User {
 	private List<String> roles = new ArrayList<String>();
 
 	private String langCode = null;
-
+	@JsonIgnore
+	private Map<String, Object> customInfos=new HashMap<>();
 	/**
 	 * Gets the name of the user.
 	 * 
@@ -305,5 +308,13 @@ public class User {
 
 	public void setLangCode(String langCode) {
 		this.langCode = langCode;
+	}
+
+	public Map<String, Object> getCustomInfos() {
+		return customInfos;
+	}
+
+	public void setCustomInfos(Map<String, Object> customInfos) {
+		this.customInfos = customInfos;
 	}
 }
