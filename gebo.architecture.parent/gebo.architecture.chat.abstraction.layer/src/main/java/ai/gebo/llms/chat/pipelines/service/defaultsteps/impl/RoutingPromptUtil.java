@@ -141,6 +141,8 @@ public final class RoutingPromptUtil {
 	public static String partialDocumentRendering(List<AIDocumentReferenceItem> docs, int documentsTokenBudget) {
 		StringBuffer buffer = new StringBuffer();
 		for (AIDocumentReferenceItem doc : docs) {
+			if (doc.getFragments().isEmpty())
+				continue;
 			String _docRendered = documentRendering(doc, documentsTokenBudget);
 			int tokensCount = tokensLength(_docRendered);
 			if (documentsTokenBudget >= tokensCount) {
@@ -330,13 +332,7 @@ public final class RoutingPromptUtil {
 	}
 
 	static final String END_SYSTEM_CATALOG = "END_SYSTEM_CATALOG";
-	
-	
-	
-	static final String SPACE = " ";
-	
-	
 
-	
+	static final String SPACE = " ";
 
 }
