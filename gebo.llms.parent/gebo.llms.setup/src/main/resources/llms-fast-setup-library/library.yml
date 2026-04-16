@@ -236,16 +236,13 @@ ai.gebo.llms.vendors.setup.config:
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
-              defaultChoice: true			  
+              defaultChoice: true
             - code: Llama-3.3-70B-Instruct
               description: Meta LLama 3.3 70b instruct
               uses: CHAT
-            - code: qwen3.5-9b
-              description: Qwen3.5 9B
+            - code: gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
               uses: INTERNAL_SERVICES
-        #            - code: Llama-3.1-8B-Instruct
-        #              description: Meta LLama 3.1 8b instruct
-        #              uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-regolo.ai
           doModelsLookup: true
