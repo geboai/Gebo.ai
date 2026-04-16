@@ -6,12 +6,10 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.knowledgebase.repositories;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.repository.NoRepositoryBean;
@@ -25,10 +23,11 @@ import ai.gebo.model.base.GObjectRef;
 /**
  * AI generated comments
  * 
- * Repository interface for managing operations on virtual filesystem objects, extending 
- * basic MongoDB repository functionalities.
+ * Repository interface for managing operations on virtual filesystem objects,
+ * extending basic MongoDB repository functionalities.
  * 
- * @param <Type> The specific type of virtual filesystem object handled by the repository
+ * @param <Type> The specific type of virtual filesystem object handled by the
+ *               repository
  */
 @NoRepositoryBean
 public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstractVirtualFilesystemObject>
@@ -62,18 +61,18 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 	 * Finds all objects by project endpoint's reference class name and code.
 	 *
 	 * @param className the class name of the project endpoint reference
-	 * @param code the reference code of the project endpoint
+	 * @param code      the reference code of the project endpoint
 	 * @return a stream of objects matching the specified reference
 	 */
 	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(String className,
 			String code);
 
 	/**
-	 * Finds all objects by project endpoint's reference class name, code, 
-	 * that are not deleted and do not match the specified job ID.
+	 * Finds all objects by project endpoint's reference class name, code, that are
+	 * not deleted and do not match the specified job ID.
 	 * 
-	 * @param name the class name of the project endpoint reference
-	 * @param code the reference code of the project endpoint
+	 * @param name      the class name of the project endpoint reference
+	 * @param code      the reference code of the project endpoint
 	 * @param lastJobId the job ID to be excluded
 	 * @return a stream of objects matching the specified criteria
 	 */
@@ -102,6 +101,15 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 				ref.getCode());
 	}
 
+	public default Stream<Type> findByProjectEndpointRefAndAclAliasesIn(GObjectRef<GProjectEndpoint> ref,
+			List<Integer> validAcls) {
+		return findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndAclAliasesIn(ref.getClassName(),
+				ref.getCode(), validAcls);
+	}
+
+	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndAclAliasesIn(
+			String className, String code, List<Integer> validAcls);
+
 	/**
 	 * Deletes all objects related to a specific project endpoint.
 	 *
@@ -125,32 +133,46 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 	 * Deletes objects by project endpoint's reference class name and code.
 	 * 
 	 * @param className the class name of the project endpoint reference
-	 * @param code the reference code of the project endpoint
+	 * @param code      the reference code of the project endpoint
 	 */
 	public void deleteByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(String className, String code);
 
 	/**
-	 * Finds all objects by project endpoint's reference class name and code, 
-	 * where the parent virtual folder code is null.
+	 * Finds all objects by project endpoint's reference class name and code, where
+	 * the parent virtual folder code is null.
 	 *
 	 * @param className the class name of the project endpoint reference
-	 * @param code the reference code of the project endpoint
+	 * @param code      the reference code of the project endpoint
 	 * @return a stream of objects matching the specified criteria
 	 */
 	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
 			String className, String code);
 
+	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNullAndAclAliasesIn(
+			String className, String code, List<Integer> validAcls);
+
 	/**
-	 * Finds all objects by project endpoint's reference class name, code, 
-	 * and specific parent virtual folder code.
+	 * Finds all objects by project endpoint's reference class name, code, and
+	 * specific parent virtual folder code.
 	 *
-	 * @param className the class name of the project endpoint reference
-	 * @param code the reference code of the project endpoint
+	 * @param className               the class name of the project endpoint
+	 *                                reference
+	 * @param code                    the reference code of the project endpoint
 	 * @param parentVirtualFolderCode the code of the parent virtual folder
 	 * @return a stream of objects under the specified criteria
 	 */
 	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCode(
 			String className, String code, String parentVirtualFolderCode);
+
+	public Stream<Type> findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeAndAclAliasesIn(
+			String className, String code, String parentVirtualFolderCode, List<Integer> validAcls);
+
+	public Stream<Type> findByParentVirtualFolderCodeAndAclAliasesIn(String parentVirtualFolderCode,
+			List<Integer> allOwnedAclAliases);
+
+	public List<Type> findByExtIntegrationCode(String extIntegrationCode);
+
+	public Stream<Type> findByExtIntegrationCodeIn(List<String> extIntegrationCodeList);
 
 	/**
 	 * Deletes all objects by the parent project's code.
@@ -165,4 +187,6 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 	 * @param code the code of the root knowledge base
 	 */
 	public void deleteByRootKnowledgebaseCode(String code);
+
+	List<Type> findByAclAliasesIn(List<Integer> validAcls);
 }

@@ -18,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMModelPresetChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class LLMModelPresetChoice {
   @JsonProperty("code")
@@ -33,6 +35,43 @@ public class LLMModelPresetChoice {
 
   @JsonProperty("defaultChoice")
   private Boolean defaultChoice = null;
+
+  @JsonProperty("contextWindow")
+  private Integer contextWindow = null;
+
+  /**
+   * Gets or Sets uses
+   */
+  public enum UsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsesEnum fromValue(String input) {
+      for (UsesEnum b : UsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("uses")
+  private List<UsesEnum> uses = null;
 
   public LLMModelPresetChoice code(String code) {
     this.code = code;
@@ -88,6 +127,50 @@ public class LLMModelPresetChoice {
     this.defaultChoice = defaultChoice;
   }
 
+  public LLMModelPresetChoice contextWindow(Integer contextWindow) {
+    this.contextWindow = contextWindow;
+    return this;
+  }
+
+   /**
+   * Get contextWindow
+   * @return contextWindow
+  **/
+  @Schema(description = "")
+  public Integer getContextWindow() {
+    return contextWindow;
+  }
+
+  public void setContextWindow(Integer contextWindow) {
+    this.contextWindow = contextWindow;
+  }
+
+  public LLMModelPresetChoice uses(List<UsesEnum> uses) {
+    this.uses = uses;
+    return this;
+  }
+
+  public LLMModelPresetChoice addUsesItem(UsesEnum usesItem) {
+    if (this.uses == null) {
+      this.uses = new ArrayList<>();
+    }
+    this.uses.add(usesItem);
+    return this;
+  }
+
+   /**
+   * Get uses
+   * @return uses
+  **/
+  @Schema(description = "")
+  public List<UsesEnum> getUses() {
+    return uses;
+  }
+
+  public void setUses(List<UsesEnum> uses) {
+    this.uses = uses;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +183,14 @@ public class LLMModelPresetChoice {
     LLMModelPresetChoice llMModelPresetChoice = (LLMModelPresetChoice) o;
     return Objects.equals(this.code, llMModelPresetChoice.code) &&
         Objects.equals(this.description, llMModelPresetChoice.description) &&
-        Objects.equals(this.defaultChoice, llMModelPresetChoice.defaultChoice);
+        Objects.equals(this.defaultChoice, llMModelPresetChoice.defaultChoice) &&
+        Objects.equals(this.contextWindow, llMModelPresetChoice.contextWindow) &&
+        Objects.equals(this.uses, llMModelPresetChoice.uses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, defaultChoice);
+    return Objects.hash(code, description, defaultChoice, contextWindow, uses);
   }
 
 
@@ -117,6 +202,8 @@ public class LLMModelPresetChoice {
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    defaultChoice: ").append(toIndentedString(defaultChoice)).append("\n");
+    sb.append("    contextWindow: ").append(toIndentedString(contextWindow)).append("\n");
+    sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -33,6 +33,7 @@ public class EditableUser {
 		this.roles = u.getRoles();
 		this.sourname = u.getSourname();
 		this.authProvider = u.getProvider();
+		this.langCode = u.getLangCode();
 	}
 
 	@NotNull
@@ -51,6 +52,7 @@ public class EditableUser {
 
 	@NotNull
 	private AuthProvider authProvider = null;
+	private String langCode = null;
 
 	/**
 	 * Default constructor for creating an empty EditableUser instance.
@@ -155,6 +157,14 @@ public class EditableUser {
 
 	public void setAuthProvider(AuthProvider authProvider) {
 		this.authProvider = authProvider;
+	}
+
+	public String getLangCode() {
+		return langCode;
+	}
+
+	public void setLangCode(String langCode) {
+		this.langCode = langCode;
 	}
 
 }

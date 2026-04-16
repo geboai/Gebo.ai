@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "เข้าสู่ระบบ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ดำเนินการล้มเหลว",
+        "detail" : "ไม่สามารถยืนยันตัวตนด้วยข้อมูลที่ให้มา"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "การเชื่อมต่อ Google Drive/Workspaces",
         "description" : "ตั้งค่า Gebo.ai เพื่อเข้าถึงข้อมูลทีมใน Google Drive/Workspaces ของคุณ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "ตั้งค่า Google search api",
+        "description" : "ตั้งค่าข้อมูลรับรอง Google search api สำหรับการค้นหาเว็บด้วย AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "ตั้งค่า Deep search",
+        "description" : "ตั้งค่าพารามิเตอร์ Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ปรับแต่งอัตโนมัติ",
+        "description" : "ปรับแต่งพารามิเตอร์สำหรับการสร้างแบบเพิ่มพูนอัตโนมัติ"
+      },
+      "Description" : {
+        "label" : "คำอธิบาย"
+      },
+      "LastAutotunedDate" : {
+        "label" : "อัปเดตการปรับแต่งครั้งล่าสุด"
+      },
+      "Code" : {
+        "label" : "โค้ด Embedding model/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "ค่าขีดจำกัดที่คำนวณได้"
+      },
+      "Autotuned" : {
+        "label" : "ปรับแต่งอัตโนมัติแล้ว"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ตั้งค่าขั้นตอนบังคับเสร็จแล้ว...",
+        "detail" : "ได้ดำเนินการขั้นตอนที่จำเป็นเสร็จเรียบร้อยแล้ว แต่ยังมีบางขั้นตอนที่ขาด ทำให้องค์กรของคุณไม่สามารถใช้งานซอฟต์แวร์นี้ได้อย่างเต็มที่"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ขาดขั้นตอนสำคัญในการตั้งค่า",
+        "detail" : "กรุณาตรวจสอบขั้นตอนที่มีเครื่องหมายสีแดงในกระบวนการตั้งค่า"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "ระบบ Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "แก้ไขระบบ"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "ตั้งค่าการเข้าถึงผู้ให้บริการ llms ของ Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "ตัวเลือกโครงสร้างพื้นฐาน/ซัพพลายเออร์ขั้นสูง"
+      },
+      "MainPanelTitle" : {
+        "label" : "ตั้งค่า Large language model ที่ใช้"
+      },
+      "EasySetup" : {
+        "label" : "การตั้งค่าเบื้องต้น/แก้ไขการตั้งค่าง่าย"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ตั้งค่า Large language model"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "คำอธิบาย"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "สร้างข้อมูลรับรอง google search"
+      },
+      "CreateBtn" : {
+        "label" : "สร้าง"
+      },
+      "customSearchEngineId" : {
+        "label" : "รหัสเครื่องมือค้นหา",
+        "help" : "กรอกรหัสเครื่องมือค้นหาที่ได้จากการลงทะเบียนข้อมูลรับรอง google search api"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัสการตั้งค่า"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "กรอก api key ที่ได้จากการลงทะเบียนข้อมูลรับรอง google search api"
+      },
+      "MainPanel" : {
+        "label" : "ตั้งค่า google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ลบ",
+        "help" : "ลบข้อมูลรับรอง Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "ตั้งค่า Deep search",
+        "help" : "เพิ่มการตั้งค่า deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "แก้ไขการตั้งค่า"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ปิดการใช้งาน"
+      },
+      "EditGroupBtn" : {
+        "label" : "แก้ไข"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "UsersHeader" : {
+        "label" : "ผู้ใช้"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ผู้ให้บริการ AI แบบรีโมตใช้งานได้",
+        "detail" : "ผู้ให้บริการทำงานและตั้งค่าสำเร็จแล้ว"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "เกิดข้อยกเว้นระหว่างดำเนินการ:เกิดปัญหาในการทำงานกับ url:https://api.openai.com/v1/models",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: เกิดปัญหาในการทำงานกับ url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
         "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ผู้ให้บริการ AI แบบรีโมตใช้งานได้",
+        "detail" : "ผู้ให้บริการทำงานและตั้งค่าสำเร็จแล้ว"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "แก้ไขการตั้งค่า Ollama local (หรือ lan) server chat model"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "แก้ไขการตั้งค่า Anthropic chat model"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "แก้ไขการตั้งค่า MistralAI chat model"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "แก้ไขการตั้งค่า Google Vertex AI chat model"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "forUses" : {
+        "label" : "การใช้งานโมเดล",
+        "help" : "ที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้",
+        "placeholder" : "การใช้งานที่ Gebo.ai จะพิจารณานำโมเดลนี้ไปใช้"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการเสร็จสมบูรณ์"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "คุณแน่ใจหรือว่าต้องการลบแชทนี้?",
         "header" : "การลบแชท"
+      },
+      "PlusContextualMenu" : {
+        "help" : "เพิ่มเนื้อหาหรือเปลี่ยนรูปแบบการค้นหา"
+      },
+      "[object HTMLElement]" : {
+        "help" : "เพิ่มเนื้อหาหรือเปลี่ยนรูปแบบการค้นหา"
+      },
+      "ContextMenuBtn" : {
+        "help" : "เพิ่มเนื้อหาหรือเปลี่ยนรูปแบบการค้นหา"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "แหล่งที่มา",
+        "help" : "เปิดรายการเอกสารที่วิเคราะห์แล้ว"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "รายละเอียดคำตอบและแหล่งที่มาจากการค้นหาลึก"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ผลการวิเคราะห์ Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "เกิดข้อผิดพลาดในการค้นหา Confluence Search",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: มีปัญหาในการเข้าถึงระบบ confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "เริ่มแชทใหม่แล้ว",
+        "detail" : "โหลดการแชทใหม่สำเร็จ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "เลือกแหล่งที่มา"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "เลือกอย่างน้อยหนึ่งตัวเลือกต่อไปนี้"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ข้ามการค้นหาลึก"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ฐานความรู้ที่เลือก"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ระบบที่เลือก"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "เพิ่มเอกสารไปยังรายการ 'แชทกับ' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "กำลังดำเนินการค้นหาลึก"
+      },
+      "RagLLMResponse" : {
+        "label" : "กำลังดำเนินการ retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "กำลังถาม llm"
+      },
+      "Waiting" : {
+        "label" : "กำลังวิเคราะห์แผนการตอบที่ดีที่สุด.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "กำลังเรียกใช้เครื่องมือ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "กำลังค้นหาด้วย AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "แฟ้มที่ถูกวิเคราะห์"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ผลลัพธ์การค้นหาที่วิเคราะห์แล้ว"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ผลลัพธ์การค้นหาระบบที่วิเคราะห์แล้วสำหรับ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "กำลังสรุปผลรายงานสุดท้าย"
+      },
+      "RUNNING" : {
+        "label" : "กำลังทำงาน"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "กำลังวิเคราะห์คำขอของคุณ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "เลือกการทำงานแบบตัวแทนแล้ว กำลังดำเนินการตอบกลับ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "ระดับบริการคือ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "กำลังดำเนินการตัวแทนที่คุณเลือก"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "อัปโหลดไฟล์"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "เรียกดู/ค้นหาไฟล์บริษัท"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "แชทกับเอกสารที่เลือก"
+      },
+      "agenticChat" : {
+        "label" : "แชทแบบตัวแทน"
+      },
+      "rag" : {
+        "label" : "แชท r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "ค้นหาลึก/หลายแหล่งที่มา"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ค้นหาลึก/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ค้นหาลึก/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ค้นหาลึก/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ค้นหาลึก/ค้นหาฐานความรู้"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "แชทกับไฟล์"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ค้นหาลึก/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ค้นหาลึก/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ค้นหาลึก/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "ผู้ใช้ Google ที่จะสวมบทบาท",
         "help" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้",
         "placeholder" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้"
+      },
+      "OK" : {
+        "summary" : "บันทึกสำเร็จ",
+        "detail" : "อัปเดตข้อมูลเรียบร้อยแล้ว"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
         "dataset-2-label" : "เอกสารถูกผิดพลาด",
         "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "จัดทำดัชนีข้อความเต็ม"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "เอกสารที่ไม่ได้จัดการ",
+        "label-1" : "เอกสารที่เกิดข้อผิดพลาด",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกตัดออก"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดระหว่างประมวลผลโทเคน"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "เปิดใช้งานการเรียกใช้ฟังก์ชันทั้งหมด",
         "help" : "เปิดใช้งานเครื่องมือและการเรียกฟังก์ชันทั้งหมดที่มีอยู่ หากไม่ได้ตั้งค่า สามารถเปิดใช้งานได้ในภายหลังผ่านแผงควบคุม llms admin"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "เกิดข้อยกเว้นระหว่างดำเนินการ: Anthropic api ไม่สามารถทำงานได้หากไม่มีการกำหนด api key ที่จำเป็น",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: Anthropic api ไม่สามารถทำงานได้หากไม่มีการกำหนด api key ที่จำเป็น"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "ผู้ให้บริการพร้อมใช้งานและตั้งค่าสำเร็จ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ข้อยกเว้นระหว่างการดำเนินการ:401 ไม่ได้รับอนุญาต",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: 401 ไม่ได้รับอนุญาต"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ข้อยกเว้นระหว่างการดำเนินการ:Missing basePath",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: ขาด basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "สร้างและเปิดใช้งาน"
+      },
+      "vendorId" : {
+        "label" : "เลือกผู้ให้บริการ Large language model ของคุณ",
+        "help" : "เลือกผู้ให้บริการเบื้องต้นสำหรับโมเดลแชทและ embedding โดยค่าเริ่มต้น"
+      },
+      "secretId" : {
+        "label" : "เลือกข้อมูลประจำตัวผู้ให้บริการ (api key)",
+        "help" : "เลือกข้อมูลประจำตัวที่มีอยู่สำหรับผู้ให้บริการ llm ที่เลือก"
+      },
+      "InternalServiceModel" : {
+        "label" : "โมเดลแชทสำหรับบริการภายใน",
+        "help" : "โมเดลแชทที่ตั้งค่าสำหรับบริการภายในจะรับผิดชอบในการดึงข้อมูล, สรุป และดำเนินการเวิร์กโฟลว์ภายใน"
+      },
+      "ChatModel" : {
+        "label" : "โมเดลแชทเริ่มต้น",
+        "help" : "โมเดลแชทเริ่มต้นจะรับผิดชอบในการตอบคำถามผู้ใช้ และดำเนินการเวิร์กโฟลว์สำหรับกรณีที่ไม่มีโมเดลอื่นที่ตั้งค่าไว้โดยเฉพาะ ต้องมีประสิทธิภาพสูงและเชื่อถือได้ พร้อมสมดุลระหว่างค่าใช้จ่าย, ประสิทธิภาพ และคุณภาพผลลัพธ์"
+      },
+      "ProviderBuy" : {
+        "label" : "ลิงก์ซื้อเครดิต Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "ลิงก์เว็บไซต์"
+      },
+      "WebSiteLink" : {
+        "label" : "เว็บไซต์ผู้ให้บริการ",
+        "help" : "คลิกที่นี่เพื่อดูข้อมูลทั่วไปเกี่ยวกับผู้ให้บริการ"
+      },
+      "AcquireCreditLink" : {
+        "label" : "ซื้อเครดิตผู้ให้บริการ",
+        "help" : "คลิกที่นี่เพื่อซื้อเครดิตสำหรับ api key ของคุณ"
+      },
+      "EmbeddingModel" : {
+        "label" : "โมเดล embedding เริ่มต้น",
+        "help" : "โมเดลนี้จะรับผิดชอบการจัดทำดัชนีเชิงความหมาย (embedding) และดึงข้อมูลหรือเอกสารของคุณ"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "คุณไม่สามารถลบสิ่งนี้ได้",
         "detail" : "ข้อมูลนี้มีการอ้างอิงจากส่วนอื่นของแอปพลิเคชัน"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "เกิดข้อยกเว้นขณะดำเนินการ:เกิดข้อผิดพลาดกับ url:http://localhost:11434/v1/models",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: เกิดข้อผิดพลาดกับ url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "เกิดข้อยกเว้นขณะดำเนินการ:ต้องตั้งค่า apiKey",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: ต้องตั้งค่า apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "เกิดข้อผิดพลาดขณะสตรีมการตอบแชท",
+        "detail" : "ข้อผิดพลาดของเซิร์ฟเวอร์: 400 Bad Request จาก POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "เกิดข้อยกเว้นระหว่างดำเนินการ:เกิดปัญหาในการทำงานกับ url:http://localhost:8000/v1/models",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: เกิดปัญหาในการทำงานกับ url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "เกิดข้อผิดพลาดระหว่างสตรีมการแชท",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: การเชื่อมต่อถูกตัด"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "เกิดข้อยกเว้นระหว่างดำเนินการ:เกิดปัญหาในการทำงานกับ url:https://api.openai.com/v1/models",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: เกิดปัญหาในการทำงานกับ url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "เกิดข้อยกเว้นระหว่างดำเนินการ: Anthropic api ไม่สามารถทำงานได้หากไม่มีการกำหนด api key ที่จำเป็น",
+        "detail" : "เซิร์ฟเวอร์ผิดพลาด: Anthropic api ไม่สามารถทำงานได้หากไม่มีการกำหนด api key ที่จำเป็น"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "เสร็จสมบูรณ์"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการเสร็จสมบูรณ์"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "บัญชีที่ใช้",
         "help" : "เลือกหรือสร้างบัญชีสำหรับเข้าถึงระบบ google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "แชท"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "กำลังค้นหาข้อมูลที่เกี่ยวข้อง"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "กำลังสรุปรายงานสุดท้าย"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ผลการค้นหาที่วิเคราะห์แล้ว"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ผลการค้นหาของระบบที่วิเคราะห์แล้วสำหรับ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "เลือกอย่างน้อยหนึ่งตัวเลือกต่อไปนี้"
+      },
+      "LaunchBtn" : {
+        "label" : "รันค้นหา"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ข้ามการค้นหาเชิงลึก"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ฐานความรู้ที่เลือก"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ระบบที่เลือก"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "เลือกแหล่งข้อมูล"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "แฟ้มที่ถูกวิเคราะห์"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "แทรก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ตั้งค่าการค้นหา"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ใส่พร็อมต์สำหรับการดึงข้อมูลที่เกี่ยวข้องจากเอกสาร"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ใส่พร็อมต์สำหรับการรวมข้อมูลที่ดึงมาได้"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ตั้งค่า large language model"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า deep search"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะที่สร้างอัตโนมัติของการตั้งค่า deep search"
+      },
+      "searchType" : {
+        "label" : "ประเภทการค้นหา",
+        "help" : "เลือกการค้นหาแบบ single hop semantic search หรือ multi hop"
+      },
+      "topK" : {
+        "label" : "จำนวนส่วนข้อความที่ดึงมา (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "llm ที่ใช้",
+        "help" : "ระบุ large language model ที่ใช้สำหรับ Deep search จะเลือกค่าเริ่มต้นถ้าไม่มีการระบุ"
+      },
+      "analisysPrompt" : {
+        "label" : "เอกสาร analisys prompt",
+        "help" : "แก้ไขพร็อมต์ที่จะใช้ในการดึงข้อมูลที่เกี่ยวข้องจากส่วนของเอกสาร"
+      },
+      "consolidationPrompt" : {
+        "label" : "พร็อมต์สำหรับรวมข้อมูลที่ดึงมา",
+        "help" : "แก้ไขพร็อมต์ที่จะใช้ในการรวมข้อมูลที่เกี่ยวข้องจากเอกสารที่ดึงมาไว้ในรายงานเดียว"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ขีดจำกัดความคล้ายคลึงในการค้นหา",
+        "help" : "ขีดจำกัดความคล้ายคลึงเชิงความหมาย hop แรก (ระหว่าง 0.5 ถึง 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ขีดจำกัดความคล้ายคลึง hop ที่สอง",
+        "help" : "ขีดจำกัดความคล้ายคลึงเชิงความหมาย hop ที่สอง (ระหว่าง 0.5 ถึง 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "large language model เริ่มต้น",
+        "help" : "large language model เริ่มต้นจะถูกใช้สำหรับการประมวลผล Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "ขีดจำกัดความคล้ายคลึงในการค้นหา",
+        "help" : "ขีดจำกัดความคล้ายคลึงเชิงความหมาย (ระหว่าง 0.5 ถึง 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "การตั้งค่าความปลอดภัย"
+      },
+      "accessibleToAll" : {
+        "label" : "เข้าถึงได้สำหรับทุกคน"
+      },
+      "datasource" : {
+        "label" : "แหล่งข้อมูล"
+      },
+      "allowedGroups" : {
+        "label" : "กลุ่มที่อนุญาต"
+      },
+      "allowedUsers" : {
+        "label" : "ผู้ใช้ที่อนุญาต"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "การเข้าถึงผู้ใช้/กลุ่มต่อแหล่งข้อมูล",
+        "help" : "จะเปิดใช้งาน deep search สำหรับแต่ละแหล่งข้อมูลภายนอกและผู้ใช้หรือกลุ่ม"
+      },
+      "SIMPLEMODE" : {
+        "label" : "เข้าถึงตามผู้ใช้/กลุ่มแบบง่าย"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "เข้าถึงตามผู้ใช้/กลุ่มและแต่ละแหล่งข้อมูล"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "ใช้หรือสร้างข้อมูลประจำตัว api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ข้อมูลประจำตัว",
+        "help" : "เลือก api key หรือข้อมูลยืนยันตัวตนสำหรับผู้ให้บริการนี้"
+      },
+      "NewApiKey" : {
+        "label" : "Api key ใหม่",
+        "help" : "กรอก api key ใหม่เพื่อใช้งานกับผู้ให้บริการนี้"
+      },
+      "PiSave" : {
+        "label" : "บันทึก"
+      },
+      "NewUserName" : {
+        "label" : "ชื่อผู้ใช้",
+        "help" : "ชื่อผู้ใช้สำหรับเข้าใช้บริการผู้ให้บริการ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ใช้ข้อมูลที่มีอยู่หรือสร้างใหม่",
+        "help" : "ใช้หรือสร้างข้อมูลประจำตัวใหม่สำหรับผู้ให้บริการนี้"
+      },
+      "newSecretDescription" : {
+        "label" : "คำอธิบายข้อมูลประจำตัว",
+        "help" : "รายละเอียดของ api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "สร้างข้อมูลประจำตัวเรียบร้อยแล้ว",
+        "detail" : "สร้างข้อมูลประจำตัวสำเร็จ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "เกิดข้อผิดพลาดกับ Ollama server",
+        "detail" : "ข้อผิดพลาดเครือข่ายในการติดต่อกับระบบระยะไกลสำหรับรายชื่อโมเดล\nเกิดข้อผิดพลาดกับ url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "แชทกับผู้ใช้"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "โมเดลที่ใช้สำหรับบริการภายใน"
       }
     }
   }

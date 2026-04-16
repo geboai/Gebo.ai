@@ -6,30 +6,45 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
+import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import reactor.core.publisher.Flux;
 
 /**
- * AI generated comments
- * An abstract class representing a configurable chat model.
- * It defines a template for setting up chat models with configuration and model type.
+ * AI generated comments An abstract class representing a configurable chat
+ * model. It defines a template for setting up chat models with configuration
+ * and model type.
  * 
- * @param <ModelConfig> The type parameter for model configuration extending from GBaseChatModelConfig.
- * @param <ChatModelType> The type parameter for the chat model extending from ChatModel.
+ * @param <ModelConfig>   The type parameter for model configuration extending
+ *                        from GBaseChatModelConfig.
+ * @param <ChatModelType> The type parameter for the chat model extending from
+ *                        ChatModel.
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
 		implements IGConfigurableChatModel<ModelConfig> {
-	
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	// Configuration for the chat model
 	protected ModelConfig config = null;
 	// Type of the chat model
@@ -60,7 +75,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	/**
 	 * Retrieves the description associated with the model configuration.
 	 * 
-	 * @return The description of the model configuration if available, otherwise null.
+	 * @return The description of the model configuration if available, otherwise
+	 *         null.
 	 */
 	@Override
 	public String getDescription() {
@@ -80,11 +96,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
-	 * Abstract method for configuring the chat model.
-	 * Implementations must define how the model is configured.
+	 * Abstract method for configuring the chat model. Implementations must define
+	 * how the model is configured.
 	 * 
 	 * @param config The model configuration to use.
-	 * @param type The type of the chat model.
+	 * @param type   The type of the chat model.
 	 * @return An instance of ChatModelType.
 	 * @throws LLMConfigException If configuration fails.
 	 */
@@ -94,7 +110,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Initializes the chat model with the given configuration and type.
 	 * 
 	 * @param config The model configuration to use.
-	 * @param type The type of the chat model.
+	 * @param type   The type of the chat model.
 	 * @throws LLMConfigException If initialization fails.
 	 */
 	@Override
@@ -188,28 +204,34 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
-	 * Retrieves the context length for the chat model.
-	 * Determines the length from configuration or model choice metadata if not explicitly set.
+	 * Retrieves the context length for the chat model. Determines the length from
+	 * configuration or model choice metadata if not explicitly set.
 	 * 
 	 * @return The context length, defaulting to 8192 if unspecified.
 	 */
 	@Override
 	public int getContextLength() {
 		Integer contextLength = null;
-		if (getConfig() != null && contextLength == null) {
+		if (getConfig() != null) {
 			contextLength = getConfig().getContextLength();
-			if (contextLength == null && getConfig().getChoosedModel() != null) {
-				GBaseChatModelChoice choice = (GBaseChatModelChoice) getConfig().getChoosedModel();
-				contextLength = choice.getContextLength();
-				if (contextLength == null) {
-					if (choice.getMetaInfos() != null) {
-						contextLength = choice.getMetaInfos().getContextLength();
+			if (contextLength == null || contextLength.intValue() == 0) {
+				if (getConfig().getChoosedModel() != null
+						&& getConfig().getChoosedModel() instanceof GBaseModelChoice choice) {
+					contextLength = choice.getContextLength();
+					if (contextLength == null || contextLength.intValue() == 0) {
+						if (choice.getMetaInfos() != null) {
+							contextLength = choice.getMetaInfos().getContextLength();
+						}
 					}
+				} else {
+					LOGGER.error("No model choice valorized or wrong class for configurable chat model:" + getCode());
 				}
 			}
 
+		} else {
+			LOGGER.error("No config value for configurable model!!");
 		}
-		if (contextLength == null)
+		if (contextLength == null || contextLength.intValue() == 0)
 			contextLength = 8192;
 		return contextLength;
 	}
@@ -222,4 +244,51 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public ChatClient getChatClient() {
 		return chatClient;
 	}
+
+	protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
+		ChatClient client = getChatClient();
+		String userQuestion = chatContext.getActualUserRequest();
+		// Here prompt, documents and consolidated history
+		SystemMessage systemMessage = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);
+		List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
+		List<Message> messages = new ArrayList<Message>();
+		messages.add(systemMessage);
+		messages.addAll(history);
+		if (userQuestion != null) {
+			messages.add(new UserMessage(userQuestion));
+		}
+		ChatClientRequestSpec reqObject = client.prompt();
+		// chat histroy in user, assistant format
+		reqObject = reqObject.messages(messages);
+		// tools call environment
+		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (toolContext != null) {
+			reqObject = reqObject.toolContext(toolContext);
+		}
+		return reqObject;
+	}
+
+	@Override
+	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+		Flux<ChatResponse> res = reqObject.stream().chatResponse();
+		return res;
+	}
+
+	@Override
+	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+		CallResponseSpec res = reqObject.call();
+		return res.chatResponse();
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
+			Class<ResponseType> rt) throws LLMConfigException {
+		ChatClient client = getChatClient();
+		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+		CallResponseSpec res = reqObject.call();
+		return res.entity(rt);
+	}
+
 }

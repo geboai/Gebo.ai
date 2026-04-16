@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.architecture.integration.tests</artifactId>
 	<dependencies>
@@ -98,6 +98,20 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>neo4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>qdrant</artifactId>
 
+		</dependency>
+		<dependency>
+			<groupId>org.opensearch</groupId>
+			<artifactId>opensearch-testcontainers</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.clients</groupId>
+			<artifactId>gebo.monolithic.api.resttemplate.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

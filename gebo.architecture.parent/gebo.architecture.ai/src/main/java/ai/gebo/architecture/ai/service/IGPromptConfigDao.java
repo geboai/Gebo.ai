@@ -1,0 +1,93 @@
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+
+package ai.gebo.architecture.ai.service;
+
+import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
+
+/**
+ * Gebo.ai comment agent
+ *
+ * Interface for accessing and managing prompt configurations in an application
+ * that rely in llms for a lot of different uses application.
+ */
+public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConfig> {
+	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
+	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
+	/**
+	 * Provides a default prompt configuration based on the specified chat model
+	 * configuration and an optional flag to enable a retrieval-augmented generation
+	 * (RAG) prompt.
+	 *
+	 * @param chatConfiguration the base chat model configuration
+	 * @param ragPrompt         a boolean indicating whether a RAG prompt should be
+	 *                          used
+	 * @return the default prompt configuration
+	 */
+	GPromptConfig defaultChatPrompt(String modelCode, Boolean ragPrompt);
+
+	/**
+	 * Provides a default prompt configuration based on an optional RAG prompt flag.
+	 *
+	 * @param ragPrompt a boolean indicating whether a RAG prompt should be used
+	 * @return the default prompt configuration
+	 */
+	GPromptConfig defaultChatPrompt(Boolean ragPrompt);
+
+	/****************************************************************************
+	 * Get a prompt by its specific use, preferring eventual customized by user one
+	 * 
+	 * @param promptUse
+	 * @return
+	 */
+	default GPromptConfig findByPromptUse(String promptUse) {
+		GPromptConfig data = this.findByPromptUse(promptUse, "en", null, null);
+		if (data == null)
+			throw new IllegalStateException("The default prompt for use:" + promptUse
+					+ " does not exist, this can leave software in an inconsistent state");
+		return data;
+	}
+
+	public GPromptConfig exactFindByPromptUse(String promptUse, String langCode, String modelProvider,
+			String modelCode);
+
+	/************************************************************************************
+	 * Gets a prompt by its specific use, language (failing back to english) and llm
+	 * code hierarchically falling back if no custom specific is declared
+	 * 
+	 * @param promptUse
+	 * @param langCode
+	 * @param config
+	 * @return
+	 */
+	default GPromptConfig findByPromptUse(String promptUse, String langCode, String modelCode) {
+		return this.findByPromptUse(promptUse, langCode, null, modelCode);
+	}
+
+	/**********************************************************************************
+	 * Gets a prompt by its specific use, for a specific llm in english,
+	 * hierarchically falling back if no custom specific is declared
+	 * 
+	 * @param promptUse
+	 * @param config
+	 * @return
+	 */
+	default GPromptConfig findByPromptUse(String promptUse, String modelCode) {
+		return this.findByPromptUse(promptUse, "en", null, modelCode);
+	}
+
+	GPromptConfig findByPromptUse(String promptUse, String langCode, String modelProvider, String modelCode);
+
+	public GPromptConfig insert(GPromptConfig config);
+
+	public GPromptConfig update(GPromptConfig config);
+
+	public void delete(GPromptConfig config);
+}

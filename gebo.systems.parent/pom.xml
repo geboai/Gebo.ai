@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<groupId>ai.gebo.systems</groupId>
 	<artifactId>gebo.systems.parent</artifactId>
@@ -32,5 +32,6 @@
 
 		<module>gebo.atlassian.jira.handler</module>
 		<module>gebo.integration.content.handler</module>
+		<module>gebo.bingsearch.handler</module>
 	</modules>
 </project>

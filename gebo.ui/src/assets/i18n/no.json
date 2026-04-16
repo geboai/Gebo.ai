@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Logg inn"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasjon mislyktes",
+        "detail" : "Kan ikke autentisere med oppgitte legitimasjonsopplysninger"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces-integrasjon",
         "description" : "Konfigurer Gebo.ai for å få tilgang til Google cloud Drive/Workspaces-teamdataene dine"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfigurer Google search api",
+        "description" : "Konfigurer Google search api-legitimasjon for AI-nettsøk"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfigurer Deep search",
+        "description" : "Konfigurer parametere for Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatisk justering av innstillinger for utvidet generering"
+      },
+      "Description" : {
+        "label" : "Beskrivelse"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Siste justeringsoppdatering"
+      },
+      "Code" : {
+        "label" : "Embeddingmodell/VectorStore-kode"
+      },
+      "ComputedThreashold" : {
+        "label" : "Beregnet terskel"
+      },
+      "Autotuned" : {
+        "label" : "Automatisk justert"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai - obligatoriske oppgaver er utført...",
+        "detail" : "Obligatoriske oppsettsteg er fullført, men noen manglende oppgaver hindrer organisasjonen din fra å få mest mulig ut av denne programvaren"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai - mangler noen obligatoriske steg",
+        "detail" : "Vennligst gjennomgå de røde stegene i oppsettprosessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-system"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rediger system"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Sett opp Gebo.ai llms-tilgang til leverandører"
+      },
+      "ExtensiveStup" : {
+        "label" : "Utvidede infrastruktur-/leverandørvalg"
+      },
+      "MainPanelTitle" : {
+        "label" : "Oppsett for brukte store språkmodeller"
+      },
+      "EasySetup" : {
+        "label" : "Enkelt oppsett/konfigurasjonsfiks"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Konfigurer store språkmodeller"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Beskrivelse"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api-nøkkel"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Opprett Google search-legitimasjon"
+      },
+      "CreateBtn" : {
+        "label" : "Opprett"
+      },
+      "customSearchEngineId" : {
+        "label" : "Søkemotor-id",
+        "help" : "Oppgi søkemotor-id som er oppnådd i Google search api-legitimasjonsregistreringen."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasjonskode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "apiKey" : {
+        "label" : "Api-nøkkel",
+        "help" : "Oppgi api-nøkkelen som er oppnådd i Google search api-legitimasjonsregistreringen."
+      },
+      "MainPanel" : {
+        "label" : "Sett opp Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Slett",
+        "help" : "Slett Google search api-legitimasjon"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search-konfig",
+        "help" : "Legg til en deep search-konfigurasjon"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rediger konfig"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktivert"
+      },
+      "EditGroupBtn" : {
+        "label" : "Rediger"
+      },
+      "CodeHeader" : {
+        "label" : "kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "beskrivelse"
+      },
+      "UsersHeader" : {
+        "label" : "brukere"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Innstillinger for modelltilgang"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ekstern leverandør OK",
+        "detail" : "Leverandøren er i drift og riktig konfigurert"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Unntak under operasjon: Feil ved arbeid med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfeil: Feil ved arbeid med url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "angi denne som standard embedding-modell",
         "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ekstern leverandør OK",
+        "detail" : "Leverandøren er i drift og riktig konfigurert"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Ollama lokal (eller lan) server chatmodelloppsett"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Anthropic chatmodelloppsett"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer MistralAI chatmodelloppsett"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Redigerer Google Vertex AI chatmodelloppsett"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Innstillinger for modelltilgang"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Innstillinger for modelltilgang"
+      },
+      "forUses" : {
+        "label" : "Modellbruk",
+        "help" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for.",
+        "placeholder" : "Bruksområder Gebo.ai-plattformen vil vurdere denne modellen for."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble utført"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Er du sikker på at du vil slette denne chatten?",
         "header" : "Slett chat-handling"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Legg til innhold eller endre søkeatferd"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Legg til innhold eller endre søkeatferd"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Legg til innhold eller endre søkeatferd"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Kilder",
+        "help" : "Åpne listen over analyserte dokumenter"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detaljer for dypsøk svar og kilder"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resultat av dypsøksanalyse"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Feil ved søk i Confluence Search",
+        "detail" : "Serverfeil: Problemer med tilgang til confluence-systemet"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Ny chat lastet inn",
+        "detail" : "Ny chat lastet inn"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Velg kilder"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Velg minst ett av følgende alternativer"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hopp over dypsøk"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valgte kunnskapsbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valgte systemer"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Legg til dokument i 'chat med'-listen "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Kjører dypsøk"
+      },
+      "RagLLMResponse" : {
+        "label" : "Kjører augmented generering"
+      },
+      "PureLLMResponse" : {
+        "label" : "Spør llm"
+      },
+      "Waiting" : {
+        "label" : "Analyserer beste svarplan.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Kjører verktøy"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Kjører AI-assistert søk"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysert fil"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysert søkeresultat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysert system søkeresultat for"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliderer sluttrapporten"
+      },
+      "RUNNING" : {
+        "label" : "Kjører "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Jeg analyserer din forespørsel"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Valgt agentisk flyt, agent svarer"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Tjenestenivå er: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Utfører din valgte agent"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Last opp fil(er)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Bla gjennom/søk i bedriftens fil(er)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Valgte dokument chat"
+      },
+      "agenticChat" : {
+        "label" : "Agentisk chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Dypsøk/flere kilder"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dypsøk/Google Nettsøk"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dypsøk/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Dypsøk/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Dypsøk/Kunnskapsbase-søk"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat med fil(er)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dypsøk/Google Nettsøk"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dypsøk/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Dypsøk/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google-bruker som skal etterlignes",
         "help" : "Brukeren som skal etterlignes av de angitte legitimasjonene",
         "placeholder" : "Brukeren som skal etterlignes av de angitte legitimasjonene"
+      },
+      "OK" : {
+        "summary" : "Lagret",
+        "detail" : "Oppdatering utført"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Behandlede dokumenter",
         "dataset-2-label" : "Feil dokumenter",
         "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Fulltekstsindeksering"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feildokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "aktiver alle funksjonskall",
         "help" : "Aktiver alle tilgjengelige verktøy og funksjonskall. Hvis dette ikke er satt, er det mulig å aktivere dem senere i llms administrasjonspanelet"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Unntak under operasjon: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon",
+        "detail" : "Serverfeil: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ekstern leverandør OK",
+        "detail" : "Leverandør kjører og er riktig konfigurert"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Unntak under operasjon:401 UNAUTHORIZED",
+        "detail" : "Serverfeil: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Unntak under operasjon:Mangler basePath",
+        "detail" : "Serverfeil: Mangler basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Opprett og aktiver"
+      },
+      "vendorId" : {
+        "label" : "Velg din leverandør av stor språkmodell",
+        "help" : "Velg den innledende leverandøren for dine standard chat- og embeddingmodeller"
+      },
+      "secretId" : {
+        "label" : "Velg leverandørens legitimasjon (api-nøkkel)",
+        "help" : "Velg en av de eksisterende legitimasjonene for valgt llm-leverandør"
+      },
+      "InternalServiceModel" : {
+        "label" : "Intern tjeneste chat-modell",
+        "help" : "Chat-modellen for interne tjenester vil være ansvarlig for å hente ut informasjon, oppsummere og kjøre interne arbeidsflyter."
+      },
+      "ChatModel" : {
+        "label" : "Standard chat-modell",
+        "help" : "Standard chat-modell vil være ansvarlig for å besvare brukerspørsmål og kjøre arbeidsflyter det ikke er spesifikt konfigurerte modeller for. Den må være kraftig og pålitelig, med en god balanse mellom kostnad, ytelse og resultatkvalitet."
+      },
+      "ProviderBuy" : {
+        "label" : "Kjøp Apy-key kredittlink"
+      },
+      "ProviderWWW" : {
+        "label" : "Nettstedlenke"
+      },
+      "WebSiteLink" : {
+        "label" : "Leverandørens nettsted",
+        "help" : "Klikk her for generell informasjon om leverandøren."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Kjøp leverandørens kreditt",
+        "help" : "Klikk her for å kjøpe kreditt til api-nøkkelen(e) dine."
+      },
+      "EmbeddingModel" : {
+        "label" : "Standard embedding-modell",
+        "help" : "Denne modellen vil være ansvarlig for semantisk indeksering (embedding) og søk i dine data og dokumenter"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Du kan ikke slette dette",
         "detail" : "Dette objektet er referert til fra andre deler av applikasjonen"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Unntak under operasjon: Feil ved arbeid med url: http://localhost:11434/v1/models",
+        "detail" : "Serverfeil: Feil ved arbeid med url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Unntak under operasjon: apiKey må settes",
+        "detail" : "Serverfeil: apiKey må settes"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Feil under strømming av chat-svar",
+        "detail" : "Serverfeil: 400 Bad Request fra POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Unntak under operasjon: Feil ved arbeid med url:http://localhost:8000/v1/models",
+        "detail" : "Serverfeil: Feil ved arbeid med url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Feil ved strømming av chat-svar",
+        "detail" : "Serverfeil: Tilkoblingen ble tilbakestilt"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Unntak under operasjon: Feil ved arbeid med url:https://api.openai.com/v1/models",
+        "detail" : "Serverfeil: Feil ved arbeid med url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Unntak under operasjon: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon",
+        "detail" : "Serverfeil: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Fullført"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble utført"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Brukt identitet",
         "help" : "Velg eller opprett identiteten som skal brukes for å få tilgang til Google Drive-systemet"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Søker etter relevante opplysninger"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Oppsummerer sluttrapporten"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analysert søkeresultat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analysert systemsøkeresultat for"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Velg minst ett av følgende alternativer"
+      },
+      "LaunchBtn" : {
+        "label" : "Start søk"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hopp over dypt søk"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valgte kunnskapsbaser"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valgte systemer"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Velg kilder"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analysert fil"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Sett inn"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SearchSettingTab" : {
+        "label" : "Søkeinnstilling"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Skriv inn prompt for utvinning av relevante opplysninger fra dokumenter"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Skriv inn prompt for konsolidering av utvinnede relevante opplysninger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer deep search-konfigurasjon"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Stor språkmodell-innstilling"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av deep search-konfigurasjonen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for deep search-konfigurasjonen"
+      },
+      "searchType" : {
+        "label" : "Søk-type",
+        "help" : "Velg mellom enkeltstegs semantisk søk eller flerstegs"
+      },
+      "topK" : {
+        "label" : "Antall hentede tekstsegmenter (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Brukt llm",
+        "help" : "Spesifiser stor språkmodell brukt for Deep search, standard brukes\n                                    hvis ingen er valgt."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentanalyse-prompt",
+        "help" : "Rediger prompten som skal brukes til å hente ut relevante opplysninger fra dokumentfragmenter."
+      },
+      "consolidationPrompt" : {
+        "label" : "Konsolideringsprompt for utvinnede opplysninger",
+        "help" : "Rediger prompten som brukes til å samle utvunnede relevante opplysninger fra hentede dokumenter til en samlet rapport."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Søkelikhetsgrense",
+        "help" : "Semantisk likhetsgrense for første steg (mellom 0,5 og 1,0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Flerstegs likhetsgrense",
+        "help" : "Semantisk likhetsgrense for andre steg (mellom 0,5 og 1,0)"
+      },
+      "defaultModel" : {
+        "label" : "Standard stor språkmodell",
+        "help" : "Den standard stor språkmodellen brukes til Deep search-behandling"
+      },
+      "similarityThreashold" : {
+        "label" : "Søkelikhetsgrense",
+        "help" : "Semantisk likhetsgrense (mellom 0,5 og 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Sikkerhetsinnstillinger"
+      },
+      "accessibleToAll" : {
+        "label" : "Tilgjengelig for alle"
+      },
+      "datasource" : {
+        "label" : "Datakilde"
+      },
+      "allowedGroups" : {
+        "label" : "Tillatte grupper"
+      },
+      "allowedUsers" : {
+        "label" : "Tillatte brukere"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Tilgang per datakilde for brukere/grupper",
+        "help" : "Dypsøk aktiveres for hver ekstern datakilde og bruker eller gruppe"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Enkel tilgang per bruker/gruppe"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Tilgang per datakilde bruker/gruppe"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Bruk eller opprett api-nøkkel-legitimasjon"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-nøkkel/legitimasjon",
+        "help" : "Velg api-nøkkel eller legitimasjon for denne leverandøren"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api-nøkkel",
+        "help" : "Legg inn en ny api-nøkkel som skal brukes med denne leverandøren"
+      },
+      "PiSave" : {
+        "label" : "Lagre"
+      },
+      "NewUserName" : {
+        "label" : "Brukernavn",
+        "help" : "Brukernavn brukt for å få tilgang til leverandørtjenestene"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Bruk eksisterende eller ny",
+        "help" : "Bruk eksisterende eller opprett ny legitimasjon for denne leverandøren"
+      },
+      "newSecretDescription" : {
+        "label" : "Legitimasjonsbeskrivelse",
+        "help" : "Beskrivelse av api-nøkkel-legitimasjon"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Legitimasjon opprettet",
+        "detail" : "Legitimasjon opprettet"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Feil ved kommunikasjon med Ollama-server",
+        "detail" : "Nettverksfeil ved kommunikasjon til fjernt system for tilgang til innhold\n modelliste Feil ved arbeid med url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chat med brukere"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modell brukt til interne tjenester"
       }
     }
   }

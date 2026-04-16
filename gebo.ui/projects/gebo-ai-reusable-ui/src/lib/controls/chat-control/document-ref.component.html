@@ -8,18 +8,33 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<div class="grid" *ngIf="ref" style="with: 100%;">
-    <div style="vertical-align: middle;" class="col-12">
-        <p-button id="AddDocsBtn" gebo-ai-label (onClick)="addToChoosed.emit(ref)" icon="pi pi-plus" *ngIf="choosed===false" [outlined]="true"
+
+
+
+<div class="gebo-ai-chat-docref">
+  @if(ref) {
+
+  @if(!choosed) {
+  <p-button id="AddDocsBtn"
+            gebo-ai-label
+            (onClick)="addToChoosed.emit(ref)"
+            text
+            rounded
+            icon="pi pi-file-plus"
+            class="custom-blue-btn"
             title="Add document to 'chat with' list "></p-button>
-        <p-button [icon]="contentCssClass" [label]="ref.name" [text]="true" (onClick)="showDocument(ref)" [title]="ref.name + ' ' + (ref.ntokensRelevant?ref.ntokensRelevant:0)+'/'+ref.ntotalContentTokens+' relevant/total tokens'"></p-button>
+  }
 
-    </div>
+  <p-button [icon]="contentCssClass"
+            [label]="ref.name"
+            [text]="true"
+            class="custom-blue-btn"
+            (onClick)="showDocument(ref)"
+            [title]="ref.name + ' ' + (ref.ntokensRelevant?ref.ntokensRelevant:0)+'/'+ref.ntotalContentTokens+' relevant/total tokens'"></p-button>
 
-
-    <gebo-ai-content-viewer [code]="openDocumentCode" [activate]="openDocumentWindow"
-        (close)="closeDocument()"></gebo-ai-content-viewer>
+  <gebo-ai-content-viewer [code]="openDocumentCode"
+                          [activate]="openDocumentWindow"
+                          (close)="closeDocument()"></gebo-ai-content-viewer>
+  }
+</div>

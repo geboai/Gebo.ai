@@ -25,6 +25,7 @@ export interface GMistralEmbeddingModelChoice {
     metaInfos?: ModelMetaInfo;
     informativeUrl?: string;
     contextLength?: number;
+    nativeModelMetaInfos?: any;
     optimalTokenizationParam?: number;
     modelCard?: MistralBaseModelCard;
 }

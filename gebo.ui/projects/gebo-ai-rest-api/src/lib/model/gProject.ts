@@ -25,6 +25,7 @@ export interface GProject {
     accessibleToAll?: boolean;
     rootKnowledgeBaseCode?: string;
     objectSpaceType?: GProject.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     parentProjectCode?: string;
 }
 export namespace GProject {

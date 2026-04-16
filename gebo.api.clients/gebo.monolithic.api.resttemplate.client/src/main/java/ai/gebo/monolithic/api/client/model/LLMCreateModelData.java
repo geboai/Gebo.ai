@@ -18,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -79,6 +81,43 @@ public class LLMCreateModelData {
 
   @JsonProperty("baseUrl")
   private String baseUrl = null;
+
+  @JsonProperty("contextWindow")
+  private Integer contextWindow = null;
+
+  /**
+   * Gets or Sets uses
+   */
+  public enum UsesEnum {
+    CHAT("CHAT"),
+    INTERNAL_SERVICES("INTERNAL_SERVICES");
+
+    private String value;
+
+    UsesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UsesEnum fromValue(String input) {
+      for (UsesEnum b : UsesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("uses")
+  private List<UsesEnum> uses = null;
 
   public LLMCreateModelData type(TypeEnum type) {
     this.type = type;
@@ -224,6 +263,50 @@ public class LLMCreateModelData {
     this.baseUrl = baseUrl;
   }
 
+  public LLMCreateModelData contextWindow(Integer contextWindow) {
+    this.contextWindow = contextWindow;
+    return this;
+  }
+
+   /**
+   * Get contextWindow
+   * @return contextWindow
+  **/
+  @Schema(description = "")
+  public Integer getContextWindow() {
+    return contextWindow;
+  }
+
+  public void setContextWindow(Integer contextWindow) {
+    this.contextWindow = contextWindow;
+  }
+
+  public LLMCreateModelData uses(List<UsesEnum> uses) {
+    this.uses = uses;
+    return this;
+  }
+
+  public LLMCreateModelData addUsesItem(UsesEnum usesItem) {
+    if (this.uses == null) {
+      this.uses = new ArrayList<>();
+    }
+    this.uses.add(usesItem);
+    return this;
+  }
+
+   /**
+   * Get uses
+   * @return uses
+  **/
+  @Schema(description = "")
+  public List<UsesEnum> getUses() {
+    return uses;
+  }
+
+  public void setUses(List<UsesEnum> uses) {
+    this.uses = uses;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -241,12 +324,14 @@ public class LLMCreateModelData {
         Objects.equals(this.enableAllFunctions, llMCreateModelData.enableAllFunctions) &&
         Objects.equals(this.secretId, llMCreateModelData.secretId) &&
         Objects.equals(this.modelCode, llMCreateModelData.modelCode) &&
-        Objects.equals(this.baseUrl, llMCreateModelData.baseUrl);
+        Objects.equals(this.baseUrl, llMCreateModelData.baseUrl) &&
+        Objects.equals(this.contextWindow, llMCreateModelData.contextWindow) &&
+        Objects.equals(this.uses, llMCreateModelData.uses);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl);
+    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses);
   }
 
 
@@ -263,6 +348,8 @@ public class LLMCreateModelData {
     sb.append("    secretId: ").append(toIndentedString(secretId)).append("\n");
     sb.append("    modelCode: ").append(toIndentedString(modelCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    contextWindow: ").append(toIndentedString(contextWindow)).append("\n");
+    sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
     sb.append("}");
     return sb.toString();
   }

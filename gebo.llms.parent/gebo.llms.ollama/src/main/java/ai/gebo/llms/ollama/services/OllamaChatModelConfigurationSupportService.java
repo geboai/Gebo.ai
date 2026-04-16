@@ -11,6 +11,7 @@ package ai.gebo.llms.ollama.services;
 
 import java.util.List;
 
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
@@ -20,7 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
@@ -31,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
@@ -151,6 +153,15 @@ public class OllamaChatModelConfigurationSupportService
 		@Override
 		public boolean isSupportsFunctionsCall() {
 			return true;
+		}
+		@Override
+		public boolean isApplyThinkingMarkupHandling() {
+			
+			return true;
+		}
+		@Override
+		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+			return new ThinkTagSkippingOutputConverter<T>(type);
 		}
 	};
 

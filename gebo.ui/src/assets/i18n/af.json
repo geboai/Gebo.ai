@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Meld aan"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasie het misluk",
+        "detail" : "Kan nie met die verskafde geloofsbriewe verifieer nie"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integrasie",
         "description" : "Stel Gebo.ai op om toegang te hê tot jou Google cloud Drive/Workspaces span data"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Stel Google-soek api op",
+        "description" : "Stel Google-soek api geloofsbriewe op vir KI-websoektogte"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Stel Deep search op",
+        "description" : "Stel Deep search parameters op"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. outomatiese afstemming",
+        "description" : "Outomatiese instel van parameters vir retrieve augmented generation"
+      },
+      "Description" : {
+        "label" : "Beskrywing"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Laaste afstemmingsopdatering"
+      },
+      "Code" : {
+        "label" : "Embedding model/VectorStore-kode"
+      },
+      "ComputedThreashold" : {
+        "label" : "Berekende drempel"
+      },
+      "Autotuned" : {
+        "label" : "Outomaties afgestem"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai instap-verpligte stappe voltooi...",
+        "detail" : "Verpligte instapstappe is voltooi, maar sommige ontbrekende stappe keer dat jou organisasie die meeste uit hierdie sagteware kan put"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai-installasie kort 'n verpligte stap",
+        "detail" : "Hersien asseblief die rooi stappe van die installasieproses"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence-stelsel"
+      },
+      "EditSystemBtn" : {
+        "label" : "Wysig stelsel"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Stel Gebo.ai llms verskafferstoegang op"
+      },
+      "ExtensiveStup" : {
+        "label" : "Uitgebreide infrastruktuur-/verskafferkeuses"
+      },
+      "MainPanelTitle" : {
+        "label" : "Stel gebruikte groot taalmodelle op"
+      },
+      "EasySetup" : {
+        "label" : "Maklike aanvanklike opstelling/konfigurasie"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Stel groot taalmodelle op"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Beskrywing"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google-soek api sleutel"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Skep Google-soek geloofsbriewe"
+      },
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "customSearchEngineId" : {
+        "label" : "Soekenjin-ID",
+        "help" : "Voer die soekenjin-ID in wat verkry is tydens die Google-soek api geloofsbriewe registrasie."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "apiKey" : {
+        "label" : "Api sleutel",
+        "help" : "Voer die api sleutel in wat verkry is tydens die Google-soek api geloofsbriewe registrasie."
+      },
+      "MainPanel" : {
+        "label" : "Stel Google-soek api op"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Verwyder",
+        "help" : "Verwyder Google-soek api geloofsbriewe"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfigurasie",
+        "help" : "Voeg 'n deep search konfigurasie by"
+      },
+      "EditSystemBtn" : {
+        "label" : "Wysig konfigurasie"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "gedeaktiveer"
+      },
+      "EditGroupBtn" : {
+        "label" : "Wysig"
+      },
+      "CodeHeader" : {
+        "label" : "kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "beskrywing"
+      },
+      "UsersHeader" : {
+        "label" : "gebruikers"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeltoegang-instellings"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-afstandverskaffer OK",
+        "detail" : "Verskaffer is aanlyn en suksesvol gekonfigureer"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Uitsondering tydens werking:Fout met url:https://api.openai.com/v1/models",
+        "detail" : "Bedienerfout: Fout met url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "stel dit as verstek embedding model",
         "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-afstandverskaffer OK",
+        "detail" : "Verskaffer is aanlyn en suksesvol gekonfigureer"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Redigeer Ollama plaaslike (of lan) kletsmodel-konfigurasie"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Redigeer Anthropic kletsmodel-konfigurasie"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Redigeer MistralAI kletsmodel-konfigurasie"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Redigeer Google Vertex AI kletsmodel-konfigurasie"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeltoegang-instellings"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeltoegang-instellings"
+      },
+      "forUses" : {
+        "label" : "Modelgebruik(e)",
+        "help" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg.",
+        "placeholder" : "Gebruik of gebruiksareas waarvoor die Gebo.ai-platform hierdie model gaan oorweeg."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Is jy seker jy wil hierdie geselskap uitvee?",
         "header" : "Verwyder geselskap-aksie"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Voeg inhoud by of verander soekgedrag"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Bronne",
+        "help" : "Maak die lys van ontlede dokumente oop"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Diep soek antwoord en brondetails"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Diep soek-analise resultaat"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Fout met Confluence-soektog",
+        "detail" : "Bedienerfout: Probleme met toegang tot die Confluence-stelsel"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nuwe klets gelaai",
+        "detail" : "Nuwe klets suksesvol gelaai"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kies bronne"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Kies ten minste een van die volgende opsies"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Slaan diep soek oor"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Gekose kennisbasisse"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Gekose stelsels"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Voeg dokument by 'gesels met' lys"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Besig met diep soek"
+      },
+      "RagLLMResponse" : {
+        "label" : "Besig met retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Vra llm"
+      },
+      "Waiting" : {
+        "label" : "Analiseer die beste reaksieplan..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Besig met gereedskap"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI-ondersteunde soektog loop"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Ontleë lêer"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Ontleë soekresultaat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Ontleë stelsel soekresultaat vir"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolideer finale verslag"
+      },
+      "RUNNING" : {
+        "label" : "Loop"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ek analiseer jou versoek"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Gekose agentiese vloei, agent aan die gang"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Diensvlak is: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Jou gekose agent word uitgevoer"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Laai lêer(s) op"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Blaai/soek maatskappy lêer(s)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Gekose doc. klets"
+      },
+      "agenticChat" : {
+        "label" : "Agentiese klets"
+      },
+      "rag" : {
+        "label" : "R.a.g. klets"
+      },
+      "deepSearch" : {
+        "label" : "Diep soek/Veelvoudige bronne"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Diep soek/Google Web-soektog"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Diep soek/Confluence-soektog"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Diep soek/Jira-soektog"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Diep soek/Kennisbasis-soektog"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Klets met lêer(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Diep soek/Google Web-soektog"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Diep soek/Confluence-soektog"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Diep soek/Jira-soektog"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google gebruiker om voor te doen as",
         "help" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe",
         "placeholder" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe"
+      },
+      "OK" : {
+        "summary" : "Suksesvol gestoor",
+        "detail" : "Opdateringsoperasie suksesvol voltooi"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Verwerkte dokumente",
         "dataset-2-label" : "Foutdokumente",
         "dataset-3-label" : "Wegegooide dokumente"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Volledige teksindeksering"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Onverwerkte dokumente",
+        "label-1" : "Fout tydens verwerking",
+        "label-2" : "Verwerkte dokumente"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout tydens verwerking van tokens"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "aktiveer alle funksie-oproepe",
         "help" : "Aktiveer alle beskikbare gereedskap en funksie-oproepe; indien nie gestel nie, kan dit later in die llms admin paneel geaktiveer word"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Uitsondering tydens werking:Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie",
+        "detail" : "Bedienerfout: Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-afstandverskaffer OK",
+        "detail" : "Verskaffer is aktief en suksesvol gekonfigureer"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Uitsondering tydens operasie:401 ONGEMAGTIG",
+        "detail" : "Bedienerfout: 401 ONGEMAGTIG"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Uitsondering tydens operasie:Basispad ontbreek",
+        "detail" : "Bedienerfout: Basispad ontbreek"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Skep en aktiveer"
+      },
+      "vendorId" : {
+        "label" : "Kies jou groot taalmodelverskaffer",
+        "help" : "Kies die aanvanklike verskaffer vir jou verstek klets- en embedding-modelle"
+      },
+      "secretId" : {
+        "label" : "Kies verskafferbewyse (api-sleutel)",
+        "help" : "Kies een van die bestaande bewese vir die geselekteerde llm-verskaffer"
+      },
+      "InternalServiceModel" : {
+        "label" : "Interne dienste kletsmodel",
+        "help" : "Die kletsmodel wat opgestel is vir interne dienste sal verantwoordelik wees om inligting uit te haal, saam te vat en interne werkvloei uit te voer."
+      },
+      "ChatModel" : {
+        "label" : "Verstek kletsmodel",
+        "help" : "Die verstek kletsmodel sal alle gebruikersvrae beantwoord, en werkvloei uitvoer waarvoor daar nie spesifiek ander modelle opgestel is nie. Dit moet kragtig en betroubaar wees, met 'n goeie balans tussen koste, prestasie en kwaliteit."
+      },
+      "ProviderBuy" : {
+        "label" : "Koop Apy-sleutel krediet skakel"
+      },
+      "ProviderWWW" : {
+        "label" : "Webwerf-skakel"
+      },
+      "WebSiteLink" : {
+        "label" : "Verskaffer se webwerf",
+        "help" : "Klik hier vir algemene inligting oor die verskaffer."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Koop verskaffer se krediet",
+        "help" : "Klik hier om krediet vir jou api-sleutel(s) te koop."
+      },
+      "EmbeddingModel" : {
+        "label" : "Verstek embedding model",
+        "help" : "Hierdie model is verantwoordelik vir semantiese indeksering (embedding) en verkryging van jou data en dokumente"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Jy kan dit nie uitvee nie",
         "detail" : "Hierdie objek word vanuit ander deel(e) van die toepassing verwys"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Uitsondering tydens operasie: Fout met url: http://localhost:11434/v1/models",
+        "detail" : "Bedienerfout: Fout met url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Uitsondering tydens operasie: apiKey moet gestel wees",
+        "detail" : "Bedienerfout: apiKey moet gestel wees"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Fout tydens stroom van chat antwoord",
+        "detail" : "Bedienerfout: 400 Bad Request vanaf POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Uitsondering tydens werking:Fout met url:http://localhost:8000/v1/models",
+        "detail" : "Bedienerfout: Fout met url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Fout tydens stroom van kletsantwoord",
+        "detail" : "Bedienerfout: Verbindingsherstel"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Uitsondering tydens werking:Fout met url:https://api.openai.com/v1/models",
+        "detail" : "Bedienerfout: Fout met url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Uitsondering tydens werking:Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie",
+        "detail" : "Bedienerfout: Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Voltooi"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Identiteit gebruik",
         "help" : "Kies of skep die identiteit om toegang te verkry tot die google drive-stelsel"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Gesels"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Soek relevante inligting"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolideer die finale verslag"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Geanaliseerde soekresultaat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Geanaliseerde stelselsoekresultaat vir"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Kies ten minste een van die volgende opsies"
+      },
+      "LaunchBtn" : {
+        "label" : "Begin soek"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Slaan diepte-soek oor"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Gekose kennisbasisse"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Gekose stelsels"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kies bronne"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Ontleë lêer"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Voeg in"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SearchSettingTab" : {
+        "label" : "Soekinstelling"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Voeg prompt in vir relevante inligting-uittrek uit dokumente"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Voeg prompt in vir konsolidasie van onttrekte relevante inligting"
+      },
+      "MainPanel" : {
+        "label" : "Wysig deep search konfigurasie"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Groot taalmodel instelling"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die deep search konfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die deep search konfigurasie"
+      },
+      "searchType" : {
+        "label" : "Soektipe",
+        "help" : "Kies tussen enkel hop semantiese soektog of multi hop"
+      },
+      "topK" : {
+        "label" : "Aantal gesoekte tekssegmente (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Gebruik llm",
+        "help" : "Spesifiseer groot taalmodel gebruik vir Deep search, die verstek een sal gebruik word as geen gekies is nie."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokument-analise prompt",
+        "help" : "Wysig die prompt wat gebruik gaan word vir fragment inligting-onttrekking uit dokumente."
+      },
+      "consolidationPrompt" : {
+        "label" : "Onttrekte inligting konsolidasie prompt",
+        "help" : "Wysig die prompt wat gebruik sal word om 'n enkele verslag te konsolideer met relevante inligting uit onttrekte dokumente."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Soeksemanthese drempelwaarde",
+        "help" : "Eerste hop semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Tweede hop gelyksoortigheid drempelwaarde",
+        "help" : "Tweede hop semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Verstek groot taalmodel",
+        "help" : "Die verstek groot taalmodel sal gebruik word vir Deep search verwerking"
+      },
+      "similarityThreashold" : {
+        "label" : "Soek se gelyksoortigheid drempelwaarde",
+        "help" : "Semantiese gelyksoortigheid drempelwaarde (tussen 0.5 en 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Sekuriteit-instellings"
+      },
+      "accessibleToAll" : {
+        "label" : "Toeganklik vir almal"
+      },
+      "datasource" : {
+        "label" : "Databron"
+      },
+      "allowedGroups" : {
+        "label" : "Toegelate groepe"
+      },
+      "allowedUsers" : {
+        "label" : "Toegelate gebruikers"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Per databron gebruikers/groepe toegang",
+        "help" : "Diep soek sal vir elke eksterne databron en gebruiker of groep beskikbaar wees"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Eenvoudige per gebruiker/groep toegang"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Per databron gebruiker/groep toegang"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Gebruik of skep api-sleutelbewyse"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-sleutel/bewyse",
+        "help" : "Kies api-sleutel of bewys vir hierdie verskaffer"
+      },
+      "NewApiKey" : {
+        "label" : "Nuwe api-sleutel",
+        "help" : "Voer 'n nuwe api-sleutel in om saam met hierdie verskaffer te gebruik"
+      },
+      "PiSave" : {
+        "label" : "Stoor"
+      },
+      "NewUserName" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Gebruikersnaam wat gebruik word om toegang te verkry tot verskaffer se dienste"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gebruik bestaande of nuwe",
+        "help" : "Gebruik bestaande of skep nuwe bewys vir hierdie verskaffer"
+      },
+      "newSecretDescription" : {
+        "label" : "Bewysbeskrywing",
+        "help" : "Api-sleutelbewys beskrywing"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Bewyse geskep",
+        "detail" : "Bewyse suksesvol geskep"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Fout met kommunikasie met Ollama-bediener",
+        "detail" : "Netwerkfout met toegang tot die afstandsstelsel om inhoud\nmodelliste te laai Fout met url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Klets met gebruikers"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model gebruik vir interne dienste"
       }
     }
   }

@@ -14,11 +14,10 @@ package ai.gebo.monolithic.api.client.api;
 
 import java.io.File;
 import ai.gebo.monolithic.api.client.model.GBaseChatModelChoice;
-import ai.gebo.monolithic.api.client.model.GUserChatInfo;
+import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.GeboChatUserInfo;
-import ai.gebo.monolithic.api.client.model.GeboTemplatedChatResponseRichResponse;
 import ai.gebo.monolithic.api.client.model.ModelProviderCapabilities;
 import ai.gebo.monolithic.api.client.model.ServerSentEventString;
 import ai.gebo.monolithic.api.client.model.SpeechRequest;
@@ -51,21 +50,6 @@ public class GeboChatControllerApiTest {
     public void chatTest() {
         GeboChatRequest body = null;
         GeboChatResponse response = api.chat(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void createCleanChatByModelCodeTest() {
-        String modelCode = null;
-        GUserChatInfo response = api.createCleanChatByModelCode(modelCode);
 
         // TODO: test validations
     }
@@ -123,9 +107,8 @@ public class GeboChatControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void richChatTest() {
-        GeboChatRequest body = null;
-        GeboTemplatedChatResponseRichResponse response = api.richChat(body);
+    public void getVisibleKnowledgeBasesTest() {
+        List<GBaseObject> response = api.getVisibleKnowledgeBases();
 
         // TODO: test validations
     }
@@ -157,21 +140,6 @@ public class GeboChatControllerApiTest {
     public void streamResponseTest() {
         GeboChatRequest body = null;
         List<ServerSentEventString> response = api.streamResponse(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void suggestChatDescriptionTest() {
-        String id = null;
-        GUserChatInfo response = api.suggestChatDescription(id);
 
         // TODO: test validations
     }

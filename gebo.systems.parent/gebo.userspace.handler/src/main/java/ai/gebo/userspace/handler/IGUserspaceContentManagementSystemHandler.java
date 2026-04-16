@@ -13,6 +13,7 @@
 package ai.gebo.userspace.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -24,6 +25,6 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
  * It serves as a contract for implementing classes that will handle operations related to
  * userspace content management.
  */
-public interface IGUserspaceContentManagementSystemHandler extends IGContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint>{
+public interface IGUserspaceContentManagementSystemHandler extends IGContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint,NoContentConsumingSessionParam>{
 
 }

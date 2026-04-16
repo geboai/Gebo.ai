@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
 
 /**
@@ -64,6 +65,12 @@ public class SpecializedHandlerRepositoryPattern
 	public IGSpecializedDocumentReferenceIngestionHandler findByCanManage(GDocumentReference reference) {
 		return this.findImplementation(x -> {
 			return x.canManageContent(reference);
+		});
+	}
+
+	public IGSpecializedDocumentReferenceIngestionHandler findByCanManage(TypedInputStream streamContent) {
+		return this.findImplementation(x -> {
+			return x.canManageContent(streamContent);
 		});
 	}
 }

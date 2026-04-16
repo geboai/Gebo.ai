@@ -30,6 +30,7 @@ export interface GProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
 }
 export namespace GProjectEndpoint {
     export type SynchroStrategyEnum = 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' | 'HASH_CHECK';

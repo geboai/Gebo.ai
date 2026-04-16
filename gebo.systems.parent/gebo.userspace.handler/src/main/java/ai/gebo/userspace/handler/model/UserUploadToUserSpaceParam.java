@@ -2,7 +2,7 @@ package ai.gebo.userspace.handler.model;
 
 import java.util.List;
 
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
 import jakarta.validation.Valid;

@@ -34,7 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.openai_compat.config.GenericOpenAICompatibleProvidersConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 

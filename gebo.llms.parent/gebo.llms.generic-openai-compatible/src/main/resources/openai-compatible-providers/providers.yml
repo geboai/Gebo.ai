@@ -14,6 +14,7 @@ ai.gebo.llms.generic.config:
       providerId: regolo.ai
       description: Regolo.ai chat models
       baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
 
     - code: chatmodel-xai
       providerId: xai
@@ -28,6 +29,7 @@ ai.gebo.llms.generic.config:
     - code: chatmodel-vllm
       providerId: vllm
       description: VLLM hosted chat model
+      applyThinkingMarkupHandling: true
       baseUrl:
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
@@ -40,6 +42,7 @@ ai.gebo.llms.generic.config:
       providerId: regolo.ai
       description: Regolo.ai embedding model
       baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
 
     - code: embedding-groq
       providerId: groq
@@ -60,3 +63,24 @@ ai.gebo.llms.generic.config:
       providerId: vllm
       description: VLLM hosted embedding model
       baseUrl:
+
+  imageModelProviders:
+    - code: images-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai image generation model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+  textToSpeechModelProviders:
+    - code: tts-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai text to speech model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+  transcriptModelProviders:
+    - code: transcript-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai transcript model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list

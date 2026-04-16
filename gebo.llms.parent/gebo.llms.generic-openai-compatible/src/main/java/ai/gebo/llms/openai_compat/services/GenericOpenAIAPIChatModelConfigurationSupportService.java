@@ -19,7 +19,17 @@ package ai.gebo.llms.openai_compat.services;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -28,10 +38,12 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.retry.support.RetryTemplate;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -40,11 +52,12 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
+import ai.gebo.llms.abstraction.layer.services.ThinkTagSkippingOutputConverter;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -122,6 +135,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
 
+		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
+
 		/**
 		 * Configures the OpenAI-compatible chat model with the provided configuration
 		 * 
@@ -164,7 +179,13 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).baseUrl(baseUrl).build();
+
+			if (apiKey != null) {
+				apiBuilder = apiBuilder.apiKey(apiKey);
+			} else {
+				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
+			}
+			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
 
 			// Configure model options
 			Builder builder = OpenAiChatOptions.builder();
@@ -179,10 +200,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			}
 
 			// Configure tool callbacks (functions)
-			List<ToolCallback> functionCallbacks = new ArrayList<ToolCallback>();
+
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-				functionCallbacks.addAll(functions);
 				builder = builder.toolCallbacks(functions);
 				List<String> names = functions.stream().map(x -> {
 					return x.getToolDefinition().name();
@@ -193,13 +213,20 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (user != null) {
 				builder = builder.user(user);
 			}
-
 			OpenAiChatOptions options = builder.build();
-
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.create());
 			return model;
+		}
+
+		@Override
+		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+			if (this.type.getCode().equals(CHATMODEL_VLLM)) {
+				return new ThinkTagSkippingOutputConverter<T>(type);
+			} else {
+				return super.createConverter(type);
+			}
 		}
 
 		/**
@@ -223,6 +250,32 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			return true;
 		}
 
+		@Override
+		protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
+			String userQuestion = chatContext.getActualUserRequest();
+			if (type.getCode().equals(CHATMODEL_VLLM)) {
+				ChatClient client = getChatClient();
+				// Here prompt, documents and consolidated history
+				String systemMessage = ClientChatCallUtil.createPromptContextHistory(prompt, chatContext);
+
+				ChatClientRequestSpec reqObject = client.prompt(systemMessage).user(userQuestion);
+				// chat histroy in user, assistant format
+				// reqObject = reqObject.messages(List.of(systemMessage));
+				// tools call environment
+				Map<String, Object> toolContext = chatContext.getToolsContext();
+				if (toolContext != null) {
+					reqObject = reqObject.toolContext(toolContext);
+				}
+				return reqObject;
+			} else
+				return super.prepareCall(prompt, chatContext);
+		}
+
+		@Override
+		public boolean isApplyThinkingMarkupHandling() {
+
+			return GenericOpenAIAPIChatModelConfigurationSupportService.this.type.isApplyThinkingMarkupHandling();
+		}
 	};
 
 	/**

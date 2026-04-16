@@ -11,4 +11,5 @@ public class DocumentChunksSet {
 	String id = UUID.randomUUID().toString();
 	long totalTokens=0l, totalBytes=0l;
 	List<DocumentChunk> chunks = new ArrayList<DocumentChunk>();
+	private String chunkingSessionId = null;
 }

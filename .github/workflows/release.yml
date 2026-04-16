@@ -113,6 +113,7 @@ jobs:
         with:
           files: |
             release-files/**/*
+            docs/**/*
           draft: false
           prerelease: false
         env:

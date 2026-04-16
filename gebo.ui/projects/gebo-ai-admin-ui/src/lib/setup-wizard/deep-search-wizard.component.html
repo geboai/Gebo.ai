@@ -1,0 +1,40 @@
+<p-blockUI id="BlockUILock" gebo-ai-label [target]="instModeUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #instModeUI header="Setup company Atlassian Confluence systems">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button id="AddDeepSearchBtn" gebo-ai-label icon="pi pi-plus" label="Deep search config"
+                styleClass="w-full" [outlined]="true" title="Add a deep search configuration"
+                [disabled]="(deepSearchConfig && deepSearchConfig?.length && (deepSearchConfig.length>0))?true:false"
+                (onClick)="createDeepSearchConfig()"></p-button>
+        </div>
+    </div>
+    <div class=" grid">
+
+        <div class="col-12"><p-table id="Table" gebo-ai-label [value]="deepSearchConfig"
+                [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header pTemplate="header">
+                    <tr>
+                        <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
+
+                        <th></th>
+
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item pTemplate="body">
+                    <tr>
+                        <td>{{ item.code }}</td>
+                        <td>{{ item.description }}</td>
+                        <td><p-button id="EditSystemBtn" gebo-ai-label label="Edit config" icon="pi pi-pencil"
+                                [outlined]="true" (onClick)="editDeepSearchConfig(item)"></p-button></td>
+                    </tr>
+                </ng-template>
+            </p-table></div>
+
+    </div>
+
+</p-panel>

@@ -9,12 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

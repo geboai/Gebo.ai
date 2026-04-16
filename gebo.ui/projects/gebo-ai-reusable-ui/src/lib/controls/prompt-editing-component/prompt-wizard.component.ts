@@ -10,9 +10,9 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardConfigs, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
@@ -50,7 +50,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /** Controls visibility of the prompt wizard dialog */
     public dialogVisible: boolean = false;
     /** Messages to display to the user in the UI */
-    public userMessages: ToastMessageOptions[] = [{ severity: "info", summary: "Ask AI to write a prompt template", detail: "With this screen AI will assist you on writing the correct template for your objectives" }];
+    public userMessages: ToastMessageOptions[] = [];
     /** Indicates if any operation is in progress */
     public loading: boolean = false;
     /** Form group for user input containing model selection and query text */
@@ -67,8 +67,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     lastResponse?: OperationStatusPromptTemplateResponse;
     /** Available chat models for selection */
     chatModels?: GLookupEntry[];
-    /** Configuration settings for the prompt template wizard */
-    wizardConfigs?: PromptTemplateWizardConfigs;
+    
 
     /**
      * Constructor for the GeboAIPromptWizardComponent
@@ -93,17 +92,12 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      */
     ngOnInit(): void {
         this.loading = true;
-        const observables: [Observable<GLookupEntry[]>, Observable<PromptTemplateWizardConfigs>] = [this.modelsLookupService.getRuntimeConfiguredChatModelsLookup(), this.promptWizardControllerService.getTemplateWizardConfigs()];
+        const observables: [Observable<GLookupEntry[]>] = [this.modelsLookupService.getRuntimeConfiguredChatModelsLookup()];
         forkJoin(observables).subscribe({
             next: (value) => {
                 this.chatModels = value[0];
-                this.wizardConfigs = value[1];
-                if (!this.promptTemplatePlaceholderText) {
-                    const prompt = this.wizardConfigs?.defaultPromptTemplateWizardConfig?.prompt;
-                    if (prompt) {
-                        this.formGroup.controls["query"].setValue(prompt);
-                    }
-                }
+               
+               
             },
             complete: () => {
                 this.loading = false;

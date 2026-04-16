@@ -11,10 +11,10 @@
 
 
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ScrollerOptions, TreeNode } from "primeng/api";
 import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -42,7 +42,7 @@ function toExtended(chatInfo: GUserChatInfo): ExtendedGUserChatInfo {
 @Component({
     selector: "gebo-ai-chat-section-component",
     templateUrl: "gebo-ai-rag-chat-section.component.html",
-    styleUrl: "gebo-ai-rag-chat-section.component.css",
+    styleUrl: "gebo-ai-rag-chat-section.component.scss",
     standalone: false,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
@@ -95,8 +95,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected chatProfilesData: GChatProfileConfiguration[] = [];
     /** Stores available chat models data */
     protected chatModelsData: { code?: string, description?: string }[] = [];
-
-
+    protected chatUIOptions?:ChatUIOptions;
     protected id?: string;
 
     /**
@@ -112,10 +111,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         private actualRouting: ActivatedRoute,
         private router: Router,
         private geboRagChatControllerService: GeboRagChatControllerService,
-        private geboChatControllerService: GeboChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
-        private geboChatModelsControllerService: ChatModelsLookupControllerService,
-        private geboTranslationService: GeboAITranslationService) {
+        private geboChatModelsControllerService: ChatModelsLookupControllerService) {
         this.scrollOptions = {
 
             onLazyLoad: () => {
@@ -131,24 +128,24 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         };
     }
 
-    /**
-     * Creates a new RAG chat with the selected profile
-     * Sets up the current chat with profile information and transitions to RAG chat view
-     */
-    protected createRagChat(): void {
-        const value = this.formGroup.value;
-        this.currentChat = {
-            code: undefined,
-            chatProfileCode: value.chatProfileCode,
-            description: "Chat with profile " + this.chatProfilesData?.find(x => x.code === value.chatProfileCode)?.description
-        };
-        this.doOpenRagChat();
-    }
+
     protected routeNewRagChat(): void {
         const value = this.formGroup.value;
         const chatProfileCode = value.chatProfileCode;
-        const route: string[] = ["/", "ui", "chat", chatProfileCode, "newRagChat"];
-        this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
+        this.chatDataLoading=true;
+        this.geboUserChatsControllerService.createCleanChatByChatProfileCode(chatProfileCode).subscribe({
+            next: (chatInfo: GUserChatInfo) => {
+                if (chatInfo.code) {
+                    this.doOpenRagChat();
+                    const route: string[] = ["/", "ui", "chat", chatInfo.code, "load"];
+                    this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
+                }
+            },
+            complete: () => {
+                this.chatDataLoading=false;
+            }
+        });
+
     }
     /**
      * Opens the RAG chat interface and hides other chat views
@@ -159,25 +156,22 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         this.chatsListAndOptionsVisible = false;
     }
 
-    /**
-     * Creates a new regular chat with the selected model
-     * Sets up the current chat with model information and transitions to chat view
-     */
-    protected createChat(): void {
-        const value = this.chatFormGroup.value;
-        this.currentChat = {
-            code: undefined,
-            chatProfileCode: undefined,
-            chatModelCode: value.chatModelCode,
-            description: "Chat with " + this.chatModelsData?.find(x => x.code === value.chatModelCode)?.description
-        };
-        this.doOpenChat();
-    }
+
     protected routeNewChat(): void {
         const value = this.chatFormGroup.value;
         const chatModelCode = value.chatModelCode;
-        const route: string[] = ["/", "ui", "chat", chatModelCode, "newChat"];
-        this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
+         this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
+            next: (chatInfo: GUserChatInfo) => {
+                if (chatInfo.code) {
+                    this.doOpenChat();
+                    const route: string[] = ["/", "ui", "chat", chatInfo.code, "load"];
+                    this.router.navigate(route, { replaceUrl: true, onSameUrlNavigation: "reload" }).then(ok => console.log('Navigation result:', ok)).catch(err => console.error('Navigation error:', err));
+                }
+            },
+            complete: () => {
+                this.chatDataLoading=false;
+            }
+        });
     }
     /**
      * Opens the regular chat interface and hides other chat views
@@ -211,8 +205,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
             this.chatsPageLoading = true;
             this.geboUserChatsControllerService.getMyChats().subscribe({
                 next: (chats) => {
-                    
-                    const childrens: GUserChatInfo[] = chats?chats: [];
+
+                    const childrens: GUserChatInfo[] = chats ? chats : [];
                     const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
                         const item: TreeNode = {
                             label: x.description,
@@ -223,11 +217,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                         return item;
                     });
-                    if (!this.chatsTree[0].children) {
-                        this.chatsTree[0].children = newItems;
-                    } else {
-                        this.chatsTree[0].children = [...this.chatsTree[0].children, ...newItems];
-                    }
+
+                    this.chatsTree[0].children = newItems;
+
                 }, error: (err) => {
                     this.chatsPageLoading = false;
                 },
@@ -272,6 +264,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      */
     protected loadChatOptions(): void {
         this.chatsProfilesLoading = true;
+        this.geboUserChatsControllerService.getUIConfig().subscribe({
+            next:(options)=>{
+                this.chatUIOptions=options;
+            }
+        })
         this.geboChatModelsControllerService.getRuntimeConfiguredChatModelsLookup().subscribe({
             next: (value) => {
                 this.chatModelsData = value;
@@ -324,7 +321,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 if (params["chatProfile"]) {
                     const chatProfileCode = params["chatProfile"];
                     this.chatDataLoading = true;
-                    this.geboRagChatControllerService.createCleanRagChatByProfileCode(chatProfileCode).subscribe({
+
+                    this.geboUserChatsControllerService.createCleanChatByChatProfileCode(chatProfileCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);
@@ -336,7 +334,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
                 if (params["modelCode"]) {
                     const modelCode = params["modelCode"];
-                    this.geboChatControllerService.createCleanChatByModelCode(modelCode).subscribe({
+                    this.geboUserChatsControllerService.createCleanChatByModelCode(modelCode).subscribe({
                         next: (chatInfo: GUserChatInfo) => {
 
                             this.activateChat(chatInfo);

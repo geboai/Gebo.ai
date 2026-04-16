@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **metaInfos** | [**ModelMetaInfo**](ModelMetaInfo.md) |  |  [optional]
 **informativeUrl** | **String** |  |  [optional]
 **contextLength** | **Integer** |  |  [optional]
+**nativeModelMetaInfos** | **Object** |  |  [optional]
 **supportsStructuredOutput** | **Boolean** |  |  [optional]
 **supportsFunctionCalls** | **Boolean** |  |  [optional]
 **modelCard** | [**MistralBaseModelCard**](MistralBaseModelCard.md) |  |  [optional]

@@ -14,4 +14,13 @@ export interface LLMModelPresetChoice {
     code: string;
     description?: string;
     defaultChoice?: boolean;
+    contextWindow?: number;
+    uses?: Array<LLMModelPresetChoice.UsesEnum>;
+}
+export namespace LLMModelPresetChoice {
+    export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UsesEnum = {
+        CHAT: 'CHAT' as UsesEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UsesEnum
+    };
 }

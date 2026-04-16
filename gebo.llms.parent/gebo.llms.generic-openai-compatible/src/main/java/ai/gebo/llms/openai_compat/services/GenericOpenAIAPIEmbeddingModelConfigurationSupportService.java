@@ -12,6 +12,7 @@ package ai.gebo.llms.openai_compat.services;
 import java.util.List;
 
 import org.springframework.ai.document.MetadataMode;
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions.Builder;
@@ -21,9 +22,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -39,8 +41,8 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIEmbeddingModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -160,7 +162,12 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).baseUrl(baseUrl).build();
+			if (apiKey != null) {
+				apiBuilder = apiBuilder.apiKey(apiKey);
+			} else {
+				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
+			}
+			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
 			Builder builder = OpenAiEmbeddingOptions.builder();
 
 			if (config.getChoosedModel() != null) {
@@ -195,8 +202,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	 * @throws LLMConfigException If creation fails
 	 */
 	@Override
-	public IGConfigurableEmbeddingModel<GenericOpenAIAPIEmbeddingModelConfig> create(
-			GenericOpenAIAPIEmbeddingModelConfig config) throws LLMConfigException {
+	public IGConfigurableEmbeddingModel create(GenericOpenAIAPIEmbeddingModelConfig config) throws LLMConfigException {
 		GenericOpenAIConfigurableEmbeddingModel model = new GenericOpenAIConfigurableEmbeddingModel();
 		model.initialize(config, type);
 		return model;
@@ -214,8 +220,9 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
-		if (providerConfig.getBasePath() == null)
+		if (providerConfig.getBasePath() != null && providerConfig.getBasePath().trim().length() > 0) {
 			providerConfig.setBasePath(type.getBaseUrl());
+		}
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
 					GenericOpenAIAPIEmbeddingModelChoice.class, type);
@@ -251,5 +258,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 
 		return configureHandler.insertAndConfigure(config, type);
 	}
+
+	
 
 }

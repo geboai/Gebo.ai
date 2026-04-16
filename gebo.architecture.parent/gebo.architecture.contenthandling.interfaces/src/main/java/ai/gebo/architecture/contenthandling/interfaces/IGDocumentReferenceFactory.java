@@ -35,12 +35,13 @@ public interface IGDocumentReferenceFactory {
 	 * @param projectEndpoint Associated project endpoint.
 	 * @param virtualFolder   The virtual folder where the document resides.
 	 * @param moduleId        Identifier for the module.
+	 * @param messagingComponentId TODO
 	 * @return GDocumentReference object representing the document.
 	 * @throws GeboContentHandlerSystemException if an error occurs during the
 	 *                                           creation.
 	 */
 	public GDocumentReference createReference(Path file, String codePrefix, String uriPrefix, String completeUrl,
-			GProjectEndpoint projectEndpoint, GVirtualFolder virtualFolder, String moduleId)
+			GProjectEndpoint projectEndpoint, GVirtualFolder virtualFolder, String moduleId, String messagingComponentId)
 			throws GeboContentHandlerSystemException;
 
 	/**
@@ -52,12 +53,13 @@ public interface IGDocumentReferenceFactory {
 	 * @param completeUrl     Full URL of the document.
 	 * @param projectEndpoint Associated project endpoint.
 	 * @param moduleId        Identifier for the module.
+	 * @param messagingComponentId TODO
 	 * @return GDocumentReference object representing the deleted document.
 	 * @throws GeboContentHandlerSystemException if an error occurs during the
 	 *                                           creation.
 	 */
 	public <ProjectEndpointType extends GProjectEndpoint> GDocumentReference createDeletedReference(Path file,
-			String codePrefix, String uriPrefix, String completeUrl, GProjectEndpoint projectEndpoint, String moduleId)
+			String codePrefix, String uriPrefix, String completeUrl, GProjectEndpoint projectEndpoint, String moduleId, String messagingComponentId)
 			throws GeboContentHandlerSystemException;
 
 	/**
@@ -70,11 +72,12 @@ public interface IGDocumentReferenceFactory {
 	 * @param projectEndpoint   Associated project endpoint.
 	 * @param virtualFolder     The virtual folder where the document resides.
 	 * @param messagingModuleId Identifier for the messaging module.
+	 * @param messagingComponentId TODO
 	 * @return GDocumentReference object representing the archived document.
 	 */
 	public <ProjectEndpointType extends GProjectEndpoint> GDocumentReference createArchiveReference(Path originalFile,
 			ZipFile zipFile, ZipEntry entry, String codePrefix, ProjectEndpointType projectEndpoint,
-			GVirtualFolder virtualFolder, String messagingModuleId);
+			GVirtualFolder virtualFolder, String messagingModuleId, String messagingComponentId);
 
 	/**
 	 * Creates a web document reference.
@@ -88,14 +91,20 @@ public interface IGDocumentReferenceFactory {
 	 * @param modificationTimestamp Date of the last modification to the document.
 	 * @param meta                  Metadata associated with the document.
 	 * @param moduleId              Identifier for the module.
+	 * @param messagingComponentId TODO
 	 * @return GDocumentReference object representing the web document.
 	 * @throws GeboContentHandlerSystemException if an error occurs during the
 	 *                                           creation.
 	 */
 	public GDocumentReference createWebDocumentReference(GVirtualFolder spaceFolder, GProjectEndpoint projectEndpoint,
 			String code, String name, String contentType, String url, Date modificationTimestamp,
-			HashMap<String, Object> meta, String moduleId) throws GeboContentHandlerSystemException;
+			HashMap<String, Object> meta, String moduleId, String messagingComponentId) throws GeboContentHandlerSystemException;
 
-	public GDocumentReference createReference(Path newPath) throws GeboContentHandlerSystemException ;
+	public GDocumentReference createReference(Path newPath) throws GeboContentHandlerSystemException;
+
+	public GDocumentReference createReference(String uri, String name, String contentType, String extension, Long size, String messageModuleId, String messagingComponentId)
+			throws GeboContentHandlerSystemException;
+	
+	
 
 }

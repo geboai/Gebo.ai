@@ -12,6 +12,8 @@ package ai.gebo.model;
 import java.util.Map;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * AI generated comments
@@ -20,12 +22,14 @@ import lombok.Data;
  * class holds various properties related to the document's metadata such as
  * code, extension, original URL, project codes, content type, and more.
  */
-@Data
+@Getter
+@ToString
 public class ExtractedDocumentMetaData {
 	// Final fields representing the metadata attributes of a document
 	final String code, extension, originalUrl, parentProjectCode, rootKnowledgebaseCode, contentType, name,
-			metaInfoHeader, referenceType;
+			metaInfoHeader, referenceType, title, language;
 	final Integer tokenLength, bytesLength;
+	final Integer chunkPosition, chunksTotal;
 
 	/**
 	 * Constructs an instance of {@code ExtractedDocumentMetaData} with the
@@ -44,12 +48,14 @@ public class ExtractedDocumentMetaData {
 	 * @param metaInfoHeader        additional metadata header information
 	 */
 	private ExtractedDocumentMetaData(String code, String extension, String originalUrl, String parentProjectCode,
-			String rootKnowledgebaseCode, String contentType, String name, Integer tokenLength, Integer bytesLength,
-			String metaInfoHeader, String referenceType) {
+			String rootKnowledgebaseCode, String contentType, String name, String title, Integer tokenLength,
+			Integer bytesLength, String metaInfoHeader, String referenceType, Integer chunkPosition,
+			Integer chunksTotal, String language) {
 		this.code = code;
 		this.contentType = contentType;
 		this.extension = extension;
 		this.name = name;
+		this.title = title;
 		this.originalUrl = originalUrl;
 		this.parentProjectCode = parentProjectCode;
 		this.rootKnowledgebaseCode = rootKnowledgebaseCode;
@@ -57,6 +63,9 @@ public class ExtractedDocumentMetaData {
 		this.bytesLength = bytesLength;
 		this.metaInfoHeader = metaInfoHeader;
 		this.referenceType = referenceType;
+		this.chunkPosition = chunkPosition;
+		this.chunksTotal = chunksTotal;
+		this.language = language;
 	}
 
 	/**
@@ -100,18 +109,23 @@ public class ExtractedDocumentMetaData {
 	public static ExtractedDocumentMetaData of(Map<String, Object> metadata) {
 		if (metadata == null)
 			return null;
+		
 		return new ExtractedDocumentMetaData(getValue(DocumentMetaInfos.CONTENT_CODE, metadata),
 				getValue(DocumentMetaInfos.CONTENT_EXTENSION, metadata),
 				getValue(DocumentMetaInfos.CONTENT_ORIGINAL_URL, metadata),
 				getValue(DocumentMetaInfos.PROJECT_CODE, metadata),
 				getValue(DocumentMetaInfos.KNOWLEDGEBASE_CODE, metadata),
 				getValue(DocumentMetaInfos.CONTENT_TYPE, metadata),
-				getValue(DocumentMetaInfos.GEBO_FILE_NAME, metadata),
+				getValue(DocumentMetaInfos.GEBO_FILE_NAME, metadata), getValue(DocumentMetaInfos.TITLE, metadata),
 				getNumericValue(DocumentMetaInfos.GEBO_TOKEN_LENGTH, metadata),
 				getNumericValue(DocumentMetaInfos.GEBO_BYTES_LENGTH, metadata),
 				getValue(DocumentMetaInfos.GEBO_EMBEDDING_METADATA, metadata),
-				getValue(DocumentMetaInfos.GEBO_REFERENCE_TYPE, metadata));
+				getValue(DocumentMetaInfos.GEBO_REFERENCE_TYPE, metadata),
+				getNumericValue(DocumentMetaInfos.GEBO_CHUNK_POSITION, metadata),
+				getNumericValue(DocumentMetaInfos.GEBO_CHUNKS_COUNT, metadata),
+				getValue(DocumentMetaInfos.LANGUAGE, metadata));
 	}
+	
 
 	/**
 	 * Determines if the document is enriched with additional metadata header

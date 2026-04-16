@@ -18,6 +18,10 @@
  */
 package ai.gebo.atlassian.jira.handler.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGMessageBroker;
@@ -30,9 +34,15 @@ import ai.gebo.atlassian.jira.handler.GJiraProjectEndpoint;
 import ai.gebo.atlassian.jira.handler.GJiraSystem;
 import ai.gebo.atlassian.jira.handler.IGJiraContentManagementHandler;
 import ai.gebo.atlassian.jira.handler.IGJiraVirtualFilesystemConsumingService;
+import ai.gebo.atlassian.jira.handler.impl.model.JiraPathNodeType;
 import ai.gebo.atlassian.jira.handler.impl.model.JiraResourceReference;
 import ai.gebo.atlassian.jira.handler.repository.JiraProjectEndpointRepository;
 import ai.gebo.atlassian.jira.handler.repository.JiraSystemRepository;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.jira.cloud.client.api.IssueAttachmentsApi;
+import ai.gebo.jira.cloud.client.api.IssuesApi;
+import ai.gebo.jira.cloud.client.invoker.ApiClient;
+import ai.gebo.jira.cloud.client.model.IssueBean;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
@@ -145,5 +155,7 @@ public class JiraContentManagementHandlerImpl extends
 	public String getMessagingModuleId() {
 		return GStandardModulesConstraints.ATLASSIAN_JIRA_MODULE;
 	}
+
+	
 
 }

@@ -4,8 +4,8 @@
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class=" grid">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-        <p-toast />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+        
         <div class="col-12">
             <h3 *ngIf="defaultConfiguration===true">System global configuration</h3>
             <h3 *ngIf="defaultConfiguration===false">{{configurationLabel}}</h3>

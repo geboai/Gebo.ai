@@ -6,24 +6,27 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.git.content.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * AI generated comments
  * 
- * Base interface for Git content management system handlers. This interface extends the general
- * content management system handler interface with specific Git integration functionality.
- * It uses generic types to specify the Git system configuration and endpoint configuration.
+ * Base interface for Git content management system handlers. This interface
+ * extends the general content management system handler interface with specific
+ * Git integration functionality. It uses generic types to specify the Git
+ * system configuration and endpoint configuration.
  * 
- * @param <SystemIntegrationConfigType> The type of Git content management system configuration
- * @param <EndpointConfigType> The type of Git project endpoint configuration
+ * @param <SystemIntegrationConfigType> The type of Git content management
+ *                                      system configuration
+ * @param <EndpointConfigType>          The type of Git project endpoint
+ *                                      configuration
  */
-public interface IGBaseGitContentManagementSystemHandler<SystemIntegrationConfigType extends GGitContentManagementSystem, EndpointConfigType extends GGitProjectEndpoint> extends IGContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType> {
+public interface IGBaseGitContentManagementSystemHandler<SystemIntegrationConfigType extends GGitContentManagementSystem, EndpointConfigType extends GGitProjectEndpoint>
+		extends
+		IGContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType, NoContentConsumingSessionParam> {
 
 }

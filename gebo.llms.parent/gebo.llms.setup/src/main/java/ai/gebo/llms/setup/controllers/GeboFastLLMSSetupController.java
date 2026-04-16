@@ -24,8 +24,10 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMAutoconfigureCreationData;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
+import ai.gebo.llms.setup.model.LLMCredentialsVerificationData;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.services.GeboLLMSSetupService;
@@ -80,10 +82,23 @@ public class GeboFastLLMSSetupController {
 		return service.createLLMCredentials(apiKeyData);
 	}
 
+	@PostMapping(value = "createLLMByAutoconfigure", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GBaseModelConfig>> createLLMByAutoconfigure(
+			@RequestBody @Valid @NotNull LLMAutoconfigureCreationData autoconfigureData)
+			throws GeboCryptSecretException {
+		return service.runAutoConfigure(autoconfigureData);
+	}
+
 	@PostMapping(value = "createLLMS", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GBaseModelConfig>> createLLMS(
 			@RequestBody @Valid @NotNull List<LLMCreateModelData> configs) {
 		return service.createLLMS(configs);
+	}
+
+	@PostMapping(value = "verifyVendorCredentialsAndDownloadModels", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GBaseModelChoice>> verifyVendorCredentialsAndDownloadModels(
+			@RequestBody @Valid @NotNull LLMCredentialsVerificationData credentials) throws GeboCryptSecretException {
+		return service.verifyCredentialsAndDownloadModels(credentials);
 	}
 
 	@PostMapping(value = "verifyCredentialsAndDownloadModels", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

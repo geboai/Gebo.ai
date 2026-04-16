@@ -6,46 +6,21 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.model;
 
+import lombok.Data;
+
 /**
- * This class represents a model choice for embeddings which extends the base model choice.
- * It includes an additional parameter for optimal tokenization.
+ * This class represents a model choice for embeddings which extends the base
+ * model choice. It includes an additional parameter for optimal tokenization.
  *
  * Gebo.ai comment agent
  */
+@Data
 public class GBaseEmbeddingModelChoice extends GBaseModelChoice {
 
-    // Holds the optimal tokenization parameter for the embedding model.
-    private Integer optimalTokenizationParam = null;
-
-    /**
-     * Retrieves the optimal tokenization parameter.
-     *
-     * @return the optimal tokenization parameter, or null if not set.
-     */
-    public Integer getOptimalTokenizationParam() {
-        return optimalTokenizationParam;
-    }
-
-    /**
-     * Sets the optimal tokenization parameter.
-     *
-     * @param optimalTokenizationParam the new tokenization parameter to set.
-     */
-    public void setOptimalTokenizationParam(Integer optimalTokenizationParam) {
-        this.optimalTokenizationParam = optimalTokenizationParam;
-    }
-
-    /**
-     * Default constructor for GBaseEmbeddingModelChoice.
-     */
-    public GBaseEmbeddingModelChoice() {
-
-    }
+	// Holds the optimal tokenization parameter for the embedding model.
+	private Integer optimalTokenizationParam = null;
 
 }

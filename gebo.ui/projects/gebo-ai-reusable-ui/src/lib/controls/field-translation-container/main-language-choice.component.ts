@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboAITranslationService } from "./gebo-translation.service";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+
 import { MegaMenuItem } from "primeng/api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 const GEBO_AI_LOCAL_STORAGE_LANG: string = "gebo.ai.lang";
 interface LanguageSetting {
     langCode: string;

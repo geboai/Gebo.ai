@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;

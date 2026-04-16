@@ -14,17 +14,15 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.monolithic.api.client.model.GObjectRefGBaseChatModelConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Date;
 /**
  * GPromptConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GPromptConfig {
   @JsonProperty("code")
@@ -33,38 +31,26 @@ public class GPromptConfig {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("userModified")
-  private String userModified = null;
-
-  @JsonProperty("userCreated")
-  private String userCreated = null;
-
-  @JsonProperty("dateModified")
-  private Date dateModified = null;
-
-  @JsonProperty("dateCreated")
-  private Date dateCreated = null;
-
   @JsonProperty("prompt")
   private String prompt = null;
+
+  @JsonProperty("langCode")
+  private String langCode = null;
+
+  @JsonProperty("promptUse")
+  private String promptUse = null;
 
   @JsonProperty("modelProvider")
   private String modelProvider = null;
 
-  @JsonProperty("modelName")
-  private String modelName = null;
+  @JsonProperty("modelCode")
+  private String modelCode = null;
 
   @JsonProperty("promptCategory")
   private String promptCategory = null;
 
-  @JsonProperty("defaultPrompt")
-  private Boolean defaultPrompt = null;
-
-  @JsonProperty("ragPrompt")
-  private Boolean ragPrompt = null;
-
-  @JsonProperty("modelConfigurationReference")
-  private GObjectRefGBaseChatModelConfig modelConfigurationReference = null;
+  @JsonProperty("configDeclarated")
+  private Boolean configDeclarated = null;
 
   public GPromptConfig code(String code) {
     this.code = code;
@@ -102,78 +88,6 @@ public class GPromptConfig {
     this.description = description;
   }
 
-  public GPromptConfig userModified(String userModified) {
-    this.userModified = userModified;
-    return this;
-  }
-
-   /**
-   * Get userModified
-   * @return userModified
-  **/
-  @Schema(description = "")
-  public String getUserModified() {
-    return userModified;
-  }
-
-  public void setUserModified(String userModified) {
-    this.userModified = userModified;
-  }
-
-  public GPromptConfig userCreated(String userCreated) {
-    this.userCreated = userCreated;
-    return this;
-  }
-
-   /**
-   * Get userCreated
-   * @return userCreated
-  **/
-  @Schema(description = "")
-  public String getUserCreated() {
-    return userCreated;
-  }
-
-  public void setUserCreated(String userCreated) {
-    this.userCreated = userCreated;
-  }
-
-  public GPromptConfig dateModified(Date dateModified) {
-    this.dateModified = dateModified;
-    return this;
-  }
-
-   /**
-   * Get dateModified
-   * @return dateModified
-  **/
-  @Schema(description = "")
-  public Date getDateModified() {
-    return dateModified;
-  }
-
-  public void setDateModified(Date dateModified) {
-    this.dateModified = dateModified;
-  }
-
-  public GPromptConfig dateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-    return this;
-  }
-
-   /**
-   * Get dateCreated
-   * @return dateCreated
-  **/
-  @Schema(description = "")
-  public Date getDateCreated() {
-    return dateCreated;
-  }
-
-  public void setDateCreated(Date dateCreated) {
-    this.dateCreated = dateCreated;
-  }
-
   public GPromptConfig prompt(String prompt) {
     this.prompt = prompt;
     return this;
@@ -183,13 +97,49 @@ public class GPromptConfig {
    * Get prompt
    * @return prompt
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public String getPrompt() {
     return prompt;
   }
 
   public void setPrompt(String prompt) {
     this.prompt = prompt;
+  }
+
+  public GPromptConfig langCode(String langCode) {
+    this.langCode = langCode;
+    return this;
+  }
+
+   /**
+   * Get langCode
+   * @return langCode
+  **/
+  @Schema(description = "")
+  public String getLangCode() {
+    return langCode;
+  }
+
+  public void setLangCode(String langCode) {
+    this.langCode = langCode;
+  }
+
+  public GPromptConfig promptUse(String promptUse) {
+    this.promptUse = promptUse;
+    return this;
+  }
+
+   /**
+   * Get promptUse
+   * @return promptUse
+  **/
+  @Schema(required = true, description = "")
+  public String getPromptUse() {
+    return promptUse;
+  }
+
+  public void setPromptUse(String promptUse) {
+    this.promptUse = promptUse;
   }
 
   public GPromptConfig modelProvider(String modelProvider) {
@@ -210,22 +160,22 @@ public class GPromptConfig {
     this.modelProvider = modelProvider;
   }
 
-  public GPromptConfig modelName(String modelName) {
-    this.modelName = modelName;
+  public GPromptConfig modelCode(String modelCode) {
+    this.modelCode = modelCode;
     return this;
   }
 
    /**
-   * Get modelName
-   * @return modelName
+   * Get modelCode
+   * @return modelCode
   **/
   @Schema(description = "")
-  public String getModelName() {
-    return modelName;
+  public String getModelCode() {
+    return modelCode;
   }
 
-  public void setModelName(String modelName) {
-    this.modelName = modelName;
+  public void setModelCode(String modelCode) {
+    this.modelCode = modelCode;
   }
 
   public GPromptConfig promptCategory(String promptCategory) {
@@ -246,58 +196,22 @@ public class GPromptConfig {
     this.promptCategory = promptCategory;
   }
 
-  public GPromptConfig defaultPrompt(Boolean defaultPrompt) {
-    this.defaultPrompt = defaultPrompt;
+  public GPromptConfig configDeclarated(Boolean configDeclarated) {
+    this.configDeclarated = configDeclarated;
     return this;
   }
 
    /**
-   * Get defaultPrompt
-   * @return defaultPrompt
+   * Get configDeclarated
+   * @return configDeclarated
   **/
   @Schema(description = "")
-  public Boolean isDefaultPrompt() {
-    return defaultPrompt;
+  public Boolean isConfigDeclarated() {
+    return configDeclarated;
   }
 
-  public void setDefaultPrompt(Boolean defaultPrompt) {
-    this.defaultPrompt = defaultPrompt;
-  }
-
-  public GPromptConfig ragPrompt(Boolean ragPrompt) {
-    this.ragPrompt = ragPrompt;
-    return this;
-  }
-
-   /**
-   * Get ragPrompt
-   * @return ragPrompt
-  **/
-  @Schema(description = "")
-  public Boolean isRagPrompt() {
-    return ragPrompt;
-  }
-
-  public void setRagPrompt(Boolean ragPrompt) {
-    this.ragPrompt = ragPrompt;
-  }
-
-  public GPromptConfig modelConfigurationReference(GObjectRefGBaseChatModelConfig modelConfigurationReference) {
-    this.modelConfigurationReference = modelConfigurationReference;
-    return this;
-  }
-
-   /**
-   * Get modelConfigurationReference
-   * @return modelConfigurationReference
-  **/
-  @Schema(description = "")
-  public GObjectRefGBaseChatModelConfig getModelConfigurationReference() {
-    return modelConfigurationReference;
-  }
-
-  public void setModelConfigurationReference(GObjectRefGBaseChatModelConfig modelConfigurationReference) {
-    this.modelConfigurationReference = modelConfigurationReference;
+  public void setConfigDeclarated(Boolean configDeclarated) {
+    this.configDeclarated = configDeclarated;
   }
 
 
@@ -312,22 +226,18 @@ public class GPromptConfig {
     GPromptConfig gpromptConfig = (GPromptConfig) o;
     return Objects.equals(this.code, gpromptConfig.code) &&
         Objects.equals(this.description, gpromptConfig.description) &&
-        Objects.equals(this.userModified, gpromptConfig.userModified) &&
-        Objects.equals(this.userCreated, gpromptConfig.userCreated) &&
-        Objects.equals(this.dateModified, gpromptConfig.dateModified) &&
-        Objects.equals(this.dateCreated, gpromptConfig.dateCreated) &&
         Objects.equals(this.prompt, gpromptConfig.prompt) &&
+        Objects.equals(this.langCode, gpromptConfig.langCode) &&
+        Objects.equals(this.promptUse, gpromptConfig.promptUse) &&
         Objects.equals(this.modelProvider, gpromptConfig.modelProvider) &&
-        Objects.equals(this.modelName, gpromptConfig.modelName) &&
+        Objects.equals(this.modelCode, gpromptConfig.modelCode) &&
         Objects.equals(this.promptCategory, gpromptConfig.promptCategory) &&
-        Objects.equals(this.defaultPrompt, gpromptConfig.defaultPrompt) &&
-        Objects.equals(this.ragPrompt, gpromptConfig.ragPrompt) &&
-        Objects.equals(this.modelConfigurationReference, gpromptConfig.modelConfigurationReference);
+        Objects.equals(this.configDeclarated, gpromptConfig.configDeclarated);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, prompt, modelProvider, modelName, promptCategory, defaultPrompt, ragPrompt, modelConfigurationReference);
+    return Objects.hash(code, description, prompt, langCode, promptUse, modelProvider, modelCode, promptCategory, configDeclarated);
   }
 
 
@@ -338,17 +248,13 @@ public class GPromptConfig {
     
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    userModified: ").append(toIndentedString(userModified)).append("\n");
-    sb.append("    userCreated: ").append(toIndentedString(userCreated)).append("\n");
-    sb.append("    dateModified: ").append(toIndentedString(dateModified)).append("\n");
-    sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    prompt: ").append(toIndentedString(prompt)).append("\n");
+    sb.append("    langCode: ").append(toIndentedString(langCode)).append("\n");
+    sb.append("    promptUse: ").append(toIndentedString(promptUse)).append("\n");
     sb.append("    modelProvider: ").append(toIndentedString(modelProvider)).append("\n");
-    sb.append("    modelName: ").append(toIndentedString(modelName)).append("\n");
+    sb.append("    modelCode: ").append(toIndentedString(modelCode)).append("\n");
     sb.append("    promptCategory: ").append(toIndentedString(promptCategory)).append("\n");
-    sb.append("    defaultPrompt: ").append(toIndentedString(defaultPrompt)).append("\n");
-    sb.append("    ragPrompt: ").append(toIndentedString(ragPrompt)).append("\n");
-    sb.append("    modelConfigurationReference: ").append(toIndentedString(modelConfigurationReference)).append("\n");
+    sb.append("    configDeclarated: ").append(toIndentedString(configDeclarated)).append("\n");
     sb.append("}");
     return sb.toString();
   }

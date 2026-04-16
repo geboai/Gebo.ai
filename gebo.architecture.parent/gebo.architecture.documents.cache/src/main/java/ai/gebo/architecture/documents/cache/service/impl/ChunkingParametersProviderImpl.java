@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -18,7 +19,7 @@ public class ChunkingParametersProviderImpl implements IChunkingParametersProvid
 	@Override
 	public ChunkingParams provideChunkingParams(GDocumentReference reference) {
 
-		return new ChunkingParams(List.of(new TextChunkingSpecs()), true, 50000);
+		return ChunkingParams.defaultParams;
 	}
 
 }

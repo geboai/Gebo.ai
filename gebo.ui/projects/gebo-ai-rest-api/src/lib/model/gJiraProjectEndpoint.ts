@@ -31,6 +31,7 @@ export interface GJiraProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GJiraProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GJiraProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     paths?: Array<VFilesystemReference>;
     jiraSystemCode?: string;
 }

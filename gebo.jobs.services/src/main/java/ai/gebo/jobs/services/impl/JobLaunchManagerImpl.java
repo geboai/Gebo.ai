@@ -12,7 +12,9 @@ package ai.gebo.jobs.services.impl;
 import java.util.List;
 import ai.gebo.jobs.services.controllers.JobLauncherController;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +59,8 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	 */
 	private final IGMessageBroker broker;
 
+	private final JobStatusRepository jobStatusRepositoy;
+
 	/**
 	 * Constructor initializing the Job Launch Manager with required dependencies
 	 * 
@@ -66,10 +70,12 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	 *                                communication
 	 */
 	public JobLaunchManagerImpl(IGGeboIngestionJobQueueService jobLauncherController,
-			IGPersistentObjectManager persistentObjectManager, IGMessageBroker broker) {
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker broker,
+			JobStatusRepository jobStatusRepositoy) {
 		this.jobLauncherController = jobLauncherController;
 		this.persistentObjectManager = persistentObjectManager;
 		this.broker = broker;
+		this.jobStatusRepositoy = jobStatusRepositoy;
 
 	}
 
@@ -155,8 +161,9 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 				// Find the endpoint from the reference
 				GProjectEndpoint endpoint = persistentObjectManager.findByReference(payload.getProjectEndpoint(),
 						GProjectEndpoint.class);
+				AbstractContentConsumingSessionParam sessionParam = payload.getSessionParam();
 				// Create a new asynchronous job for the endpoint
-				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint,
+				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint, sessionParam,
 						envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
 						envelope.getWorkflowId());
 				// Create an acknowledgment message

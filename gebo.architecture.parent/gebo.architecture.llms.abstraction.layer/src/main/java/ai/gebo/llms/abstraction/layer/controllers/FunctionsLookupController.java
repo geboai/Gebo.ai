@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.model.base.GLookupEntry;
 
 /**

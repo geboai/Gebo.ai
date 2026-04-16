@@ -12,11 +12,11 @@
 
 package ai.gebo.atlassian.confluence.integration.tests;
 
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
 import ai.gebo.monolithic.app.Main;
 @SpringBootTest(classes = Main.class)
 public class AtlassianOnPremiseConfluenceIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
-
 }

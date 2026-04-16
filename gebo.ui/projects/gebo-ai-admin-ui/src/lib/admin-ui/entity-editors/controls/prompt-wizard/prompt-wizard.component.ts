@@ -20,9 +20,9 @@
  * The component handles loading available chat models, configuring the wizard,
  * and managing the dialog for prompt generation and selection.
  */
-import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardConfigs, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse,PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
@@ -67,7 +67,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**
      * Messages to display to the user in the UI
      */
-    public userMessages: ToastMessageOptions[] = [{ severity: "info", summary: "Ask AI to write a prompt template", detail: "With this screen AI will assist you on writing the correct template for your objectives" }];
+    public userMessages: ToastMessageOptions[] = [];
 
     /**
      * Flag to indicate when async operations are in progress
@@ -99,10 +99,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      */
     chatModels?: GLookupEntry[];
 
-    /**
-     * Configuration options for the prompt template wizard
-     */
-    wizardConfigs?: PromptTemplateWizardConfigs;
+    
 
     /**
      * Initializes the component with required services for prompt generation and model lookup
@@ -128,17 +125,12 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      */
     ngOnInit(): void {
         this.loading = true;
-        const observables: [Observable<GLookupEntry[]>, Observable<PromptTemplateWizardConfigs>] = [this.modelsLookupService.getRuntimeConfiguredChatModelsLookup(), this.promptWizardControllerService.getTemplateWizardConfigs()];
+        const observables: [Observable<GLookupEntry[]>] = [this.modelsLookupService.getRuntimeConfiguredChatModelsLookup()];
         forkJoin(observables).subscribe({
             next: (value) => {
                 this.chatModels = value[0];
-                this.wizardConfigs = value[1];
-                if (!this.promptTemplatePlaceholderText) {
-                    const prompt = this.wizardConfigs?.defaultPromptTemplateWizardConfig?.prompt;
-                    if (prompt) {
-                        this.formGroup.controls["query"].setValue(prompt);
-                    }
-                }
+                
+                
             },
             complete: () => {
                 this.loading = false;

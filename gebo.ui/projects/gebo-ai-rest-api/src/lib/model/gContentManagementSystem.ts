@@ -24,6 +24,7 @@ export interface GContentManagementSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GContentManagementSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
 }
 export namespace GContentManagementSystem {
     export type UsedCapabilitiesEnum = 'TICKETS_MANAGEMENT' | 'DOCUMENTS_MANAGEMENT' | 'SOURCE_MANAGEMENT' | 'ARTIFACTS_REPOSITORY_MANAGEMENT';

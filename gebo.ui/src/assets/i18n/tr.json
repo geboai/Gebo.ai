@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Giriş yap"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "İşlem başarısız",
+        "detail" : "Sağlanan kimlik bilgileri ile kimlik doğrulama yapılamıyor"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces entegrasyonu",
         "description" : "Gebo.ai'yi Google cloud Drive/Workspaces ekip verilerinize erişecek şekilde yapılandırın"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google arama api yapılandır",
+        "description" : "AI web aramaları için Google arama api kimlik bilgilerini yapılandır"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search yapılandır",
+        "description" : "Deep search parametrelerini yapılandır"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. otomatik ayar",
+        "description" : "Otomatik alınan artırılmış oluşturma parametrelerinin ayarlanması"
+      },
+      "Description" : {
+        "label" : "Açıklama"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Son ayar güncellemesi"
+      },
+      "Code" : {
+        "label" : "Gömme modeli/VectorStore kodu"
+      },
+      "ComputedThreashold" : {
+        "label" : "Hesaplanan eşik"
+      },
+      "Autotuned" : {
+        "label" : "Otomatik ayarlandı"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai kurulumunun zorunlu adımları tamamlandı...",
+        "detail" : "Zorunlu kurulum adımları tamamlandı ancak bazı eksik adımlar, kuruluşunuzun bu yazılımdan en iyi şekilde faydalanmasını engelliyor"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai kurulumunda bazı zorunlu adımlar eksik",
+        "detail" : "Lütfen kurulum sürecindeki kırmızı adımları gözden geçirin"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistemi"
+      },
+      "EditSystemBtn" : {
+        "label" : "Sistemi düzenle"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms sağlayıcılarına erişimi yapılandır"
+      },
+      "ExtensiveStup" : {
+        "label" : "Genişletilmiş altyapı/tedarikçi seçenekleri"
+      },
+      "MainPanelTitle" : {
+        "label" : "Kullanılan büyük dil modellerini ayarlayın"
+      },
+      "EasySetup" : {
+        "label" : "Kolay ilk kurulum/konfigürasyon düzeltmesi"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Büyük dil modellerini ayarlayın"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Açıklama"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google arama api anahtarı"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google arama kimlik bilgilerini oluştur"
+      },
+      "CreateBtn" : {
+        "label" : "Oluştur"
+      },
+      "customSearchEngineId" : {
+        "label" : "Arama motoru kimliği",
+        "help" : "Google arama api kimlik bilgileri kaydında elde edilen arama motoru kimliğini girin."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Yapılandırma kodu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Açıklama"
+      },
+      "apiKey" : {
+        "label" : "Api anahtarı",
+        "help" : "Google arama api kimlik bilgileri kaydında elde edilen api anahtarını girin."
+      },
+      "MainPanel" : {
+        "label" : "Google arama api'yi kur"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Sil",
+        "help" : "Google arama api kimlik bilgilerini sil"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search yapılandırması",
+        "help" : "Bir deep search yapılandırması ekle"
+      },
+      "EditSystemBtn" : {
+        "label" : "Yapılandırmayı düzenle"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "devre dışı"
+      },
+      "EditGroupBtn" : {
+        "label" : "Düzenle"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "açıklama"
+      },
+      "UsersHeader" : {
+        "label" : "kullanıcılar"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktan sağlayıcı OK",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "İşlem sırasında istisna: url ile çalışırken hata oluştu:https://api.openai.com/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata oluştu:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "bunu varsayılan gömme modeli olarak ayarla",
         "help" : "Eğer seçilirse, gömme modeli belirtilmediğinde bu varsayılan gömme modeli olarak kullanılacaktır"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktan sağlayıcı OK",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama yerel (veya ağ) sunucu sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI sohbet modeli yapılandırmasını düzenleme"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Model erişim ayarları"
+      },
+      "forUses" : {
+        "label" : "Model kullanımı",
+        "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
+        "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Bu sohbeti silmek istediğinizden emin misiniz?",
         "header" : "Sohbeti silme işlemi"
+      },
+      "PlusContextualMenu" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
+      },
+      "[object HTMLElement]" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
+      },
+      "ContextMenuBtn" : {
+        "help" : "İçerik ekle veya arama davranışını değiştir"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Kaynaklar",
+        "help" : "Analiz edilen belgelerin listesini aç"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Derin arama yanıtı ve kaynak detayları"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Derin arama analiz sonucu"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Aramasında hata",
+        "detail" : "Sunucu hatası: Confluence sistemine erişimde sorunlar"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Yeni sohbet yüklendi",
+        "detail" : "Yeni sohbet başarıyla yüklendi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kaynakları seç"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdaki seçeneklerden en az birini seçin"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Derin aramayı atla"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilen bilgi tabanları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilen sistemler"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'Sohbete ekle' listesine belge ekle "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Derin arama çalışıyor"
+      },
+      "RagLLMResponse" : {
+        "label" : "Gelişmiş getirme çalışıyor"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM'ye soruluyor"
+      },
+      "Waiting" : {
+        "label" : "En iyi yanıt planı analiz ediliyor.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Araçlar çalışıyor"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Yapay zeka destekli arama yürütülüyor"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilen dosya"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiz edilen arama sonucu"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Sistem arama sonucu analiz edildi"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Son rapor birleştiriliyor"
+      },
+      "RUNNING" : {
+        "label" : "Çalışıyor "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "İsteğinizi analiz ediyorum"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Ajan akışı seçildi, yanıtlayan ajan çalışıyor"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Hizmet seviyesi: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Seçtiğiniz ajan çalıştırılıyor"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Dosya(ları) yükle"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Şirket dosyalarını gözden geçir/ara"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Seçilen dök. sohbet"
+      },
+      "agenticChat" : {
+        "label" : "Ajan sohbeti"
+      },
+      "rag" : {
+        "label" : "R.a.g. sohbeti"
+      },
+      "deepSearch" : {
+        "label" : "Derin arama/Çoklu kaynak"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Derin arama/Google Web Arama"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Derin arama/Confluence Arama"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Derin arama/Jira Arama"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Derin arama/Bilgi tabanı araması"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Dosya(larla) sohbet"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Derin arama/Google Web Arama"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Derin arama/Confluence Arama"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Derin arama/Jira Arama"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Taklit edilecek Google kullanıcısı",
         "help" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı",
         "placeholder" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı"
+      },
+      "OK" : {
+        "summary" : "Başarıyla kaydedildi",
+        "detail" : "Güncelleme işlemi başarıyla tamamlandı"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "İşlenen belgeler",
         "dataset-2-label" : "Hatalı belgeler",
         "dataset-3-label" : "Atılan belgeler"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Tam metin indeksleme"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "İşlenmeyen dökümanlar",
+        "label-1" : "Döküman işleme hatası",
+        "label-2" : "İşlenen dökümanlar"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Alınan dökümanlar",
+        "dataset-1-label" : "İşlenen dökümanlar",
+        "dataset-2-label" : "Hatalı dökümanlar",
+        "dataset-3-label" : "Atılan dökümanlar"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "İşlenen tokenlar",
+        "dataset-1-label" : "Token işleme hatası"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "Tüm fonksiyon çağrılarını etkinleştir",
         "help" : "Mevcut tüm araçları ve fonksiyon çağrılarını etkinleştir. Eğer ayarlanmazsa, daha sonra llms yönetici panelinde etkinleştirilebilir"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "İşlem sırasında istisna:Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz",
+        "detail" : "Sunucu hatası: Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaktan sağlayıcı tamam",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "İşlem sırasında istisna:401 YETKİSİZ",
+        "detail" : "Sunucu hatası: 401 YETKİSİZ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "İşlem sırasında istisna: Eksik basePath",
+        "detail" : "Sunucu hatası: Eksik basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Oluştur ve etkinleştir"
+      },
+      "vendorId" : {
+        "label" : "Büyük dil modeli tedarikçinizi seçin",
+        "help" : "Varsayılan sohbet ve gömme modeliniz için ilk tedarikçiyi seçin"
+      },
+      "secretId" : {
+        "label" : "Sağlayıcı kimlik bilgileri (api anahtarı) seçin",
+        "help" : "Seçilen llm sağlayıcısı için mevcut kimlik bilgilerinden birini seçin"
+      },
+      "InternalServiceModel" : {
+        "label" : "Dahili hizmetler sohbet modeli",
+        "help" : "Dahili hizmetler için yapılandırılmış sohbet modeli, bilgileri çıkarmaktan, özetlemekten ve dahili iş akışlarını yürütmekten sorumlu olacaktır."
+      },
+      "ChatModel" : {
+        "label" : "Varsayılan sohbet modeli",
+        "help" : "Varsayılan sohbet modeli, kullanıcıların sorularını yanıtlamaktan ve özel olarak yapılandırılmış modellerin olmadığı iş akışlarını yürütmekten sorumlu olacaktır. Güçlü ve güvenilir olmalı; maliyet, performans ve sonuç kalitesi arasında iyi bir denge sağlamalıdır."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy anahtar kredi bağlantısı satın al"
+      },
+      "ProviderWWW" : {
+        "label" : "Web sitesi bağlantısı"
+      },
+      "WebSiteLink" : {
+        "label" : "Sağlayıcı web sitesi",
+        "help" : "Genel sağlayıcı bilgileri için buraya tıklayın."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Sağlayıcı kredisi satın alın",
+        "help" : "Api anahtar(lar)ınız için kredi satın almak için buraya tıklayın."
+      },
+      "EmbeddingModel" : {
+        "label" : "Varsayılan gömme modeli",
+        "help" : "Bu model, veri ve belgelerinizin anlamsal indekslemesi (gömme) ve alınmasından sorumlu olacaktır"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Bunu silemezsiniz",
         "detail" : "Bu nesne uygulamanın başka bir bölümünden referans alınmış"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "İşlem sırasında istisna:Url ile çalışırken hata:http://localhost:11434/v1/models",
+        "detail" : "Sunucu hatası: Url ile çalışırken hata:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "İşlem sırasında istisna:apiKey ayarlanmalı",
+        "detail" : "Sunucu hatası: apiKey ayarlanmalı"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Sohbet yanıtı iletilirken hata oluştu",
+        "detail" : "Sunucu hatası: 400 Hatalı İstek POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "İşlem sırasında istisna:http://localhost:8000/v1/models adresinde hata oluştu",
+        "detail" : "Sunucu hatası: http://localhost:8000/v1/models adresinde hata oluştu"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Sohbet akışında hata oluştu",
+        "detail" : "Sunucu hatası: Bağlantı sıfırlandı"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "İşlem sırasında istisna: url ile çalışırken hata oluştu:https://api.openai.com/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata oluştu:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "İşlem sırasında istisna:Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz",
+        "detail" : "Sunucu hatası: Anthropic api gerekli api anahtarı yapılandırması olmadan çalışamaz"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Tamamlandı"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Kullanılan kimlik",
         "help" : "Google drive sistemine erişmek için bir kimlik seçin veya oluşturun"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Sohbet"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "İlgili bilgiler aranıyor"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Nihai rapor birleştiriliyor"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiz edilen arama sonucu"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "için analiz edilen sistem arama sonucu"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdaki seçeneklerden en az birini seçin"
+      },
+      "LaunchBtn" : {
+        "label" : "Aramayı başlat"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Derin aramayı atla"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilen bilgi tabanları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilen sistemler"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Kaynakları seç"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilen dosya"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ekle"
+      },
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SearchSettingTab" : {
+        "label" : "Arama ayarı"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Belgelerden ilgili bilgileri çıkarmak için prompt yazın"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Çıkarılan ilgili bilgileri birleştirmek için prompt yazın"
+      },
+      "MainPanel" : {
+        "label" : "Deep search yapılandırmasını düzenle"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Büyük dil modeli ayarı"
+      },
+      "description" : {
+        "label" : "Açıklama",
+        "help" : "Deep search yapılandırmasının açıklamasını girin"
+      },
+      "code" : {
+        "label" : "Benzersiz kod",
+        "help" : "Deep search yapılandırmasının otomatik oluşturulan benzersiz kodu"
+      },
+      "searchType" : {
+        "label" : "Arama türü",
+        "help" : "Tek adımlı anlamsal arama veya çok adımlı seçeneklerinden birini seçin"
+      },
+      "topK" : {
+        "label" : "Alınan metin segmenti sayısı (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Kullanılan llm",
+        "help" : "Deep search için hangi büyük dil modelinin kullanılacağını belirtin, eğer seçilmezse varsayılan kullanılacak."
+      },
+      "analisysPrompt" : {
+        "label" : "Belgeler analiz prompt'u",
+        "help" : "Belgelerden ilgili bilgileri çıkarmak için kullanılacak prompt'u düzenleyin."
+      },
+      "consolidationPrompt" : {
+        "label" : "Çıkarılan bilgileri birleştirme prompt'u",
+        "help" : "Alınan belgelerden çıkarılan ilgili bilgileri tek bir raporda birleştirmek için kullanılacak prompt'u düzenleyin."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Arama benzerlik eşiği",
+        "help" : "İlk adım anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "İkinci adım benzerlik eşiği",
+        "help" : "İkinci adım anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      },
+      "defaultModel" : {
+        "label" : "Varsayılan büyük dil modeli",
+        "help" : "Deep search işlemleri için varsayılan büyük dil modeli kullanılacak"
+      },
+      "similarityThreashold" : {
+        "label" : "Arama benzerlik eşiği",
+        "help" : "Anlamsal benzerlik eşiği (0.5 ile 1.0 arasında)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Güvenlik ayarları"
+      },
+      "accessibleToAll" : {
+        "label" : "Herkes için erişilebilir"
+      },
+      "datasource" : {
+        "label" : "Veri kaynağı"
+      },
+      "allowedGroups" : {
+        "label" : "İzinli gruplar"
+      },
+      "allowedUsers" : {
+        "label" : "İzinli kullanıcılar"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Her veri kaynağı için kullanıcı/grup erişimi",
+        "help" : "Derin arama, her bir harici veri kaynağı ile kullanıcı veya grup için etkinleştirilecektir"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Kullanıcı/grup bazında basit erişim"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Veri kaynağı kullanıcı/grup erişimi"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api anahtar kimlik bilgileri kullan veya oluştur"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api anahtarı/kimlik bilgileri",
+        "help" : "Bu sağlayıcı için api anahtarı veya kimlik bilgileri seçin"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api anahtarı",
+        "help" : "Bu sağlayıcıyla kullanılacak yeni bir api anahtarı girin"
+      },
+      "PiSave" : {
+        "label" : "Kaydet"
+      },
+      "NewUserName" : {
+        "label" : "Kullanıcı adı",
+        "help" : "Sağlayıcı hizmetlerine erişmek için kullanılan kullanıcı adı"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mevcudu kullan veya yeni oluştur",
+        "help" : "Bu sağlayıcı için mevcut olan veya yeni oluşturulacak kimlik bilgilerini kullanın"
+      },
+      "newSecretDescription" : {
+        "label" : "Kimlik bilgileri açıklaması",
+        "help" : "Api anahtarı kimlik bilgileri açıklaması"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kimlik bilgileri oluşturuldu",
+        "detail" : "Kimlik bilgileri başarıyla oluşturuldu"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama sunucusuyla iletişimde hata ",
+        "detail" : "Uzak sistemle iletişimde ağ hatası, içerik erişimi\n modeller listesiyle çalışırken hata url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Kullanıcılarla sohbet"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Dahili hizmetler için kullanılan model"
       }
     }
   }

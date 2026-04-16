@@ -9,15 +9,13 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.utils.DataPage;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.client.rest.config.GeboChatUIConfig;
+import ai.gebo.llms.chat.client.rest.model.ChatUIOptions;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.security.services.IGSecurityService;
@@ -49,16 +52,18 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/users/GeboUserChatsController")
 @AllArgsConstructor
 public class GeboUserChatsController {
-	final GUserChatContextRepository repository;
+	final GUserChatSessionRepository repository;
 	final IGSecurityService securityService;
 	final IGChatStorageAreaService chatStorageAreaService;
+	final IGChatSessionLifeCycleService sessionLifeCycleService;
+	final GeboChatUIConfig uiConfig;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
 	 * pattern. Contains a filter object and pagination information.
 	 */
 	public static class ChatInfosByQbeParam {
-		public GUserChatContext filter = new GUserChatContext();
+		public GUserChatSession filter = new GUserChatSession();
 		public DataPage page = new DataPage();
 	};
 
@@ -79,9 +84,9 @@ public class GeboUserChatsController {
 
 	@GetMapping(value = "getChatInfosByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo getChatInfosByCode(@RequestParam("id") String id) {
-		Optional<GUserChatContext> optional = repository.findById(id);
+		Optional<GUserChatSession> optional = repository.findById(id);
 		if (optional.isPresent()) {
-			GUserChatContext data = optional.get();
+			GUserChatSession data = optional.get();
 			securityService.checkBeingCreator(data);
 			return new GUserChatInfoData(data);
 		}
@@ -112,27 +117,6 @@ public class GeboUserChatsController {
 	}
 
 	/**
-	 * Deletes multiple user chats by their IDs.
-	 * 
-	 * @param ids List of chat IDs to delete
-	 */
-	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteUserChats(@RequestBody List<String> ids) {
-		List<GUserChatContext> data = repository.findAllById(ids);
-		for (GUserChatContext gUserChatContext : data) {
-			securityService.checkBeingCreator(gUserChatContext);
-		}
-		for (GUserChatContext gUserChatContext : data) {
-			try {
-				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
-			} catch (IOException e) {
-
-			}
-			repository.delete(gUserChatContext);
-		}
-	}
-
-	/**
 	 * Data transfer object for chat history information. Contains only the
 	 * necessary information to be sent to the client.
 	 */
@@ -154,26 +138,14 @@ public class GeboUserChatsController {
 		 * @return A new UserChatHistory with data from the provided context
 		 * @throws CloneNotSupportedException
 		 */
-		public static UserChatHistory from(GUserChatContext context) throws CloneNotSupportedException {
+		public static UserChatHistory from(GUserChatSession context) throws CloneNotSupportedException {
 			UserChatHistory history = new UserChatHistory();
 			history.setCode(context.getCode());
 			history.setDescription(context.getDescription());
-			history.setInteractions(getClientViewOf(context.getInteractions()));
+			history.setInteractions(context.getInteractions());
 			return history;
 		}
 
-		private static List<ChatInteractions> getClientViewOf(List<ChatInteractions> interactions)
-				throws CloneNotSupportedException {
-
-			List<ChatInteractions> cinteractions = new ArrayList<>();
-			if (interactions != null) {
-				for (ChatInteractions chatInteraction : interactions) {
-					ChatInteractions clientVision = chatInteraction.clientClone();
-					cinteractions.add(clientVision);
-				}
-			}
-			return cinteractions;
-		}
 	}
 
 	/**
@@ -188,9 +160,9 @@ public class GeboUserChatsController {
 	 */
 	@GetMapping(value = "getChatHistory", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserChatHistory getChatHistory(@RequestParam("code") String code) throws CloneNotSupportedException {
-		Optional<GUserChatContext> optional = repository.findById(code);
+		Optional<GUserChatSession> optional = repository.findById(code);
 		if (optional.isPresent()) {
-			GUserChatContext uc = optional.get();
+			GUserChatSession uc = optional.get();
 			String currUN = securityService.getCurrentUser().getUsername();
 			if (uc.getUsername().equals(currUN))
 				return UserChatHistory.from(uc);
@@ -210,13 +182,43 @@ public class GeboUserChatsController {
 	 */
 	@PostMapping(value = "changeChatDescription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GLookupEntry changeChatDescription(@RequestBody GLookupEntry entry) {
-		Optional<GUserChatContext> data = repository.findById(entry.getCode());
+		Optional<GUserChatSession> data = repository.findById(entry.getCode());
 		if (data.isPresent()) {
-			GUserChatContext uc = data.get();
+			GUserChatSession uc = data.get();
 			uc.setDescription(entry.getDescription());
 			repository.save(uc);
 			return GLookupEntry.of(uc);
 		} else
 			throw new IllegalStateException("Chat not found with this code");
+	}
+
+	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByModelCode(
+			@RequestParam(value = "modelCode", required = true) String modelCode) throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByModelCode(modelCode);
+	}
+
+	@GetMapping(value = "createCleanChatByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByChatProfileCode(
+			@RequestParam(value = "chatProfileCode", required = true) String chatProfileCode)
+			throws GeboPersistenceException {
+		return this.sessionLifeCycleService.createCleanChatByChatProfileCode(chatProfileCode);
+	}
+
+	@DeleteMapping("deleteChat")
+	public void deleteChat(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		this.sessionLifeCycleService.removeChatSession(userChatContextCode);
+	}
+
+	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo suggestChatDescription(@RequestParam("userChatContextCode") String userChatContextCode)
+			throws GeboChatSessionLifecycleException {
+		return this.sessionLifeCycleService.suggestChatDescription(userChatContextCode);
+	}
+
+	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ChatUIOptions getUIConfig() {
+		return new ChatUIOptions(uiConfig);
 	}
 }

@@ -15,7 +15,7 @@
 <p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing embedding model configuration'"
     [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid standardTabDialogueHeight">
 
             <div class="col-12">

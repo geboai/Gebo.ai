@@ -15,7 +15,6 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
-import ai.gebo.monolithic.api.client.model.RagDocumentsCachedDaoResult;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,7 +26,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -48,20 +47,67 @@ public class GeboChatRequest {
   @JsonProperty("query")
   private String query = null;
 
+  @JsonProperty("rewrittenQuery")
+  private String rewrittenQuery = null;
+
   @JsonProperty("customRagConfig")
   private GeboRagRequestCustomConfig customRagConfig = null;
 
   @JsonProperty("choosedKnowledgeBases")
   private List<String> choosedKnowledgeBases = null;
 
+  @JsonProperty("chatPipelineProcessId")
+  private String chatPipelineProcessId = null;
+
   @JsonProperty("forcedRequestDocuments")
   private List<String> forcedRequestDocuments = null;
 
-  @JsonProperty("documents")
-  private RagDocumentsCachedDaoResult documents = null;
-
   @JsonProperty("userUploadedContents")
   private List<UserUploadedContent> userUploadedContents = null;
+
+  @JsonProperty("deepSearchDataSources")
+  private List<String> deepSearchDataSources = null;
+
+  /**
+   * Gets or Sets userIntent
+   */
+  public enum UserIntentEnum {
+    QA("QA"),
+    REPORT("REPORT"),
+    HOWTO("HOWTO"),
+    DECISION("DECISION"),
+    SUMMARY("SUMMARY"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    UserIntentEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static UserIntentEnum fromValue(String input) {
+      for (UserIntentEnum b : UserIntentEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("userIntent")
+  private UserIntentEnum userIntent = null;
+
+  @JsonProperty("tokensSize")
+  private Integer tokensSize = null;
 
   public GeboChatRequest id(String id) {
     this.id = id;
@@ -171,6 +217,24 @@ public class GeboChatRequest {
     this.query = query;
   }
 
+  public GeboChatRequest rewrittenQuery(String rewrittenQuery) {
+    this.rewrittenQuery = rewrittenQuery;
+    return this;
+  }
+
+   /**
+   * Get rewrittenQuery
+   * @return rewrittenQuery
+  **/
+  @Schema(description = "")
+  public String getRewrittenQuery() {
+    return rewrittenQuery;
+  }
+
+  public void setRewrittenQuery(String rewrittenQuery) {
+    this.rewrittenQuery = rewrittenQuery;
+  }
+
   public GeboChatRequest customRagConfig(GeboRagRequestCustomConfig customRagConfig) {
     this.customRagConfig = customRagConfig;
     return this;
@@ -215,6 +279,24 @@ public class GeboChatRequest {
     this.choosedKnowledgeBases = choosedKnowledgeBases;
   }
 
+  public GeboChatRequest chatPipelineProcessId(String chatPipelineProcessId) {
+    this.chatPipelineProcessId = chatPipelineProcessId;
+    return this;
+  }
+
+   /**
+   * Get chatPipelineProcessId
+   * @return chatPipelineProcessId
+  **/
+  @Schema(description = "")
+  public String getChatPipelineProcessId() {
+    return chatPipelineProcessId;
+  }
+
+  public void setChatPipelineProcessId(String chatPipelineProcessId) {
+    this.chatPipelineProcessId = chatPipelineProcessId;
+  }
+
   public GeboChatRequest forcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
     return this;
@@ -239,24 +321,6 @@ public class GeboChatRequest {
 
   public void setForcedRequestDocuments(List<String> forcedRequestDocuments) {
     this.forcedRequestDocuments = forcedRequestDocuments;
-  }
-
-  public GeboChatRequest documents(RagDocumentsCachedDaoResult documents) {
-    this.documents = documents;
-    return this;
-  }
-
-   /**
-   * Get documents
-   * @return documents
-  **/
-  @Schema(description = "")
-  public RagDocumentsCachedDaoResult getDocuments() {
-    return documents;
-  }
-
-  public void setDocuments(RagDocumentsCachedDaoResult documents) {
-    this.documents = documents;
   }
 
   public GeboChatRequest userUploadedContents(List<UserUploadedContent> userUploadedContents) {
@@ -285,6 +349,68 @@ public class GeboChatRequest {
     this.userUploadedContents = userUploadedContents;
   }
 
+  public GeboChatRequest deepSearchDataSources(List<String> deepSearchDataSources) {
+    this.deepSearchDataSources = deepSearchDataSources;
+    return this;
+  }
+
+  public GeboChatRequest addDeepSearchDataSourcesItem(String deepSearchDataSourcesItem) {
+    if (this.deepSearchDataSources == null) {
+      this.deepSearchDataSources = new ArrayList<>();
+    }
+    this.deepSearchDataSources.add(deepSearchDataSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get deepSearchDataSources
+   * @return deepSearchDataSources
+  **/
+  @Schema(description = "")
+  public List<String> getDeepSearchDataSources() {
+    return deepSearchDataSources;
+  }
+
+  public void setDeepSearchDataSources(List<String> deepSearchDataSources) {
+    this.deepSearchDataSources = deepSearchDataSources;
+  }
+
+  public GeboChatRequest userIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+    return this;
+  }
+
+   /**
+   * Get userIntent
+   * @return userIntent
+  **/
+  @Schema(description = "")
+  public UserIntentEnum getUserIntent() {
+    return userIntent;
+  }
+
+  public void setUserIntent(UserIntentEnum userIntent) {
+    this.userIntent = userIntent;
+  }
+
+  public GeboChatRequest tokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+    return this;
+  }
+
+   /**
+   * Get tokensSize
+   * @return tokensSize
+  **/
+  @Schema(description = "")
+  public Integer getTokensSize() {
+    return tokensSize;
+  }
+
+  public void setTokensSize(Integer tokensSize) {
+    this.tokensSize = tokensSize;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -301,16 +427,20 @@ public class GeboChatRequest {
         Objects.equals(this.chatModelCode, geboChatRequest.chatModelCode) &&
         Objects.equals(this.streamResponse, geboChatRequest.streamResponse) &&
         Objects.equals(this.query, geboChatRequest.query) &&
+        Objects.equals(this.rewrittenQuery, geboChatRequest.rewrittenQuery) &&
         Objects.equals(this.customRagConfig, geboChatRequest.customRagConfig) &&
         Objects.equals(this.choosedKnowledgeBases, geboChatRequest.choosedKnowledgeBases) &&
+        Objects.equals(this.chatPipelineProcessId, geboChatRequest.chatPipelineProcessId) &&
         Objects.equals(this.forcedRequestDocuments, geboChatRequest.forcedRequestDocuments) &&
-        Objects.equals(this.documents, geboChatRequest.documents) &&
-        Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents);
+        Objects.equals(this.userUploadedContents, geboChatRequest.userUploadedContents) &&
+        Objects.equals(this.deepSearchDataSources, geboChatRequest.deepSearchDataSources) &&
+        Objects.equals(this.userIntent, geboChatRequest.userIntent) &&
+        Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, customRagConfig, choosedKnowledgeBases, forcedRequestDocuments, documents, userUploadedContents);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, userUploadedContents, deepSearchDataSources, userIntent, tokensSize);
   }
 
 
@@ -325,11 +455,15 @@ public class GeboChatRequest {
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    streamResponse: ").append(toIndentedString(streamResponse)).append("\n");
     sb.append("    query: ").append(toIndentedString(query)).append("\n");
+    sb.append("    rewrittenQuery: ").append(toIndentedString(rewrittenQuery)).append("\n");
     sb.append("    customRagConfig: ").append(toIndentedString(customRagConfig)).append("\n");
     sb.append("    choosedKnowledgeBases: ").append(toIndentedString(choosedKnowledgeBases)).append("\n");
+    sb.append("    chatPipelineProcessId: ").append(toIndentedString(chatPipelineProcessId)).append("\n");
     sb.append("    forcedRequestDocuments: ").append(toIndentedString(forcedRequestDocuments)).append("\n");
-    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("    userUploadedContents: ").append(toIndentedString(userUploadedContents)).append("\n");
+    sb.append("    deepSearchDataSources: ").append(toIndentedString(deepSearchDataSources)).append("\n");
+    sb.append("    userIntent: ").append(toIndentedString(userIntent)).append("\n");
+    sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");
     return sb.toString();
   }

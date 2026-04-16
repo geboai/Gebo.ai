@@ -19,8 +19,8 @@
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, ConfluenceSystemsControllerService, ConfluenceBrowsingControllerService, GConfluenceSystem } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
@@ -36,7 +36,7 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
 @Component({
     selector: "gebo-ai-confluence-endpoint-component",
     templateUrl: "gebo-ai-confluence-endpoint.component.html",
-    providers: [MessageService, { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false }, {
+    providers: [ { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIConfluenceEndpointComponent),
         multi: false
     }],
@@ -106,7 +106,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
         private projectsController: ProjectsControllerService,
         private JobLauncherControllerService: JobLauncherControllerService,
         private actionsRouter: GeboUIActionRoutingService,
-        private messageService: MessageService,
+        private messageService: GeboAIRootNotificationService,
 
         confirmService: ConfirmationService,
         outputForwardingService: GeboUIOutputForwardingService
@@ -210,14 +210,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
         return of({ canBeDeleted: true, message: "" });
     }
 
-    /**
-     * Handles automatic file upload events
-     * @param event The upload event
-     */
-    onBasicUploadAuto(event: UploadEvent) {
-        this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
-    }
+   
 
     /**
      * Performs both save and publish operations

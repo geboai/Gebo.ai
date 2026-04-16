@@ -34,4 +34,5 @@ export interface GChatProfileConfiguration {
     forcedRequestDocumentsReadonly?: boolean;
     disableMultiHopRag?: boolean;
     otherSearchSimilarityThreshold?: number;
+    manualThreasholdsConfiguration?: boolean;
 }

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Prihlásiť sa"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operácia zlyhala",
+        "detail" : "Nie je možné overiť prihlásenie pomocou zadaných údajov"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrácia Google Drive/Workspaces",
         "description" : "Nakonfigurujte Gebo.ai na prístup k tímovým dátam v Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Nastavenie Google search api",
+        "description" : "Nakonfigurujte poverenia Google search api pre AI webové vyhľadávania"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Nastavenie Deep search",
+        "description" : "Nakonfigurujte parametre Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatické ladenie parametrov pre retrieve augmented generation"
+      },
+      "Description" : {
+        "label" : "Popis"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Dátum poslednej aktualizácie ladenia"
+      },
+      "Code" : {
+        "label" : "Embedovacie model/VectorStore kód"
+      },
+      "ComputedThreashold" : {
+        "label" : "Vypočítaný prah"
+      },
+      "Autotuned" : {
+        "label" : "Automaticky doladené"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Povinné kroky nastavenia Gebo.ai dokončené...",
+        "detail" : "Povinné kroky nastavenia boli dokončené, ale stále chýbajú niektoré kroky, ktoré bránia vašej organizácii naplno využívať tento softvér"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "V nastavení Gebo.ai chýba niektorý povinný krok",
+        "detail" : "Skontrolujte červené kroky v procese nastavenia"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence systém"
+      },
+      "EditSystemBtn" : {
+        "label" : "Upraviť systém"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Nastavenie prístupu poskytovateľov Gebo.ai llms"
+      },
+      "ExtensiveStup" : {
+        "label" : "Rozšírené možnosti infraštruktúry/dodávateľov"
+      },
+      "MainPanelTitle" : {
+        "label" : "Nastavenie použitých veľkých jazykových modelov"
+      },
+      "EasySetup" : {
+        "label" : "Rýchle počiatočné nastavenie/uprava konfigurácie"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Nastavenie veľkých jazykových modelov"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Popis"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api kľúč"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Vytvoriť poverenia pre google search"
+      },
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID vyhľadávača",
+        "help" : "Zadajte ID vyhľadávača získané pri registrácii poverení google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "apiKey" : {
+        "label" : "Api kľúč",
+        "help" : "Zadajte api kľúč získaný pri registrácii poverení google search api."
+      },
+      "MainPanel" : {
+        "label" : "Nastavenie google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Odstrániť",
+        "help" : "Odstrániť poverenia Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfigurácia Deep search",
+        "help" : "Pridať konfiguráciu deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Upraviť konfiguráciu"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktivované"
+      },
+      "EditGroupBtn" : {
+        "label" : "Upraviť"
+      },
+      "CodeHeader" : {
+        "label" : "kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "popis"
+      },
+      "UsersHeader" : {
+        "label" : "používatelia"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ je v poriadku",
+        "detail" : "Poskytovateľ je spustený, funkčný a správne nastavený"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:https://api.openai.com/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "nastaviť ako predvolený embedding model",
         "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ je v poriadku",
+        "detail" : "Poskytovateľ je spustený, funkčný a správne nastavený"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie chat modelu pre Ollama lokálny (alebo LAN) server"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie Anthropic chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie MistralAI chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Úprava konfigurácie Google Vertex AI chat modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Nastavenia prístupu k modelu"
+      },
+      "forUses" : {
+        "label" : "Použitie modelu",
+        "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
+        "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia prebehla úspešne"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ste si istí, že chcete odstrániť tento chat?",
         "header" : "Akcia odstránenia chatu"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Pridať obsah alebo upraviť správanie vyhľadávania"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Zdroje",
+        "help" : "Otvorte zoznam analyzovaných dokumentov"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Podrobnosti odpovede a zdrojov z hĺbkového vyhľadávania"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Výsledok analýzy hĺbkového vyhľadávania"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Chyba pri vyhľadávaní Confluence Search",
+        "detail" : "Chyba servera: Problémy s prístupom do systému Confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nový chat načítaný",
+        "detail" : "Nový chat bol úspešne načítaný"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vybrať zdroje"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vyberte aspoň jednu z nasledujúcich možností"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskočiť hĺbkové vyhľadávanie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Vybrané bázy znalostí"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Vybrané systémy"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Pridať dokument do zoznamu 'chatovať s'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Prebieha hĺbkové vyhľadávanie"
+      },
+      "RagLLMResponse" : {
+        "label" : "Prebieha retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Pýtanie sa llm"
+      },
+      "Waiting" : {
+        "label" : "Analyzujem najlepší plán odpovede..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Spúšťanie nástrojov"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Prebieha AI asistované vyhľadávanie"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyzovaný súbor"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Vyhodnotený výsledok vyhľadávania"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Vyhodnotený výsledok vyhľadávania systému pre"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidujem záverečnú správu"
+      },
+      "RUNNING" : {
+        "label" : "Prebieha"
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analyzujem vašu požiadavku"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Zvolený agentický tok, beží odpovedajúci agent"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Úroveň služby je: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Spúšťam zvoleného agenta"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Nahrať súbor(y)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Prehliadať/vyhľadávať firemné súbory"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat s vybraným dokumentom"
+      },
+      "agenticChat" : {
+        "label" : "Agentický chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Hĺbkové vyhľadávanie/Viac zdrojov"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Hĺbkové vyhľadávanie/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Hĺbkové vyhľadávanie/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Hĺbkové vyhľadávanie/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Hĺbkové vyhľadávanie/Vyhľadávanie v báze znalostí"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat so súborom(súbormi)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Hĺbkové vyhľadávanie/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Hĺbkové vyhľadávanie/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Hĺbkové vyhľadávanie/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google používateľ na zosobnenie",
         "help" : "Používateľ, ktorého budú poverenia zosobňovať",
         "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
+      },
+      "OK" : {
+        "summary" : "Úspešne uložené",
+        "detail" : "Aktualizácia prebehla úspešne"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Spracované dokumenty",
         "dataset-2-label" : "Dokumenty s chybou",
         "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexovanie plného textu"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyradené dokumenty"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "povoliť všetky funkčné volania",
         "help" : "Povoľte všetky dostupné nástroje a funkčné volania, ak nie je nastavené, bude ich možné povoliť neskôr v llms administračnom paneli"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
+        "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ OK",
+        "detail" : "Poskytovateľ je funkčný a úspešne nakonfigurovaný"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Výnimka počas operácie:401 NEAUTORIZOVANÉ",
+        "detail" : "Chyba servera: 401 NEAUTORIZOVANÉ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Výnimka počas operácie:Chýba basePath",
+        "detail" : "Chyba servera: Chýba basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Vytvoriť a aktivovať"
+      },
+      "vendorId" : {
+        "label" : "Vyberte svojho dodávateľa veľkého jazykového modelu",
+        "help" : "Vyberte počiatočného dodávateľa pre predvolené chat a embedding modely"
+      },
+      "secretId" : {
+        "label" : "Vyberte prihlasovacie údaje poskytovateľa (api key)",
+        "help" : "Vyberte si z existujúcich prihlasovacích údajov pre vybraného poskytovateľa llm"
+      },
+      "InternalServiceModel" : {
+        "label" : "Chat model interných služieb",
+        "help" : "Chatovací model nakonfigurovaný pre interné služby je zodpovedný za extrakciu informácií, sumarizáciu a vykonávanie interných workflow."
+      },
+      "ChatModel" : {
+        "label" : "Predvolený chatovací model",
+        "help" : "Predvolený chatovací model bude zodpovedný za zodpovedanie otázok používateľov a vykonávanie workflow, pre ktoré nie sú špecificky nakonfigurované modely. Mal by byť výkonný a spoľahlivý, s dobrým pomerom medzi cenou, výkonom a kvalitou výsledku."
+      },
+      "ProviderBuy" : {
+        "label" : "Odkaz na nákup kreditu pre Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Odkaz na webstránku"
+      },
+      "WebSiteLink" : {
+        "label" : "Webová stránka poskytovateľa",
+        "help" : "Kliknite sem pre všeobecné informácie o poskytovateľovi."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Zakúpiť kredit poskytovateľa",
+        "help" : "Kliknite sem pre nákup kreditu pre vaše api key(e)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Predvolený embedding model",
+        "help" : "Tento model bude zodpovedný za sémantický index (embedding) a vyhľadávanie vašich údajov a dokumentov"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Toto nemôžete odstrániť",
         "detail" : "Na tento objekt sa odkazuje z inej časti aplikácie"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url: http://localhost:11434/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Výnimka počas operácie: apiKey musí byť nastavený",
+        "detail" : "Chyba servera: apiKey musí byť nastavený"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Chyba počas streamovania odpovede chatu",
+        "detail" : "Chyba servera: 400 Zlá požiadavka z POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8000/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Chyba počas streamovania odpovede na chat",
+        "detail" : "Chyba servera: Pripojenie bolo resetované"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:https://api.openai.com/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
+        "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Dokončené"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia prebehla úspešne"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Použitá identita",
         "help" : "Vyberte alebo vytvorte identitu na prístup do systému google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Vyhľadávajú sa relevantné informácie"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsoliduje sa finálna správa"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analyzovaný výsledok vyhľadávania"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analyzovaný systémový výsledok vyhľadávania pre"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vyberte aspoň jednu z nasledujúcich možností"
+      },
+      "LaunchBtn" : {
+        "label" : "Spustiť vyhľadávanie"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskočiť hĺbkové vyhľadávanie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Zvolené znalostné bázy"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Zvolené systémy"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vybrať zdroje"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analyzovaný súbor"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Vložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SearchSettingTab" : {
+        "label" : "Nastavenia vyhľadávania"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Vložte prompt pre extrakciu relevantných informácií z dokumentov"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Vložte prompt na konsolidáciu extrahovaných relevantných informácií"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Nastavenie veľkého jazykového modelu"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie deep search"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód pre konfiguráciu deep search"
+      },
+      "searchType" : {
+        "label" : "Typ vyhľadávania",
+        "help" : "Vyberte medzi jednohopovým semantickým vyhľadávaním alebo multi hop"
+      },
+      "topK" : {
+        "label" : "Počet získaných textových segmentov (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Použitý llm",
+        "help" : "Uveďte veľký jazykový model použitý pre Deep search, ak nevyberiete žiadny, použije sa predvolený."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt na analýzu dokumentov",
+        "help" : "Upravte prompt, ktorý sa použije na extrakciu relevantných informácií z fragmentov dokumentov."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt na konsolidáciu extrahovaných informácií",
+        "help" : "Upravte prompt, ktorý sa použije na konsolidáciu dôležitých informácií získaných z dokumentov do jednej správy."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Prah podobnosti vyhľadávania",
+        "help" : "Prvý prah semantickej podobnosti (medzi 0.5 a 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Druhý prah podobnosti",
+        "help" : "Druhý prah semantickej podobnosti (medzi 0.5 a 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Predvolený veľký jazykový model",
+        "help" : "Predvolený veľký jazykový model bude použitý na spracovanie Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Prah podobnosti vyhľadávania",
+        "help" : "Semantický prah podobnosti (medzi 0.5 a 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Nastavenia zabezpečenia"
+      },
+      "accessibleToAll" : {
+        "label" : "Prístupné pre všetkých"
+      },
+      "datasource" : {
+        "label" : "Zdroj dát"
+      },
+      "allowedGroups" : {
+        "label" : "Povolené skupiny"
+      },
+      "allowedUsers" : {
+        "label" : "Povolení používatelia"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Prístup k používateľom/skupinám podľa zdroja dát",
+        "help" : "Hĺbkové vyhľadávanie bude povolené pre každý externý zdroj dát a vybraných používateľov alebo skupiny"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Jednoduchý prístup podľa používateľa/skupiny"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Prístup podľa používateľa/skupiny a zdroja dát"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Použiť alebo vytvoriť prihlasovacie údaje api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/prihlasovacie údaje",
+        "help" : "Vyberte api key alebo údaje na prihlásenie pre tohto poskytovateľa"
+      },
+      "NewApiKey" : {
+        "label" : "Nový api key",
+        "help" : "Zadajte nový api key, ktorý bude použitý s týmto poskytovateľom"
+      },
+      "PiSave" : {
+        "label" : "Uložiť"
+      },
+      "NewUserName" : {
+        "label" : "Používateľské meno",
+        "help" : "Používateľské meno používané na prístup k službám poskytovateľa"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Použiť existujúce alebo vytvoriť nové",
+        "help" : "Použiť existujúce alebo vytvoriť nové prihlasovacie údaje pre tohto poskytovateľa"
+      },
+      "newSecretDescription" : {
+        "label" : "Popis prihlasovacích údajov",
+        "help" : "Popis prihlasovacích údajov api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Prihlasovacie údaje boli vytvorené",
+        "detail" : "Prihlasovacie údaje úspešne vytvorené"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Chyba pri komunikácii so serverom Ollama ",
+        "detail" : "Chyba siete pri komunikácii so vzdialeným systémom prístupovým k obsahu\n models list Chyba pri práci s url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chat s používateľmi"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model používaný pre interné služby"
       }
     }
   }

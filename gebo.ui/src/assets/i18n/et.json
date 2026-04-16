@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Logi sisse"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Toiming ebaõnnestus",
+        "detail" : "Autentimine sisestatud andmetega ei õnnestunud"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces'i integratsioon",
         "description" : "Seadista Gebo.ai ligipääsuks oma Google Drive/Workspaces meeskonna andmetele"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Seadista Google'i otsingu API",
+        "description" : "Seadista Google'i otsingu API mandaadid AI-veebiotsingute jaoks"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Seadista Deep search",
+        "description" : "Määra Deep search parameetrid"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automaatne laiendatud genereerimise parameetrite häälestamine"
+      },
+      "Description" : {
+        "label" : "Kirjeldus"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Viimase häälestuse uuendus"
+      },
+      "Code" : {
+        "label" : "Embedimise mudeli/vektorpanga kood"
+      },
+      "ComputedThreashold" : {
+        "label" : "Arvutatud lävi"
+      },
+      "Autotuned" : {
+        "label" : "Automaatselt häälestatud"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai kohustuslikud seadistamise sammud tehtud...",
+        "detail" : "Kohustuslikud seadistamise sammud on lõpetatud, kuid mõned puuduvad etapid takistavad teie organisatsioonil sellest tarkvarast maksimaalset kasu saada"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai seadistamisel puudub mõni kohustuslik samm",
+        "detail" : "Palun vaadake üle punasega tähistatud etapid seadistamise protsessis"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence'i süsteem"
+      },
+      "EditSystemBtn" : {
+        "label" : "Muuda süsteemi"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Seadista Gebo.ai LLM pakkujate ligipääs"
+      },
+      "ExtensiveStup" : {
+        "label" : "Laiendatud infrastruktuuri/tarnijate valikud"
+      },
+      "MainPanelTitle" : {
+        "label" : "Kasutatavate suurte keelemudelite seadistamine"
+      },
+      "EasySetup" : {
+        "label" : "Lihtne algne seadistus/konfiguratsiooni parandus"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Suurte keelemudelite seadistamine"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Kirjeldus"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google'i otsingu API võti"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Loo Google'i otsingu mandaadid"
+      },
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "customSearchEngineId" : {
+        "label" : "Otsingumootori ID",
+        "help" : "Sisesta Google'i otsingu API mandaatide registreerimisel saadud otsingumootori ID."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Seadistuse kood"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "apiKey" : {
+        "label" : "API võti",
+        "help" : "Sisesta Google'i otsingu API mandaatide registreerimisel saadud API võti."
+      },
+      "MainPanel" : {
+        "label" : "Seadista Google'i otsingu API"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Kustuta",
+        "help" : "Kustuta Google'i otsingu API mandaadid"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search seaded",
+        "help" : "Lisa deep search konfiguratsioon"
+      },
+      "EditSystemBtn" : {
+        "label" : "Muuda seadeid"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "keelatud"
+      },
+      "EditGroupBtn" : {
+        "label" : "Muuda"
+      },
+      "CodeHeader" : {
+        "label" : "kood"
+      },
+      "DescriptionHeader" : {
+        "label" : "kirjeldus"
+      },
+      "UsersHeader" : {
+        "label" : "kasutajad"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugteenuse pakkuja OK",
+        "detail" : "Teenusepakkuja töötab ja on edukalt seadistatud"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: https://api.openai.com/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "seadista see vaikimisi embedding mudeliks",
         "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugteenuse pakkuja OK",
+        "detail" : "Teenusepakkuja töötab ja on edukalt seadistatud"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama kohaliku (või võrgus) vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI vestlusmudeli seadistuse muutmine"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mudeli ligipääsu seaded"
+      },
+      "forUses" : {
+        "label" : "Mudeli kasutusvõimalused",
+        "help" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab.",
+        "placeholder" : "Kasutused, mille jaoks Gebo.ai platvorm seda mudelit arvestab."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiming õnnestus"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Kas olete kindel, et soovite selle vestluse kustutada?",
         "header" : "Vestluse kustutamise tegevus"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Lisa sisu või muuda otsingu käitumist"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Allikad",
+        "help" : "Ava analüüsitud dokumentide loend"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Sügava otsingu vastus ja allikate detailid"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Sügava otsingu analüüsi tulemus"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Viga Confluence Search otsingus",
+        "detail" : "Serveri viga: Probleemid confluence süsteemile ligipääsuga"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Uus vestlus laetud",
+        "detail" : "Uus vestlus edukalt laetud"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vali allikad"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vali vähemalt üks järgmistest valikutest"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Jäta sügav otsing vahele"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valitud teadmistebaasid"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valitud süsteemid"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Lisa dokument vestluse loendisse"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Käivitan sügavat otsingut"
+      },
+      "RagLLMResponse" : {
+        "label" : "Käivitan parendatud vastuse loomist"
+      },
+      "PureLLMResponse" : {
+        "label" : "Küsin llmilt"
+      },
+      "Waiting" : {
+        "label" : "Analüüsin parimat vastuse plaani..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Käivitab tööriistu"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Käivitan AI abil otsingu"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analüüsitud fail"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analüüsitud otsingutulemus"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analüüsitud süsteemi otsingutulemus järgmiselt"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Lõpparuande koondamine"
+      },
+      "RUNNING" : {
+        "label" : "Käivitamisel "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analüüsin sinu päringut"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Valiti agendivool, vastav agent töötab"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Teenusetasand tuvastatud: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Täidan sinu valitud agenti"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Lae fail(id) üles"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Sirvi/otsi ettevõtte faile"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Valitud dokumendi vestlus"
+      },
+      "agenticChat" : {
+        "label" : "Agendivestlus"
+      },
+      "rag" : {
+        "label" : "R.a.g. vestlus"
+      },
+      "deepSearch" : {
+        "label" : "Sügav otsing/mitu allikat"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Sügav otsing/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Sügav otsing/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Sügav otsing/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Sügav otsing/teadmistebaasi otsing"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Vestle failidega"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Sügav otsing/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Sügav otsing/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Sügav otsing/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google'i kasutaja, keda volitatakse",
         "help" : "Kasutaja, keda antud mandaadid volitavad",
         "placeholder" : "Kasutaja, keda antud mandaadid volitavad"
+      },
+      "OK" : {
+        "summary" : "Salvestamine õnnestus",
+        "detail" : "Uuendamine edukalt lõpetatud"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Töödeldud dokumendid",
         "dataset-2-label" : "Vigased dokumendid",
         "dataset-3-label" : "Kõrvaldatud dokumendid"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Täisteksti indekseerimine"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Töötlemata dokumendid",
+        "label-1" : "Viga dokumentide töötlemisel",
+        "label-2" : "Töödeldud dokumendid"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Vastu võetud dokumendid",
+        "dataset-1-label" : "Töödeldud dokumendid",
+        "dataset-2-label" : "Vead dokumentides",
+        "dataset-3-label" : "Kõrvale jäetud dokumendid"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Töödeldud tokenid",
+        "dataset-1-label" : "Viga tokenite töötlemisel"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "luba kõik funktsioonikutsed",
         "help" : "Luba kõik saadaolevad tööriistad ja funktsioonikutsed; kui pole määratud, saab neid hiljem llms-i halduspaneelis lubada"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Tõrge toimingul: Anthropic api ei saa töötada ilma vajaliku api võtmeta",
+        "detail" : "Serveri viga: Anthropic api ei saa töötada ilma vajaliku api võtmeta"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugpakkuja OK",
+        "detail" : "Pakkuja töötab ja on edukalt seadistatud"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Erind toimingu ajal: 401 UNAUTHORIZED",
+        "detail" : "Serveri viga: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Erind toimingu ajal: puuduv basePath",
+        "detail" : "Serveri viga: puudub basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Loo ja aktiveeri"
+      },
+      "vendorId" : {
+        "label" : "Vali oma suurte keelemudelite pakkuja",
+        "help" : "Vali algne pakkuja vaikimisi vestlus- ja embedding-mudelitele"
+      },
+      "secretId" : {
+        "label" : "Vali teenusepakkuja mandaadid (api võti)",
+        "help" : "Vali üks olemasolevatest mandaatidest valitud llm pakkujale"
+      },
+      "InternalServiceModel" : {
+        "label" : "Sisemiste teenuste vestlusmudel",
+        "help" : "Sisemiste teenuste jaoks seadistatud vestlusmudel on vastutav info väljavõtmise, kokkuvõtete tegemise ning sisemiste töövoogude täitmise eest."
+      },
+      "ChatModel" : {
+        "label" : "Vaikimisi vestlusmudel",
+        "help" : "Vaikimisi vestlusmudel vastab kasutajate küsimustele ja täidab töövooge, millele ei ole spetsiaalselt määratud mudeleid. See peab olema võimas ja usaldusväärne, hea tasakaaluga hinna, jõudluse ja tulemuse kvaliteedi vahel."
+      },
+      "ProviderBuy" : {
+        "label" : "Osta Apy võtme krediiti link"
+      },
+      "ProviderWWW" : {
+        "label" : "Veebisaidi link"
+      },
+      "WebSiteLink" : {
+        "label" : "Teenusepakkuja veebisait",
+        "help" : "Klõpsa siin, et näha teenusepakkuja üldinfot."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Osta teenusepakkuja krediiti",
+        "help" : "Klõpsa siia, et osta krediiti oma api võtme(te) jaoks."
+      },
+      "EmbeddingModel" : {
+        "label" : "Vaikimisi embedding-mudel",
+        "help" : "See mudel tegeleb teie andmete ja dokumentide semantilise indekseerimise (embedding) ja leidmisega"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Seda ei saa kustutada",
         "detail" : "Seda objekti kasutatakse rakenduse teistes osades"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Erand toimingu käigus: Tõrge töö url-iga: http://localhost:11434/v1/models",
+        "detail" : "Serveri tõrge: Tõrge töö url-iga: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Erand toimingu käigus: apiKey peab olema määratud",
+        "detail" : "Serveri tõrge: apiKey peab olema määratud"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Viga vestluse voogedastamisel",
+        "detail" : "Serveri tõrge: 400 Bad Request POST-i korral http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: http://localhost:8000/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Viga vestluse vastuse voogedastamisel",
+        "detail" : "Serveri viga: Ühendus lähtestatud"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Tõrge toimingul: Viga url-iga töötamisel: https://api.openai.com/v1/models",
+        "detail" : "Serveri viga: Viga url-iga töötamisel: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Tõrge toimingul: Anthropic api ei saa töötada ilma vajaliku api võtmeta",
+        "detail" : "Serveri viga: Anthropic api ei saa töötada ilma vajaliku api võtmeta"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Valmis"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiming õnnestus"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Kasutatav identiteet",
         "help" : "Vali või loo identiteet Google Drive'i süsteemile juurdepääsuks"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Vestlus"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Otsin asjakohast infot"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Koostan lõplikku raportit"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analüüsitud otsingutulemus"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Süsteemi analüüsitud otsingutulemus:"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Vali vähemalt üks järgmistest valikutest"
+      },
+      "LaunchBtn" : {
+        "label" : "Käivita otsing"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Jäta süvaotsing vahele"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Valitud teadmistebaasid"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Valitud süsteemid"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Vali allikad"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analüüsitud fail"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Lisa"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SearchSettingTab" : {
+        "label" : "Otsingu seadistus"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Sisesta ülesanne dokumentide asjakohase info leidmiseks"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Sisesta ülesanne leitud asjakohase info koondamiseks"
+      },
+      "MainPanel" : {
+        "label" : "Deep search seadete muutmine"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Suure keelemudeli seadistus"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta deep search konfiguratsiooni kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Deep search seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "searchType" : {
+        "label" : "Otsingu tüüp",
+        "help" : "Vali ühehüppe semantiline otsing või mitmehüppega otsing"
+      },
+      "topK" : {
+        "label" : "Leitud tekstilõikude arv (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Kasutatav llm",
+        "help" : "Määra Deep search jaoks kasutatav suur keelemudel, vaikimisi kasutatakse\n                                    standardmudelit, kui midagi pole valitud."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentide analüüsi ülesanne",
+        "help" : "Redigeeri ülesannet, mida kasutatakse dokumentidest asjakohase info leidmisel."
+      },
+      "consolidationPrompt" : {
+        "label" : "Leitud info konsolideerimise ülesanne",
+        "help" : "Redigeeri ülesannet, mida kasutatakse leitud info koondamiseks ühte raportisse."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Otsingu sarnasuse lävi",
+        "help" : "Esimese hüppe semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Teise hüppe sarnasuse lävi",
+        "help" : "Teise hüppe semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Vaikimisi suur keelemudel",
+        "help" : "Vaikimisi suur keelemudel kasutatakse Deep search töötlemiseks"
+      },
+      "similarityThreashold" : {
+        "label" : "Otsingu sarnasuse lävi",
+        "help" : "Semantilise sarnasuse lävi (0.5 kuni 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Turvaseaded"
+      },
+      "accessibleToAll" : {
+        "label" : "Ligipääsetav kõigile"
+      },
+      "datasource" : {
+        "label" : "Andmeallikas"
+      },
+      "allowedGroups" : {
+        "label" : "Lubatud grupid"
+      },
+      "allowedUsers" : {
+        "label" : "Lubatud kasutajad"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Iga andmeallika kasutaja/grupi ligipääs",
+        "help" : "Sügav otsing võimaldatakse igale välisele andmeallikale ning kasutajale või grupile eraldi"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Lihtne kasutaja/grupi ligipääs"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Iga andmeallika kasutaja/grupi ligipääs"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Kasuta või loo api võtme mandaadid"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api võti/mandaadid",
+        "help" : "Vali api võti või mandaadid selle teenusepakkuja jaoks"
+      },
+      "NewApiKey" : {
+        "label" : "Uus api võti",
+        "help" : "Sisesta uus api võti selle teenusepakkuja jaoks"
+      },
+      "PiSave" : {
+        "label" : "Salvesta"
+      },
+      "NewUserName" : {
+        "label" : "Kasutajanimi",
+        "help" : "Teenusepakkuja teenustele ligipääsemiseks kasutatav nimi"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Kasuta olemasolevat või uut",
+        "help" : "Kasuta olemasolevaid või loo uusi mandaate selle teenusepakkuja jaoks"
+      },
+      "newSecretDescription" : {
+        "label" : "Mandaatide kirjeldus",
+        "help" : "Api võtme mandaadi kirjeldus"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Mandaadid loodud",
+        "detail" : "Mandaadid loodi edukalt"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Viga ühendusel Ollama serveriga ",
+        "detail" : "Võrgu viga sisuga töötamisel kaugserveris\n mudelite nimekirja hankimisel viga. Probleem url: nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Vestlus kasutajatega"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Siseteenusteks kasutatav mudel"
       }
     }
   }

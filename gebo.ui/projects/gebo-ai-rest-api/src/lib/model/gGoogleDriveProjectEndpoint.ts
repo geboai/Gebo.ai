@@ -31,6 +31,7 @@ export interface GGoogleDriveProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GGoogleDriveProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GGoogleDriveProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     paths?: Array<VFilesystemReference>;
     driveSystemCode: string;
 }

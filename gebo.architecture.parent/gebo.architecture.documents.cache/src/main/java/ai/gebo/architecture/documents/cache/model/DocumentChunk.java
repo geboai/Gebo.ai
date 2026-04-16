@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,9 @@ public class DocumentChunk {
 	private String chunkData = null;
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 	private Long tokensSize = null, bytesSize = null;
+	private Long chunkPosition = null;
+	private Long chunksCount = null;
+	private String chunkingSessionId = null;
 
 	public static DocumentChunk ofText(String originalDocumentCode, String id, String mimeType, String text,
 			Map<String, Object> metaData) {
@@ -31,5 +35,19 @@ public class DocumentChunk {
 
 	public static DocumentChunk ofText(String originalDocumentCode, String text, Map<String, Object> metaData) {
 		return ofText(originalDocumentCode, UUID.randomUUID().toString(), "text/plain", text, metaData);
+	}
+
+	public void setChunkPosition(Long chunkPosition) {
+		this.chunkPosition = chunkPosition;
+		if (metaData != null && chunkPosition != null) {
+			metaData.put(DocumentMetaInfos.GEBO_CHUNK_POSITION, chunkPosition);
+		}
+	}
+
+	public void setChunksCount(Long chunksCount) {
+		this.chunksCount = chunksCount;
+		if (metaData != null && chunksCount != null) {
+			metaData.put(DocumentMetaInfos.GEBO_CHUNKS_COUNT, chunksCount);
+		}
 	}
 }

@@ -30,6 +30,7 @@ export interface GUploadsProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GUploadsProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GUploadsProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     uploadHandshakeCode?: string;
     uploadedContents?: Array<string>;
 }

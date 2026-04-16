@@ -38,10 +38,4 @@ export class GeboChatUserInfoComponent {
      * Expected to be of type GeboChatUserInfo from the Gebo.ai API
      */
     @Input() data?: GeboChatUserInfo;
-
-    /**
-     * Output event emitter that fires when the user info display should be closed
-     * Emits a boolean value (typically true) to signal closure
-     */
-    @Output() close: EventEmitter<boolean> = new EventEmitter();
 }

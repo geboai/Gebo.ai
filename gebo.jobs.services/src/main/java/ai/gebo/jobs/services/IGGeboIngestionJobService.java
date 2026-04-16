@@ -6,21 +6,19 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services;
 
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 
 /**
- * AI generated comments
- * Interface defining operations for managing Gebo ingestion jobs.
- * This service handles the lifecycle of ingestion jobs including creation, status checking, and completion.
+ * AI generated comments Interface defining operations for managing Gebo
+ * ingestion jobs. This service handles the lifecycle of ingestion jobs
+ * including creation, status checking, and completion.
  */
 public interface IGGeboIngestionJobService {
 
@@ -30,16 +28,19 @@ public interface IGGeboIngestionJobService {
 	 * @param status the current status of the job to complete
 	 * @throws GeboJobServiceException if there is an error completing the job
 	 */
-	public void completeAsyncJob(GJobStatus status) throws GeboJobServiceException;
+	public <SessionParamType extends AbstractContentConsumingSessionParam> void completeAsyncJob(GJobStatus status,
+			SessionParamType sessionParam) throws GeboJobServiceException;
 
 	/**
-	 * Completes a synchronous job with the provided status and returns the updated status.
+	 * Completes a synchronous job with the provided status and returns the updated
+	 * status.
 	 * 
 	 * @param status the current status of the job to complete
 	 * @return the updated job status after completion
 	 * @throws GeboJobServiceException if there is an error completing the job
 	 */
-	public GJobStatus completeSyncJob(GJobStatus status) throws GeboJobServiceException;
+	public <SessionParamType extends AbstractContentConsumingSessionParam> GJobStatus completeSyncJob(
+			final GJobStatus status, SessionParamType sessionParam) throws GeboJobServiceException;
 
 	/**
 	 * Checks if a job is currently running for the specified endpoint.
@@ -47,7 +48,7 @@ public interface IGGeboIngestionJobService {
 	 * @param endpoint reference to the project endpoint to check
 	 * @return true if a job is running for the endpoint, false otherwise
 	 */
-	public boolean isJobRunning(GObjectRef<GProjectEndpoint> endpoint);
+	public <EndpointType extends GProjectEndpoint> boolean isJobRunning(GObjectRef<EndpointType> endpoint);
 
 	/**
 	 * Creates a new asynchronous job with the provided status.
@@ -55,5 +56,6 @@ public interface IGGeboIngestionJobService {
 	 * @param status the initial status for the new job
 	 * @return a runnable object that can execute the job asynchronously
 	 */
-	public IGRunnable createAsyncJob(GJobStatus status);
+	public <SessionParamType extends AbstractContentConsumingSessionParam> IGRunnable createAsyncJob(GJobStatus status,
+			SessionParamType sessionParam);
 }

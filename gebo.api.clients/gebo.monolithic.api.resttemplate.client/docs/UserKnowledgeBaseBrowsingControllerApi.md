@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**getAccessibleRootKnowledgeBases**](UserKnowledgeBaseBrowsingControllerApi.md#getAccessibleRootKnowledgeBases) | **GET** /api/user/UserKnowledgeBaseBrowsingController/getAccessibleRootKnowledgeBases | 
 [**getKnowledgeBaseNavigationStatus**](UserKnowledgeBaseBrowsingControllerApi.md#getKnowledgeBaseNavigationStatus) | **POST** /api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseNavigationStatus | 
 [**getKnowledgeBaseRoots**](UserKnowledgeBaseBrowsingControllerApi.md#getKnowledgeBaseRoots) | **GET** /api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots | 
+[**getVisibleKnowledgeBaseByCodes**](UserKnowledgeBaseBrowsingControllerApi.md#getVisibleKnowledgeBaseByCodes) | **POST** /api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes | 
 
 <a name="browseKnowledgeBasePath"></a>
 # **browseKnowledgeBasePath**
@@ -179,5 +180,48 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getVisibleKnowledgeBaseByCodes"></a>
+# **getVisibleKnowledgeBaseByCodes**
+> List&lt;GKnowledgeBase&gt; getVisibleKnowledgeBaseByCodes(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.UserKnowledgeBaseBrowsingControllerApi;
+
+
+UserKnowledgeBaseBrowsingControllerApi apiInstance = new UserKnowledgeBaseBrowsingControllerApi();
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+try {
+    List<GKnowledgeBase> result = apiInstance.getVisibleKnowledgeBaseByCodes(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UserKnowledgeBaseBrowsingControllerApi#getVisibleKnowledgeBaseByCodes");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**List&lt;String&gt;**](String.md)|  |
+
+### Return type
+
+[**List&lt;GKnowledgeBase&gt;**](GKnowledgeBase.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 

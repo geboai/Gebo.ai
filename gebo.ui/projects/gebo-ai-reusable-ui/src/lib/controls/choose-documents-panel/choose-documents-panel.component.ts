@@ -83,7 +83,7 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Output("openedSearchDocumentsWindowsChange") openedSearchDocumentsWindowsChange: EventEmitter<boolean> = new EventEmitter();
     @Input("openedUploadDocumentsWindow") public openedUploadDocumentsWindow: boolean = false;
     @Output("openedUploadDocumentsWindowChange") openedUploadDocumentsWindowChange: EventEmitter<boolean> = new EventEmitter();
-
+    @Output() successfullDocumentChosen:EventEmitter<boolean>=new EventEmitter();
     /**
      * Getter that returns the overall loading state by checking if documents or file types are loading
      */
@@ -238,6 +238,7 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
         this.retrieveDocsMetaData();
         this.onChange(this.internalValue);
         this.openedSearchDocumentsWindows = false;
+        this.successfullDocumentChosen.emit(true);
     }
 
 }

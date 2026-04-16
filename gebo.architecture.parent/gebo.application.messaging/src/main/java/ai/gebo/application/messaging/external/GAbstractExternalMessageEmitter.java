@@ -22,7 +22,7 @@ import ai.gebo.application.messaging.SystemComponentType;
  * Abstract class that provides a common foundation for external message emitter implementations,
  * adhering to IGExternalMessageEmitter interface.
  */
-public abstract class GAbstractExternalMessageEmitter implements IGExternalMessageEmitter {
+public abstract class GAbstractExternalMessageEmitter implements IGExternalMessageEmitterProvider {
     // Configuration data for the external emitter
     private ExternalEmitterIfaceData config = null;
 
@@ -46,7 +46,7 @@ public abstract class GAbstractExternalMessageEmitter implements IGExternalMessa
      * Inner class that implements IGMessageEmitter, providing access to system
      * identification and characteristics from the config.
      */
-    class NestedEmitter implements IGMessageEmitter {
+    class NestedEmitter implements IGExternalMessageEmitter {
         @Override
         public String getMessagingSystemId() {
             // Retrieves the messaging system ID from the config
@@ -82,7 +82,7 @@ public abstract class GAbstractExternalMessageEmitter implements IGExternalMessa
     private final NestedEmitter emitter = new NestedEmitter();
 
     @Override
-    public IGMessageEmitter getEmitter() {
+    public IGExternalMessageEmitter getEmitter() {
         // Provides access to the nested emitter instance
         return emitter;
     }

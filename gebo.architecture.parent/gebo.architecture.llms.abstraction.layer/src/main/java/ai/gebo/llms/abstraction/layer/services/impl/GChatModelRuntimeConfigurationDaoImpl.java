@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services.impl;
 
@@ -33,6 +30,7 @@ import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.ModuleType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -42,24 +40,24 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 /**
- * AI generated comments
- * Implementation of the IGChatModelRuntimeConfigurationDao interface.
- * Manages runtime configurations of chat models.
- * Handles dynamic initialization of chat models upon application context refresh.
+ * AI generated comments Implementation of the
+ * IGChatModelRuntimeConfigurationDao interface. Manages runtime configurations
+ * of chat models. Handles dynamic initialization of chat models upon
+ * application context refresh.
  */
 @Component
 @Scope("singleton")
 public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<IGConfigurableChatModel>
 		implements IGChatModelRuntimeConfigurationDao, ApplicationListener<ContextRefreshedEvent> {
-	
+
 	// Logger instance for this class
 	static Logger LOGGER = LoggerFactory.getLogger(GChatModelRuntimeConfigurationDaoImpl.class);
 	// ObjectMapper instance for JSON processing
 	static ObjectMapper mapper = new ObjectMapper();
-	
+
 	@Autowired
 	IGChatModelConfigurationSupportServiceRepositoryPattern supportRepoPattern;
-	
+
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
 
@@ -119,8 +117,8 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 	}
 
 	/**
-	 * Add a chat model to runtime configurations based on the provided configuration.
-	 * If the handler is not found, an exception is thrown.
+	 * Add a chat model to runtime configurations based on the provided
+	 * configuration. If the handler is not found, an exception is thrown.
 	 * 
 	 * @param config The configuration of the chat model.
 	 * @throws LLMConfigException If the chat model configuration fails.
@@ -151,7 +149,8 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 	/**
 	 * Delete a chat model configuration by its unique code.
 	 * 
-	 * @param code The unique code identifying the chat model configuration to be deleted.
+	 * @param code The unique code identifying the chat model configuration to be
+	 *             deleted.
 	 * @throws LLMConfigException If the chat model configuration cannot be found.
 	 */
 	@Override
@@ -183,6 +182,29 @@ public class GChatModelRuntimeConfigurationDaoImpl extends GAbstractRuntimeConfi
 			use.add(useItem);
 		}
 		return use;
+	}
+
+	@Override
+	public IGConfigurableChatModel findByUses(ChatModelsUses... graphExtraction) {
+		if (graphExtraction != null) {
+			for (ChatModelsUses chatModelsUses : graphExtraction) {
+				IGConfigurableChatModel foundModel = findByPredicate(x -> {
+					GBaseChatModelConfig chatMConfig = (GBaseChatModelConfig) x.getConfig();
+
+					return chatMConfig.getForUses() != null && chatMConfig.getForUses().contains(chatModelsUses);
+				});
+				return foundModel;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public IGConfigurableChatModel findByUsesOrGetDefault(ChatModelsUses... graphExtraction) {
+		IGConfigurableChatModel outValue = findByUses(graphExtraction);
+		if (outValue == null)
+			outValue = defaultHandler();
+		return outValue;
 	}
 
 }

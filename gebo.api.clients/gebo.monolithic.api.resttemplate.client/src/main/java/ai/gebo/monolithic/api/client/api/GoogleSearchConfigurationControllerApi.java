@@ -2,7 +2,9 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.ComponentSetupStatus;
 import ai.gebo.monolithic.api.client.model.GGoogleSearchApiCredentials;
+import ai.gebo.monolithic.api.client.model.GoogleSearchConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GoogleSearchConfigurationControllerApi {
     private ApiClient apiClient;
@@ -84,6 +86,128 @@ public class GoogleSearchConfigurationControllerApi {
 
         ParameterizedTypeReference<Void> returnType = new ParameterizedTypeReference<Void>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return GGoogleSearchApiCredentials
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GGoogleSearchApiCredentials fastInsertGoogleSearchApiCredentials(GoogleSearchConfig body) throws RestClientException {
+        return fastInsertGoogleSearchApiCredentialsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;GGoogleSearchApiCredentials&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GGoogleSearchApiCredentials> fastInsertGoogleSearchApiCredentialsWithHttpInfo(GoogleSearchConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling fastInsertGoogleSearchApiCredentials");
+        }
+        String path = UriComponentsBuilder.fromPath("/api/admin/GoogleSearchConfigurationController/fastInsertGoogleSearchApiCredentials").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GGoogleSearchApiCredentials> returnType = new ParameterizedTypeReference<GGoogleSearchApiCredentials>() {};
+        return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;GGoogleSearchApiCredentials&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GGoogleSearchApiCredentials> getGoogleSearchApiCredentials() throws RestClientException {
+        return getGoogleSearchApiCredentialsWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;GGoogleSearchApiCredentials&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GGoogleSearchApiCredentials>> getGoogleSearchApiCredentialsWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String path = UriComponentsBuilder.fromPath("/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GGoogleSearchApiCredentials>> returnType = new ParameterizedTypeReference<List<GGoogleSearchApiCredentials>>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ComponentSetupStatus
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ComponentSetupStatus getGoogleSearchStatus() throws RestClientException {
+        return getGoogleSearchStatusWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;ComponentSetupStatus&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<ComponentSetupStatus> getGoogleSearchStatusWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String path = UriComponentsBuilder.fromPath("/api/admin/GoogleSearchConfigurationController/getGoogleSearchStatus").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<ComponentSetupStatus> returnType = new ParameterizedTypeReference<ComponentSetupStatus>() {};
+        return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 

@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
   /**
    * Collection of toast messages to display to the user
    */
-  userMessages: ToastMessageOptions[] = [welcomeMessage];
+  userMessages: ToastMessageOptions[] = [];
   private subscription?: Subscription;
   providers: Oauth2ClientAuthorizativeInfo[] = [];
 
@@ -119,11 +119,7 @@ export class LoginComponent implements OnInit {
       this.subscription.unsubscribe();
       this.subscription = undefined;
     }
-    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "Login", "LoginComponent", welcomeMessage).subscribe({
-      next: (message) => {
-        if (message) this.userMessages = [message];
-      }
-    });
+    //this.userMessages = [welcomeMessage];
     this.loginService.loginActivated.next(true);
   }
 
@@ -141,12 +137,7 @@ export class LoginComponent implements OnInit {
         this.subscription = undefined;
       }
       if (x.messages) {
-        const observable = this.geboTranslationService.translateBackendMessages(x.messages as GUserMessage[]);
-        this.subscription = observable.subscribe({
-          next: (messages) => {
-            if (messages) this.userMessages = messages;
-          }
-        });
+        this.userMessages = x.messages;
       }
 
       if (x.userInfo) {

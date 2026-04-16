@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging.external;
 
@@ -19,11 +16,11 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 
 /**
- * Gebo.ai comment agent
- * Abstract class that provides the basic structure for an external message receiver.
- * It implements IGExternalMessageReceiver interface and provides functionality for handling configuration data.
+ * Gebo.ai comment agent Abstract class that provides the basic structure for an
+ * external message receiver. It implements IGExternalMessageReceiver interface
+ * and provides functionality for handling configuration data.
  */
-public abstract class GAbstractExternalMessageReceiver implements IGExternalMessageReceiver {
+public abstract class GAbstractExternalMessageReceiver implements IGExternalMessageReceiverProvider {
 	// Configuration for the external receiver interface
 	private ExternalReceiverIfaceData config = null;
 
@@ -43,14 +40,14 @@ public abstract class GAbstractExternalMessageReceiver implements IGExternalMess
 	}
 
 	/**
-	 * Inner class that implements IGMessageReceiver to handle message receiving functionality
-	 * based on the provided configuration.
+	 * Inner class that implements IGMessageReceiver to handle message receiving
+	 * functionality based on the provided configuration.
 	 */
-	class NestedMessageReceiver implements IGMessageReceiver {
+	class NestedMessageReceiver implements IGExternalMessageReceiver {
 
 		/**
-		 * Returns the list of accepted payload types. 
-		 * If the configuration is null, returns null.
+		 * Returns the list of accepted payload types. If the configuration is null,
+		 * returns null.
 		 * 
 		 * @return list of accepted payload types or null
 		 */
@@ -60,8 +57,8 @@ public abstract class GAbstractExternalMessageReceiver implements IGExternalMess
 		}
 
 		/**
-		 * Checks if all payload types are accepted.
-		 * If the configuration is null, returns null.
+		 * Checks if all payload types are accepted. If the configuration is null,
+		 * returns null.
 		 * 
 		 * @return true if all payload types are accepted, false otherwise
 		 */
@@ -131,13 +128,13 @@ public abstract class GAbstractExternalMessageReceiver implements IGExternalMess
 	 * @return an instance of IGMessageReceiver
 	 */
 	@Override
-	public IGMessageReceiver getReceiver() {
+	public IGExternalMessageReceiver getReceiver() {
 		return receiver;
 	}
 
 	/**
-	 * Abstract method that must be implemented by subclasses to define 
-	 * how incoming messages are processed.
+	 * Abstract method that must be implemented by subclasses to define how incoming
+	 * messages are processed.
 	 * 
 	 * @param message the message envelope to be processed
 	 */

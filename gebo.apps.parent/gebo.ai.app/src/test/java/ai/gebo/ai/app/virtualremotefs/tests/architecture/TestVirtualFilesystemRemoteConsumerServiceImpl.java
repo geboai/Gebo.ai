@@ -31,6 +31,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.architecture.integration.tests.model.TestVirtualFilesystemNode;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
@@ -147,7 +148,7 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 	 */
 	@Override
 	protected TestVirtualfilesystemNavigationCoordinates getPositionCoordinate(
-			List<TestVirtualFilesystemNativeObject> childCoordinates) throws GeboContentHandlerSystemException {
+			List<TestVirtualFilesystemNativeObject> childCoordinates, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		TestVirtualfilesystemNavigationCoordinates coords = new TestVirtualfilesystemNavigationCoordinates();
 		// Assume the first item is the root. Initiating with the first root element.
 		TestVirtualFilesystemNativeObject root = childCoordinates.get(0);
@@ -314,7 +315,7 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 	 * @throws GeboContentHandlerSystemException if any error occurs in content handling
 	 */
 	@Override
-	protected TestVirtualfilesystemNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected TestVirtualfilesystemNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		String id = null;
 		if (path.path != null) {
@@ -405,6 +406,38 @@ public class TestVirtualFilesystemRemoteConsumerServiceImpl extends
 		doc.setDeleted(TestRootHolder.findNode(reference.getId()) == null);
 		doc.setModificationDate(new Date());
 		return doc;
+	}
+
+	@Override
+	protected List<TestVirtualFilesystemNativeObject> toResourcesNativeCoordinates(
+			TestVirtualfilesystemNavigationCoordinates position, TestVirtualRemoteSystem system,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(TestVirtualRemoteSystem system)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected TestVirtualFilesystemRemoteReference getResourceHandle(SearchableSystemMetaData system,
+			TestVirtualfilesystemNavigationCoordinates navigationPosition,
+			List<TestVirtualFilesystemNativeObject> nativeCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected InputStream streamResource(TestVirtualRemoteSystem system,
+			TestVirtualFilesystemRemoteReference remoteReference, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException, IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

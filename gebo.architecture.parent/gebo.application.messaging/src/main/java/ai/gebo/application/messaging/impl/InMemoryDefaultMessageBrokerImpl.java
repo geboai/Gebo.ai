@@ -6,31 +6,33 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ai.gebo.application.messaging.GBaseMessageBroker;
+import ai.gebo.application.messaging.GeboCurrentApplication;
 
 /**
  * Gebo.ai comment agent
  * 
- * This class provides an implementation of the GBaseMessageBroker interface using 
- * an in-memory message broker. It extends the GBaseMessageBroker to inherit its 
- * functionality and provide specific implementations for handling messages in-memory.
+ * This class provides an implementation of the GBaseMessageBroker interface
+ * using an in-memory message broker. It extends the GBaseMessageBroker to
+ * inherit its functionality and provide specific implementations for handling
+ * messages in-memory.
  */
 public class InMemoryDefaultMessageBrokerImpl extends GBaseMessageBroker {
 
-    /**
-     * Constructs a new InMemoryDefaultMessageBrokerImpl.
-     * The constructor initializes any necessary resources and sets up the 
-     * in-memory message broker instance.
-     */
-    public InMemoryDefaultMessageBrokerImpl() {
-        // Placeholder for any initialization code needed for setting up
-        // in-memory message broker instance in the future.
-    }
+	/**
+	 * Constructs a new InMemoryDefaultMessageBrokerImpl. The constructor
+	 * initializes any necessary resources and sets up the in-memory message broker
+	 * instance.
+	 */
+	public InMemoryDefaultMessageBrokerImpl(@Autowired(required = false) GeboCurrentApplication application) {
+		// Placeholder for any initialization code needed for setting up
+		// in-memory message broker instance in the future.
+		super(application);
+	}
 
 }

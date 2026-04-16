@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Είσοδος"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Η λειτουργία απέτυχε",
+        "detail" : "Αδυναμία πιστοποίησης με τα παρεχόμενα στοιχεία"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Ενσωμάτωση Google Drive/Workspaces",
         "description" : "Ρυθμίστε το Gebo.ai για να έχει πρόσβαση στα δεδομένα της ομάδας σας στο Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Ρύθμιση Google search api",
+        "description" : "Ρυθμίστε τα διαπιστευτήρια Google search api για αναζητήσεις AI στον ιστό"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Ρύθμιση Deep search",
+        "description" : "Ρυθμίστε τις παραμέτρους Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "Αυτόματη ρύθμιση R.a.g.",
+        "description" : "Αυτόματη ρύθμιση παραμέτρων ανάκτησης ενισχυμένης δημιουργίας"
+      },
+      "Description" : {
+        "label" : "Περιγραφή"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Τελευταία ενημέρωση ρύθμισης"
+      },
+      "Code" : {
+        "label" : "Κώδικας μοντέλου ενσωμάτωσης/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Υπολογισμένο όριο"
+      },
+      "Autotuned" : {
+        "label" : "Ρυθμισμένο αυτόματα"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Ολοκληρώθηκαν τα υποχρεωτικά βήματα εγκατάστασης του Gebo.ai...",
+        "detail" : "Τα υποχρεωτικά βήματα εγκατάστασης έχουν ολοκληρωθεί, αλλά κάποιες ελλείψεις εμποδίζουν την πλήρη αξιοποίηση αυτού του λογισμικού από τον οργανισμό σας"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Λείπει κάποιο υποχρεωτικό βήμα στην εγκατάσταση του Gebo.ai",
+        "detail" : "Ελέγξτε τα κόκκινα βήματα της διαδικασίας εγκατάστασης"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence σύστημα"
+      },
+      "EditSystemBtn" : {
+        "label" : "Επεξεργασία συστήματος"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Ρύθμιση πρόσβασης παρόχων llms σε Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Επιλογές εκτεταμένης υποδομής/προμηθευτών"
+      },
+      "MainPanelTitle" : {
+        "label" : "Ρύθμιση χρησιμοποιούμενων Μεγάλων γλωσσικών μοντέλων"
+      },
+      "EasySetup" : {
+        "label" : "Εύκολη αρχική ρύθμιση/διόρθωση διαμόρφωσης"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Ρύθμιση Μεγάλων γλωσσικών μοντέλων"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Περιγραφή"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Κλειδί Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Δημιουργία διαπιστευτηρίων google search"
+      },
+      "CreateBtn" : {
+        "label" : "Δημιουργία"
+      },
+      "customSearchEngineId" : {
+        "label" : "ταυτότητα μηχανής αναζήτησης",
+        "help" : "Εισάγετε την ταυτότητα μηχανής αναζήτησης που λήφθηκε κατά την εγγραφή διαπιστευτηρίων google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Κωδικός ρυθμίσεων"
+      },
+      "DescriptionHeader" : {
+        "label" : "Περιγραφή"
+      },
+      "apiKey" : {
+        "label" : "Κλειδί api",
+        "help" : "Εισάγετε το api key που λήφθηκε κατά την εγγραφή διαπιστευτηρίων google search api."
+      },
+      "MainPanel" : {
+        "label" : "Ρύθμιση google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Διαγραφή",
+        "help" : "Διαγραφή διαπιστευτηρίων Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Ρυθμίσεις Deep search",
+        "help" : "Προσθήκη ρύθμισης deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Επεξεργασία ρυθμίσεων"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ανενεργό"
+      },
+      "EditGroupBtn" : {
+        "label" : "Επεξεργασία"
+      },
+      "CodeHeader" : {
+        "label" : "κωδικός"
+      },
+      "DescriptionHeader" : {
+        "label" : "περιγραφή"
+      },
+      "UsersHeader" : {
+        "label" : "χρήστες"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Ρυθμίσεις πρόσβασης στο μοντέλο"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ο πάροχος AI λειτουργεί σωστά",
+        "detail" : "Ο πάροχος είναι ενεργός, σε λειτουργία και διαμορφώθηκε επιτυχώς"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:Σφάλμα κατά την εργασία με url:https://api.openai.com/v1/models",
+        "detail" : "Σφάλμα διακομιστή: Σφάλμα κατά την εργασία με url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "ορίστε αυτό ως προεπιλεγμένο μοντέλο ενσωμάτωσης",
         "help" : "Αν είναι αληθές, αυτό θα χρησιμοποιείται ως προεπιλεγμένο μοντέλο ενσωμάτωσης όπου δεν υποδεικνύεται μοντέλο"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ο πάροχος AI λειτουργεί σωστά",
+        "detail" : "Ο πάροχος είναι ενεργός, σε λειτουργία και διαμορφώθηκε επιτυχώς"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Επεξεργασία ρύθμισης τοπικού (ή lan) διακομιστή συνομιλίας Ollama"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Επεξεργασία ρύθμισης μοντέλου συνομιλίας Anthropic"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Επεξεργασία ρύθμισης μοντέλου συνομιλίας MistralAI"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Επεξεργασία ρύθμισης μοντέλου συνομιλίας Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Ρυθμίσεις πρόσβασης στο μοντέλο"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Ρυθμίσεις πρόσβασης στο μοντέλο"
+      },
+      "forUses" : {
+        "label" : "Χρήσεις μοντέλου",
+        "help" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο.",
+        "placeholder" : "Χρήσεις για τις οποίες η πλατφόρμα Gebo.ai θα αξιολογήσει αυτό το μοντέλο."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή τη συνομιλία;",
         "header" : "Ενέργεια διαγραφής συνομιλίας"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Προσθέστε περιεχόμενο ή αλλάξτε τη συμπεριφορά αναζήτησης"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Πηγές",
+        "help" : "Άνοιγμα λίστας αναλυμένων εγγράφων"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Λεπτομέρειες απάντησης deep search και πηγών"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Αποτέλεσμα ανάλυσης Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Σφάλμα κατά την αναζήτηση στο Confluence Search",
+        "detail" : "Σφάλμα διακομιστή: Προβλήματα πρόσβασης στο σύστημα confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Νέα συνομιλία φορτώθηκε",
+        "detail" : "Η νέα συνομιλία φορτώθηκε επιτυχώς"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Επιλογή πηγών"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Επιλέξτε τουλάχιστον μία από τις παρακάτω επιλογές"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Παράκαμψη deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Επιλεγμένες βάσεις γνώσης"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Επιλεγμένα συστήματα"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Προσθήκη εγγράφου στη λίστα 'συνομιλία με'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Εκτέλεση deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Εκτέλεση retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Ερώτημα στο llm"
+      },
+      "Waiting" : {
+        "label" : "Ανάλυση του καλύτερου σχεδίου απάντησης.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Εκτέλεση εργαλείων"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Εκτέλεση αναζήτησης με βοήθεια AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Αναλυμένο αρχείο"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης συστήματος για"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Συνοψίζονται τα τελικά αποτελέσματα"
+      },
+      "RUNNING" : {
+        "label" : "Εκτελείται "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Αναλύω το αίτημά σας"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Επιλέχθηκε agentic flow, εκτελείται agent"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Το επίπεδο υπηρεσίας είναι: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Εκτελείται ο επιλεγμένος agent"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Ανέβασμα αρχείων"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Αναζήτηση/περιήγηση αρχείων εταιρείας"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Συνομιλία με επιλεγμένο έγγραφο"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Πολλαπλές πηγές"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Αναζήτηση βάσης γνώσης"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Συνομιλία με αρχεία"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Χρήστης Google για προσωρινή αντιπροσώπευση",
         "help" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια",
         "placeholder" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια"
+      },
+      "OK" : {
+        "summary" : "Αποθηκεύτηκε με επιτυχία",
+        "detail" : "Η ενημέρωση ολοκληρώθηκε επιτυχώς"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Επεξεργασμένα έγγραφα",
         "dataset-2-label" : "Έγγραφα με σφάλμα",
         "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Ευρετηρίαση πλήρους κειμένου"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα κατά την επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Επεξεργασμένα tokens",
+        "dataset-1-label" : "Σφάλμα κατά την επεξεργασία tokens"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "Ενεργοποίηση όλων των λειτουργιών",
         "help" : "Ενεργοποιήστε όλα τα διαθέσιμα εργαλεία και λειτουργίες. Εάν δεν οριστεί, μπορείτε να τα ενεργοποιήσετε αργότερα στον πίνακα διαχείρισης llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαιτούμενες ρυθμίσεις κλειδιού api",
+        "detail" : "Σφάλμα διακομιστή: Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαραίτητες ρυθμίσεις κλειδιού api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ο πάροχος AI λειτουργεί",
+        "detail" : "Ο πάροχος είναι ενεργός και έχει ρυθμιστεί επιτυχώς"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:401 UNAUTHORIZED",
+        "detail" : "Σφάλμα διακομιστή: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: Λείπει basePath",
+        "detail" : "Σφάλμα διακομιστή: Λείπει basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Δημιουργία και ενεργοποίηση"
+      },
+      "vendorId" : {
+        "label" : "Επιλέξτε τον προμηθευτή μεγάλου γλωσσικού μοντέλου",
+        "help" : "Επιλέξτε τον αρχικό προμηθευτή για τα προεπιλεγμένα μοντέλα συνομιλίας και ενσωμάτωσης"
+      },
+      "secretId" : {
+        "label" : "Επιλέξτε διαπιστευτήρια παρόχου (api key)",
+        "help" : "Επιλέξτε ένα από τα υπάρχοντα διαπιστευτήρια για τον επιλεγμένο πάροχο llm"
+      },
+      "InternalServiceModel" : {
+        "label" : "Μοντέλο συνομιλίας εσωτερικών υπηρεσιών",
+        "help" : "Το μοντέλο συνομιλίας για εσωτερικές υπηρεσίες θα είναι υπεύθυνο για εξαγωγή πληροφοριών, σύνοψη και εκτέλεση εσωτερικών ροών εργασιών."
+      },
+      "ChatModel" : {
+        "label" : "Προεπιλεγμένο μοντέλο συνομιλίας",
+        "help" : "Το προεπιλεγμένο μοντέλο συνομιλίας θα είναι υπεύθυνο για απαντήσεις σε ερωτήσεις χρηστών και εκτέλεση ροών εργασιών όπου δεν υπάρχουν καθορισμένα μοντέλα. Πρέπει να είναι ισχυρό και αξιόπιστο, με καλή ισορροπία μεταξύ κόστους, απόδοσης και ποιότητας αποτελέσματος."
+      },
+      "ProviderBuy" : {
+        "label" : "Σύνδεσμος αγοράς πίστωσης Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Σύνδεσμος ιστότοπου"
+      },
+      "WebSiteLink" : {
+        "label" : "Ιστότοπος παρόχου",
+        "help" : "Πατήστε εδώ για γενικές πληροφορίες παρόχου."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Αγοράστε πίστωση παρόχου",
+        "help" : "Πατήστε εδώ για να αγοράσετε πίστωση για το(τα) api key σας."
+      },
+      "EmbeddingModel" : {
+        "label" : "Προεπιλεγμένο μοντέλο ενσωμάτωσης",
+        "help" : "Αυτό το μοντέλο θα είναι υπεύθυνο για τη σημασιολογική ευρετηρίαση (ενσωμάτωση) και ανάκτηση των δεδομένων και των εγγράφων σας"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Δεν μπορείτε να το διαγράψετε",
         "detail" : "Αυτό το αντικείμενο αναφέρεται από άλλο σημείο της εφαρμογής"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: Σφάλμα κατά την εργασία με το url:http://localhost:11434/v1/models",
+        "detail" : "Σφάλμα διακομιστή: Σφάλμα κατά την εργασία με το url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία: πρέπει να οριστεί apiKey",
+        "detail" : "Σφάλμα διακομιστή: πρέπει να οριστεί apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Σφάλμα κατά το streaming απάντησης συνομιλίας",
+        "detail" : "Σφάλμα διακομιστή: 400 Bad Request από POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:Σφάλμα κατά την εργασία με url:http://localhost:8000/v1/models",
+        "detail" : "Σφάλμα διακομιστή: Σφάλμα κατά την εργασία με url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Σφάλμα κατά τη ροή απάντησης συνομιλίας",
+        "detail" : "Σφάλμα διακομιστή: Επαναφορά σύνδεσης"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:Σφάλμα κατά την εργασία με url:https://api.openai.com/v1/models",
+        "detail" : "Σφάλμα διακομιστή: Σφάλμα κατά την εργασία με url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Εξαίρεση κατά τη λειτουργία:Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαιτούμενες ρυθμίσεις κλειδιού api",
+        "detail" : "Σφάλμα διακομιστή: Το Anthropic api δεν μπορεί να λειτουργήσει χωρίς τις απαραίτητες ρυθμίσεις κλειδιού api"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Ολοκληρώθηκε"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Χρησιμοποιούμενη ταυτότητα",
         "help" : "Επιλέξτε ή δημιουργήστε την ταυτότητα για πρόσβαση στο σύστημα google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Συνομιλία"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Αναζήτηση σχετικών πληροφοριών"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Συγκέντρωση της τελικής αναφοράς"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Αναλυμένο αποτέλεσμα αναζήτησης"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Αναλυμένο αποτέλεσμα συστήματος αναζήτησης για"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Επιλέξτε τουλάχιστον μία από τις παρακάτω επιλογές"
+      },
+      "LaunchBtn" : {
+        "label" : "Εκκίνηση αναζήτησης"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Παράλειψη εκτενούς αναζήτησης"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Επιλεγμένες βάσεις γνώσης"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Επιλεγμένα συστήματα"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Επιλογή πηγών"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Αναλυμένο αρχείο"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Εισαγωγή"
+      },
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "DeleteBtn" : {
+        "label" : "Διαγραφή"
+      },
+      "SearchSettingTab" : {
+        "label" : "Ρυθμίσεις αναζήτησης"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Εισαγωγή prompt για εξαγωγή σχετικών πληροφοριών από έγγραφα"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Εισαγωγή prompt για συγκέντρωση εξαγόμενων σχετικών πληροφοριών"
+      },
+      "MainPanel" : {
+        "label" : "Επεξεργασία ρύθμισης deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Ρύθμιση μεγάλου γλωσσικού μοντέλου"
+      },
+      "description" : {
+        "label" : "Περιγραφή",
+        "help" : "Εισάγετε την περιγραφή της ρύθμισης deep search"
+      },
+      "code" : {
+        "label" : "Μοναδικός κωδικός",
+        "help" : "Αυτόματα παραγόμενος μοναδικός κωδικός για τη ρύθμιση deep search"
+      },
+      "searchType" : {
+        "label" : "Τύπος αναζήτησης",
+        "help" : "Επιλέξτε ανάμεσα σε single hop semantic search ή multi hop"
+      },
+      "topK" : {
+        "label" : "Αριθμός τμημάτων κειμένου που ανακτώνται (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Χρησιμοποιούμενο llm",
+        "help" : "Καθορίστε το μεγάλο γλωσσικό μοντέλο που θα χρησιμοποιηθεί για Deep search, θα χρησιμοποιηθεί το προεπιλεγμένο αν δεν επιλεγεί άλλο."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt ανάλυσης εγγράφων",
+        "help" : "Επεξεργαστείτε το prompt που θα χρησιμοποιείται για την εξαγωγή σχετικών πληροφοριών από αποσπάσματα εγγράφων."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt συγκέντρωσης πληροφοριών",
+        "help" : "Επεξεργαστείτε το prompt που θα χρησιμοποιείται για τη συγκέντρωση όλων των σχετικών πληροφοριών που εξάγονται από τα ανακτηθέντα έγγραφα σε μία αναφορά."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Όριο ομοιότητας αναζήτησης",
+        "help" : "Semantic όριο ομοιότητας πρώτου βήματος (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Όριο ομοιότητας δεύτερου βήματος",
+        "help" : "Semantic όριο ομοιότητας δεύτερου βήματος (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Προεπιλεγμένο μεγάλο γλωσσικό μοντέλο",
+        "help" : "Το προεπιλεγμένο μεγάλο γλωσσικό μοντέλο θα χρησιμοποιηθεί για την επεξεργασία Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Όριο ομοιότητας αναζήτησης",
+        "help" : "Semantic όριο ομοιότητας (ανάμεσα σε 0.5 και 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Ρυθμίσεις ασφαλείας"
+      },
+      "accessibleToAll" : {
+        "label" : "Προσβάσιμο σε όλους"
+      },
+      "datasource" : {
+        "label" : "Πηγή Δεδομένων"
+      },
+      "allowedGroups" : {
+        "label" : "Επιτρεπόμενες ομάδες"
+      },
+      "allowedUsers" : {
+        "label" : "Επιτρεπόμενοι χρήστες"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Διαχείριση πρόσβασης χρηστών/ομάδων ανά πηγή δεδομένων",
+        "help" : "To deep search θα ενεργοποιηθεί για κάθε εξωτερική πηγή δεδομένων και χρήστη ή ομάδα"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Απλή πρόσβαση ανά χρήστη/ομάδα"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Πρόσβαση ανά χρήστη/ομάδα και πηγή δεδομένων"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Χρησιμοποιήστε ή δημιουργήστε διαπιστευτήρια api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/διαπιστευτήρια",
+        "help" : "Επιλέξτε api key ή διαπιστευτήρια για τον πάροχο"
+      },
+      "NewApiKey" : {
+        "label" : "Νέο api key",
+        "help" : "Εισαγάγετε ένα νέο api key για χρήση με αυτόν τον πάροχο"
+      },
+      "PiSave" : {
+        "label" : "Αποθήκευση"
+      },
+      "NewUserName" : {
+        "label" : "Όνομα χρήστη",
+        "help" : "Όνομα χρήστη για πρόσβαση στις υπηρεσίες παρόχου"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Χρησιμοποιήστε υπάρχοντα ή νέα",
+        "help" : "Χρησιμοποιήστε υπάρχοντα ή δημιουργήστε νέα διαπιστευτήρια για αυτόν τον πάροχο"
+      },
+      "newSecretDescription" : {
+        "label" : "Περιγραφή διαπιστευτηρίων",
+        "help" : "Περιγραφή διαπιστευτηρίων api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Τα διαπιστευτήρια δημιουργήθηκαν",
+        "detail" : "Τα διαπιστευτήρια δημιουργήθηκαν με επιτυχία"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Σφάλμα επικοινωνίας με τον διακομιστή Ollama",
+        "detail" : "Σφάλμα δικτύου κατά την επικοινωνία με το απομακρυσμένο σύστημα προσπέλασης περιεχομένου\n λίστα μοντέλων Σφάλμα με url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Συνομιλία με χρήστες"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Μοντέλο για εσωτερικές υπηρεσίες"
       }
     }
   }

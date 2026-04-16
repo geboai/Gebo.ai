@@ -10,7 +10,6 @@
 package ai.gebo.systems.abstraction.layer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -22,10 +21,13 @@ import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * AI generated comments Handler interface for managing interactions with
@@ -36,7 +38,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
  *                                being integrated.
  * @param <ProjectEndpointType>   The type of the project endpoint being used.
  */
-public interface IGContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
+public interface IGContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
 		extends IGMessageReceiver {
 
 	/**
@@ -52,14 +54,15 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 * consumers.
 	 *
 	 * @param projectEndpoint  The endpoint from which to consume content.
+	 * @param sessionParam TODO
 	 * @param consumer         The content consumer to handle the content.
 	 * @param messagesConsumer The consumer to handle user messages.
 	 * @param errorConsumer    The consumer to handle access errors.
 	 * @throws GeboContentHandlerSystemException If an error occurs during content
 	 *                                           consumption.
 	 */
-	public void consume(ProjectEndpointType projectEndpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+	public void consume(ProjectEndpointType projectEndpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException;
 
 	/**
@@ -103,16 +106,18 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 
 	/**
 	 * Streams content from a given document reference.
+	 * 
+	 * @param streamingPurpose TODO
+	 * @param reference        The document reference for the content to stream.
+	 * @param cache            A map to cache previously accessed content.
 	 *
-	 * @param reference The document reference for the content to stream.
-	 * @param cache     A map to cache previously accessed content.
 	 * @return An InputStream to stream the document content.
 	 * @throws GeboContentHandlerSystemException If an error occurs accessing the
 	 *                                           content.
 	 * @throws IOException                       If an I/O error occurs.
 	 */
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException;
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException;
 
 	/**
 	 * Reads and returns a document from a specified reference.
@@ -128,6 +133,10 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 */
 	public GeboDocument readDocument(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException;
+
+	public default boolean isIngestedAsGeboDocument() {
+		return false;
+	}
 
 	/**
 	 * Checks the status of virtual filesystem objects to determine if they are

@@ -20,21 +20,27 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, EventEmitter, forwardRef, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, forwardRef, HostListener, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
-import { ConfirmationService, ToastMessageOptions, MessageService, Confirmation } from "primeng/api";
-import { ScrollPanel } from "primeng/scrollpanel";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
-import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
+import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
-import { ExtendedConfirmation, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+
+import { IGeboChatMessage } from "../../services/gebo-chat-message";
+import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
+import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
+import { GeboAIDeepSearchComponent } from "../deep-search-control/deep-search.component";
+import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
+import { PipelineRoutingOption } from "./pipeline-routing-option";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
+const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -43,6 +49,8 @@ interface GeboChatInteraction {
     request: GeboChatRequest;
     response?: GeboChatTemplatedResponse;
     loading?: boolean;
+    pipelineRouterDecisionCode?: string;
+    streamingModelName?: string;
 };
 
 /**
@@ -58,10 +66,11 @@ interface GeboChatTemplatedResponse {
     backendMessages?: Array<GUserMessage>;
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
-    generatedResources?:LLMGeneratedResource[];
+    generatedResources?: LLMGeneratedResource[];
 };
 const moduleId: string = "GeboAIChatControlModule";
 const entityId: string = "GeboAIReusableChatComponent";
+const scrollStart: number = 350;
 /**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
@@ -71,7 +80,7 @@ const entityId: string = "GeboAIReusableChatComponent";
 @Component({
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
-    styleUrls: ["gebo-ai-reusable-chat.component.css"],
+    styleUrls: ["gebo-ai-reusable-chat.component.scss"],
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         {
@@ -85,6 +94,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
 
 
+
     /**
      * Stores the capabilities of the current model provider
      */
@@ -95,6 +105,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     public knowledgeBaseCodes: string[] = [];
     protected userChatContextCode: string | undefined;
+    protected currentPipelineRouterDecisionCode?: string;
+    protected chatPipelinesMenu: PipelineChatMenu[] = [];
 
     /**
      * Determines if any loading operation is currently in progress
@@ -104,6 +116,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     }
 
     /**
+     * Flag indicating if chat loading
+     */
+    public loadingSearchResult: boolean = false;
+
+    /**
      * Flag indicating if chat history is being loaded
      */
     private loadingChatHistory: boolean = false;
@@ -111,7 +128,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Flag indicating if a chat response is being loaded
      */
-    private loadingChatResponse: boolean = false;
+    protected loadingChatResponse: boolean = false;
 
     /**
      * Flag indicating if model metadata is being loaded
@@ -220,22 +237,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     @Output() addedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
     @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
-
-    /**
-     * Reference to the chat scroll panel
-     */
-    @ViewChild("chatScroller") scrollPanel?: ScrollPanel;
-
-    /**
-     * Reference to the element that should receive focus
-     */
-    @ViewChild("focusable") focusable?: ElementRef<HTMLButtonElement>;
-
-    /**
-     * Reference to the element that should receive focus to scroll up
-     */
-    @ViewChild("focusableTop") focusableTop?: ElementRef<HTMLButtonElement>;
-
+    @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
     /**
      * Configuration options for Mermaid diagrams
      */
@@ -254,9 +256,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         chatModelCode: new FormControl(),
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
-        userUploadedContents: new FormControl()
+        userUploadedContents: new FormControl(),
+        deepSearchDataSources: new FormControl()
     });
-
+    protected currentPipelineRoutingOption?: PipelineRoutingOption;
     /**
      * Form group for chat information
      */
@@ -271,7 +274,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatCreationDateTime: new FormControl()
         }
     );
-
+    /**
+     * Scroll buttons
+     */
+    public showTopButton: boolean = false;
+    public showBottomButton: boolean = false;
     /**
      * Metadata about the current chat model
      */
@@ -295,19 +302,22 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Flag to control visibility of the description change dialog
      */
-    changeDescriptionDialogOpened: boolean = false;
+    protected changeDescriptionDialogOpened: boolean = false;
 
     /**
      * Constructor - injects all required services
      */
+
     public constructor(
         private geboUserChatsControllerService: GeboUserChatsControllerService,
         private confirmService: ConfirmationService,
         private chatService: GeboChatControllerService,
-        private messageService: MessageService,
+        private messageService: GeboAIRootNotificationService,
         private ragChatService: GeboRagChatControllerService,
         private reactiveChatService: ReactiveRagChatService,
         private geboAiTranslationService: GeboAITranslationService,
+        private geboChatPipelineService: GeboChatPipelinesControllerService,
+        private userChatControllerService: GeboUserChatsControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -316,6 +326,20 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             }
         });
     }
+
+    @HostListener('window:scroll')
+    onWindowScroll() {
+        this.showTopButton = window.scrollY > scrollStart;
+        this.showBottomButton = ((window.document.body.scrollHeight - window.innerHeight) - window.scrollY) > scrollStart;
+    }
+    public scrollToTop(): void {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    public scrollToBottom(): void {
+        window.scrollTo(0, (window.document.body.scrollHeight - window.innerHeight));
+    }
+
     public getEntityName(): string {
         return entityId;
     }
@@ -346,7 +370,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.formGroup.controls["forcedRequestDocuments"].setValue(actualChoosed);
         }
     }
-
+    isDeepSearchResponse(item?: GeboChatResponse) {
+        return ((item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" || item?.pipelineRouterDecisionCode === "SHALLOW_SEARCH_RESPONSE") && item?.deepSearchRequestId) ? true : false;
+    }
+    getDeepSearchRequestId(item?: GeboChatResponse) {
+        return item?.deepSearchRequestId;
+    }
     /**
      * Handles changes to input properties
      * Loads model info and chat history when chatInfo changes
@@ -355,12 +384,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         if (this.chatInfo && changes["chatInfo"]) {
             this.formGroup.patchValue(this.chatInfo);
             this.chatInfoFormGroup.patchValue(this.chatInfo);
-            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>] | null = null;
+            let observables: [Observable<GBaseChatModelChoice>, Observable<GeboChatUserInfo>, Observable<PipelineChatMenu[]>] | null = null;
+
             if (this.chatInfo.chatProfileCode) {
-                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode)];
+                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode), this.geboChatPipelineService.getDefaultPersonalPipelinesChatMenu(this.chatInfo.chatProfileCode)];
             } else
                 if (this.chatInfo.chatModelCode) {
-                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode)];
+                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode), of([])];
                 }
             if (observables) {
                 this.loadingModelMetaInfo = true;
@@ -369,6 +399,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         this.modelMetaInfos = value[0];
                         this.knowledgeBaseCodes = value[1].knowledgeBases?.map(x => x.code).filter(y => y ? true : false) as string[];
                         this.chatUserInfos = value[1];
+                        this.chatPipelinesMenu = value[2];
                     },
                     complete: () => {
                         this.loadingModelMetaInfo = false;
@@ -404,24 +435,17 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
             this.formGroup.controls["userChatContextCode"].setValue(this.chatInfo?.code);
             this.loadingChatHistory = true;
+            this.loadingSearchResult = true;
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = false;
             this.chatStreamingUpdatedTime = undefined;
             this.geboUserChatsControllerService.getChatHistory(this.chatInfo?.code).subscribe({
                 next: (value) => {
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
+                    this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    const subscription = this.geboAiTranslationService.translateMessage(moduleId, entityId, chat_history_loaded.id, chat_history_loaded).subscribe({
-                        next: (msg) => {
-                            if (msg) {
-                                this.lastInteractionMessages = [msg];
-                                this.messageService.addAll(this.lastInteractionMessages);
-                                subscription.unsubscribe();
-                            }
-                        }
-                    })
-
-                    this.scrollDown();
+                    this.lastInteractionMessages = this.interactions && this.interactions?.length > 0 ? [chat_history_loaded] : [clean_chat_loaded];
+                    this.scrollToBottom();
 
                 },
                 complete: () => {
@@ -497,7 +521,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             header: "Delete chat action",
             message: "Are you shure you whant to delete this chat?",
             accept: () => {
-                this.geboUserChatsControllerService.deleteUserChats([actualChat.code]).subscribe({
+                this.geboUserChatsControllerService.deleteChat(actualChat.code).subscribe({
                     next: (value) => {
                         this.deleteChatAction.emit(actualChat);
                     },
@@ -510,10 +534,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         };
         const translateSubscription = this.geboAiTranslationService.translateConfirmation(moduleId, entityId, confirmation).subscribe({
             next: (trconfirmation) => {
-                
-                    this.confirmService.confirm(trconfirmation?trconfirmation:confirmation);
+
+                this.confirmService.confirm(trconfirmation ? trconfirmation : confirmation);
+                try {
                     translateSubscription.unsubscribe();
-                
+                } catch (e) {
+
+                }
+
             }
         })
 
@@ -563,7 +591,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             this.addedChatAction.emit(newContext);
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                        this.messageService.addAll(this.lastInteractionMessages);
+
                         const dataUpdate: any = {
                             chatProfileCode: r.chatProfileCode,
                             chatModelCode: r.chatModelCode,
@@ -571,7 +599,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             query: null
                         };
                         this.formGroup.patchValue(dataUpdate);
-                        this.scrollDown();
+                        this.scrollToBottom();
                         this.loadingChatResponse = false;
                         if (doSpeach === true) {
                             this.speechPlay(response.queryResponse);
@@ -586,7 +614,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
             );
         }
-        this.scrollDown();
+        // this.scrollDown();
     }
 
     /**
@@ -597,10 +625,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
+        this.currentPipelineRouterDecisionCode = (this.ragsystem === true ? "WAITING" : undefined);
         const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
         const interaction: GeboChatInteraction = {
             loading: true,
-            request: r
+            request: r,
+            pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
         const messageCallback = (msg: IGeboChatMessage | string) => {
@@ -619,19 +649,29 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     recvd = msg as IGeboChatMessage;
                 }
 
-                if (recvd && recvd.contentObjectType && (recvd.contentObjectType === "GeboChatResponse" || recvd.contentObjectType === "GUserMessage")) {
-                    if (recvd.contentObjectType === "GUserMessage") {
-                        const message = recvd.content as ToastMessageOptions;
-                        this.lastInteractionMessages = [message];
-                        this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
-                            next: (msg) => {
-                                if (msg) {
-                                    this.lastInteractionMessages = [message];
-                                }
-                            }
-                        });
+                this.chatInputShell.onStreamMessage(recvd);
 
+                if (recvd.contentObjectType === "GUserMessage") {
+                    const message = recvd.content as ToastMessageOptions;
+                    this.lastInteractionMessages = [message];
+                    if (message.severity === 'error' || message.severity === 'ERROR') {
+                        this.chatStreamingErrorOccurred = true;
                     }
+
+                }
+                if (recvd.contentObjectType === "PipelineRoutingInfos") {
+                    const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
+                    interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
+                    this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
+                    if (recvd.content?.chatModel) {
+                        interaction.streamingModelName = recvd.content?.chatModel;
+                        this.modelName = recvd.content?.chatModel;
+                    }
+                    console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
+
+                }
+                if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
+
                     interaction.response = recvd.content;
                     if (interaction.response) {
                         const response: GeboChatResponse = interaction.response;
@@ -646,15 +686,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             this.addedChatAction.emit(newContext);
                         }
                         if (recvd.lastMessage === true) {
-
+                            this.currentPipelineRouterDecisionCode = undefined;
+                            interaction.pipelineRouterDecisionCode = undefined;
                             if (suggestChatDescription === true) {
                                 if (response.userChatContextCode) {
-                                    let newChatInfoObservable: Observable<GUserChatInfo>;
-                                    if (this.ragsystem === true) {
-                                        newChatInfoObservable = this.ragChatService.suggestRagChatDescription(response.userChatContextCode);
-                                    } else {
-                                        newChatInfoObservable = this.chatService.suggestChatDescription(response.userChatContextCode);
-                                    }
+                                    const newChatInfoObservable: Observable<GUserChatInfo> = this.userChatControllerService.suggestChatDescription(response.userChatContextCode);
                                     newChatInfoObservable.subscribe({
                                         next: (value: GUserChatInfo) => {
                                             if (this.chatInfo && value?.description) {
@@ -670,12 +706,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             }
 
                             this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                            this.messageService.addAll(this.lastInteractionMessages);
+
                             const dataUpdate: any = {
                                 chatProfileCode: r.chatProfileCode,
                                 chatModelCode: r.chatModelCode,
                                 userChatContextCode: response.userChatContextCode,
-                                query: null
+                                query: null,
+                                chatPipelineProcessId: null
                             };
                             this.formGroup.patchValue(dataUpdate);
 
@@ -687,13 +724,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             }
                         }
                     }
-                    this.scrollDown();
+                    this.scrollToBottom();
                 } else if (recvd.contentObjectType === "String") {
                     if (interaction.response) {
                         if (!interaction.response.queryResponse) {
                             interaction.response.queryResponse = "";
                         }
                         interaction.response.queryResponse += recvd.content;
+                        setTimeout(() => this.scrollToBottom(), 10);
                     }
                 }
                 if (recvd.lastMessage === true) {
@@ -709,19 +747,56 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatStreaming = false;
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
+
+            this.chatInputShell.onStreamError(error);
+
         }
         this.chatStreaming = true;
         this.chatStreamingErrorOccurred = false;
+
+        const onCompleteCallback = () => {
+            this.chatStreaming = false;
+            this.loadingChatResponse = false;
+            if (interaction) {
+                interaction.loading = false;
+            }
+        };
+
         if (this.ragsystem === true) {
-            this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
+            const agenticChatRequest: AgenticChatRequestBody = {
+                request: r,
+                environment: undefined
+            }
+            if (this.currentPipelineRoutingOption) {
+                agenticChatRequest.request.chatPipelineProcessId = this.currentPipelineRoutingOption.chatPipelineProcessId;
+                agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
+            }
+            //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
+            this.reactiveChatService.streamAgenticChat(agenticChatRequest, messageCallback, errorCallBack, onCompleteCallback);
         } else {
-            this.reactiveChatService.streamChat(r, messageCallback, errorCallBack);
+            this.reactiveChatService.streamChat(r, messageCallback, errorCallBack, onCompleteCallback);
         }
+
+
 
     }
     onSumbit(): void {
         if (this.formGroup.valid && !this.chatStreaming) {
             this.sendMessage();
+        }
+    }
+
+    stopReactiveChat(userChatContextCode?: string) {
+        const codeToStop = userChatContextCode || this.userChatContextCode;
+        if (codeToStop) {
+            this.geboChatPipelineService.stopChatPipeline(codeToStop).subscribe({
+                next: () => {
+                    console.log("Reactive chat stopped");
+                },
+                error: (err) => {
+                    console.error("Error stopping reactive chat", err);
+                }
+            });
         }
     }
     /**
@@ -735,6 +810,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const uuid: string = uuidv4();
         qry.id = uuid;
         qry.streamResponse = true;
+        // this.loadingSearchResult = true;
         this.formGroup.controls["query"].setValue(null);
         this.formGroup.controls["userUploadedContents"].setValue([]);
         if (this.useRestOnly === true) {
@@ -743,47 +819,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.callReactiveChat(qry, doSpeach);
         }
     }
-
-    /**
-     * Scrolls to the bottom of the chat
-     */
-    scrollDown(): void {
-        const scrollFunction = () => {
-
-            if (this.focusable) {
-                try {
-                    this.focusable.nativeElement.scrollTo();
-                } catch (e) {
-                    console.error(e);
-                }
-                try {
-                    this.focusable.nativeElement.scrollIntoView();
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        }
-        setTimeout(scrollFunction, 500);
-    }
-    scrollUp() {
-         const scrollFunction = () => {
-
-            if (this.focusableTop) {
-                try {
-                    this.focusableTop.nativeElement.scrollTo();
-                } catch (e) {
-                    console.error(e);
-                }
-                try {
-                    this.focusableTop.nativeElement.scrollIntoView();
-                } catch (e) {
-                    console.error(e);
-                }
-            }
-        }
-        setTimeout(scrollFunction, 500);
-    }
-
     /**
      * Sends a text-to-speech request and plays the audio
      * 
@@ -800,28 +835,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
 
         if (chatModelCode) {
-            const loadingSub = this.geboAiTranslationService.translateMessage(moduleId, entityId, loading_vocal_answer.id, loading_vocal_answer).subscribe({
-                next: (msg) => {
-                    if (msg) {
-                        this.messageService.add(msg);
-                        loadingSub.unsubscribe();
-                    }
-                }
-            })
+            this.messageService.addMessage(moduleId, entityId, loading_vocal_answer);
+
 
             this.waitingForAudiocontent = true;
             this.chatService.speechText(sr, chatModelCode).subscribe(
                 {
                     next: (value) => {
                         this.currentAudioTrack = value;
-                        const loadingSub = this.geboAiTranslationService.translateMessage(moduleId, entityId, loading_vocal_answer.id, loading_vocal_answer_received).subscribe({
-                            next: (msg) => {
-                                if (msg) {
-                                    this.messageService.add(msg);
-                                    loadingSub.unsubscribe();
-                                }
-                            }
-                        })
+                        this.messageService.addMessage(moduleId, entityId, loading_vocal_answer_received);
+
                     },
                     error: (err) => {
                         this.waitingForAudiocontent = false;
@@ -843,6 +866,22 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatInfoFormGroup.patchValue(info);
         this.addedChatAction.emit(info);
     }
+    onExternalModuleRequest(request: GeboChatRequest) {
+        if (!this.interactions) {
+            this.interactions = [];
+        }
+        this.interactions.push({
+            request: request,
+            loading: false,
+        });
+    }
+    onExternalModuleResponse(response: GeboChatResponse) {
+        const interaction = this.interactions[this.interactions.length - 1];
+        if (!interaction.response) {
+            interaction.response = response;
+        }
+    }
+
     /**
      * Handles speech-to-text conversion events
      * 
@@ -854,14 +893,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatModelCode = this.capabilities?.configurationCode;
         }
         if (chatModelCode) {
-            const subs = this.geboAiTranslationService.translateMessage(moduleId, entityId, your_speech_is_uploading.id, your_speech_is_uploading).subscribe({
-                next: (msg) => {
-                    if (msg) {
-                        this.messageService.add(msg);
-                        subs.unsubscribe();
-                    }
-                }
-            })
+            this.messageService.addMessage(moduleId, entityId, your_speech_is_uploading);
+
 
             const url: string = this.basePath + "/api/users/GeboDirectModelChatController/transcriptText";
             console.log("sending directly to model code:" + chatModelCode);

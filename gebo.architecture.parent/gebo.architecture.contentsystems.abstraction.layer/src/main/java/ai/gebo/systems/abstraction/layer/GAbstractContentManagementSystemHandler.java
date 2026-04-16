@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,7 @@ import ai.gebo.knlowledgebase.model.contents.GDependencyTree;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.BuildSystemRef;
@@ -61,14 +63,16 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 import jakarta.el.MethodNotFoundException;
 
-public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
-		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType>,
+public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint,ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
+		implements IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>,
 		IGRuntimeModuleComponent {
 
 	// Logger for the handler
@@ -150,7 +154,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		try {
 			GDocumentReference document = contentHandler.createReference(file, hierarchy.getCode(), hierarchy.getUri(),
-					null, endpoint, hierarchy, getMessagingModuleId());
+					null, endpoint, hierarchy, getMessagingModuleId(), getMessagingSystemId());
 			document.setParentVirtualFolderCode(hierarchy.getCode());
 			boolean manageArchive = endpoint.getOpenZips() != null && endpoint.getOpenZips();
 
@@ -322,7 +326,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 						"Analyzing archive:" + zipFile.getName() + " entry: " + entry.getName(),
 						"Trying opening archive and read contents"));
 				GDocumentReference document = contentHandler.createArchiveReference(originalFile, zipFile, entry,
-						baseFolder.getCode(), endpoint, baseFolder, getMessagingModuleId());
+						baseFolder.getCode(), endpoint, baseFolder, getMessagingModuleId(), getMessagingSystemId());
 				document.setParentVirtualFolderCode(baseFolder.getCode());
 				consumer.accept(document);
 				messagesConsumer.accept(GUserMessage.successMessage(
@@ -356,7 +360,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 		}
 		try {
 			GDocumentReference document = contentHandler.createDeletedReference(file, hierarchy.getCode(),
-					hierarchy.getUri(), null, endpoint, getMessagingModuleId());
+					hierarchy.getUri(), null, endpoint, getMessagingModuleId(), getMessagingSystemId());
 			document.setParentVirtualFolderCode(hierarchy.getCode());
 
 			if (LOGGER.isDebugEnabled()) {
@@ -388,17 +392,17 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	/**
 	 * Consumes content from a project endpoint, processing with a consumer and
 	 * handling messages and errors.
-	 *
-	 * @param endpoint         The project endpoint.
 	 * @param consumer         The content consumer.
 	 * @param messagesConsumer The messages consumer.
 	 * @param errorConsumer    The error consumer.
+	 * @param endpoint         The project endpoint.
+	 *
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           consumption.
 	 */
 	@Override
-	public void consume(ProjectEndpointType endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+	public void consume(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 
 		SystemIntegrationType contentManagementSystem = getSystem(endpoint);
@@ -416,8 +420,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			}
 		}
 
-		consumeImplementation(contentManagementSystem, buildSystems, endpoint, consumer, messagesConsumer,
-				errorConsumer);
+		consumeImplementation(contentManagementSystem, buildSystems, endpoint, sessionParam, consumer,
+				messagesConsumer, errorConsumer);
 	}
 
 	/**
@@ -426,6 +430,7 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 * @param contentManagementConfig The content management configuration.
 	 * @param buildSystems            The list of build systems.
 	 * @param endpoint                The project endpoint.
+	 * @param sessionParam TODO
 	 * @param consumer                The content consumer.
 	 * @param messagesConsumer        The messages consumer.
 	 * @param errorConsumer           The error consumer.
@@ -433,8 +438,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	 *                                           implementation.
 	 */
 	abstract protected void consumeImplementation(SystemIntegrationType contentManagementConfig,
-			List<GBuildSystem> buildSystems, ProjectEndpointType endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+			List<GBuildSystem> buildSystems, ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException;
 
 	/**
@@ -636,17 +641,19 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 
 	/**
 	 * Streams content based on a document reference.
-	 *
+	 * 
 	 * @param reference The document reference.
 	 * @param cache     A cache of objects.
+	 *
 	 * @return An InputStream for the document content.
 	 * @throws GeboContentHandlerSystemException If an error occurs during
 	 *                                           streaming.
 	 * @throws IOException                       If an IO exception occurs.
 	 */
 	@Override
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
+		InputStream is = null;
 		if (reference.getNestedInArchive() != null && reference.getNestedInArchive()) {
 			final ZipFile zipFile = new ZipFile(reference.getAbsoluteArchivePath());
 			ZipEntry entry = zipFile.getEntry(reference.getArchiveInternalPath());
@@ -664,15 +671,16 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 					}
 				};
 			};
-			return zipFile.getInputStream(entry);
+			is = zipFile.getInputStream(entry);
 		} else if (reference.getArtificiallyGeneratedContent() != null
 				&& reference.getArtificiallyGeneratedContent().trim().length() > 0) {
-			return new ByteArrayInputStream(reference.getArtificiallyGeneratedContent().getBytes());
+			is = new ByteArrayInputStream(reference.getArtificiallyGeneratedContent().getBytes());
 		} else if (reference.getAbsolutePath() != null) {
 			Path path = Path.of(reference.getAbsolutePath());
-			return Files.newInputStream(path, StandardOpenOption.READ);
+			is = Files.newInputStream(path, StandardOpenOption.READ);
 		} else
 			return null;
+		return TypedInputStream.of(is, reference.getContentType(), reference.getExtension());
 	}
 
 	/**
@@ -789,8 +797,10 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 	public GeboDocument readDocument(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException {
 		if (ingestionHandler.isHandled(reference)) {
-			InputStream stream = streamContent(reference, cache);
-			return ingestionHandler.handleDocument(reference, stream);
+			TypedInputStream stream = streamContent(StreamingPurpose.SERVING, reference, cache);
+			if (stream == null || stream.getInputStream() == null)
+				return null;
+			return ingestionHandler.handleDocument(reference, stream != null ? stream.getInputStream() : null);
 		}
 		return null;
 	}

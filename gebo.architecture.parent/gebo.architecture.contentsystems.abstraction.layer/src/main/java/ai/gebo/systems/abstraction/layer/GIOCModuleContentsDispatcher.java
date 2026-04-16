@@ -45,6 +45,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReferenceSnapshot;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -68,11 +69,12 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.E
  * 
  *                                AI generated comments
  */
-public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
-		implements IGIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> {
+public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam>
+		implements
+		IGIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> {
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	protected final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler;
+	protected final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType, ContentConsumingSessionParamType> handler;
 	protected final IGMessageBroker broker;
 	protected final IGContentConsumerFactory consumerFactory;
 	protected final IGContentDispatchingEvaluator evaluator;
@@ -90,13 +92,13 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 * @param <SystemIntegrationType> the type of the content management system
 	 * @param <ProjectEndpointType>   the type of the project endpoint
 	 */
-	public static class SingletonBuilder<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint> {
-		protected GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> dispatcher = null;
+	public static class SingletonBuilder<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint, ContentConsumingSessionParamType extends AbstractContentConsumingSessionParam> {
+		protected GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType> dispatcher = null;
 
 		/**
 		 * Constructs the builder with the given components required for the dispatcher.
 		 */
-		public SingletonBuilder(IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler,
+		public SingletonBuilder(IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType> handler,
 				IGMessageBroker broker, IGContentConsumerFactory consumerFactory,
 				IGContentDispatchingEvaluator evaluator, IGDocumentReferenceEnricherMapFactory mapperFactory,
 				DocumentReferenceSnapshotRepository documentsReferenceSnapshotRepository,
@@ -112,7 +114,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 		 * 
 		 * @return the dispatcher instance
 		 */
-		protected GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> getDispatcher() {
+		protected GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType> getDispatcher() {
 			return dispatcher;
 		}
 	}
@@ -121,7 +123,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 * Constructs an instance of the dispatcher with the specified components.
 	 */
 	public GIOCModuleContentsDispatcher(
-			IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler,
+			IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType> handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
 			IGDocumentReferenceEnricherMapFactory mapperFactory,
 			DocumentReferenceSnapshotRepository documentsReferenceSnapshotRepository,
@@ -215,12 +217,12 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 *                                           error occurs
 	 */
 	@Override
-	public void dispatchContents(ProjectEndpointType endpoint, GJobStatus jobStatus)
+	public void dispatchContents(ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException {
-		Consumers consumers = dispatchContentsConsumers(endpoint, jobStatus);
+		Consumers consumers = dispatchContentsConsumers(endpoint, sessionParam, jobStatus);
 		try {
-			this.handler.consume(endpoint, consumers.getContentConsumer(), consumers.getUserMessagesConsumer(),
-					consumers.getErrorConsumer());
+			this.handler.consume(endpoint, sessionParam, consumers.getContentConsumer(),
+					consumers.getUserMessagesConsumer(), consumers.getErrorConsumer());
 		} finally {
 			consumers.getContentConsumer().endConsuming();
 			consumers.getUserMessagesConsumer().endConsuming();
@@ -242,7 +244,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	 *                                           error occurs
 	 */
 	@Override
-	public Consumers dispatchContentsConsumers(final ProjectEndpointType endpoint, final GJobStatus jobStatus)
+	public Consumers dispatchContentsConsumers(final ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, final GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException {
 		final IGContentsAccessErrorConsumer errorConsumer = IGContentsAccessErrorConsumer.defaultImplementation();
 		final boolean indexingServiceOnline = broker.checkReceivingComponentPresent(
@@ -268,8 +270,8 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 
 		final EnricherMappers enrichers = mapperFactory.mappers(endpoint);
 		final IGContentConsumer documentConsumer = consumerFactory.create(endpoint);
-			
-		final IGContentConsumer documentSenderConsumerWrapper = new GIOCContentConsumer<SystemIntegrationType, ProjectEndpointType>(
+
+		final IGContentConsumer documentSenderConsumerWrapper = new GIOCContentConsumer<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>(
 				enrichers, jobStatus, evaluator, handler, endpoint, workflowRouter, this, userMessagesConsumer,
 				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository);
 

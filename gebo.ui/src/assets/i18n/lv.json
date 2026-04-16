@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Pieslēgties"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Darbība neizdevās",
+        "detail" : "Neizdevās autentificēties ar norādītajiem datiem"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integrācija",
         "description" : "Konfigurējiet Gebo.ai lai piekļūtu jūsu Google cloud Drive/Workspaces komandas datiem"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfigurēt Google meklēšanas api",
+        "description" : "Konfigurējiet Google meklēšanas api akreditācijas datus AI tīmekļa meklējumiem"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfigurēt Deep search",
+        "description" : "Konfigurējiet Deep search parametrus"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. automātiskā regulēšana",
+        "description" : "Automātiska ģenerēšanas parametru pielāgošana ar paplašinātu izgūšanu"
+      },
+      "Description" : {
+        "label" : "Apraksts"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Pēdējā regulēšanas atjaunināšana"
+      },
+      "Code" : {
+        "label" : "Iegulšanas modeļa/VectorStore kods"
+      },
+      "ComputedThreashold" : {
+        "label" : "Aprēķinātais slieksnis"
+      },
+      "Autotuned" : {
+        "label" : "Automātiski pielāgots"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai iestatīšanas obligātie soļi pabeigti...",
+        "detail" : "Obligātie iestatīšanas soļi ir pabeigti, taču trūkstošie soļi neļauj jūsu organizācijai pilnībā izmantot šo programmatūru"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
+        "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistēma"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rediģēt sistēmu"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Iestatiet Gebo.ai llms nodrošinātāju piekļuvi"
+      },
+      "ExtensiveStup" : {
+        "label" : "Paplašinātas infrastruktūras/piegādātāju izvēles"
+      },
+      "MainPanelTitle" : {
+        "label" : "Iestatīt izmantotos lielos valodas modeļus"
+      },
+      "EasySetup" : {
+        "label" : "Vienkārša sākotnējā iestatīšana/konfigurācijas labošana"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Iestatīt lielos valodas modeļus"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Apraksts"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google meklēšanas api atslēga"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Izveidot google meklēšanas akreditācijas datus"
+      },
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "customSearchEngineId" : {
+        "label" : "Meklētāja id",
+        "help" : "Ievadiet meklētāja id, ko ieguvāt reģistrējoties google meklēšanas api akreditācijas datos."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "apiKey" : {
+        "label" : "Api atslēga",
+        "help" : "Ievadiet api atslēgu, ko ieguvāt reģistrējoties google meklēšanas api akreditācijas datos."
+      },
+      "MainPanel" : {
+        "label" : "Iestatīt google meklēšanas api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Dzēst",
+        "help" : "Dzēst Google meklēšanas api akreditācijas datus"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfigurācija",
+        "help" : "Pievienot Deep search konfigurāciju"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rediģēt konfigurāciju"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "deaktivizēts"
+      },
+      "EditGroupBtn" : {
+        "label" : "Rediģēt"
+      },
+      "CodeHeader" : {
+        "label" : "kods"
+      },
+      "DescriptionHeader" : {
+        "label" : "apraksts"
+      },
+      "UsersHeader" : {
+        "label" : "lietotāji"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālināts nodrošinātājs ir aktīvs",
+        "detail" : "Nodrošinātājs darbojas un ir veiksmīgi konfigurēts"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izņēmums darbības laikā: Kļūda, darbojoties ar url:https://api.openai.com/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "iestatīt kā noklusējuma iegulējuma modelis",
         "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālināts nodrošinātājs ir aktīvs",
+        "detail" : "Nodrošinātājs darbojas un ir veiksmīgi konfigurēts"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama lokālā (vai LAN) servera čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI čata modeļa konfigurācijas rediģēšana"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "forUses" : {
+        "label" : "Modeļa izmantošana(-s)",
+        "help" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem.",
+        "placeholder" : "Gebo.ai platforma ņems vērā šo modeli šiem lietojumiem."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Labi!",
+        "detail" : "Operācija veiksmīgi pabeigta"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Vai esat pārliecināts, ka vēlaties dzēst šo tērzēšanu?",
         "header" : "Tērzēšanas dzēšanas darbība"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Pievienot saturu vai mainīt meklēšanas uzvedību"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Avoti",
+        "help" : "Atvērt analizēto dokumentu sarakstu"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Padziļinātas meklēšanas atbilde un avotu informācija"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Padziļinātas meklēšanas analīzes rezultāts"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Kļūda, meklējot Confluence Search",
+        "detail" : "Servera kļūda: Problēmas, piekļūstot confluence sistēmai"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Jauna saruna ielādēta",
+        "detail" : "Jauna saruna veiksmīgi ielādēta"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izvēlēties avotus"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izvēlieties vismaz vienu no iespējām"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Izlaist padziļināto meklēšanu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izvēlētās zināšanu bāzes"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izvēlētās sistēmas"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Pievienot dokumentu 'tērzēšanas ar' sarakstam"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Notiek padziļinātā meklēšana"
+      },
+      "RagLLMResponse" : {
+        "label" : "Notiek retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Uzdodu jautājumu llm"
+      },
+      "Waiting" : {
+        "label" : "Analizēju labāko atbildes plānu.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Palaisti rīki"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI atbalstīta meklēšana"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizētā faila"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizētais meklēšanas rezultāts"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizētais sistēmas meklēšanas rezultāts priekš"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidē galīgo atskaiti"
+      },
+      "RUNNING" : {
+        "label" : "Notiek "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analizēju jūsu pieprasījumu"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Izvēlēta agentic plūsma, tiek palaists atbildes aģents"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Servisa līmenis: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Tiek izpildīts jūsu izvēlētais aģents"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Augšupielādēt failu(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Pārlūkot/meklēt uzņēmuma failu(s)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Izvēlētā dokumenta saruna"
+      },
+      "agenticChat" : {
+        "label" : "Agentic čats"
+      },
+      "rag" : {
+        "label" : "R.a.g. čats"
+      },
+      "deepSearch" : {
+        "label" : "Padziļinātā meklēšana/Vairāki avoti"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Padziļinātā meklēšana/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Padziļinātā meklēšana/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Padziļinātā meklēšana/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Padziļinātā meklēšana/Zināšanu bāzes meklēšana"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Čatot ar failu(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Padziļinātā meklēšana/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Padziļinātā meklēšana/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Padziļinātā meklēšana/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google lietotājs, kuru imitēt",
         "help" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām",
         "placeholder" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām"
+      },
+      "OK" : {
+        "summary" : "Veiksmīgi saglabāts",
+        "detail" : "Atjaunināšanas operācija veikta veiksmīgi"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Apstrādātie dokumenti",
         "dataset-2-label" : "Kļūdainie dokumenti",
         "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Pilnteksta indeksēšana"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Neapstrādāti dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādāti dokumenti"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātie tokeni",
+        "dataset-1-label" : "Kļūda apstrādājot tokenus"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "iespējot visas funkciju izsaukšanas",
         "help" : "Iespējo visus pieejamos rīkus un funkciju izsaukšanas; ja nav atzīmēts, tos varēs aktivizēt vēlāk llms administrēšanas panelī"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izņēmums darbības laikā:Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas",
+        "detail" : "Servera kļūda: Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālinātais nodrošinātājs OK",
+        "detail" : "Nodrošinātājs aktīvs un veiksmīgi konfigurēts"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Kļūda operācijas laikā:401 NEATĻAUTS",
+        "detail" : "Servera kļūda: 401 NEATĻAUTS"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Kļūda operācijas laikā:Trūkst basePath",
+        "detail" : "Servera kļūda: Trūkst basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "vendorId" : {
+        "label" : "Izvēlieties savu lielā valodas modeļa piegādātāju",
+        "help" : "Izvēlieties sākotnējo piegādātāju saviem noklusētajiem tērzēšanas un iegulšanas modeļiem"
+      },
+      "secretId" : {
+        "label" : "Izvēlieties pakalpojumu sniedzēja akreditācijas datus (api atslēga)",
+        "help" : "Izvēlieties kādu no esošajiem akreditācijas datiem izvēlētajam llm nodrošinātājam"
+      },
+      "InternalServiceModel" : {
+        "label" : "Iekšējo pakalpojumu tērzēšanas modelis",
+        "help" : "Iekšējiem pakalpojumiem konfigurētais tērzēšanas modelis būs atbildīgs par informācijas izguvi, kopsavilkumu sniegšanu un iekšējo darbplūsmu izpildi."
+      },
+      "ChatModel" : {
+        "label" : "Noklusējuma tērzēšanas modelis",
+        "help" : "Noklusējuma tērzēšanas modelis atbildēs uz lietotāju jautājumiem un izpildīs darbplūsmas, kam nav speciāli konfigurētu modeļu. Tam jābūt jaudīgam un uzticamam, ar labu līdzsvaru starp izmaksām, veiktspēju un rezultātu kvalitāti."
+      },
+      "ProviderBuy" : {
+        "label" : "Pirkt api atslēgas kredīta saiti"
+      },
+      "ProviderWWW" : {
+        "label" : "Tīmekļa vietnes saite"
+      },
+      "WebSiteLink" : {
+        "label" : "Pakalpojumu sniedzēja tīmekļa vietne",
+        "help" : "Noklikšķiniet šeit, lai iegūtu vispārīgu informāciju par pakalpojumu sniedzēju."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Pirkt pakalpojumu sniedzēja kredītu",
+        "help" : "Noklikšķiniet šeit, lai iegādātos kredītu savām api atslēgām."
+      },
+      "EmbeddingModel" : {
+        "label" : "Noklusējuma iegulšanas modelis",
+        "help" : "Šis modelis būs atbildīgs par semantisko indeksēšanu (iegulšanu) un datu un dokumentu izgūšanu"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Jūs nevarat to dzēst",
         "detail" : "Uz šo objektu ir atsauces citās lietotnes daļās"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Izņēmums darbības laikā: Kļūda, strādājot ar url: http://localhost:11434/v1/models",
+        "detail" : "Servera kļūda: Kļūda, strādājot ar url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Izņēmums darbības laikā: apiKey jābūt iestatītam",
+        "detail" : "Servera kļūda: apiKey jābūt iestatītam"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Kļūda straumējot tērzēšanas atbildi",
+        "detail" : "Servera kļūda: 400 Bad Request no POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Izņēmums darbības laikā:Kļūda, darbojoties ar url:http://localhost:8000/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Kļūda, straumējot tērzēšanas atbildi",
+        "detail" : "Servera kļūda: Savienojums atiestatīts"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Izņēmums darbības laikā:Kļūda, darbojoties ar url:https://api.openai.com/v1/models",
+        "detail" : "Servera kļūda: Kļūda, darbojoties ar url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Izņēmums darbības laikā:Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas",
+        "detail" : "Servera kļūda: Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Pabeigts"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Labi!",
+        "detail" : "Operācija veiksmīgi pabeigta"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Lietotā identitāte",
         "help" : "Izvēlieties vai izveidojiet identitāti, lai piekļūtu google drive sistēmai"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Tērzēšana"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Meklē atbilstošu informāciju"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidē gala ziņojumu"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizētais meklēšanas rezultāts"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizētā sistēmas meklēšanas rezultāts priekš"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izvēlieties vismaz vienu no šīm opcijām"
+      },
+      "LaunchBtn" : {
+        "label" : "Sākt meklēšanu"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Izlaist dziļo meklēšanu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izvēlētās zināšanu bāzes"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izvēlētās sistēmas"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izvēlēties avotus"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizētā faila"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Pievienot"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SearchSettingTab" : {
+        "label" : "Meklēšanas iestatījumi"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Ievadiet dokumentu būtiskās informācijas iegūšanas promptu"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Ievadiet ekstraktētās informācijas apvienošanas promptu"
+      },
+      "MainPanel" : {
+        "label" : "Rediģē Deep search konfigurāciju"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Lielā valodas modeļa iestatījumi"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet Deep search konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts unikāls Deep search konfigurācijas kods"
+      },
+      "searchType" : {
+        "label" : "Meklēšanas tips",
+        "help" : "Izvēlieties starp vienpakāpes semantisko meklēšanu vai vairāku pakāpju"
+      },
+      "topK" : {
+        "label" : "Atrastie teksta segmenti (TopK) skaits"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Lietotais llm",
+        "help" : "Norādiet lielo valodas modeli, kas izmantots Deep search. Ja nekas nav izvēlēts, tiks izmantots noklusējuma modelis."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentu analīzes prompts",
+        "help" : "Rediģējiet promptu, kas tiks izmantots dokumentu fragmentu būtiskās informācijas ieguvei."
+      },
+      "consolidationPrompt" : {
+        "label" : "Ekstrahētās informācijas apvienošanas prompts",
+        "help" : "Rediģējiet promptu, kas tiks izmantots, lai apvienotu atgūto dokumentu izvilkto būtisko informāciju vienā pārskatā."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Meklēšanas līdzības slieksnis",
+        "help" : "Pirmās pakāpes semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Otrās pakāpes līdzības slieksnis",
+        "help" : "Otrās pakāpes semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Noklusējuma lielais valodas modelis",
+        "help" : "Noklusējuma lielais valodas modelis tiks izmantots Deep search apstrādei"
+      },
+      "similarityThreashold" : {
+        "label" : "Meklēšanas līdzības slieksnis",
+        "help" : "Semantiskās līdzības slieksnis (no 0.5 līdz 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Drošības iestatījumi"
+      },
+      "accessibleToAll" : {
+        "label" : "Pieejams visiem"
+      },
+      "datasource" : {
+        "label" : "Datu avots"
+      },
+      "allowedGroups" : {
+        "label" : "Atļautās grupas"
+      },
+      "allowedUsers" : {
+        "label" : "Atļautie lietotāji"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Pieeja lietotājiem/grupām pēc datu avota",
+        "help" : "Padziļinātā meklēšana tiks aktivizēta katram ārējam datu avotam un lietotājam vai grupai"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Vienkārša pieeja lietotājam/grupai"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Pieeja lietotājam/grupai pēc datu avota"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Izmantot vai izveidot api atslēgas akreditācijas datus"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api atslēga/akreditācijas dati",
+        "help" : "Izvēlieties api atslēgu vai akreditācijas datus šim pakalpojumu sniedzējam"
+      },
+      "NewApiKey" : {
+        "label" : "Jauna api atslēga",
+        "help" : "Ievadiet jaunu api atslēgu, ko izmantot ar šo pakalpojumu sniedzēju"
+      },
+      "PiSave" : {
+        "label" : "Saglabāt"
+      },
+      "NewUserName" : {
+        "label" : "Lietotājvārds",
+        "help" : "Lietotājvārds piekļuvei pakalpojumu sniedzēja pakalpojumiem"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Izmantot esošos vai jaunus",
+        "help" : "Izmantot esošos vai izveidot jaunus akreditācijas datus šim pakalpojumu sniedzējam"
+      },
+      "newSecretDescription" : {
+        "label" : "Akreditācijas datu apraksts",
+        "help" : "Api atslēgas akreditācijas datu apraksts"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Akreditācijas dati izveidoti",
+        "detail" : "Akreditācijas dati veiksmīgi izveidoti"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Kļūda sazinoties ar Ollama serveri ",
+        "detail" : "Tīkla kļūda komunikācijā ar attālo sistēmu, piekļūstot saturam\n modeļu saraksta kļūda darbā ar url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Tērzēšana ar lietotājiem"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modelis izmantošanai iekšējiem pakalpojumiem"
       }
     }
   }

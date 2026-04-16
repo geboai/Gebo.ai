@@ -5,13 +5,23 @@
 	<parent>
 		<groupId>ai.gebo.ragsystem</groupId>
 		<artifactId>gebo.ragsystem.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.ragsystem.starter</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>ai.gebo.ragsystem</groupId>
 			<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.fulltext.processor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

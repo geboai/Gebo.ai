@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
@@ -23,18 +20,14 @@ import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
  * It extends the generic model configuration support service with additional
  * functionalities specific to embedding models.
  * 
- * @param <ModelChoice> The type of model choice extending GBaseEmbeddingModelChoice.
- * @param <ModelConfig> The type of model configuration extending GBaseEmbeddingModelConfig.
+ * @param <ModelChoice> The type of model choice extending
+ *                      GBaseEmbeddingModelChoice.
+ * @param <ModelConfig> The type of model configuration extending
+ *                      GBaseEmbeddingModelConfig.
  */
 public interface IGEmbeddingModelConfigurationSupportService<ModelChoice extends GBaseEmbeddingModelChoice, ModelConfig extends GBaseEmbeddingModelConfig>
-        extends IGModelConfigurationSupportService<GEmbeddingModelType, ModelChoice, ModelConfig> {
+		extends
+		IGModelConfigurationSupportService<GEmbeddingModelType, ModelChoice, ModelConfig, IGConfigurableEmbeddingModel> {
+	public IGConfigurableEmbeddingModel create(ModelConfig config) throws LLMConfigException;
 
-    /**
-     * Creates a configurable embedding model based on the provided configuration.
-     *
-     * @param config The model configuration to use for creating the embedding model.
-     * @return The configured embedding model.
-     * @throws LLMConfigException If the configuration process encounters an error.
-     */
-    public IGConfigurableEmbeddingModel<ModelConfig> create(ModelConfig config) throws LLMConfigException;
 }

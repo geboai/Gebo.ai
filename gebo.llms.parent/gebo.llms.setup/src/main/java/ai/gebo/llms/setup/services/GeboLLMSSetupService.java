@@ -11,15 +11,17 @@ package ai.gebo.llms.setup.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
@@ -39,8 +41,10 @@ import ai.gebo.llms.setup.config.LLMSVendor;
 import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
 import ai.gebo.llms.setup.config.ModelType;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMAutoconfigureCreationData;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
+import ai.gebo.llms.setup.model.LLMCredentialsVerificationData;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
 import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
@@ -108,28 +112,50 @@ public class GeboLLMSSetupService {
 
 	public LLMSSetupConfigurationData getActualConfiguration() throws GeboCryptSecretException {
 		LLMSSetupConfigurationData configData = new LLMSSetupConfigurationData();
+		boolean canRunAutoconfigure = false;
+		boolean embeddingModelExists = false;
+		boolean defaultChatModelExists = false;
+		boolean internalServicesChatModelExists = false;
+
 		for (LLMSVendor vendor : vendorsSetupConfig.getVendors()) {
 			LLMSSetupConfiguration vendorData = new LLMSSetupConfiguration();
 			vendorData.setParentModel(vendor.getVendorInfo());
 			vendorData.setLibraryModel(vendor.getPresets());
 			vendorData.setRuntimeConfigs(new ArrayList<>());
 			for (LLMSModelsPresets preset : vendor.getPresets()) {
-
 				switch (preset.getType()) {
 				case CHAT: {
 					IGChatModelConfigurationSupportService handler = chatModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The CHAT Handler " + preset.getServiceHandler() + " is not present or started up");
+						continue;
+					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableChatModel> chatConfigurations = chatModelsConfigDao.getConfigurations();
 					for (IGConfigurableChatModel chatModel : chatConfigurations) {
+
+						if (chatModel.getConfig() instanceof GBaseChatModelConfig chatModelConfig) {
+							if (chatModelConfig.getDefaultModel() != null && chatModelConfig.getDefaultModel()) {
+								defaultChatModelExists = true;
+							}
+							if (chatModelConfig.getForUses() != null
+									&& chatModelConfig.getForUses().contains(ChatModelsUses.INTERNAL_SERVICES)) {
+								internalServicesChatModelExists = true;
+							}
+						}
 						if (chatModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.CHAT);
 							existingConfiguration.setExistingModelConfig(GObjectRef.of(chatModel.getConfig()));
+
 							String secretCode = chatModel.getConfig().getApiSecretCode();
 							if (secretCode != null) {
 								SecretInfo infos = secretService.getSecretInfoById(secretCode);
 								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(chatModel.getConfig().getBaseUrl());
 							}
 							vendorData.getRuntimeConfigs().add(existingConfiguration);
 						}
@@ -139,10 +165,19 @@ public class GeboLLMSSetupService {
 				case EMBEDDING: {
 					IGEmbeddingModelConfigurationSupportService handler = embedModelsSupportRepo
 							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
+						continue;
+					}
 					GModelType modelProviderType = handler.getType();
 					List<IGConfigurableEmbeddingModel> embeddingConfigurations = embeddingModelsConfigDao
 							.getConfigurations();
 					for (IGConfigurableEmbeddingModel embeddingModel : embeddingConfigurations) {
+						if (embeddingModel.getConfig().getDefaultModel() != null
+								&& embeddingModel.getConfig().getDefaultModel()) {
+							embeddingModelExists = true;
+						}
 						if (embeddingModel.getType().getCode().equals(modelProviderType.getCode())) {
 							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
 							existingConfiguration.setModelType(ModelType.EMBEDDING);
@@ -151,6 +186,9 @@ public class GeboLLMSSetupService {
 							if (secretCode != null) {
 								SecretInfo infos = secretService.getSecretInfoById(secretCode);
 								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(embeddingModel.getConfig().getBaseUrl());
 							}
 							vendorData.getRuntimeConfigs().add(existingConfiguration);
 						}
@@ -161,6 +199,12 @@ public class GeboLLMSSetupService {
 			}
 			configData.getConfigurations().add(vendorData);
 		}
+
+		configData.setDefaultChatModelExists(defaultChatModelExists);
+		configData.setEmbeddingModelExists(embeddingModelExists);
+		configData.setInternalServicesChatModelExists(internalServicesChatModelExists);
+		canRunAutoconfigure = !(defaultChatModelExists && embeddingModelExists);
+		configData.setCanRunAutoconfigure(canRunAutoconfigure);
 		return configData;
 	}
 
@@ -180,10 +224,10 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<SecretInfo> createLLMCredentials(@Valid @NotNull LLMCredentialsCreationData apiKeyData)
 			throws GeboCryptSecretException {
+
 		GeboTokenContent geboToken = new GeboTokenContent();
 		geboToken.setToken(apiKeyData.getNewApiSecret());
 		geboToken.setUser(apiKeyData.getNewUserName());
-
 		switch (apiKeyData.getType()) {
 		case CHAT: {
 			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
@@ -231,9 +275,117 @@ public class GeboLLMSSetupService {
 
 	}
 
+	public OperationStatus<List<GBaseModelConfig>> runAutoConfigure(
+			@Valid @NotNull LLMAutoconfigureCreationData autoconfiguredata) throws GeboCryptSecretException {
+		Optional<LLMSVendor> vendor = vendorsSetupConfig.getVendors().stream()
+				.filter(x -> x.getVendorInfo().getVendorId().equals(autoconfiguredata.getVendorId())).findFirst();
+		if (vendor.isPresent()) {
+			LLMSVendor vendorData = vendor.get();
+			String secretId = autoconfiguredata.getSecretId();
+			if (secretId != null && secretId.trim().length() > 0) {
+
+			} else {
+				GeboTokenContent geboToken = new GeboTokenContent();
+				geboToken.setToken(autoconfiguredata.getNewApiSecret());
+				geboToken.setUser(autoconfiguredata.getNewUserName());
+				secretId = secretService.storeSecret(geboToken, vendorData.getVendorInfo().getName() + " credentials",
+						vendorData.getVendorInfo().getApiKeySecretContext());
+			}
+			List<LLMCreateModelData> configs = new ArrayList<LLMCreateModelData>();
+			for (LLMSModelsPresets preset : vendorData.getPresets()) {
+				switch (preset.getType()) {
+				case CHAT: {
+					// check if a default chat model is present and if not add one
+					if (autoconfiguredata.getDefaultChatModel() != null
+							&& autoconfiguredata.getDefaultChatModel().trim().length() > 0) {
+						LLMCreateModelData modelData = createChatModel(secretId, vendorData,
+								autoconfiguredata.getDefaultChatModel(), true, true, ChatModelsUses.CHAT);
+						configs.add(modelData);
+					}
+					if (autoconfiguredata.getInternalServicesModel() != null
+							&& autoconfiguredata.getInternalServicesModel().trim().length() > 0) {
+						LLMCreateModelData modelData = createChatModel(secretId, vendorData,
+								autoconfiguredata.getInternalServicesModel(), false, false,
+								ChatModelsUses.INTERNAL_SERVICES);
+						configs.add(modelData);
+					}
+
+				}
+					break;
+
+				case EMBEDDING: {
+					// check if a default embedding model is present and if not add one
+					if (autoconfiguredata.getEmbeddingModel() != null
+							&& autoconfiguredata.getEmbeddingModel().trim().length() > 0) {
+						LLMCreateModelData modelData = createEmbeddingModel(secretId, vendorData,
+								autoconfiguredata.getEmbeddingModel());
+						configs.add(modelData);
+					}
+				}
+					break;
+				}
+			}
+			return createLLMS(configs);
+		} else
+			throw new RuntimeException("Vendor not found by data:" + autoconfiguredata);
+	}
+
+	private LLMCreateModelData createEmbeddingModel(String secretId, LLMSVendor vendorData, String embeddingModel) {
+		LLMCreateModelData md = new LLMCreateModelData();
+		md.setEnableAllFunctions(false);
+		md.setModelCode(embeddingModel);
+		md.setSecretId(secretId);
+		LLMSModelsPresets embeddingPreset = vendorData.getPresets().stream()
+				.filter(x -> x.getType() == ModelType.EMBEDDING).toList().get(0);
+		md.setServiceHandler(embeddingPreset.getServiceHandler());
+		md.setSetAsDefaultModel(true);
+		md.setType(ModelType.EMBEDDING);
+
+		return md;
+	}
+
+	private LLMCreateModelData createChatModel(String secretId, LLMSVendor vendorData, String chatModel,
+			boolean defaultModel, boolean enableAllFunctions, ChatModelsUses use) {
+		LLMCreateModelData md = new LLMCreateModelData();
+		md.setEnableAllFunctions(enableAllFunctions);
+		md.setModelCode(chatModel);
+		md.setSecretId(secretId);
+		LLMSModelsPresets chatPreset = vendorData.getPresets().stream().filter(x -> x.getType() == ModelType.CHAT)
+				.toList().get(0);
+		md.setServiceHandler(chatPreset.getServiceHandler());
+		md.setSetAsDefaultModel(defaultModel);
+		md.setType(ModelType.CHAT);
+		md.setUses(List.of(use));
+		return md;
+	}
+
+	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
+			@Valid @NotNull LLMCredentialsVerificationData data) {
+		Optional<LLMSVendor> vendorOpt = this.vendorsSetupConfig.getVendors().stream()
+				.filter(x -> x.getVendorInfo() != null && x.getVendorInfo().getVendorId() != null
+						&& x.getVendorInfo().getVendorId().equals(data.getVendorId()))
+				.findFirst();
+		if (vendorOpt.isEmpty()) {
+			return OperationStatus.ofError("Vendor unknown", "Vendor " + data.getVendorId() + " unknown");
+		}
+		LLMSVendor vendor = vendorOpt.get();
+		if (!vendor.getPresets().isEmpty()) {
+			LLMSModelsPresets preset = vendor.getPresets().get(0);
+			LLMModelsLookupParameter credentials = new LLMModelsLookupParameter();
+			credentials.setSecretId(data.getSecretId());
+			credentials.setServiceHandler(preset.getServiceHandler());
+			credentials.setBaseUrl(data.getBaseUrl());
+			credentials.setType(preset.getType());
+			return verifyCredentialsAndDownloadModels(credentials);
+		} else {
+			return OperationStatus.ofError("Vendor without presets",
+					"Vendor " + data.getVendorId() + " has no presets");
+		}
+	}
+
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
 			@Valid @NotNull LLMModelsLookupParameter credentials) {
-		
+
 		switch (credentials.getType()) {
 		case CHAT: {
 			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
@@ -269,12 +421,17 @@ public class GeboLLMSSetupService {
 				try {
 					IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
 							.findByCode(config.getServiceHandler());
-					GBaseChatModelConfig configuration =(GBaseChatModelConfig) supportLogic.createBaseConfiguration(config.getModelCode());
+					GBaseChatModelConfig configuration = (GBaseChatModelConfig) supportLogic
+							.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
-					if (config.getEnableAllFunctions()!=null && config.getEnableAllFunctions()) {
+					configuration.setForUses(config.getUses());
+					if (config.getContextWindow() != null) {
+						configuration.setContextLength(config.getContextWindow());
+					}
+					if (config.getEnableAllFunctions() != null && config.getEnableAllFunctions()) {
 						List<ToolCallback> tools = this.toolsRepo.getTools();
 						List<String> names = tools.stream().map(x -> {
 							return x.getToolDefinition().name();
@@ -306,10 +463,10 @@ public class GeboLLMSSetupService {
 			}
 
 		}
-		OperationStatus<List<GBaseModelConfig>> out=new OperationStatus<>();	
-		for(OperationStatus<GBaseModelConfig> res:operationsOutput) {
-			if (res.getResult()!=null) {
-				if (out.getResult()==null) {
+		OperationStatus<List<GBaseModelConfig>> out = new OperationStatus<>();
+		for (OperationStatus<GBaseModelConfig> res : operationsOutput) {
+			if (res.getResult() != null) {
+				if (out.getResult() == null) {
 					out.setResult(new ArrayList<>());
 				}
 				out.getResult().add(res.getResult());
@@ -318,8 +475,7 @@ public class GeboLLMSSetupService {
 				out.getMessages().addAll(res.getMessages());
 			}
 		}
-		
-		
+
 		return out;
 	}
 

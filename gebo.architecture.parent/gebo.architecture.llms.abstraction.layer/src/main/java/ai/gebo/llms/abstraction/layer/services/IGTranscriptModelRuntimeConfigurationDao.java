@@ -6,29 +6,19 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 
 /**
- * Gebo.ai comment agent
- * Interface for handling runtime configurations specific to transcript models.
- * Extends the IGRuntimeModelConfigurationDao to provide additional methods
- * specific to configuring transcript models at runtime.
+ * Gebo.ai comment agent Interface for handling runtime configurations specific
+ * to transcript models. Extends the IGRuntimeModelConfigurationDao to provide
+ * additional methods specific to configuring transcript models at runtime.
  */
 public interface IGTranscriptModelRuntimeConfigurationDao
-        extends IGRuntimeModelConfigurationDao<IGConfigurableTranscriptModel> {
+		extends IGRuntimeModelConfigurationDao<IGConfigurableTranscriptModel, GBaseTranscriptModelConfig> {
 
-    /**
-     * Adds a runtime configuration for a transcript model using the specified configuration.
-     *
-     * @param config The configuration details for the transcript model.
-     * @throws LLMConfigException if there is an error processing the configuration.
-     */
-    void addRuntimeByConfig(GBaseTranscriptModelConfig config) throws LLMConfigException;
+	
 
 }

@@ -1,0 +1,82 @@
+<p-blockUI id="BlockUILock" gebo-ai-label [target]="googleSearchSetupUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #googleSearchSetupUI header="Setup google search api">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button id="GoogleSearchCredentialsBtn" gebo-ai-label icon="pi pi-plus" label="Google search api key"
+                styleClass="w-full" [outlined]="true" (onClick)="createGoogleSearchCredentials()"
+                [disabled]="googleSearchCredentials && googleSearchCredentials.length>0"></p-button>
+        </div>
+    </div>
+    <div class=" grid">
+
+        <div class="col-12"><p-table id="Table" gebo-ai-label [value]="googleSearchCredentials"
+                [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header pTemplate="header">
+                    <tr>
+                        <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
+
+                        <th></th>
+
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item pTemplate="body">
+                    <tr>
+                        <td>{{ item.code }}</td>
+                        <td>{{ item.description }}</td>
+
+                        <td><p-button id="DeleteCredentialsBtn" gebo-ai-label label="Delete"
+                                title="Delete Google search api credentials" icon="pi pi-trash" [outlined]="true"
+                                (onClick)="deleteCredentials(item)"></p-button></td>
+                    </tr>
+                </ng-template>
+            </p-table></div>
+
+    </div>
+
+</p-panel>
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="googleSearchConfig?true:false" [modal]="true"
+    (visibleChange)="googleSearchConfig=undefined">
+    <p-blockUI id="BlockUILock" gebo-ai-label [target]="createCredentialsUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-panel id="CreateCredentialsPanel" gebo-ai-label #createCredentialsUI header="Create google search credentials"
+        [formGroup]="formGroup">
+        <div class="grid">
+            <div class="col-4">
+                <gebo-ai-field id="customSearchEngineId" label="Search engine id"
+                    help="Enter the search engine id obtained in the google search api credentials registration."
+                    [required]="true">
+                    <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId" [required]="true"
+                        gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+            <div class="col-8">
+                <gebo-ai-field id="apiKey" label="Api key"
+                    help="Enter the api key obtained in the google search api credentials registration."
+                    [required]="true">
+                    <input pInputText id="apiKey" formControlName="apiKey" [required]="true" gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+        </div>
+        <div class="geboButtonsBar" style="vertical-align: baseline;">
+            <div class="grid">
+                <div class="col-4">
+                    <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create"
+                        (onClick)="saveGoogleSearchCredentials()" icon="pi pi-save" severity="success"
+                        styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+                </div>
+                <div class="col-4">
+                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                        (onClick)="doCancel()" styleClass="w-full" />
+                </div>
+
+            </div>
+        </div>
+    </p-panel>
+
+</p-dialog>

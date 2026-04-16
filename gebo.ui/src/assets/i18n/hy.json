@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Մուտք"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Գործողությունը ձախողվեց",
+        "detail" : "Չի հաջողվում հաստատել մուտքը ներկայացված հավաստագրերով"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ինտեգրացիա",
         "description" : "Կազմակերպեք Gebo.ai-ը, որպեսզի մուտք գործի ձեր Google cloud Drive/Workspaces թիմային տվյալները"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Կարգավորել Google search api-ը",
+        "description" : "Կարգավորեք Google search api-ի վկայականները AI վեբ որոնման համար"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Կարգավորել խորը որոնում",
+        "description" : "Կարգավորեք խորը որոնման պարամետրերը"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ավտո կարգավորում",
+        "description" : "Ավտոմատ կարգավորում որոնողական ընդլայնված սերնդի պարամետրերի համար"
+      },
+      "Description" : {
+        "label" : "Նկարագրություն"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Վերջին կարգավորման թարմացում"
+      },
+      "Code" : {
+        "label" : "Գրաֆիկական մոդելի/Վեկտորականի կոդ"
+      },
+      "ComputedThreashold" : {
+        "label" : "Հաշվարկված շեմ"
+      },
+      "Autotuned" : {
+        "label" : "Ավտոընտրված"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai-ի հիմնական կարգավորման քայլերը ավարտված են...",
+        "detail" : "Հիմնական կարգավորման քայլերը ավարտվել են, բայց բացակայում են որոշ քայլեր, որոնք խոչընդոտում են ձեր կազմակերպությանը այս ծրագրից առավելագույնը ստանալու համար"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai կարգավորումը բացակայում է որոշ հիմնական քայլով",
+        "detail" : "Խնդրում ենք վերանայել կարգավորման գործընթացի կարմիր քայլերը"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence համակարգ"
+      },
+      "EditSystemBtn" : {
+        "label" : "Խմբագրել համակարգը"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Կարգավորել Gebo.ai llms մատակարարների հասանելիությունը"
+      },
+      "ExtensiveStup" : {
+        "label" : "Ընդլայնված ենթակառուցվածք/մատակարարների ընտրություններ"
+      },
+      "MainPanelTitle" : {
+        "label" : "Կարգավորեք օգտագործվող մեծ լեզվական մոդելները"
+      },
+      "EasySetup" : {
+        "label" : "Հեշտ սկզբնական կարգավորում/կոնֆիգուրացիայի ուղղում"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Կարգավորել մեծ լեզվական մոդելները"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Նկարագրություն"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api բանալի"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Ստեղծել google search վկայականներ"
+      },
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "customSearchEngineId" : {
+        "label" : "Որոնման շարժիչի id",
+        "help" : "Մուտքագրեք որոնման շարժիչի id-ը, որը ստացվել է google search api-ի վկայականների գրանցման ժամանակ։"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կարգավորման կոդ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "apiKey" : {
+        "label" : "Api բանալի",
+        "help" : "Մուտքագրեք api բանալին, որը ստացվել է google search api-ի վկայականների գրանցման ժամանակ։"
+      },
+      "MainPanel" : {
+        "label" : "Կարգավորել google search api-ը"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Ջնջել",
+        "help" : "Ջնջել Google search api-ի վկայականները"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Խորը որոնման կարգավորումները",
+        "help" : "Ավելացնել խորը որոնման կարգավորում"
+      },
+      "EditSystemBtn" : {
+        "label" : "Փոփոխել կարգավորումները"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "անդամը ակտիվ չէ"
+      },
+      "EditGroupBtn" : {
+        "label" : "Խմբագրել"
+      },
+      "CodeHeader" : {
+        "label" : "կոդ"
+      },
+      "DescriptionHeader" : {
+        "label" : "նկարագրություն"
+      },
+      "UsersHeader" : {
+        "label" : "օգտատերեր"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI հեռավար մատակարարը OK է",
+        "detail" : "Մատակարարը գործում է շարունակում և հաջողությամբ կարգավորված է"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Գործողության ընթացքում բացառություն՝ սխալ հղման հետ աշխատանքում՝ https://api.openai.com/v1/models",
+        "detail" : "Սերվերի սխալ՝ սխալ հղման հետ աշխատանքում՝ https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "սահմանել որպես հիմնական embedding մոդել",
         "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI հեռավար մատակարարը OK է",
+        "detail" : "Մատակարարը գործում է շարունակում և հաջողությամբ կարգավորված է"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama տեղական (կամ LAN) սերվերի զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "forUses" : {
+        "label" : "Մոդելի օգտագործում(ներ)",
+        "help" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:",
+        "placeholder" : "Օգտագործումները, որոնց համար Gebo.ai հարթակը կդիտարկի այս մոդելը:"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Պատրաստ է!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Վստա՞հ եք, որ ցանկանում եք ջնջել այս զրույցը։",
         "header" : "Ջնջել զրույցի գործողություն"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Ավելացնել բովանդակություն կամ փոփոխել որոնման պահվածքը"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Աղբյուրներ",
+        "help" : "Բացել վերլուծված փաստաթղթերի ցանկը"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Խորը որոնման պատասխան և աղբյուրների մանրամասներ"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Խորը որոնման վերլուծության արդյունք"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Սխալ՝ Confluence որոնման ժամանակ",
+        "detail" : "Սերվերի սխալ. Խնդիրներ՝ confluence համակարգ մուտք գործելիս"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Նոր զրույցը բեռնված է",
+        "detail" : "Նոր զրույցը հաջողությամբ բեռնվել է"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Ընտրել աղբյուրներ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Ընտրեք առնվազն մեկ տարբերակ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Բաց թողնել խորը որոնումը"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Ընտրված գիտելիքների բազաներ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Ընտրված համակարգեր"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ավելացնել փաստաթուղթ 'զրուցել' ցուցակում"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Խորը որոնում է ընթանում"
+      },
+      "RagLLMResponse" : {
+        "label" : "Ընդունման ընդլայնված ստեղծում է կատարվում"
+      },
+      "PureLLMResponse" : {
+        "label" : "Հարցում llm-ին"
+      },
+      "Waiting" : {
+        "label" : "Լավագույն պատասխանի պլանը վերլուծվում է.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Գործիքները գործարկվում են"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI-ն օգնում է որոնմանը"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Վերլուծված ֆայլ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Վերլուծված որոնման արդյունք"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Վերլուծված համակարգի որոնման արդյունքը՝"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Վերջնական հաշվետվություն է պատրաստվում"
+      },
+      "RUNNING" : {
+        "label" : "Գործարկվում է "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Վերլուծում եմ ձեր հարցումը"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Ընտրվել է գործակալային ընթացք, գործակալը աշխատում է"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Ծառայության մակարդակը՝ QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Կատարվում է ձեր ընտրված գործակալը"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Վերբեռնել ֆայլ(եր)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Դիտել/որոնել ընկերության ֆայլ(եր)"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Ընտրված փաստաթղթի զրույց"
+      },
+      "agenticChat" : {
+        "label" : "Գործակալային զրույց"
+      },
+      "rag" : {
+        "label" : "R.a.g. զրույց"
+      },
+      "deepSearch" : {
+        "label" : "Խորը որոնում/Համակցված աղբյուրներ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Խորը որոնում/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Խորը որոնում/Confluence որոնում"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Խորը որոնում/Jira որոնում"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Խորը որոնում/Գիտելիքների բազայի որոնում"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Զրուցել ֆայլ(երի) հետ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Խորը որոնում/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Խորը որոնում/Confluence որոնում"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Խորը որոնում/Jira որոնում"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google օգտագործող, որին պետք է անձնավորել",
         "help" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով",
         "placeholder" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով"
+      },
+      "OK" : {
+        "summary" : "Հաջողությամբ պահպանված է",
+        "detail" : "Թարմացման գործողությունը հաջողությամբ ավարտվեց"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Վերամշակված փաստաթղթեր",
         "dataset-2-label" : "Սխալ փաստաթղթեր",
         "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Լրիվ տեքստի ինդեքսավորում"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալով մշակված փաստաթղթեր",
+        "label-2" : "Մշակված փաստաթղթեր"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Մշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Մշակված տոքեններ",
+        "dataset-1-label" : "Սխալ տոքենների մշակում"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "Միացնել բոլոր ֆունկցիաների կանչերը",
         "help" : "Միացնել բոլոր հասանելի գործիքներն ու ֆունկցիաների կանչերը։ Եթե անհասանելի է՝ հնարավոր կլինի միացնել դրանք llms ադմինիստրատորի վահանակում"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Գործողության ընթացքում բացառություն՝ Anthropic api-ն չի կարող աշխատել առանց անհրաժեշտ api ստեղնի կարգավորման",
+        "detail" : "Սերվերի սխալ՝ Anthropic api-ն չի կարող աշխատել առանց անհրաժեշտ api ստեղնի կարգավորման"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI հեռակա մատակարարը OK է",
+        "detail" : "Մատակարարը առցանց է և հաջողությամբ կոնֆիգուրացված է"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Բացառություն՝ գործողության ընթացքում։ 401 Չթուլատրելի",
+        "detail" : "Սերվերի սխալ. 401 Չթուլատրելի"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Բացառություն՝ գործողության ընթացքում։ Բացակայում է basePath",
+        "detail" : "Սերվերի սխալ. Բացակայում է basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Ստեղծել և ակտիվացնել"
+      },
+      "vendorId" : {
+        "label" : "Ընտրեք ձեր մեծ լեզվական մոդելի մատակարարը",
+        "help" : "Ընտրեք նախնական մատակարար ձեր լռելյայն չաթի և embedding մոդելների համար"
+      },
+      "secretId" : {
+        "label" : "Ընտրեք մատակարարի հավատարմագրերը (api ստեղն)",
+        "help" : "Ընտրեք արդեն առկա հավատարմագրերից մեկին ընտրված llm մատակարարի համար"
+      },
+      "InternalServiceModel" : {
+        "label" : "Ներքին ծառայությունների չաթ մոդել",
+        "help" : "Ներքին ծառայությունների համար կարգավորված չաթ մոդելը պատասխանատվություն է կրում տվյալների դուրսբերման, ամփոփման և ներքին հոսքերի կատարման համար։"
+      },
+      "ChatModel" : {
+        "label" : "Լռելյայն չաթ մոդել",
+        "help" : "Այս լռելյայն չաթ մոդելը պատասխանատվություն է կրում օգտատերերի հարցերին պատասխանելու, և այն հոսքերին, որոնց համար հատուկ մոդելներ չեն ընտրված։ Պետք է լինի հզոր և վստահելի՝ լավ հավասարակշռությամբ ծախսի, արդյունավետության և արդյունքի որակի միջև։"
+      },
+      "ProviderBuy" : {
+        "label" : "Ապի ստեղնի կրեդիտ գնումի հղում"
+      },
+      "ProviderWWW" : {
+        "label" : "Վեբ կայքի հղում"
+      },
+      "WebSiteLink" : {
+        "label" : "Մատակարարի վեբկայք",
+        "help" : "Սեղմեք այստեղ՝ մատակարարի ընդհանուր տեղեկության համար։"
+      },
+      "AcquireCreditLink" : {
+        "label" : "Մատակարարի կրեդիտ գնել",
+        "help" : "Սեղմեք այստեղ՝ api ստեղն(եր)ի համար կրեդիտ գնելու համար։"
+      },
+      "EmbeddingModel" : {
+        "label" : "Լռելյայն embedding մոդել",
+        "help" : "Այս մոդելը կպատասխանատու լինի ձեր տվյալների ու փաստաթղթերի սեմանտիկ ինդեքսավորման (embedding) և որոնման համար"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Դուք չեք կարող ջնջել սա",
         "detail" : "Այս օբյեկտը կապված է հավելվածի այլ մաս(եր)ից"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Վրիպում գործողության ընթացքում: Սխալ url-ի հետ աշխատանքի ժամանակ:http://localhost:11434/v1/models",
+        "detail" : "Սերվերի սխալ: Սխալ url-ի հետ աշխատանքի ժամանակ:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Վրիպում գործողության ընթացքում:apiKey-ը պետք է սահմանված լինի",
+        "detail" : "Սերվերի սխալ: apiKey-ը պետք է սահմանված լինի"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Սխալը հաղորդագրության հոսքի ժամանակ",
+        "detail" : "Սերվերի սխալ: 400 վատ հարցում POST http://localhost:8000/v1/chat/completions-ից"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Գործողության ընթացքում բացառություն՝ սխալ հղման հետ աշխատանքում՝ http://localhost:8000/v1/models",
+        "detail" : "Սերվերի սխալ՝ սխալ հղման հետ աշխատանքում՝ http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Չաթի արձագանք ստրիմինգի սխալ",
+        "detail" : "Սերվերի սխալ՝ կապի վերամիավորում"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Գործողության ընթացքում բացառություն՝ սխալ հղման հետ աշխատանքում՝ https://api.openai.com/v1/models",
+        "detail" : "Սերվերի սխալ՝ սխալ հղման հետ աշխատանքում՝ https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Գործողության ընթացքում բացառություն՝ Anthropic api-ն չի կարող աշխատել առանց անհրաժեշտ api ստեղնի կարգավորման",
+        "detail" : "Սերվերի սխալ՝ Anthropic api-ն չի կարող աշխատել առանց անհրաժեշտ api ստեղնի կարգավորման"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Ավարտված"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Պատրաստ է!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Օգտագործված ինքնություն",
         "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ google drive համակարգին մուտք գործելու համար"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Զրուցարան"
+      },
+      "deep-search" : {
+        "label" : "Խորը որոնում"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Խորը որոնում"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Որոնվում են համապատասխան տեղեկությունները"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Վերջնական հաշվետվության ամփոփում"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Վերլուծված որոնման արդյունք"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Համակարգի որոնման վերլուծված արդյունք՝"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Ընտրեք հետևյալ տարբերակներից առնվազն մեկը"
+      },
+      "LaunchBtn" : {
+        "label" : "Սկսել որոնումը"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Բաց թողնել խորացված որոնումը"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Ընտրված գիտելիքների բազաներ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Ընտրված համակարգեր"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Ընտրել աղբյուրները"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Վերլուծված ֆայլ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ավելացնել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SearchSettingTab" : {
+        "label" : "Որոնման կարգավորում"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Մուտքագրեք հորդորը՝ փաստաթղթերից համապատասխան տեղեկության արտահանման համար"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Մուտքագրեք հորդորը՝ արտահանված տեղեկության համալրման համար"
+      },
+      "MainPanel" : {
+        "label" : "Խորը որոնման կարգավորումների խմբագրում"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Մեծ լեզվական մոդելի կարգավորումներ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք խորը որոնման կարգավորման նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Հատուկ կոդ",
+        "help" : "Խորը որոնման կարգավորման համար ավտոմատ գեներացված հատուկ կոդ"
+      },
+      "searchType" : {
+        "label" : "Որոնման տեսակ",
+        "help" : "Ընտրեք մեկ քայլանոց սեմանտիկ որոնում կամ բազմաքայլ"
+      },
+      "topK" : {
+        "label" : "Վերադարձվող տեքստային հատվածների քանակը (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Օգտագործվող llm",
+        "help" : "Նշել խորը որոնման համար օգտագործվող մեծ լեզվական մոդելը, եթե ոչ, ապա օգտագործվելու է լռելյայն տարբերակը։"
+      },
+      "analisysPrompt" : {
+        "label" : "Փաստաթղթերի վերլուծության հորդոր",
+        "help" : "Խմբագրեք հորդորը, որը կօգտագործվի փաստաթղթից համապատասխան տեղեկության արտահանման համար։"
+      },
+      "consolidationPrompt" : {
+        "label" : "Արտահանված տեղեկության ամփոփման հորդոր",
+        "help" : "Խմբագրեք հորդորը, որը կօգտագործվի մի ընդհանուր հաշվետվության մեջ արտահանված տեղեկությունը ամփոփելու համար։"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Որոնման նմանության շեմ",
+        "help" : "Առաջին քայլի սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Երկրորդ քայլի նմանության շեմ",
+        "help" : "Երկրորդ քայլի սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
+      },
+      "defaultModel" : {
+        "label" : "Լռելյայն մեծ լեզվական մոդել",
+        "help" : "Խորը որոնման ժամանակ կօգտագործվի լռելյայն մեծ լեզվական մոդելը"
+      },
+      "similarityThreashold" : {
+        "label" : "Որոնման նմանության շեմ",
+        "help" : "Սեմանտիկ նմանության շեմ (0.5-ից մինչև 1.0 միջակայքում)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Անվտանգության կարգավորումներ"
+      },
+      "accessibleToAll" : {
+        "label" : "Մատչելի բոլորին"
+      },
+      "datasource" : {
+        "label" : "Տվյալների աղբյուր"
+      },
+      "allowedGroups" : {
+        "label" : "Թույլատրված խմբեր"
+      },
+      "allowedUsers" : {
+        "label" : "Թույլատրված օգտատերեր"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Օգտատիրոջ/խմբի հասանելիություն ըստ տվյալների աղբյուրի",
+        "help" : "Խորը որոնումը կաշխատի յուրաքանչյուր արտաքին տվյալների աղբյուրի և օգտատիրոջ կամ խմբի համար"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Պարզ մուտքի կառավարում ըստ օգտատիրոջ/խմբի"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Հասանելիություն ըստ տվյալների աղբյուրի՝ օգտատեր/խմբի համար"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Օգտագործել կամ ստեղծել api ստեղնի հավատարմագրեր"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ստեղն/հավատարմագրեր",
+        "help" : "Ընտրեք api ստեղն կամ հավատարմագրեր այս մատակարարը օգտագործելու համար"
+      },
+      "NewApiKey" : {
+        "label" : "Նոր api ստեղն",
+        "help" : "Մուտքագրեք նոր api ստեղն՝ այս մատակարարի հետ օգտագործելու համար"
+      },
+      "PiSave" : {
+        "label" : "Պահպանել"
+      },
+      "NewUserName" : {
+        "label" : "Օգտատիրոջ անուն",
+        "help" : "Օգտատիրոջ անուն, որով մուտք են գործում մատակարարի ծառայություններին"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Օգտագործել առկա կամ նոր",
+        "help" : "Օգտագործել առկա կամ ստեղծել նոր հավատարմագրեր այս մատակարարի համար"
+      },
+      "newSecretDescription" : {
+        "label" : "Հավատարմագրի նկարագրություն",
+        "help" : "Api ստեղնի հավատարմագրի նկարագրություն"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Հավատարմագրերը ստեղծված են",
+        "detail" : "Հավատարմագրերը հաջողությամբ ստեղծվեցին"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Սխալ Ollama սերվերից հաղորդակցության ժամանակ ",
+        "detail" : "Ձանցի սխալ՝ հեռավոր համակարգի բովանդակությանը մուտք գործելու ժամանակ\n մոդելների ցանկի սխալ՝ url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Չաթ օգտատերերի հետ"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Ներքին ծառայությունների համար օգտագործվող մոդել"
       }
     }
   }

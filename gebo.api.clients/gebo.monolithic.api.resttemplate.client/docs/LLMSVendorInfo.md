@@ -14,6 +14,8 @@ Name | Type | Description | Notes
 **webSite** | **String** |  | 
 **acquireKeyUrl** | **String** |  |  [optional]
 **apiKeySecretContext** | **String** |  | 
+**minContextWindow** | **Integer** |  |  [optional]
+**supportsAutoconfig** | **Boolean** |  |  [optional]
 
 <a name="SecretTypeEnum"></a>
 ## Enum: SecretTypeEnum

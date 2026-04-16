@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FastVectorStoreSetupData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class FastVectorStoreSetupData {
   /**
@@ -33,7 +33,6 @@ public class FastVectorStoreSetupData {
   public enum ProductEnum {
     MONGO("MONGO"),
     QDRANT("QDRANT"),
-    LUCENE("LUCENE"),
     REDIS("REDIS"),
     TEST("TEST");
 

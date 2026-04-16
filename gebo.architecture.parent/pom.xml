@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.0.0-rc1</version>
+    <version>1.0.1.0-ALPHA</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -20,7 +20,7 @@
   	<module>gebo.application.messaging</module>
   	<module>gebo.secrets.services</module>
   	<module>gebo.architecture.security.controllers</module>  	
-  	<module>gebo.architecture.lucene</module>
+  	
   	<module>gebo.architecture.multithreading</module>
   	<module>gebo.architecture.scheduling</module>
   	<module>gebo.multilanguage.support</module>
@@ -43,5 +43,12 @@
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
   	<module>gebo.architecture.setup</module>
+  	<module>gebo.architecture.hazelcast</module>
+  	<module>gebo.architecture.search.abstraction.layer</module>
+  	<module>gebo.architecture.rag-threasholds-autotune</module>
+  	<module>gebo.architecture.opensearch</module>
+  	<module>gebo.architecture.fulltext</module>
+  	<module>gebo.architecture.rag.support.layer</module>
+  	<module>gebo.architecture.redis</module>
   </modules>
 </project>

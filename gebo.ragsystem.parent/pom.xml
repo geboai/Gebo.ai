@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<groupId>ai.gebo.ragsystem</groupId>
 	<artifactId>gebo.ragsystem.parent</artifactId>
@@ -19,6 +19,8 @@
 
 		<module>gebo.ragsystem.vectorstores.test.services</module>
 		<module>gebo.ragsystem.content.graphrag_processor</module>
+
+		<module>gebo.ragsystem.content.fulltext.processor</module>
 	</modules>
 	<dependencies>
 		<dependency>

@@ -27,6 +27,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * AI generated comments Configuration class responsible for setting up the
@@ -36,7 +37,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  */
 @Configuration
 public class GGoogleDriveContentsDispatcherConfig
-		extends SingletonBuilder<GGoogleDriveSystem, GGoogleDriveProjectEndpoint> {
+		extends SingletonBuilder<GGoogleDriveSystem, GGoogleDriveProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
 	 * Constructor that initializes the Google Drive contents dispatcher
@@ -74,7 +75,7 @@ public class GGoogleDriveContentsDispatcherConfig
 	@Scope("singleton")
 	@Qualifier("googleDriveContentsDispatcher")
 
-	public GIOCModuleContentsDispatcher<GGoogleDriveSystem, GGoogleDriveProjectEndpoint> getGoogleDriveContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GGoogleDriveSystem, GGoogleDriveProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> getGoogleDriveContentsDispatcher() {
 
 		return super.getDispatcher();
 	}

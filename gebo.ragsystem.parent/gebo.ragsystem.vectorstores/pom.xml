@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.ragsystem</groupId>
 		<artifactId>gebo.ragsystem.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.ragsystem.vectorstores</artifactId>
 	<dependencies>
@@ -24,11 +24,7 @@
 			<artifactId>gebo.architecture.ai</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.lucene</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-redis-store</artifactId>

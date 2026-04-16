@@ -14,6 +14,7 @@ Gebo.ai.Config/
 .factorypath
 ***/.factorypath
 logs/
+.idea/
 dockers/qdrant_storage/
 com.openi40/openi40.scheduler.SpringBootEnvironment/tmlog.lck
 *.msi

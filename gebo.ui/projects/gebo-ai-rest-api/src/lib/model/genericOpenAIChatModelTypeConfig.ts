@@ -22,4 +22,5 @@ export interface GenericOpenAIChatModelTypeConfig {
     modelsListProvider?: string;
     providerId?: string;
     optionalAuthentication?: boolean;
+    applyThinkingMarkupHandling?: boolean;
 }

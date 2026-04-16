@@ -62,7 +62,8 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
         accessibleUsers: new FormControl(), 
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
-        defaultModelPrompt:new FormControl()
+        defaultModelPrompt:new FormControl(),
+        forUses:new FormControl()
     });
     
     /** Keeps track of previous form values to detect changes */

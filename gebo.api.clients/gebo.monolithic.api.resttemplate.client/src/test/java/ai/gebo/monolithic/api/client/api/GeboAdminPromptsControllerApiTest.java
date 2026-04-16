@@ -12,10 +12,8 @@
 
 package ai.gebo.monolithic.api.client.api;
 
-import ai.gebo.monolithic.api.client.model.DataPage;
 import ai.gebo.monolithic.api.client.model.GPromptConfig;
-import ai.gebo.monolithic.api.client.model.PageGPromptConfig;
-import ai.gebo.monolithic.api.client.model.PromptConfigByQbeParam;
+import ai.gebo.monolithic.api.client.model.PromptFilter;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -71,38 +69,23 @@ public class GeboAdminPromptsControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void getAllPromptConfigTest() {
-        DataPage body = null;
-        PageGPromptConfig response = api.getAllPromptConfig(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getAllPromptConfigByQbeTest() {
-        PromptConfigByQbeParam body = null;
-        PageGPromptConfig response = api.getAllPromptConfigByQbe(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
     public void getPromptCategoriesTest() {
         List<String> response = api.getPromptCategories();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getPromptConfigByFilterTest() {
+        PromptFilter body = null;
+        GPromptConfig response = api.getPromptConfigByFilter(body);
 
         // TODO: test validations
     }

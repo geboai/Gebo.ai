@@ -6,7 +6,13 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@Gebo.ai/gebo-ai-rest-api": ["../../dist/gebo-ai-rest-api"],
+      "@Gebo.ai/gebo-ai-chat-ui": ["../../dist/gebo-ai-chat-ui"],
+      "@Gebo.ai/gebo-ai-admin-ui": ["../../dist/gebo-ai-admin-ui"],
+      "@Gebo.ai/reusable-ui": ["../../dist/gebo-ai-reusable-ui"]
+    }
   },
   "exclude": [
     "**/*.spec.ts"

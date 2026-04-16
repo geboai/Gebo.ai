@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ಲಾಗಿನ್"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ಕ್ರಿಯೆ ವಿಫಲವಾಯಿತು",
+        "detail" : "ನೀಡಲಾದ ಅನುಮತಿ ವಿವರಗಳೊಂದಿಗೆ ಪ್ರಮಾಣೀಕರಣ ಸಾಧ್ಯವಿಲ್ಲ"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ಏಕೀಕರಣ",
         "description" : "ನಿಮ್ಮ Google cloud Drive/Workspaces ತಂಡ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು Gebo.ai ಅನ್ನು ಸಂರಚಿಸಿ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ಅನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ",
+        "description" : "AI ವೆಬ್ ಹುಡುಕಾಟಗಳಿಗಾಗಿ Google search api ರುಜುವಾತುಗಳನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ಅನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ",
+        "description" : "Deep search ಪರಿಮಿತಿಗಳನ್ನು ಸಂರಚಿತಗೊಳಿಸಿ"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ಸ್ವಯಂಅನುಕೂಲತೆ",
+        "description" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಹೆಚ್ಚು ಉತ್ತಮ ಪೀಳಿಗೆ ನಿಯತಾಂಕಗಳನ್ನು ಸರಿಹೊಂದಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "Description" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ಕೊನೆಯ ತಿದ್ದುಪಡಿ ದಿನಾಂಕ"
+      },
+      "Code" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ/ವೆಕ್ಟರ್‌ಸ್ಟೋರ್ ಕೋಡ್"
+      },
+      "ComputedThreashold" : {
+        "label" : "ಗಣನೆ ಮಾಡಿದ ಮಿತಿಮುಡುಪು"
+      },
+      "Autotuned" : {
+        "label" : "ಸ್ವಯಂ ಅರ್ಹತೆ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಅಗತ್ಯವಾದ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ...",
+        "detail" : "ಅಗತ್ಯವಾದ ಸೆಟಪ್ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ ಆದರೆ ಕೆಲವು ಬಾಕಿ ಹಂತಗಳು ನಿಮ್ಮ ಸಂಸ್ಥೆಗೂ ಈ ಸಾಫ್ಟ್‌ವೇರ್‌ನಿಂದ ಪೂರ್ಣ ಪ್ರಯೋಜನ ಪಡೆಯುವುದನ್ನು ಅಡ್ಡಿಪಡಿಸುತ್ತಿವೆ"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್‌ನಲ್ಲಿ ಕೆಲವು ಅಗತ್ಯ ಹಂತ ಬಾಕಿಯಿದೆ",
+        "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence ವ್ಯವಸ್ಥೆ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ಸಿಸ್ಟಮ್ ಸಂಪಾದಿಸಿ"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms ಪೂರೈಕೆದಾರರ ಪ್ರವೇಶವನ್ನು ಸಜ್ಜುಗೊಳಿಸಿ"
+      },
+      "ExtensiveStup" : {
+        "label" : "ವಿಸ್ತೃತ ಮೂಲಸೌಕರ್ಯ/ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಗಳು"
+      },
+      "MainPanelTitle" : {
+        "label" : "ಬಳಕೆ ಮಾಡಿದ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಗಳನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "EasySetup" : {
+        "label" : "ಸರಳ ಪ್ರಾರಂಭಿಕ ಸೆಟಪ್/ಕಾನ್ಫಿಗರೇಶನ್ ಸರಿಪಡಿಸಿ"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಗಳನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "ವಿವರಣೆ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ರುಜುವಾತುಗಳನ್ನು ರಚಿಸಿ"
+      },
+      "CreateBtn" : {
+        "label" : "ರಚಿಸಿ"
+      },
+      "customSearchEngineId" : {
+        "label" : "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಐಡಿ",
+        "help" : "Google search api ರುಜುವಾತುಗಳ ನೋಂದಣಿಯಲ್ಲಿ ಪಡೆದಿರುವ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Google search api ರುಜುವಾತುಗಳ ನೋಂದಣಿಯಲ್ಲಿ ಪಡೆದಿರುವ api key ಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "MainPanel" : {
+        "label" : "Google search api ಅನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ಅಳಿಸಿ",
+        "help" : "Google search api ರುಜುವಾತುಗಳನ್ನು ಅಳಿಸಿ"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search ಸಂರಚನೆ",
+        "help" : "Deep search ಸಂರಚನೆಯನ್ನು ಸೇರಿಸಿ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಸಂಪಾದಿಸಿ"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ನಿಷ್ಕ್ರಿಯಗೊಂಡಿದೆ"
+      },
+      "EditGroupBtn" : {
+        "label" : "ಸಂಪಾದಿಸಿ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "UsersHeader" : {
+        "label" : "ಬಳಕೆದಾರರು"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ಎಐ ದೂರದ ಪೂರೈಕೆದಾರ ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗೈಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
         "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ಎಐ ದೂರದ ಪೂರೈಕೆದಾರ ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗೈಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama ಸ್ಥಳೀಯ (ಅಥವಾ lan) ಸರ್ವರ್ ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "forUses" : {
+        "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
+        "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
+        "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಒಪ್ಪಿದೆ!",
+        "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ನೀವು ಈ ಚಾಟ್ ಅನ್ನು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುತ್ತೀರಾ?",
         "header" : "ಚಾಟ್ ಅಳಿಸುವ ಕ್ರಿಯೆ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ವಿಷಯವನ್ನು ಸೇರಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ನಡವಳಿಕೆಯನ್ನು ಬದಲಿಸಿ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ಆಕರಗಳು",
+        "help" : "ವಿಶ್ಲೇಷಿಸಿರುವ ಡಾಕ್ಯುಮೆಂಟ್ ಪಟ್ಟಿ ತೆರೆ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ಉತ್ತರ ಮತ್ತು ಆಕರಗಳ ವಿವರಗಳು"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ವಿಶ್ಲೇಷಣೆ ಫಲಿತಾಂಶ"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Research ನಲ್ಲಿ ಹುಡುಕುವಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: confluence ಸಿಸ್ಟಮ್ ಗೆ ಪ್ರವೇಶಿಸುವಲ್ಲಿ ಸಮಸ್ಯೆಗಳು"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ಹೊಸ ಚಾಟ್ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ",
+        "detail" : "ಹೊಸ ಚಾಟ್ ಯಶಸ್ವಿಯಾಗಿ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ಆಕರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ಕೆಳಗಿನ ಆಯ್ಕೆಗಳಲ್ಲಿ ಕನಿಷ್ಠ ಒಂದು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ಬಿಡು"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ನೊಲಡ್ಜಿ ಬೇಸ್ ಗಳು"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ಸಿಸ್ಟಮ್ ಗಳು"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'ಚಾಟ್ ವಿತ್' ಪಟ್ಟಿಗೆ ಡಾಕ್ಯುಮೆಂಟ್ ಸೇರಿಸಿ "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್ ನಡೆಯುತ್ತಿದೆ"
+      },
+      "RagLLMResponse" : {
+        "label" : "ಪೂರ್ಣಗೊಳಿಸಬಲ್ಲ ಉತ್ಪಾದನೆ ನಡೆಯುತ್ತಿದೆ"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm ಗೆ ಕೇಳಲಾಗುತ್ತಿದೆ"
+      },
+      "Waiting" : {
+        "label" : "ಉತ್ತಮ ಪ್ರತಿಕ್ರಿಯೆಗೆ ಯೋಜನೆ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ಟೂಲ್‌ಗಳು ನಡೆಯುತ್ತಿವೆ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI ಸಹಾಯಿತ ಹುಡುಕಾಟ ನಡೆಯುತ್ತಿದೆ"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಿದ ಫೈಲ್"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ವಿಶ್ಲೇಷಿತ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ವಿಶ್ಲೇಷಿತ ಸಿಸ್ಟಮ್ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ಅಂತಿಮ ವರದಿ ಒಕ್ಕೂಸಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "RUNNING" : {
+        "label" : "ಚಾಲನೆಯಲ್ಲಿದೆ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತಿದ್ದೇನೆ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "ಆಯ್ಕೆಯಾದ ಏಜೆಂಟಿಕ್ ಫ್ಲೋ, ಉತ್ತರ ನೀಡುತ್ತಿರುವ ಏಜೆಂಟ್ ಚಾಲನೆಯಲ್ಲಿದೆ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "ಸೇವಾ ಮಟ್ಟ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "ನೀವು ಆಯ್ಕೆಮಾಡಿದ ಏಜೆಂಟ್ ಕಾರ್ಯಗತವಾಗುತ್ತಿದೆ"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ಫೈಲ್(ಗಳು) ಅಪ್‌ಲೋಡ್ ಮಾಡಿ"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "ಕಂಪನಿ ಫೈಲ್(ಗಳು) ಬ್ರೌಸ್/ಹುಡುಕಿ"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿದ ಡಾಕ್ ಚಾಟ್"
+      },
+      "agenticChat" : {
+        "label" : "ಏಜೆಂಟಿಕ್ ಚಾಟ್"
+      },
+      "rag" : {
+        "label" : "R.a.g. ಚಾಟ್"
+      },
+      "deepSearch" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/ಬಹು ಆಕರಗಳು"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Google ವೆಬ್ ಸರ್ಚ್"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Confluence ಹುಡುಕಾಟ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/ನೊಲಡ್ಜಿ ಬೇಸ್ ಹುಡುಕಾಟ"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ಫೈಲ್(ಗಳು) ಜೊತೆಗೆ ಚಾಟ್ ಮಾಡಿ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Google ವೆಬ್ ಸರ್ಚ್"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Confluence ಹುಡುಕಾಟ"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "ನಕಲಿ ಮಾಡಬೇಕಾದ Google ಬಳಕೆದಾರ",
         "help" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ",
         "placeholder" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ"
+      },
+      "OK" : {
+        "summary" : "ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ",
+        "detail" : "ಅಪ್‌ಡೇಟ್ ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
         "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
         "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "ಪೂರ್ಣ ಪಠ್ಯ ಸೂಚ್ಯಂಕಗೊಳಿಸುವಿಕೆ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಿಸದ ಡಾಕ್ಸ್",
+        "label-1" : "ಡಾಕ್ಸ್ ಸಂಸ್ಕರಿಸುವಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಸ್"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಸ್",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಸ್",
+        "dataset-2-label" : "ಎರ್ರರ್ ಡಾಕ್ಸ್",
+        "dataset-3-label" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಡಾಕ್ಸ್"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "ಸಂಸ್ಕರಿಸಿದ ಟೋಕನ್‌ಗಳು",
+        "dataset-1-label" : "ಟೋಕನ್ ಪ್ರೊಸೆಸಿಂಗ್‌ನಲ್ಲಿ ದೋಷ"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "ಎಲ್ಲಾ ಕಾರ್ಯಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
         "help" : "ಎಲ್ಲಾ ಲಭ್ಯವಿರುವ ಉಪಕರಣಗಳು ಮತ್ತು ಕಾರ್ಯ ಆಹ್ವಾನಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ, ಇದನ್ನು ಸೆಟ್ ಮಾಡದೇ ಇದ್ದರೆ ನಂತರ llms ಆಡ್ಮಿನ್ ಪ್ಯಾನೆಲ್ ನಲ್ಲಿ ಅವುಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ರಿಮೋಟ್ ಪೂರೈಕೆಕಾರನು ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರನು ಪ್ರಾರಂಭವಾಗಿದೆ ಮತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ಕ್ರಿಯೆಯಲ್ಲಿ ಅಪವಾದ:401 ಅರ್ಹತೆ ಇಲ್ಲ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 401 ಅರ್ಹತೆ ಇಲ್ಲ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ಕ್ರಿಯೆಯಲ್ಲಿ ಅಪವಾದ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ರಚಿಸಿ ಮತ್ತು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "vendorId" : {
+        "label" : "ನಿಮ್ಮ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ನಿಮ್ಮ ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮತ್ತು ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಗಳ ಆರಂಭಿಕ ಪೂರೈಕೆದಾರ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "secretId" : {
+        "label" : "ಪೂರೈಕೆದಾರರ سندಸಂಪರ್ಕ (api ಕೀ) ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ಆಯ್ಕೆಯಾದ llm ಪೂರೈಕೆದಾರಕ್ಕೆ ಇರುವ سندಗಳನ್ನು ಆರಿಸಿ"
+      },
+      "InternalServiceModel" : {
+        "label" : "ಆಂತರಿಕ ಸೇವೆಗಳ ಚಾಟ್ ಮಾದರಿ",
+        "help" : "ಆಂತರಿಕ ಸೇವೆಗಳಿಗೆ ಸಂರಚಿಸಿದ ಚಾಟ್ ಮಾದರಿ ಮಾಹಿತಿ ಸಂಗ್ರಹ, ಸಾರಾಂಶ ಸೃಷ್ಟಿಸಲಿಕ್ಕೆ ಹಾಗು ಆಂಟೆನಲ್ ವರ್ಕ್‌ಫ್ಲೋಗಳಿಗೆ ಜವಾಬ್ದಾರಿ ವಹಿಸುತ್ತದೆ."
+      },
+      "ChatModel" : {
+        "label" : "ಡೀಫಾಲ್ಡ್ ಚಾಟ್ ಮಾದರಿ",
+        "help" : "ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿ ಬಳಕೆದಾರರ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸುವುದರ ಜೊತೆಗೆ ನಿರ್ದಿಷ್ಟವಾಗಿ ಸಂರಚಿಸದ ವರ್ಕ್‌ಫ್ಲೋಗಳನ್ನು ನಿರ್ವಹಿಸುತ್ತದೆ. ಇದು ಶಕ್ತಿಶಾಲಿಯಾಗಿದ್ದು, ವಿಶ್ವಾಸಾರ್ಹವಾಗಿರಬೇಕು, ವೆಚ್ಚ, ಪ್ರದರ್ಶನ ಮತ್ತು ಫಲಿತಾಂಶ ಗುಣಮಟ್ಟಕ್ಕೆ ಉತ್ತಮ ಸಮತೋಲನವಿರಬೇಕು."
+      },
+      "ProviderBuy" : {
+        "label" : "ಎಪಿ ಕೀ ಕ್ರೆಡಿಟ್ ಖರೀದಿ ಲಿಂಕ್"
+      },
+      "ProviderWWW" : {
+        "label" : "ವೆಬ್ ಸೈಟ್ ಲಿಂಕ್"
+      },
+      "WebSiteLink" : {
+        "label" : "ಪೂರೈಕೆದಾರ ವೆಬ್‌ಸೈಟ್",
+        "help" : "ಸಾಮಾನ್ಯ ಪೂರೈಕೆದಾರ ಮಾಹಿತಿಗಾಗಿ ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ."
+      },
+      "AcquireCreditLink" : {
+        "label" : "ಪೂರೈಕೆದಾರರ ಕ್ರೆಡಿಟ್ ಖರಿೀದಿ",
+        "help" : "ನಿಮ್ಮ api ಕೀ(ಗಳು)ಗಾಗಿ ಕ್ರೆಡಿಟ್ ಖರೀದಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ."
+      },
+      "EmbeddingModel" : {
+        "label" : "ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ",
+        "help" : "ಈ ಮಾದರಿ ನಿಮ್ಮ ಡೇಟಾ ಮತ್ತು ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಸೆಮಾಂಟಿಕ್ ಇಂಡೆಕ್ಸಿಂಗ್ (ಎಂಬೆಡ್ಡಿಂಗ್) ಮತ್ತು ಪುನಃತೆಗೆಯಲು ಜವಾಬ್ದಾರಿ ವಹಿಸುತ್ತದೆ"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ನೀವು ಇದನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ",
         "detail" : "ಈ ವಸ್ತುವನ್ನು ಅನ್ವಯಿಕೆಯ ಇತರ ಭಾಗಗಳಿಂದ ಉಲ್ಲೇಖಿಸಲಾಗಿದೆ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ಅಭಿಯಾನ ಸಮಯದಲ್ಲಿ ಹೊರತಾದ ವಿಶೇಷ ಸ್ಥಿತಿ: URL ನಲ್ಲಿ ಸಮಸ್ಯೆ: http://localhost:11434/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: URL ನಲ್ಲಿ ಸಮಸ್ಯೆ: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ಅಭಿಯಾನ ಸಮಯದಲ್ಲಿ ಹೊರತಾದ ವಿಶೇಷ ಸ್ಥಿತಿ: apiKey ಸೆಟ್ ಮಾಡಬೇಕು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: apiKey ಸೆಟ್ ಮಾಡಬೇಕು"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ಚಾಟ್ ಸ್ಟ್ರೀಮಿಂಗ್ ಉತ್ತರದಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: http://localhost:8000/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಸಂಪರ್ಕ ಪುನರ್ ಸೇರ್ಪಡೆ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆಗೆ ಕೆಲಸ ಮಾಡುವಾಗ ಎರೆರ್: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ಪೂರ್ಣಗೊಂಡಿದೆ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಒಪ್ಪಿದೆ!",
+        "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "ಬಳಸಲಾದ ಗುರುತು",
         "help" : "google drive ವ್ಯವಸ್ಥೆಗೆ ಪ್ರವೇಶಿಸಲು ಗುರುತನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ನಿರ್ಮಿಸಿ"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ಚಾಟ್"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ಸಂಬಂಧಿತ ಮಾಹಿತಿಗಳನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ಹೊಂದಾಣಿಕೆಯ ಅಂತಿಮ ವರದಿ ತಯಾರಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಲಾದ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ಗುರಿಗೆ ವಿಶ್ಲೇಷಿಸಲಾದ ಸಿಸ್ಟಮ್ ಹುಡುಕಾಟ ಫಲಿತಾಂಶ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ಇಲ್ಲಿದೆಗಾದರೂ ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ"
+      },
+      "LaunchBtn" : {
+        "label" : "ಹುಡುಕು ಆರಂಭಿಸಿ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ಆಳವಾದ ಹುಡುಕಾಟ ಬಿಟ್ಟುಬಿಡಿ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ಆಯ್ದ ಜ್ಞಾನ ತಳಸಾಲುಗಳು"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ಆಯ್ದ ವ್ಯವಸ್ಥೆಗಳು"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ಮೂಲಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ವಿಶ್ಲೇಷಿಸಿದ ಫೈಲ್"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ಸೇರಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ಹುಡುಕಾಟ ಸೆಟಿಂಗ್"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ಪತ್ರಿಕೆಗಳು ಸಂಬಂಧಿತ ಮಾಹಿತಿಗಾಗಿ ಪ್ರಾಂಪ್ಟ್ ನಮೂದಿಸಿ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಸಂಬಂಧಿತ ಮಾಹಿತಿಯ ಹೊಂದಾಣಿಕೆಗಾಗಿ ಪ್ರಾಂಪ್ಟ್ ನಮೂದಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "Deep search ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಸೆಟಿಂಗ್"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Deep search ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "Deep search ಸಂರಚನೆಯ ಸ್ವಯಚಾಲಿತವಾಗ生成ಗೊಳ್ಳುವ ವಿಶಿಷ್ಟ ಕೋಡ್"
+      },
+      "searchType" : {
+        "label" : "ಹುಡುಕಾಟ ಪ್ರಕಾರ",
+        "help" : "ಒಂದು ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟ ಅಥವಾ ಬಹು ಹಂತಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "topK" : {
+        "label" : "ಮೀಳಿಸಿಕೊಂಡ ಪಠ್ಯ ವಿಭಾಗಗಳ ಸಂಖ್ಯೆ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ಬಳಸುತ್ತಿರುವ llm",
+        "help" : "Deep search ಗೆ ಬಳಸುವ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಯನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಿ, ಯಾವುದೇ ಆಯ್ಕೆಮಾಡದಿದ್ದರೆ ಪೂರ್ವನಿಯೋಜಿತ ಮाडೆಲ್ ಬಳಸಲಾಗುತ್ತದೆ."
+      },
+      "analisysPrompt" : {
+        "label" : "ದಾಖಲೆಗಳು ವಿಶ್ಲೇಷಣೆ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ದಾಖಲೆಗಳು ಭಾಗದಲ್ಲಿ ಸಂಬಂಧಿತ ಮಾಹಿತಿಯನ್ನು ತೆಗೆಯಲು ಬಳಸುವ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      },
+      "consolidationPrompt" : {
+        "label" : "ತೆಗೆಯಲ್ಪಟ್ಟ ಮಾಹಿತಿಗಳ ಹೊಂದಾಣಿಕೆ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಮೀಳಿಸಿಕೊಂಡ ದಾಖಲೆಯ ಭಾಗಗಳಿಂದ ಹೊರತೆಗೆದ ಮಾಹಿತಿಯನ್ನು ಒಂದು ವರದಿಗೋಸ್ಕರ ಹೊಂದಿಸಲು ಬಳಸುವ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಮೊದಲ ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ಎರಡನೇ ಹಂತದ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಎರಡನೇ ಹಂತದ ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "defaultModel" : {
+        "label" : "ಪೂರ್ವನಿಯೋಜಿತ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ",
+        "help" : "Deep search ಪ್ರಕ್ರಿಯೆಗೆ ಪೂರ್ವನಿಯೋಜಿತ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "similarityThreashold" : {
+        "label" : "ಹುಡುಕಾಟ ಸಾಮ್ಯ ತಾರತಮ್ಯ ಮೌಲ್ಯ",
+        "help" : "ಸೆಮ್ಯಾಂಟಿಕ್ ಸಾಮ್ಯತೆ ತಾರತಮ್ಯ ಮೌಲ್ಯ (0.5 ರಿಂದ 1.0 ರ ನಡುವೆ)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "ಭದ್ರತಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "accessibleToAll" : {
+        "label" : "ಎಲ್ಲರಿಗೂ ಲಭ್ಯ"
+      },
+      "datasource" : {
+        "label" : "ದತ್ತಾಂಶ ಆಕರ"
+      },
+      "allowedGroups" : {
+        "label" : "ಅನುಮತಿಸಲಾದ ಗುಂಪುಗಳು"
+      },
+      "allowedUsers" : {
+        "label" : "ಅನುಮತಿಸಲಾದ ಬಳಕೆದಾರರು"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ಪ್ರತಿ ದತ್ತಾಂಶ ಆಕರ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ",
+        "help" : "ಪ್ರತಿ ಬಾಹ್ಯ ದತ್ತಾಂಶ ಆಕರ ಮತ್ತು ಬಳಕೆದಾರ ಅಥವಾ ಗುಂಪಿಗೆ ಡೀಪ್ ಸರ್ಚ್ ಲಭ್ಯವಾಗುತ್ತದೆ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ಸರಳ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ಪ್ರತಿ ದತ್ತಾಂಶ ಆಕರ ಬಳಕೆದಾರ/ಗುಂಪು ಪ್ರವೇಶ"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "বಳಕೆ ಮಾಡಿ ಅಥವಾ api ಕೀ سندಗಳನ್ನು ರಚಿಸಿ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ಕೀ/ سندಗಳು",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಿಗಾಗಿ api ಕೀ ಅಥವಾ سندಗಳನ್ನು ಆರಿಸಿ"
+      },
+      "NewApiKey" : {
+        "label" : "ಹೊಸ api ಕೀ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರ ಹಲಗಾಗಿ ಹೊಸ api ಕೀ ಸೇರಿಸಿ"
+      },
+      "PiSave" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "NewUserName" : {
+        "label" : "ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗಳನ್ನು ಬಳಸಲು ಬಳಸುವ ಹೆಸರು"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ಇರುವ ಅಥವಾ ಹೊಸದನ್ನು ಬಳಸಿ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಿಗಾಗಿ ಇರುವ ಅಥವಾ ಹೊಸ سندಗಳನ್ನು ಬಳಸಿ"
+      },
+      "newSecretDescription" : {
+        "label" : "ಸಂದರ್ಶನದ ವಿವರ",
+        "help" : "Api ಕೀ سند ವಿವರಣೆ"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ಸಂದರ್ಶನಗಳು ರಚಿಸಲಾಗಿದೆ",
+        "detail" : "ಸಂದರ್ಶನಗಳು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama ಸರ್ವರ್ ಜೊತೆಗೆ ಸಂವಹನ ದೋಷ",
+        "detail" : "ದೂರಸ್ಥ ಸಿಸ್ಟಮ್ ಜೊತೆ ಸಂವಹನದಲ್ಲಿ ನೆಟ್ವರ್ಕ್ ದೋಷ\nವಿಷಯದ ಅನುವು/ಮಾದರಿಗಳ ಪಟ್ಟಿ url:nullapi/tags ಬಳಸುವಲ್ಲಿ ದೋಷ"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ಬಳಕೆದಾರರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ಆಂತರಿಕ ಸೇವೆಗಳಿಗೆ ಬಳಸುವ ಮಾದರಿ"
       }
     }
   }

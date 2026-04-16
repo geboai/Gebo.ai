@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMExistingConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class LLMExistingConfiguration {
   @JsonProperty("existingModelConfig")
@@ -66,6 +66,9 @@ public class LLMExistingConfiguration {
 
   @JsonProperty("secretInfo")
   private SecretInfo secretInfo = null;
+
+  @JsonProperty("baseUrl")
+  private String baseUrl = null;
 
   public LLMExistingConfiguration existingModelConfig(GObjectRefGBaseModelConfig existingModelConfig) {
     this.existingModelConfig = existingModelConfig;
@@ -121,6 +124,24 @@ public class LLMExistingConfiguration {
     this.secretInfo = secretInfo;
   }
 
+  public LLMExistingConfiguration baseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
+    return this;
+  }
+
+   /**
+   * Get baseUrl
+   * @return baseUrl
+  **/
+  @Schema(description = "")
+  public String getBaseUrl() {
+    return baseUrl;
+  }
+
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,12 +154,13 @@ public class LLMExistingConfiguration {
     LLMExistingConfiguration llMExistingConfiguration = (LLMExistingConfiguration) o;
     return Objects.equals(this.existingModelConfig, llMExistingConfiguration.existingModelConfig) &&
         Objects.equals(this.modelType, llMExistingConfiguration.modelType) &&
-        Objects.equals(this.secretInfo, llMExistingConfiguration.secretInfo);
+        Objects.equals(this.secretInfo, llMExistingConfiguration.secretInfo) &&
+        Objects.equals(this.baseUrl, llMExistingConfiguration.baseUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(existingModelConfig, modelType, secretInfo);
+    return Objects.hash(existingModelConfig, modelType, secretInfo, baseUrl);
   }
 
 
@@ -150,6 +172,7 @@ public class LLMExistingConfiguration {
     sb.append("    existingModelConfig: ").append(toIndentedString(existingModelConfig)).append("\n");
     sb.append("    modelType: ").append(toIndentedString(modelType)).append("\n");
     sb.append("    secretInfo: ").append(toIndentedString(secretInfo)).append("\n");
+    sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }

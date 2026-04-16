@@ -65,7 +65,31 @@ services:
       - /home/gebo.ai/neo4j/logs:/logs
       - /home/gebo.ai/neo4j/plugins:/plugins
       - /home/gebo.ai/neo4j/import:/import
-
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - plugins.security.ssl.transport.enabled=true
+      # consigliato in docker (evita bootstrap checks su memlock)
+      - bootstrap.memory_lock=true
+      # heap: regola in base alla RAM della macchina
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    
   # =======================
   # gebo.ai
   # =======================
@@ -79,6 +103,7 @@ services:
       - mongo
       - qdrant
       - neo4j
+      - opensearch
     volumes:
       # Bind mount two local directories for work and home
       - /home/gebo.ai/work:/opt/gebo.ai/work
@@ -97,7 +122,7 @@ services:
       JAVA_TOOL_OPTIONS: --enable-native-access=ALL-UNNAMED
         -Dsun.jnu.encoding=UTF-8
         -Dfile.encoding=UTF-8
-        -Dai.gebo.neo4j.enabled=true       
+        -Dai.gebo.neo4j.enabled=true
         -XX:+AggressiveHeap
         -XX:+PrintGCDetails
         -Xlog:gc:/opt/gebo.ai/logs/gc.log

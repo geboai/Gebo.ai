@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
 	<dependencies>
@@ -23,6 +23,11 @@
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.core.contents.security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -71,6 +76,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.search.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
@@ -87,23 +97,23 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			
+
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test-autoconfigure</artifactId>
-			
+
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			
+
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			
+
 		</dependency>
 	</dependencies>
 </project>

@@ -1,7 +1,8 @@
 package ai.gebo.integration.content.handler;
 
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
-public interface IGIntegrationSystemContentHandler extends IGContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint>{
+public interface IGIntegrationSystemContentHandler extends IGContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint,NoContentConsumingSessionParam>{
 
 }

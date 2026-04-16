@@ -24,7 +24,7 @@ import { FastInstallationSetupData, GeboFastInstallationSetupControllerService, 
 import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
-
+const setupMessage:ToastMessageOptions={id:"WELCOME2SETUP", summary: "Welcome to Gebo.ai setup", detail: "Create the administration credentials for this installation", severity: "info" };
 /**
  * Component responsible for the initial fast setup process of the Gebo.ai application.
  * Provides a user interface for creating the first admin account and completing installation.
@@ -70,7 +70,7 @@ export class FastSetupComponent implements OnInit {
     licencee: string = "";
 
     /** Array of messages to display to the user */
-    userMessages: ToastMessageOptions[] = [{ summary: "Welcome to gebo.ai setup", detail: "Enter your username (email) and password, wich LLMS to use and your api keys to setup", severity: "success" }];
+    userMessages: ToastMessageOptions[] = [setupMessage];
 
     /**
      * Constructor initializes required services for installation, login, and navigation
@@ -104,6 +104,7 @@ export class FastSetupComponent implements OnInit {
      * Creates a validator to ensure passwords match and meet minimum requirements.
      */
     ngOnInit(): void {
+        this.userMessages=[setupMessage];
         this.checkSystemSetup();
         const equalPasswordsValidator: ValidatorFn = (control: AbstractControl) => {
             const validationError: ValidationErrors = {};
@@ -129,7 +130,7 @@ export class FastSetupComponent implements OnInit {
         this.formGroup.controls["username"].valueChanges.subscribe((username: string) => {
             this.licencee = username;
         });
-
+        
     }
 
     /**

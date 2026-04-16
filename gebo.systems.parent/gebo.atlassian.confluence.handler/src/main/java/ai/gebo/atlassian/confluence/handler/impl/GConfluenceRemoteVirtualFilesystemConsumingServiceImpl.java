@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -34,6 +31,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceAttachmentApi;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceConnection;
 import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceContentApi;
@@ -75,12 +73,11 @@ import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemConsumi
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
-import jakarta.el.MethodNotFoundException;
 
 /**
- * Implementation of the Confluence virtual filesystem service.
- * Provides access to Confluence content through a virtual filesystem interface,
- * supporting both cloud and on-premise Confluence instances.
+ * Implementation of the Confluence virtual filesystem service. Provides access
+ * to Confluence content through a virtual filesystem interface, supporting both
+ * cloud and on-premise Confluence instances.
  */
 @Service
 public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
@@ -91,7 +88,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Constructor for the service.
 	 * 
-	 * @param documentFactory Factory for creating document references
+	 * @param documentFactory   Factory for creating document references
 	 * @param connectionFactory Factory for creating Confluence connections
 	 */
 	public GConfluenceRemoteVirtualFilesystemConsumingServiceImpl(IGDocumentReferenceFactory documentFactory,
@@ -106,7 +103,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * Helper method to safely retrieve a value from the cache.
 	 * 
 	 * @param constant The key to look up in the cache
-	 * @param cache The cache to search
+	 * @param cache    The cache to search
 	 * @return The value as a string, or null if not found
 	 */
 	private String getId(String constant, Map<String, Object> cache) {
@@ -116,10 +113,10 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates a resource handle from a virtual filesystem object.
 	 * 
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param system    The Confluence system
+	 * @param endpoint  The project endpoint
 	 * @param reference The virtual filesystem object
-	 * @param cache A cache for storing metadata
+	 * @param cache     A cache for storing metadata
 	 * @return A Confluence resource reference
 	 * @throws GeboContentHandlerSystemException If metadata is missing or invalid
 	 */
@@ -141,19 +138,20 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		obj.attachmentTitle = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_TITLE_METAINFO, metainfos);
 		obj.parentPageId = getId(ConfluenceNativePositionObject.CONFLUENCE_CONTENT_PARENT_METAINFO, metainfos);
 		obj.attachmentId = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_ID_METAINFO, metainfos);
+		obj.downloadUrl = getId(ConfluenceNativePositionObject.CONFLUENCE_DOWNLOAD_RELATIVE_URL, metainfos);
 		return obj;
 	}
 
 	/****************************************************************************************************************
 	 * Streams a page or an attachment content
 	 * 
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param system    The Confluence system
+	 * @param endpoint  The project endpoint
 	 * @param reference The resource reference
-	 * @param cache A cache for storing metadata
+	 * @param cache     A cache for storing metadata
 	 * @return An input stream containing the content
 	 * @throws GeboContentHandlerSystemException If the resource cannot be accessed
-	 * @throws IOException If there is an I/O error
+	 * @throws IOException                       If there is an I/O error
 	 */
 	@Override
 	public InputStream streamResource(GConfluenceSystem system, GConfluenceProjectEndpoint endpoint,
@@ -164,6 +162,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		String attachmentId = reference.attachmentId;
 		String attachmentTitle = reference.attachmentTitle;
 		String parentPageId = reference.parentPageId;
+		String downloadUrl = reference.downloadUrl;
 		if (resourceType == null) {
 			final String msg = "Reference=>" + reference + " has no resource type";
 			LOGGER.error(msg);
@@ -190,6 +189,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		try {
 			switch (type) {
 			case PAGE: {
+
 				if (pageId == null) {
 					throw new GeboContentHandlerSystemException(
 							"Resource=>" + reference + " is a PAGE but has no pageId");
@@ -216,17 +216,28 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 				;
 				break;
 			case ATTACHMENT: {
-				if (parentPageId == null || attachmentTitle == null) {
-					throw new GeboContentHandlerSystemException(
-							"Resource=>" + reference + " is an ATTACHMENT but has no parentPageId or attachmentTitle");
-				}
+
 				if (confluenceBrowser instanceof CloudConfluenceConnection) {
 					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
 					CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
 					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
 				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
 					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
 					OnPremiseConfluenceAttachmentApi attachmentApi = new OnPremiseConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
 					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
 				}
 			}
@@ -259,7 +270,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 */
 	@Override
 	protected ConfluenceNavigationCoordinates getPositionCoordinate(
-			List<ConfluenceNativePositionObject> childCoordinates) throws GeboContentHandlerSystemException {
+			List<ConfluenceNativePositionObject> childCoordinates, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 
 		return ConfluenceNavigationUtil.toNavigationCoordinates(childCoordinates);
 	}
@@ -268,11 +279,11 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * Retrieve childs of the actual reference, basically childs are
 	 * 
 	 * @param nativeCoordinates The native coordinates
-	 * @param position The navigation position
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
-	 * @param messagesConsumer The message consumer
-	 * @param environment The environment map
+	 * @param position          The navigation position
+	 * @param system            The Confluence system
+	 * @param endpoint          The project endpoint
+	 * @param messagesConsumer  The message consumer
+	 * @param environment       The environment map
 	 * @return A list of native coordinate pointers
 	 * @throws GeboContentHandlerSystemException If retrieval fails
 	 */
@@ -348,9 +359,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates a list of coordinate pointers from an on-premise full content.
 	 * 
-	 * @param fullContent The full content
+	 * @param fullContent       The full content
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> childTree(OnPremiseFullContent fullContent,
@@ -387,9 +398,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates a list of coordinate pointers from a cloud full content.
 	 * 
-	 * @param fullContent The full content
+	 * @param fullContent       The full content
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> childTree(CloudConfluenceFullContent fullContent,
@@ -426,9 +437,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Converts a list of on-premise content items to native coordinate pointers.
 	 * 
-	 * @param items The content items
+	 * @param items             The content items
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> toPointersWithChildFolders(List<OnPremiseConfluenceContentItem> items,
@@ -457,9 +468,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Converts a list of cloud content items to native coordinate pointers.
 	 * 
-	 * @param items The content items
+	 * @param items             The content items
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> toPointersWithChildFolders(List<CloudConfluenceListItem> items,
@@ -484,12 +495,13 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * Creates a list of coordinate pointers from on-premise content items and attachments.
+	 * Creates a list of coordinate pointers from on-premise content items and
+	 * attachments.
 	 * 
-	 * @param items The content items
-	 * @param attachments The attachment items
+	 * @param items             The content items
+	 * @param attachments       The attachment items
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> toPointersWithAttachments(List<OnPremiseConfluenceContentItem> items,
@@ -517,12 +529,13 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * Creates a list of coordinate pointers from cloud content items and attachments.
+	 * Creates a list of coordinate pointers from cloud content items and
+	 * attachments.
 	 * 
-	 * @param items The content items
-	 * @param attachments The attachment items
+	 * @param items             The content items
+	 * @param attachments       The attachment items
 	 * @param nativeCoordinates The native coordinates
-	 * @param browser The content API
+	 * @param browser           The content API
 	 * @return A collection of native coordinate pointers
 	 */
 	private Collection<NativeCoordinatePointer> toPointersWithAttachments(List<CloudConfluenceListItem> items,
@@ -550,14 +563,14 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Converts navigation coordinates to native coordinates.
 	 * 
-	 * @param position The navigation position
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
-	 * @param root The virtual folder root
-	 * @param consumer The content consumer
+	 * @param position         The navigation position
+	 * @param system           The Confluence system
+	 * @param endpoint         The project endpoint
+	 * @param root             The virtual folder root
+	 * @param consumer         The content consumer
 	 * @param messagesConsumer The message consumer
-	 * @param errorConsumer The error consumer
-	 * @param environment The environment map
+	 * @param errorConsumer    The error consumer
+	 * @param environment      The environment map
 	 * @return A list of native position objects
 	 * @throws GeboContentHandlerSystemException If conversion fails
 	 */
@@ -569,8 +582,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 			throws GeboContentHandlerSystemException {
 		List<ConfluenceNativePositionObject> natives = new ArrayList<ConfluenceNativePositionObject>();
 		try {
-			ConfluenceNativePositionObject _root = loadRoot(position.getRoot(), system, endpoint, messagesConsumer,
-					environment);
+			ConfluenceNativePositionObject _root = loadRoot(position.getRoot(), system, environment);
 			if (_root == null)
 				return natives;
 			natives.add(_root);
@@ -582,7 +594,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 			if (position.getBrowsingStepsCustom() != null) {
 				for (ConfluencePathComponent customitem : position.getBrowsingStepsCustom()) {
 					ConfluenceNativePositionObject thisPathEntry = loadPathComponent(customitem, natives, system,
-							endpoint, messagesConsumer, environment);
+							environment);
 					if (thisPathEntry == null) {
 						LOGGER.error("The path item:" + customitem.type + " id=" + customitem.id
 								+ " does not lead to a loadable entity");
@@ -595,94 +607,6 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 			throw new GeboContentHandlerSystemException("Cannot load this item", e);
 		}
 		return natives;
-	}
-
-	/**
-	 * Loads a path component from the Confluence system.
-	 * 
-	 * @param customitem The path component
-	 * @param natives The list of native position objects
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
-	 * @param messagesConsumer The message consumer
-	 * @param environment The environment map
-	 * @return A native position object
-	 * @throws GeboRestIntegrationException If loading fails
-	 */
-	private ConfluenceNativePositionObject loadPathComponent(ConfluencePathComponent customitem,
-			List<ConfluenceNativePositionObject> natives, GConfluenceSystem system, GConfluenceProjectEndpoint endpoint,
-			IGUserMessagesConsumer messagesConsumer, Map<String, Object> environment)
-			throws GeboRestIntegrationException {
-		ConfluenceNativePositionObject nativeObject = new ConfluenceNativePositionObject();
-		switch (system.getConfluenceVersion()) {
-
-		case CLOUD: {
-			CloudConfluenceConnection connection = getCloudConnection(environment);
-			CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
-			switch (customitem.type) {
-			case PAGE: {
-				CloudConfluenceContent page = contentApi.getContent(customitem.id);
-				nativeObject.setCloudConfluenceContent(page);
-			}
-				break;
-			case PAGE_CONTAINER: {
-				CloudConfluenceContent page = contentApi.getContent(customitem.id);
-				nativeObject.setCloudConfluenceContentAsContainer(page);
-			}
-				break;
-			case ATTACHMENT: {
-				CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
-				CloudConfluenceAttachmentItem attachent = attachmentApi.getAttachment(customitem.id);
-				nativeObject.setCloudConfluenceAttachment(attachent);
-			}
-
-			case SPACE: {
-				CloudConfluenceSpaceApi spaceApi = new CloudConfluenceSpaceApi(connection);
-				CloudConfluenceSpacesList space = spaceApi.getSpace(customitem.id);
-				if (space != null && !space.getResults().isEmpty())
-					nativeObject.setCloudConfluenceSpace(space.getResults().get(0));
-				else
-					throw new GeboRestIntegrationException(
-							"Space " + customitem.id + " does not exist in the remote system");
-			}
-				break;
-			}
-		}
-			break;
-		case ONPREMISE7X: {
-			OnPremiseConfluenceConnection connection = getOnPremiseConnection(environment);
-			OnPremiseConfluenceContentApi browser = new OnPremiseConfluenceContentApi(connection);
-			OnPremiseConfluenceSpaceApi spaceApi = new OnPremiseConfluenceSpaceApi(connection);
-			switch (customitem.type) {
-			case PAGE: {
-
-				OnPremiseConfluenceContent page = browser.getContent(customitem.id);
-				nativeObject.setOnPremiseConfluenceContent(page);
-			}
-				break;
-			case PAGE_CONTAINER: {
-				OnPremiseConfluenceContent page = browser.getContent(customitem.id);
-				nativeObject.setOnPremiseConfluenceContentAsContainer(page);
-			}
-				break;
-			case ATTACHMENT: {
-				throw new MethodNotFoundException("Attachment " + customitem.id + " not yet loadable explicitely");
-			}
-			case SPACE: {
-				OnPremiseConfluenceSpacesList space = spaceApi.getSpace(customitem.id);
-				if (space != null && !space.getResults().isEmpty())
-					nativeObject.setOnPremiseConfluenceSpace(space.getResults().get(0));
-				else
-					throw new GeboRestIntegrationException(
-							"Space " + customitem.id + " does not exist in the remote system");
-			}
-				break;
-			}
-		}
-			break;
-		}
-
-		return nativeObject;
 	}
 
 	/**
@@ -708,16 +632,14 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Loads the root object from the Confluence system.
 	 * 
-	 * @param root The virtual filesystem root
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
-	 * @param messagesConsumer The message consumer
+	 * @param root        The virtual filesystem root
+	 * @param system      The Confluence system
 	 * @param environment The environment map
 	 * @return A native position object for the root
 	 * @throws GeboRestIntegrationException If loading fails
 	 */
 	private ConfluenceNativePositionObject loadRoot(GVirtualFilesystemRoot root, GConfluenceSystem system,
-			GConfluenceProjectEndpoint endpoint, IGUserMessagesConsumer messagesConsumer,
+
 			Map<String, Object> environment) throws GeboRestIntegrationException {
 		ConfluenceNativePositionObject nativeObject = new ConfluenceNativePositionObject();
 		if (system.getConfluenceVersion() != null) {
@@ -758,8 +680,8 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates an environment for interacting with the Confluence system.
 	 * 
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param system        The Confluence system
+	 * @param endpoint      The project endpoint
 	 * @param errorConsumer The error consumer
 	 * @return A map containing environment variables
 	 * @throws GeboContentHandlerSystemException If environment creation fails
@@ -788,12 +710,35 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 		return environment;
 	}
 
+	protected Map<String, Object> createEnvironment(GConfluenceSystem system,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+		Map<String, Object> environment = new HashMap<String, Object>();
+		environment.put(VERSION_ID, system.getConfluenceVersion());
+		try {
+			switch (system.getConfluenceVersion()) {
+			case CLOUD: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getCloudConnection(system));
+
+			}
+				break;
+			case ONPREMISE7X: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getOnPremiseConnection(system));
+			}
+				break;
+			}
+		} catch (Throwable th) {
+			LOGGER.error("Cannot allocate confluence connection", th);
+			throw new GeboContentHandlerSystemException(th.getMessage(), th);
+		}
+		return environment;
+	}
+
 	/**
 	 * Clears the environment map.
 	 * 
 	 * @param environment The environment map to clear
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param system      The Confluence system
+	 * @param endpoint    The project endpoint
 	 * @throws GeboContentHandlerSystemException If clearing fails
 	 */
 	@Override
@@ -811,7 +756,7 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * @throws GeboContentHandlerSystemException If conversion fails
 	 */
 	@Override
-	protected ConfluenceNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected ConfluenceNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		ConfluenceNavigationCoordinates coordinates = new ConfluenceNavigationCoordinates();
 		coordinates.setRoot(path.root);
@@ -825,9 +770,9 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Provides a human-readable description of a Confluence object.
 	 * 
-	 * @param references The list of native position objects
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param references  The list of native position objects
+	 * @param system      The Confluence system
+	 * @param endpoint    The project endpoint
 	 * @param environment The environment map
 	 * @return A string describing the object
 	 */
@@ -860,8 +805,8 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Provides a human-readable description of a Confluence project endpoint.
 	 * 
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
+	 * @param system      The Confluence system
+	 * @param endpoint    The project endpoint
 	 * @param environment The environment map
 	 * @return A string describing the endpoint
 	 */
@@ -875,10 +820,10 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Verifies that a remote object exists.
 	 * 
-	 * @param system The Confluence system
-	 * @param endpoint The project endpoint
-	 * @param doc The virtual filesystem object
-	 * @param reference The resource reference
+	 * @param system      The Confluence system
+	 * @param endpoint    The project endpoint
+	 * @param doc         The virtual filesystem object
+	 * @param reference   The resource reference
 	 * @param environment The environment map
 	 * @return The virtual filesystem object if it exists
 	 * @throws GeboContentHandlerSystemException If verification fails
@@ -890,6 +835,267 @@ public class GConfluenceRemoteVirtualFilesystemConsumingServiceImpl extends
 			throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected List<ConfluenceNativePositionObject> toResourcesNativeCoordinates(ConfluenceNavigationCoordinates position,
+			GConfluenceSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		List<ConfluenceNativePositionObject> natives = new ArrayList<ConfluenceNativePositionObject>();
+		if (position.getRoot() != null) {
+			try {
+				ConfluenceNativePositionObject _root = loadRoot(position.getRoot(), system, environment);
+				if (_root == null)
+					return natives;
+				natives.add(_root);
+			} catch (GeboRestIntegrationException e) {
+				throw new GeboContentHandlerSystemException("Cannot load this item", e);
+			}
+		}
+		try {
+			if (position.getBrowsingStepsCustom() != null) {
+				for (ConfluencePathComponent customitem : position.getBrowsingStepsCustom()) {
+					ConfluenceNativePositionObject thisPathEntry = loadPathComponent(customitem, natives, system,
+							environment);
+					if (thisPathEntry == null) {
+						LOGGER.error("The path item:" + customitem.type + " id=" + customitem.id
+								+ " does not lead to a loadable entity");
+					}
+					natives.add(thisPathEntry);
+				}
+			}
+		} catch (GeboRestIntegrationException e) {
+			throw new GeboContentHandlerSystemException("Cannot load this item", e);
+		}
+		return natives;
+	}
+
+	private ConfluenceNativePositionObject loadPathComponent(ConfluencePathComponent customitem,
+			List<ConfluenceNativePositionObject> natives, GConfluenceSystem system, Map<String, Object> environment)
+			throws GeboRestIntegrationException {
+		ConfluenceNativePositionObject nativeObject = new ConfluenceNativePositionObject();
+		switch (system.getConfluenceVersion()) {
+
+		case CLOUD: {
+			CloudConfluenceConnection connection = getCloudConnection(environment);
+			CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+			switch (customitem.type) {
+			case PAGE: {
+				CloudConfluenceContent page = contentApi.getContent(customitem.id);
+				nativeObject.setCloudConfluenceContent(page);
+			}
+				break;
+			case PAGE_CONTAINER: {
+				CloudConfluenceContent page = contentApi.getContent(customitem.id);
+				nativeObject.setCloudConfluenceContentAsContainer(page);
+			}
+				break;
+			case ATTACHMENT: {
+				CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
+				CloudConfluenceAttachmentItem attachent = attachmentApi.getAttachment(customitem.id);
+				nativeObject.setCloudConfluenceAttachment(attachent);
+			}
+				break;
+
+			case SPACE: {
+				CloudConfluenceSpaceApi spaceApi = new CloudConfluenceSpaceApi(connection);
+				CloudConfluenceSpacesList space = spaceApi.getSpace(customitem.id);
+				if (space != null && !space.getResults().isEmpty())
+					nativeObject.setCloudConfluenceSpace(space.getResults().get(0));
+				else
+					throw new GeboRestIntegrationException(
+							"Space " + customitem.id + " does not exist in the remote system");
+			}
+				break;
+			}
+		}
+			break;
+		case ONPREMISE7X: {
+			OnPremiseConfluenceConnection connection = getOnPremiseConnection(environment);
+			OnPremiseConfluenceContentApi browser = new OnPremiseConfluenceContentApi(connection);
+			OnPremiseConfluenceSpaceApi spaceApi = new OnPremiseConfluenceSpaceApi(connection);
+			switch (customitem.type) {
+			case PAGE: {
+
+				OnPremiseConfluenceContent page = browser.getContent(customitem.id);
+				nativeObject.setOnPremiseConfluenceContent(page);
+			}
+				break;
+			case PAGE_CONTAINER: {
+				OnPremiseConfluenceContent page = browser.getContent(customitem.id);
+				nativeObject.setOnPremiseConfluenceContentAsContainer(page);
+			}
+				break;
+			case ATTACHMENT: {
+				OnPremiseConfluenceAttachmentApi attachApi = new OnPremiseConfluenceAttachmentApi(connection);
+				OnPremiseConfluenceAttachmentItem attachment = attachApi.getAttachment(customitem.id);
+				nativeObject.setOnPremiseConfluenceAttachment(attachment);
+			}
+				break;
+			case SPACE: {
+				OnPremiseConfluenceSpacesList space = spaceApi.getSpace(customitem.id);
+				if (space != null && !space.getResults().isEmpty())
+					nativeObject.setOnPremiseConfluenceSpace(space.getResults().get(0));
+				else
+					throw new GeboRestIntegrationException(
+							"Space " + customitem.id + " does not exist in the remote system");
+			}
+				break;
+			}
+		}
+			break;
+		}
+
+		return nativeObject;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(GConfluenceSystem system) throws GeboContentHandlerSystemException {
+
+		Map<String, Object> environment = new HashMap<String, Object>();
+		environment.put(VERSION_ID, system.getConfluenceVersion());
+		try {
+			switch (system.getConfluenceVersion()) {
+			case CLOUD: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getCloudConnection(system));
+
+			}
+				break;
+			case ONPREMISE7X: {
+				environment.put(CONFLUENCE_CONNECTION, connectionFactory.getOnPremiseConnection(system));
+			}
+				break;
+			}
+		} catch (Throwable th) {
+			LOGGER.error("Cannot allocate confluence connection", th);
+			throw new GeboContentHandlerSystemException(th.getMessage(), th);
+		}
+		return environment;
+	}
+
+	@Override
+	protected ConfluenceResourceReference getResourceHandle(SearchableSystemMetaData system,
+			ConfluenceNavigationCoordinates navigationPosition, List<ConfluenceNativePositionObject> nativeCoordinates,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+
+		Map<String, Object> metainfos = !nativeCoordinates.isEmpty()
+				? nativeCoordinates.get(nativeCoordinates.size() - 1).getResourceReferenceMetaInfos()
+				: null;
+		if (metainfos == null)
+			throw new GeboContentHandlerSystemException("customMetaInfos not present in document reference");
+
+		ConfluenceResourceReference obj = new ConfluenceResourceReference();
+		obj.resourceType = getId(ConfluenceNativePositionObject.CONFLUENCE_RESOURCE_METAINFO, metainfos);
+		obj.confluenceVersion = getId(ConfluenceNativePositionObject.CONFLUENCE_VERSION_METAINFO, metainfos);
+		obj.spaceId = getId(ConfluenceNativePositionObject.CONFLUENCE_SPACE_ID_METAINFO, metainfos);
+		obj.pageId = getId(ConfluenceNativePositionObject.CONFLUENCE_CONTENT_ID_METAINFO, metainfos);
+		obj.attachmentTitle = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_TITLE_METAINFO, metainfos);
+		obj.parentPageId = getId(ConfluenceNativePositionObject.CONFLUENCE_CONTENT_PARENT_METAINFO, metainfos);
+		obj.attachmentId = getId(ConfluenceNativePositionObject.CONFLUENCE_ATTACHMENT_ID_METAINFO, metainfos);
+		obj.downloadUrl = getId(ConfluenceNativePositionObject.CONFLUENCE_DOWNLOAD_RELATIVE_URL, metainfos);
+		return obj;
+
+	}
+
+	@Override
+	protected InputStream streamResource(GConfluenceSystem system, ConfluenceResourceReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException {
+
+		String resourceType = reference.resourceType;
+		String pageId = reference.pageId;
+		String attachmentId = reference.attachmentId;
+		String attachmentTitle = reference.attachmentTitle;
+		String parentPageId = reference.parentPageId;
+		String downloadUrl = reference.downloadUrl;
+		if (resourceType == null) {
+			final String msg = "Reference=>" + reference + " has no resource type";
+			LOGGER.error(msg);
+			throw new GeboContentHandlerSystemException(msg);
+		}
+		ConfluencePathNodeType type = ConfluencePathNodeType.valueOf(resourceType);
+		if (!cache.containsKey(CONFLUENCE_CONNECTION)) {
+
+			Map<String, Object> environment = createEnvironment(system,
+					IGContentsAccessErrorConsumer.defaultImplementation());
+			cache.putAll(environment);
+		}
+		Object confluenceBrowser = null;
+		switch (system.getConfluenceVersion()) {
+		case CLOUD: {
+			confluenceBrowser = getCloudConnection(cache);
+		}
+			break;
+		case ONPREMISE7X: {
+			confluenceBrowser = getOnPremiseConnection(cache);
+		}
+			break;
+		}
+		try {
+			switch (type) {
+			case PAGE_CONTAINER: {
+			}
+				break;
+			case PAGE: {
+				if (pageId == null) {
+					throw new GeboContentHandlerSystemException(
+							"Resource=>" + reference + " is a PAGE but has no pageId");
+				}
+				if (confluenceBrowser instanceof CloudConfluenceConnection) {
+					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
+					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+					CloudConfluenceContent content = contentApi.getContent(pageId);
+					if (content.getBody() != null && content.getBody().getView() != null
+							&& content.getBody().getView().getValue() != null) {
+						return new ByteArrayInputStream(content.getBody().getView().getValue().getBytes());
+					}
+				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
+					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
+					OnPremiseConfluenceContentApi browser = new OnPremiseConfluenceContentApi(connection);
+					OnPremiseConfluenceContent content = browser.getContent(pageId);
+					if (content.getBody() != null && content.getBody().getView() != null
+							&& content.getBody().getView().getValue() != null) {
+						return new ByteArrayInputStream(content.getBody().getView().getValue().getBytes());
+					}
+				}
+
+			}
+				;
+				break;
+			case ATTACHMENT: {
+
+				if (confluenceBrowser instanceof CloudConfluenceConnection) {
+					CloudConfluenceConnection connection = (CloudConfluenceConnection) confluenceBrowser;
+					CloudConfluenceAttachmentApi attachmentApi = new CloudConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
+					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
+				} else if (confluenceBrowser instanceof OnPremiseConfluenceConnection) {
+					OnPremiseConfluenceConnection connection = (OnPremiseConfluenceConnection) confluenceBrowser;
+					OnPremiseConfluenceAttachmentApi attachmentApi = new OnPremiseConfluenceAttachmentApi(connection);
+					if (downloadUrl != null) {
+						return attachmentApi.getAttachmentContentByDownloadUrl(downloadUrl);
+					}
+					if (parentPageId == null || attachmentTitle == null) {
+
+						throw new GeboContentHandlerSystemException("Resource=>" + reference
+								+ " is an ATTACHMENT but has no parentPageId or attachmentTitle");
+					}
+					return attachmentApi.getAttachmentContent(parentPageId, attachmentTitle);
+				}
+			}
+
+			}
+
+		} catch (GeboRestIntegrationException e) {
+			throw new GeboContentHandlerSystemException("Rest Confluence comunication exception", e);
+		}
+		LOGGER.warn("Content:" + reference.toString() + " returning nullInputStream()");
+		return InputStream.nullInputStream();
 	}
 
 }

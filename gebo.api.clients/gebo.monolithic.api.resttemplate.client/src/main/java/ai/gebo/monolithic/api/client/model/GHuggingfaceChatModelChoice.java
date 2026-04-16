@@ -24,7 +24,7 @@ import java.util.Date;
  * GHuggingfaceChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GHuggingfaceChatModelChoice {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GHuggingfaceChatModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -285,6 +288,24 @@ public class GHuggingfaceChatModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GHuggingfaceChatModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GHuggingfaceChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -343,13 +364,14 @@ public class GHuggingfaceChatModelChoice {
         Objects.equals(this.metaInfos, ghuggingfaceChatModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, ghuggingfaceChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, ghuggingfaceChatModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, ghuggingfaceChatModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.supportsStructuredOutput, ghuggingfaceChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, ghuggingfaceChatModelChoice.supportsFunctionCalls);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, supportsStructuredOutput, supportsFunctionCalls);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls);
   }
 
 
@@ -370,6 +392,7 @@ public class GHuggingfaceChatModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("}");

@@ -21,9 +21,9 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSource;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 
 /**
@@ -46,10 +46,8 @@ public class GoogleSearchFunctionCallbackWrapperSourceImpl implements IGToolCall
 	@Autowired
 	GoogleSearchApi googleApi;
 	
-	// Simple Bing Search API implementation
-	@Autowired
-	SimpleBingSearchApi bingSearchApi;
-
+	
+	
 	/**
 	 * Default constructor for GoogleSearchFunctionCallbackWrapperSourceImpl
 	 */
@@ -77,7 +75,6 @@ public class GoogleSearchFunctionCallbackWrapperSourceImpl implements IGToolCall
 	public List<ToolCallback> getToolCallbacks() {
 		List<ToolCallback> out = new ArrayList<ToolCallback>();
 		List<GoogleSearchConfig> configurations = dao.getConfigurations();
-		out.add(bingSearchApi.createSimplebingSearch());
 		// Add Google Search only if there are configurations available
 		if (!configurations.isEmpty()) {
 			out.add(googleApi.create(configurations.get(0)));

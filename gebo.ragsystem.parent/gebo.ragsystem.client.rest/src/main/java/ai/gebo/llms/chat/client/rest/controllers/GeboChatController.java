@@ -9,13 +9,9 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,22 +26,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.richresponse.model.RichResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService.ModelProviderCapabilities;
-import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.model.base.GBaseObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -99,28 +91,18 @@ public class GeboChatController {
 	 * @return A response from the chat model
 	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "chat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboChatResponse chat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException {
+	public GeboChatResponse chat(@RequestBody GeboChatRequest request) throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 
 		return chatService.chat(request);
 
 	}
 
-	/**
-	 * Endpoint for rich chat interaction that returns templated responses
-	 * 
-	 * @param request The chat request containing messages and parameters
-	 * @return A templated response with rich content
-	 * @throws GeboChatException  If there's a problem with the chat service
-	 * @throws LLMConfigException If there's a configuration issue with the model
-	 */
-	@PostMapping(value = "richChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GeboTemplatedChatResponse<RichResponse> richChat(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
-		return chatService.templatedChat(request, RichResponse.class);
-	}
-
+	
 	/**
 	 * Retrieves the capabilities of a specific model provider
 	 * 
@@ -207,20 +189,23 @@ public class GeboChatController {
 	 * @return A flux of server-sent events containing chat response chunks
 	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
+	 * @throws FullTextException 
+	 * @throws IOException 
+	 * @throws GeboPersistenceException 
 	 */
 	@PostMapping(value = "streamResponse", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamResponse(@RequestBody GeboChatRequest request)
-			throws GeboChatException, LLMConfigException {
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException {
 		return chatService.streamChat(request).map(StreamUtil.mappingFunction)
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 
-	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo suggestChatDescription(@RequestParam("id") @NotNull String id) throws GeboChatException, LLMConfigException {
-		return chatService.suggestChatDescription(id);
-	}
-	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) throws GeboPersistenceException {
-		return chatService.createCleanChatByModelCode(modelCode);
+	
+	
+	@GetMapping(value = "getVisibleKnowledgeBases", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GBaseObject> getVisibleKnowledgeBases()
+			throws GeboPersistenceException, LLMConfigException {
+		List<GKnowledgeBase> visibles = chatService.getVisibleKnowledgeBases();
+		return visibles.stream().map(x -> new GBaseObject(x)).toList();
 	}
 }

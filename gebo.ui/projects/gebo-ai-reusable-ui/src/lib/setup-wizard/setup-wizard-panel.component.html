@@ -11,13 +11,16 @@
  
  
  
-
+<gebo-ai-display-messages></gebo-ai-display-messages>
 <p-breadcrumb class="max-w-full" [model]="bcItems" [home]="home" />
 <p-panel id="WizardUi" gebo-ai-label #wizardUI header="Choose a setup section" *ngIf="!wizardComponent">
     <p-blockUI [target]="wizardUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <!-- 
     <p-messages [value]="userMessages" [enableService]="false"></p-messages>
+    -->
     <div class="grid" >
         <div *ngFor="let entry of wizardsEntries" class="col-12">
             <div class="grid">
@@ -51,3 +54,13 @@
     </div>
     
 </div>
+<p-dialog [visible]="mandatoryUnsatisfiedEntriesWindowOpened" [modal]="true" [maximizable]="true" [style]="{width:'98%',height:'100%'}" (visibleChange)="mandatoryUnsatisfiedEntriesWindowOpened=false;userShowedMandatoryUnsatisfiedEntries=true;">
+    <span *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length ==1 && mandatoryUnsatisfiedEntries[0].wizardComponent">
+        <ng-container    #ngOutletItem *ngComponentOutlet="mandatoryUnsatisfiedEntries[0].wizardComponent;inputs: {}"  />
+    </span>
+    <p-tabview *ngIf="mandatoryUnsatisfiedEntries && mandatoryUnsatisfiedEntries.length >1">
+        <p-tabPanel *ngFor="let p of mandatoryUnsatisfiedEntries" [header]="p.config.label">
+            <ng-container   #ngOutletItem *ngComponentOutlet="p.wizardComponent;inputs: {}"  />
+        </p-tabPanel>
+    </p-tabview>
+</p-dialog>

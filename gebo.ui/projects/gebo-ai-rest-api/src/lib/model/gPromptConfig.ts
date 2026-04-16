@@ -9,20 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
 
 export interface GPromptConfig { 
     code?: string;
     description?: string;
-    userModified?: string;
-    userCreated?: string;
-    dateModified?: Date;
-    dateCreated?: Date;
-    prompt?: string;
+    prompt: string;
+    langCode?: string;
+    promptUse: string;
     modelProvider?: string;
-    modelName?: string;
+    modelCode?: string;
     promptCategory?: string;
-    defaultPrompt?: boolean;
-    ragPrompt?: boolean;
-    modelConfigurationReference?: GObjectRefGBaseChatModelConfig;
+    tokensSize?: number;
+    configDeclarated?: boolean;
 }

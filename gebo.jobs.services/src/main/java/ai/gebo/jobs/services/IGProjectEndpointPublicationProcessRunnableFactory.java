@@ -6,23 +6,25 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services;
 
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactory;
+import ai.gebo.knlowledgebase.model.projects.AbstractContentConsumingSessionParam;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import lombok.Data;
 
 /**
  * AI generated comments
  * 
- * Interface that defines a factory for creating runnables that process GProjectEndpoint objects.
- * This interface extends the generic IGEntityProcessingRunnableFactory with GProjectEndpoint as the
- * specific entity type. It is used in the publication process of project endpoints, allowing for
- * multithreaded processing of these endpoints.
+ * Interface that defines a factory for creating runnables that process
+ * GProjectEndpoint objects. This interface extends the generic
+ * IGEntityProcessingRunnableFactory with GProjectEndpoint as the specific
+ * entity type. It is used in the publication process of project endpoints,
+ * allowing for multithreaded processing of these endpoints.
  */
-public interface IGProjectEndpointPublicationProcessRunnableFactory extends IGEntityProcessingRunnableFactory<GProjectEndpoint>{
+public interface IGProjectEndpointPublicationProcessRunnableFactory
+		extends IGEntityProcessingRunnableFactory<ProjectendPointSession> {
 	
+
 }

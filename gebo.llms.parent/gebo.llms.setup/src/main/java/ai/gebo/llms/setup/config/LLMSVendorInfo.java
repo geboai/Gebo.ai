@@ -23,5 +23,7 @@ public class LLMSVendorInfo {
 	private String acquireKeyUrl = null;
 	@NotNull
 	private String apiKeySecretContext = null;
+	private Integer minContextWindow = null;
+	private Boolean supportsAutoconfig = null;
 
 }

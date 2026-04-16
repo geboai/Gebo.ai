@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Autentificare"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operațiunea a eșuat",
+        "detail" : "Nu se poate autentifica cu datele furnizate"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrare Google Drive/Workspaces",
         "description" : "Configurează Gebo.ai pentru a accesa datele echipei tale din Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Configurează Google search api",
+        "description" : "Configurează datele de autentificare Google search api pentru căutări AI pe web"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Configurează Deep search",
+        "description" : "Configurează parametrii pentru Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Ajustare automată a parametrilor pentru generarea augmentată de informații"
+      },
+      "Description" : {
+        "label" : "Descriere"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Ultima actualizare a optimizării"
+      },
+      "Code" : {
+        "label" : "Cod model de embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Prag calculat"
+      },
+      "Autotuned" : {
+        "label" : "Optimizat automat"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Pașii obligatorii pentru configurarea Gebo.ai au fost realizați...",
+        "detail" : "Pașii obligatorii de configurare au fost finalizați, dar lipsesc unele etape care împiedică organizația să beneficieze la maxim de acest software"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Lipsesc unii pași obligatorii din configurarea Gebo.ai",
+        "detail" : "Vă rugăm să verificați pașii marcați cu roșu din procesul de configurare"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistem Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Editează sistemul"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Setați accesul la furnizorii llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Alege infrastructura sau furnizorii extinși"
+      },
+      "MainPanelTitle" : {
+        "label" : "Configurează modelele lingvistice mari utilizate"
+      },
+      "EasySetup" : {
+        "label" : "Configurare/fixare rapidă inițială"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Configurează modelele lingvistice mari"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Descriere"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Cheie Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Creează date de autentificare google search"
+      },
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID motor de căutare",
+        "help" : "Introduceți id-ul motorului de căutare obținut la înregistrarea datelor de autentificare google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod de configurare"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "apiKey" : {
+        "label" : "Cheie api",
+        "help" : "Introduceți cheia api obținută la înregistrarea datelor de autentificare google search api."
+      },
+      "MainPanel" : {
+        "label" : "Configurează google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Șterge",
+        "help" : "Șterge datele de autentificare Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Configurație Deep search",
+        "help" : "Adaugă o configurație pentru deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Editează configurația"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "dezactivat"
+      },
+      "EditGroupBtn" : {
+        "label" : "Editează"
+      },
+      "CodeHeader" : {
+        "label" : "cod"
+      },
+      "DescriptionHeader" : {
+        "label" : "descriere"
+      },
+      "UsersHeader" : {
+        "label" : "utilizatori"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul funcționează și a fost configurat cu succes"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:https://api.openai.com/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "setează ca model embedding implicit",
         "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul funcționează și a fost configurat cu succes"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat pe server ollama local (sau rețea)"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat Anthropic"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat MistralAI"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Editare configurație model chat Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Setări acces model"
+      },
+      "forUses" : {
+        "label" : "Utilizări model",
+        "help" : "Utilizările pentru care platforma Gebo.ai va folosi acest model.",
+        "placeholder" : "Utilizările pentru care platforma Gebo.ai va folosi acest model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiunea a fost realizată cu succes"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Sigur doriți să ștergeți această conversație?",
         "header" : "Acțiune de ștergere chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Adaugă conținut sau modifică modul de căutare"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Surse",
+        "help" : "Deschide lista documentelor analizate"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detalii răspuns și surse din căutare amplă"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Rezultat analiză deep search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Eroare la căutarea în Confluence",
+        "detail" : "Eroare server: Probleme la accesarea sistemului confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Chat nou încărcat",
+        "detail" : "Chat nou încărcat cu succes"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selectează surse"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Alege cel puțin una dintre opțiunile de mai jos"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Sari peste deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Baze de cunoștințe alese"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sisteme alese"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Adăugați document la lista 'chatează cu'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Se rulează deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Se rulează recover augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Se întreabă llm"
+      },
+      "Waiting" : {
+        "label" : "Analizez cel mai bun plan de răspuns.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Se rulează instrumente"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Se rulează căutare asistată AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fișier analizat"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultat analiză căutare"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultat analiză căutare sistem pentru"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Se consolidează raportul final"
+      },
+      "RUNNING" : {
+        "label" : "Se rulează "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analizez cererea ta"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Flux agentic ales, agentul răspunde"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Nivel serviciu: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Se execută agentul ales de tine"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Încarcă fișier(e)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Răsfoiește/caută fișierele companiei"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat cu documentul ales"
+      },
+      "agenticChat" : {
+        "label" : "Chat agentic"
+      },
+      "rag" : {
+        "label" : "Chat R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Mai multe surse"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Căutare Google Web"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Căutare Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Căutare Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Căutare bază de cunoștințe"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat cu fișier(e)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Căutare Google Web"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Căutare Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Căutare Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Utilizator Google de impersonat",
         "help" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate",
         "placeholder" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate"
+      },
+      "OK" : {
+        "summary" : "Salvat cu succes",
+        "detail" : "Operațiunea de actualizare s-a finalizat cu succes"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Documente procesate",
         "dataset-2-label" : "Documente cu erori",
         "dataset-3-label" : "Documente eliminate"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexare text integrală"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente ignorate"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokeni procesați",
+        "dataset-1-label" : "Eroare la procesarea tokenilor"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "activează toate apelurile de funcții",
         "help" : "Activează toate instrumentele și apelurile de funcții disponibile, dacă nu este setat, va fi posibil să le activezi mai târziu din panoul de administrare llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepție în timpul operației:Anthropic api nu poate funcționa fără configurarea necesară a cheii api",
+        "detail" : "Eroare server: Anthropic api nu poate funcționa fără configurarea necesară a cheii api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI de la distanță OK",
+        "detail" : "Furnizorul este activ și configurat cu succes"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Excepție în timpul operațiunii:401 UNAUTHORIZED",
+        "detail" : "Eroare server: 401 NEAUTORIZAT"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Excepție în timpul operațiunii:Lipsește basePath",
+        "detail" : "Eroare server: Lipsește basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Creează și activează"
+      },
+      "vendorId" : {
+        "label" : "Alege furnizorul tău de model lingvistic mare",
+        "help" : "Alege furnizorul inițial pentru modelele tale implicite de chat și embedding"
+      },
+      "secretId" : {
+        "label" : "Alege acreditările furnizorului (cheie api)",
+        "help" : "Alege una dintre acreditările existente pentru furnizorul de llm selectat"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model de chat pentru servicii interne",
+        "help" : "Modelul de chat configurat pentru servicii interne va extrage informații, va rezuma și va executa fluxuri de lucru interne."
+      },
+      "ChatModel" : {
+        "label" : "Model implicit de chat",
+        "help" : "Modelul implicit de chat va răspunde la întrebările utilizatorilor și va executa fluxuri de lucru pentru care nu sunt configurate modele specifice. Trebuie să fie puternic și fiabil, cu un echilibru bun între cost, performanță și calitate."
+      },
+      "ProviderBuy" : {
+        "label" : "Link de cumpărare credit Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Link site web"
+      },
+      "WebSiteLink" : {
+        "label" : "Site-ul furnizorului",
+        "help" : "Click aici pentru informații generale despre furnizor."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Cumpără credit de la furnizor",
+        "help" : "Click aici pentru a cumpăra credit pentru cheia(le) ta(le) api."
+      },
+      "EmbeddingModel" : {
+        "label" : "Modelul implicit de embedding",
+        "help" : "Acest model se va ocupa de indexarea semantică (embedding) și regăsirea datelor și documentelor."
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Nu poți șterge acest lucru",
         "detail" : "Acest obiect este referit din alte părți ale aplicației"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Excepție în timpul operațiunii: Eroare la procesarea url: http://localhost:11434/v1/models",
+        "detail" : "Eroare de server: Eroare la procesarea url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Excepție în timpul operațiunii: trebuie setat apiKey",
+        "detail" : "Eroare de server: trebuie setat apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Eroare la transmiterea răspunsului chat",
+        "detail" : "Eroare de server: 400 Bad Request de la POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:http://localhost:8000/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Eroare la transmiterea fluxului de răspuns chat",
+        "detail" : "Eroare server: Conexiune resetată"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepție în timpul operației:Eroare la lucrul cu url:https://api.openai.com/v1/models",
+        "detail" : "Eroare server: Eroare la lucrul cu url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepție în timpul operației:Anthropic api nu poate funcționa fără configurarea necesară a cheii api",
+        "detail" : "Eroare server: Anthropic api nu poate funcționa fără configurarea necesară a cheii api"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Finalizat"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiunea a fost realizată cu succes"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Identitatea folosită",
         "help" : "Selectează sau creează identitatea pentru accesul la sistemul Google Drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Se caută informații relevante"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Se consolidează raportul final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Rezultat de căutare analizat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Rezultat analizat al căutării în sistem pentru"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Alege cel puțin una dintre opțiunile de mai jos"
+      },
+      "LaunchBtn" : {
+        "label" : "Pornește căutarea"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Sari peste căutare avansată"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Baze de cunoștințe alese"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sisteme alese"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selectează surse"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fișier analizat"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Inserează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SearchSettingTab" : {
+        "label" : "Setare căutare"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Introduceți promptul pentru extragerea informațiilor relevante din documente"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Introduceți promptul pentru consolidarea informațiilor extrase"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Setare model de limbaj mare"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației deep search"
+      },
+      "code" : {
+        "label" : "Cod Unic",
+        "help" : "Cod unic generat automat pentru configurația deep search"
+      },
+      "searchType" : {
+        "label" : "Tip de căutare",
+        "help" : "Selectează între căutare semantică cu un singur hop sau cu mai multe hop-uri"
+      },
+      "topK" : {
+        "label" : "Număr de segmente de text returnate (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM utilizat",
+        "help" : "Specificați modelul de limbaj mare folosit pentru Deep search; se va folosi cel implicit dacă nu este selectat niciunul."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt pentru analiză documente",
+        "help" : "Editează promptul folosit pentru extragerea informațiilor relevante din fragmentele documentelor."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt pentru consolidarea informațiilor extrase",
+        "help" : "Editează promptul care va fi folosit pentru consolidarea într-un singur raport a informațiilor relevante extrase din documentele recuperate."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Prag de similaritate la prima căutare",
+        "help" : "Prag de similaritate semantică la primul hop (între 0.5 și 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Prag de similaritate la a doua căutare",
+        "help" : "Prag de similaritate semantică la al doilea hop (între 0.5 și 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Model de limbaj mare implicit",
+        "help" : "Modelul de limbaj mare implicit va fi folosit pentru procesarea Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Prag de similaritate la căutare",
+        "help" : "Prag de similaritate semantică (între 0.5 și 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Setări de securitate"
+      },
+      "accessibleToAll" : {
+        "label" : "Accesibil tuturor"
+      },
+      "datasource" : {
+        "label" : "Sursă de date"
+      },
+      "allowedGroups" : {
+        "label" : "Grupuri permise"
+      },
+      "allowedUsers" : {
+        "label" : "Utilizatori permiși"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Acces per sursă de date pentru utilizatori/grupuri",
+        "help" : "Deep search va fi activat pentru fiecare sursă externă de date și utilizator sau grup"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Acces simplu per utilizator/grup"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Acces per sursă de date pentru utilizator/grup"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Folosește sau creează acreditări de chei api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Cheie api/acreditări",
+        "help" : "Alege cheia api sau acreditările pentru acest furnizor"
+      },
+      "NewApiKey" : {
+        "label" : "Cheie api nouă",
+        "help" : "Introdu o cheie api nouă pentru acest furnizor"
+      },
+      "PiSave" : {
+        "label" : "Salvează"
+      },
+      "NewUserName" : {
+        "label" : "Nume utilizator",
+        "help" : "Numele utilizatorului pentru accesarea serviciilor furnizorului"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Folosește existente sau creează noi",
+        "help" : "Folosește acreditările existente sau creează altele noi pentru acest furnizor"
+      },
+      "newSecretDescription" : {
+        "label" : "Descriere acreditări",
+        "help" : "Descrierea acreditărilor cheii api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Acreditările au fost create",
+        "detail" : "Acreditările au fost create cu succes"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Eroare de comunicare cu serverul Ollama ",
+        "detail" : "Eroare de rețea la comunicarea cu sistemul la distanță pentru accesarea listei de modele\n Eroare la lucrul cu url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Conversații cu utilizatorii"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model utilizat pentru servicii interne"
       }
     }
   }

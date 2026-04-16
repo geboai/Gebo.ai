@@ -6,38 +6,40 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.webconfig;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
- * Gebo.ai comment agent
- * Configuration class to define bean for RestTemplate.
+ * Gebo.ai comment agent Configuration class to define bean for RestTemplate.
  */
 @Configuration
 public class RestTemplateConfig {
 
-    /**
-     * Default constructor.
-     */
-    public RestTemplateConfig() {
-        
-    }
+	/**
+	 * Default constructor.
+	 */
+	public RestTemplateConfig() {
 
-    /**
-     * Creates a new RestTemplate bean that can be used for making REST calls.
-     * 
-     * @return a configured RestTemplate instance
-     */
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+	}
+
+	/**
+	 * Creates a new RestTemplate bean that can be used for making REST calls.
+	 * 
+	 * @return a configured RestTemplate instance
+	 */
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder, ObjectMapper objectMapper) {
+		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter(objectMapper);
+
+		return builder.additionalMessageConverters(jackson).build();
+	}
 
 }

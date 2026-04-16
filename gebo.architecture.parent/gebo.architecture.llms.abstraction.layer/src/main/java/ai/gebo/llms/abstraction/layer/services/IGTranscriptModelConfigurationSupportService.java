@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
@@ -23,18 +20,23 @@ import ai.gebo.llms.abstraction.layer.model.GTranscriptModelType;
  * of transcript models. It extends the generic model configuration support
  * service interface by specifying types related to transcript models.
  *
- * @param <ModelChoice> The type representing choices/configurations specific to the transcript model.
- * @param <ModelConfig> The type representing the configuration of a transcript model.
+ * @param <ModelChoice> The type representing choices/configurations specific to
+ *                      the transcript model.
+ * @param <ModelConfig> The type representing the configuration of a transcript
+ *                      model.
  */
 public interface IGTranscriptModelConfigurationSupportService<ModelChoice extends GBaseTranscriptModelChoice, ModelConfig extends GBaseTranscriptModelConfig<ModelChoice>>
-		extends IGModelConfigurationSupportService<GTranscriptModelType, ModelChoice, ModelConfig> {
-	
+		extends
+		IGModelConfigurationSupportService<GTranscriptModelType, ModelChoice, ModelConfig, IGConfigurableTranscriptModel> {
+
 	/**
-	 * Creates an instance of a configurable transcript model using the specified configuration.
+	 * Creates an instance of a configurable transcript model using the specified
+	 * configuration.
 	 *
 	 * @param config The configuration specific to the transcript model.
 	 * @return An instance of a configurable transcript model.
-	 * @throws LLMConfigException If there is an error during the creation of the transcript model.
+	 * @throws LLMConfigException If there is an error during the creation of the
+	 *                            transcript model.
 	 */
 	public IGConfigurableTranscriptModel<ModelConfig> create(ModelConfig config) throws LLMConfigException;
 

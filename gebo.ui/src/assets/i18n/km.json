@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ចូល"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ប្រតិបត្តការបរាជ័យ",
+        "detail" : "មិនអាចបញ្ជាក់អត្តសញ្ញាណជាមួយព័ត៌មានសម្ងាត់ដែលបានផ្ដល់"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "ការរួមបញ្ចូល Google Drive/Workspaces",
         "description" : "កំណត់រចនាសម្ព័ន្ធ Gebo.ai ដើម្បីចូលប្រើទិន្នន័យក្រុម Google cloud Drive/Workspaces របស់អ្នក"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Google search api",
+        "description" : "កំណត់ព័ត៌មានសម្ងាត់ Google search api សម្រាប់ស្វែងរកតាមបណ្ដាញដោយ AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Deep search",
+        "description" : "កំណត់ប៉ារ៉ាម៉ែត្រ Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "ការកំណត់​បណ្ដុះ​បណ្ដាល R.a.g.",
+        "description" : "ការកំណត់ប៉ារ៉ាម៉ែត្រពង្រីកបញ្ចូលដោយស្វ័យប្រវត្តិ"
+      },
+      "Description" : {
+        "label" : "ពិពណ៌នា"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ធ្វើបច្ចុប្បន្នភាពកំណត់បន្ថែមចុងក្រោយ"
+      },
+      "Code" : {
+        "label" : "កូដម៉ូដែលបង្កប់/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "កំណត់ខ្ទង់ដែលគណនាឡើង"
+      },
+      "Autotuned" : {
+        "label" : "បានកំណត់​បណ្ដុះ​បណ្ដាលដោយស្វ័យប្រវត្តិ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "ជំហាន​ចាំបាច់​សម្រាប់ការកំណត់ Gebo.ai បានបញ្ចប់...",
+        "detail" : "ជំហានចាំបាច់សម្រាប់ការកំណត់បានបញ្ចប់ ប៉ុន្តែមានជំហានខ្វះខាតដែលធ្វើឲ្យអង្គការរបស់អ្នកមិនទទួលបានបទពិសោធន៍ពេញលេញពីកម្មវិធីនេះ"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "ការកំណត់ Gebo.ai យោងតាមជំហានចាំបាច់មួយចំនួនត្រូវបានខ្វះ",
+        "detail" : "សូមពិនិត្យមើលជំហានពណ៌ក្រហមក្នុងដំណើរការកំណត់"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "ប្រព័ន្ធ Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "កែសម្រួលប្រព័ន្ធ"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "ផ្ដល់ការចូលដំណើរការផ្នែកផ្គត់ផ្គង់ llms របស់ Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "ជម្រើសហេដ្ឋារចនាសម្ព័ន្ធ/អ្នកផ្គត់ផ្គង់បន្ថែម"
+      },
+      "MainPanelTitle" : {
+        "label" : "កំណត់ម៉ូដែលភាសាធំៗដែលបានប្រើ"
+      },
+      "EasySetup" : {
+        "label" : "ដំណោះស្រាយកំណត់/កំណត់រចនាសម្ព័ន្ធគោលដៅឱ្យងាយស្រួល"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "កំណត់ម៉ូដែលភាសាធំៗ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "សេចក្ដីពិពណ៌នា"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "កូនសោ Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "បង្កើតព័ត៌មានសម្ងាត់ google search"
+      },
+      "CreateBtn" : {
+        "label" : "បង្កើត"
+      },
+      "customSearchEngineId" : {
+        "label" : "លេខសម្គាល់ម៉ាស៊ីនស្វែងរក",
+        "help" : "បញ្ចូលលេខសម្គាល់ម៉ាស៊ីនស្វែងរកដែលទទួលបាននៅក្នុងការចុះឈ្មោះព័ត៌មានសម្ងាត់ google search api ។"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "កូដកំណត់រចនាសម្ព័ន្ធ"
+      },
+      "DescriptionHeader" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "apiKey" : {
+        "label" : "កូនសោ Api",
+        "help" : "បញ្ចូលកូនសោ api ដែលទទួលបាននៅក្នុងការចុះឈ្មោះព័ត៌មានសម្ងាត់ google search api ។"
+      },
+      "MainPanel" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "លុប",
+        "help" : "លុបព័ត៌មានសម្ងាត់ Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ Deep search",
+        "help" : "បន្ថែមកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "កែសម្រួលកំណត់រចនាសម្ព័ន្ធ"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "បានបិទ"
+      },
+      "EditGroupBtn" : {
+        "label" : "កែសម្រួល"
+      },
+      "CodeHeader" : {
+        "label" : "កូដ"
+      },
+      "DescriptionHeader" : {
+        "label" : "សេចក្តីពិពណ៌នា"
+      },
+      "UsersHeader" : {
+        "label" : "អ្នកប្រើ"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ការកំណត់សិទ្ធិប្រើម៉ូដែល"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "អ្នកផ្តល់សេវា AI ពីចម្ងាយដំណើរការរួច",
+        "detail" : "អ្នកផ្តល់សេវាកំពុងដំណើរការនិងបានកំណត់រចនាសម្ព័ន្ធជោគជ័យ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការឃៈមានបញ្ហានៅពេលធ្វើការជាមួយ url:https://api.openai.com/v1/models",
+        "detail" : "បញ្ហា​ម៉ាស៊ីនបម្រើ: មានបញ្ហានៅពេលធ្វើការជាមួយ url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "កំណត់ជាម៉ូដែល embedding លំនាំដើម",
         "help" : "បើយើងកំណត់នេះ ត្រូវបានប្រើជាណុង embed ម៉ូដែលលំនាំដើម នៅពេលមិនបានបញ្ជាក់"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "អ្នកផ្តល់សេវា AI ពីចម្ងាយដំណើរការរួច",
+        "detail" : "អ្នកផ្តល់សេវាកំពុងដំណើរការនិងបានកំណត់រចនាសម្ព័ន្ធជោគជ័យ"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "កែប្រែការកំណត់រចនាសម្ព័ន្ធម៉ូដែលជជែក Ollama ក្នុងLAN"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "កែប្រែការកំណត់រចនាសម្ព័ន្ធម៉ូដែលជជែក Anthropic"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "កែប្រែការកំណត់រចនាសម្ព័ន្ធម៉ូដែលជជែក MistralAI"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "កែប្រែការកំណត់រចនាសម្ព័ន្ធម៉ូដែលជជែក Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ការកំណត់សិទ្ធិប្រើម៉ូដែល"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ការកំណត់សិទ្ធិប្រើម៉ូដែល"
+      },
+      "forUses" : {
+        "label" : "ការប្រើម៉ូដែល",
+        "help" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។",
+        "placeholder" : "ការប្រើប្រាស់ដែលវេទិកា Gebo.ai នឹងពិចារណា ម៉ូដែលនេះសម្រាប់។"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ល្អ!",
+        "detail" : "ប្រតិបត្តការបានបញ្ចប់ដោយជោគជ័យ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "តើអ្នកប្រាកដថាអ្នកចង់លុបការជជែកនេះ?",
         "header" : "សកម្មភាពលុបការជជែក"
+      },
+      "PlusContextualMenu" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
+      },
+      "[object HTMLElement]" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
+      },
+      "ContextMenuBtn" : {
+        "help" : "បន្ថែមមាតិកា ឬកែប្រែរបៀបស្វែងរក"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ប្រភព",
+        "help" : "បើកបញ្ជីឯកសារដែលបានវិភាគ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ចម្លើយ និងព័ត៌មានលម្អិតពីការស្វែងរកជ្រៅ"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "លទ្ធផលវិភាគស្វែងរកជ្រៅ"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "កំហុសក្នុងការស្វែងរក Confluence Search",
+        "detail" : "កំហុសម៉ាស៊ីនមេ: ប្រសិទ្ធភាពក្នុងការចូលប្រើប្រព័ន្ធ confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "កិច្ចពិភាក្សាថ្មីបានផ្ទុក",
+        "detail" : "កិច្ចពិភាក្សាថ្មីបានផ្ទុកដោយជោគជ័យ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ជ្រើសប្រភព"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "សូមជ្រើសយ៉ាងហោចណាស់មួយពីជម្រើសខាងក្រោម"
+      },
+      "SkipDeepSearch" : {
+        "label" : "រំលងការស្វែងរកជ្រៅ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "មូលដ្ឋានចំណេះដឹងដែលបានជ្រើស"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ប្រព័ន្ធដែលបានជ្រើស"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "បន្ថែមឯកសារទៅបញ្ជី 'ជជែកជាមួយ'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "កំពុងដំណើរការស្វែងរកជ្រៅ"
+      },
+      "RagLLMResponse" : {
+        "label" : "កំពុងដំណើរការទិន្នន័យបង្កើនការឆ្លើយតប"
+      },
+      "PureLLMResponse" : {
+        "label" : "កំពុងសួរ llm"
+      },
+      "Waiting" : {
+        "label" : "កំពុងវិភាគផែនការឆ្លើយតបល្អបំផុត..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "កំពុងដំណើរការឧបករណ៍"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "កំពុងស្វែងរកជាមួយ AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ឯកសារដែលបានវិភាគ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "លទ្ធផលស្វែងរកដែលបានវិភាគ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "លទ្ធផលស្វែងរកប្រព័ន្ធដែលបានវិភាគសម្រាប់"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "កំពុងប្រមូលរបាយការណ៍មជាង"
+      },
+      "RUNNING" : {
+        "label" : "កំពុងដំណើរការ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ខ្ញុំកំពុងវិភាគសំណើរបស់អ្នក"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "បានជ្រើស agentic flow ការឆ្លើយតប agent កំពុងដំណើរការ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "កម្រិតសេវាកម្មគឺ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "កំពុងដំណើរការ agent ដែលអ្នកបានជ្រើស"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ផ្ទុកឯកសារឡើង"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "រកមើល/ស្វែងរកឯកសាររបស់ក្រុមហ៊ុន"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ជជែកឯកសារដែលបានជ្រើស"
+      },
+      "agenticChat" : {
+        "label" : "Agentic chat"
+      },
+      "rag" : {
+        "label" : "R.a.g. chat"
+      },
+      "deepSearch" : {
+        "label" : "ស្វែងរកជ្រៅ/ប្រភពជាច្រើន"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Google Web"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរកមូលដ្ឋានចំណេះដឹង"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ជជែកជាមួយឯកសារ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Google Web"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "អ្នកប្រើប្រាស់ Google ដែលនឹងរំលង",
         "help" : "អ្នកប្រើប្រាស់នេះនឹងត្រូវបានរំលងដោយ credentials ដែលបានផ្ដល់",
         "placeholder" : "អ្នកប្រើប្រាស់នេះនឹងត្រូវបានរំលងដោយ credentials ដែលបានផ្ដល់"
+      },
+      "OK" : {
+        "summary" : "រក្សាទុកដោយជោគជ័យ",
+        "detail" : "ប្រតិបត្តការត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
         "dataset-2-label" : "ឯកសារដែលមានបញ្ហា",
         "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "បង្កើតសន្ទស្សន៍អត្ថបទពេញលេញ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "កំហុសក្នុងការកែច្នៃឯកសារ",
+        "label-2" : "ឯកសារបានដំណើរការ"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "ឯកសារទទួលបាន",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារមានកំហុស",
+        "dataset-3-label" : "ឯកសារត្រូវបានបោះបង់"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Token ដែលបានដំណើរការ",
+        "dataset-1-label" : "កំហុសក្នុងការដំណើរការ token"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "បើកការហៅមុខងារទាំងអស់",
         "help" : "បើកឧបករណ៍និងការហៅមុខងារដែលអាចប្រើបានទាំងអស់។ ប្រសិនបើមិនបានកំណត់ អ្នកអាចបើកពួកវាបាននៅក្រោយក្នុងផ្ទាំងគ្រប់គ្រង llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការឃៈAnthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោគ្រាប់ api",
+        "detail" : "បញ្ហាម៉ាស៊ីនបម្រើ: Anthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោ គ្រាប់ api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ផ្នែកផ្ដល់សេវា AI ពីចម្ងាយ OK",
+        "detail" : "អ្នកផ្ដល់សេវាកំពុងដំណើរការ និងកំណត់រចនាសម្ព័ន្ធដោយជោគជ័យ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ករណីអវិជ្ជមានក្នុងប្រតិបត្តការ:401 UNAUTHORIZED",
+        "detail" : "កំហុសម៉ាស៊ីនមេ: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ករណីអវិជ្ជមានក្នុងប្រតិបត្តការ:BasePath បាត់",
+        "detail" : "កំហុសម៉ាស៊ីនមេ: BasePath បាត់"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "បង្កើត និង បើកដំណើរការ"
+      },
+      "vendorId" : {
+        "label" : "ជ្រើសរើសអ្នកផ្គត់ផ្គង់ម៉ូដែលភាសាធំរបស់អ្នក",
+        "help" : "ជ្រើសរើសអ្នកផ្គត់ផ្គង់ដំបូងសម្រាប់ម៉ូដែល chat និង embedding លំនាំដើមរបស់អ្នក"
+      },
+      "secretId" : {
+        "label" : "ជ្រើសរើសព័ត៌មានសម្អាតអ្នកផ្គត់ផ្គង់ (api key)",
+        "help" : "ជ្រើសរើសព័ត៌មានសម្អាតមួយក្នុងចំណោមដែលមានស្រាប់សម្រាប់ LLM provider ដែលបានជ្រើស"
+      },
+      "InternalServiceModel" : {
+        "label" : "ម៉ូដែល chat សេវាផ្ទៃក្នុង",
+        "help" : "ម៉ូដែល chat ដែលបានកំណត់សម្រាប់សេវាផ្ទៃក្នុងនឹងទទួលខុសត្រូវក្នុងការស្រង់ព័ត៌មាន សង្ខេប និងអនុវត្ត workflow ផ្ទៃក្នុង។"
+      },
+      "ChatModel" : {
+        "label" : "ម៉ូដែល chat លំនាំដើម",
+        "help" : "ម៉ូដែល chat លំនាំដើមនឹងទទួលខុសត្រូវក្នុងការឆ្លើយ​សំណួរអ្នកប្រើប្រាស់ និងអនុវត្ត workflow ដែលមិនមានម៉ូដែលបានកំណត់ជាសង់។ វាត្រូវតែមានខ្លាំង និងទុកចិត្តបាន មានសម្រង់ល្អរវាងថ្លៃ ដំណើរការ និងគុណភាពលទ្ធផល។"
+      },
+      "ProviderBuy" : {
+        "label" : "តំណភ្ជាប់ទិញឥណទាន Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "តំណប្រាក់បណ្ដាញ"
+      },
+      "WebSiteLink" : {
+        "label" : "វេបសាយអ្នកផ្តល់សេវា",
+        "help" : "ចុចទីនេះសម្រាប់ព័ត៌មានទូទៅពីអ្នកផ្តល់សេវា។"
+      },
+      "AcquireCreditLink" : {
+        "label" : "ទិញឥណទានសម្រាប់អ្នកផ្គត់ផ្គង់",
+        "help" : "ចុចទីនេះដើម្បីទិញឥណទានសម្រាប់ api key របស់អ្នក។"
+      },
+      "EmbeddingModel" : {
+        "label" : "ម៉ូដែល embedding លំនាំដើម",
+        "help" : "ម៉ូដែលនេះនឹងទទួលខុសត្រូវក្នុងការបញ្ជូលន័យសេមែនទិក (embedding) និងនេះជាប្រភពស្វែងរកចាំបាច់សម្រាប់ទិន្នន័យ និងឯកសាររបស់អ្នក"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "អ្នកមិនអាចលុបវានេះបានទេ",
         "detail" : "វត្ថុនេះត្រូវបានយោងពីផ្នែកផ្សេងៗនៃកម្មវិធី"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "មានបញ្ហាក្នុងការជួសជុលប្រតិបត្តិការ:មានកំហុសក្នុងការដំណើរការ url:http://localhost:11434/v1/models",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ មានកំហុសក្នុងការដំណើរការ url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "មានបញ្ហាក្នុងប្រតិបត្ដិការ:ត្រូវតែដាក់ apiKey",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ ត្រូវតែដាក់ apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "កំហុសពេលចេញលទ្ធផលជជែកល្បឿនលឿន",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ៖ 400 សំណើមិនត្រឹមត្រូវពី POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការ:មានបញ្ហានៅពេលធ្វើការជាមួយ url:http://localhost:8000/v1/models",
+        "detail" : "បញ្ហា​ម៉ាស៊ីនបម្រើ: មានបញ្ហានៅពេលធ្វើការជាមួយ url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "បញ្ហាក្នុងពេលផ្សាយអត្ថបទជជែក",
+        "detail" : "បញ្ហា​ម៉ាស៊ីនបម្រើ: ការតភ្ជាប់ត្រូវបានកំណត់ឡើងវិញ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការឃៈមានបញ្ហានៅពេលធ្វើការជាមួយ url:https://api.openai.com/v1/models",
+        "detail" : "បញ្ហា​ម៉ាស៊ីនបម្រើ: មានបញ្ហានៅពេលធ្វើការជាមួយ url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការឃៈAnthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោគ្រាប់ api",
+        "detail" : "បញ្ហាម៉ាស៊ីនបម្រើ: Anthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោ គ្រាប់ api"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "បានបញ្ចប់"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ល្អ!",
+        "detail" : "ប្រតិបត្តការបានបញ្ចប់ដោយជោគជ័យ"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "អត្តសញ្ញាណដែលបានប្រើ",
         "help" : "ជ្រើសរើស ឬបង្កើតអត្តសញ្ញាណសម្រាប់ចូលប្រើប្រព័ន្ធ google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ជជែក"
+      },
+      "deep-search" : {
+        "label" : "ស្វែងរកជ្រៅ"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "ស្វែងរកជ្រៅ"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "កំពុងស្វែងរកព័ត៌មានសក្ដិសម"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "កំពុងបង្រួមរបាយការណ៍ចុងក្រោយ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "លទ្ធផលស្វែងរកដែលបានវិភាគ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "លទ្ធផលស្វែងរកប្រព័ន្ធដែលបានវិភាគ សម្រាប់"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "សូមជ្រើសយ៉ាងហោចណាស់ជម្រើសមួយខាងក្រោម"
+      },
+      "LaunchBtn" : {
+        "label" : "ដំណើរការស្វែងរក"
+      },
+      "SkipDeepSearch" : {
+        "label" : "រំលងការស្វែងរកជ្រៅ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "មូលដ្ឋានចំណេះដឹងដែលបានជ្រើស"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ប្រព័ន្ធដែលបានជ្រើស"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ជ្រើសប្រភព"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ឯកសារដែលបានវិភាគ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "បញ្ចូល"
+      },
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "DeleteBtn" : {
+        "label" : "លុប"
+      },
+      "SearchSettingTab" : {
+        "label" : "កំណត់ការស្វែងរក"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "បញ្ចូល prompt សម្រាប់បង្ហាញព័ត៌មានពាក់ព័ន្ធនៃឯកសារ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "បញ្ចូល prompt សម្រាប់បង្រួមព័ត៌មានពាក់ព័ន្ធដែលបានសម្រេច"
+      },
+      "MainPanel" : {
+        "label" : "កែសម្រួលកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធម៉ូដែលភាសាធំ"
+      },
+      "description" : {
+        "label" : "សេចក្ដីពិពណ៌នា",
+        "help" : "បញ្ចូលសេចក្ដីពិពណ៌នានៃកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "code" : {
+        "label" : "កូដតែមួយគត់",
+        "help" : "កូដតែមួយគត់ដែលបង្កើតដោយស្វ័យប្រវត្តិនៃកំណត់រចនាសម្ព័ន្ធ deep search"
+      },
+      "searchType" : {
+        "label" : "ប្រភេទស្វែងរក",
+        "help" : "ជ្រើសរើសស្វែងរកសេមេនតិកតែមួយគ្រឿង ឬច្រើន hop"
+      },
+      "topK" : {
+        "label" : "ចំនួនផ្នែកអត្ថបទដែលបានយក (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ម៉ូដែលភាសាធំដែលប្រើ",
+        "help" : "បញ្ជាក់ម៉ូដែលភាសាធំដែលប្រើសម្រាប់ Deep search គ្មានជ្រើសរើសនឹងប្រើលំនាំដើម។"
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt វិភាគឯកសារ",
+        "help" : "កែសម្រួល prompt ដែលនឹងប្រើសម្រាប់បង្ហាញព័ត៌មានពាក់ព័ន្ធនៅក្នុងផ្នែកឯកសារ។"
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt បង្រួមព័ត៌មានដែលបានសន្និដ្ឋាន",
+        "help" : "កែសម្រួល prompt ដែលនឹងប្រើសម្រាប់បង្រួមព័ត៌មានសំខាន់ៗដែលបានស្រាវជ្រាវចេញពីឯកសារ។"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរកលើកទី១",
+        "help" : "កម្រិតសេមេនតិចលើកទី១ (ជួរពី 0.5 ដល់ 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរកលើកទី២",
+        "help" : "កម្រិតសេមេនតិចលើកទី២ (ជួរពី 0.5 ដល់ 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "ម៉ូដែលភាសាធំលំនាំដើម",
+        "help" : "ម៉ូដែលភាសាធំលំនាំដើមនឹងត្រូវប្រើសម្រាប់ដំណើរការ Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "កម្រិតប្រសិទ្ធភាពការស្វែងរក",
+        "help" : "កម្រិតសេមេនតិច (ជួរពី 0.5 ដល់ 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "ការកំណត់សុវត្ថិភាព"
+      },
+      "accessibleToAll" : {
+        "label" : "អ្នករាល់គ្នាអាចចូលប្រើបាន"
+      },
+      "datasource" : {
+        "label" : "ប្រភពទិន្នន័យ"
+      },
+      "allowedGroups" : {
+        "label" : "ក្រុមដែលអាចចូលប្រើបាន"
+      },
+      "allowedUsers" : {
+        "label" : "អ្នកប្រើដែលអាចចូលប្រើបាន"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ចូលប្រើតាមប្រភពទិន្នន័យសម្រាប់អ្នកប្រើ/ក្រុម",
+        "help" : "ស្វែងរកជ្រៅនឹងត្រូវបើកសម្រាប់ប្រភពទិន្នន័យខាងក្រៅនិងអ្នកប្រើឬក្រុមនីមួយៗ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ចូលប្រើតាមអ្នកប្រើ/ក្រុមតែមួយ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ចូលប្រើតាមប្រភពទិន្នន័យ/អ្នកប្រើ/ក្រុម"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "ប្រើ ឬ បង្កើត​ព័ត៌មានសម្អាត api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "api key/ព័ត៌មានសម្អាត",
+        "help" : "ជ្រើស api key ឬព័ត៌មានសម្អាតសម្រាប់អ្នកផ្តល់សេវានេះ"
+      },
+      "NewApiKey" : {
+        "label" : "api key ថ្មី",
+        "help" : "បញ្ចូល api key ថ្មីដើម្បីប្រើជាមួយអ្នកផ្តល់សេវានេះ"
+      },
+      "PiSave" : {
+        "label" : "រក្សាទុក"
+      },
+      "NewUserName" : {
+        "label" : "ឈ្មោះអ្នកប្រើ",
+        "help" : "ឈ្មោះអ្នកប្រើសម្រាប់ចូលប្រើសេវាអ្នកផ្តល់សេវា"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ប្រើព័ត៌មានសម្អាតដែលមានឬ បង្កើតថ្មី",
+        "help" : "ប្រើព័ត៌មានសម្អាតដែលមានឬបង្កើតថ្មីសម្រាប់អ្នកផ្តល់សេវានេះ"
+      },
+      "newSecretDescription" : {
+        "label" : "ពិពណ៌នាព័ត៌មានសម្អាត",
+        "help" : "ពិពណ៌នាព័ត៌មានសម្អាត api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ទិន្នន័យសម្អាតបានបង្កើត",
+        "detail" : "ទិន្នន័យសម្អាតបានបង្កើតដោយជោគជ័យ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "កំហុសក្នុងការទំនាក់ទំនងជាមួយម៉ាស៊ីនបម្រើ Ollama",
+        "detail" : "កំហុសបណ្តាញ ក្នុងការទំនាក់ទំនងប្រព័ន្ធចម្ងាយដើម្បីចូលប្រើមាតិកា\n បញ្ជីម៉ូឌែល កំហុសក្នុងការប្រើ url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ជជែកជាមួយអ្នកប្រើ"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ម៉ូដែលដែលប្រើសម្រាប់សេវាផ្ទៃក្នុង"
       }
     }
   }

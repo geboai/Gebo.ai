@@ -53,6 +53,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -139,7 +140,7 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 	 * @throws GeboContentHandlerSystemException If there's an error in the conversion
 	 */
 	@Override
-	protected MicrosoftGraphNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected MicrosoftGraphNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		MicrosoftGraphNavigationCoordinates coordinates = new MicrosoftGraphNavigationCoordinates();
 		coordinates.setRoot(path.root);
@@ -393,14 +394,14 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 
 	/**
 	 * Gets the position coordinates from native path objects.
-	 * 
 	 * @param nativepath The list of native position objects
+	 * 
 	 * @return The navigation coordinates
 	 * @throws GeboContentHandlerSystemException If there's an error getting the coordinates
 	 */
 	@Override
 	protected MicrosoftGraphNavigationCoordinates getPositionCoordinate(
-			List<MicrosoftGraphNativePositionObject> nativepath) throws GeboContentHandlerSystemException {
+			List<MicrosoftGraphNativePositionObject> nativepath, Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		MicrosoftGraphNavigationCoordinates coordinate = new MicrosoftGraphNavigationCoordinates();
 		if (!nativepath.isEmpty()) {
 			MicrosoftGraphNativePositionObject firstItem = nativepath.get(0);
@@ -425,7 +426,7 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 				}
 				reference.path = pathInfo;
 			}
-			coordinate = toNavigationPosition(reference);
+			coordinate = toNavigationPosition(reference, environment);
 		}
 		return coordinate;
 
@@ -595,6 +596,37 @@ public class GMicrosoftGraphVirtualFilesystemConsumingServiceImpl extends
 			GSharepointProjectEndpoint endpoint, GAbstractVirtualFilesystemObject doc,
 			MicrosoftGraphResourceReference reference, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<MicrosoftGraphNativePositionObject> toResourcesNativeCoordinates(MicrosoftGraphNavigationCoordinates position,
+			GSharepointContentManagementSystem system, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(GSharepointContentManagementSystem system)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected MicrosoftGraphResourceReference getResourceHandle(SearchableSystemMetaData system,
+			MicrosoftGraphNavigationCoordinates navigationPosition,
+			List<MicrosoftGraphNativePositionObject> nativeCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected InputStream streamResource(GSharepointContentManagementSystem system,
+			MicrosoftGraphResourceReference remoteReference, Map<String, Object> environment) {
 		// TODO Auto-generated method stub
 		return null;
 	}

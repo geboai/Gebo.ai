@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.userspace.handler.impl;
 
@@ -40,6 +37,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.userspace.handler.GUserspaceContentManagementSystem;
 import ai.gebo.userspace.handler.GUserspaceFile;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
@@ -48,40 +46,40 @@ import ai.gebo.userspace.handler.repository.UserspaceFileRepository;
 import ai.gebo.userspace.handler.repository.UserspaceProjectEndpointRepository;
 
 /**
- * Implementation of the userspace content management system handler.
- * This class manages userspace content by extending the abstract content management system handler.
- * AI generated comments
+ * Implementation of the userspace content management system handler. This class
+ * manages userspace content by extending the abstract content management system
+ * handler. AI generated comments
  */
 @Service
-public class GUserspaceContentManagementSystemHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint>
+public class GUserspaceContentManagementSystemHandlerImpl extends
+		GAbstractContentManagementSystemHandler<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint, NoContentConsumingSessionParam>
 		implements IGUserspaceContentManagementSystemHandler {
 
 	/**
 	 * The constant content management system type for userspace.
 	 */
 	private static final GContentManagementSystemType type = new GContentManagementSystemType();
-	
+
 	/**
 	 * The constant content management system for userspace.
 	 */
 	private static final GUserspaceContentManagementSystem system = new GUserspaceContentManagementSystem();
-	
+
 	/**
 	 * Repository for userspace project endpoints.
 	 */
 	final UserspaceProjectEndpointRepository endpointsRepository;
-	
+
 	/**
 	 * Repository for document references.
 	 */
 	final DocumentReferenceRepository documentRepository;
-	
+
 	/**
 	 * Repository for userspace files.
 	 */
 	final UserspaceFileRepository filesRepository;
-	
+
 	/**
 	 * Static initializer to set up the system type and system properties.
 	 */
@@ -97,21 +95,23 @@ public class GUserspaceContentManagementSystemHandlerImpl
 	 * Constructor for the userspace content management system handler.
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for creating document references
-	 * @param endpointsRepository Repository for userspace project endpoints
-	 * @param localFolderDiscoveryService Service for discovering local folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for messaging
-	 * @param filesRepository Repository for userspace files
-	 * @param documentRepository Repository for document references
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for creating document references
+	 * @param endpointsRepository          Repository for userspace project
+	 *                                     endpoints
+	 * @param localFolderDiscoveryService  Service for discovering local folders
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for messaging
+	 * @param filesRepository              Repository for userspace files
+	 * @param documentRepository           Repository for document references
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public GUserspaceContentManagementSystemHandlerImpl(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
 			IGDocumentReferenceFactory contentHandler, UserspaceProjectEndpointRepository endpointsRepository,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
 			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
-			UserspaceFileRepository filesRepository, DocumentReferenceRepository documentRepository, IGDocumentReferenceIngestionHandler ingestionHandler) {
+			UserspaceFileRepository filesRepository, DocumentReferenceRepository documentRepository,
+			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler, IGContentManagementSystemConfigurationDao.of(system),
 				IGProjectEndpointRuntimeConfigurationDao.of(endpointsRepository), localFolderDiscoveryService,
 				persistentObjectManager, messageBroker, ingestionHandler);
@@ -134,10 +134,11 @@ public class GUserspaceContentManagementSystemHandlerImpl
 	/**
 	 * Finds a project endpoint by system code and project endpoint code.
 	 * 
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The userspace project endpoint
-	 * @throws GeboContentHandlerSystemException If there's an error finding the endpoint
+	 * @throws GeboContentHandlerSystemException If there's an error finding the
+	 *                                           endpoint
 	 */
 	@Override
 	public GUserspaceProjectEndpoint findProjectEndPoint(String systemCode, String projectEndpointCode)
@@ -171,7 +172,8 @@ public class GUserspaceContentManagementSystemHandlerImpl
 	 * 
 	 * @param projectEndPoint The userspace project endpoint
 	 * @return The userspace content management system
-	 * @throws GeboContentHandlerSystemException If there's an error getting the system
+	 * @throws GeboContentHandlerSystemException If there's an error getting the
+	 *                                           system
 	 */
 	@Override
 	public GUserspaceContentManagementSystem getSystem(GUserspaceProjectEndpoint projectEndPoint)
@@ -181,21 +183,23 @@ public class GUserspaceContentManagementSystemHandlerImpl
 
 	/**
 	 * Implements the content consumption for userspace content management system.
-	 * This method handles the consumption of content from the userspace, creating folders if needed
-	 * and processing deleted files.
+	 * This method handles the consumption of content from the userspace, creating
+	 * folders if needed and processing deleted files.
 	 * 
 	 * @param contentManagementConfig The content management configuration
-	 * @param buildSystems The list of build systems
-	 * @param endpoint The userspace project endpoint
-	 * @param consumer The content consumer
-	 * @param messagesConsumer The user messages consumer
-	 * @param errorConsumer The error consumer for content access errors
-	 * @throws GeboContentHandlerSystemException If there's an error during consumption
+	 * @param buildSystems            The list of build systems
+	 * @param endpoint                The userspace project endpoint
+	 * @param consumer                The content consumer
+	 * @param messagesConsumer        The user messages consumer
+	 * @param errorConsumer           The error consumer for content access errors
+	 * @throws GeboContentHandlerSystemException If there's an error during
+	 *                                           consumption
 	 */
 	@Override
 	protected void consumeImplementation(GUserspaceContentManagementSystem contentManagementConfig,
-			List<GBuildSystem> buildSystems, GUserspaceProjectEndpoint endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+			List<GBuildSystem> buildSystems, GUserspaceProjectEndpoint endpoint, NoContentConsumingSessionParam param,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 		String folder = localFolderDiscoveryService.getLocalPersistentFolder(contentManagementConfig, endpoint);
 		Path rootPath = Path.of(folder);
 		if (!Files.exists(rootPath)) {
@@ -209,10 +213,12 @@ public class GUserspaceContentManagementSystemHandlerImpl
 		List<GUserspaceFile> files = filesRepository.findByUserspaceEndpointCodeAndDeletedIsTrue(endpoint.getCode());
 		if (!files.isEmpty()) {
 			List<String> names = files.stream().map(x -> x.getName()).toList();
-			Stream<GDocumentReference> docStream = documentRepository.findByParentVirtualFolderCodeAndNameIn(root.getCode(),names);
-			List<GDocumentReference> toDelete = docStream.filter(x->(x.getDeleted()==null || !x.getDeleted())).toList();
+			Stream<GDocumentReference> docStream = documentRepository
+					.findByParentVirtualFolderCodeAndNameIn(root.getCode(), names);
+			List<GDocumentReference> toDelete = docStream.filter(x -> (x.getDeleted() == null || !x.getDeleted()))
+					.toList();
 			if (!toDelete.isEmpty()) {
-				toDelete.stream().map(x->{
+				toDelete.stream().map(x -> {
 					x.setDeleted(true);
 					return x;
 				}).forEach(consumer);
@@ -221,6 +227,7 @@ public class GUserspaceContentManagementSystemHandlerImpl
 		consume(root, contentManagementConfig, buildSystems, endpoint, rootPath, (t) -> true, consumer,
 				messagesConsumer, errorConsumer);
 	}
+
 	@Override
 	public boolean isContentsOnLocalFilesystem() {
 

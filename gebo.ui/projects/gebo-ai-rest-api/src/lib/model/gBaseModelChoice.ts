@@ -24,4 +24,5 @@ export interface GBaseModelChoice {
     metaInfos?: ModelMetaInfo;
     informativeUrl?: string;
     contextLength?: number;
+    nativeModelMetaInfos?: any;
 }

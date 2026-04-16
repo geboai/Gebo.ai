@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
 	<dependencies>
@@ -26,6 +26,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.rag-threasholds-autotune</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>
 			<version>${project.version}</version>
@@ -35,6 +40,15 @@
 			<artifactId>gebo.core.contents.security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.rag.support.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

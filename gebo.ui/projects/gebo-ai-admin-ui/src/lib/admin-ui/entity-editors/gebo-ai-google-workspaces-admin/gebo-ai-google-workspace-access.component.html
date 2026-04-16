@@ -13,7 +13,7 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #gwHandshakeView header="Access to google workspaces informations">
-    <p-messages id="Messages" gebo-ai-label [value]="userMessages" [enableService]="false"></p-messages>
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
     <div class="grid" *ngIf="!handshakeData" [formGroup]="formGroup">
         <div class="col-12">

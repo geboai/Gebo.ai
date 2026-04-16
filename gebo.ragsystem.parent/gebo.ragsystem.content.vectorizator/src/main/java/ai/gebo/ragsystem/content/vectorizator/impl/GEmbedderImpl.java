@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
@@ -246,7 +247,20 @@ public class GEmbedderImpl implements IGEmbedder {
 
 					// Add tokenized documents to vector store
 					if (!tokenizeddocuments.isEmpty()) {
+						long time = System.currentTimeMillis();
+						LOGGER.info("VECTORIZING: Start vectorizing " + tokenizeddocuments.size() + " fragments");
 						embedder.getVectorStore().add(tokenizeddocuments);
+						long totalTokens = 0l;
+						for (Document doc : tokenizeddocuments) {
+							Number tokensCount = doc.getMetadata() != null
+									? (Number) doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
+									: null;
+							if (tokensCount!=null) {
+								totalTokens+=tokensCount.longValue();
+							}
+						}
+						LOGGER.info("VECTORIZING: Vectorized " + tokenizeddocuments.size() + "  fragments, "+totalTokens+" tokens in "
+								+ (System.currentTimeMillis() - time) + " (msec)");
 					}
 
 					if (LOGGER.isDebugEnabled()) {

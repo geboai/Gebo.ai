@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
@@ -19,17 +16,11 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * Gebo.ai comment agent
  *
  * Interface for embedding model runtime configuration data access object (DAO).
- * This interface provides methods to manage the runtime configuration of embedding models
- * and to interact with other runtime module components.
+ * This interface provides methods to manage the runtime configuration of
+ * embedding models and to interact with other runtime module components.
  */
 public interface IGEmbeddingModelRuntimeConfigurationDao
-        extends IGRuntimeModelConfigurationDao<IGConfigurableEmbeddingModel>, IGRuntimeModuleComponent {
-
-    /**
-     * Adds a runtime configuration by using the provided configuration information.
-     *
-     * @param config The base embedding model configuration to be added.
-     * @throws LLMConfigException If there is an exception during the configuration process.
-     */
-    public void addRuntimeByConfig(GBaseEmbeddingModelConfig config) throws LLMConfigException;
+		extends IGRuntimeModelConfigurationDao<IGConfigurableEmbeddingModel, GBaseEmbeddingModelConfig>,
+		IGRuntimeModuleComponent {
+	
 }

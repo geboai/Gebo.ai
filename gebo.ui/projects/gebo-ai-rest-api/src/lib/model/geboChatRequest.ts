@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
-import { RagDocumentsCachedDaoResult } from './ragDocumentsCachedDaoResult';
 import { UserUploadedContent } from './userUploadedContent';
 
 export interface GeboChatRequest { 
@@ -20,9 +19,24 @@ export interface GeboChatRequest {
     chatModelCode?: string;
     streamResponse?: boolean;
     query?: string;
+    rewrittenQuery?: string;
     customRagConfig?: GeboRagRequestCustomConfig;
     choosedKnowledgeBases?: Array<string>;
+    chatPipelineProcessId?: string;
     forcedRequestDocuments?: Array<string>;
-    documents?: RagDocumentsCachedDaoResult;
     userUploadedContents?: Array<UserUploadedContent>;
+    deepSearchDataSources?: Array<string>;
+    userIntent?: GeboChatRequest.UserIntentEnum;
+    tokensSize?: number;
+}
+export namespace GeboChatRequest {
+    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'UNKNOWN';
+    export const UserIntentEnum = {
+        QA: 'QA' as UserIntentEnum,
+        REPORT: 'REPORT' as UserIntentEnum,
+        HOWTO: 'HOWTO' as UserIntentEnum,
+        DECISION: 'DECISION' as UserIntentEnum,
+        SUMMARY: 'SUMMARY' as UserIntentEnum,
+        UNKNOWN: 'UNKNOWN' as UserIntentEnum
+    };
 }

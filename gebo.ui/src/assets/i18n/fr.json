@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Se connecter"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Échec de l'opération",
+        "detail" : "Impossible de s'authentifier avec les identifiants fournis"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Intégration Google Drive/Workspaces",
         "description" : "Configurez Gebo.ai pour accéder aux données d’équipe de votre Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Configurer l'api de recherche Google",
+        "description" : "Configurer les identifiants de l'api de recherche Google pour les recherches web IA"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Configurer la Deep search",
+        "description" : "Configurer les paramètres de Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Réglage automatique des paramètres de génération augmentée par récupération"
+      },
+      "Description" : {
+        "label" : "Description"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Dernière mise à jour du réglage"
+      },
+      "Code" : {
+        "label" : "Code du modèle d'intégration/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Seuil calculé"
+      },
+      "Autotuned" : {
+        "label" : "Ajusté automatiquement"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Étapes obligatoires de configuration Gebo.ai terminées...",
+        "detail" : "Les étapes obligatoires ont été terminées mais certaines étapes manquantes empêchent votre organisation de profiter au maximum de ce logiciel"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Il manque une étape obligatoire à la configuration Gebo.ai",
+        "detail" : "Veuillez vérifier les étapes en rouge dans le processus de configuration"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Système Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Modifier le système"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Configurer l'accès aux fournisseurs de llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Choix étendus d’infrastructure/fournisseurs"
+      },
+      "MainPanelTitle" : {
+        "label" : "Configurer les grands modèles de langage utilisés"
+      },
+      "EasySetup" : {
+        "label" : "Correction/configuration initiale simple"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Configurer les grands modèles de langage"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Description"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Annuler"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Clé api de recherche Google"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Créer des identifiants de recherche Google"
+      },
+      "CreateBtn" : {
+        "label" : "Créer"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID du moteur de recherche",
+        "help" : "Saisissez l'identifiant du moteur de recherche obtenu lors de l'enregistrement des identifiants de l'api de recherche Google."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Code de configuration"
+      },
+      "DescriptionHeader" : {
+        "label" : "Description"
+      },
+      "apiKey" : {
+        "label" : "Clé api",
+        "help" : "Saisissez la clé api obtenue lors de l'enregistrement des identifiants de l'api de recherche Google."
+      },
+      "MainPanel" : {
+        "label" : "Configurer l'api de recherche Google"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Supprimer",
+        "help" : "Supprimer les identifiants de l'api de recherche Google"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Config Deep search",
+        "help" : "Ajouter une configuration Deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Modifier la configuration"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "désactivé"
+      },
+      "EditGroupBtn" : {
+        "label" : "Modifier"
+      },
+      "CodeHeader" : {
+        "label" : "code"
+      },
+      "DescriptionHeader" : {
+        "label" : "description"
+      },
+      "UsersHeader" : {
+        "label" : "utilisateurs"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Paramètres d'accès au modèle"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Fournisseur IA à distance opérationnel",
+        "detail" : "Le fournisseur est opérationnel et correctement configuré"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Exception pendant l’opération :Erreur avec l’url :https://api.openai.com/v1/models",
+        "detail" : "Erreur serveur : Erreur avec l’url :https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "définir comme modèle d'embedding par défaut",
         "help" : "Si vrai, cela sera utilisé comme modèle d'embedding par défaut lorsqu’aucun modèle n’est indiqué"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Fournisseur IA à distance opérationnel",
+        "detail" : "Le fournisseur est opérationnel et correctement configuré"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Modification de la configuration du modèle de discussion du serveur local (ou réseau) Ollama"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Modification de la configuration du modèle de discussion Anthropic"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Modification de la configuration du modèle de discussion MistralAI"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Modification de la configuration du modèle de discussion Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Paramètres d'accès au modèle"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Paramètres d'accès au modèle"
+      },
+      "forUses" : {
+        "label" : "Utilisation(s) du modèle",
+        "help" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle.",
+        "placeholder" : "Usages pour lesquels la plateforme Gebo.ai tiendra compte de ce modèle."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Êtes-vous sûr de vouloir supprimer cette discussion ?",
         "header" : "Supprimer la discussion"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Ajouter du contenu ou modifier le comportement de recherche"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Ajouter du contenu ou modifier le comportement de recherche"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Ajouter du contenu ou modifier le comportement de recherche"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Sources",
+        "help" : "Ouvrir la liste des documents analysés"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Détails de la réponse deep search et des sources"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Résultat de l’analyse Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Erreur lors de la recherche Confluence Search",
+        "detail" : "Erreur serveur : Problèmes lors de l'accès au système confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nouveau chat chargé",
+        "detail" : "Nouveau chat chargé avec succès"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Sélectionner les sources"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Choisissez au moins une des options suivantes"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ignorer la deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de connaissances choisies"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Systèmes choisis"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ajouter un document à la liste 'discuter avec'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Recherche approfondie en cours"
+      },
+      "RagLLMResponse" : {
+        "label" : "Exécution du retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Interrogation du llm"
+      },
+      "Waiting" : {
+        "label" : "Analyse du meilleur plan de réponse..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Exécution des outils"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Recherche assistée par IA en cours"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fichier analysé"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Résultat de recherche analysé"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Résultat de recherche du système analysé pour"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidation du rapport final"
+      },
+      "RUNNING" : {
+        "label" : "En cours "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "J’analyse votre demande"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Flux agentique choisi, agent en cours d’exécution"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Le niveau de service est : QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Exécution de l'agent choisi"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Téléverser un (des) fichier(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Parcourir/rechercher un (des) fichier(s) de l'entreprise"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat doc. choisi"
+      },
+      "agenticChat" : {
+        "label" : "Chat agentique"
+      },
+      "rag" : {
+        "label" : "Chat r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Multiples sources"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Recherche Web Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Recherche Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Recherche Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Recherche base de connaissances"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat avec fichier(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Recherche Web Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Recherche Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Recherche Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Utilisateur Google à imiter",
         "help" : "L’utilisateur qui sera imité par les identifiants fournis",
         "placeholder" : "L’utilisateur qui sera imité par les identifiants fournis"
+      },
+      "OK" : {
+        "summary" : "Enregistré avec succès",
+        "detail" : "Mise à jour réalisée avec succès"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Documents traités",
         "dataset-2-label" : "Documents en erreur",
         "dataset-3-label" : "Documents écartés"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexation texte intégral"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Docs non traités",
+        "label-1" : "Erreur de traitement des docs",
+        "label-2" : "Docs traités"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Docs reçus",
+        "dataset-1-label" : "Docs traités",
+        "dataset-2-label" : "Docs en erreur",
+        "dataset-3-label" : "Docs écartés"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Jetons traités",
+        "dataset-1-label" : "Erreur de traitement des jetons"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "activer tous les appels de fonctions",
         "help" : "Active tous les outils et appels de fonctions disponibles ; si non activé, il sera possible de les activer plus tard dans le panneau d'administration des llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Exception pendant l’opération : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise",
+        "detail" : "Erreur serveur : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Fournisseur AI à distance OK",
+        "detail" : "Le fournisseur est opérationnel et configuré avec succès"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Exception lors de l’opération : 401 NON AUTORISÉ",
+        "detail" : "Erreur serveur : 401 NON AUTORISÉ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Exception lors de l'opération : Missing basePath",
+        "detail" : "Erreur serveur : basePath manquant"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Créer et activer"
+      },
+      "vendorId" : {
+        "label" : "Choisissez votre fournisseur de grand modèle de langage",
+        "help" : "Choisissez le fournisseur initial pour vos modèles de chat et d'intégration par défaut"
+      },
+      "secretId" : {
+        "label" : "Choisir les identifiants du fournisseur (clé API)",
+        "help" : "Choisissez l’un des identifiants existants pour le fournisseur llm sélectionné"
+      },
+      "InternalServiceModel" : {
+        "label" : "Modèle de chat des services internes",
+        "help" : "Le modèle de chat configuré pour les services internes sera responsable de l'extraction d'informations, de la synthèse et de l'exécution des workflows internes."
+      },
+      "ChatModel" : {
+        "label" : "Modèle de chat par défaut",
+        "help" : "Le modèle de chat par défaut sera responsable de répondre aux questions des utilisateurs et d’exécuter les workflows pour lesquels il n’existe pas de modèles configurés spécifiquement. Il doit être puissant et fiable, avec un bon équilibre entre coût, performance et qualité des résultats."
+      },
+      "ProviderBuy" : {
+        "label" : "Lien d’achat de crédit clé API"
+      },
+      "ProviderWWW" : {
+        "label" : "Lien du site web"
+      },
+      "WebSiteLink" : {
+        "label" : "Site web du fournisseur",
+        "help" : "Cliquez ici pour des informations générales sur le fournisseur."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Acheter le crédit du fournisseur",
+        "help" : "Cliquez ici pour acheter du crédit pour votre/vos clé(s) API."
+      },
+      "EmbeddingModel" : {
+        "label" : "Modèle d’intégration par défaut",
+        "help" : "Ce modèle sera responsable de l’indexation sémantique (intégration) et de la récupération de vos données et documents"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Vous ne pouvez pas supprimer ceci",
         "detail" : "Cet objet est référencé par une ou plusieurs autres parties de l'application"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Exception pendant l'opération : Erreur lors du traitement de l'url : http://localhost:11434/v1/models",
+        "detail" : "Erreur serveur : Erreur lors du traitement de l'url : http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Exception pendant l'opération : apiKey doit être défini",
+        "detail" : "Erreur serveur : apiKey doit être défini"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Erreur lors du streaming de la réponse de chat",
+        "detail" : "Erreur serveur : 400 Requête incorrecte depuis POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Exception pendant l’opération :Erreur avec l’url :http://localhost:8000/v1/models",
+        "detail" : "Erreur serveur : Erreur avec l’url :http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Erreur lors de la réception de la réponse de chat en streaming",
+        "detail" : "Erreur serveur : connexion réinitialisée"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Exception pendant l’opération :Erreur avec l’url :https://api.openai.com/v1/models",
+        "detail" : "Erreur serveur : Erreur avec l’url :https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Exception pendant l’opération : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise",
+        "detail" : "Erreur serveur : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Terminé"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Identité utilisée",
         "help" : "Sélectionnez ou créez l’identité permettant d’accéder au système google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Recherche d'informations pertinentes"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidation du rapport final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Résultat de recherche analysé"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Résultat de recherche système analysé pour"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Choisissez au moins une des options suivantes"
+      },
+      "LaunchBtn" : {
+        "label" : "Lancer la recherche"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ignorer la recherche approfondie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de connaissances choisies"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Systèmes choisis"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Sélectionner les sources"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fichier analysé"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Insérer"
+      },
+      "CancelBtn" : {
+        "label" : "Annuler"
+      },
+      "DeleteBtn" : {
+        "label" : "Supprimer"
+      },
+      "SearchSettingTab" : {
+        "label" : "Paramètre de recherche"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Insérer un prompt pour l'extraction d'informations pertinentes dans les documents"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Insérer un prompt pour la consolidation des informations extraites pertinentes"
+      },
+      "MainPanel" : {
+        "label" : "Édition de la configuration Deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Paramètre du large language model"
+      },
+      "description" : {
+        "label" : "Description",
+        "help" : "Saisissez la description de la configuration Deep search"
+      },
+      "code" : {
+        "label" : "Code unique",
+        "help" : "Code unique généré automatiquement de la configuration Deep search"
+      },
+      "searchType" : {
+        "label" : "Type de recherche",
+        "help" : "Choisir entre recherche sémantique simple ou multihop"
+      },
+      "topK" : {
+        "label" : "Nombre de segments de texte récupérés (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM utilisé",
+        "help" : "Précisez le large language model utilisé pour Deep search, celui par défaut sera utilisé si aucun n'est sélectionné."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt d'analyse des documents",
+        "help" : "Éditez le prompt qui sera utilisé pour extraire les informations pertinentes des fragments de documents."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt de consolidation des informations extraites",
+        "help" : "Éditez le prompt qui sera utilisé pour consolider en un seul rapport les informations pertinentes extraites des documents récupérés."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Seuil de similarité de recherche",
+        "help" : "Premier seuil de similarité sémantique (entre 0,5 et 1,0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Seuil de similarité du second hop",
+        "help" : "Second seuil de similarité sémantique (entre 0,5 et 1,0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model par défaut",
+        "help" : "Le large language model par défaut sera utilisé pour le traitement Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Seuil de similarité de recherche",
+        "help" : "Seuil de similarité sémantique (entre 0,5 et 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Paramètres de sécurité"
+      },
+      "accessibleToAll" : {
+        "label" : "Accessible à tous"
+      },
+      "datasource" : {
+        "label" : "Source de données"
+      },
+      "allowedGroups" : {
+        "label" : "Groupes autorisés"
+      },
+      "allowedUsers" : {
+        "label" : "Utilisateurs autorisés"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Accès utilisateurs/groupes par source de données",
+        "help" : "La deep search sera activée pour chaque source de données externe et utilisateur ou groupe"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Accès simple par utilisateur/groupe"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Accès par source de données et utilisateur/groupe"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Utiliser ou créer des identifiants de clé API"
+      },
+      "ExistingApiKey" : {
+        "label" : "Clé API/identifiants",
+        "help" : "Choisissez la clé API ou les identifiants pour ce fournisseur"
+      },
+      "NewApiKey" : {
+        "label" : "Nouvelle clé API",
+        "help" : "Saisissez une nouvelle clé API à utiliser avec ce fournisseur"
+      },
+      "PiSave" : {
+        "label" : "Enregistrer"
+      },
+      "NewUserName" : {
+        "label" : "Nom d'utilisateur",
+        "help" : "Nom d’utilisateur utilisé pour accéder aux services du fournisseur"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Utiliser existant ou nouveau",
+        "help" : "Utilisez des identifiants existants ou créez-en de nouveaux pour ce fournisseur"
+      },
+      "newSecretDescription" : {
+        "label" : "Description des identifiants",
+        "help" : "Description des identifiants de clé API"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Identifiants créés",
+        "detail" : "Identifiants créés avec succès"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Erreur de communication avec le serveur Ollama ",
+        "detail" : "Erreur réseau lors de la communication avec le système distant pour accéder à la liste des modèles de contenu\nErreur lors de l'utilisation de l'url : nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Discussion avec les utilisateurs"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modèle utilisé pour les services internes"
       }
     }
   }

@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Bejelentkezés"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "A művelet nem sikerült",
+        "detail" : "Nem sikerült azonosítani a megadott hitelesítő adatokkal"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integráció",
         "description" : "Állítsa be a Gebo.ai-t, hogy hozzáférjen a Google cloud Drive/Workspaces csapatadataihoz"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google keresési api beállítása",
+        "description" : "Add meg a Google keresési api hitelesítő adatokat AI webes keresésekhez"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search beállítása",
+        "description" : "Állítsd be a Deep search paramétereit"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. önhangolás",
+        "description" : "Automatikus augmented generálási paraméterek hangolása"
+      },
+      "Description" : {
+        "label" : "Leírás"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Legutóbbi hangolás frissítése"
+      },
+      "Code" : {
+        "label" : "Embedding modell/VectorStore kód"
+      },
+      "ComputedThreashold" : {
+        "label" : "Kiszámított küszöb"
+      },
+      "Autotuned" : {
+        "label" : "Automatikusan hangolva"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai beállítási kötelező lépések befejezve...",
+        "detail" : "A kötelező beállítások megtörténtek, de néhány hiányzó lépés miatt szervezete nem használhatja ki teljesen ezt a szoftvert"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "A Gebo.ai beállításból hiányzik néhány kötelező lépés",
+        "detail" : "Kérjük, nézze át a piros lépéseket a beállítási folyamatban"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence rendszer"
+      },
+      "EditSystemBtn" : {
+        "label" : "Rendszer szerkesztése"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms szolgáltatók elérésének beállítása"
+      },
+      "ExtensiveStup" : {
+        "label" : "Kiterjesztett infrastruktúra/szállítói lehetőségek"
+      },
+      "MainPanelTitle" : {
+        "label" : "Használatban lévő nagy nyelvi modellek beállítása"
+      },
+      "EasySetup" : {
+        "label" : "Könnyű kezdeti beállítás/javítás"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Nagy nyelvi modellek beállítása"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Leírás"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google keresési api kulcs"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google keresési hitelesítő adatok létrehozása"
+      },
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "customSearchEngineId" : {
+        "label" : "Keresőmotor azonosító",
+        "help" : "Add meg a keresőmotor azonosítót, amelyet a Google keresési api hitelesítő adatok regisztrációjánál kaptál."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "apiKey" : {
+        "label" : "Api kulcs",
+        "help" : "Add meg az api kulcsot, amelyet a Google keresési api hitelesítő adatok regisztrációjánál kaptál."
+      },
+      "MainPanel" : {
+        "label" : "Google keresési api beállítása"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Törlés",
+        "help" : "Google keresési api hitelesítő adatok törlése"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfiguráció",
+        "help" : "Adj hozzá deep search konfigurációt"
+      },
+      "EditSystemBtn" : {
+        "label" : "Konfiguráció szerkesztése"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "letiltva"
+      },
+      "EditGroupBtn" : {
+        "label" : "Szerkesztés"
+      },
+      "CodeHeader" : {
+        "label" : "kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "leírás"
+      },
+      "UsersHeader" : {
+        "label" : "felhasználók"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató rendben",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálták"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "állítsd be alapértelmezett beágyazási modellként",
         "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató rendben",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálták"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama helyi (vagy hálózati) szerver chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI chat modell konfiguráció szerkesztése"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Modell elérhetőségi beállításai"
+      },
+      "forUses" : {
+        "label" : "Modellhasználat(ok)",
+        "help" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi.",
+        "placeholder" : "Azok a felhasználások, amelyekhez a Gebo.ai platform ezt a modellt figyelembe veszi."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Biztos törli ezt a csevegést?",
         "header" : "Csevegés törlése"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Tartalom hozzáadása vagy keresési viselkedés módosítása"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Források",
+        "help" : "Elemezett dokumentumok listájának megnyitása"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Mélykeresési válasz és forrás részletei"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Mélykeresés elemzési eredménye"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Hiba a Confluence keresés során",
+        "detail" : "Szerver hiba: Problémák a confluence rendszer elérésében"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Új csevegés betöltve",
+        "detail" : "Az új csevegés sikeresen betöltve"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Források kiválasztása"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Válasszon legalább egy lehetőséget az alábbiak közül"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Mélykeresés kihagyása"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Kiválasztott tudásbázisok"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Kiválasztott rendszerek"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Dokumentum hozzáadása a 'csevegés ezzel' listához "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Mélykeresés futtatása"
+      },
+      "RagLLMResponse" : {
+        "label" : "Kiegészített generálás futtatása"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM lekérése"
+      },
+      "Waiting" : {
+        "label" : "Legjobb választerv elemzése..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Eszközök futtatása"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI által támogatott keresés futtatása"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Elemzett fájl"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Elemzett keresési eredmény"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Elemzett rendszeri keresési eredmény ehhez:"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "A végső jelentés összeállítása"
+      },
+      "RUNNING" : {
+        "label" : "Fut "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Elemzem a kérését"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Kiválasztott ügynöki folyamat, válaszügynök fut"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Szolgáltatási szint: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "A kiválasztott ügynök végrehajtása"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Fájl(ok) feltöltése"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Vállalati fájl(ok) böngészése/keresése"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Kiválasztott dok. chat"
+      },
+      "agenticChat" : {
+        "label" : "Ügynöki csevegés"
+      },
+      "rag" : {
+        "label" : "R.a.g. csevegés"
+      },
+      "deepSearch" : {
+        "label" : "Mélykeresés/Több forrás"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Mélykeresés/Google webes keresés"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Mélykeresés/Confluence keresés"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Mélykeresés/Jira keresés"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Mélykeresés/Tudásbázis keresés"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat fájl(ok)kal"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Mélykeresés/Google webes keresés"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Mélykeresés/Confluence keresés"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Mélykeresés/Jira keresés"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Impersonálandó Google felhasználó",
         "help" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak",
         "placeholder" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak"
+      },
+      "OK" : {
+        "summary" : "Sikeresen mentve",
+        "detail" : "A frissítés sikeresen megtörtént"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Feldolgozott dokumentumok",
         "dataset-2-label" : "Hibás dokumentumok",
         "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Teljes szöveg indexelés"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dok.",
+        "label-1" : "Hiba a dok. feldolgozásakor",
+        "label-2" : "Feldolgozott dok."
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Fogadott dok.",
+        "dataset-1-label" : "Feldolgozott dok.",
+        "dataset-2-label" : "Hibás dok.",
+        "dataset-3-label" : "Elvetett dok."
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "minden funkció engedélyezése",
         "help" : "Minden elérhető eszköz és funkcióhívás engedélyezése, ha nincs beállítva, később az llms admin panelen is lehetséges aktiválni"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Kivétel történt a művelet során: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül",
+        "detail" : "Szerverhiba: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató OK",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálva"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Kivétel a művelet közben:401 NEM ENGEDÉLYEZETT",
+        "detail" : "Szerver hiba: 401 NEM ENGEDÉLYEZETT"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Kivétel a művelet közben: Hiányzik a basePath",
+        "detail" : "Szerver hiba: Hiányzik a basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Létrehozás és aktiválás"
+      },
+      "vendorId" : {
+        "label" : "Válassza ki a nagy nyelvi modell szolgáltatót",
+        "help" : "Válassza ki a kezdeti szolgáltatót az alapértelmezett chathez és embedding modellekhez"
+      },
+      "secretId" : {
+        "label" : "Válasszon szolgáltatói hitelesítést (api kulcsot)",
+        "help" : "Válasszon egy meglévő hitelesítést a kiválasztott llm szolgáltatóhoz"
+      },
+      "InternalServiceModel" : {
+        "label" : "Belső szolgáltatások chat modell",
+        "help" : "A belső szolgáltatásokhoz konfigurált chat modell felel az információk kinyeréséért, összefoglalásáért és a belső folyamatok végrehajtásáért."
+      },
+      "ChatModel" : {
+        "label" : "Alapértelmezett chat modell",
+        "help" : "Az alapértelmezett chat modell felel a felhasználói kérdésekre adandó válaszokért, illetve a specifikusan nem konfigurált workflow-k végrehajtásáért. Erősnek, megbízhatónak kell lennie, jó egyensúlyt tartva az ár, a teljesítmény és a minőség között."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy kulcs vásárlási hivatkozás"
+      },
+      "ProviderWWW" : {
+        "label" : "Weboldal hivatkozás"
+      },
+      "WebSiteLink" : {
+        "label" : "Szolgáltató weboldala",
+        "help" : "Kattintson ide általános szolgáltatói információkért."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Szolgáltatói kredit vásárlása",
+        "help" : "Kattintson ide, hogy kredithez jusson api kulcsaihoz."
+      },
+      "EmbeddingModel" : {
+        "label" : "Alapértelmezett embedding modell",
+        "help" : "Ez a modell felel az adatok és dokumentumok szemantikus indexeléséért (embedding) és visszakereséséért"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ez nem törölhető",
         "detail" : "Erre az objektumra az alkalmazás más része(i) hivatkoznak"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Kivétel a művelet közben: Hiba az url feldolgozása során: http://localhost:11434/v1/models",
+        "detail" : "Szerverhiba: Hiba az url feldolgozása során: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Kivétel a művelet közben: apiKey beállítása szükséges",
+        "detail" : "Szerverhiba: apiKey beállítása szükséges"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Hiba a chat válasz streamelésekor",
+        "detail" : "Szerverhiba: 400 Hibás kérés a POST http://localhost:8000/v1/chat/completions címről"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: http://localhost:8000/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Hiba történt a chat válasz közvetítése közben",
+        "detail" : "Szerverhiba: Kapcsolat alaphelyzetbe állítva"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Kivétel történt a művelet során: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models",
+        "detail" : "Szerverhiba: Hiba a következő URL-lel dolgozva: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Kivétel történt a művelet során: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül",
+        "detail" : "Szerverhiba: Az Anthropic api nem működik a szükséges api kulcs konfiguráció nélkül"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Kész"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Használt identitás",
         "help" : "Válassza ki vagy hozzon létre egy identitást a google drive rendszer eléréséhez"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Releváns információk keresése"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Végső jelentés összeállítása"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Elemzett keresési eredmény"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Elemzett rendszer keresési eredménye ehhez:"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Válasszon legalább egy lehetőséget az alábbiak közül"
+      },
+      "LaunchBtn" : {
+        "label" : "Keresés indítása"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Mélykeresés kihagyása"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Kiválasztott tudásbázisok"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Kiválasztott rendszerek"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Források kiválasztása"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Elemzett fájl"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Beillesztés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SearchSettingTab" : {
+        "label" : "Keresési beállítás"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Adj meg promptot a dokumentumok releváns információinak kinyeréséhez"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Adj meg promptot a kinyert információk összevonásához"
+      },
+      "MainPanel" : {
+        "label" : "Deep search konfiguráció szerkesztése"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Nagy nyelvi modell beállítás"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a deep search konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A deep search konfiguráció automatikusan generált egyedi kódja"
+      },
+      "searchType" : {
+        "label" : "Keresés típusa",
+        "help" : "Válassz egyszerű szemantikus keresés vagy többlépcsős között"
+      },
+      "topK" : {
+        "label" : "Lekért szöveg szegmensek száma (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Használt llm",
+        "help" : "Állítsd be, hogy melyik nagy nyelvi modell legyen használva a Deep search-hoz, ha nincs kiválasztva, az alapértelmezett lesz\n                                    használva."
+      },
+      "analisysPrompt" : {
+        "label" : "Dokumentumok elemzési promptja",
+        "help" : "Szerkeszd azt a promptot, amelyet a dokumentumrészletek releváns információinak kinyerésére használsz."
+      },
+      "consolidationPrompt" : {
+        "label" : "Kinyert információk összevonási promptja",
+        "help" : "Szerkeszd azt a promptot, amelyet a lekért dokumentumokból kinyert információk egy jelentésbe való összevonására használsz."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Keresési hasonlósági küszöb",
+        "help" : "Első lépcsős szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Második lépcsős hasonlósági küszöb",
+        "help" : "Második lépcsős szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "defaultModel" : {
+        "label" : "Alapértelmezett nagy nyelvi modell",
+        "help" : "A Deep search feldolgozáshoz az alapértelmezett nagy nyelvi modell kerül használatra"
+      },
+      "similarityThreashold" : {
+        "label" : "Keresési hasonlósági küszöb",
+        "help" : "Szemantikus hasonlósági küszöb (0,5 és 1,0 között)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Biztonsági beállítások"
+      },
+      "accessibleToAll" : {
+        "label" : "Mindenki számára elérhető"
+      },
+      "datasource" : {
+        "label" : "Adatforrás"
+      },
+      "allowedGroups" : {
+        "label" : "Engedélyezett csoportok"
+      },
+      "allowedUsers" : {
+        "label" : "Engedélyezett felhasználók"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Felhasználó/csoport hozzáférés adatforrásonként",
+        "help" : "A mélykeresés minden külső adatforrásnál és felhasználónál vagy csoportnál elérhető lesz"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Egyszerű felhasználó/csoport hozzáférés"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Felhasználó/csoport hozzáférés adatforrásonként"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api kulcs hitelesítés használata vagy létrehozása"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api kulcs/hitelesítés",
+        "help" : "Válassza ki a szolgáltatóhoz tartozó api kulcsot vagy hitelesítést"
+      },
+      "NewApiKey" : {
+        "label" : "Új api kulcs",
+        "help" : "Adjon meg új api kulcsot ehhez a szolgáltatóhoz"
+      },
+      "PiSave" : {
+        "label" : "Mentés"
+      },
+      "NewUserName" : {
+        "label" : "Felhasználónév",
+        "help" : "A szolgáltatást elérő felhasználónév"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Létező vagy új használata",
+        "help" : "Válassza a meglévő vagy hozzon létre új hitelesítést ehhez a szolgáltatóhoz"
+      },
+      "newSecretDescription" : {
+        "label" : "Hitelesítés leírása",
+        "help" : "Api kulcs hitelesítés leírása"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Hitelesítés létrejött",
+        "detail" : "A hitelesítés sikeresen létrejött"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Hiba az Ollama szerverrel való kommunikációban ",
+        "detail" : "Hálózati hiba a távoli rendszerhez kapcsolódva a tartalom elérésében\n modellek listája Hiba a következő url-lel való munkában:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Csevegés felhasználókkal"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Modell belső szolgáltatásokhoz"
       }
     }
   }

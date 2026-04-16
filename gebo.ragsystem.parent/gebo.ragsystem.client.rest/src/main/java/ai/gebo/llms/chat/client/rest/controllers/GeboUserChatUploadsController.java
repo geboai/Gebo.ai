@@ -16,14 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
-import ai.gebo.llms.chat.client.rest.model.ChatSessionCreationWithUpload;
 import ai.gebo.model.OperationStatus;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,44 +36,14 @@ public class GeboUserChatUploadsController {
 	final IGChatService chatService;
 	final IGRagChatService ragChatService;
 
-	@PostMapping(value = "chatSessionUpload/{userSessionCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "chatSessionUpload/{userSessionCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(
 			@PathVariable("userSessionCode") String userSessionCode, @RequestParam("files[]") List<MultipartFile> files)
 			throws IOException {
 		return uploadsHandler.chatSessionUpload(userSessionCode, files);
 	}
 
-	@PostMapping(value = "chatSessionCreateWithUpload/{modelCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public OperationStatus<ChatSessionCreationWithUpload> chatSessionCreateWithUpload(
-			@PathVariable("modelCode") String modelCode, @RequestParam("files[]") List<MultipartFile> files)
-			throws IOException, GeboPersistenceException, LLMConfigException {
-		GUserChatInfo chatsession = chatService.createNewChat(modelCode);
-		OperationStatus<List<UserUploadedContent>> data = uploadsHandler.chatSessionUpload(chatsession.getCode(),
-				files);
-		ChatSessionCreationWithUpload out = new ChatSessionCreationWithUpload(data.getResult(), chatsession);
-		OperationStatus<ChatSessionCreationWithUpload> status = OperationStatus.of(out);
-		if (data.isHasErrorMessages()) {
-			status.setMessages(data.getMessages());
-		}
-		return status;
-	}
-
-	@PostMapping(value = "ragChatSessionCreateWithUpload/{chatProfileCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public OperationStatus<ChatSessionCreationWithUpload> ragChatSessionCreateWithUpload(
-			@PathVariable("chatProfileCode") String chatProfileCode, @RequestParam("files[]") List<MultipartFile> files)
-			throws IOException, GeboPersistenceException, LLMConfigException {
-		GUserChatInfo chatsession = ragChatService.createNewChat(chatProfileCode);
-		OperationStatus<List<UserUploadedContent>> data = uploadsHandler.chatSessionUpload(chatsession.getCode(),
-				files);
-		ChatSessionCreationWithUpload out = new ChatSessionCreationWithUpload(data.getResult(), chatsession);
-		OperationStatus<ChatSessionCreationWithUpload> status = OperationStatus.of(out);
-		if (data.isHasErrorMessages()) {
-			status.setMessages(data.getMessages());
-		}
-		return status;
-	}
-
-	@DeleteMapping(value = "deleteSessionUploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@DeleteMapping(value = "deleteSessionUploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(
 			@PathVariable("userSessionCode") String userSessionCode,
 			@NotNull @Valid @RequestBody List<UserUploadedContent> contents) {
@@ -95,8 +61,9 @@ public class GeboUserChatUploadsController {
 		if (contentType != null) {
 			response.setContentType(contentType);
 		}
-		
-		try (InputStream inputStream = this.uploadsHandler.streamContent(content);ServletOutputStream os = response.getOutputStream();) {
+
+		try (InputStream inputStream = this.uploadsHandler.streamContent(content);
+				ServletOutputStream os = response.getOutputStream();) {
 			IOUtils.copy(inputStream, os);
 		}
 	}

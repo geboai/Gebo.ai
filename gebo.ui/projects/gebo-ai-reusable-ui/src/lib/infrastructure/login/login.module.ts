@@ -28,7 +28,6 @@ import { LoginComponent } from "./login.component";
 import { PasswordModule } from "primeng/password";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
-import { MessagesModule } from "primeng/messages";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { InputTextModule } from "primeng/inputtext";
@@ -41,6 +40,7 @@ import { LoggedComponent } from "./logged.component";
 import { LogoutComponent } from "./logout.component";
 import { GeboAIReloadForwardComponent } from "./reload-forward.component";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
+import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 /**
  * Defines the route configuration for the login module.
  * Sets up the '/ui/login' path to be handled by the LoginComponent.
@@ -54,9 +54,9 @@ const routes: Routes = [
 
 @NgModule({
     imports: [CommonModule, PasswordModule, InputTextModule, ButtonModule,
-        BlockUIModule,
-        PanelModule,
-        MessagesModule, ReactiveFormsModule, FormsModule, RouterModule.forRoot(routes), FieldsetModule,GeboAIFieldTranslationContainerModule],
+    BlockUIModule,
+    PanelModule,
+    ReactiveFormsModule, FormsModule, RouterModule.forRoot(routes), FieldsetModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule],
     declarations: [LoginComponent, GeboAIOauth2LandingComponent, LoggedComponent, LogoutComponent,GeboAIReloadForwardComponent],
     exports: [LoginComponent],
     providers: [LoginService, GenericOauth2ClientLoginService, GenericOauth2ServerSideLoginService]

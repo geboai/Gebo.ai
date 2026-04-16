@@ -29,6 +29,7 @@ import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.contents.ReferenceType;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.model.base.GeboComponentInfo;
 
 /**
  * AI generated comments Implementation of the IGDocumentReferenceFactory
@@ -73,8 +74,8 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 	 */
 	@Override
 	public GDocumentReference createReference(Path file, String codePrefix, String uriPrefix, String completeUrl,
-			GProjectEndpoint projectEndpoint, GVirtualFolder virtualFolder, String moduleId)
-			throws GeboContentHandlerSystemException {
+			GProjectEndpoint projectEndpoint, GVirtualFolder virtualFolder, String moduleId,
+			String messagingComponentId) throws GeboContentHandlerSystemException {
 		assert projectEndpoint != null;
 		assert virtualFolder != null;
 		try {
@@ -83,6 +84,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			GDocumentReference reference = new GDocumentReference();
 			reference.setReferenceType(ReferenceType.FILE);
 			reference.setAbsolutePath(file.toAbsolutePath().toString());
+			reference.setName(file.getFileName().toString());
 			reference.setCode(codePrefix + "/" + file.getFileName().toString());
 			reference.setContentType(mimeType);
 			reference.setExtension(extension);
@@ -96,6 +98,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			reference.setName(file.getFileName().toString());
 			reference.setMessagingModuleId(moduleId);
 			reference.setSkippedVectorizationContent(false);
+			reference.setOriginComponent(new GeboComponentInfo(moduleId, messagingComponentId));
 			if (completeUrl != null) {
 				reference.setUri(completeUrl);
 			} else if (uriPrefix != null) {
@@ -137,8 +140,8 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 	 */
 	@Override
 	public <ProjectEndpointType extends GProjectEndpoint> GDocumentReference createDeletedReference(Path file,
-			String codePrefix, String uriPrefix, String completeUrl, GProjectEndpoint projectEndpoint, String moduleId)
-			throws GeboContentHandlerSystemException {
+			String codePrefix, String uriPrefix, String completeUrl, GProjectEndpoint projectEndpoint, String moduleId,
+			String messagingComponentId) throws GeboContentHandlerSystemException {
 		assert projectEndpoint != null;
 
 		try {
@@ -155,6 +158,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			reference.setMessagingModuleId(moduleId);
 			reference.setDeleted(true);
 			reference.setSkippedVectorizationContent(false);
+			reference.setOriginComponent(new GeboComponentInfo(moduleId, messagingComponentId));
 			if (completeUrl != null) {
 				reference.setUri(completeUrl);
 			} else if (uriPrefix != null) {
@@ -192,7 +196,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 	@Override
 	public <ProjectEndpointType extends GProjectEndpoint> GDocumentReference createArchiveReference(Path originalFile,
 			ZipFile zipFile, ZipEntry entry, String codePrefix, ProjectEndpointType projectEndpoint,
-			GVirtualFolder virtualFolder, String messagingModuleId) {
+			GVirtualFolder virtualFolder, String messagingModuleId, String messagingComponentId) {
 		assert projectEndpoint != null;
 		assert virtualFolder != null;
 		try {
@@ -215,6 +219,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 			reference.setArchiveInternalPath(entry.getName());
 			reference.setNestedInArchive(true);
 			reference.setSkippedVectorizationContent(false);
+			reference.setOriginComponent(new GeboComponentInfo(messagingModuleId, messagingComponentId));
 			if (virtualFolder != null) {
 				reference.setRelativePath(virtualFolder.getRelativePath() + "/" + originalFile.getFileName().toString()
 						+ "/" + entry.getName());
@@ -261,7 +266,8 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 	@Override
 	public GDocumentReference createWebDocumentReference(GVirtualFolder spaceFolder, GProjectEndpoint projectEndpoint,
 			String code, String name, String contentType, String url, Date modificationTimestamp,
-			HashMap<String, Object> meta, String moduleId) throws GeboContentHandlerSystemException {
+			HashMap<String, Object> meta, String moduleId, String messagingComponentId)
+			throws GeboContentHandlerSystemException {
 		assert projectEndpoint != null;
 		assert spaceFolder != null;
 		GDocumentReference reference = new GDocumentReference();
@@ -281,7 +287,7 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 		reference.setParentVirtualFolderCode(spaceFolder.getCode());
 		reference.setParentProjectCode(projectEndpoint.getCode());
 		reference.setSkippedVectorizationContent(false);
-
+		reference.setOriginComponent(new GeboComponentInfo(moduleId, messagingComponentId));
 		if (projectEndpoint.getVectorizeOnlyExtensions() != null
 				&& !projectEndpoint.getVectorizeOnlyExtensions().isEmpty() && reference.getExtension() != null) {
 			reference.setSkippedVectorizationContent(
@@ -304,9 +310,10 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 				reference.setReferenceType(ReferenceType.FILE);
 				reference.setAbsolutePath(file.toAbsolutePath().toString());
 				reference.setCode(file.getFileName().toString());
+				reference.setName(file.getFileName().toString());
 				reference.setContentType(mimeType);
 				reference.setExtension(extension);
-				
+
 				FileTime lastModified = Files.getLastModifiedTime(file);
 				if (lastModified != null) {
 					reference.setModificationDate(new Date(lastModified.toMillis()));
@@ -315,11 +322,26 @@ public class GDocumentReferenceFactoryImpl implements IGDocumentReferenceFactory
 				reference.setDeleted(false);
 				reference.setName(file.getFileName().toString());
 				reference.setSkippedVectorizationContent(false);
-				
+
 				return reference;
 			} catch (Throwable th) {
 				throw new GeboContentHandlerSystemException("exception in extractContent(...)", th);
 			}
 		}
+	}
+
+	@Override
+	public GDocumentReference createReference(String uri, String name, String contentType, String extension, Long size,
+			String messageModuleId, String messagingComponentId) throws GeboContentHandlerSystemException {
+		GDocumentReference reference = new GDocumentReference();
+		reference.setReferenceType(ReferenceType.WEB);
+		reference.setAbsolutePath(uri);
+		reference.setCode(uri);
+		reference.setContentType(contentType);
+		reference.setExtension(extension);
+		reference.setName(name);
+		reference.setParentVirtualFolderCode(null);
+		reference.setOriginComponent(new GeboComponentInfo(messageModuleId, messagingComponentId));
+		return reference;
 	}
 }

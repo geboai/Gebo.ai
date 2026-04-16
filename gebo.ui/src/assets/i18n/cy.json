@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Mewngofnodi"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Gweithrediad wedi methu",
+        "detail" : "Methu dilysu gyda'r manylion a ddarparwyd"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integreiddio Google Drive/Workspaces",
         "description" : "Ffurfweddu Gebo.ai i gael mynediad at ddata tîm Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Ffurfweddu api chwilio Google",
+        "description" : "Ffurfweddu manylion mewngofnodi api chwilio Google ar gyfer chwiliadau gwe AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Ffurfweddu Deep search",
+        "description" : "Ffurfweddu paramedrau Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Tynnu paramedrau awtomeiddio ar gyfer cynhyrchu wedi'i atgyfnerthu"
+      },
+      "Description" : {
+        "label" : "Disgrifiad"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Diweddariad diweddaraf tiwnio"
+      },
+      "Code" : {
+        "label" : "Cod model mewnblannu/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Trothwy cyfrifo"
+      },
+      "Autotuned" : {
+        "label" : "Wedi'i diwnio'n awtomatig"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Camau hanfodol ar gyfer setup Gebo.ai wedi'u cwblhau...",
+        "detail" : "Mae'r camau setup gorfodol wedi'u cwblhau ond mae rhai camau yn dal i fod ar ôl sy'n atal eich sefydliad rhag cael y gorau o'r meddalwedd hwn"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Mae cam hanfodol ar goll o setup Gebo.ai",
+        "detail" : "Adolygwch y camau coch o'r broses setup os gwelwch yn dda"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "System Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Golygu system"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Setup mynediad darparwyr llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Dewisiadau seilwaith neu gyflenwyr estynedig"
+      },
+      "MainPanelTitle" : {
+        "label" : "Setup modelau iaith mawr a ddefnyddir"
+      },
+      "EasySetup" : {
+        "label" : "Setup/atgyweiriad cychwynnol hawdd"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Setup modelau iaith mawr"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Disgrifiad"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Allwedd api chwilio Google"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Creu manylion mewngofnodi chwilio Google"
+      },
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "customSearchEngineId" : {
+        "label" : "Id peiriant chwilio",
+        "help" : "Rhowch yr id peiriant chwilio a gafwyd wrth gofrestru manylion mewngofnodi api chwilio Google."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "apiKey" : {
+        "label" : "Allwedd api",
+        "help" : "Rhowch yr allwedd api a gafwyd wrth gofrestru manylion mewngofnodi api chwilio Google."
+      },
+      "MainPanel" : {
+        "label" : "Ffurfweddu api chwilio Google"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Dileu",
+        "help" : "Dileu manylion mewngofnodi api chwilio Google"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Ffurfweddiad Deep search",
+        "help" : "Ychwanegu ffurfweddiad deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Golygu ffurfweddiad"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "anabl"
+      },
+      "EditGroupBtn" : {
+        "label" : "Golygu"
+      },
+      "CodeHeader" : {
+        "label" : "cod"
+      },
+      "DescriptionHeader" : {
+        "label" : "disgrifiad"
+      },
+      "UsersHeader" : {
+        "label" : "defnyddwyr"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Gosodiadau mynediad y model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Darparwr AI o bell yn iawn",
+        "detail" : "Mae'r darparwr yn weithredol ac wedi'i ffurfweddu'n llwyddiannus"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Gwall wrth weithio gyda url: https://api.openai.com/v1/models",
+        "detail" : "Gwall gweinydd: Gwall wrth weithio gyda url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "gosod hwn fel y model mewnblannu diofyn",
         "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Darparwr AI o bell yn iawn",
+        "detail" : "Mae'r darparwr yn weithredol ac wedi'i ffurfweddu'n llwyddiannus"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Golygu ffurfweddiad model sgwrs gweinydd lleol (neu LAN) Ollama"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Golygu ffurfweddiad model sgwrs Anthropic"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Golygu ffurfweddiad model sgwrs MistralAI"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Golygu ffurfweddiad model sgwrs Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Gosodiadau mynediad y model"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Gosodiadau mynediad y model"
+      },
+      "forUses" : {
+        "label" : "Defnydd/defnyddiau'r model",
+        "help" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn.",
+        "placeholder" : "Defnyddiau y bydd y platfform Gebo.ai yn eu hystyried ar gyfer y model hwn."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithrediad wedi cwblhau'n llwyddiannus"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Ydych chi'n siŵr eich bod chi eisiau dileu'r sgwrs hon?",
         "header" : "Gweithred dileu sgwrs"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Ychwanegu cynnwys neu newid ymddygiad chwilio"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Ffynonellau",
+        "help" : "Agor y rhestr o ddogfennau a ddadansoddwyd"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Ateb chwilio dwfn a manylion ffynonellau"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Canlyniad dadansoddiad Chwilio Dwfn"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Gwall wrth chwilio Chwilio Confluence",
+        "detail" : "Gwall gweinydd: Problemau wrth gael mynediad i system confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Sgwrs newydd wedi'i lwytho",
+        "detail" : "Sgwrs newydd wedi'i lwytho'n llwyddiannus"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Dewiswch ffynonellau"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Dewiswch o leiaf un o'r opsiynau canlynol"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hepgor chwilio dwfn"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Sylfaen wybodaeth a ddewiswyd"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Systemau a ddewiswyd"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ychwanegu dogfen at y rhestr 'sgwrsio gyda'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Yn rhedeg chwilio dwfn"
+      },
+      "RagLLMResponse" : {
+        "label" : "Yn rhedeg creu cynnwys wedi'i wella"
+      },
+      "PureLLMResponse" : {
+        "label" : "Yn holi llm"
+      },
+      "Waiting" : {
+        "label" : "Yn dadansoddi'r cynllun ymateb gorau.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Yn rhedeg offer"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Yn rhedeg chwilio cynorthwyedig gan AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Ffeil wedi'i dadansoddi"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Canlyniad chwilio wedi'i ddadansoddi"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Canlyniad chwilio system wedi'i ddadansoddi ar gyfer"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Yn cadarnhau'r adroddiad terfynol"
+      },
+      "RUNNING" : {
+        "label" : "Yn rhedeg "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Rwy'n dadansoddi eich cais"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Llwybr asiantaidd wedi'i ddewis, asiant ateb yn rhedeg"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Lefel gwasanaeth yw: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Yn gweithredu eich asiant a ddewiswyd"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Llwytho ffeil(iau) i fyny"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Pori/chwilio ffeil(iau) cwmni"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Sgwrs dog. dewisiedig"
+      },
+      "agenticChat" : {
+        "label" : "Sgwrs asiantaidd"
+      },
+      "rag" : {
+        "label" : "Sgwrs r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Chwilio dwfn/Lluosog ffynonellau"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Chwilio dwfn/Chwilio Gwe Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Chwilio dwfn/Chwilio Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Chwilio dwfn/Chwilio Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Chwilio dwfn/Chwilio sylfaen wybodaeth"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Sgwrs gyda ffeil(iau)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Chwilio dwfn/Chwilio Gwe Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Chwilio dwfn/Chwilio Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Chwilio dwfn/Chwilio Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Defnyddiwr Google i'w efelychu",
         "help" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir",
         "placeholder" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir"
+      },
+      "OK" : {
+        "summary" : "Wedi'i gadw'n llwyddiannus",
+        "detail" : "Diweddaru'r weithred wedi'i gwblhau'n llwyddiannus"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Dogfennau wedi’u prosesu",
         "dataset-2-label" : "Dogfennau â gwall",
         "dataset-3-label" : "Dogfennau wedi’u diystyru"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Mynegeio testun llawn"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi'u prosesu"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi'u prosesu",
+        "dataset-2-label" : "Dogfennau gyda gwall",
+        "dataset-3-label" : "Dogfennau wedi'u gwrthod"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokenau wedi'u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tokenau"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "galluogi pob galwad swyddogaeth",
         "help" : "Galluogwch bob offeryn a galwad swyddogaeth sydd ar gael; os na chaiff ei osod, bydd modd eu galluogi’n ddiweddarach yn y panel gweinyddu llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol",
+        "detail" : "Gwall gweinydd: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Darparwr AI o bell Iawn",
+        "detail" : "Mae'r darparwr yn rhedeg ac wedi'i ffurfweddu'n llwyddiannus"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Eithriad yn ystod y weithred: 401 ANAWDUDEDIG",
+        "detail" : "Gwall gweinydd: 401 ANAWDUDEDIG"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Eithriad yn ystod y weithred: BasPath ar goll",
+        "detail" : "Gwall gweinydd: BasPath ar goll"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Creu a gweithredu"
+      },
+      "vendorId" : {
+        "label" : "Dewiswch eich gwerthwr model iaith mawr",
+        "help" : "Dewiswch y gwerthwr cychwynnol ar gyfer eich modelau chat a mewnblannu rhagosodedig"
+      },
+      "secretId" : {
+        "label" : "Dewiswch gredydau darparwr (allwedd api)",
+        "help" : "Dewiswch un o'r credydau presennol ar gyfer y darparwr llm a ddewiswyd"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model chat gwasanaethau mewnol",
+        "help" : "Bydd y model chat sydd wedi'i ffurfweddu ar gyfer gwasanaethau mewnol yn gyfrifol am dynnu gwybodaeth, crynhoi ac yn gweithredu llif gwaith mewnol."
+      },
+      "ChatModel" : {
+        "label" : "Model chat rhagosodedig",
+        "help" : "Bydd y model chat rhagosodedig yn gyfrifol am ateb cwestiynau defnyddwyr ac yn gweithredu llifau gwaith lle nad oes modelau wedi'u ffurfweddu'n benodol. Rhaid iddo fod yn bwerus ac yn ddibynadwy, gyda chydbwysedd da rhwng cost, perfformiad ac ansawdd allbwn."
+      },
+      "ProviderBuy" : {
+        "label" : "Prynu dolen credyd allwedd Apy"
+      },
+      "ProviderWWW" : {
+        "label" : "Dolen gwefan"
+      },
+      "WebSiteLink" : {
+        "label" : "Gwefan y darparwr",
+        "help" : "Cliciwch yma am wybodaeth gyffredinol y darparwr."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Prynu credyd y darparwr",
+        "help" : "Cliciwch yma i brynu credyd ar gyfer eich allwedd(au) api."
+      },
+      "EmbeddingModel" : {
+        "label" : "Model mewnblannu rhagosodedig",
+        "help" : "Bydd y model hwn yn gyfrifol am fynegai semantig (mewnblannu) ac adalw eich data a'ch dogfennau"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ni allwch ddileu hwn",
         "detail" : "Cyfeirir at y gwrthrych hwn o rannau eraill o’r cymhwysiad"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Eithriad yn ystod y weithred: Gwall wrth weithio gyda url:http://localhost:11434/v1/models",
+        "detail" : "Gwall gweinydd: Gwall wrth weithio gyda url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Eithriad yn ystod y weithred: rhaid gosod apiKey",
+        "detail" : "Gwall gweinydd: rhaid gosod apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Gwall wrth ffrydio ymateb sgwrsio",
+        "detail" : "Gwall gweinydd: 400 Cais Annilys gan POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Gwall wrth weithio gyda url: http://localhost:8000/v1/models",
+        "detail" : "Gwall gweinydd: Gwall wrth weithio gyda url: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Gwall wrth ffrydio ymateb sgwrsio",
+        "detail" : "Gwall gweinydd: Ailosod y cysylltiad"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Gwall wrth weithio gyda url: https://api.openai.com/v1/models",
+        "detail" : "Gwall gweinydd: Gwall wrth weithio gyda url: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol",
+        "detail" : "Gwall gweinydd: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Wedi’i gwblhau"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithrediad wedi cwblhau'n llwyddiannus"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Hunaniaeth sydd wedi'i ddefnyddio",
         "help" : "Dewiswch neu crëwch hunaniaeth i gael mynediad i'r system google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Sgwrs"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Yn chwilio am wybodaeth berthnasol"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Yn cadarnhau'r adroddiad terfynol"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Canlyniad chwilio a ddadansoddwyd"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Canlyniad chwilio system a ddadansoddwyd ar gyfer"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Dewiswch o leiaf un o'r opsiynau canlynol"
+      },
+      "LaunchBtn" : {
+        "label" : "Rhedeg chwiliad"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Hepgor chwiliad dwfn"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Basau gwybodaeth a ddewiswyd"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Systemau wedi'u dewis"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Dewiswch ffynonellau"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Ffeil wedi'i dadansoddi"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Mewnosod"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SearchSettingTab" : {
+        "label" : "Gosodiad chwilio"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Mewnosod prompt ar gyfer tynnu gwybodaeth berthnasol o ddogfennau"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Mewnosod prompt ar gyfer cyfuno gwybodaeth berthnasol sydd wedi'i dynnu"
+      },
+      "MainPanel" : {
+        "label" : "Yn golygu ffurfweddiad deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Gosodiad model iaith mawr"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o ffurfweddiad deep search"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y ffurfweddiad deep search"
+      },
+      "searchType" : {
+        "label" : "Math o chwiliad",
+        "help" : "Dewiswch rhwng chwiliad semantig un hop neu aml-hop"
+      },
+      "topK" : {
+        "label" : "Nifer y darnau testun a gafwyd (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "llm a ddefnyddir",
+        "help" : "Nodwch y model iaith mawr a ddefnyddir ar gyfer Deep search, bydd un diofyn yn cael ei ddefnyddio os na chaiff un ei ddewis."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt dadansoddi dogfennau",
+        "help" : "Golygu'r prompt a fydd yn cael ei ddefnyddio ar gyfer tynnu gwybodaeth berthnasol o ddarnau dogfen."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt cyfuno gwybodaeth a gafwyd",
+        "help" : "Golygu'r prompt a fydd yn cael ei ddefnyddio i gyfuno mewn adroddiad sengl y wybodaeth berthnasol sydd wedi'i thynnu o ddogfennau a gafwyd."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Trothwy tebygrwydd chwilio",
+        "help" : "Trothwy tebygrwydd semantig hop cyntaf (rhwng 0.5 a 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Trothwy tebygrwydd ail hop",
+        "help" : "Trothwy tebygrwydd semantig ail hop (rhwng 0.5 a 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Model iaith mawr diofyn",
+        "help" : "Bydd y model iaith mawr diofyn yn cael ei ddefnyddio ar gyfer prosesu Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Trothwy tebygrwydd chwilio",
+        "help" : "Trothwy tebygrwydd semantig (rhwng 0.5 a 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Gosodiadau diogelwch"
+      },
+      "accessibleToAll" : {
+        "label" : "Ar gael i Bawb"
+      },
+      "datasource" : {
+        "label" : "Ffynhonnell data"
+      },
+      "allowedGroups" : {
+        "label" : "Grwpiau a ganiateir"
+      },
+      "allowedUsers" : {
+        "label" : "Defnyddwyr a ganiateir"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Mynediad defnyddiwr/grŵp y ffynhonnell ddata",
+        "help" : "Bydd chwilio dwfn yn cael ei alluogi ar gyfer pob ffynhonnell ddata allanol a defnyddiwr neu grŵp"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Mynediad syml y defnyddiwr/grŵp"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Mynediad defnyddiwr/grŵp y ffynhonnell ddata"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Defnyddio neu greu credydau allwedd api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Allwedd api/credydau",
+        "help" : "Dewiswch allwedd api neu gredydau ar gyfer y darparwr hwn"
+      },
+      "NewApiKey" : {
+        "label" : "Allwedd api newydd",
+        "help" : "Rhowch allwedd api newydd i'w defnyddio gyda'r darparwr hwn"
+      },
+      "PiSave" : {
+        "label" : "Cadw"
+      },
+      "NewUserName" : {
+        "label" : "Enw defnyddiwr",
+        "help" : "Enw defnyddiwr a ddefnyddir i gael mynediad at wasanaethau'r darparwr"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Defnyddio presennol neu greu newydd",
+        "help" : "Defnyddiwch gredydau presennol neu greu rhai newydd ar gyfer y darparwr hwn"
+      },
+      "newSecretDescription" : {
+        "label" : "Disgrifiad credydau",
+        "help" : "Disgrifiad credydau allwedd api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Creu credydau",
+        "detail" : "Credydau wedi'u creu'n llwyddiannus"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Gwall wrth gyfathrebu gyda gweinydd Ollama ",
+        "detail" : "Gwall rhwydwaith wrth gyfathrebu â'r system bell yn cael mynediad at gynnwys\n rhestr modelau Gwall wrth weithio gyda url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Sgwrsio gyda defnyddwyr"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model a ddefnyddir ar gyfer gwasanaethau mewnol"
       }
     }
   }

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory;
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
+import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGTimedOutMessageReceiver;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
@@ -29,6 +31,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.config.GeboCoreConfig;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
+import ai.gebo.core.model.ComputeWorkflowEndPayload;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
@@ -139,6 +142,10 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 			super(nested, flushThreshold);
 		}
 
+		private static boolean isMoreThanZero(Number n) {
+			return n != null && n.longValue() > 0l;
+		}
+
 		/**
 		 * Accepts a message envelope and processes payloads accordingly.
 		 *
@@ -169,7 +176,23 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 				ContentsBatchProcessedRepository repo = binder
 						.getImplementationOf(ContentsBatchProcessedRepository.class);
 				repo.insert(processed);
-
+				boolean stepAdvancement = (payload.getLastMessage() != null && payload.getLastMessage())
+						|| isMoreThanZero(payload.getBatchDocumentsProcessed())
+						|| isMoreThanZero(payload.getBatchDocumentsProcessingErrors());
+				if (stepAdvancement) {
+					ComputeWorkflowEndPayload compute = new ComputeWorkflowEndPayload();
+					compute.setJobId(payload.getJobId());
+					compute.setWorkflowType(payload.getWorkflowType());
+					compute.setWorkflowId(payload.getWorkflowId());
+					IGMessageEmitter emitter = binder.getImplementationOf(GCoreMessagesEmitterImpl.class);
+					IGMessageBroker broker = binder.getImplementationOf(IGMessageBroker.class);
+					GMessageEnvelope<ComputeWorkflowEndPayload> envelope = GMessageEnvelope.newMessageFrom(emitter,
+							compute);
+					envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					envelope.setTargetComponent(GComputeEndOfWorkflowReceiverFactory.END_OF_WORKFLOW_COMPUTE_SERVICE);
+					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+					broker.accept(envelope);
+				}
 			} else {
 				throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
 			}

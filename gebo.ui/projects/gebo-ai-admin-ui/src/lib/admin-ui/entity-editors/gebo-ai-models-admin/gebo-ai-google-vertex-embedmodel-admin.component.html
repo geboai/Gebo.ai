@@ -17,7 +17,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #gvUI header="Editing Google Vertex AI embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages id="Messages" gebo-ai-label [value]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         
         <div class="grid standardTabDialogueHeight">
             <div class="col-6">

@@ -1,0 +1,19 @@
+ <svg viewBox="0 0 24 24" role="img" focusable="false">
+    <!-- retrieval/database -->
+    <ellipse class="pi-rag-stroke" cx="8" cy="6" rx="4.5" ry="2.2"/>
+    <path class="pi-rag-stroke" d="M3.5 6v4c0 1.2 2 2.2 4.5 2.2s4.5-1 4.5-2.2V6"/>
+    <path class="pi-rag-stroke" d="M3.5 10v4c0 1.2 2 2.2 4.5 2.2s4.5-1 4.5-2.2v-4"/>
+
+    <!-- generation / knowledge flow -->
+    <path class="pi-rag-stroke" d="M12.8 8.8l2.2 1.4"/>
+    <path class="pi-rag-stroke" d="M12.8 14.8l2.2-1.4"/>
+
+    <!-- AI node cluster -->
+    <circle class="pi-rag-stroke" cx="18" cy="7" r="1.8"/>
+    <circle class="pi-rag-stroke" cx="18" cy="17" r="1.8"/>
+    <circle class="pi-rag-stroke" cx="20.5" cy="12" r="1.8"/>
+    <path class="pi-rag-stroke" d="M19.3 8.3l1.2 2.1"/>
+    <path class="pi-rag-stroke" d="M19.3 15.7l1.2-2.1"/>
+    <path class="pi-rag-stroke" d="M16.2 8.3l-1.4 2.2"/>
+    <path class="pi-rag-stroke" d="M16.2 15.7l-1.4-2.2"/>
+  </svg>

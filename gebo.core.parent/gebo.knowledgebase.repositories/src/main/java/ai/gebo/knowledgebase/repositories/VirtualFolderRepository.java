@@ -12,7 +12,11 @@
 
 package ai.gebo.knowledgebase.repositories;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 
 /**
  * AI generated comments
@@ -30,4 +34,6 @@ public interface VirtualFolderRepository extends IGAbstractVirtualFilesystemObje
     default Class<GVirtualFolder> getManagedType() {
         return GVirtualFolder.class; // Returns the class type for GVirtualFolder
     }
+
+	
 }

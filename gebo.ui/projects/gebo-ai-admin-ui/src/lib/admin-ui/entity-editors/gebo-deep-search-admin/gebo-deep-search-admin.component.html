@@ -1,0 +1,154 @@
+<p-blockUI id="BlockUi" gebo-ai-label [target]="anthropicUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #anthropicUI header="Editing deep search configuration" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+        <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
+            <p-tabPanel id="SearchSettingTab" gebo-ai-label header="Search setting">
+
+                <div class="grid geboDialogContent">
+                    <div class="col-6">
+                        <gebo-ai-field id="description" label="Description"
+                            help="Enter the description of the deep search configuration" [required]="true">
+                            <input pInputText id="description" formControlName="description" maxlength="120"
+                                [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
+                        <gebo-ai-field id="code" label="Unique Code"
+                            help="Automatically generated unique code of the deep search configuration">
+                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
+                        <gebo-ai-field id="searchType" label="Search type"
+                            help="Select between single hop semantic search or multi hop" [required]="true">
+                            <p-selectbutton [options]="searchTypeOptions" formControlName="searchType"
+                                optionLabel="description" optionValue="code" [required]="true" />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" [formGroup]="getform('ragQueryOptions')">
+                        <gebo-ai-field id="topK" label="Number of retrieved text segments (TopK)"
+                            title="Number of retrieved text segments in similarity with the user text that will be retrieved"
+                            [required]="true">
+                            <p-inputNumber id="topK" formControlName="topK" [min]="1" [max]="1000"
+                                [maxFractionDigits]="0" styleClass="w-full" gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="!searchType || searchType==='MULTI_HOP'">
+                        <gebo-ai-field id="firstHopSimilarityThreashold" label="Search similarity threashold"
+                            help="First hop semantic similarity threashold (between 0.5 to 1.0)">
+                            <p-inputNumber id="firstHopSimilarityThreashold"
+                                formControlName="firstHopSimilarityThreashold" [min]="minThreashold"
+                                [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
+                                gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="!searchType || searchType==='MULTI_HOP'">
+                        <gebo-ai-field id="secondHopSimilarityThreashold" label="Second hop similarity threashold"
+                            help="Second hop semantic similarity threashold (between 0.5 to 1.0)">
+                            <p-inputNumber id="secondHopSimilarityThreashold"
+                                formControlName="secondHopSimilarityThreashold" [min]="minThreashold"
+                                [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
+                                gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="searchType==='SINGLE_HOP'" [formGroup]="getform('ragQueryOptions')">
+                        <gebo-ai-field id="similarityThreashold" label="Search similarity threashold"
+                            help="Semantic similarity threashold (between 0.5 to 1.0)">
+                            <p-inputNumber formControlName="similarityThreashold" [min]="minThreashold"
+                                [max]="maxThreashold" [maxFractionDigits]="2" styleClass="w-full"
+                                gebo-ai-field-element />
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="searchType==='SINGLE_HOP'">
+
+                    </div>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel id="SecuritySettingsTab" gebo-ai-label header="Security settings">
+                <div class="grid geboDialogContent p-3">
+                    <div class="col-6">
+
+                        <gebo-ai-field id="perDataSourceConfigured" label="Per data source user/groups access"
+                            help="Deep search will be enabled for each external data source and user or group">
+                            <p-checkbox formControlName="perDataSourceConfigured" binary="true" [trueValue]="true"
+                                [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-12">
+                        <p-fieldset id="SIMPLEMODE" legend="Simple per user/group access" gebo-ai-label>
+                            <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                        </p-fieldset>
+                    </div>
+                    <div class="col-12">
+                        <p-fieldset id="PERDATASOURCEMODE" legend="Per data source user/group access" gebo-ai-label>
+                            <p-table [value]="dsAccessRows" styleClass="p-datatable-sm p-datatable-striped"
+                                [tableStyle]="{'min-width': '50rem'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th id="datasource" gebo-ai-text>Data Source</th>
+                                        <th id="accessibleToAll" gebo-ai-text>Accessible to All</th>
+                                        <th id="allowedGroups" gebo-ai-text>Allowed Groups</th>
+                                        <th id="allowedUsers" gebo-ai-text>Allowed Users</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row>
+                                    <tr [formGroup]="row.formGroup">
+                                        <td>{{ row.dataSource.description || row.dataSource.code }}</td>
+                                        <td>
+                                            <p-checkbox formControlName="accessibleToAll" [binary]="true"></p-checkbox>
+                                        </td>
+                                        <td>
+                                            <p-multiSelect [options]="groups" formControlName="accessibleGroups"
+                                                optionLabel="description" optionValue="code" appendTo="body"
+                                                placeholder="Select Groups" styleClass="w-full"></p-multiSelect>
+                                        </td>
+                                        <td>
+                                            <p-multiSelect [options]="row.availableUsers"
+                                                formControlName="accessibleUsers" optionLabel="name"
+                                                optionValue="username" appendTo="body" placeholder="Select Users"
+                                                styleClass="w-full">
+                                                <ng-template let-user pTemplate="item">
+                                                    <div class="flex align-items-center gap-2">
+                                                        <span>{{ user.name }} {{ user.sourname }}</span>
+                                                        <span style="font-size: 0.8em; color: gray;">({{ user.username
+                                                            }})</span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template let-user pTemplate="selectedItem">
+                                                    {{ user.name }} {{ user.sourname }}
+                                                </ng-template>
+                                            </p-multiSelect>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-fieldset>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+        </p-tabView>
+        <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+            <div class="grid">
+                <div class="col-4">
+                    <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doSave()"
+                        icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+                        styleClass="w-full"></p-button>
+                </div>
+                <div class="col-4">
+                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                        (onClick)="cancelAction.emit(true)" styleClass="w-full" />
+                </div>
+                <div class="col-4">
+                    <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                        icon="pi pi-trash" (onClick)="doDelete()" [disabled]="true" styleClass="w-full" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-panel>

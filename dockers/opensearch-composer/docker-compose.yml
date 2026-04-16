@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=dothesearch1973-Advanced
+      - plugins.security.ssl.http.enabled=true
+      - plugins.security.ssl.transport.enabled=true
+      # consigliato in docker (evita bootstrap checks su memlock)
+      - bootstrap.memory_lock=true
+      # heap: regola in base alla RAM della macchina
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    networks:
+      - opensearch-net
+
+  dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    depends_on:
+      - opensearch
+    environment:
+      # Dashboards si collega al servizio "opensearch" sulla rete docker
+      - OPENSEARCH_HOSTS=["https://opensearch:9200"]
+      - OPENSEARCH_USERNAME=admin
+      - OPENSEARCH_PASSWORD=dothesearch1973-Advanced
+      # Per certificati demo/self-signed del container OpenSearch:
+      - OPENSEARCH_SSL_VERIFICATIONMODE=none
+      # rende Dashboards raggiungibile dall'host (non solo localhost nel container)
+      - SERVER_HOST=0.0.0.0
+    ports:
+      - "5601:5601"
+    networks:
+      - opensearch-net
+
+volumes:
+  opensearch-data:
+
+networks:
+  opensearch-net:

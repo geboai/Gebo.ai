@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Masuk"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasi gagal",
+        "detail" : "Tidak dapat mengautentikasi dengan kredensial yang diberikan"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integrasi Google Drive/Workspaces",
         "description" : "Konfigurasikan Gebo.ai untuk mengakses data tim Google cloud Drive/Workspaces Anda"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Konfigurasi Google search api",
+        "description" : "Konfigurasikan kredensial Google search api untuk pencarian web AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Konfigurasi Deep search",
+        "description" : "Konfigurasikan parameter Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Penyetelan parameter retrieve augmented generation otomatis"
+      },
+      "Description" : {
+        "label" : "Deskripsi"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Pembaruan penyetelan terakhir"
+      },
+      "Code" : {
+        "label" : "Kode Embedding model/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Ambang batas yang dihitung"
+      },
+      "Autotuned" : {
+        "label" : "Sudah disesuaikan otomatis"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Langkah wajib setup Gebo.ai telah selesai...",
+        "detail" : "Langkah wajib setup sudah diselesaikan namun ada beberapa langkah yang belum lengkap, sehingga organisasi Anda belum bisa memanfaatkan software ini sepenuhnya"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Setup Gebo.ai belum menyelesaikan beberapa langkah wajib",
+        "detail" : "Silakan cek langkah berwarna merah dalam proses setup"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistem Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edit sistem"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Atur akses penyedia llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Pilihan infrastruktur/pemasok lanjutan"
+      },
+      "MainPanelTitle" : {
+        "label" : "Setup model bahasa besar yang digunakan"
+      },
+      "EasySetup" : {
+        "label" : "Perbaikan setup/konfigurasi awal yang mudah"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Setup model bahasa besar"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Deskripsi"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Kunci api Google search"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Buat kredensial Google search"
+      },
+      "CreateBtn" : {
+        "label" : "Buat"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID mesin pencari",
+        "help" : "Masukkan ID mesin pencari yang didapatkan dari pendaftaran kredensial Google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kode konfigurasi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
+      },
+      "apiKey" : {
+        "label" : "Kunci api",
+        "help" : "Masukkan kunci api yang didapatkan dari pendaftaran kredensial Google search api."
+      },
+      "MainPanel" : {
+        "label" : "Pengaturan Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Hapus",
+        "help" : "Hapus kredensial Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfigurasi Deep search",
+        "help" : "Tambah konfigurasi deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edit konfigurasi"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "dinonaktifkan"
+      },
+      "EditGroupBtn" : {
+        "label" : "Edit"
+      },
+      "CodeHeader" : {
+        "label" : "kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "deskripsi"
+      },
+      "UsersHeader" : {
+        "label" : "pengguna"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Pengaturan akses model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jarak jauh OK",
+        "detail" : "Penyedia sudah aktif berjalan dan berhasil dikonfigurasi"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Terjadi pengecualian saat operasi: Error bekerja dengan url:https://api.openai.com/v1/models",
+        "detail" : "Kesalahan server: Error bekerja dengan url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "jadikan ini sebagai model embedding default",
         "help" : "Jika benar ini akan digunakan sebagai model embedding default ketika model embedding tidak ditentukan"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jarak jauh OK",
+        "detail" : "Penyedia sudah aktif berjalan dan berhasil dikonfigurasi"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Mengedit konfigurasi model chat server lokal (atau LAN) Ollama"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Mengedit konfigurasi model chat Anthropic"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Mengedit konfigurasi model chat MistralAI"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Mengedit konfigurasi model chat Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Pengaturan akses model"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Pengaturan akses model"
+      },
+      "forUses" : {
+        "label" : "Penggunaan model",
+        "help" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini.",
+        "placeholder" : "Penggunaan yang akan dipertimbangkan Gebo.ai untuk model ini."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Apakah Anda yakin ingin menghapus chat ini?",
         "header" : "Hapus chat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Tambahkan konten atau ubah perilaku pencarian"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Sumber",
+        "help" : "Buka daftar dokumen yang dianalisis"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detail jawaban dan sumber deep search"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Hasil analisis Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Galat pencarian Confluence Search",
+        "detail" : "Kesalahan server: Masalah mengakses sistem confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Chat baru dimuat",
+        "detail" : "Chat baru berhasil dimuat"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pilih sumber"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pilih setidaknya salah satu dari pilihan berikut"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Lewati deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Basis pengetahuan yang dipilih"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistem yang dipilih"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Tambah dokumen ke daftar 'chat dengan' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Menjalankan deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Menjalankan retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Bertanya ke llm"
+      },
+      "Waiting" : {
+        "label" : "Menganalisis rencana jawaban terbaik.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Menjalankan alat"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Menjalankan pencarian berbantuan AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "File dianalisis"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Hasil pencarian dianalisis"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Hasil pencarian sistem dianalisis untuk"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Mengonsolidasikan laporan akhir"
+      },
+      "RUNNING" : {
+        "label" : "Sedang berjalan "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Saya sedang menganalisis permintaan Anda"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Alur agentic dipilih, agen jawaban berjalan"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Tingkat layanan: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Menjalankan agen yang Anda pilih"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Unggah file"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Jelajahi/cari file perusahaan"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Chat dokumen terpilih"
+      },
+      "agenticChat" : {
+        "label" : "Chat agentic"
+      },
+      "rag" : {
+        "label" : "Chat r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Beberapa sumber"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Pencarian basis pengetahuan"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat dengan file"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Pengguna Google yang akan diwakilkan",
         "help" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan",
         "placeholder" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan"
+      },
+      "OK" : {
+        "summary" : "Berhasil disimpan",
+        "detail" : "Operasi pembaruan berhasil dilakukan"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Dokumen yang diproses",
         "dataset-2-label" : "Dokumen error",
         "dataset-3-label" : "Dokumen dibuang"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Pengindeksan full text"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Kesalahan memproses dokumen",
+        "label-2" : "Dokumen terproses"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen terproses",
+        "dataset-2-label" : "Dokumen error",
+        "dataset-3-label" : "Dokumen dibuang"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Token terproses",
+        "dataset-1-label" : "Kesalahan memproses token"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "aktifkan semua panggilan fungsi",
         "help" : "Aktifkan semua alat dan panggilan fungsi yang tersedia, jika tidak diatur maka dapat diaktifkan nanti di panel admin llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Terjadi pengecualian saat operasi: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan",
+        "detail" : "Kesalahan server: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI remote OK",
+        "detail" : "Penyedia aktif dan dikonfigurasi dengan sukses"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Exception saat operasi:401 UNAUTHORIZED",
+        "detail" : "Kesalahan server: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Exception saat operasi:Missing basePath",
+        "detail" : "Kesalahan server: Missing basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Buat dan aktifkan"
+      },
+      "vendorId" : {
+        "label" : "Pilih penyedia model bahasa besar Anda",
+        "help" : "Pilih vendor awal untuk model chat dan embedding default Anda"
+      },
+      "secretId" : {
+        "label" : "Pilih kredensial penyedia (api key)",
+        "help" : "Pilih salah satu kredensial yang sudah ada untuk penyedia llm yang dipilih"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model chat layanan internal",
+        "help" : "Model chat yang dikonfigurasi untuk layanan internal akan bertanggung jawab mengekstrak informasi, meringkas dan menjalankan workflow internal."
+      },
+      "ChatModel" : {
+        "label" : "Model chat default",
+        "help" : "Model chat default akan bertanggung jawab menjawab pertanyaan pengguna, dan menjalankan workflow di mana tidak ada model yang dikonfigurasi secara khusus. Model ini harus kuat dan andal, dengan keseimbangan yang baik antara biaya, performa, dan kualitas hasil."
+      },
+      "ProviderBuy" : {
+        "label" : "Beli tautan kredit Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Tautan situs web"
+      },
+      "WebSiteLink" : {
+        "label" : "Situs web penyedia",
+        "help" : "Klik di sini untuk informasi umum penyedia."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Beli kredit dari penyedia",
+        "help" : "Klik di sini untuk membeli kredit untuk api key Anda."
+      },
+      "EmbeddingModel" : {
+        "label" : "Model embedding default",
+        "help" : "Model ini akan bertanggung jawab melakukan pengindeksan semantik (embedding) dan pengambilan data serta dokumen Anda"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Anda tidak dapat menghapus ini",
         "detail" : "Objek ini dirujuk dari bagian lain aplikasi"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Kesalahan selama operasi: Error saat bekerja dengan url:http://localhost:11434/v1/models",
+        "detail" : "Kesalahan server: Error saat bekerja dengan url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Kesalahan selama operasi: apiKey harus diatur",
+        "detail" : "Kesalahan server: apiKey harus diatur"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Terjadi kesalahan saat streaming respons chat",
+        "detail" : "Kesalahan server: 400 Permintaan Tidak Valid dari POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Terjadi pengecualian saat operasi: Error bekerja dengan url:http://localhost:8000/v1/models",
+        "detail" : "Kesalahan server: Error bekerja dengan url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Terjadi kesalahan saat streaming respons chat",
+        "detail" : "Kesalahan server: Koneksi terputus"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Terjadi pengecualian saat operasi: Error bekerja dengan url:https://api.openai.com/v1/models",
+        "detail" : "Kesalahan server: Error bekerja dengan url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Terjadi pengecualian saat operasi: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan",
+        "detail" : "Kesalahan server: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Selesai"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Identitas yang digunakan",
         "help" : "Pilih atau buat identitas untuk mengakses sistem google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Chat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Mencari informasi yang relevan"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Mengonsolidasi laporan akhir"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Hasil pencarian yang dianalisis"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Hasil pencarian sistem yang dianalisis untuk"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Pilih minimal salah satu opsi berikut"
+      },
+      "LaunchBtn" : {
+        "label" : "Jalankan pencarian"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Lewati pencarian mendalam"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Basis pengetahuan yang dipilih"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistem yang dipilih"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Pilih sumber"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "File dianalisis"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Simpan"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "SearchSettingTab" : {
+        "label" : "Pengaturan pencarian"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Masukkan prompt untuk ekstraksi informasi relevan dari dokumen"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Masukkan prompt untuk konsolidasi informasi relevan yang diekstrak"
+      },
+      "MainPanel" : {
+        "label" : "Mengedit konfigurasi deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Pengaturan large language model"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi konfigurasi deep search"
+      },
+      "code" : {
+        "label" : "Kode unik",
+        "help" : "Kode unik yang dibuat secara otomatis untuk konfigurasi deep search"
+      },
+      "searchType" : {
+        "label" : "Tipe pencarian",
+        "help" : "Pilih antara single hop semantic search atau multi hop"
+      },
+      "topK" : {
+        "label" : "Jumlah segmen teks yang diambil (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "LLM yang digunakan",
+        "help" : "Tentukan large language model yang digunakan untuk Deep search, yang standar akan digunakan jika tidak dipilih."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt analisis dokumen",
+        "help" : "Edit prompt yang akan digunakan untuk ekstraksi informasi relevan dari potongan dokumen."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt konsolidasi informasi yang diekstrak",
+        "help" : "Edit prompt yang akan digunakan untuk konsolidasi informasi relevan yang diekstrak dari dokumen yang diambil dalam satu laporan."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Ambang kesamaan pencarian",
+        "help" : "Ambang kesamaan semantik hop pertama (antara 0.5 hingga 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Ambang kesamaan hop kedua",
+        "help" : "Ambang kesamaan semantik hop kedua (antara 0.5 hingga 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model default",
+        "help" : "Large language model default akan digunakan untuk pemrosesan Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Ambang kesamaan pencarian",
+        "help" : "Ambang kesamaan semantik (antara 0.5 hingga 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Pengaturan keamanan"
+      },
+      "accessibleToAll" : {
+        "label" : "Dapat diakses untuk Semua"
+      },
+      "datasource" : {
+        "label" : "Sumber Data"
+      },
+      "allowedGroups" : {
+        "label" : "Grup Yang Diizinkan"
+      },
+      "allowedUsers" : {
+        "label" : "Pengguna Yang Diizinkan"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Akses pengguna/grup per sumber data",
+        "help" : "Deep search akan diaktifkan untuk setiap sumber data eksternal dan pengguna atau grup"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Akses sederhana per pengguna/grup"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Akses pengguna/grup per sumber data"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Gunakan atau buat kredensial api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kredensial",
+        "help" : "Pilih api key atau kredensial untuk penyedia ini"
+      },
+      "NewApiKey" : {
+        "label" : "Api key baru",
+        "help" : "Masukkan api key baru untuk digunakan dengan penyedia ini"
+      },
+      "PiSave" : {
+        "label" : "Simpan"
+      },
+      "NewUserName" : {
+        "label" : "Nama pengguna",
+        "help" : "Nama pengguna untuk mengakses layanan penyedia"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gunakan yang sudah ada atau baru",
+        "help" : "Gunakan kredensial yang sudah ada atau buat baru untuk penyedia ini"
+      },
+      "newSecretDescription" : {
+        "label" : "Deskripsi kredensial",
+        "help" : "Deskripsi kredensial api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kredensial berhasil dibuat",
+        "detail" : "Kredensial berhasil dibuat"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Kesalahan komunikasi dengan Ollama server ",
+        "detail" : "Kesalahan jaringan saat berkomunikasi ke sistem remote untuk mengakses daftar\n model: Error bekerja dengan url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Chat dengan pengguna"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model yang digunakan untuk layanan internal"
       }
     }
   }

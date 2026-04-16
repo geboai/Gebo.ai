@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GAclEntry } from './gAclEntry';
 import { GObjectRef } from './gObjectRef';
 
 export interface GKnowledgeBase { 
@@ -27,6 +28,8 @@ export interface GKnowledgeBase {
     username?: string;
     parentKnowledgebaseCode?: string;
     objectSpaceType?: GKnowledgeBase.ObjectSpaceTypeEnum;
+    acl?: Array<GAclEntry>;
+    aclAliases?: Array<number>;
 }
 export namespace GKnowledgeBase {
     export type ObjectSpaceTypeEnum = 'COMPANY' | 'USERSPACE';

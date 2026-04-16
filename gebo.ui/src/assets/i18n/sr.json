@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Prijavi se"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija nije uspela",
+        "detail" : "Ne mogu da se autentifikujem sa datim podacima"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces integracija",
         "description" : "Konfigurišite Gebo.ai za pristup podacima vašeg Google cloud Drive/Workspaces tima"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Podesite Google search api",
+        "description" : "Podesite akreditive za Google search api za AI pretrage na vebu"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Podesite Deep search",
+        "description" : "Podesite parametre za Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. automatsko podešavanje",
+        "description" : "Automatsko podešavanje parametara generisanja sa proširenim preuzimanjem"
+      },
+      "Description" : {
+        "label" : "Opis"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Poslednje ažuriranje podešavanja"
+      },
+      "Code" : {
+        "label" : "Kod modela za ugradnju/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Izračunati prag"
+      },
+      "Autotuned" : {
+        "label" : "Automatski podešeno"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Obavezni koraci za Gebo.ai podešavanje završeni...",
+        "detail" : "Obavezni koraci podešavanja su završeni, ali neki nedostajući koraci sprečavaju vašu organizaciju da iskoristi najviše iz ovog softvera"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Nedostaje neki obavezan korak za Gebo.ai podešavanje",
+        "detail" : "Pregledajte crvene korake procesa podešavanja"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence sistem"
+      },
+      "EditSystemBtn" : {
+        "label" : "Uredi sistem"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Podešavanje pristupa Gebo.ai llms provajderima"
+      },
+      "ExtensiveStup" : {
+        "label" : "Opcije za proširenu infrastrukturu/dobavljače"
+      },
+      "MainPanelTitle" : {
+        "label" : "Podešavanje korišćenih velikih jezičkih modela"
+      },
+      "EasySetup" : {
+        "label" : "Jednostavno početno podešavanje/fiksiranje konfiguracije"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Podešavanje velikih jezičkih modela"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Opis"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Otkaži"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api ključ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Kreirajte Google search akreditive"
+      },
+      "CreateBtn" : {
+        "label" : "Kreiraj"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID pretraživača",
+        "help" : "Unesite ID pretraživača dobijen tokom registracije akreditiva za Google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfig kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "apiKey" : {
+        "label" : "Api ključ",
+        "help" : "Unesite api ključ dobijen tokom registracije akreditiva za Google search api."
+      },
+      "MainPanel" : {
+        "label" : "Podesite Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Obriši",
+        "help" : "Obrišite Google search api akreditive"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Podešavanje Deep search",
+        "help" : "Dodajte konfiguraciju za Deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Izmeni podešavanje"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "onemogućeno"
+      },
+      "EditGroupBtn" : {
+        "label" : "Uredi"
+      },
+      "CodeHeader" : {
+        "label" : "šifra"
+      },
+      "DescriptionHeader" : {
+        "label" : "opis"
+      },
+      "UsersHeader" : {
+        "label" : "korisnici"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Podešavanja pristupa modelu"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI udaljeni provajder je u redu",
+        "detail" : "Provajder je aktivan i uspešno konfigurisan"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Greška tokom operacije:Greška pri radu sa url:https://api.openai.com/v1/models",
+        "detail" : "Greška servera: Greška pri radu sa url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "postavi kao podrazumevani model za ugrađivanje",
         "help" : "Ako je izabrano, ovo će se koristiti kao podrazumevani model za ugrađivanje gde model nije naveden"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI udaljeni provajder je u redu",
+        "detail" : "Provajder je aktivan i uspešno konfigurisan"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Uređivanje Ollama lokalne (ili lan) konfiguracije modela za razgovor"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Uređivanje Anthropic konfiguracije modela za razgovor"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Uređivanje MistralAI konfiguracije modela za razgovor"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Uređivanje Google Vertex AI konfiguracije modela za razgovor"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Podešavanja pristupa modelu"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Podešavanja pristupa modelu"
+      },
+      "forUses" : {
+        "label" : "Namene modela",
+        "help" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model.",
+        "placeholder" : "Namene za koje će Gebo.ai platforma uzeti u obzir ovaj model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "U redu!",
+        "detail" : "Operacija uspešno završena"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Da li ste sigurni da želite da obrišete ovaj chat?",
         "header" : "Brisanje chata"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Dodajte sadržaj ili izmenite ponašanje pretrage"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Dodajte sadržaj ili izmenite ponašanje pretrage"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Dodajte sadržaj ili izmenite ponašanje pretrage"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Izvori",
+        "help" : "Otvorite listu analiziranih dokumenata"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detalji dubinske pretrage i izvora"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Rezultat analize dubinske pretrage"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Greška tokom pretrage Confluence Search",
+        "detail" : "Greška servera: problemi sa pristupom confluence sistemu"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Novi čet je učitan",
+        "detail" : "Novi čet uspešno učitan"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izaberi izvore"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izaberite bar jednu od sledećih opcija"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskoči dubinsku pretragu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izabrane baze znanja"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izabrani sistemi"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Dodaj dokument na listu 'razgovaraj sa' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Pokretanje dubinske pretrage"
+      },
+      "RagLLMResponse" : {
+        "label" : "Pokretanje proširene generacije odgovora"
+      },
+      "PureLLMResponse" : {
+        "label" : "Postavljanje pitanja llm-u"
+      },
+      "Waiting" : {
+        "label" : "Analiziram najbolji plan za odgovor..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Pokretanje alata"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Pokretanje pretrage uz pomoć AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizirana datoteka"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analiziran rezultat pretrage"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analiziran rezultat pretrage sistema za"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidujem završni izveštaj"
+      },
+      "RUNNING" : {
+        "label" : "Pokrećem "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analiziram vaš zahtev"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Izabran agentni tok, agent je pokrenut"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Nivo usluge je: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Izvršavam izabranog agenta"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Otpremi datoteku(e)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Pretraži/pregledaj kompanijske datoteke"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Razgovor sa izabranim dokumentom"
+      },
+      "agenticChat" : {
+        "label" : "Agentni čet"
+      },
+      "rag" : {
+        "label" : "R.a.g. čet"
+      },
+      "deepSearch" : {
+        "label" : "Dubinska pretraga/Više izvora"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dubinska pretraga/Google Web pretraga"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dubinska pretraga/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Dubinska pretraga/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Dubinska pretraga/Pretraga baze znanja"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Razgovor sa datotekom(a)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dubinska pretraga/Google Web pretraga"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dubinska pretraga/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Dubinska pretraga/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google korisnik za imitaciju",
         "help" : "Korisnik koji će biti imitiran pomoću navedenih akreditacija",
         "placeholder" : "Korisnik koji će biti imitiran pomoću navedenih akreditacija"
+      },
+      "OK" : {
+        "summary" : "Uspešno sačuvano",
+        "detail" : "Ažuriranje uspešno obavljeno"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Obrađeni dokumenti",
         "dataset-2-label" : "Dokumenti sa greškom",
         "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indeksiranje celog teksta"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Neobrađeni dokumenti",
+        "label-1" : "Greška u obradi dokumenata",
+        "label-2" : "Obrađeni dokumenti"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Primljeni dokumenti",
+        "dataset-1-label" : "Obrađeni dokumenti",
+        "dataset-2-label" : "Dokumenti sa greškom",
+        "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Obrađeni tokeni",
+        "dataset-1-label" : "Greška u obradi tokena"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "omogući sve pozive funkcija",
         "help" : "Omogućite sve dostupne alate i pozive funkcija, ako nije podešeno, moguće ih je omogućiti kasnije u llms administratorskoj tabli"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Greška tokom operacije:Anthropic API ne može da radi bez potrebne konfiguracije API ključa",
+        "detail" : "Greška servera: Anthropic API ne može da radi bez potrebne konfiguracije API ključa"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI udaljeni provajder je u redu",
+        "detail" : "Provajder radi i uspešno je konfigurisan"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Izuzetak tokom operacije:401 NIJE OVLAŠĆENO",
+        "detail" : "Greška servera: 401 NIJE OVLAŠĆENO"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Izuzetak tokom operacije:Nedostaje basePath",
+        "detail" : "Greška servera: Nedostaje basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Kreiraj i aktiviraj"
+      },
+      "vendorId" : {
+        "label" : "Izaberite svog dobavljača velikih jezičkih modela",
+        "help" : "Izaberite početnog dobavljača za svoje podrazumevane chat i embedding modele"
+      },
+      "secretId" : {
+        "label" : "Izaberite kredencijale provajdera (API ključ)",
+        "help" : "Izaberite neke od postojećih kredencijala za izabranog LLM provajdera"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model za chat internim servisima",
+        "help" : "Model za chat za interne servise biće zadužen za ekstrakciju informacija, rezimiranje i izvođenje internih radnih tokova."
+      },
+      "ChatModel" : {
+        "label" : "Podrazumevani chat model",
+        "help" : "Podrazumevani chat model će odgovarati na korisnička pitanja i izvršavati radne tokove za koje nisu posebno podešeni modeli. Mora biti snažan i pouzdan, sa dobrim odnosom cene, performansi i kvaliteta rezultata."
+      },
+      "ProviderBuy" : {
+        "label" : "Link za kupovinu API kredita"
+      },
+      "ProviderWWW" : {
+        "label" : "Link ka web lokaciji"
+      },
+      "WebSiteLink" : {
+        "label" : "Web sajt provajdera",
+        "help" : "Kliknite ovde za opšte informacije o provajderu."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Kupite kredit kod provajdera",
+        "help" : "Kliknite ovde za kupovinu kredita za svoj API ključ(eve)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Podrazumevani embedding model",
+        "help" : "Ovaj model je odgovoran za semantičko indeksiranje (embedding) i pretragu vaših podataka i dokumenata"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ne možete ovo obrisati",
         "detail" : "Ovaj objekat se koristi u drugom delu aplikacije"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Izuzetak tokom operacije:Greška prilikom rada sa url:http://localhost:11434/v1/models",
+        "detail" : "Greška servera: Greška prilikom rada sa url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Izuzetak tokom operacije:apiKey mora biti postavljen",
+        "detail" : "Greška servera: apiKey mora biti postavljen"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Greška tokom strimovanja odgovora četa",
+        "detail" : "Greška servera: 400 Bad Request od POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Greška tokom operacije:Greška pri radu sa url:http://localhost:8000/v1/models",
+        "detail" : "Greška servera: Greška pri radu sa url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Greška pri strimovanju chat odgovora",
+        "detail" : "Greška servera: Veza resetovana"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Greška tokom operacije:Greška pri radu sa url:https://api.openai.com/v1/models",
+        "detail" : "Greška servera: Greška pri radu sa url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Greška tokom operacije:Anthropic API ne može da radi bez potrebne konfiguracije API ključa",
+        "detail" : "Greška servera: Anthropic API ne može da radi bez potrebne konfiguracije API ključa"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Završeno"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "U redu!",
+        "detail" : "Operacija uspešno završena"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Korišćeni identitet",
         "help" : "Izaberite ili napravite identitet za pristup google drive sistemu"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Čet"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Pretraga relevantnih informacija"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidacija konačnog izveštaja"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Analizirani rezultat pretrage"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Analizirani rezultat sistemske pretrage za"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Izaberite bar jednu od sledećih opcija"
+      },
+      "LaunchBtn" : {
+        "label" : "Pokreni pretragu"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Preskoči dubinsku pretragu"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Izabrane baze znanja"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Izabrani sistemi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Izaberi izvore"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizirana datoteka"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Unesi"
+      },
+      "CancelBtn" : {
+        "label" : "Otkaži"
+      },
+      "DeleteBtn" : {
+        "label" : "Obriši"
+      },
+      "SearchSettingTab" : {
+        "label" : "Podešavanje pretrage"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Unesite prompt za izdvajanje relevantnih informacija iz dokumenata"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Unesite prompt za konsolidaciju izdvojenih relevantnih informacija"
+      },
+      "MainPanel" : {
+        "label" : "Uređivanje Deep search konfiguracije"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Podešavanje velikih jezičkih modela"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis Deep search konfiguracije"
+      },
+      "code" : {
+        "label" : "Jedinstveni kod",
+        "help" : "Automatski generisan jedinstveni kod za Deep search konfiguraciju"
+      },
+      "searchType" : {
+        "label" : "Tip pretrage",
+        "help" : "Izaberite između jednostruke ili višestruke semantic pretrage"
+      },
+      "topK" : {
+        "label" : "Broj pronađenih tekstualnih segmenata (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Korišćen llm",
+        "help" : "Naznačite veliki jezički model koji se koristi za Deep search, podrazumevani će biti korišćen\n                                    ako nijedan nije izabran."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt za analizu dokumenata",
+        "help" : "Izmenite prompt koji će se koristiti za izdvajanje relevantnih informacija iz fragmenata dokumenata."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt za konsolidaciju izdvojenih informacija",
+        "help" : "Izmenite prompt koji će se koristiti za konsolidaciju u jedinstven izveštaj relevantnih informacija iz pronađenih dokumenata."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Prag sličnosti pretrage",
+        "help" : "Prvi prag semantičke sličnosti (između 0.5 i 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Prag sličnosti za drugi nivo",
+        "help" : "Drugi prag semantičke sličnosti (između 0.5 i 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Podrazumevani veliki jezički model",
+        "help" : "Podrazumevani veliki jezički model će biti korišćen za Deep search obradu"
+      },
+      "similarityThreashold" : {
+        "label" : "Prag sličnosti pretrage",
+        "help" : "Prag semantičke sličnosti (između 0.5 i 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Podešavanja bezbednosti"
+      },
+      "accessibleToAll" : {
+        "label" : "Dostupno svima"
+      },
+      "datasource" : {
+        "label" : "Izvor podataka"
+      },
+      "allowedGroups" : {
+        "label" : "Dozvoljene grupe"
+      },
+      "allowedUsers" : {
+        "label" : "Dozvoljeni korisnici"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Pristup korisnika/grupa po izvoru podataka",
+        "help" : "Dubinska pretraga biće omogućena za svaki eksterni izvor podataka i korisnika ili grupu"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Jednostavan pristup po korisniku/grupi"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Pristup po izvoru podataka po korisniku/grupi"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Koristite ili kreirajte kredencijale za API ključ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ključ/kredencijali",
+        "help" : "Izaberite api ključ ili kredencijale za ovog provajdera"
+      },
+      "NewApiKey" : {
+        "label" : "Novi api ključ",
+        "help" : "Unesite novi API ključ za korišćenje sa ovim provajderom"
+      },
+      "PiSave" : {
+        "label" : "Sačuvaj"
+      },
+      "NewUserName" : {
+        "label" : "Korisničko ime",
+        "help" : "Korisničko ime za pristup servisima provajdera"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Koristi postojeće ili novu",
+        "help" : "Koristite postojeće ili kreirajte nove kredencijale za ovog provajdera"
+      },
+      "newSecretDescription" : {
+        "label" : "Opis kredencijala",
+        "help" : "Opis API ključ kredencijala"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kredencijali su kreirani",
+        "detail" : "Kredencijali su uspešno kreirani"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Greška u komunikaciji sa Ollama serverom ",
+        "detail" : "Greška mreže pri povezivanju sa udaljenim sistemom\n greška prilikom rada sa url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Čet sa korisnicima"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model za interne servise"
       }
     }
   }

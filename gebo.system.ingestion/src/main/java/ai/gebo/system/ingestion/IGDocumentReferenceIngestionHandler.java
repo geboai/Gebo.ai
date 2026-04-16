@@ -21,6 +21,7 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 
 /**
@@ -185,5 +186,9 @@ public interface IGDocumentReferenceIngestionHandler {
 	 */
 	public GeboDocument handleDocument(GDocumentReference reference, InputStream is)
 			throws GeboIngestionException, IOException;
+
+	public IngestionHandlerData handleContent(GDocumentReference reference, GeboDocument geboDocument);
+
+	public IngestionHandlerData handleContent(GDocumentReference reference, TypedInputStream streamContent) throws GeboIngestionException, IOException;
 
 }

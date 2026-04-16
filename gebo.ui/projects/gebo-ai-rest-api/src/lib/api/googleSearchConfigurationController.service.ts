@@ -17,7 +17,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ComponentSetupStatus } from '../model/componentSetupStatus';
 import { GGoogleSearchApiCredentials } from '../model/gGoogleSearchApiCredentials';
+import { GoogleSearchConfig } from '../model/googleSearchConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -93,6 +95,125 @@ export class GoogleSearchConfigurationControllerService {
         return this.httpClient.request<any>('post',`${this.basePath}/api/admin/GoogleSearchConfigurationController/deleteGGoogleSearchApiCredentials`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public fastInsertGoogleSearchApiCredentials(body: GoogleSearchConfig, observe?: 'body', reportProgress?: boolean): Observable<GGoogleSearchApiCredentials>;
+    public fastInsertGoogleSearchApiCredentials(body: GoogleSearchConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GGoogleSearchApiCredentials>>;
+    public fastInsertGoogleSearchApiCredentials(body: GoogleSearchConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GGoogleSearchApiCredentials>>;
+    public fastInsertGoogleSearchApiCredentials(body: GoogleSearchConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling fastInsertGoogleSearchApiCredentials.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GGoogleSearchApiCredentials>('post',`${this.basePath}/api/admin/GoogleSearchConfigurationController/fastInsertGoogleSearchApiCredentials`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGoogleSearchApiCredentials(observe?: 'body', reportProgress?: boolean): Observable<Array<GGoogleSearchApiCredentials>>;
+    public getGoogleSearchApiCredentials(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GGoogleSearchApiCredentials>>>;
+    public getGoogleSearchApiCredentials(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GGoogleSearchApiCredentials>>>;
+    public getGoogleSearchApiCredentials(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GGoogleSearchApiCredentials>>('get',`${this.basePath}/api/admin/GoogleSearchConfigurationController/getGoogleSearchApiCredentials`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGoogleSearchStatus(observe?: 'body', reportProgress?: boolean): Observable<ComponentSetupStatus>;
+    public getGoogleSearchStatus(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ComponentSetupStatus>>;
+    public getGoogleSearchStatus(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ComponentSetupStatus>>;
+    public getGoogleSearchStatus(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<ComponentSetupStatus>('get',`${this.basePath}/api/admin/GoogleSearchConfigurationController/getGoogleSearchStatus`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

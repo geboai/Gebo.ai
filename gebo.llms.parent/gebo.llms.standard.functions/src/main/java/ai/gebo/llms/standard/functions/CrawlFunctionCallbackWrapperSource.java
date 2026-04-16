@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.standard.functions;
 
@@ -28,17 +25,17 @@ import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSource;
-import ai.gebo.architecture.ai.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.IGToolCallbackSource;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 
 /**
- * AI generated comments
- * Service class that provides web crawling functionality as a tool callback for LLM interactions.
- * This class allows the LLM to fetch and read content from specified URLs.
+ * AI generated comments Service class that provides web crawling functionality
+ * as a tool callback for LLM interactions. This class allows the LLM to fetch
+ * and read content from specified URLs.
  */
 @Service
 public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource {
@@ -49,14 +46,14 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 	static long LENGTH_CUT = 1024 * 4;
 
 	/**
-	 * Request object for URL crawling operations.
-	 * Contains the URL to be crawled.
+	 * Request object for URL crawling operations. Contains the URL to be crawled.
 	 */
 	public static class UrlCrawlRequest {
 		private String url = null;
 
 		/**
 		 * Gets the URL to crawl.
+		 * 
 		 * @return the URL string
 		 */
 		public String getUrl() {
@@ -65,6 +62,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 		/**
 		 * Sets the URL to crawl.
+		 * 
 		 * @param url the URL string to set
 		 */
 		public void setUrl(String url) {
@@ -73,14 +71,15 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 	}
 
 	/**
-	 * Response object for URL crawling operations.
-	 * Contains the content fetched from the URL.
+	 * Response object for URL crawling operations. Contains the content fetched
+	 * from the URL.
 	 */
 	public static class UrlCrawlResponse {
 		public String content = null;
 
 		/**
 		 * Gets the content fetched from the URL.
+		 * 
 		 * @return the content string
 		 */
 		public String getContent() {
@@ -89,6 +88,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 		/**
 		 * Sets the content fetched from the URL.
+		 * 
 		 * @param content the content string to set
 		 */
 		public void setContent(String content) {
@@ -105,11 +105,22 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 	/**
 	 * Creates a ToolCallback for URL crawling functionality.
+	 * 
 	 * @return a ToolCallback that handles URL crawling
 	 */
+	static UrlCrawlResponse EMPTYRESPONSE=new UrlCrawlResponse();
+	static {
+		EMPTYRESPONSE.content="Invalid url or request gonna wrong";
+	}
 	ToolCallback create() {
-		BiFunction<UrlCrawlRequest,ToolContext, UrlCrawlResponse> thisFunction = (UrlCrawlRequest request,ToolContext toolContext) -> {
+		BiFunction<UrlCrawlRequest, ToolContext, UrlCrawlResponse> thisFunction = (UrlCrawlRequest request,
+				ToolContext toolContext) -> {
 			String url = request != null ? request.getUrl() : null;
+			if (url == null || url.trim().length() == 0)
+				return EMPTYRESPONSE;
+			if (!url.toLowerCase().startsWith("http")) {
+				return EMPTYRESPONSE;
+			}
 			LOGGER.info("Begin llm reading content:" + url);
 			try {
 				String content = "No content can be returned";
@@ -146,7 +157,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 					calledFunction.setParamsDescription(List.of(request.getUrl()));
 				}
 				if (context != null) {
-					
+
 					context.getCalledFunctions().add(calledFunction);
 				}
 				ToolCallbackDeclarationUtil.addCallToContext(toolContext, calledFunction);
@@ -163,6 +174,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 	/**
 	 * Gets the unique identifier for this tool callback source.
+	 * 
 	 * @return the class name as the ID
 	 */
 	@Override
@@ -173,6 +185,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 	/**
 	 * Specifies the category of this tool.
+	 * 
 	 * @return INTERNET_BROWSING tool category
 	 */
 	@Override
@@ -182,6 +195,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 	/**
 	 * Gets the list of tool callbacks provided by this source.
+	 * 
 	 * @return a list containing the URL crawling tool callback
 	 */
 	@Override
@@ -191,7 +205,9 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 
 	/**
 	 * Gets the full list of tool references.
-	 * @return an empty list as this implementation doesn't provide any tool references
+	 * 
+	 * @return an empty list as this implementation doesn't provide any tool
+	 *         references
 	 */
 	@Override
 	public List<ToolReference> getFullToolReferences() {

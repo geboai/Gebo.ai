@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Logáil isteach"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Theip ar an oibríocht",
+        "detail" : "Ní féidir fíordheimhniú leis na dintiúir a seachadadh"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Comhtháthú Google Drive/Workspaces",
         "description" : "Cumraigh Gebo.ai chun do chuid sonraí foirne Google cloud Drive/Workspaces a rochtain"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Cumraigh Google search api",
+        "description" : "Cumraigh dintiúir Google search api le haghaidh cuardaigh gréasáin AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Cumraigh Deep search",
+        "description" : "Cumraigh paraiméadair Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. uath-fhoinsiú",
+        "description" : "Tiúnáil uathoibríoch ar pharaiméadair giniúna retrieve augmented"
+      },
+      "Description" : {
+        "label" : "Cur síos"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Nuashonrú tiúnála is déanaí"
+      },
+      "Code" : {
+        "label" : "Cód samhail embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Tairseach ríofa"
+      },
+      "Autotuned" : {
+        "label" : "Uath-thiúnaithe"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Céimeanna éigeantacha do shocrú Gebo.ai críochnaithe...",
+        "detail" : "Tá na céimeanna éigeantacha socraithe déanta ach tá roinnt céimeanna in easnamh a chuireann cosc ar d'eagraíocht an leas is mó a bhaint as an mbogearra seo"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Tá céimeanna éigeantacha áirithe ar iarraidh i socrú Gebo.ai",
+        "detail" : "Athbhreithnigh na céimeanna dearga sa phróiseas socraithe le do thoil"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Córas Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Cuir an córas in eagar"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Rochtain sholáthraithe Gebo.ai llms a shocrú"
+      },
+      "ExtensiveStup" : {
+        "label" : "Roghanna bonneagair/soláthraithe leathnaithe"
+      },
+      "MainPanelTitle" : {
+        "label" : "Socrú samhlacha móra teanga a úsáidtear"
+      },
+      "EasySetup" : {
+        "label" : "Socrú tosaigh nó ceartúchán éasca"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Socrú samhlacha móra teanga"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Cur síos"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Eochair Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Cruthaigh dintiúir google search"
+      },
+      "CreateBtn" : {
+        "label" : "Cruthaigh"
+      },
+      "customSearchEngineId" : {
+        "label" : "Aitheantas inneall cuardaigh",
+        "help" : "Cuir isteach an t-aitheantas inneall cuardaigh a fuarthas le linn clárúchán dintiúir google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cód cumraíochta"
+      },
+      "DescriptionHeader" : {
+        "label" : "Cur síos"
+      },
+      "apiKey" : {
+        "label" : "Eochair api",
+        "help" : "Cuir isteach an eochair api a fuarthas le linn clárúchán dintiúir google search api."
+      },
+      "MainPanel" : {
+        "label" : "Socraigh google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Scrios",
+        "help" : "Scrios dintiúir Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Cumraíocht Deep search",
+        "help" : "Cuir cumraíocht deep search leis"
+      },
+      "EditSystemBtn" : {
+        "label" : "Cuir an chumraíocht in eagar"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "díchumasaithe"
+      },
+      "EditGroupBtn" : {
+        "label" : "Cuir in eagar"
+      },
+      "CodeHeader" : {
+        "label" : "cód"
+      },
+      "DescriptionHeader" : {
+        "label" : "cur síos"
+      },
+      "UsersHeader" : {
+        "label" : "úsáideoirí"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Socruithe rochtana ar an mhúnla"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Soláthraí AI iargúlta ceart go leor",
+        "detail" : "Tá an soláthraí ar fáil agus socraithe go rathúil"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Eisceacht le linn oibríochta: Earráid ag obair le url: https://api.openai.com/v1/models",
+        "detail" : "Earráid freastalaí: Earráid ag obair le url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "socraigh seo mar mhúnla leabaithe réamhshocraithe",
         "help" : "Má tá true, úsáidfear é seo mar an mhúnla leabaithe réamhshocraithe nuair nach léirítear múnla leabaithe"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Soláthraí AI iargúlta ceart go leor",
+        "detail" : "Tá an soláthraí ar fáil agus socraithe go rathúil"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ag cur in eagar cumraíocht mhúnla comhrá freastalaí áitiúil (nó LAN) Ollama"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Ag cur in eagar cumraíocht mhúnla comhrá Anthropic"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Ag cur in eagar cumraíocht mhúnla comhrá MistralAI"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Ag cur in eagar cumraíocht mhúnla comhrá Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Socruithe rochtana ar an mhúnla"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Socruithe rochtana ar an mhúnla"
+      },
+      "forUses" : {
+        "label" : "Úsáid(í) an tsamhail",
+        "help" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir.",
+        "placeholder" : "Úsáidfidh an t-ardán Gebo.ai an tsamhail seo dá réir."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Oibríocht críochnaithe go rathúil"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "An bhfuil tú cinnte gur mian leat an comhrá seo a scriosadh?",
         "header" : "Gníomh scriosta comhrá"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Cuir ábhar leis nó athraigh iompar cuardaigh"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Foinsí",
+        "help" : "Oscail liosta na ndoiciméad a ndearnadh anailís orthu"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Sonraí freagra an chuardaigh dhomhain agus foinsí"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Toradh anailíse Chuardach Domhain"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Earráid agus Cuardach Confluence á dhéanamh",
+        "detail" : "Earráid freastalaí: Fadhbanna ag rochtain ar an gcóras confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Comhrá nua luchtaithe",
+        "detail" : "Comhrá nua luchtaithe go rathúil"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Roghnaigh foinsí"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Roghnaigh ceann amháin ar a laghad de na roghanna seo"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ná déan cuardach domhain"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bunachair eolais roghnaithe"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Córais roghnaithe"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Cuir cáipéis leis an liosta 'comhrá leis'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Cuardach domhain á rith"
+      },
+      "RagLLMResponse" : {
+        "label" : "Giniúint le cuardach spreagtha á rith"
+      },
+      "PureLLMResponse" : {
+        "label" : "Ag fiafraí de llm"
+      },
+      "Waiting" : {
+        "label" : "Ag anailísiú an phlean freagartha is fearr.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Uirlisí á rith"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Cuardach le cabhair AI á rith"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Comhad anailísithe"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Toradh cuardaigh anailísithe"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Toradh cuardaigh córais anailísithe do"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "An tuarascáil dheiridh á daingniú"
+      },
+      "RUNNING" : {
+        "label" : "Ag rith "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Táim ag anailísiú do iarratais"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Sreabhadh gníomhaireach roghnaithe, gníomhaire á rith"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Leibhéal seirbhíse: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Do ghníomhaire roghnaithe á fhorghníomhú"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Uaslódáil comhad(aí)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Brabhsáil/cuardaigh comhad(aí) cuideachta"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Comhrá doiciméad roghnaithe"
+      },
+      "agenticChat" : {
+        "label" : "Comhrá gníomhaireach"
+      },
+      "rag" : {
+        "label" : "Comhrá R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Cuardach domhain/Ilfhoinsí"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Cuardach domhain/Cuardach Gréasáin Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Cuardach domhain/Cuardach Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Cuardach domhain/Cuardach Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Cuardach domhain/Cuardach bunachar eolais"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Comhrá le comhad(aí)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Cuardach domhain/Cuardach Gréasáin Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Cuardach domhain/Cuardach Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Cuardach domhain/Cuardach Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Úsáideoir Google le clónáil",
         "help" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil",
         "placeholder" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil"
+      },
+      "OK" : {
+        "summary" : "Sábháilte go rathúil",
+        "detail" : "Oibríocht nuashonraithe críochnaithe go rathúil"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Cáipéisí próiseáilte",
         "dataset-2-label" : "Cáipéisí le hearráid",
         "dataset-3-label" : "Cáipéisí caite"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Innéacsú iomlán téacs"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Docs nár próiseáladh",
+        "label-1" : "Earráid ag próiseáil docs",
+        "label-2" : "Docs próiseáilte"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Docs faighte",
+        "dataset-1-label" : "Docs próiseáilte",
+        "dataset-2-label" : "Docs le hearráid",
+        "dataset-3-label" : "Docs diúltaithe"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tóicíní próiseáilte",
+        "dataset-1-label" : "Earráid ag próiseáil tóicíní"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "cumasaigh gach glao feidhme",
         "help" : "Cumasaigh gach uirlis agus glao feidhme atá ar fáil, mura mbíonn sé socraithe, beidh sé indéanta iad a chumasú níos déanaí sa phainéal riaracháin llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Eisceacht le linn oibríochta: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach",
+        "detail" : "Earráid freastalaí: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Soláthraí AI cianda ceart go leor",
+        "detail" : "Tá an soláthraí suas agus ag rith agus cumraithe go rathúil"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Eisceacht le linn na hoibríochta: 401 UNAUTHORIZED",
+        "detail" : "Earráid freastalaí: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Eisceacht le linn na hoibríochta: basePath ar iarraidh",
+        "detail" : "Earráid freastalaí: basePath ar iarraidh"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Cruthaigh agus gníomhachtaigh"
+      },
+      "vendorId" : {
+        "label" : "Roghnaigh do sholáthraí samhail mhór teanga",
+        "help" : "Roghnaigh an chéad soláthraí do do shamhlacha comhrá agus embedding réamhshocraithe"
+      },
+      "secretId" : {
+        "label" : "Roghnaigh dintiúir an tsoláthraí (eochair api)",
+        "help" : "Roghnaigh ceann de na dintiúir atá ann don soláthraí llm roghnaithe"
+      },
+      "InternalServiceModel" : {
+        "label" : "Samhail chomhrá seirbhísí inmheánacha",
+        "help" : "Beidh an tsamhail chomhrá atá cumraithe do sheirbhísí inmheánacha freagrach as faisnéis a bhaint, achoimriú agus sreafaí oibre inmheánacha a chur i bhfeidhm."
+      },
+      "ChatModel" : {
+        "label" : "Samhail chomhrá réamhshocraithe",
+        "help" : "Beidh an tsamhail chomhrá réamhshocraithe freagrach as ceisteanna ó úsáideoirí a fhreagairt, agus sreafaí oibre a chur i bhfeidhm nach bhfuil samhlacha ar leith cumraithe dóibh. Caithfidh sí a bheith cumhachtach agus iontaofa, le comhréireacht idir costas, feidhmíocht agus caighdeán toraidh."
+      },
+      "ProviderBuy" : {
+        "label" : "Nasc creidmheasa Eochair Apy a cheannach"
+      },
+      "ProviderWWW" : {
+        "label" : "Nasc suíomh gréasáin"
+      },
+      "WebSiteLink" : {
+        "label" : "Suíomh Gréasáin an tsoláthraí",
+        "help" : "Cliceáil anseo le haghaidh faisnéis ghinearálta faoin soláthraí."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Ceannaigh creidmheas an tsoláthraí",
+        "help" : "Cliceáil anseo chun creidmheas a cheannach do do eochair(api)(í)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Samhail embedding réamhshocraithe",
+        "help" : "Beidh an tsamhail seo freagrach as innéacsú séimeantach (embedding) agus do chuid sonraí agus doiciméad a aimsiú"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Ní féidir leat é seo a scriosadh",
         "detail" : "Tagraítear don réad seo ó chuid eile den fheidhmchlár"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Eisceacht le linn oibríochta: Earráid ag obair leis an url:http://localhost:11434/v1/models",
+        "detail" : "Earráid freastalaí: Earráid ag obair leis an url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Eisceacht le linn oibríochta: Caithfidh apiKey a bheith socraithe",
+        "detail" : "Earráid freastalaí: Caithfidh apiKey a bheith socraithe"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Earráid agus freagra comhrá á shruthú",
+        "detail" : "Earráid freastalaí: 400 Droch-Iarratas ó POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Eisceacht le linn oibríochta: Earráid ag obair le url:http://localhost:8000/v1/models",
+        "detail" : "Earráid freastalaí: Earráid ag obair le url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Earráid agus freagra comhrá á shruthú",
+        "detail" : "Earráid freastalaí: Athshocrú an cheangail"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Eisceacht le linn oibríochta: Earráid ag obair le url:https://api.openai.com/v1/models",
+        "detail" : "Earráid freastalaí: Earráid ag obair le url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Eisceacht le linn oibríochta: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach",
+        "detail" : "Earráid freastalaí: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Críochnaithe"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Oibríocht críochnaithe go rathúil"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Aitheantas in úsáid",
         "help" : "Roghnaigh nó cruthaigh an taitheantas chun rochtain a fháil ar an gcóras google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Comhrá"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Cuardach faisnéise ábhartha"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Á comhdhlúthú an tuarascáil deiridh"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Toradh cuardaigh anailísithe"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Toradh cuardaigh córas anailísithe do"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Roghnaigh ceann amháin ar a laghad de na roghanna seo"
+      },
+      "LaunchBtn" : {
+        "label" : "Rith cuardach"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ná déan cuardach domhain"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bunachair eolais roghnaithe"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Córais roghnaithe"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Roghnaigh foinsí"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Comhad anailísithe"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ionsáigh"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "DeleteBtn" : {
+        "label" : "Scrios"
+      },
+      "SearchSettingTab" : {
+        "label" : "Socrú cuardaigh"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Cuir isteach luaigh do bhaint faisnéise ábhartha ó cháipéisí"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Cuir isteach luaigh do chomhdhlúthú na faisnéise bainte"
+      },
+      "MainPanel" : {
+        "label" : "Cumraíocht deep search á heagarthóireacht"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Socrú samhail teanga mhóir"
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Cuir isteach cur síos ar an gcumraíocht deep search"
+      },
+      "code" : {
+        "label" : "Cód uathúil",
+        "help" : "Cód uathúil ginte go huathoibríoch ar an gcumraíocht deep search"
+      },
+      "searchType" : {
+        "label" : "Cineál cuardaigh",
+        "help" : "Roghnaigh idir cuardach seimeantach hop amháin nó il-hop"
+      },
+      "topK" : {
+        "label" : "Líon na míreanna téacs a faightear (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Úsáid llm",
+        "help" : "Sonraigh an tsamhail teanga mhór le húsáid don Deep search, úsáidfear an ceann réamhshocraithe mura roghnaítear ceann."
+      },
+      "analisysPrompt" : {
+        "label" : "Luaigh anailíse do cháipéisí",
+        "help" : "Cuir in eagar an luaigh a úsáidfear chun faisnéis ábhartha a bhaint as codanna de cháipéisí."
+      },
+      "consolidationPrompt" : {
+        "label" : "Luaigh comhdhlúthaithe faisnéise bainte",
+        "help" : "Cuir in eagar an luaigh a úsáidfear chun faisnéis ábhartha bainte a chomhdhlúthú i dtuarascáil aonair ó cháipéisí faighte."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Tairseach cosúlachta cuardaigh",
+        "help" : "Tairseach cosúlachta seimeantaigh an chéad hop (idir 0.5 agus 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Tairseach cosúlachta an dara hop",
+        "help" : "Tairseach cosúlachta seimeantaigh an dara hop (idir 0.5 agus 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Samhail teanga mhór réamhshocraithe",
+        "help" : "Úsáidfear an samhail teanga mhór réamhshocraithe do phróiseáil Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Tairseach cosúlachta cuardaigh",
+        "help" : "Tairseach cosúlachta seimeantaigh (idir 0.5 agus 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Socruithe slándála"
+      },
+      "accessibleToAll" : {
+        "label" : "Inrochtana ag gach duine"
+      },
+      "datasource" : {
+        "label" : "Foinse sonraí"
+      },
+      "allowedGroups" : {
+        "label" : "Grúpaí ceadaithe"
+      },
+      "allowedUsers" : {
+        "label" : "Úsáideoirí ceadaithe"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Rochtain úsáideora/grúpa in aghaidh gach foinse sonraí",
+        "help" : "Cuirfear cuardach domhain ar fáil do gach foinse sheachtrach agus úsáideoir nó grúpa"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Rochtain shimplí úsáideora/grúpa"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Rochtain úsáideora/grúpa in aghaidh na foinse sonraí"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Úsáid nó cruthaigh dintiúir eochrach api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Eochair api/dintiúir",
+        "help" : "Roghnaigh eochair api nó dintiúir don soláthraí seo"
+      },
+      "NewApiKey" : {
+        "label" : "Eochair api nua",
+        "help" : "Cuir isteach eochair api nua le húsáid leis an soláthraí seo"
+      },
+      "PiSave" : {
+        "label" : "Sábháil"
+      },
+      "NewUserName" : {
+        "label" : "Ainm úsáideora",
+        "help" : "Ainm úsáideora chun rochtain a fháil ar sheirbhísí an tsoláthraí"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Úsáid ceann atá ann nó ceann nua",
+        "help" : "Úsáid dintiúir atá ann nó cruthaigh cinn nua don soláthraí seo"
+      },
+      "newSecretDescription" : {
+        "label" : "Cur síos ar na dintiúir",
+        "help" : "Cur síos ar na dintiúir eochair api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Dintiúir cruthaithe",
+        "detail" : "Cruthaíodh dintiúir go rathúil"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Earráid cumarsáide leis an bhfreastalaí Ollama ",
+        "detail" : "Earráid líonra ag cumarsáid leis an gcóras cianda ag rochtain liosta na samhlacha inneachair\n Earráid agus url á úsáid:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Comhrá le húsáideoirí"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Samhail a úsáidtear le haghaidh seirbhísí inmheánacha"
       }
     }
   }

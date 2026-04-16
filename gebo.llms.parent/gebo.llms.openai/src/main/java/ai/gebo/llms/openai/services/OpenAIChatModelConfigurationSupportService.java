@@ -30,7 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -76,12 +76,7 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
 	}
 
-	/**
-	 * Available model choices for OpenAI chat models.
-	 */
-	static final List<GOpenAIChatModelChoice> choices = GBaseModelChoice.of(GOpenAIChatModelChoice.class,
-			OpenAiApi.ChatModel.values());
-
+	
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;

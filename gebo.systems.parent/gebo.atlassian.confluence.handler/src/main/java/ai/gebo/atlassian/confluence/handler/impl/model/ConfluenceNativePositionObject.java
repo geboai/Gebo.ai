@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -36,6 +33,7 @@ import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 
 public class ConfluenceNativePositionObject extends AbstractNativePositionObject {
 
+	private static final String DEFAULT_CONFLUENCE_CONTENT_TYPE = "text/html";
 	// Basic object properties
 	private String code = null;
 	private String name = null;
@@ -46,19 +44,19 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	private Date resourceModificationTime;
 	private boolean resource;
 	private Long resourceFileSize = null;
-	
+
 	// Cloud Confluence object references
 	private CloudConfluenceListItem cloudConfluenceItemChildrens = null;
 	private CloudConfluenceListItem cloudConfluencePage = null;
 	private CloudConfluenceAttachmentItem cloudConfluenceAttachment = null;
 	private CloudConfluenceSpacesListItem cloudConfluenceSpace = null;
-	
+
 	// On-Premise Confluence object references
 	private OnPremiseConfluenceListItem onPremiseConfluenceListItemChildrens = null;
 	private OnPremiseConfluenceListItem onPremiseConfluencePage = null;
 	private OnPremiseConfluenceAttachmentItem onPremiseConfluenceAttachment = null;
 	private OnPremiseConfluenceSpacesListItem onPremiseConfluenceSpace = null;
-	
+
 	// Metadata constants used to store information about Confluence objects
 	public static final String CONFLUENCE_ATTACHMENT_TITLE_METAINFO = "CONFLUENCE_ATTACHMENT_TITLE_METAINFO";
 	public static final String CONFLUENCE_BROWSER_CACHE_ENTRY = "confluenceBrowser";
@@ -73,6 +71,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	public static final String CONFLUENCE_RESOURCE_METAINFO = "CONFLUENCE_RESOURCE_METAINFO";
 	public static final String CONFLUENCE_RESOURCE_METAINFO_PAGE = "PAGE";
 	public static final String CONFLUENCE_RESOURCE_METAINFO_ATTACHMENT = "ATTACHMENT";
+	public static final String CONFLUENCE_DOWNLOAD_RELATIVE_URL = "DOWNLOAD_RELATIVE_URL";
 
 	/**
 	 * Converts an OffsetDateTime to a Date object
@@ -127,7 +126,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	}
 
 	/**
-	 * Determines if this object is a folder/container that can contain other resources
+	 * Determines if this object is a folder/container that can contain other
+	 * resources
 	 * 
 	 * @return true if this is a folder, false otherwise
 	 */
@@ -186,7 +186,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = false;
 		this.code = this.cloudConfluenceItemChildrens.getId();
 		this.name = this.cloudConfluenceItemChildrens.getTitle();
-		this.resourceContentType = "text/html";
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO, cloudConfluenceItemChildrens.getId());
 	}
@@ -203,7 +203,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	/**
 	 * Sets this object as an On-Premise Confluence container with children
 	 * 
-	 * @param onPremiseConfluenceListItemChildrens The On-Premise Confluence children
+	 * @param onPremiseConfluenceListItemChildrens The On-Premise Confluence
+	 *                                             children
 	 */
 	public void setOnPremiseConfluenceListItemChildrens(
 			OnPremiseConfluenceListItem onPremiseConfluenceListItemChildrens) {
@@ -238,7 +239,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = true;
 		this.code = this.cloudConfluencePage.getId();
 		this.name = this.cloudConfluencePage.getTitle();
-		this.resourceContentType = "text/html";
+		
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluencePage.getId());
@@ -270,7 +272,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resource = true;
 		this.code = this.onPremiseConfluencePage.getId();
 		this.name = this.onPremiseConfluencePage.getTitle();
-		this.resourceContentType = "text/html";
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluenceAttachment.getId());
@@ -302,8 +304,14 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_ID_METAINFO, cloudConfluenceAttachment.getId());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_TITLE_METAINFO, cloudConfluenceAttachment.getTitle());
+		if (cloudConfluenceAttachment.get_links() != null
+				&& cloudConfluenceAttachment.get_links().getDownload() != null) {
+			this.resourceReferenceMetaInfos.put(CONFLUENCE_DOWNLOAD_RELATIVE_URL,
+					cloudConfluenceAttachment.get_links().getDownload());
+		}
 		this.folder = false;
 		this.resource = true;
+		
 		this.code = this.cloudConfluenceAttachment.getId();
 		this.name = this.cloudConfluenceAttachment.getTitle();
 		if (this.cloudConfluenceAttachment.getExtensions() != null)
@@ -342,10 +350,16 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_ATTACHMENT_TITLE_METAINFO,
 				onPremiseConfluenceAttachment.getTitle());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
+		if (onPremiseConfluenceAttachment.get_links() != null
+				&& onPremiseConfluenceAttachment.get_links().getDownload() != null) {
+			this.resourceReferenceMetaInfos.put(CONFLUENCE_DOWNLOAD_RELATIVE_URL,
+					onPremiseConfluenceAttachment.get_links().getDownload());
+		}
 		this.folder = false;
 		this.resource = true;
 		this.code = this.onPremiseConfluenceAttachment.getId();
 		this.name = this.onPremiseConfluenceAttachment.getTitle();
+		
 		if (onPremiseConfluenceAttachment.getVersion() != null
 				&& onPremiseConfluenceAttachment.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(onPremiseConfluenceAttachment.getVersion().getWhen());
@@ -473,7 +487,8 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 	}
 
 	/**
-	 * Determines if this object is a Confluence super page (container for other pages)
+	 * Determines if this object is a Confluence super page (container for other
+	 * pages)
 	 * 
 	 * @return true if this is a Confluence super page, false otherwise
 	 */
@@ -536,6 +551,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_ID_METAINFO, cloudConfluencePage.getId());
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.setCloudConfluencePage(this.cloudConfluencePage);
 		if (page.getVersion() != null && page.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(page.getVersion().getWhen());
@@ -555,6 +571,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		this.name = page.getTitle();
 		this.resource = true;
 		this.folder = false;
+		this.resourceContentType = DEFAULT_CONFLUENCE_CONTENT_TYPE;
 		this.onPremiseConfluencePage = new OnPremiseConfluenceListItem();
 		this.onPremiseConfluencePage.setId(page.getId());
 		this.onPremiseConfluencePage.setTitle(page.getTitle());
@@ -593,6 +610,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		if (page.get_links() != null) {
 			this.url = page.get_links().getSelf();
 		}
+		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.CLOUD.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO, cloudConfluenceItemChildrens.getId());
 	}
@@ -616,6 +634,7 @@ public class ConfluenceNativePositionObject extends AbstractNativePositionObject
 		if (page.getVersion() != null && page.getVersion().getWhen() != null) {
 			this.resourceModificationTime = toDate(page.getVersion().getWhen());
 		}
+		this.resourceReferenceMetaInfos.put(CONFLUENCE_RESOURCE_METAINFO, CONFLUENCE_RESOURCE_METAINFO_PAGE);
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_VERSION_METAINFO, ConfluenceVersion.ONPREMISE7X.name());
 		this.resourceReferenceMetaInfos.put(CONFLUENCE_CONTENT_PARENT_METAINFO,
 				onPremiseConfluenceListItemChildrens.getId());

@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>gebo.apps.parent</artifactId>
 		<groupId>ai.gebo.apps</groupId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.ai.app</artifactId>
 	<dependencies>
@@ -406,7 +406,7 @@
 										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
 										<option>-XX:+PrintGCDetails</option>
-										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
+										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>										
 									</javaOptions>
 								</configuration>
 							</execution>

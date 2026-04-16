@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "تسجيل الدخول"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "فشلت العملية",
+        "detail" : "لا يمكن المصادقة باستخدام بيانات الاعتماد المقدمة"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "تكامل Google Drive/Workspaces",
         "description" : "قم بإعداد Gebo.ai للوصول إلى بيانات فريقك في Google Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "إعداد Google search api",
+        "description" : "إعداد بيانات اعتماد Google search api لعمليات البحث الذكية في الويب"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "إعداد Deep search",
+        "description" : "إعداد معلمات Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "ضبط R.a.g تلقائي",
+        "description" : "ضبط تلقائي لإعدادات توليد البيانات المعززة"
+      },
+      "Description" : {
+        "label" : "الوصف"
+      },
+      "LastAutotunedDate" : {
+        "label" : "آخر تحديث للضبط"
+      },
+      "Code" : {
+        "label" : "كود نموذج التح嶮يد/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "العَتَبة المحسوبة"
+      },
+      "Autotuned" : {
+        "label" : "تم الضبط التلقائي"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "تم الانتهاء من الخطوات الإلزامية لإعداد Gebo.ai...",
+        "detail" : "تم إكمال الخطوات الإلزامية للإعداد ولكن هناك خطوات مفقودة تمنع مؤسستك من الاستفادة الكاملة من هذا البرنامج"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "هناك خطوة إلزامية مفقودة في إعداد Gebo.ai",
+        "detail" : "يرجى مراجعة الخطوات ذات اللون الأحمر في عملية الإعداد"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "نظام Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "تعديل النظام"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "إعداد وصول مقدمي llms على Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "خيارات البنية التحتية/الموردين الموسعة"
+      },
+      "MainPanelTitle" : {
+        "label" : "إعداد نماذج اللغة الكبيرة المستخدمة"
+      },
+      "EasySetup" : {
+        "label" : "إصلاح الإعداد/التهيئة السهلة"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "إعداد نماذج اللغة الكبيرة"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "الوصف"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "مفتاح Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "إنشاء بيانات اعتماد google search"
+      },
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "customSearchEngineId" : {
+        "label" : "معرّف محرك البحث",
+        "help" : "أدخل معرّف محرك البحث الذي تم الحصول عليه عند تسجيل بيانات اعتماد google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "كود الإعداد"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "apiKey" : {
+        "label" : "مفتاح api",
+        "help" : "أدخل مفتاح api الذي تم الحصول عليه عند تسجيل بيانات اعتماد google search api."
+      },
+      "MainPanel" : {
+        "label" : "إعداد google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "حذف",
+        "help" : "حذف بيانات اعتماد Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "إعداد Deep search",
+        "help" : "إضافة إعداد Deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "تعديل الإعداد"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "معطل"
+      },
+      "EditGroupBtn" : {
+        "label" : "تعديل"
+      },
+      "CodeHeader" : {
+        "label" : "الكود"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "UsersHeader" : {
+        "label" : "المستخدمون"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي عن بعد جاهز",
+        "detail" : "المزود يعمل بنجاح وتم تكوينه بنجاح"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: https://api.openai.com/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "تعيين كنموذج تضمين افتراضي",
         "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي عن بعد جاهز",
+        "detail" : "المزود يعمل بنجاح وتم تكوينه بنجاح"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج محادثة خادم Ollama المحلي (أو على الشبكة)"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة Anthropic"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة MistralAI"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "تعديل إعدادات نموذج دردشة Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "إعدادات وصول النموذج"
+      },
+      "forUses" : {
+        "label" : "استخدامات النموذج",
+        "help" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج.",
+        "placeholder" : "الاستخدامات التي ستأخذها منصة Gebo.ai بعين الاعتبار لهذا النموذج."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تمت العملية بنجاح"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "هل أنت متأكد أنك تريد حذف هذه المحادثة؟",
         "header" : "إجراء حذف المحادثة"
+      },
+      "PlusContextualMenu" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "[object HTMLElement]" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "ContextMenuBtn" : {
+        "help" : "إضافة محتوى أو تعديل سلوك البحث"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "المصادر",
+        "help" : "فتح قائمة المستندات التي تم تحليلها"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "تفاصيل إجابة البحث المتعمق والمصادر"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "نتيجة تحليل البحث المتعمق"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "خطأ في البحث في Confluence Search",
+        "detail" : "خطأ في الخادم: مشاكل في الوصول إلى نظام confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "تم تحميل محادثة جديدة",
+        "detail" : "تم تحميل المحادثة الجديدة بنجاح"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "اختر المصادر"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "اختر واحدًا على الأقل من الخيارات التالية"
+      },
+      "SkipDeepSearch" : {
+        "label" : "تخطي البحث المتعمق"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "قواعد المعرفة المختارة"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "الأنظمة المختارة"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "إضافة مستند إلى قائمة 'الدردشة مع'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "تشغيل البحث المتعمق"
+      },
+      "RagLLMResponse" : {
+        "label" : "تشغيل استرجاع معزز بالإجابات"
+      },
+      "PureLLMResponse" : {
+        "label" : "سؤال llm"
+      },
+      "Waiting" : {
+        "label" : "تحليل أفضل خطة للرد.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "تشغيل الأدوات"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "تشغيل البحث المدعوم بالذكاء الاصطناعي"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "الملف الذي تم تحليله"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "نتيجة البحث التي تم تحليلها"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "نتيجة بحث النظام التي تم تحليلها لـ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "جاري تجميع التقرير النهائي"
+      },
+      "RUNNING" : {
+        "label" : "قيد التشغيل "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "أحلل طلبك"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "تم اختيار تدفق وكيل، جاري تشغيل الوكيل المجيب"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "مستوى الخدمة هو: سؤال وجواب"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "جاري تنفيذ الوكيل الذي اخترته"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "رفع ملف(ات)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "تصفح/بحث ملفات الشركة"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "محادثة مع المستند المختار"
+      },
+      "agenticChat" : {
+        "label" : "محادثة الوكيل"
+      },
+      "rag" : {
+        "label" : "دردشة r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "بحث متعمق/مصادر متعددة"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "بحث متعمق/بحث جوجل ويب"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "بحث متعمق/بحث Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "بحث متعمق/بحث Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "بحث متعمق/بحث قاعدة المعرفة"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "محادثة مع ملف(ات)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "بحث متعمق/بحث جوجل ويب"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "بحث متعمق/بحث Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "بحث متعمق/بحث Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "مستخدم Google المراد تمثيله",
         "help" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة",
         "placeholder" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة"
+      },
+      "OK" : {
+        "summary" : "تم الحفظ بنجاح",
+        "detail" : "تم تحديث العملية بنجاح"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "المستندات المعالجة",
         "dataset-2-label" : "المستندات ذات الأخطاء",
         "dataset-3-label" : "المستندات المرفوضة"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "فهرسة النص الكامل"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "المستندات المعالجة"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "مستندات بها خطأ",
+        "dataset-3-label" : "المستندات المستبعدة"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "الرموز المعالجة",
+        "dataset-1-label" : "خطأ في معالجة الرموز"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "تفعيل جميع استدعاءات الوظائف",
         "help" : "تفعيل جميع الأدوات ووظائف الاستدعاء المتاحة، إذا لم يتم تعيينها يمكن تفعيلها لاحقًا من لوحة إدارة llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
+        "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "مزود الذكاء الاصطناعي البعيد جاهز",
+        "detail" : "المزود نشط وجاهز ومهيأ بنجاح"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "استثناء أثناء العملية:401 غير مصرح",
+        "detail" : "خطأ في الخادم: 401 غير مصرح"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "استثناء أثناء العملية: مسار أساسي مفقود",
+        "detail" : "خطأ في الخادم: مسار أساسي مفقود"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "إنشاء وتفعيل"
+      },
+      "vendorId" : {
+        "label" : "اختر مزود نموذج اللغة الكبير",
+        "help" : "اختر المزود الأولي للنموذج الافتراضي للدردشة ونماذج التح嶮يد"
+      },
+      "secretId" : {
+        "label" : "اختر بيانات اعتماد المزود (مفتاح api)",
+        "help" : "اختر واحدة من بيانات الاعتماد الحالية لمزود llm المحدد"
+      },
+      "InternalServiceModel" : {
+        "label" : "نموذج الدردشة لخدمات النظام الداخلية",
+        "help" : "سيكون نموذج الدردشة المكون للخدمات الداخلية مسؤولاً عن استخراج المعلومات، والتلخيص، وتنفيذ سير العمل الداخلي."
+      },
+      "ChatModel" : {
+        "label" : "نموذج الدردشة الافتراضي",
+        "help" : "سيكون نموذج الدردشة الافتراضي مسؤولاً عن الإجابة على أسئلة المستخدمين وتنفيذ سير العمل الذي لم تُخصص له نماذج محددة. يجب أن يكون قويًا وموثوقًا، مع توازن جيد بين التكلفة والأداء وجودة النتائج."
+      },
+      "ProviderBuy" : {
+        "label" : "رابط شراء رصيد Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "رابط الموقع الإلكتروني"
+      },
+      "WebSiteLink" : {
+        "label" : "موقع مزود الخدمة",
+        "help" : "اضغط هنا لمعلومات عامة حول المزود."
+      },
+      "AcquireCreditLink" : {
+        "label" : "شراء رصيد المزود",
+        "help" : "اضغط هنا لشراء رصيد لمفاتيح api الخاصة بك."
+      },
+      "EmbeddingModel" : {
+        "label" : "نموذج التح嶮يد الافتراضي",
+        "help" : "سيكون هذا النموذج مسؤولاً عن فهرسة البيانات الدلالية (التح嶮يد) واسترجاع بياناتك ومستنداتك"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "لا يمكنك حذف هذا",
         "detail" : "هذا العنصر مرتبط بجزء آخر من التطبيق"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "استثناء أثناء العملية: خطأ في التعامل مع الرابط: http://localhost:11434/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في التعامل مع الرابط: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "استثناء أثناء العملية: يجب تعيين apiKey",
+        "detail" : "خطأ في الخادم: يجب تعيين apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "حدث خطأ أثناء بث استجابة الدردشة",
+        "detail" : "خطأ في الخادم: 400 طلب غير صالح من POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: http://localhost:8000/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "حدث خطأ أثناء بث استجابة الدردشة",
+        "detail" : "خطأ في الخادم: تم قطع الاتصال"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "استثناء أثناء العملية: خطأ في العمل مع الرابط: https://api.openai.com/v1/models",
+        "detail" : "خطأ في الخادم: خطأ في العمل مع الرابط: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
+        "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "مكتمل"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تمت العملية بنجاح"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "الهوية المستخدمة",
         "help" : "اختر أو أنشئ هوية للوصول إلى نظام Google Drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "دردشة"
+      },
+      "deep-search" : {
+        "label" : "بحث عميق"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "بحث عميق"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "جارٍ البحث عن المعلومات ذات الصلة"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "جاري تجميع التقرير النهائي"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "نتيجة البحث المحللة"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "نتيجة البحث في النظام المحللة لـ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "اختر خيارًا واحدًا على الأقل من الخيارات التالية"
+      },
+      "LaunchBtn" : {
+        "label" : "تشغيل البحث"
+      },
+      "SkipDeepSearch" : {
+        "label" : "تخطي البحث المتعمق"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "قواعد المعرفة المختارة"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "الأنظمة المختارة"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "تحديد المصادر"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "الملف الذي تم تحليله"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "إدراج"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SearchSettingTab" : {
+        "label" : "إعداد البحث"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "أدخل التعليمات لاستخلاص المعلومات ذات الصلة من المستندات"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "أدخل التعليمات لتجميع المعلومات المستخرجة ذات الصلة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعداد البحث العميق"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "إعداد نموذج اللغة الكبير"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعداد بحث عميق"
+      },
+      "code" : {
+        "label" : "كود فريد",
+        "help" : "كود فريد يتم إنشاؤه تلقائيًا لإعداد البحث العميق"
+      },
+      "searchType" : {
+        "label" : "نوع البحث",
+        "help" : "اختر بين بحث دلالي بخطوة واحدة أو عدة خطوات"
+      },
+      "topK" : {
+        "label" : "عدد المقاطع النصية المسترجعة (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "النموذج المستخدم",
+        "help" : "حدد نموذج اللغة الكبير المستخدم في Deep search. سيتم استخدام الافتراضي في حال عدم تحديد أي نموذج."
+      },
+      "analisysPrompt" : {
+        "label" : "تعليمات تحليل المستندات",
+        "help" : "عدل التعليمات التي ستستخدم لاستخلاص المعلومات ذات الصلة من أجزاء المستندات."
+      },
+      "consolidationPrompt" : {
+        "label" : "تعليمات تجميع المعلومات المستخرجة",
+        "help" : "عدل التعليمات التي ستستخدم لتجميع المعلومات ذات الصلة المستخرجة من المستندات المسترجعة في تقرير واحد."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "حد تشابه البحث",
+        "help" : "حد تشابه الدلالة في الخطوة الأولى (بين 0.5 إلى 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "حد تشابه الخطوة الثانية",
+        "help" : "حد تشابه الدلالة في الخطوة الثانية (بين 0.5 إلى 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "النموذج الافتراضي للغة الكبيرة",
+        "help" : "سيتم استخدام نموذج اللغة الافتراضي لمعالجة Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "حد تشابه البحث",
+        "help" : "حد تشابه الدلالة (بين 0.5 إلى 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "إعدادات الأمان"
+      },
+      "accessibleToAll" : {
+        "label" : "متاح للجميع"
+      },
+      "datasource" : {
+        "label" : "مصدر البيانات"
+      },
+      "allowedGroups" : {
+        "label" : "المجموعات المسموح بها"
+      },
+      "allowedUsers" : {
+        "label" : "المستخدمون المسموح لهم"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "وصول المستخدمين/المجموعات حسب مصدر البيانات",
+        "help" : "سيتم تمكين البحث المتعمق لكل مصدر بيانات خارجي ولكل مستخدم أو مجموعة"
+      },
+      "SIMPLEMODE" : {
+        "label" : "صلاحية بسيطة لكل مستخدم/مجموعة"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "صلاحية لكل مستخدم/مجموعة حسب مصدر البيانات"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "استخدم أو أنشئ بيانات اعتماد مفتاح api"
+      },
+      "ExistingApiKey" : {
+        "label" : "مفتاح api/بيانات الاعتماد",
+        "help" : "اختر مفتاح api أو بيانات الاعتماد لهذا المزود"
+      },
+      "NewApiKey" : {
+        "label" : "مفتاح api جديد",
+        "help" : "أدخل مفتاح api جديد لاستخدامه مع هذا المزود"
+      },
+      "PiSave" : {
+        "label" : "حفظ"
+      },
+      "NewUserName" : {
+        "label" : "اسم المستخدم",
+        "help" : "اسم المستخدم المستخدم للوصول إلى خدمات المزود"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "استخدم الحالي أو أنشئ جديدًا",
+        "help" : "استخدم بيانات الاعتماد الحالية أو أنشئ بيانات جديدة لهذا المزود"
+      },
+      "newSecretDescription" : {
+        "label" : "وصف بيانات الاعتماد",
+        "help" : "وصف بيانات اعتماد مفتاح api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "تم إنشاء بيانات الاعتماد",
+        "detail" : "تم إنشاء بيانات الاعتماد بنجاح"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "خطأ في التواصل مع خادم Ollama ",
+        "detail" : "خطأ في الشبكة أثناء التواصل مع النظام البعيد للوصول إلى قائمة النماذج \n حدث خطأ أثناء العمل مع url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "الدردشة مع المستخدمين"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "نموذج يستخدم للخدمات الداخلية"
       }
     }
   }

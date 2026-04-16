@@ -15,7 +15,7 @@
 <p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing chat model configuration'" [formGroup]="formGroup">
 
     <div class="geboDialogContent">
-        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
             <div class="col-12">
                 <h3><span id="TitleFragment" gebo-ai-text>Editing chat model provider:</span>{{modelType?.description}}
@@ -64,6 +64,14 @@
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
+                        <gebo-ai-field id="forUses" label="Model usage(s)"
+                            help="Uses that the Gebo.ai platform will consider this model for."
+                            placeholder="Choose model uses">
+                            <gebo-ai-chat-model-use-component formControlName="forUses"
+                                gebo-ai-field-element></gebo-ai-chat-model-use-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6">
                         <gebo-ai-field id="defaultModel" label="set this as default chat model"
                             help="If true this will be used as default chat model where chat model is not indicated">
                             <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true"
@@ -87,16 +95,17 @@
 
     <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
         <div class="col-3">
-            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+                severity="success" [disabled]="this.formGroup.invalid || canSave===false"
+                styleClass="w-full"></p-button>
         </div>
         <div class="col-3">
-            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
-                styleClass="w-full" />
+            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                (onClick)="cancelAction.emit(true)" styleClass="w-full" />
         </div>
         <div class="col-3">
-            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                styleClass="w-full" [disabled]="canDelete===false" />
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
+                (onClick)="doDelete()" styleClass="w-full" [disabled]="canDelete===false" />
         </div>
         <div class="col-3">
             <gebo-ai-test-chat-component [chatModelCode]="entity?.code"></gebo-ai-test-chat-component>

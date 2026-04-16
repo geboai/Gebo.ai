@@ -25,12 +25,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessageReceiver;
-import ai.gebo.application.messaging.external.IGExternalMessageEmitter;
-import ai.gebo.application.messaging.external.IGExternalMessageEmitterSource;
-import ai.gebo.application.messaging.external.IGExternalMessageEmitterSourceRepositoryPattern;
-import ai.gebo.application.messaging.external.IGExternalMessageReceiver;
-import ai.gebo.application.messaging.external.IGExternalMessageReceiverSource;
-import ai.gebo.application.messaging.external.IGExternalMessageReceiverSourceRepositoryPattern;
+import ai.gebo.application.messaging.external.IGExternalMessageEmitterProvider;
+import ai.gebo.application.messaging.external.IGExternalMessageEmitterProviderSource;
+import ai.gebo.application.messaging.external.IGExternalMessageEmitterSourceProviderRepositoryPattern;
+import ai.gebo.application.messaging.external.IGExternalMessageReceiverProvider;
+import ai.gebo.application.messaging.external.IGExternalMessageReceiverProviderSource;
+import ai.gebo.application.messaging.external.IGExternalMessageReceiverProviderSourceRepositoryPattern;
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
 import ai.gebo.application.messaging.orchestration.MultiThreadedMessagesOrchestrator;
@@ -59,10 +59,10 @@ public class MessageBrokeringAssembler implements ApplicationListener<ContextRef
 	MultiThreadedMessagesOrchestrator threadOrchestrator = null;
 	
 	// Repository pattern to manage external message emitter sources
-	IGExternalMessageEmitterSourceRepositoryPattern externalMessageEmitterSourceRepositoryPattern = null;
+	IGExternalMessageEmitterSourceProviderRepositoryPattern externalMessageEmitterProviderSourceRepositoryPattern = null;
 	
 	// Repository pattern to manage external message receiver sources
-	IGExternalMessageReceiverSourceRepositoryPattern externalMessageReceiverSourceRepositoryPattern = null;
+	IGExternalMessageReceiverProviderSourceRepositoryPattern externalMessageReceiverProviderSourceRepositoryPattern = null;
 
     /**
      * Constructs a new MessageBrokeringAssembler with the specified dependencies.
@@ -78,14 +78,14 @@ public class MessageBrokeringAssembler implements ApplicationListener<ContextRef
 			@Autowired(required = false) List<IGMessageReceiver> receivers,
 			@Autowired(required = false) List<IGMessageEmitter> emitters,
 			MultiThreadedMessagesOrchestrator threadOrchestrator,
-			IGExternalMessageEmitterSourceRepositoryPattern externalMessageEmitterSourceRepositoryPattern,
-			IGExternalMessageReceiverSourceRepositoryPattern externalMessageReceiverSourceRepositoryPattern) {
+			IGExternalMessageEmitterSourceProviderRepositoryPattern externalMessageEmitterSourceRepositoryPattern,
+			IGExternalMessageReceiverProviderSourceRepositoryPattern externalMessageReceiverSourceRepositoryPattern) {
 		this.broker = broker;
 		this.receivers = receivers != null ? receivers : new ArrayList<IGMessageReceiver>();
 		this.emitters = emitters != null ? emitters : new ArrayList<IGMessageEmitter>();
 		this.threadOrchestrator = threadOrchestrator;
-		this.externalMessageEmitterSourceRepositoryPattern = externalMessageEmitterSourceRepositoryPattern;
-		this.externalMessageReceiverSourceRepositoryPattern = externalMessageReceiverSourceRepositoryPattern;
+		this.externalMessageEmitterProviderSourceRepositoryPattern = externalMessageEmitterSourceRepositoryPattern;
+		this.externalMessageReceiverProviderSourceRepositoryPattern = externalMessageReceiverSourceRepositoryPattern;
 	}
 
     /**
@@ -140,21 +140,21 @@ public class MessageBrokeringAssembler implements ApplicationListener<ContextRef
 		}
 		
 		// Add external message emitters to the broker
-		List<IGExternalMessageEmitterSource> emitterSources = externalMessageEmitterSourceRepositoryPattern
+		List<IGExternalMessageEmitterProviderSource> emitterSources = externalMessageEmitterProviderSourceRepositoryPattern
 				.getImplementations();
-		for (IGExternalMessageEmitterSource emitterSource : emitterSources) {
-			List<IGExternalMessageEmitter> emittersList = emitterSource.getExternalEmitters();
-			for (IGExternalMessageEmitter emitter : emittersList) {
+		for (IGExternalMessageEmitterProviderSource emitterSource : emitterSources) {
+			List<IGExternalMessageEmitterProvider> emittersList = emitterSource.getExternalEmitters();
+			for (IGExternalMessageEmitterProvider emitter : emittersList) {
 				broker.addSystemComponent(emitter.getEmitter());
 			}
 		}
 		
 		// Add external message receivers to the broker
-		List<IGExternalMessageReceiverSource> receiverSources = externalMessageReceiverSourceRepositoryPattern
+		List<IGExternalMessageReceiverProviderSource> receiverSources = externalMessageReceiverProviderSourceRepositoryPattern
 				.getImplementations();
-		for (IGExternalMessageReceiverSource receiverSource : receiverSources) {
-			List<IGExternalMessageReceiver> receiversList = receiverSource.getExternalReceivers();
-			for (IGExternalMessageReceiver receiver : receiversList) {
+		for (IGExternalMessageReceiverProviderSource receiverSource : receiverSources) {
+			List<IGExternalMessageReceiverProvider> receiversList = receiverSource.getExternalReceivers();
+			for (IGExternalMessageReceiverProvider receiver : receiversList) {
 				broker.addSystemComponent(receiver.getReceiver());
 			}
 		}

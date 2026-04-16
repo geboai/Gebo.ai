@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -26,8 +28,10 @@ import org.springframework.stereotype.Service;
 import ai.gebo.document.model.GeboDocument;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.system.ingestion.IGLanguageDetector;
 import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 
@@ -42,6 +46,7 @@ import ai.gebo.system.ingestion.model.IngestionFileType;
 public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferenceIngestionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentReferenceIngestionHandlerImpl.class);
 	protected final SpecializedHandlerRepositoryPattern repoPattern;
+	protected final IGLanguageDetector languageDetector;
 
 	/**
 	 * Map of content types that can be handled by this ingestion handler
@@ -61,8 +66,10 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	 * @param repoPattern Repository containing specialized document reference
 	 *                    ingestion handlers
 	 */
-	public GDocumentReferenceIngestionHandlerImpl(SpecializedHandlerRepositoryPattern repoPattern) {
+	public GDocumentReferenceIngestionHandlerImpl(SpecializedHandlerRepositoryPattern repoPattern,
+			IGLanguageDetector languageDetector) {
 		this.repoPattern = repoPattern;
+		this.languageDetector = languageDetector;
 		List<IGSpecializedDocumentReferenceIngestionHandler> impls = repoPattern.getImplementations();
 		for (IGSpecializedDocumentReferenceIngestionHandler handler : impls) {
 			List<String> contentTypes = handler.getHandledContentTypes();
@@ -86,6 +93,10 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	 */
 	private Map<String, Object> manageMetaInfo(GDocumentReference reference) {
 		Map<String, Object> meta = new HashMap<String, Object>();
+		if (reference.getCustomMetaInfos() != null) {
+			meta.putAll(sanityzeMap(reference.getCustomMetaInfos()));
+		}
+
 		if (reference.getCode() != null) {
 			meta.put(DocumentMetaInfos.CONTENT_CODE, reference.getCode());
 		}
@@ -127,8 +138,25 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 				meta.put(DocumentMetaInfos.GEBO_ARCHIVE_INTERNALPATH, reference.getArchiveInternalPath());
 			}
 		}
+		if (reference.getAclAliases() != null) {
+			meta.put(DocumentMetaInfos.GEBO_ACL_ALIASES, reference.getAclAliases());
+		}
 		return meta;
 
+	}
+
+	private Map<? extends String, ? extends Object> sanityzeMap(Map<String, Object> customMetaInfos) {
+		Map<String, Object> out = new HashMap<>();
+		if (customMetaInfos != null) {
+			for (Entry<String, Object> entry : customMetaInfos.entrySet()) {
+				if (entry.getValue() != null) {
+					if (entry.getValue() instanceof Number || entry.getValue() instanceof String) {
+						out.put(entry.getKey(), entry.getValue());
+					}
+				}
+			}
+		}
+		return out;
 	}
 
 	/**
@@ -161,6 +189,14 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		} else {
 			data.setUnmanagedContent(true);
 		}
+		outContents = outContents.map(x -> {
+			try {
+				languageDetector.addLanguageMetaData(x);
+			} catch (IOException e) {
+
+			}
+			return x;
+		});
 		data.setStream(outContents);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End handleContent([" + reference.getCode() + ",...)");
@@ -302,6 +338,73 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 			return null;
 		else
 			return handler.handleDocument(reference, is, manageMetaInfo(reference));
+	}
+
+	private Map<String, Object> add(Map<String, Object>... m1) {
+		Map<String, Object> m = new HashMap<>();
+		if (m1 != null && m1.length > 0) {
+			for (Map<String, Object> map : m1) {
+				if (map != null) {
+					m.putAll(map);
+				}
+			}
+		}
+		return m;
+	}
+
+	@Override
+	public IngestionHandlerData handleContent(GDocumentReference reference, GeboDocument geboDocument) {
+		IngestionHandlerData out = new IngestionHandlerData();
+		out.setHashableContent(true);
+		out.setSingleMessageRappresentable(true);
+		out.setUnmanagedContent(false);
+		if (geboDocument != null) {
+			Map<String, Object> metainfos = manageMetaInfo(reference);
+			Map<String, Object> additional = geboDocument.getAdditionalAttributes();
+			Map<String, Object> custom = geboDocument.getCustomMetaData();
+			final Map<String, Object> joined = add(metainfos, additional, custom);
+			out.setStream(geboDocument.getTexts().stream()
+					.filter(x -> x.getContent() != null && x.getContent().trim().length() > 0)
+					.map(fragment -> new Document(fragment.getUniqueCode(), fragment.getContent(),
+							add(joined, fragment.getCustomMetaData()))));
+		} else
+			out.setStream(Stream.of());
+		return out;
+	}
+
+	@Override
+	public IngestionHandlerData handleContent(GDocumentReference reference, TypedInputStream streamContent)
+			throws GeboIngestionException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin handleContent([" + reference.getCode() + ",...)");
+		}
+		Stream<Document> outContents = Stream.of();
+		IGSpecializedDocumentReferenceIngestionHandler handler = repoPattern.findByCanManage(streamContent);
+		IngestionHandlerData data = new IngestionHandlerData();
+		if (handler != null && streamContent != null && streamContent.getInputStream() != null) {
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Specific content handler=>" + handler.getCode());
+			}
+			data.setSingleMessageRappresentable(handler.isSingleMessageRappresentable());
+			data.setHashableContent(handler.isHashbleContent());
+			outContents = handler.handleContent(reference, streamContent.getInputStream(), manageMetaInfo(reference));
+		} else {
+			data.setUnmanagedContent(true);
+		}
+		outContents = outContents.map(x -> {
+			try {
+				languageDetector.addLanguageMetaData(x);
+			} catch (IOException e) {
+
+			}
+			return x;
+		});
+		data.setStream(outContents);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End handleContent([" + reference.getCode() + ",...)");
+		}
+		return data;
 	}
 
 }

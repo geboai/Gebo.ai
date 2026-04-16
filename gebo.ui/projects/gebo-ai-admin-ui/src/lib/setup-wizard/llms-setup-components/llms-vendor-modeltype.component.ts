@@ -1,15 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboAITranslationService, GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { FormControl, FormControlStatus, FormGroup, Validators } from "@angular/forms";
+import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
-import { forkJoin, Observable, Subscription } from "rxjs";
+import { forkJoin, map, Observable, of, Subscription } from "rxjs";
 interface IModelChoice {
-    enableAllFunctions?:boolean;
+    enableAllFunctions?: boolean;
     setAsDefault?: boolean;
     choosedModel?: string;
 };
 interface IProviderAccess {
+    requireApiKeyAniway?:boolean;
     selectedSecret?: string;
     baseUrl?: string;
 }
@@ -26,10 +27,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected secrets: SecretInfo[] = [];
     protected secretFormGroup: FormGroup = new FormGroup({
         requireApiKeyAniway: new FormControl(),
-        useExistingOrNew: new FormControl(),
         selectedSecret: new FormControl(),
-        newApiSecret: new FormControl(),
-        newUserName: new FormControl(),
         baseUrl: new FormControl()
     });
     protected chatModelPresetsFormGroup: FormGroup = new FormGroup({
@@ -50,50 +48,36 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
-    protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
+
     protected chatPresets: LLMModelPresetChoice[] = [];
     protected embeddingPresets: LLMModelPresetChoice[] = [];
     protected lookedUpChatModels: GBaseModelChoice[] = [];
     protected lookedUpEmbeddingModels: GBaseModelChoice[] = [];
-    protected existingOrNewShow: boolean = false;
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
     protected llmsStatus!: ComponentLLMSStatus;
     protected subscription?: Subscription;
-    constructor(private secretController: SecretsControllerService,
-        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
-        private geboAITranslationService: GeboAITranslationService) {
-        this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
-            next: (value) => {
-                if (this.vendorConfiguration?.parentModel?.requiresApiKey === true) return;
-                if (value === true) {
-                    this.secretFormGroup.controls["useExistingOrNew"].enable();
-                    this.secretFormGroup.controls["selectedSecret"].enable();
-                    this.secretFormGroup.controls["newApiSecret"].enable();
-                    this.secretFormGroup.controls["newUserName"].enable();
-                } else {
-                    this.secretFormGroup.controls["useExistingOrNew"].disable();
-                    this.secretFormGroup.controls["selectedSecret"].disable();
-                    this.secretFormGroup.controls["newApiSecret"].disable();
-                    this.secretFormGroup.controls["newUserName"].disable();
-                }
-                this.secretFormGroup.updateValueAndValidity();
+    protected doBackendCredentialsValidation: (credentials: SecretInfo) => Observable<IOperationStatus<any>> = (credentials: SecretInfo) => {
+        const baseUrl = this.secretFormGroup.controls["baseUrl"].value?.baseUrl;
+        if (this.vendorConfiguration && credentials.code) {
+            const data: LLMCredentialsVerificationData = {
+                baseUrl: baseUrl,
+                secretId: credentials.code as string,
+                vendorId: this.vendorConfiguration?.parentModel.vendorId
             }
-        });
-        this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
-        this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
-            next: (value) => {
-                const allCtrls = ["selectedSecret", "newApiSecret", "newUserName"];
-                this.switchControlsRequired(allCtrls, false);
+            return this.geboFastLLMSSetupService.verifyVendorCredentialsAndDownloadModels(data);
+        } else {
+            const rv: IOperationStatus<any> = {
+                hasErrorMessages: true,
+                messages: [{ id: "INVALID_VENDOR", detail: "Invalid credentials or baseUrl", jobId: "", severity: "error", summary: "Invalid data", timestamp: 0 }]
+            }
+            return of(rv);
+        }
+    };
+    constructor(
+        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService
+    ) {
 
-                if (value === "EXISTING") {
-                    this.switchControlsRequired(["selectedSecret"], true);
-                }
-                if (value === "NEW") {
-                    this.switchControlsRequired(["newApiSecret", "newUserName"], true);
-                }
-            }
-        });
         this.secretFormGroup.controls["selectedSecret"].valueChanges.subscribe({
             next: (secretId) => {
                 if (secretId) {
@@ -121,7 +105,54 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 }
             }
         });
+        this.secretFormGroup.controls["baseUrl"].statusChanges.subscribe({
+            next:(baseUrlValueStatus)=>{
+                this.handleSelectedSecretEnabled(baseUrlValueStatus,this.secretFormGroup.controls["baseUrl"].value,this.secretFormGroup.controls["requireApiKeyAniway"].value===true);
+            }
+        });
+        this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
+            next:(requireApiKeyAniway: boolean)=>{
+                this.handleSelectedSecretEnabled(this.secretFormGroup.controls["baseUrl"].status,this.secretFormGroup.controls["baseUrl"].value,requireApiKeyAniway===true);
+            }
+        })
+        
     }
+    private handleSelectedSecretEnabled(baseUrlValueStatus: FormControlStatus, baseUrl: string | null, requireApiKeyAniway: boolean) {
+        let usableBaseUrl:string|undefined=undefined;
+        let usableSecretId:string|undefined;
+        let doLookupModels:boolean=false;
+        const requiresApiKey = this.vendorConfiguration?.parentModel.requiresApiKey === true || requireApiKeyAniway === true;
+        let knownUrl: boolean = this.vendorConfiguration?.parentModel.requiresCustomUrl !== true;
+        let apiKeyOk:boolean=false;
+        if (this.vendorConfiguration?.parentModel.requiresCustomUrl === true) {
+            knownUrl = baseUrlValueStatus === "VALID" && (baseUrl!==null && baseUrl.length>0);
+            if (knownUrl) {
+                usableBaseUrl=baseUrl?baseUrl:undefined;
+            }
+        }
+        const selectedSecretEnabled: boolean = requiresApiKey && knownUrl;
+        this.secretFormGroup.controls["selectedSecret"].clearValidators();
+        if (selectedSecretEnabled) {
+            this.secretFormGroup.controls["selectedSecret"].enable();
+            this.secretFormGroup.controls["selectedSecret"].setValidators(Validators.required);
+            this.secretFormGroup.controls["selectedSecret"].updateValueAndValidity();
+        } else {
+            this.secretFormGroup.controls["selectedSecret"].disable();
+        }
+       const actualParams:IProviderAccess=this.secretFormGroup.value;
+       if (requiresApiKey) {
+            usableSecretId=actualParams?.selectedSecret;
+            apiKeyOk=usableSecretId?true:false;
+       }else {
+            apiKeyOk=true;
+       }
+       doLookupModels=apiKeyOk && knownUrl;
+       if (doLookupModels===true) {
+            this.loadModels(usableSecretId,usableBaseUrl);
+       }
+        
+    }
+
     private assignBackendMessages(messages?: GUserMessage[]) {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -133,12 +164,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     withoutDuplicates.push(msg);
                 }
             });
-            this.subscription = this.geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
-                next: (msgs) => {
-                    if (msgs)
-                        this.userMessages = msgs;
-                }
-            });
+
+            this.userMessages = withoutDuplicates;
+
+
         } else {
             this.userMessages = [];
         }
@@ -203,38 +232,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             }
         })
     }
-    protected createCredentials(): void {
-        const credentials = this.secretFormGroup.value;
-        if (this.vendorConfiguration?.parentModel.apiKeySecretContext && this.vendorConfiguration.libraryModel[0].serviceHandler && this.vendorConfiguration.libraryModel[0].type) {
-            this.loading = true;
-            this.geboFastLLMSSetupService.createLLMCredentials({
-                apiKeySecretContext: this.vendorConfiguration?.parentModel.apiKeySecretContext,
-                newApiSecret: credentials.newApiSecret,
-                newUserName: credentials.newUserName,
-                serviceHandler: this.vendorConfiguration.libraryModel[0].serviceHandler,
-                type: this.vendorConfiguration.libraryModel[0].type,
-                baseUrl: credentials.baseUrl,
-                doModelsLookup: this.vendorConfiguration.libraryModel[0].doModelsLookup
 
-            }).subscribe({
-                next: (value) => {
-                    //showing eventual fealures or successes
-                    this.assignBackendMessages(value?.messages);
-                    if (value.hasErrorMessages !== true && value.result) {
-                        //the created secret is automatically selected and the option of using it or creating another
-                        //new secret is shown.
-                        this.secrets = [...this.secrets, value.result];
-                        this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
-                        this.secretFormGroup.controls["selectedSecret"].setValue(value.result.code);
-                        this.existingOrNewShow=true;
-                    }
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            });
-        }
-    }
     private switchControlsRequired(ctrls: string[], required: boolean) {
         ctrls.forEach(ctrName => {
             this.secretFormGroup.controls[ctrName].clearValidators();
@@ -243,50 +241,33 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             }
         });
     }
-    reloadSecrets(): void {
-        if (this.vendorConfiguration?.parentModel?.apiKeySecretContext) {
-            this.loading = true;
-            this.secretController.getSecretsByContextCode(this.vendorConfiguration?.parentModel?.apiKeySecretContext).subscribe({
-                next: (infos) => {
-                    if (infos) {
-                        this.secrets = infos;
-                        if (infos.length) {
-                            this.secretFormGroup.controls["selectedSecret"].setValue(infos[0].code);
-                            this.existingOrNewShow = true;
-                            this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
 
-                        }
 
-                    }
-                    if (!infos || infos.length === 0) {
-                        this.secretFormGroup.controls["useExistingOrNew"].setValue("NEW");
-                        this.existingOrNewShow = false;
-                    }
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            });
-        }
-    }
-    protected get saveDisabled(): boolean {
-        //|| this.secretFormGroup.controls["newApiSecret"].disabled || this.secretFormGroup.controls["newUserName"].disabled
-        const ctrlsValid = this.secretFormGroup.controls["newApiSecret"].valid && this.secretFormGroup.controls["newUserName"].valid;
-        return !(ctrlsValid && (this.vendorConfiguration?.parentModel?.requiresApiKey === true || this.secretFormGroup.controls["requireApiKeyAniway"].value === true));
-
-    }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["vendorConfiguration"] && this.vendorConfiguration) {
             if (this.vendorConfiguration?.parentModel.requiresCustomUrl === true) {
                 this.secretFormGroup.controls["baseUrl"].setValidators(GeboAIValidators.baseUrl(true));
+                //set a value from existing configs or from default url value
+                let defaultBaseUrl = this.vendorConfiguration.parentModel.defaultCustomUrl;
+                if (this.vendorConfiguration.runtimeConfigs && this.vendorConfiguration.runtimeConfigs.length) {
+                    const firstNonNull = this.vendorConfiguration.runtimeConfigs.find(x => x.baseUrl ? true : false);
+                    if (firstNonNull?.baseUrl) {
+                        defaultBaseUrl = firstNonNull.baseUrl;
+                    }
+                }
+                if (defaultBaseUrl) {
+                    this.secretFormGroup.controls["baseUrl"].setValue(defaultBaseUrl);
+                }
             }
-            if (!this.vendorConfiguration?.parentModel?.requiresApiKey === true) {
-                this.secretFormGroup.controls["useExistingOrNew"].disable();
+            this.secretFormGroup.controls["selectedSecret"].clearValidators();
+            if (this.vendorConfiguration?.parentModel?.requiresApiKey === true) {
+                this.secretFormGroup.controls["selectedSecret"].enable();
+                this.secretFormGroup.controls["selectedSecret"].setValidators(Validators.required);
+            } else {
                 this.secretFormGroup.controls["selectedSecret"].disable();
-                this.secretFormGroup.controls["newApiSecret"].disable();
-                this.secretFormGroup.controls["newUserName"].disable();
-                this.secretFormGroup.updateValueAndValidity();
+                
             }
+            this.secretFormGroup.updateValueAndValidity();
             this.vendorConfiguration.libraryModel.forEach(x => {
                 if (x.type)
                     switch (x.type) {
@@ -306,7 +287,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                         } break;
                     }
             });
-            this.reloadSecrets();
+
         }
     }
     protected get presetCreateBtnEnabled(): boolean {
@@ -363,7 +344,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     baseUrl: providerAccess.baseUrl,
                     doModelsLookup: preset.doModelsLookup === true,
                     secretId: providerAccess.selectedSecret,
-                    enableAllFunctions: modelChoice.enableAllFunctions===true
+                    enableAllFunctions: modelChoice.enableAllFunctions === true
                 };
                 return out;
             }

@@ -25,7 +25,7 @@ import java.util.Date;
  * GMistralChatModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GMistralChatModelChoice {
   @JsonProperty("code")
@@ -63,6 +63,9 @@ public class GMistralChatModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("supportsStructuredOutput")
   private Boolean supportsStructuredOutput = null;
@@ -289,6 +292,24 @@ public class GMistralChatModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GMistralChatModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GMistralChatModelChoice supportsStructuredOutput(Boolean supportsStructuredOutput) {
     this.supportsStructuredOutput = supportsStructuredOutput;
     return this;
@@ -365,6 +386,7 @@ public class GMistralChatModelChoice {
         Objects.equals(this.metaInfos, gmistralChatModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, gmistralChatModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, gmistralChatModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, gmistralChatModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.supportsStructuredOutput, gmistralChatModelChoice.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, gmistralChatModelChoice.supportsFunctionCalls) &&
         Objects.equals(this.modelCard, gmistralChatModelChoice.modelCard);
@@ -372,7 +394,7 @@ public class GMistralChatModelChoice {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, supportsStructuredOutput, supportsFunctionCalls, modelCard);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, supportsStructuredOutput, supportsFunctionCalls, modelCard);
   }
 
 
@@ -393,6 +415,7 @@ public class GMistralChatModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("    modelCard: ").append(toIndentedString(modelCard)).append("\n");

@@ -28,6 +28,7 @@ import ai.gebo.document.model.GeboDocument;
 import ai.gebo.document.model.GeboTextDocumentFragment;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
 import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
@@ -127,6 +128,22 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 		}
 		if (reference.getName() != null && specialfiles.contains(reference.getName()))
 			return true;
+		return false;
+	}
+
+	@Override
+	public boolean canManageContent(TypedInputStream streamContent) {
+		String extension = streamContent != null ? streamContent.getExtension() : null;
+		String contentType = streamContent != null ? streamContent.getContentType() : null;
+		if (extension != null) {
+			if (extensions.contains(extension.toLowerCase()))
+				return true;
+		}
+		if (contentType != null) {
+			if (contentTypes.contains(contentType.toLowerCase()))
+				return true;
+		}
+
 		return false;
 	}
 

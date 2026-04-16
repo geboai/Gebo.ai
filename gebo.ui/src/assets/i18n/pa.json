@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "ਲੌਗਇਨ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਫੇਲ ਹੋ ਗਿਆ",
+        "detail" : "ਦਿੱਤੇ ਗਏ ਜਾਣਕਾਰੀ ਨਾਲ ਪਰਮਾਣਿਤ ਨਹੀਂ ਹੋ ਸਕਿਆ"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Google Drive/Workspaces ਇੰਟੀਗ੍ਰੇਸ਼ਨ",
         "description" : "Gebo.ai ਨੂੰ ਤੁਹਾਡੀ Google cloud Drive/Workspaces ਟੀਮ ਡਾਟਾ ਤੱਕ ਪਹੁੰਚਣ ਲਈ ਕਨਫ਼ਿਗਰ ਕਰੋ"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google search api ਸੰਰਚਿਤ ਕਰੋ",
+        "description" : "AI ਵੈੱਬ ਖੋਜਾਂ ਲਈ Google search api ਪ੍ਰਮਾਣ ਪੱਤਰ ਸੰਰਚਿਤ ਕਰੋ"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search ਸੰਰਚਿਤ ਕਰੋ",
+        "description" : "Deep search ਪੈਰਾਮੀਟਰ ਸੰਰਚਿਤ ਕਰੋ"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. ਆਟੋਟਿਊਨ",
+        "description" : "ਆਪਣੇ-ਆਪ ਜਨਰੇਸ਼ਨ ਪੈਰਾਮੀਟਰਾਂ ਦੀ ਟਿਊਨਿੰਗ ਮੁਹੱਈਆ ਕਰਨਾ"
+      },
+      "Description" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "LastAutotunedDate" : {
+        "label" : "ਆਖਰੀ ਟਿਊਨਿੰਗ ਅੱਪਡੇਟ"
+      },
+      "Code" : {
+        "label" : "ਐਂਬੈੱਡਿੰਗ ਮੌਡਲ/ਵੇਕਟਰਸਟੋਰ ਕੋਡ"
+      },
+      "ComputedThreashold" : {
+        "label" : "ਗਣਨਾ ਕੀਤਾ ਸੀਮਾ"
+      },
+      "Autotuned" : {
+        "label" : "ਆਟੋਟਿਊਨ ਕੀਤਾ"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai ਸੈਟਅੱਪ ਲਾਜ਼ਮੀ ਕਦਮ ਪੂਰੇ ਹੋਏ...",
+        "detail" : "ਲਾਜ਼ਮੀ ਸੈਟਅੱਪ ਕਦਮ ਪੂਰੇ ਹੋ ਗਏ ਹਨ ਪਰ ਕੁਝ ਬਚੇ ਹੋਏ ਕਦਮਾਂ ਕਰਕੇ ਤੁਹਾਡੀ ਸੰਸਥਾ ਇਸ ਸਾਫਟਵੇਅਰ ਤੋਂ ਪੂਰਾ ਲਾਭ ਨਹੀਂ ਲੈ ਸਕਦੀ"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai ਸੈਟਅੱਪ ਦੇ ਕੁਝ ਲਾਜ਼ਮੀ ਕਦਮ ਬਾਕੀ ਹਨ",
+        "detail" : "ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਅੱਪ ਪ੍ਰਕਿਰਿਆ ਦੇ ਲਾਲ ਕਦਮਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence system"
+      },
+      "EditSystemBtn" : {
+        "label" : "ਪਰਣਾਲੀ ਨੂੰ ਸੰਪਾਦਿਤ ਕਰੋ"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Gebo.ai llms ਪ੍ਰੋਵਾਇਡਰ ਦੀ ਐਕਸੈੱਸ ਸੈੱਟਅੱਪ ਕਰੋ"
+      },
+      "ExtensiveStup" : {
+        "label" : "ਵਧੀਕ ਇੰਫਰਾਸਟਰਕਚਰ/ਸਪਲਾਇਰ ਚੋਣਾਂ"
+      },
+      "MainPanelTitle" : {
+        "label" : "ਵਰਤੇ ਜਾਣ ਵਾਲੇ ਵੱਡੇ ਲੈਂਗੂਇਜ ਮੌਡਲ ਸੈਟਅੱਪ ਕਰੋ"
+      },
+      "EasySetup" : {
+        "label" : "ਸੌਖਾ ਪਹਿਲਾ ਸੈਟਅੱਪ/ਕਾਫੀਗ੍ਰੇਸ਼ਨ ਫਿਕਸ"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "ਵੱਡੇ ਲੈਂਗੂਇਜ ਮੌਡਲ ਸੈਟਅੱਪ ਕਰੋ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "ਵੇਰਵਾ"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google search ਪ੍ਰਮਾਣ ਪੱਤਰ ਬਣਾਓ"
+      },
+      "CreateBtn" : {
+        "label" : "ਬਣਾਓ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Search engine id",
+        "help" : "Google search api credentials ਰਜਿਸਟਰੇਸ਼ਨ ਵਿੱਚ ਪ੍ਰਾਪਤ ਕੀਤਾ search engine id ਦਰਜ ਕਰੋ।"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Google search api credentials ਰਜਿਸਟਰੇਸ਼ਨ ਵਿੱਚੋਂ ਪ੍ਰਾਪਤ ਕੀਤਾ api key ਦਰਜ ਕਰੋ।"
+      },
+      "MainPanel" : {
+        "label" : "Google search api ਸੈੱਟਅੱਪ ਕਰੋ"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "ਹਟਾਓ",
+        "help" : "Google search api ਪ੍ਰਮਾਣ ਪੱਤਰ ਹਟਾਓ"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search config",
+        "help" : "ਇੱਕ deep search configuration ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "EditSystemBtn" : {
+        "label" : "ਸੰਰਚਨਾ ਸੋਧੋ"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "ਅਸ਼ਕਤ"
+      },
+      "EditGroupBtn" : {
+        "label" : "ਸੰਪਾਦਿਤ ਕਰੋ"
+      },
+      "CodeHeader" : {
+        "label" : "ਕੋਡ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "UsersHeader" : {
+        "label" : "ਉਪਭੋਗਤਾ"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ਮਾਡਲ ਦੀ ਪਹੁੰਚ ਸੈਟਿੰਗਾਂ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ਦੂਰਵਰਤੀ ਪ੍ਰਦਾਤਾ ਠੀਕ ਹੈ",
+        "detail" : "ਪ੍ਰਦਾਤਾ ਚਾਲੂ ਅਤੇ ਸਹੀ ਤਰ੍ਹਾਂ ਕਾਨਫਿਗਰ ਕੀਤਾ ਗਿਆ ਹੈ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url:https://api.openai.com/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url:https://api.openai.com/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "ਇਸਨੂੰ ਡਿਫੌਲਟ embedding ਮਾਡਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ",
         "help" : "ਜੇ ਇਹ ਤੇ ਹੋਵੇ ਤਾਂ embedding ਮਾਡਲ ਨਾ ਹੋਣ ਤੇ ਇਹ ਡਿਫੌਲਟ embedding ਮਾਡਲ ਵਜੋਂ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ਦੂਰਵਰਤੀ ਪ੍ਰਦਾਤਾ ਠੀਕ ਹੈ",
+        "detail" : "ਪ੍ਰਦਾਤਾ ਚਾਲੂ ਅਤੇ ਸਹੀ ਤਰ੍ਹਾਂ ਕਾਨਫਿਗਰ ਕੀਤਾ ਗਿਆ ਹੈ"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Ollama ਲੋਕਲ (ਜਾਂ ਲੈਨ) ਸਰਵਰ ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਸੰਪਾਦਨ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Anthropic ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਸੰਪਾਦਨ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "MistralAI ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਸੰਪਾਦਨ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Google Vertex AI ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਸੰਪਾਦਨ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ਮਾਡਲ ਦੀ ਪਹੁੰਚ ਸੈਟਿੰਗਾਂ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "ਮਾਡਲ ਦੀ ਪਹੁੰਚ ਸੈਟਿੰਗਾਂ"
+      },
+      "forUses" : {
+        "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
+        "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
+        "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋ ਗਿਆ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "ਕੀ ਤੁਸੀਂ ਇਹ ਗੱਲਬਾਤ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
         "header" : "ਚੈਟ ਮਿਟਾਉਣ ਦੀ ਕਾਰਵਾਈ"
+      },
+      "PlusContextualMenu" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
+      },
+      "[object HTMLElement]" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ामਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
+      },
+      "ContextMenuBtn" : {
+        "help" : "ਸਮੱਗਰੀ ਸ਼ਾਮਲ ਕਰੋ ਜਾਂ ਖੋਜ ਵਿਹਾਰ ਬਦਲੋ"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "ਸਰੋਤ",
+        "help" : "ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦੀ ਸੂਚੀ ਖੋਲ੍ਹੋ"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "ਡੀਪ ਖੋਜ ਉੱਤਰ ਅਤੇ ਸਰੋਤ ਵੇਰਵੇ"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "ਡੀਪ ਖੋਜ ਵਿਸ਼ਲੇਸ਼ਣ ਨਤੀਜਾ"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence ਖੋਜ ਕਰਦਿਆਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: confluence ਸਿਸਟਮ ਤੱਕ ਪਹੁੰਚਣ ਵਿੱਚ ਸਮੱਸਿਆ"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "ਨਵਾਂ ਚੈਟ ਲੋਡ ਹੋਇਆ",
+        "detail" : "ਨਵਾਂ ਚੈਟ ਸਫਲਤਾਪੂਰਵਕ ਲੋਡ ਹੋ ਗਿਆ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ਸਰੋਤ ਚੁਣੋ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਵਿਚੋਂ ਘੱਟੋ-ਘੱਟ ਇੱਕ ਵਿਕਲਪ ਚੁਣੋ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ਡੀਪ ਖੋਜ ਛੱਡੋ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ਚੁਣੀਆਂ ਗਿਆਨ ਅਧਾਰ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ਚੁਣੀਆਂ ਸਿਸਟਮ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "'ਚੈਟ ਨਾਲ' ਲਿਸਟ ਵਿੱਚ ਡੌਕਯੂਮੈਂਟ ਸ਼ਾਮਿਲ ਕਰੋ "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "ਡੀਪ ਖੋਜ ਚੱਲ ਰਹੀ ਹੈ"
+      },
+      "RagLLMResponse" : {
+        "label" : "ਰੀਟਰੀਵ ਆਗੁਮੈਂਟਡ ਜਨਰੇਸ਼ਨ ਚੱਲ ਰਹੀ ਹੈ"
+      },
+      "PureLLMResponse" : {
+        "label" : "llm ਨੂੰ ਪੁੱਛ ਰਹੇ ਹਾਂ"
+      },
+      "Waiting" : {
+        "label" : "ਉੱਤਰ ਯੋਜਨਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "ਟੂਲ ਚਲ ਰਹੇ ਹਨ"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI ਮਦਦ ਵਾਲੀ ਖੋਜ ਚੱਲ ਰਹੀ ਹੈ"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "ਵਿਸ਼ਲੇਸ਼ਿਤ ਫਾਈਲ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ਵਿਸ਼ਲੇਸ਼ਿਤ ਖੋਜ ਨਤੀਜਾ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ਸਿਸਟਮ ਖੋਜ ਨਤੀਜੇ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਗਿਆ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ਅੰਤਿਮ ਰਿਪੋਟ ਨੂੰ ਇਕੱਤਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+      },
+      "RUNNING" : {
+        "label" : "ਚੱਲ ਰਿਹਾ ਹੈ "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "ਤੁਹਾਡੀ ਬੇਨਤੀ ਵਿਸ਼ਲੇਸ਼ਣ ਕਰ ਰਿਹਾ ਹਾਂ"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "ਚੁਣਿਆ ਗਿਆ ਏਜੈਂਟਿਕ ਫ਼ਲੋ, ਜਵਾਬ ਦੇਣ ਵਾਲਾ ਏਜੈਂਟ ਚੱਲ ਰਿਹਾ ਹੈ"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "ਸੇਵਾ ਪੱਧਰ ਹੈ: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "ਤੁਹਾਡਾ ਚੁਣਿਆ ਏਜੈਂਟ ਚਲਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "ਫਾਈਲ(ਾਂ) ਅੱਪਲੋਡ ਕਰੋ"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "ਕੰਪਨੀ ਦੀ ਫਾਈਲ(ਾਂ) ਬ੍ਰਾਊਜ਼/ਖੋਜੋ"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "ਚੁਣੀ ਦਸਤਾਵੇਜ਼ ਚੈਟ"
+      },
+      "agenticChat" : {
+        "label" : "ਏਜੈਂਟਿਕ ਚੈਟ"
+      },
+      "rag" : {
+        "label" : "R.a.g. ਚੈਟ"
+      },
+      "deepSearch" : {
+        "label" : "ਡੀਪ ਖੋਜ/ਕਈ ਸਰੋਤ"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ਡੀਪ ਖੋਜ/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "ਡੀਪ ਖੋਜ/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "ਡੀਪ ਖੋਜ/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "ਡੀਪ ਖੋਜ/ਗਿਆਨ ਅਧਾਰ ਖੋਜ"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "ਫਾਈਲ(ਾਂ) ਨਾਲ ਚੈਟ"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "ਡੀਪ ਖੋਜ/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "ਡੀਪ ਖੋਜ/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "ਡੀਪ ਖੋਜ/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "ਨਕਲ ਕਰਨ ਲਈ Google ਯੂਜ਼ਰ",
         "help" : "ਉਹ ਯੂਜ਼ਰ ਜੋ ਦਿੱਤੇ ਪ੍ਰਮਾਣ ਪੱਤਰਾਂ ਰਾਹੀਂ ਨਕਲ ਕੀਤਾ ਜਾਏਗਾ",
         "placeholder" : "ਉਹ ਯੂਜ਼ਰ ਜੋ ਦਿੱਤੇ ਪ੍ਰਮਾਣ ਪੱਤਰਾਂ ਰਾਹੀਂ ਨਕਲ ਕੀਤਾ ਜਾਏਗਾ"
+      },
+      "OK" : {
+        "summary" : "ਸਫਲਤਾਪੂਰਵਕ ਸੰਭਾਲਿਆ ਗਿਆ",
+        "detail" : "ਅਪਡੇਟ ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋਈ"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ",
         "dataset-2-label" : "ਗਲਤ ਡੌਕ",
         "dataset-3-label" : "ਅਣਗੌਰ ਕੀਤੇ ਡੌਕ"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "ਪੂਰਾ ਪਾਠ ਇੰਡੈਕਸਿੰਗ"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "ਨਾ-ਤਿਆਰ ਕੀਤਾ ਦਸਤਾਵੇਜ਼",
+        "label-1" : "ਦਸਤਾਵੇਜ਼ ਪ੍ਰੋਸੈਸ ਕਰਨ 'ਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈਸ ਕੀਤਾ ਦਸਤਾਵੇਜ਼"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "ਪ੍ਰਾਪਤ ਦਸਤਾਵੇਜ਼",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈਸד ਦਸਤਾਵੇਜ਼",
+        "dataset-2-label" : "ਗਲਤੀਆਂ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤਾ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈਸ ਕਰਨ 'ਚ ਗਲਤੀ"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "ਸਾਰੇ ਫੰਕਸ਼ਨ ਕਾਲ ਚਾਲੂ ਕਰੋ",
         "help" : "ਜੇਕਰ ਇਹ ਸੈੱਟ ਨਹੀਂ ਹੈ ਤਾਂ llms ਪ੍ਰਸ਼ਾਸਕ ਪੈਨਲ ਵਿੱਚ ਬਾਅਦ ਵਿੱਚ ਉਪਲਬਧ ਟੂਲ ਤੇ ਫੰਕਸ਼ਨ ਕਾਲ ਚਾਲੂ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ਦੂਰਦਰਾਜ ਪ੍ਰਦਾਤਾ ਠੀਕ ਹੈ",
+        "detail" : "ਪ੍ਰਦਾਤਾ ਚੱਲ ਰਿਹਾ ਹੈ ਅਤੇ ਸਫਲਤਾਪੂਰਵਕ ਸੰਰਚਿਤ ਹੈ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ:401 ਮਨਜ਼ੂਰੀ ਨਹੀਂ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 401 ਮਨਜ਼ੂਰੀ ਨਹੀਂ"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ:basePath ਗੁੰਮ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: basePath ਗੁੰਮ"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "ਤਿਆਰ ਕਰੋ ਅਤੇ ਐਕਟੀਵੇਟ ਕਰੋ"
+      },
+      "vendorId" : {
+        "label" : "ਆਪਣਾ ਵੱਡਾ ਲੈਂਗੂਇਜ ਮੌਡਲ ਵੇਂਡਰ ਚੁਣੋ",
+        "help" : "ਆਪਣੇ ਡਿਫੌਲਟ ਚੈਟ ਅਤੇ ਐਂਬੈੱਡਿੰਗ ਮੌਡਲ ਲਈ ਸ਼ੁਰੂਆਤੀ ਵੇਂਡਰ ਚੁਣੋ"
+      },
+      "secretId" : {
+        "label" : "ਪਰੋਵਾਇਡਰ ਦੀyaan ਅੰਜਾਣੀ ਜਾਂ (api key)",
+        "help" : "ਚੁਣੇ ਹੋਏ llm ਪ੍ਰੋਵਾਇਡਰ ਲਈ ਮੌਜੂਦਾ ਅੰਜਾਣੀਆਂ ਚੁਣੋ"
+      },
+      "InternalServiceModel" : {
+        "label" : "ਅੰਦਰੂਨੀ ਸੇਵਾਵਾਂ ਚੈਟ ਮੌਡਲ",
+        "help" : "ਅੰਦਰੂਨੀ ਸੇਵਾਵਾਂ ਲਈ ਸੰਰਚਿਤ ਚੈਟ ਮੌਡਲ ਜਾਣਕਾਰੀ ਕੱਢਣ, ਸੰਖੇਪ ਕਰਨ ਅਤੇ ਅੰਦਰੂਨੀ ਵਰਕਫਲੋ ਚਲਾਉਣ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਹੋਵੇਗਾ।"
+      },
+      "ChatModel" : {
+        "label" : "ਡਿਫੌਲਟ ਚੈਟ ਮੌਡਲ",
+        "help" : "ਡਿਫੌਲਟ ਚੈਟ ਮੌਡਲ ਉਪਭੋਗੀਆਂ ਦੇ ਸਵਾਲਾਂ ਦੇ ਜਵਾਬ ਦੇਣ ਅਤੇ ਉਹਨਾਂ ਵਰਕਫਲੋ ਚਲਾਉਣ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਹੋਵੇਗਾ, ਜਿਨ੍ਹਾਂ ਲਈ ਥੋੜ੍ਹੇ ਮੌਡਲ ਖਾਸ ਤੌਰ ਤੇ ਸੰਰਚਿਤ ਨਹੀਂ ਹਨ। ਇਹ ਮਜਬੂਤ ਅਤੇ ਭਰੋਸੇਯੋਗ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ਅਤੇ ਲਾਗਤ, ਪ੍ਰਦਰਸ਼ਨ ਤੇ ਨਤੀਜੇ ਦੀ ਗੁਣਵੱਤਾ ਵਿਚ ਚੰਗਾ ਸੰਤੁਲਨ ਹੋਵੇ।"
+      },
+      "ProviderBuy" : {
+        "label" : "Apy key ਕ੍ਰੈਡਿਟ ਲਿੰਕ ਖਰੀਦੋ"
+      },
+      "ProviderWWW" : {
+        "label" : "ਵੈੱਬ ਸਾਈਟ ਲਿੰਕ"
+      },
+      "WebSiteLink" : {
+        "label" : "ਪਰੋਵਾਇਡਰ ਵੈੱਬ ਸਾਈਟ",
+        "help" : "ਆਮ ਪਰੋਵਾਇਡਰ ਜਾਣਕਾਰੀ ਲਈ ਇੱਥੇ ਕਲਿਕ ਕਰੋ।"
+      },
+      "AcquireCreditLink" : {
+        "label" : "ਪਰੋਵਾਇਡਰ ਦਾ ਕ੍ਰੈਡਿਟ ਖਰੀਦੋ",
+        "help" : "ਆਪਣੀ api key(ਆਂ) ਲਈ ਇੱਥੇ ਕਲਿਕ ਕਰਕੇ ਕ੍ਰੈਡਿਟ ਖਰੀਦੋ।"
+      },
+      "EmbeddingModel" : {
+        "label" : "ਡਿਫੌਲਟ ਐਂਬੈੱਡਿੰਗ ਮੌਡਲ",
+        "help" : "ਇਹ ਮੌਡਲ ਤੁਹਾਡੇ ਡਾਟਾ ਅਤੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦੀ ਪਰਿਸ਼ਨਕ ਇੰਡੈਕਸਿੰਗ (ਐਂਬੈੱਡਿੰਗ) ਅਤੇ ਰੀਟਰੀਵ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਹੋਵੇਗਾ"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "ਤੁਸੀਂ ਇਹਨੂੰ ਮਿਟਾ ਨਹੀਂ ਸਕਦੇ",
         "detail" : "ਇਹ ਆਬਜੈਕਟ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਹੋਰ ਹਿੱਸਿਆਂ ਤੋਂ ਦਰਸਾਇਆ ਗਿਆ ਹੈ"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ: url ਨਾਲ ਕੰਮ ਕਰਨ ਵਿੱਚ ਖ਼ਤਾ: http://localhost:11434/v1/models",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: url ਨਾਲ ਕੰਮ ਕਰਨ ਵਿੱਚ ਖ਼ਤਾ: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ: apiKey ਸੈਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: apiKey ਸੈਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ਚੈਟ ਪ੍ਰਵਾਹ ਦੌਰਾਨ ਖ਼ਤਾ",
+        "detail" : "ਸਰਵਰ ਖ਼ਤਾ: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url:http://localhost:8000/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url:http://localhost:8000/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ਚੈਟ ਸਟਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਕਨੈਕਸ਼ਨ ਰੀਸੈਟ ਹੋਇਆ"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url:https://api.openai.com/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url:https://api.openai.com/v1/models ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "ਪੂਰਾ ਹੋ ਗਿਆ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "ਵਰਤੀ ਗਈ ਪਛਾਣ",
         "help" : "google drive ਸਿਸਟਮ ਤੱਕ ਪਹੁੰਚ ਲਈ ਪਛਾਣ ਚੁਣੋ ਜਾਂ ਬਣਾਓ"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "ਚੈਟ"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "ਸੰਬੰਧਤ ਜਾਣਕਾਰੀਆਂ ਦੀ ਖੋਜ ਚੱਲ ਰਹੀ ਹੈ"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "ਅੰਤਿਮ ਰਿਪੋਰਟ ਇਕਠੀ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਖੋਜ ਨਤੀਜਾ"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "ਸਿਸਟਮ ਖੋਜ ਨਤੀਜਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਗਿਆ"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਚੋਣਾਂ ਵਿੱਚੋਂ ਘੱਟੋ ਘੱਟ ਇੱਕ ਚੁਣੋ"
+      },
+      "LaunchBtn" : {
+        "label" : "ਸਰਚ ਚਲਾਓ"
+      },
+      "SkipDeepSearch" : {
+        "label" : "ਡੀਪ ਸਰਚ ਛੱਡੋ"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "ਚੁਣੀਆਂ ਗਿਆਨਾਂ ਅਧਾਰ"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "ਚੁਣੀਆਂ ਸਿਸਟਮਾਂ"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "ਸਰੋਤ ਚੁਣੋ"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "ਵਿਸ਼ਲੇਸ਼ਿਤ ਫਾਈਲ"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "DeleteBtn" : {
+        "label" : "ਹਟਾਓ"
+      },
+      "SearchSettingTab" : {
+        "label" : "ਖੋਜ ਸੈਟਿੰਗ"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "ਡੌਕਯੂਮੈਂਟਾਂ ਵਿੱਚੋਂ ਸੰਬੰਧਿਤ ਜਾਣਕਾਰੀ ਕੱਢਣ ਲਈ ਪ੍ਰਚੋਦਨਾ ਲਿਖੋ"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "ਨਿਕලੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇਕੱਠਾ ਕਰਨ ਲਈ ਪ੍ਰਚੋਦਨਾ ਲਿਖੋ"
+      },
+      "MainPanel" : {
+        "label" : "Deep search configuration ਸੋਧੀ ਜਾ ਰਹੀ ਹੈ"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਸੈਟਿੰਗ"
+      },
+      "description" : {
+        "label" : "ਵੇਰਵਾ",
+        "help" : "Deep search configuration ਦਾ ਵੇਰਵਾ ਦਰਜ ਕਰੋ"
+      },
+      "code" : {
+        "label" : "ਵੱਖਰਾ ਕੋਡ",
+        "help" : "Deep search configuration ਲਈ ਆਪਣੇ ਆਪ ਬਣਿਆ ਵਿਲੱਖਣ ਕੋਡ"
+      },
+      "searchType" : {
+        "label" : "ਖੋਜ ਕਿਸਮ",
+        "help" : "Single hop semantic search ਜਾਂ multi hop ਵਿੱਚੋਂ ਚੁਣੋ"
+      },
+      "topK" : {
+        "label" : "ਪ੍ਰਾਪਤ ਹੋਣ ਵਾਲੀਆਂ ਟੈਕਸਟ ਖੰਡਾਂ ਦੀ ਗਿਣਤੀ (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "ਵਰਤੇ ਗਏ llm",
+        "help" : "Deep search ਲਈ ਵਰਤਾ ਗਿਆ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਦੱਸੋ, ਜੇ ਕੋਈ ਚੁਣਿਆ ਨਾ ਗਿਆ ਤਾਂ ਮੌਲਭੂਤ ਵਰਤਿਆ ਜਾਏਗਾ।"
+      },
+      "analisysPrompt" : {
+        "label" : "ਡੌਕਯੂਮੈਂਟਾਂ ਅਨਾਲਿਸਿਸ ਪ੍ਰਚੋਦਨਾ",
+        "help" : "ਉਹ ਪ੍ਰਚੋਦਨਾ ਸੋਧੋ ਜੋ ਡੌਕਯੂਮੈਂਟ ਟੁਕੜਿਆਂ ਵਿੱਚੋਂ ਸੰਬੰਧਤ ਜਾਣਕਾਰੀ ਕੱਢਣ ਲਈ ਵਰਤੀ ਜਾਵੇਗੀ।"
+      },
+      "consolidationPrompt" : {
+        "label" : "ਨਿਕਲੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇਕੱਠਾ ਕਰਨ ਦੀ ਪ੍ਰਚੋਦਨਾ",
+        "help" : "ਨਿਕਲੀਆਂ ਜਾਣਕਾਰੀਆਂ ਨੂੰ ਇੱਕ ਹੀ ਰਿਪੋਰਟ ਵਿੱਚ ਇਕੱਠਾ ਕਰਨ ਲਈ ਵਰਤੀ ਜਾਣ ਵਾਲੀ ਪ੍ਰਚੋਦਨਾ ਸੋਧੋ।"
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "ਖੋਜ ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "ਪਹਿਲਾ hop semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "ਦੂਜਾ hop ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "ਦੂਜਾ hop semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
+      },
+      "defaultModel" : {
+        "label" : "ਮੂਲ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ",
+        "help" : "Deep search ਪ੍ਰੋਸੈਸਿੰਗ ਲਈ ਮੂਲ ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "similarityThreashold" : {
+        "label" : "ਖੋਜ ਸਮਾਨਤਾ ਥ੍ਰੈਸ਼ਹੋਲਡ",
+        "help" : "Semantic similarity ਥ੍ਰੈਸ਼ਹੋਲਡ (0.5 ਤੋਂ 1.0 ਤੱਕ)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "ਸੁਰੱਖਿਆ ਸੈਟਿੰਗਾਂ"
+      },
+      "accessibleToAll" : {
+        "label" : "ਸਾਰਿਆਂ ਲਈ ਪਹੁੰਚਯੋਗ"
+      },
+      "datasource" : {
+        "label" : "ਡਾਟਾ ਸਰੋਤ"
+      },
+      "allowedGroups" : {
+        "label" : "ਮਨਜ਼ੂਰਸ਼ੁਦਾ ਸਮੂਹ"
+      },
+      "allowedUsers" : {
+        "label" : "ਮਨਜ਼ੂਰ ਉਪਭੋਗਤਾ"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "ਹਰ ਡਾਟਾ ਸਰੋਤ ਉਪਭੋਗਤਾ/ਸਮੂਹ ਪਹੁੰਚ",
+        "help" : "ਹਰ ਬਾਹਰੀ ਡਾਟਾ ਸਰੋਤ ਅਤੇ ਉਪਭੋਗਤਾ ਜਾਂ ਸਮੂਹ ਲਈ ਡੀਪ ਖੋਜ ਉਪਲਬਧ ਹੋਏਗੀ"
+      },
+      "SIMPLEMODE" : {
+        "label" : "ਉਪਭੋਗਤਾ/ਸਮੂਹ ਪੱਖੋਂ ਸਧਾਰਨ ਪਹੁੰਚ"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "ਹਰ ਡਾਟਾ ਸਰੋਤ ਉਪਭੋਗਤਾ/ਸਮੂਹ ਪਹੁੰਚ"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "api key ਅੰਜਾਣੀਆਂ ਵਰਤੋ ਜਾਂ ਨਵੀਆਂ ਬਣਾਓ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ਅੰਜਾਣੀ",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਲਈ api key ਜਾਂ ਅੰਜਾਣੀ ਚੁਣੋ"
+      },
+      "NewApiKey" : {
+        "label" : "ਨਵੀਂ api key",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਨਾਲ ਵਰਤਣ ਲਈ ਨਵੀਂ api key ਤਿਆਰ ਕਰੋ"
+      },
+      "PiSave" : {
+        "label" : "ਸੇਵ ਕਰੋ"
+      },
+      "NewUserName" : {
+        "label" : "ਉਪਭੋਗੀ ਨਾਂ",
+        "help" : "ਪਰੋਵਾਇਡਰ ਸੇਵਾਵਾਂ ਐਕਸੈਸ ਕਰਨ ਲਈ ਵਰਤਿਆ ਗਿਆ ਉਪਭੋਗੀ ਨਾਂ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ਮੌਜੂਦਾ ਜਾਂ ਨਵੀਆਂ ਵਰਤੋ",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਲਈ ਮੌਜੂਦਾ ਜਾਂ ਨਵੀਂ ਅੰਜਾਣੀ ਵਰਤੋ"
+      },
+      "newSecretDescription" : {
+        "label" : "ਅੰਜਾਣੀਆਂ ਦਾ ਵੇਰਵਾ",
+        "help" : "api key ਅੰਜਾਣੀਆਂ ਦਾ ਵੇਰਵਾ"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "ਅੰਜਾਣੀਆਂ ਬਣਾਈਆਂ ਗਈਆਂ",
+        "detail" : "ਅੰਜਾਣੀਆਂ ਸਫਲਤਾਪੂਰਕ ਬਣਾਈਆਂ ਗਈਆਂ"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama ਸਰਵਰ ਨਾਲ ਸੰਚਾਰ ਕਰਦਿਆਂ ਗਲਤੀ ",
+        "detail" : "ਦੂਰਦਰਾਜ ਸਿਸਟਮ ਨਾਲ ਸੰਚਾਰ ਵਿੱਚ ਨੈੱਟਵਰਕ ਗਲਤੀ\n ਸਮੱਗਰੀ ਇਕਸੈਸ ਕਰਦਿਆਂ ਮਾਡਲ ਲਿਸਟ ਉਲਝਣ url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "ਉਪਭੋਗੀਆਂ ਨਾਲ ਚੈਟ ਕਰੋ"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "ਅੰਦਰੂਨੀ ਸੇਵਾਵਾਂ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਮੌਡਲ"
       }
     }
   }

@@ -10,7 +10,7 @@
  -->
 
 <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="true" [modal]="true" [style]="{width:'95%',height:'95%'}"
-    (onHide)="changedData.emit(undefined)" [closable]="false" [showHeader]="false">
+     [closable]="false" [showHeader]="false">
 
     <p-blockUI id="BlockUI" gebo-ai-label [target]="userUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -18,7 +18,7 @@
 
     <p-panel id="MainPanel" gebo-ai-label  #userUI header="Editing user">
         <div class="geboDialogContent">
-            <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+            <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
             <div class="grid" [formGroup]="formGroup">
                 <div class="col-6">
                     <gebo-ai-field id="username" label="Username" help="User username will be used also as user name" [required]="true">

@@ -30,6 +30,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
 
 /**
  * AI generated comments
@@ -39,7 +40,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  * a dispatcher for handling Jira system content with project endpoints.
  */
 @Configuration
-public class GJiraContentsDispatcherConfig extends SingletonBuilder<GJiraSystem, GJiraProjectEndpoint> {
+public class GJiraContentsDispatcherConfig extends SingletonBuilder<GJiraSystem, GJiraProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	/**
 	 * Constructor that initializes the configuration with all required dependencies.
@@ -73,7 +74,7 @@ public class GJiraContentsDispatcherConfig extends SingletonBuilder<GJiraSystem,
 	@Bean
 	@Scope("singleton")
 	@Qualifier("jiraContentsDispatcher")
-	public GIOCModuleContentsDispatcher<GJiraSystem, GJiraProjectEndpoint> getJiraContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<GJiraSystem, GJiraProjectEndpoint,RemoteVirtualFileSystemContentConsumingSessionParam> getJiraContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

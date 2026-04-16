@@ -1,0 +1,595 @@
+package ai.gebo.atlassian.confluence.handler.impl;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.architecture.search.model.CatalogueSample;
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
+import ai.gebo.architecture.search.model.SearchResultReference;
+import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.CleanQueryUtil;
+import ai.gebo.architecture.search.service.INativeSearchService;
+import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceConnection;
+import ai.gebo.atlassian.confluence.cloud.client.CloudConfluenceContentApi;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceAttachmentItem;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceContentItem;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceFullContent;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageResponseSearchResult;
+import ai.gebo.atlassian.confluence.cloud.model.CloudConfluenceSearchPageResponseSearchResult.CloudConfluenceSearchResult;
+import ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint;
+import ai.gebo.atlassian.confluence.handler.GConfluenceSystem;
+import ai.gebo.atlassian.confluence.handler.IGConfluenceVirtualFilesystemConsumingService;
+import ai.gebo.atlassian.confluence.handler.config.ConfluenceHandlerConfig;
+import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNativePositionObject;
+import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceNavigationCoordinates;
+import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResourceReference;
+import ai.gebo.atlassian.confluence.handler.impl.model.ConfluenceResultsExtractionData;
+import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceAdditionalSearchFilter;
+import ai.gebo.atlassian.confluence.handler.search.model.ConfluenceContentSearchFilter;
+import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceConnection;
+import ai.gebo.atlassian.confluence.onpremise.client.OnPremiseConfluenceContentApi;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceAttachmentItem;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceContentItem;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSearchPageResponseSearchResult;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseConfluenceSearchPageResponseSearchResult.OnPremiseConfluenceSearchResult;
+import ai.gebo.atlassian.confluence.onpremise.model.OnPremiseFullContent;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.model.virtualfs.PathInfo;
+import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
+import ai.gebo.systems.abstraction.layer.GAbstractRemoteVirtualFilesystemSearchService;
+import ai.gebo.systems.abstraction.layer.impl.DataStructureJoinUtils;
+
+@Service
+public class ConfluenceSearchService extends
+		GAbstractRemoteVirtualFilesystemSearchService<ConfluenceResultsExtractionData, GConfluenceSystem, GConfluenceProjectEndpoint, ConfluenceNativePositionObject, ConfluenceNavigationCoordinates, ConfluenceResourceReference, IGConfluenceVirtualFilesystemConsumingService, ConfluenceBrowsingContext>
+		implements INativeSearchService<ConfluenceResultsExtractionData, ConfluenceContentSearchFilter> {
+	private static final String CONFLUENCE_SPACE_DESCRIPTION = "description: ";
+	private static final String CONFLUENCE_SPACE_KEY = "key: ";
+	private static final String CONFLUENCE_END_SPACE = "END_SPACE";
+	private static final String CONFLUENCE_SPACE = "SPACE";
+	private static final String END_CONFLUENCE_SPACES = "END_CONFLUENCE_SPACES";
+	private static final String NEWLINE = "\r\n";
+	private static final String CONFLUENCE_SPACES = "CONFLUENCE_SPACES";
+	public static final String CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM = "confluenceSpaces";
+	public static final String CONFLUENCE_NATIVE_QUERY_EXTRACTION_PROMPT = "confluence-native-query-extraction-prompt";
+	public static final String CONFLUENCE_STANDARD_QUERY_EXTRACTION_PROMPT = "confluence-standard-query-extraction-prompt";
+	private static final String CONFLUENCE = "confluence";
+	private static final String HTML = ".html";
+	private static final String TEXT_HTML = "text/html";
+	private final ConfluenceConnectionFactory confluenceConnectionFactory;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfluenceSearchService.class);
+
+	public ConfluenceSearchService(ConfluenceConnectionFactory confluenceConnectionFactory,
+			GConfluenceRemoteVirtualFilesystemConsumingServiceImpl virtualFileSystemConsumingService,
+			ConfluenceContentManagementHandlerImpl contentManagementSystemHandler, ConfluenceHandlerConfig config,
+			ConfluenceBrowsingService browsingService) {
+		super(virtualFileSystemConsumingService, contentManagementSystemHandler, browsingService);
+		this.confluenceConnectionFactory = confluenceConnectionFactory;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return "Confluence Search";
+	}
+
+	@Override
+	public String getId() {
+
+		return CONFLUENCE;
+	}
+
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.ATLASSIAN_CONFLUENCE_MODULE;
+	}
+
+	@Override
+	public List<SearchResult> search(SearchQuery query, SearchableSystemMetaData system, int nEntryLimit)
+			throws IOException, SearchServiceException {
+		query = CleanQueryUtil.cleanQuery(query);
+		if (system.getSystemConfigurationReference() instanceof GConfluenceSystem confluenceSystem) {
+
+			try {
+				boolean isCql = query.getQueryText() != null && query.getQueryText().toLowerCase().contains("cql=");
+				switch (confluenceSystem.getConfluenceVersion()) {
+				case CLOUD: {
+					CloudConfluenceConnection connection = confluenceConnectionFactory
+							.getCloudConnection(confluenceSystem);
+					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+					CloudConfluenceSearchPageResponseSearchResult data = isCql
+							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
+							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
+
+					List<SearchResult> list = encodeCloudResults(data, connection, contentApi, confluenceSystem);
+					setOriginOn(list);
+					return list;
+
+				}
+				case ONPREMISE7X: {
+					OnPremiseConfluenceConnection connection = confluenceConnectionFactory
+							.getOnPremiseConnection(confluenceSystem);
+					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
+					OnPremiseConfluenceSearchPageResponseSearchResult data = isCql
+							? contentApi.searchByCql(query.getQueryText(), nEntryLimit)
+							: contentApi.searchFullText(query.getQueryText(), nEntryLimit);
+					List<SearchResult> list = encodeOnPremiseResults(data, connection, contentApi, confluenceSystem);
+					setOriginOn(list);
+					return list;
+				}
+				}
+			} catch (GeboCryptSecretException e) {
+				throw new SearchServiceException("Problems in crypt subsystem", e);
+			} catch (GeboRestIntegrationException e) {
+				throw new SearchServiceException("Problems accessing confluence system", e);
+			}
+
+		}
+		return List.of();
+	}
+
+	private List<SearchResult> encodeOnPremiseResults(OnPremiseConfluenceSearchPageResponseSearchResult data,
+			OnPremiseConfluenceConnection connection, OnPremiseConfluenceContentApi contentApi,
+			GConfluenceSystem confluenceSystem) throws GeboRestIntegrationException {
+		List<SearchResult> outList = new ArrayList<SearchResult>();
+		if (data != null && data.getResults() != null) {
+
+			for (OnPremiseConfluenceSearchResult result : data.getResults()) {
+				if (result.getContent() != null) {
+					SearchResult searchResult = new SearchResult();
+					setOriginOn(searchResult);
+					searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+					searchResult.setDescriptiveText(result.getTitle());
+					searchResult.setResultReference(new SearchResultReference());
+					searchResult.getResultReference().setId(result.getContent().getId());
+					searchResult.getResultReference().setTitle(result.getContent().getTitle());
+					searchResult.getResultReference().setUri(result.getUrl());
+					searchResult.setNavigationReference(new VFilesystemReference());
+					searchResult.getNavigationReference().root = result.getContent() != null
+							&& result.getContent().getSpace() != null
+									? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
+											result.getContent().getSpace().getName(),
+											result.getContent().getSpace().get_expandable())
+									: null;
+					if (result.getContent().getType() != null) {
+						switch (result.getContent().getType()) {
+						case "attachment": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsAttachment(result.getContent().getId(), result.getContent().getTitle());
+							outList.add(searchResult);
+							// Loading attachment meta data to add content type and other meta informations
+
+						}
+							break;
+						case "page": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsFolder(result.getContent());
+							searchResult.getResultReference().setContentType(TEXT_HTML);
+							searchResult.getResultReference().setExtension(HTML);
+							outList.add(searchResult);
+							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
+									contentApi, searchResult.getNavigationReference(), confluenceSystem));
+						}
+							break;
+						case "blogpost": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsFolder(result.getContent());
+							outList.add(searchResult);
+							searchResult.getResultReference().setContentType(TEXT_HTML);
+							searchResult.getResultReference().setExtension(HTML);
+							searchResult.getChilds().addAll(encodeOnPremiseChilds(result.getContent().getId(),
+									contentApi, searchResult.getNavigationReference(), confluenceSystem));
+
+						}
+							break;
+						case "comment": {
+							continue;
+						}
+
+						}
+					}
+				}
+			}
+		}
+		return outList;
+	}
+
+	private List<SearchResult> encodeOnPremiseChilds(String parentContentId, OnPremiseConfluenceContentApi contentApi,
+			VFilesystemReference vFilesystemReference, GConfluenceSystem confluenceSystem)
+			throws GeboRestIntegrationException {
+
+		OnPremiseFullContent fullContents = contentApi.getFullContent(parentContentId);
+		List<SearchResult> results = new ArrayList<SearchResult>();
+
+		if (fullContents.getRootContent() != null) {
+			PathInfo page = ConfluenceNavigationUtil.encodeAsPage(fullContents.getRootContent());
+			SearchResult searchResult = new SearchResult();
+			setOriginOn(searchResult);
+			searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+			searchResult.setDescriptiveText(page.name);
+			searchResult.setNavigationReference(new VFilesystemReference());
+			searchResult.getNavigationReference().root = vFilesystemReference.root;
+			searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+					page);
+			searchResult.setResultReference(new SearchResultReference());
+			searchResult.getResultReference().setName(page.name);
+			searchResult.getResultReference().setContentType(TEXT_HTML);
+			searchResult.getResultReference().setExtension(HTML);
+			results.add(searchResult);
+		}
+		// ATTACHMENT WILL NOT BE LISTED BECAUSE CANNOT SELECT AND RETRIEVE THEM
+
+		if (fullContents.getAttachmentsList() != null && fullContents.getAttachmentsList().getResults() != null) {
+			for (OnPremiseConfluenceAttachmentItem attach : fullContents.getAttachmentsList().getResults()) {
+				PathInfo attachment = ConfluenceNavigationUtil.encodeAsAttachment(attach);
+				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+				searchResult.setDescriptiveText(attachment.name);
+				searchResult.setNavigationReference(new VFilesystemReference());
+				searchResult.getNavigationReference().root = vFilesystemReference.root;
+				searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+						ConfluenceNavigationUtil.encodeAsAttachment(attach));
+				searchResult.setResultReference(new SearchResultReference());
+				searchResult.getResultReference().setName(attachment.name);
+				if (attach.getMetadata() != null && attach.getMetadata().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getMetadata().getMediaType());
+				} else if (attach.getExtensions() != null && attach.getExtensions().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getExtensions().getMediaType());
+				}
+				results.add(searchResult);
+			}
+		}
+
+		if (fullContents.getChildPagesList() != null && fullContents.getChildPagesList().getResults() != null) {
+			for (OnPremiseConfluenceContentItem childpage : fullContents.getChildPagesList().getResults()) {
+				PathInfo page = ConfluenceNavigationUtil.encodeAsPage(childpage);
+				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+				searchResult.setDescriptiveText(page.name);
+				searchResult.setNavigationReference(new VFilesystemReference());
+				searchResult.getNavigationReference().root = vFilesystemReference.root;
+				searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+						page);
+				searchResult.setResultReference(new SearchResultReference());
+				searchResult.getResultReference().setName(page.name);
+				searchResult.getResultReference().setContentType(TEXT_HTML);
+				searchResult.getResultReference().setExtension(HTML);
+				results.add(searchResult);
+			}
+		}
+		return results;
+	}
+
+	private List<SearchResult> encodeCloudResults(CloudConfluenceSearchPageResponseSearchResult data,
+			CloudConfluenceConnection connection, CloudConfluenceContentApi contentApi,
+			GConfluenceSystem confluenceSystem) throws GeboRestIntegrationException {
+		List<SearchResult> outList = new ArrayList<SearchResult>();
+		if (data != null && data.getResults() != null) {
+
+			for (CloudConfluenceSearchResult result : data.getResults()) {
+				if (result.getContent() != null) {
+					SearchResult searchResult = new SearchResult();
+					setOriginOn(searchResult);
+					searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+					searchResult.setDescriptiveText(result.getTitle());
+					searchResult.setResultReference(new SearchResultReference());
+					searchResult.getResultReference().setId(result.getContent().getId());
+					searchResult.getResultReference().setTitle(result.getContent().getTitle());
+					searchResult.getResultReference().setUri(result.getUrl());
+					searchResult.setNavigationReference(new VFilesystemReference());
+					searchResult.getNavigationReference().root = result.getContent() != null
+							&& result.getContent().getSpace() != null
+									? ConfluenceNavigationUtil.encodeSpace(result.getContent().getSpace().getKey(),
+											result.getContent().getSpace().getName(),
+											result.getContent().getSpace().get_expandable())
+									: null;
+					if (result.getContent().getType() != null) {
+						switch (result.getContent().getType()) {
+						case "attachment": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsAttachment(result.getContent().getId(), result.getContent().getTitle());
+							outList.add(searchResult);
+
+						}
+							break;
+						case "page": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsFolder(result.getContent());
+							outList.add(searchResult);
+							searchResult.getChilds().addAll(encodeCloudChilds(result.getContent().getId(), contentApi,
+									searchResult.getNavigationReference(), confluenceSystem));
+						}
+							break;
+						case "blogpost": {
+							searchResult.getNavigationReference().path = ConfluenceNavigationUtil
+									.encodeAsFolder(result.getContent());
+							outList.add(searchResult);
+							searchResult.getChilds().addAll(encodeCloudChilds(result.getContent().getId(), contentApi,
+									searchResult.getNavigationReference(), confluenceSystem));
+
+						}
+							break;
+						case "comment": {
+							continue;
+						}
+
+						}
+					}
+				}
+			}
+		}
+		return outList;
+	}
+
+	private Collection<? extends SearchResult> encodeCloudChilds(String parentContentId,
+			CloudConfluenceContentApi contentApi, VFilesystemReference vFilesystemReference,
+			GConfluenceSystem confluenceSystem) throws GeboRestIntegrationException {
+		CloudConfluenceFullContent fullContents = contentApi.getFullContent(parentContentId);
+		List<SearchResult> results = new ArrayList<SearchResult>();
+
+		if (fullContents.getRootContent() != null) {
+			PathInfo page = ConfluenceNavigationUtil.encodeAsPage(fullContents.getRootContent());
+			SearchResult searchResult = new SearchResult();
+			setOriginOn(searchResult);
+			searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+
+			searchResult.setDescriptiveText(page.name);
+			searchResult.setNavigationReference(new VFilesystemReference());
+			searchResult.getNavigationReference().root = vFilesystemReference.root;
+			searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+					page);
+			searchResult.setResultReference(new SearchResultReference());
+			searchResult.getResultReference().setName(page.name);
+			searchResult.getResultReference().setContentType(TEXT_HTML);
+			searchResult.getResultReference().setExtension(HTML);
+			results.add(searchResult);
+		}
+		// ATTACHMENT WILL NOT BE LISTED BECAUSE CANNOT SELECT AND RETRIEVE THEM
+
+		if (fullContents.getAttachmentsList() != null && fullContents.getAttachmentsList().getResults() != null) {
+			for (CloudConfluenceAttachmentItem attach : fullContents.getAttachmentsList().getResults()) {
+				PathInfo attachment = ConfluenceNavigationUtil.encodeAsAttachment(attach);
+				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+
+				searchResult.setDescriptiveText(attachment.name);
+				searchResult.setNavigationReference(new VFilesystemReference());
+				searchResult.getNavigationReference().root = vFilesystemReference.root;
+				searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+						ConfluenceNavigationUtil.encodeAsAttachment(attach));
+				searchResult.setResultReference(new SearchResultReference());
+				searchResult.getResultReference().setName(attachment.name);
+				if (attach.getMetadata() != null && attach.getMetadata().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getMetadata().getMediaType());
+				} else if (attach.getExtensions() != null && attach.getExtensions().getMediaType() != null) {
+					searchResult.getResultReference().setContentType(attach.getExtensions().getMediaType());
+				}
+				results.add(searchResult);
+			}
+		}
+
+		if (fullContents.getChildPagesList() != null && fullContents.getChildPagesList().getResults() != null) {
+			for (CloudConfluenceContentItem childpage : fullContents.getChildPagesList().getResults()) {
+				PathInfo page = ConfluenceNavigationUtil.encodeAsPage(childpage);
+				SearchResult searchResult = new SearchResult();
+				setOriginOn(searchResult);
+				searchResult.setSystemConfigurationCode(confluenceSystem.getCode());
+				searchResult.setDescriptiveText(page.name);
+				searchResult.setNavigationReference(new VFilesystemReference());
+				searchResult.getNavigationReference().root = vFilesystemReference.root;
+				searchResult.getNavigationReference().path = ConfluenceNavigationUtil.combine(vFilesystemReference.path,
+						page);
+				searchResult.setResultReference(new SearchResultReference());
+				searchResult.getResultReference().setName(page.name);
+				searchResult.getResultReference().setContentType(TEXT_HTML);
+				searchResult.getResultReference().setExtension(HTML);
+				results.add(searchResult);
+			}
+		}
+		return results;
+	}
+
+	@Override
+	public Class<ConfluenceResultsExtractionData> getCustomResultsAggregationDataType() throws SearchServiceException {
+
+		return ConfluenceResultsExtractionData.class;
+	}
+
+	@Override
+	public ConfluenceResultsExtractionData aggregate(ConfluenceResultsExtractionData oldConsolidated,
+			ConfluenceResultsExtractionData consolidated) {
+		ConfluenceResultsExtractionData data = basicAggregate(oldConsolidated, consolidated,
+				new ConfluenceResultsExtractionData());
+		data.setAdditionalConfluenceSearchIdeas(join(oldConsolidated, consolidated));
+		return data;
+	}
+
+	private ConfluenceAdditionalSearchFilter join(ConfluenceResultsExtractionData oldConsolidated,
+			ConfluenceResultsExtractionData consolidated) {
+		ConfluenceAdditionalSearchFilter filter = new ConfluenceAdditionalSearchFilter();
+		join(filter, oldConsolidated);
+		join(filter, consolidated);
+		return filter;
+	}
+
+	private void join(ConfluenceAdditionalSearchFilter filter, ConfluenceResultsExtractionData oldConsolidated) {
+		if (oldConsolidated != null && oldConsolidated.getAdditionalConfluenceSearchIdeas() != null) {
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getLabels(),
+					filter::getLabels, filter::setLabels);
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTextTerms(),
+					filter::getTextTerms, filter::setTextTerms);
+			DataStructureJoinUtils.join(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
+					filter::getTitleTerms, filter::setTitleTerms);
+			filter.setLabelsMatchMode(oldConsolidated.getAdditionalConfluenceSearchIdeas().getLabelsMatchMode());
+			filter.setTextTermsMatchMode(oldConsolidated.getAdditionalConfluenceSearchIdeas().getTextTermsMatchMode());
+			filter.setTitleTermsMatchMode(
+					oldConsolidated.getAdditionalConfluenceSearchIdeas().getTitleTermsMatchMode());
+		}
+	}
+
+	@Override
+	public String getQueriesGenerationPromptUseCode() {
+
+		return CONFLUENCE_STANDARD_QUERY_EXTRACTION_PROMPT;
+	}
+
+	@Override
+	public SearchResultAnalisysOutcome extractRelatedAnalisysReferences(String systemId,
+			ConfluenceResultsExtractionData extractedData) throws IOException, SearchServiceException {
+		SearchResultAnalisysOutcome outcome = null;
+		if (extractedData.getAdditionalConfluenceSearchIdeas() != null) {
+			boolean doneSetAtLeastAField = false;
+			ConfluenceContentSearchFilter searchFilter = new ConfluenceContentSearchFilter();
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getLabels(),
+					searchFilter.getContentAttributesFilter()::setLabels);
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTextTerms(),
+					searchFilter.getContentAttributesFilter()::setTextTerms);
+			doneSetAtLeastAField |= DataStructureJoinUtils.doneCopy(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTitleTerms(),
+					searchFilter.getContentAttributesFilter()::setTitleTerms);
+			searchFilter.getContentAttributesFilter()
+					.setLabelsMatchMode(extractedData.getAdditionalConfluenceSearchIdeas().getLabelsMatchMode());
+			searchFilter.getContentAttributesFilter()
+					.setTextTermsMatchMode(extractedData.getAdditionalConfluenceSearchIdeas().getTextTermsMatchMode());
+			searchFilter.getContentAttributesFilter().setTitleTermsMatchMode(
+					extractedData.getAdditionalConfluenceSearchIdeas().getTitleTermsMatchMode());
+			if (doneSetAtLeastAField) {
+				List<SearchableSystemMetaData> systems = this.getSearchableSystems();
+				List<SearchResult> searchResults = new ArrayList<SearchResult>();
+				for (SearchableSystemMetaData searchableSystemMetaData : systems) {
+					List<SearchResult> _searchResults = nativeSearch(searchFilter, searchableSystemMetaData, 50);
+					if (_searchResults != null) {
+						searchResults.addAll(_searchResults);
+					}
+				}
+
+				outcome = new SearchResultAnalisysOutcome(null, searchResults);
+			}
+		}
+		return outcome;
+	}
+
+	@Override
+	protected ConfluenceBrowsingContext createBrowsingContext(GConfluenceSystem systemType) {
+
+		return ConfluenceBrowsingContext.of(systemType.getCode());
+	}
+
+	@Override
+	public List<SearchResult> nativeSearch(ConfluenceContentSearchFilter query, SearchableSystemMetaData system,
+			int nEntryLimit) throws IOException, SearchServiceException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin nativeSearch(...)");
+		}
+		String cql = ConfluenceCqlTranslator.createCqlString(query);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("cql => " + cql);
+		}
+		List<SearchResult> list = List.of();
+		if (system.getSystemConfigurationReference() instanceof GConfluenceSystem confluenceSystem) {
+
+			try {
+
+				switch (confluenceSystem.getConfluenceVersion()) {
+				case CLOUD: {
+					CloudConfluenceConnection connection = confluenceConnectionFactory
+							.getCloudConnection(confluenceSystem);
+					CloudConfluenceContentApi contentApi = new CloudConfluenceContentApi(connection);
+					CloudConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
+					list = encodeCloudResults(data, connection, contentApi, confluenceSystem);
+					setOriginOn(list);
+
+				}
+					break;
+				case ONPREMISE7X: {
+					OnPremiseConfluenceConnection connection = confluenceConnectionFactory
+							.getOnPremiseConnection(confluenceSystem);
+					OnPremiseConfluenceContentApi contentApi = new OnPremiseConfluenceContentApi(connection);
+					OnPremiseConfluenceSearchPageResponseSearchResult data = contentApi.searchByCql(cql, nEntryLimit);
+					list = encodeOnPremiseResults(data, connection, contentApi, confluenceSystem);
+					setOriginOn(list);
+
+				}
+					break;
+				}
+			} catch (GeboCryptSecretException e) {
+				throw new SearchServiceException("Problems in crypt subsystem", e);
+			} catch (GeboRestIntegrationException e) {
+				throw new SearchServiceException("Problems accessing confluence system", e);
+			}
+
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End nativeSearch(...)");
+		}
+		return list;
+	}
+
+	@Override
+	public Class<ConfluenceContentSearchFilter> getNativeSearchDataStructureType() {
+		return ConfluenceContentSearchFilter.class;
+	}
+
+	@Override
+	public String getNativePromptTemplateUseCode() {
+
+		return CONFLUENCE_NATIVE_QUERY_EXTRACTION_PROMPT;
+	}
+
+	@Override
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
+
+		return Map.of(CONFLUENCE_SPACES_TEMPLATE_PROMPT_PARAM, renderConfluenceSpaces(cataloguesSample));
+	}
+
+	private Object renderConfluenceSpaces(List<CatalogueSample> cataloguesSample) {
+		StringBuffer buffer = new StringBuffer();
+		if (cataloguesSample != null && !cataloguesSample.isEmpty()) {
+			buffer.append(CONFLUENCE_SPACES);
+			buffer.append(NEWLINE);
+
+			for (CatalogueSample catalogueSample : cataloguesSample) {
+				buffer.append(CONFLUENCE_SPACE);
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_SPACE_KEY);
+				buffer.append(catalogueSample.getCode());
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_SPACE_DESCRIPTION);
+				buffer.append(catalogueSample.getDescription());
+				buffer.append(NEWLINE);
+				buffer.append(CONFLUENCE_END_SPACE);
+				buffer.append(NEWLINE);
+			}
+
+			buffer.append(END_CONFLUENCE_SPACES);
+		}
+		return buffer.toString();
+	}
+
+	@Override
+	public String getProductId() {
+		
+		return CONFLUENCE;
+	}
+
+}

@@ -18,7 +18,7 @@
  * and edit both chat profiles and prompts with pagination support.
  */
 import { Component, OnInit } from "@angular/core";
-import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig, PageGChatProfileConfiguration, PageGPromptConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig, PageGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -63,9 +63,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
     /**
      * Container for prompts data retrieved from the server.
      */
-    prompts: PageGPromptConfig = {
-        content: []
-    };
+    prompts: GPromptConfig[] =  [];
     
     /**
      * Flag indicating whether prompts are currently being loaded.
@@ -112,14 +110,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
      */
     private loadPrompts() {
         this.loadingPrompts = true;
-        this.geboPromptAdminService.getAllPromptConfig(this.promptsPage).subscribe({
-            next: (data) => {
-                this.prompts = data;
-            },
-            complete: () => {
-                this.loadingPrompts = false;
-            }
-        });
+        
     }
     
     /**

@@ -67,7 +67,8 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
         accessibleUsers: new FormControl(), 
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
-        defaultModelPrompt:new FormControl()
+        defaultModelPrompt:new FormControl(),
+        forUses:new FormControl()
     });
     
     /**

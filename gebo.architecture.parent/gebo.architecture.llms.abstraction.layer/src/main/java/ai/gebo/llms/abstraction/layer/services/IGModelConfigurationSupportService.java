@@ -35,7 +35,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <ModelConfig> The configuration of the model extending
  *                      GBaseModelConfig
  */
-public interface IGModelConfigurationSupportService<ModelType extends GModelType, ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig>
+public interface IGModelConfigurationSupportService<ModelType extends GModelType, ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig, ConfigurableIface extends IGConfigurableModel>
 		extends IGRuntimeModuleComponent {
 
 	/**
@@ -96,5 +96,13 @@ public interface IGModelConfigurationSupportService<ModelType extends GModelType
 		}
 		return OperationStatus.of(null, choices.getMessages());
 	}
-
+	/**
+	 * Creates a configurable  model based on the provided configuration.
+	 *
+	 * @param config The configuration for the  model.
+	 * @return An instance of {@code ConfigurableIface} based on the provided
+	 *         configuration.
+	 * @throws LLMConfigException If there is a problem creating the chat model.
+	 */
+	public ConfigurableIface create(ModelConfig config) throws LLMConfigException;
 }

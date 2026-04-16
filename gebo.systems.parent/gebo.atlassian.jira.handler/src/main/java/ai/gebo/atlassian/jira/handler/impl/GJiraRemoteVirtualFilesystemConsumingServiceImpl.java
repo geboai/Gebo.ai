@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -35,6 +32,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.atlassian.jira.handler.GJiraProjectEndpoint;
 import ai.gebo.atlassian.jira.handler.GJiraSystem;
 import ai.gebo.atlassian.jira.handler.IGJiraVirtualFilesystemConsumingService;
@@ -51,6 +49,7 @@ import ai.gebo.jira.cloud.client.api.IssueSearchApi;
 import ai.gebo.jira.cloud.client.api.IssuesApi;
 import ai.gebo.jira.cloud.client.api.ProjectsApi;
 import ai.gebo.jira.cloud.client.invoker.ApiClient;
+import ai.gebo.jira.cloud.client.model.AttachmentMetadata;
 import ai.gebo.jira.cloud.client.model.Comment;
 import ai.gebo.jira.cloud.client.model.IssueBean;
 import ai.gebo.jira.cloud.client.model.PageOfComments;
@@ -70,58 +69,58 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Constant key for storing the Jira API client in the cache
 	 */
-	private static final String JIRA_CLIENT = "JIRA-CLIENT";
-	
+	static final String JIRA_CLIENT = "JIRA-CLIENT";
+
 	/**
 	 * Service for wrapping REST template operations
 	 */
 	protected final RestTemplateWrapperService restTemplateWrapper;
-	
+
 	/**
 	 * Factory for creating Jira API clients
 	 */
 	protected final JiraApiClientFactory apiClientFactory;
-	
+
 	/**
 	 * Constant key for attachment filename in metadata
 	 */
 	public static final String ATTACHMENT_FILENAME = "ATTACHMENT-FILENAME";
-	
+
 	/**
 	 * Constant key for attachment ID in metadata
 	 */
 	public static final String ATTACHMENT_ID = "ATTACHMENT-ID";
-	
+
 	/**
 	 * Constant key for comment content in metadata
 	 */
 	public static final String COMMENT_CONTENT = "COMMENT-CONTENT";
-	
+
 	/**
 	 * Constant key for comment reference in metadata
 	 */
 	public static final String COMMENT_REFERENCE = "COMMENT-REFERENCE";
-	
+
 	/**
 	 * Constant key for issue content reference in metadata
 	 */
 	public static final String ISSUE_CONTENT_REFERENCE = "ISSUE-CONTENT-REFERENCE";
-	
+
 	/**
 	 * Constant key for issue reference in metadata
 	 */
 	public static final String ISSUE_REFERENCE = "ISSUE-REFERNCE";
-	
+
 	/**
 	 * Constant key for Jira object type in metadata
 	 */
 	public static final String JIRA_OBJECT_TYPE = "JIRA-OBJECT-TYPE";
-	
+
 	/**
 	 * Constant key for attachment content URL in metadata
 	 */
 	public static final String ATTACHMENT_CONTENT_URL = "ATTACHMENT-CONTENT-URL";
-	
+
 	/**
 	 * Constant key for attachment MIME type in metadata
 	 */
@@ -130,9 +129,9 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Constructor for the Jira remote virtual filesystem service
 	 * 
-	 * @param documentFactory Factory for document references
+	 * @param documentFactory     Factory for document references
 	 * @param restTemplateWrapper Service for REST template operations
-	 * @param browserFactory Factory for creating Jira API clients
+	 * @param browserFactory      Factory for creating Jira API clients
 	 */
 	public GJiraRemoteVirtualFilesystemConsumingServiceImpl(IGDocumentReferenceFactory documentFactory,
 			RestTemplateWrapperService restTemplateWrapper, JiraApiClientFactory browserFactory) {
@@ -145,10 +144,10 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates a resource handle from a virtual filesystem object
 	 * 
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param system    The Jira system
+	 * @param endpoint  The Jira project endpoint
 	 * @param reference The virtual filesystem object
-	 * @param cache Cache for storing temporary data
+	 * @param cache     Cache for storing temporary data
 	 * @return A Jira resource reference
 	 * @throws GeboContentHandlerSystemException If an error occurs during handling
 	 */
@@ -176,7 +175,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * Helper method to extract string values from metadata map
 	 * 
 	 * @param metainfos Map containing metadata
-	 * @param field Field name to extract
+	 * @param field     Field name to extract
 	 * @return The string value or null if not found
 	 */
 	private String extractString(Map<String, Object> metainfos, String field) {
@@ -186,13 +185,13 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Streams a Jira resource (attachment, comment, or issue) as an InputStream
 	 * 
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param system    The Jira system
+	 * @param endpoint  The Jira project endpoint
 	 * @param reference The Jira resource reference
-	 * @param cache Cache for storing temporary data
+	 * @param cache     Cache for storing temporary data
 	 * @return InputStream of the resource content
 	 * @throws GeboContentHandlerSystemException If an error occurs during handling
-	 * @throws IOException If an I/O error occurs
+	 * @throws IOException                       If an I/O error occurs
 	 */
 	@Override
 	public InputStream streamResource(GJiraSystem system, GJiraProjectEndpoint endpoint,
@@ -259,10 +258,11 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * 
 	 * @param childCoordinates List of native position objects
 	 * @return Navigation coordinates
-	 * @throws GeboContentHandlerSystemException If an error occurs during conversion
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           conversion
 	 */
 	@Override
-	protected JiraNavigationCoordinates getPositionCoordinate(List<JiraNativePositionObject> childCoordinates)
+	protected JiraNavigationCoordinates getPositionCoordinate(List<JiraNativePositionObject> childCoordinates, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 		return JiraNavigationUtil.toJiraNavigationCoordinates(childCoordinates);
 	}
@@ -271,11 +271,11 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * Retrieves child elements from a Jira location
 	 * 
 	 * @param nativeCoordinates List of native position objects
-	 * @param position Navigation coordinates
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
-	 * @param messagesConsumer Consumer for user messages
-	 * @param environment Environment data
+	 * @param position          Navigation coordinates
+	 * @param system            The Jira system
+	 * @param endpoint          The Jira project endpoint
+	 * @param messagesConsumer  Consumer for user messages
+	 * @param environment       Environment data
 	 * @return List of child coordinate pointers
 	 * @throws GeboContentHandlerSystemException If an error occurs during retrieval
 	 */
@@ -326,9 +326,9 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Retrieves comments for a specific issue
 	 * 
-	 * @param issueKey Issue key
+	 * @param issueKey          Issue key
 	 * @param nativeCoordinates Parent coordinates
-	 * @param commentApi Jira comment API client
+	 * @param commentApi        Jira comment API client
 	 * @return List of comment coordinate pointers
 	 */
 	private List<NativeCoordinatePointer> getCommentsNodes(String issueKey,
@@ -358,9 +358,9 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Retrieves issues based on a JQL query
 	 * 
-	 * @param jql JQL query string
+	 * @param jql               JQL query string
 	 * @param nativeCoordinates Parent coordinates
-	 * @param searchApi Jira search API client
+	 * @param searchApi         Jira search API client
 	 * @return List of issue coordinate pointers
 	 */
 	private List<NativeCoordinatePointer> getIssuesNodesByJQL(String jql,
@@ -399,7 +399,7 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Retrieves attachment metadata from an issue
 	 * 
-	 * @param issueAsFolder Issue bean
+	 * @param issueAsFolder     Issue bean
 	 * @param nativeCoordinates Parent coordinates
 	 * @return List of attachment coordinate pointers
 	 */
@@ -428,16 +428,17 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Converts navigation coordinates to native coordinates
 	 * 
-	 * @param position Navigation coordinates
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
-	 * @param root Root virtual folder
-	 * @param consumer Content consumer
+	 * @param position         Navigation coordinates
+	 * @param system           The Jira system
+	 * @param endpoint         The Jira project endpoint
+	 * @param root             Root virtual folder
+	 * @param consumer         Content consumer
 	 * @param messagesConsumer User messages consumer
-	 * @param errorConsumer Error consumer
-	 * @param environment Environment data
+	 * @param errorConsumer    Error consumer
+	 * @param environment      Environment data
 	 * @return List of native position objects
-	 * @throws GeboContentHandlerSystemException If an error occurs during conversion
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           conversion
 	 */
 	@Override
 	protected List<JiraNativePositionObject> toNativeCoordinates(JiraNavigationCoordinates position, GJiraSystem system,
@@ -448,20 +449,21 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);
 		ProjectsApi projectApi = new ProjectsApi(apiClient);
 		IssuesApi issueApi = new IssuesApi(apiClient);
-		String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
-		Project project = projectApi.getProject(projectKey, null, null);
-		if (project == null)
-			return List.of();
-		JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
-		nativeRoot.setProject(project);
-		nativePositions.add(nativeRoot);
-
+		IssueAttachmentsApi attachmentApi = new IssueAttachmentsApi(apiClient);
+		if (position.getRoot() != null) {
+			String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
+			Project project = projectApi.getProject(projectKey, null, null);
+			if (project == null)
+				return List.of();
+			JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
+			nativeRoot.setProject(project);
+			nativePositions.add(nativeRoot);
+		}
 		for (JiraPathComponent pos : position.getBrowsingStepsCustom()) {
 			JiraNativePositionObject nativePosition = new JiraNativePositionObject();
-			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
-			if (issue == null)
+			if (!handlePosition(nativePosition, pos, issueApi, attachmentApi)) {
 				return List.of();
-			nativePosition.setIssueAsFolder(issue);
+			}
 			nativePositions.add(nativePosition);
 		}
 		return nativePositions;
@@ -470,8 +472,8 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Creates an environment for API operations
 	 * 
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param system        The Jira system
+	 * @param endpoint      The Jira project endpoint
 	 * @param errorConsumer Error consumer
 	 * @return Environment map
 	 * @throws GeboContentHandlerSystemException If an error occurs during creation
@@ -494,8 +496,8 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * Clears the environment after operations
 	 * 
 	 * @param environment Environment map
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param system      The Jira system
+	 * @param endpoint    The Jira project endpoint
 	 * @throws GeboContentHandlerSystemException If an error occurs during clearing
 	 */
 	@Override
@@ -510,10 +512,11 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	 * 
 	 * @param path Filesystem reference
 	 * @return Navigation coordinates
-	 * @throws GeboContentHandlerSystemException If an error occurs during conversion
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           conversion
 	 */
 	@Override
-	protected JiraNavigationCoordinates toNavigationPosition(VFilesystemReference path)
+	protected JiraNavigationCoordinates toNavigationPosition(VFilesystemReference path, Map<String, Object> environment)
 			throws GeboContentHandlerSystemException {
 
 		return JiraNavigationUtil.toJiraNavigationCoordinats(path);
@@ -522,9 +525,9 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Provides a description for a Jira object
 	 * 
-	 * @param references List of native position objects
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param references  List of native position objects
+	 * @param system      The Jira system
+	 * @param endpoint    The Jira project endpoint
 	 * @param environment Environment data
 	 * @return Description string
 	 */
@@ -558,8 +561,8 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Provides a description for a Jira project endpoint
 	 * 
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
+	 * @param system      The Jira system
+	 * @param endpoint    The Jira project endpoint
 	 * @param environment Environment data
 	 * @return Description string
 	 */
@@ -572,13 +575,14 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 	/**
 	 * Verifies if a remote object exists
 	 * 
-	 * @param system The Jira system
-	 * @param endpoint The Jira project endpoint
-	 * @param doc Virtual filesystem object
-	 * @param reference Resource reference
+	 * @param system      The Jira system
+	 * @param endpoint    The Jira project endpoint
+	 * @param doc         Virtual filesystem object
+	 * @param reference   Resource reference
 	 * @param environment Environment data
 	 * @return The verified virtual filesystem object or null
-	 * @throws GeboContentHandlerSystemException If an error occurs during verification
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           verification
 	 */
 	@Override
 	protected GAbstractVirtualFilesystemObject verifyRemoteObjectExistence(GJiraSystem system,
@@ -586,6 +590,102 @@ public class GJiraRemoteVirtualFilesystemConsumingServiceImpl extends
 			Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected List<JiraNativePositionObject> toResourcesNativeCoordinates(JiraNavigationCoordinates position,
+			GJiraSystem system, Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		List<JiraNativePositionObject> nativePositions = new ArrayList<>();
+		ApiClient apiClient = (ApiClient) environment.get(JIRA_CLIENT);
+		ProjectsApi projectApi = new ProjectsApi(apiClient);
+		IssuesApi issueApi = new IssuesApi(apiClient);
+		IssueAttachmentsApi attachmentApi = new IssueAttachmentsApi(apiClient);
+		if (position.getRoot() != null) {
+			String projectKey = JiraNavigationUtil.getProjectCode(position.getRoot());
+			Project project = projectApi.getProject(projectKey, null, null);
+			if (project == null)
+				return List.of();
+			JiraNativePositionObject nativeRoot = new JiraNativePositionObject();
+			nativeRoot.setProject(project);
+			nativePositions.add(nativeRoot);
+		}
+		for (JiraPathComponent pos : position.getBrowsingStepsCustom()) {
+			JiraNativePositionObject nativePosition = new JiraNativePositionObject();
+			if (!handlePosition(nativePosition, pos, issueApi, attachmentApi)) {
+				return List.of();
+			}
+			nativePositions.add(nativePosition);
+		}
+		return nativePositions;
+
+	}
+
+	private boolean handlePosition(JiraNativePositionObject nativePosition, JiraPathComponent pos, IssuesApi issueApi,
+			IssueAttachmentsApi attachmentApi) {
+		if (pos.type == JiraPathNodeType.CONTAINER_TICKET) {
+			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
+			if (issue == null)
+				return false;
+			nativePosition.setIssueAsFolder(issue);
+		}
+		if (pos.type == JiraPathNodeType.TICKET) {
+			IssueBean issue = issueApi.getIssue(pos.id, JiraNavigationUtil.ISSUES_FIELDS, null, null, null, null, null);
+			if (issue == null)
+				return false;
+			nativePosition.setIssueAsResource(issue);
+		}
+		if (pos.type == JiraPathNodeType.ATTACHMENT) {
+			AttachmentMetadata attach = attachmentApi.getAttachment(pos.id);
+			if (attach == null)
+				return false;
+			JiraAttachment attachment = new JiraAttachment(attach);
+
+			nativePosition.setAttachment(attachment);
+		}
+		return true;
+	}
+
+	@Override
+	protected Map<String, Object> createEnvironment(GJiraSystem system) throws GeboContentHandlerSystemException {
+		Map<String, Object> environment = new HashMap<>();
+		try {
+			environment.put(JIRA_CLIENT, this.apiClientFactory.getApiClient(system));
+			return environment;
+		} catch (GeboCryptSecretException e) {
+			throw new GeboContentHandlerSystemException("Cannot instantiate jira-client for credentials secret issues",
+					e);
+		}
+	}
+
+	@Override
+	protected JiraResourceReference getResourceHandle(SearchableSystemMetaData system,
+			JiraNavigationCoordinates navigationPosition, List<JiraNativePositionObject> nativeCoordinates,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+		JiraNativePositionObject nativeObject = !nativeCoordinates.isEmpty()
+				? nativeCoordinates.get(nativeCoordinates.size() - 1)
+				: null;
+		JiraResourceReference _reference = new JiraResourceReference();
+		Map<String, Object> metainfos = nativeObject.getResourceReferenceMetaInfos();
+		if (metainfos != null) {
+			_reference.jiraObjectType = extractString(metainfos, JIRA_OBJECT_TYPE);
+			_reference.issueContainerId = extractString(metainfos, ISSUE_REFERENCE);
+			_reference.issueContentId = extractString(metainfos, ISSUE_CONTENT_REFERENCE);
+			_reference.attachmentId = extractString(metainfos, ATTACHMENT_ID);
+			_reference.attachmentFileName = extractString(metainfos, ATTACHMENT_FILENAME);
+			_reference.attachmentUrl = extractString(metainfos, ATTACHMENT_CONTENT_URL);
+			_reference.attachmentContentType = extractString(metainfos, ATTACHMENT_MIME_TYPE);
+			_reference.commentId = extractString(metainfos, COMMENT_REFERENCE);
+			_reference.commentContent = extractString(metainfos, COMMENT_CONTENT);
+		}
+		return _reference;
+
+	}
+
+	@Override
+	protected InputStream streamResource(GJiraSystem system, JiraResourceReference remoteReference,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException, IOException {
+		
+		return streamResource(system, null, remoteReference, environment);
 	}
 
 }

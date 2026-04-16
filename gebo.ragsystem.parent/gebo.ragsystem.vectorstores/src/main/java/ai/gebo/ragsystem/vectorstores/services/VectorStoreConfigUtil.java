@@ -35,7 +35,7 @@ class VectorStoreConfigUtil {
      * @throws LLMConfigException If the configuration is invalid or missing
      */
 	static GeboMongoVectorStoreConfig yml2Mongo(GeboAIVectorStoreConfig config) throws LLMConfigException {
-		VectorStoreProduct product = VectorStoreProduct.LUCENE;
+		VectorStoreProduct product = VectorStoreProduct.QDRANT;
 		GeboMongoVectorStoreConfig out = new GeboMongoVectorStoreConfig();
 		if (config.getUse() == null && config.getQdrant() != null) {
 			product = (VectorStoreProduct.QDRANT);
@@ -51,16 +51,7 @@ class VectorStoreConfigUtil {
 		}
 		out.setProduct(product);
 		switch (product) {
-		case LUCENE: {
-			if (config.getLucene() == null) {
-				throw new LLMConfigException(
-						"Configuration of vector store product=" + product.name() + " is not present in yml file");
-
-			}
-			out.setLuceneConfig(config.getLucene());
-		}
-
-			break;
+		
 		case QDRANT: {
 			if (config.getQdrant() == null) {
 				throw new LLMConfigException(
@@ -94,14 +85,7 @@ class VectorStoreConfigUtil {
      */
 	static VectorStoreRuntimeConfiguration mongo2Standart(GeboMongoVectorStoreConfig config) throws LLMConfigException {
 		switch (config.getProduct()) {
-		case LUCENE: {
-			if (config.getLuceneConfig() == null) {
-				throw new LLMConfigException("Configuration of vector store product=" + config.getProduct().name()
-						+ " is not present in yml file");
-
-			}
-			return new VectorStoreRuntimeConfiguration(config.getProduct(), config.getLuceneConfig());
-		}
+		
 		case QDRANT: {
 			if (config.getQdrantConfig() == null) {
 				throw new LLMConfigException("Configuration of vector store product=" + config.getProduct().name()

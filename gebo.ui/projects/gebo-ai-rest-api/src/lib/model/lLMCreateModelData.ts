@@ -19,11 +19,18 @@ export interface LLMCreateModelData {
     secretId?: string;
     modelCode: string;
     baseUrl?: string;
+    contextWindow?: number;
+    uses?: Array<LLMCreateModelData.UsesEnum>;
 }
 export namespace LLMCreateModelData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,
         EMBEDDING: 'EMBEDDING' as TypeEnum
+    };
+    export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
+    export const UsesEnum = {
+        CHAT: 'CHAT' as UsesEnum,
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as UsesEnum
     };
 }

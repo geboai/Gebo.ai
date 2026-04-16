@@ -81,8 +81,8 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 		try {
 			// Retrieve content stream from the document
 			List<Document> fragments = new ArrayList<Document>();
-
-			DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunkSet(docref);
+			String chunkingSession = chunkingService.retrieveChunkingSession("job:" + envelope.getPayload().getJobId());
+			DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunkSet(docref, chunkingSession);
 			while (chunkResponse != null && !chunkResponse.isEmpty()) {
 				List<Document> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks().stream()
 						.map(currentChunk -> new Document(currentChunk.getId(), currentChunk.getChunkData(),
@@ -91,7 +91,7 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 				fragments.addAll(fragmentsSet);
 				if (chunkResponse.getNextChunkSetId() != null) {
 					chunkResponse = chunkingService.getNextChunkSet(docref, chunkResponse.getId(),
-							chunkResponse.getNextChunkSetId());
+							chunkResponse.getNextChunkSetId(), chunkingSession);
 				} else
 					chunkResponse = null;
 			}

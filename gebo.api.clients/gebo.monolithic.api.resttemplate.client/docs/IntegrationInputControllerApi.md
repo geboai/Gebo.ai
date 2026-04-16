@@ -142,7 +142,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
- - **Accept**: */*
+ - **Accept**: application/json
 
 <a name="spoolDocument1"></a>
 # **spoolDocument1**

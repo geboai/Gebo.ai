@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.DataPage;
-import ai.gebo.monolithic.api.client.model.GUserChatContext;
+import ai.gebo.monolithic.api.client.model.GUserChatSession;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -24,16 +24,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ChatInfosByQbeParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class ChatInfosByQbeParam {
   @JsonProperty("filter")
-  private GUserChatContext filter = null;
+  private GUserChatSession filter = null;
 
   @JsonProperty("page")
   private DataPage page = null;
 
-  public ChatInfosByQbeParam filter(GUserChatContext filter) {
+  public ChatInfosByQbeParam filter(GUserChatSession filter) {
     this.filter = filter;
     return this;
   }
@@ -43,11 +43,11 @@ public class ChatInfosByQbeParam {
    * @return filter
   **/
   @Schema(description = "")
-  public GUserChatContext getFilter() {
+  public GUserChatSession getFilter() {
     return filter;
   }
 
-  public void setFilter(GUserChatContext filter) {
+  public void setFilter(GUserChatSession filter) {
     this.filter = filter;
   }
 

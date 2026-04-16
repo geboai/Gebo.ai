@@ -15,7 +15,7 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIAudioControlComponent } from "./audio-control.component";
 import { ButtonModule } from "primeng/button";
-import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 /**
  * AI generated comments
  * 

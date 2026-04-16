@@ -25,6 +25,7 @@ export interface GMistralChatModelChoice {
     metaInfos?: ModelMetaInfo;
     informativeUrl?: string;
     contextLength?: number;
+    nativeModelMetaInfos?: any;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
     modelCard?: MistralBaseModelCard;

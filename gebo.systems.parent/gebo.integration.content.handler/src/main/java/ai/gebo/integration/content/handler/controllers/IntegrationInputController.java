@@ -42,7 +42,7 @@ public class IntegrationInputController {
 		return this.integrationService.spoolDocument(endpointCode, relativePath, envelop);
 	}
 
-	@PutMapping(value = "spoolDocument", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(value = "spoolDocument", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public JobTicket spoolDocument(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestParam("relativePath") String relativePath,
 			@NotNull @Valid @RequestParam("file") MultipartFile file) throws GeboContentHandlerSystemException {

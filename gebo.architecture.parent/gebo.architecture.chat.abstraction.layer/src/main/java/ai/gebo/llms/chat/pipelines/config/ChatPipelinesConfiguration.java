@@ -1,0 +1,39 @@
+package ai.gebo.llms.chat.pipelines.config;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultInputChatPipelineStepServiceImpl;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultRoutingChatPipelineStepServiceImpl;
+import lombok.Data;
+
+@Configuration
+@ConfigurationProperties(value = "ai.gebo.chatpipes")
+@Data
+public class ChatPipelinesConfiguration {
+	public static final String DEFAULT_PIPELINE = "default-pipeline";
+	private Double fixedDocumentsRequestRoutesDeepSearchTreasholdContextWindowCoeff = 0.5;
+	private Integer fixedDocumentsRequestRoutesDeepSearchTokenThreashold = null;
+	private Integer warnUploadedFileSizeTokenBudget = 150000;
+	private Integer maximumUploadedFileSizeTokenBudget = 500000;
+
+	public ChatPipelinesConfiguration() {
+		ChatPipelineConfiguration defaultPipeline = new ChatPipelineConfiguration();
+		defaultPipeline.setCode(DEFAULT_PIPELINE);
+		defaultPipeline.setDefaultPipeline(true);
+		defaultPipeline.setStepInputId(DefaultInputChatPipelineStepServiceImpl.DEFAULT_INPUT_STEP);
+		defaultPipeline.setStepRouterId(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP);
+		this.pipelines.add(defaultPipeline);
+
+	}
+
+	private List<ChatPipelineConfiguration> pipelines = new ArrayList<ChatPipelineConfiguration>();
+
+	private int maxRoutingDecisionDocumentsTokenBudget = 12000;
+	private int globalRagTopK = 20;
+	private double rewriteThreashold = 0.60;
+}

@@ -12,10 +12,10 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 import java.util.List;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import jakarta.validation.constraints.NotNull;
 
@@ -70,7 +70,8 @@ public interface IGRagChatService extends IGGenericalChatService {
 	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
 			throws GeboPersistenceException, LLMConfigException;
 
-	public GUserChatInfo createCleanRagChatByProfileCode(@NotNull String profileCode)
-			throws GeboPersistenceException, LLMConfigException;
+	
+
+	public List<GKnowledgeBase> getVisibleKnowledgeBasesByProfileCode(@NotNull String profileCode);
 
 }

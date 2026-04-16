@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Inicia sessió"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "L'operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials proporcionades"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Integració de Google Drive/Workspaces",
         "description" : "Configura Gebo.ai per accedir a les dades d'equip de Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Configura Google search api",
+        "description" : "Configura les credencials de Google search api per a cerques web amb IA"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Configura Deep search",
+        "description" : "Configura els paràmetres de Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Ajust automàtic de paràmetres de la generació amb recuperació augmentada"
+      },
+      "Description" : {
+        "label" : "Descripció"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Última actualització de l'ajust"
+      },
+      "Code" : {
+        "label" : "Codi del model d'incrustació/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Llindar calculat"
+      },
+      "Autotuned" : {
+        "label" : "Ajust automàtic"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Passos obligatoris de configuració de Gebo.ai finalitzats...",
+        "detail" : "S'han completat els passos obligatoris, però falten alguns passos que impedeixen que la vostra organització tregui el màxim profit d'aquest programari"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Falten alguns passos obligatoris a la configuració de Gebo.ai",
+        "detail" : "Reviseu els passos en vermell del procés de configuració"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Sistema Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edita el sistema"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Configura l’accés als proveïdors llms de Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Opcions avançades d'infraestructura/proveïdors"
+      },
+      "MainPanelTitle" : {
+        "label" : "Configura els models de llenguatge gran utilitzats"
+      },
+      "EasySetup" : {
+        "label" : "Configuració/fixació inicial fàcil"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Configura models de llenguatge gran"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Descripció"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Clau Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Crea credencials de google search"
+      },
+      "CreateBtn" : {
+        "label" : "Crea"
+      },
+      "customSearchEngineId" : {
+        "label" : "Identificador del motor de cerca",
+        "help" : "Introdueix l'identificador del motor de cerca obtingut en el registre de credencials de google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "apiKey" : {
+        "label" : "Clau Api",
+        "help" : "Introdueix la clau api obtinguda en el registre de credencials de google search api."
+      },
+      "MainPanel" : {
+        "label" : "Configura google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Elimina",
+        "help" : "Elimina les credencials de Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Configuració Deep search",
+        "help" : "Afegeix una configuració de deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edita configuració"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "desactivat"
+      },
+      "EditGroupBtn" : {
+        "label" : "Edita"
+      },
+      "CodeHeader" : {
+        "label" : "codi"
+      },
+      "DescriptionHeader" : {
+        "label" : "descripció"
+      },
+      "UsersHeader" : {
+        "label" : "usuaris"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Configuració d'accés al model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor d'IA remot OK",
+        "detail" : "El proveïdor està actiu i configurat correctament"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepció durant l'operació: Error treballant amb url:https://api.openai.com/v1/models",
+        "detail" : "Error del servidor: Error treballant amb url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "estableix com a model d'embeddings per defecte",
         "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor d'IA remot OK",
+        "detail" : "El proveïdor està actiu i configurat correctament"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Edició de la configuració del model de xat del servidor Ollama local (o LAN)"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Edició de la configuració del model de xat Anthropic"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Edició de la configuració del model de xat MistralAI"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Edició de la configuració del model de xat Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Configuració d'accés al model"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Configuració d'accés al model"
+      },
+      "forUses" : {
+        "label" : "Ús del model",
+        "help" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model.",
+        "placeholder" : "Usos pels quals la plataforma Gebo.ai tindrà en compte aquest model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Estàs segur que vols suprimir aquest xat?",
         "header" : "Acció de suprimir xat"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Afegeix contingut o modifica el comportament de la cerca"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Afegeix contingut o modifica el comportament de la cerca"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Afegeix contingut o modifica el comportament de la cerca"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Fonts",
+        "help" : "Obre la llista de documents analitzats"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Detalls de la resposta de deep search i fonts"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Resultat de l'anàlisi deep search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Error en cercar a Confluence Search",
+        "detail" : "Error del servidor: Problemes per accedir al sistema confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nou xat carregat",
+        "detail" : "Xat carregat correctament"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selecciona fonts"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Tria almenys una de les següents opcions"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Omet deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de coneixement escollides"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistemes escollits"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Afegeix document a la llista 'xatejar amb'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Executant deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Executant retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Preguntant al llm"
+      },
+      "Waiting" : {
+        "label" : "Analitzant el millor pla de resposta..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Executant eines"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Executant cerca assistida per IA"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Fitxer analitzat"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Resultat de cerca analitzat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Resultat de cerca del sistema analitzat per a"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidant l'informe final"
+      },
+      "RUNNING" : {
+        "label" : "Executant "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Estic analitzant la teva sol·licitud"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Flux agentic escollit, agent responent en execució"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "El nivell de servei és: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Executant l'agent escollit"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Puja fitxer(s)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Navega/cerca fitxer(s) de l'empresa"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Xat amb doc. escollit"
+      },
+      "agenticChat" : {
+        "label" : "Xat agentic"
+      },
+      "rag" : {
+        "label" : "Xat R.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Fonts múltiples"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Cerca web de Google"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Cerca de Confluence"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Cerca de Jira"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Cerca a base de coneixement"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Xat amb fitxer(s)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Cerca web de Google"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Cerca de Confluence"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Cerca de Jira"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Usuari de Google a suplantar",
         "help" : "L'usuari que serà suplantat per les credencials proporcionades",
         "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
+      },
+      "OK" : {
+        "summary" : "Desat correctament",
+        "detail" : "Actualització realitzada amb èxit"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Documents processats",
         "dataset-2-label" : "Documents amb error",
         "dataset-3-label" : "Documents descartats"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indexació de text complet"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Docs no tractats",
+        "label-1" : "Error processant docs",
+        "label-2" : "Docs processats"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Docs rebuts",
+        "dataset-1-label" : "Docs processats",
+        "dataset-2-label" : "Docs amb error",
+        "dataset-3-label" : "Docs descartats"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error processant tokens"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "activa totes les trucades de funció",
         "help" : "Activa totes les eines i trucades de funció disponibles, si no s'activa es podrà fer més endavant des del panell d'administració de llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepció durant l'operació: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària",
+        "detail" : "Error del servidor: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor remot d'IA OK",
+        "detail" : "El proveïdor està operatiu i configurat correctament"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Excepció durant l'operació:401 NO AUTORITZAT",
+        "detail" : "Error del servidor: 401 NO AUTORITZAT"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Excepció durant l'operació: falta basePath",
+        "detail" : "Error del servidor: falta basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Crear i activar"
+      },
+      "vendorId" : {
+        "label" : "Escull el teu proveïdor de model de llenguatge gran",
+        "help" : "Escull el proveïdor inicial per als teus models de xat i incrustació per defecte"
+      },
+      "secretId" : {
+        "label" : "Escull credencials de proveïdor (clau api)",
+        "help" : "Escull una de les credencials existents per al proveïdor llm seleccionat"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model de xat per a serveis interns",
+        "help" : "El model de xat configurat per als serveis interns serà responsable d'extreure informació, resumir i executar fluxos de treball interns."
+      },
+      "ChatModel" : {
+        "label" : "Model de xat per defecte",
+        "help" : "El model de xat per defecte serà responsable de respondre preguntes d'usuaris i d'executar fluxos de treball pels quals no hi ha models específicament configurats. Ha de ser potent i fiable, amb un bon equilibri entre cost, rendiment i qualitat del resultat."
+      },
+      "ProviderBuy" : {
+        "label" : "Enllaç de compra de crèdit de clau Apy"
+      },
+      "ProviderWWW" : {
+        "label" : "Enllaç al lloc web"
+      },
+      "WebSiteLink" : {
+        "label" : "Lloc web del proveïdor",
+        "help" : "Fes clic aquí per informació general del proveïdor."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Compra crèdit del proveïdor",
+        "help" : "Fes clic aquí per comprar crèdit per a la teva clau o claus API."
+      },
+      "EmbeddingModel" : {
+        "label" : "Model d'incrustació per defecte",
+        "help" : "Aquest model serà responsable d'indexar semànticament (embedding) i recuperar les teves dades i documents"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "No pots suprimir això",
         "detail" : "Aquest objecte està referenciat des d’altres parts de l’aplicació"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Excepció durant l'operació: Error treballant amb url:http://localhost:11434/v1/models",
+        "detail" : "Error del servidor: Error treballant amb url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Excepció durant l'operació: s'ha d'establir apiKey",
+        "detail" : "Error del servidor: s'ha d'establir apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Error durant la transmissió de la resposta del xat",
+        "detail" : "Error del servidor: 400 Sol·licitud incorrecta des de POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Excepció durant l'operació: Error treballant amb url:http://localhost:8000/v1/models",
+        "detail" : "Error del servidor: Error treballant amb url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Error en transmetre resposta del xat",
+        "detail" : "Error del servidor: Connexió restablerta"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Excepció durant l'operació: Error treballant amb url:https://api.openai.com/v1/models",
+        "detail" : "Error del servidor: Error treballant amb url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Excepció durant l'operació: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària",
+        "detail" : "Error del servidor: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Completat"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Identitat utilitzada",
         "help" : "Selecciona o crea la identitat per accedir al sistema google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Xat"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Cercant informacions rellevants"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Consolidant l'informe final"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Resultat de cerca analitzat"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Resultat de cerca al sistema analitzat per a"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Cal escollir almenys una de les opcions següents"
+      },
+      "LaunchBtn" : {
+        "label" : "Executar cerca"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ometre cerca avançada"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bases de coneixement escollides"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Sistemes escollits"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Selecciona fonts"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Fitxer analitzat"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Insereix"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SearchSettingTab" : {
+        "label" : "Paràmetres de cerca"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Introdueix una prompt per extreure informació rellevant dels documents"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Introdueix una prompt per consolidar la informació rellevant extreta"
+      },
+      "MainPanel" : {
+        "label" : "Editant configuració de deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Paràmetres del model de llenguatge"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració de deep search"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració de deep search"
+      },
+      "searchType" : {
+        "label" : "Tipus de cerca",
+        "help" : "Selecciona entre cerca semàntica d'un salt o de múltiples salts"
+      },
+      "topK" : {
+        "label" : "Nombre de segments de text recuperats (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Llm usat",
+        "help" : "Especifica el model de llenguatge utilitzat per a Deep search. S'utilitzarà el predeterminat si no se'n selecciona cap."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt d'anàlisi de documents",
+        "help" : "Edita la prompt que s'utilitzarà per extreure informació rellevant dels fragments de documents."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt de consolidació d'informació extreta",
+        "help" : "Edita la prompt que s'utilitzarà per consolidar en un únic informe la informació rellevant extreta dels documents recuperats."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Llindar de similitud de cerca",
+        "help" : "Llindar de similitud semàntica del primer salt (entre 0,5 i 1,0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Llindar de similitud del segon salt",
+        "help" : "Llindar de similitud semàntica del segon salt (entre 0,5 i 1,0)"
+      },
+      "defaultModel" : {
+        "label" : "Model de llenguatge predeterminat",
+        "help" : "El model de llenguatge predeterminat s'utilitzarà per al processament de Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Llindar de similitud de cerca",
+        "help" : "Llindar de similitud semàntica (entre 0,5 i 1,0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Configuració de seguretat"
+      },
+      "accessibleToAll" : {
+        "label" : "Accessible per a tothom"
+      },
+      "datasource" : {
+        "label" : "Font de dades"
+      },
+      "allowedGroups" : {
+        "label" : "Grups permesos"
+      },
+      "allowedUsers" : {
+        "label" : "Usuaris permesos"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Accés d'usuari/grup per font de dades",
+        "help" : "Deep search estarà habilitat per cada font de dades externa i usuari o grup"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Accés simple per usuari/grup"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Accés per font de dades i usuari/grup"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Utilitza o crea credencials de clau api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Clau api/credencials",
+        "help" : "Escull clau api o credencials per a aquest proveïdor"
+      },
+      "NewApiKey" : {
+        "label" : "Nova clau api",
+        "help" : "Introdueix una nova clau api per utilitzar amb aquest proveïdor"
+      },
+      "PiSave" : {
+        "label" : "Desar"
+      },
+      "NewUserName" : {
+        "label" : "Nom d'usuari",
+        "help" : "Nom d'usuari utilitzat per accedir als serveis del proveïdor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Utilitza existents o noves",
+        "help" : "Utilitza credencials existents o crea'n de noves per a aquest proveïdor"
+      },
+      "newSecretDescription" : {
+        "label" : "Descripció de les credencials",
+        "help" : "Descripció de les credencials de la clau api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Credencials creades",
+        "detail" : "Credencials creades correctament"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Error en comunicar amb el servidor Ollama ",
+        "detail" : "Error de xarxa en comunicar amb el sistema remot accedint al contingut\nllista de models Error treballant amb url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Conversar amb usuaris"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model utilitzat per a serveis interns"
       }
     }
   }

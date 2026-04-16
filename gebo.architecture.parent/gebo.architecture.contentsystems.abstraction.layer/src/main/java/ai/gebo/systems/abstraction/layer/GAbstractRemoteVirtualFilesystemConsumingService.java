@@ -6,12 +6,11 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.systems.abstraction.layer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +27,7 @@ import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemE
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
@@ -37,6 +37,8 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam.OperationType;
+import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam.VirtualFileSystemOperation;
 import ai.gebo.systems.abstraction.layer.model.AbstractNativePositionObject;
 import ai.gebo.systems.abstraction.layer.model.AbstractNavigationCoordinates;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
@@ -46,13 +48,15 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
  * Meta implementation for a publisher that will browse the remote system and
  * navigate it while publishing
  * 
- * @param <SystemType> Type of the content management system used
- * @param <EndpointType> Type of the project endpoint
+ * @param <SystemType>                       Type of the content management
+ *                                           system used
+ * @param <EndpointType>                     Type of the project endpoint
  * @param <ImplementativePositionObjectType> Type of the position object
- * @param <PositionsCoordinateType> position coordinates type
- * @param <ResourceReferenceType> resources reference type to handle resources streaming
+ * @param <PositionsCoordinateType>          position coordinates type
+ * @param <ResourceReferenceType>            resources reference type to handle
+ *                                           resources streaming
  * 
- * AI generated comments
+ *                                           AI generated comments
  */
 public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemType extends GContentManagementSystem, EndpointType extends GVirtualFilesystemProjectEndpoint, ImplementativePositionObjectType extends AbstractNativePositionObject, PositionsCoordinateType extends AbstractNavigationCoordinates, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference>
 		implements IGRemoteVirtualFilesystemConsumingService<SystemType, EndpointType, ResourceReferenceType> {
@@ -79,8 +83,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	/**
 	 * Logs an informational step in the process.
 	 * 
-	 * @param summary Summary of the log.
-	 * @param detail Detailed message.
+	 * @param summary          Summary of the log.
+	 * @param detail           Detailed message.
 	 * @param messagesConsumer Consumer for user messages.
 	 */
 	protected void logInfoStep(String summary, String detail, IGUserMessagesConsumer messagesConsumer) {
@@ -91,9 +95,11 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	}
 
 	@Override
-	public final void consumeAll(SystemType system, EndpointType endpoint, GVirtualFolder root,
+	public final void consumeAll(SystemType system, EndpointType endpoint,
+			RemoteVirtualFileSystemContentConsumingSessionParam sessionParam, GVirtualFolder root,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
-			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+			IGContentsAccessErrorConsumer errorConsumer, String messageModuleId, String messageSystemId)
+			throws GeboContentHandlerSystemException {
 		logInfoStep("Accessing for listing resources " + describeSystem(system), "Start accessing remote system",
 				messagesConsumer);
 		Map<String, Object> environment = createEnvironment(system, endpoint, errorConsumer);
@@ -101,67 +107,80 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				"System accessed, starting integrating data source:"
 						+ describeProjectEndpoint(system, endpoint, environment),
 				"Start listing resources", messagesConsumer);
-
+		List<VFilesystemReference> paths = new ArrayList<>();
+		List<VFilesystemReference> deleted = new ArrayList<>();
 		if (endpoint.getPaths() != null) {
-			for (VFilesystemReference path : endpoint.getPaths()) {
-				try {
-					PositionsCoordinateType position = toNavigationPosition(path);
-					List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
-							endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
-					if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
-						List<ImplementativePositionObjectType> previusFolderCoordinates = nativeCoordinates.subList(0,
-								nativeCoordinates.size() - 1);
-						ImplementativePositionObjectType resource = nativeCoordinates.get(nativeCoordinates.size() - 1);
-						if (resource.getPath() == null) {
-							String msg = "Node=>" + resource.toString() + " does not have an associated path";
-							LOGGER.warn(msg);
-						} else {
-							if (resource.getPath().folder != resource.isFolder()) {
-								String msg = "Node=>" + resource.toString()
-										+ " folder attributes differs from navigation to native implementation ";
-								LOGGER.error(msg);
-								throw new GeboContentHandlerSystemException(msg);
-							}
-							if (resource.getPath().folder && resource.isResource()) {
-								String msg = "Node=>" + resource.toString()
-										+ " reported to be a folder in navigation but is a resource in implementative object ";
-								LOGGER.error(msg);
-								throw new GeboContentHandlerSystemException(msg);
-							}
-						}
-						if (resource.isFolder()) {
-							logInfoStep(
-									"Listing resource(s) of "
-											+ describeObject(nativeCoordinates, system, endpoint, environment),
-									"Listing resources", messagesConsumer);
-							GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(nativeCoordinates, position,
-									system, endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
-							consumeChilds(nativeCoordinates, position, system, endpoint, parentNode, consumer,
-									messagesConsumer, errorConsumer, environment);
-						} else if (resource.isResource()) {
-							logInfoStep(
-									"Listing resource  "
-											+ describeObject(nativeCoordinates, system, endpoint, environment),
-									"Listing resource", messagesConsumer);
-							GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(previusFolderCoordinates,
-									position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
-									environment);
-							createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
-									parentNode, consumer, messagesConsumer, errorConsumer, environment);
-						} else
-							throw new GeboContentHandlerSystemException(
-									"The node=>" + resource.toString() + " is not a resource nor a folder");
-					} else {
-						LOGGER.error("The path: " + path.toString() + " does not lead to a native rappresentation");
-					}
-				} catch (GeboContentHandlerSystemException exc) {
-					LOGGER.error("Exception while managing:" + path.toString(), exc);
-				} catch (Throwable th) {
-					LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
-					errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+			paths.addAll(endpoint.getPaths());
+		}
+		if (sessionParam != null && sessionParam.getOperations() != null) {
+			for (VirtualFileSystemOperation op : sessionParam.getOperations()) {
+				if (op.getOperation() == null || op.getOperation() == OperationType.ADD) {
+					paths.add(op.getReference());
+				} else if (op.getOperation() == OperationType.REMOVE) {
+					deleted.add(op.getReference());
 				}
 			}
 		}
+
+		for (VFilesystemReference path : paths) {
+			try {
+				PositionsCoordinateType position = toNavigationPosition(path, environment);
+				List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
+						endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
+				if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
+					List<ImplementativePositionObjectType> previusFolderCoordinates = nativeCoordinates.subList(0,
+							nativeCoordinates.size() - 1);
+					ImplementativePositionObjectType resource = nativeCoordinates.get(nativeCoordinates.size() - 1);
+					if (resource.getPath() == null) {
+						String msg = "Node=>" + resource.toString() + " does not have an associated path";
+						LOGGER.warn(msg);
+					} else {
+						if (resource.getPath().folder != resource.isFolder()) {
+							String msg = "Node=>" + resource.toString()
+									+ " folder attributes differs from navigation to native implementation ";
+							LOGGER.error(msg);
+							throw new GeboContentHandlerSystemException(msg);
+						}
+						if (resource.getPath().folder && resource.isResource()) {
+							String msg = "Node=>" + resource.toString()
+									+ " reported to be a folder in navigation but is a resource in implementative object ";
+							LOGGER.error(msg);
+							throw new GeboContentHandlerSystemException(msg);
+						}
+					}
+					if (resource.isFolder()) {
+						logInfoStep(
+								"Listing resource(s) of "
+										+ describeObject(nativeCoordinates, system, endpoint, environment),
+								"Listing resources", messagesConsumer);
+						GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(nativeCoordinates, position,
+								system, endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
+						consumeChilds(nativeCoordinates, position, system, endpoint, parentNode, consumer,
+								messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
+					} else if (resource.isResource()) {
+						logInfoStep(
+								"Listing resource  " + describeObject(nativeCoordinates, system, endpoint, environment),
+								"Listing resource", messagesConsumer);
+						GVirtualFolder parentNode = createAndConsumeVirtualFolderNodes(previusFolderCoordinates,
+								position, system, endpoint, root, consumer, messagesConsumer, errorConsumer,
+								environment);
+						createAndConsumeDocumentReference(previusFolderCoordinates, resource, system, endpoint,
+								parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
+								messageSystemId);
+					} else
+						throw new GeboContentHandlerSystemException(
+								"The node=>" + resource.toString() + " is not a resource nor a folder");
+				} else {
+					LOGGER.error("The path: " + path.toString() + " does not lead to a native rappresentation");
+				}
+			} catch (GeboContentHandlerSystemException exc) {
+				LOGGER.error("Exception while managing:" + path.toString(), exc);
+			} catch (Throwable th) {
+				LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
+				errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+			}
+		}
+
 		clearEnvironment(environment, system, endpoint);
 		logInfoStep("End of listing resources through " + describeSystem(system), "End of listing phase",
 				messagesConsumer);
@@ -175,21 +194,24 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * stream contents from it
 	 * 
 	 * @param previusFolderCoordinates List of previous folder coordinates
-	 * @param resource The current resource
-	 * @param system The current system
-	 * @param endpoint The endpoint being used
-	 * @param root The root virtual folder
-	 * @param consumer The content consumer
-	 * @param messagesConsumer The user messages consumer
-	 * @param errorConsumer Consumer for access errors
-	 * @param environment The operating environment
+	 * @param resource                 The current resource
+	 * @param system                   The current system
+	 * @param endpoint                 The endpoint being used
+	 * @param root                     The root virtual folder
+	 * @param consumer                 The content consumer
+	 * @param messagesConsumer         The user messages consumer
+	 * @param errorConsumer            Consumer for access errors
+	 * @param environment              The operating environment
+	 * @param messageModuleId          TODO
+	 * @param messageSystemId          TODO
 	 * @return A GDocumentReference representing the consumed document reference
 	 */
-	protected final GDocumentReference createAndConsumeDocumentReference(
+	protected GDocumentReference createAndConsumeDocumentReference(
 			List<ImplementativePositionObjectType> previusFolderCoordinates, ImplementativePositionObjectType resource,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
-			Map<String, Object> environment) throws GeboContentHandlerSystemException {
+			Map<String, Object> environment, String messageModuleId, String messageSystemId)
+			throws GeboContentHandlerSystemException {
 		GVirtualFolder spaceFolder = root;
 		GProjectEndpoint projectEndpoint = endpoint;
 		String code = resource.getCode();
@@ -199,9 +221,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		Date modificationTimestamp = resource.getResourceModificationTime();
 		HashMap<String, Object> meta = resource.getResourceReferenceMetaInfos();
 		Long size = resource.getResourceFileSize();
-		String moduleId = getMessagingModuleId();
+
 		GDocumentReference dr = this.documentFactory.createWebDocumentReference(spaceFolder, projectEndpoint, code,
-				name, contentType, url, modificationTimestamp, meta, moduleId);
+				name, contentType, url, modificationTimestamp, meta, messageModuleId, messageSystemId);
 		dr.setFileSize(size);
 		consumer.accept(dr);
 		return dr;
@@ -234,20 +256,22 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * native system
 	 * 
 	 * @param nativeCoordinates List of native position coordinates
-	 * @param position Current navigation coordinates position
-	 * @param system Current system
-	 * @param endpoint Current endpoint
-	 * @param parentNode Parent node in the virtual filesystem
-	 * @param consumer Content consumer
-	 * @param messagesConsumer User messages consumer
-	 * @param errorConsumer Consumer for access errors
-	 * @param environment Operating environment
+	 * @param position          Current navigation coordinates position
+	 * @param system            Current system
+	 * @param endpoint          Current endpoint
+	 * @param parentNode        Parent node in the virtual filesystem
+	 * @param consumer          Content consumer
+	 * @param messagesConsumer  User messages consumer
+	 * @param errorConsumer     Consumer for access errors
+	 * @param environment       Operating environment
+	 * @param messageModuleId   TODO
+	 * @param messageSystemId   TODO
 	 */
 	protected final void consumeChilds(List<ImplementativePositionObjectType> nativeCoordinates,
 			PositionsCoordinateType position, SystemType system, EndpointType endpoint, GVirtualFolder parentNode,
 			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
-			IGContentsAccessErrorConsumer errorConsumer, Map<String, Object> environment)
-			throws GeboContentHandlerSystemException {
+			IGContentsAccessErrorConsumer errorConsumer, Map<String, Object> environment, String messageModuleId,
+			String messageSystemId) throws GeboContentHandlerSystemException {
 		List<NativeCoordinatePointer> childs = null;
 		try {
 			childs = this.retrieveChilds(nativeCoordinates, position, system, endpoint, messagesConsumer, environment);
@@ -271,7 +295,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				if (nativeCoordinatePointer.child.isResource()) {
 					GDocumentReference docreference = createAndConsumeDocumentReference(
 							nativeCoordinatePointer.parentCoordinates, nativeCoordinatePointer.child, system, endpoint,
-							parentNode, consumer, messagesConsumer, errorConsumer, environment);
+							parentNode, consumer, messagesConsumer, errorConsumer, environment, messageModuleId,
+							messageSystemId);
 					if (LOGGER.isDebugEnabled() && docreference != null) {
 						final String msg = "Document reference generated=>" + docreference.getCode();
 						LOGGER.debug(msg);
@@ -284,9 +309,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 						final String msg = "VFolder reference generated=>" + childFolder.getCode();
 						LOGGER.debug(msg);
 					}
-					PositionsCoordinateType childPosition = getPositionCoordinate(completeCoordinates);
+					PositionsCoordinateType childPosition = getPositionCoordinate(completeCoordinates, environment);
 					consumeChilds(completeCoordinates, childPosition, system, endpoint, childFolder, consumer,
-							messagesConsumer, errorConsumer, environment);
+							messagesConsumer, errorConsumer, environment, messageModuleId, messageSystemId);
 				} else {
 					final String msg = "The node=>" + nativeCoordinatePointer.child.toString()
 							+ " is not a resource nor a folder";
@@ -304,22 +329,25 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * UI navigation
 	 * 
 	 * @param childCoordinates List of child coordinates in native format
+	 * @param environment      TODO
 	 * @return PositionsCoordinateType result of the translation
-	 * @throws GeboContentHandlerSystemException If a coordinate cannot be translated
+	 * @throws GeboContentHandlerSystemException If a coordinate cannot be
+	 *                                           translated
 	 */
 	protected abstract PositionsCoordinateType getPositionCoordinate(
-			List<ImplementativePositionObjectType> childCoordinates) throws GeboContentHandlerSystemException;
+			List<ImplementativePositionObjectType> childCoordinates, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException;
 
 	/********************************************************************************************************************
 	 * Retrieve the list of childs of a specific native navigation coordinates
 	 * position
 	 * 
 	 * @param nativeCoordinates List of native coordinates
-	 * @param position PositionsCoordinateType
-	 * @param system SystemType
-	 * @param endpoint EndpointType
-	 * @param messagesConsumer IGUserMessagesConsumer
-	 * @param environment Operating environment map
+	 * @param position          PositionsCoordinateType
+	 * @param system            SystemType
+	 * @param endpoint          EndpointType
+	 * @param messagesConsumer  IGUserMessagesConsumer
+	 * @param environment       Operating environment map
 	 * @return List of NativeCoordinatePointer for each child
 	 * @throws GeboContentHandlerSystemException If an error occurs during retrieval
 	 */
@@ -334,24 +362,24 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * consume them with all detailed meta infos
 	 * 
 	 * @param nativeCoordinates List of native coordinates
-	 * @param position Position of the navigation
-	 * @param system Content management system
-	 * @param endpoint Project endpoint
-	 * @param root Root virtual folder
-	 * @param consumer Content consumer
-	 * @param messagesConsumer User messages consumer
-	 * @param errorConsumer Consumer for access errors
-	 * @param environment Operational environment
+	 * @param position          Position of the navigation
+	 * @param system            Content management system
+	 * @param endpoint          Project endpoint
+	 * @param root              Root virtual folder
+	 * @param consumer          Content consumer
+	 * @param messagesConsumer  User messages consumer
+	 * @param errorConsumer     Consumer for access errors
+	 * @param environment       Operational environment
 	 * @return GVirtualFolder representing the created nodes
 	 */
-	protected final GVirtualFolder createAndConsumeVirtualFolderNodes(
+	protected GVirtualFolder createAndConsumeVirtualFolderNodes(
 			List<ImplementativePositionObjectType> nativeCoordinates, PositionsCoordinateType position,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException {
 		GVirtualFolder currentFolder = root;
-		for (ImplementativePositionObjectType microsoftGraphNativePositionObject : nativeCoordinates) {
-			currentFolder = createVirtualFolder(microsoftGraphNativePositionObject, root, system, endpoint);
+		for (ImplementativePositionObjectType positionObject : nativeCoordinates) {
+			currentFolder = createVirtualFolder(positionObject, currentFolder, system, endpoint);
 			consumer.accept(currentFolder);
 		}
 		return currentFolder;
@@ -361,18 +389,18 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Creates a virtual folder representing an implementative node of the
 	 * navigation
 	 * 
-	 * @param node Native position object
-	 * @param root Root virtual folder
-	 * @param system Content management system
+	 * @param node     Native position object
+	 * @param root     Root virtual folder
+	 * @param system   Content management system
 	 * @param endpoint Endpoint used
 	 * @return GVirtualFolder representing the virtual folder
 	 */
-	protected final GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder root,
+	protected GVirtualFolder createVirtualFolder(ImplementativePositionObjectType node, GVirtualFolder parent,
 			SystemType system, EndpointType endpoint) {
 		String code = node.getCode();
 		String name = node.getName();
 		String url = node.getUrl();
-		GVirtualFolder child = createChildItem(root, endpoint, code, name, name, url,
+		GVirtualFolder child = createChildItem(parent, endpoint, code, name, name, url,
 				node.getResourceReferenceMetaInfos());
 		return child;
 	}
@@ -381,20 +409,34 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Does a reconstruction from native coordinates metainfos in term of native
 	 * objects reconstructed from "position" encoded navigation steps informations
 	 * 
-	 * @param position Positions coordinate type
-	 * @param system Content management system used
-	 * @param endpoint Project endpoint
-	 * @param root Root virtual folder
-	 * @param consumer Content consumer
+	 * @param position         Positions coordinate type
+	 * @param system           Content management system used
+	 * @param endpoint         Project endpoint
+	 * @param root             Root virtual folder
+	 * @param consumer         Content consumer
 	 * @param messagesConsumer User messages consumer
-	 * @param errorConsumer Consumer for access errors
-	 * @param environment Operational environment
-	 * @return List of ImplementativePositionObjectType representing native coordinates
+	 * @param errorConsumer    Consumer for access errors
+	 * @param environment      Operational environment
+	 * @return List of ImplementativePositionObjectType representing native
+	 *         coordinates
 	 */
 	protected abstract List<ImplementativePositionObjectType> toNativeCoordinates(PositionsCoordinateType position,
 			SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException;
+
+	/********************************************************************************************************************
+	 * Returning implementative specific path components for a logic position
+	 * 
+	 * @param position
+	 * @param system
+	 * @param environment
+	 * @return
+	 * @throws GeboContentHandlerSystemException
+	 */
+	protected abstract List<ImplementativePositionObjectType> toResourcesNativeCoordinates(
+			PositionsCoordinateType position, SystemType system, Map<String, Object> environment)
+			throws GeboContentHandlerSystemException;
 
 	/****************************************************************************************************************
 	 * Creates a runtime environment map that binds all required
@@ -402,20 +444,33 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * native system, the returned map will be available for all subsequent business
 	 * methods.
 	 * 
-	 * @param system Content management system
-	 * @param endpoint Project endpoint
+	 * @param system        Content management system
+	 * @param endpoint      Project endpoint
 	 * @param errorConsumer Consumer for access errors
 	 * @return Map if string and object representing the environment context
 	 */
 	protected abstract Map<String, Object> createEnvironment(SystemType system, EndpointType endpoint,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException;
 
+	/******************
+	 * Creates a runtime environment map that binds all required
+	 * connections/resources required for the following interactions with the remote
+	 * native system, the returned map will be available for all subsequent business
+	 * methods.
+	 * 
+	 * @param system
+	 * @return
+	 * @throws GeboContentHandlerSystemException
+	 */
+	protected abstract Map<String, Object> createEnvironment(SystemType system)
+			throws GeboContentHandlerSystemException;
+
 	/******************************************************************************************************************
 	 * Releases eventually allocated resources
 	 * 
 	 * @param environment Map containing environment variables
-	 * @param system Content management system
-	 * @param endpoint Project endpoint
+	 * @param system      Content management system
+	 * @param endpoint    Project endpoint
 	 */
 	protected abstract void clearEnvironment(Map<String, Object> environment, SystemType system, EndpointType endpoint)
 			throws GeboContentHandlerSystemException;
@@ -424,21 +479,22 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Transforms a memorized VFilesystemReference to a root with navigation steps
 	 * navigation coordinates infos
 	 * 
-	 * @param path Filesystem reference path
+	 * @param path        Filesystem reference path
+	 * @param environment TODO
 	 * @return PositionsCoordinateType representing navigation coordinates
 	 */
-	protected abstract PositionsCoordinateType toNavigationPosition(VFilesystemReference path)
-			throws GeboContentHandlerSystemException;
+	protected abstract PositionsCoordinateType toNavigationPosition(VFilesystemReference path,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException;
 
 	/******************************************************************************************************************
 	 * Utility method to create a child virtual folder
 	 * 
-	 * @param parent Parent virtual folder
-	 * @param endpoint Project endpoint reference
-	 * @param codePart Code part for child item
-	 * @param name Name of the child item
-	 * @param urlPart URL part for the child item
-	 * @param webUrl Web URL for the child item
+	 * @param parent    Parent virtual folder
+	 * @param endpoint  Project endpoint reference
+	 * @param codePart  Code part for child item
+	 * @param name      Name of the child item
+	 * @param urlPart   URL part for the child item
+	 * @param webUrl    Web URL for the child item
 	 * @param customMap Map containing custom metadata
 	 * @return GVirtualFolder representing the child item
 	 */
@@ -453,7 +509,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		childItem.setName(name);
 		childItem.setRelativePath((parent.getRelativePath() != null ? (parent.getRelativePath() + "/") : "") + urlPart);
 		childItem.setProjectEndpointReference(GObjectRef.of(endpoint));
-		childItem.setMessagingModuleId(GStandardModulesConstraints.SHAREPOINT_MODULE);
+		childItem.setMessagingModuleId(getMessagingModuleId());
 		childItem.setUri(webUrl);
 		childItem.setCustomMetaInfos(customMap != null ? customMap : new HashMap<String, Object>());
 		return childItem;
@@ -464,9 +520,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Provides a user understandable description of a virtual folder or a resource
 	 * remote node while trying to accessing it or listing it
 	 * 
-	 * @param references List of implementative position objects
-	 * @param system The content management system
-	 * @param endpoint The project endpoint
+	 * @param references  List of implementative position objects
+	 * @param system      The content management system
+	 * @param endpoint    The project endpoint
 	 * @param environment Environment context map
 	 * @return String description of the remote object
 	 */
@@ -486,8 +542,8 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * Provides a user understandable description of the endpoint before accessing
 	 * it or trying to do so
 	 * 
-	 * @param system Content management system
-	 * @param endpoint Project endpoint
+	 * @param system      Content management system
+	 * @param endpoint    Project endpoint
 	 * @param environment Map with environment context
 	 * @return String description of the project endpoint
 	 */
@@ -555,9 +611,9 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	/**
 	 * Verifies the existence of a remote object.
 	 * 
-	 * @param system Content management system
-	 * @param endpoint Project endpoint
-	 * @param x Abstract virtual filesystem object to verify
+	 * @param system      Content management system
+	 * @param endpoint    Project endpoint
+	 * @param x           Abstract virtual filesystem object to verify
 	 * @param environment Map representing the environment context
 	 * @return The virtual filesystem object with updated existence info
 	 */
@@ -576,10 +632,10 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	/*******************************************************************************************************
 	 * Checks if the remote referenced object is still alive or not
 	 * 
-	 * @param system Content management system
-	 * @param endpoint Endpoint being used
-	 * @param doc Virtual filesystem object to check
-	 * @param reference Resource reference type
+	 * @param system      Content management system
+	 * @param endpoint    Endpoint being used
+	 * @param doc         Virtual filesystem object to check
+	 * @param reference   Resource reference type
 	 * @param environment The operation environment map
 	 * @return Updated GAbstractVirtualFilesystemObject after verification
 	 * @throws GeboContentHandlerSystemException if the object cannot be verified
@@ -587,5 +643,22 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	protected abstract GAbstractVirtualFilesystemObject verifyRemoteObjectExistence(SystemType system,
 			EndpointType endpoint, GAbstractVirtualFilesystemObject doc, ResourceReferenceType reference,
 			Map<String, Object> environment) throws GeboContentHandlerSystemException;
+
+	/******************************************************************************************************
+	 * Returns a reference to the passed native and navigationPositions
+	 * 
+	 * @param system
+	 * @param navigationPosition
+	 * @param nativeCoordinates
+	 * @param environment
+	 * @return
+	 * @throws GeboContentHandlerSystemException
+	 */
+	protected abstract ResourceReferenceType getResourceHandle(SearchableSystemMetaData system,
+			PositionsCoordinateType navigationPosition, List<ImplementativePositionObjectType> nativeCoordinates,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException;
+
+	protected abstract InputStream streamResource(SystemType system, ResourceReferenceType remoteReference,
+			Map<String, Object> environment) throws GeboContentHandlerSystemException, IOException;
 
 }

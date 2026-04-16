@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.ragsystem</groupId>
 		<artifactId>gebo.ragsystem.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
 	<dependencies>
@@ -36,12 +36,12 @@
 			<artifactId>gebo.application.messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<!-- 
 		<dependency>
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.system.ingestion</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.core.analisys</artifactId>

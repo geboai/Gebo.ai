@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.BrowseParam;
 import ai.gebo.monolithic.api.client.model.GBaseObject;
+import ai.gebo.monolithic.api.client.model.GKnowledgeBase;
 import ai.gebo.monolithic.api.client.model.OperationStatusListGVirtualFilesystemRoot;
 import ai.gebo.monolithic.api.client.model.OperationStatusListPathInfo;
 import ai.gebo.monolithic.api.client.model.OperationStatusListVirtualFilesystemNavigationTreeStatus;
@@ -92,6 +93,21 @@ public class UserKnowledgeBaseBrowsingControllerApiTest {
     public void getKnowledgeBaseRootsTest() {
         List<String> codes = null;
         OperationStatusListGVirtualFilesystemRoot response = api.getKnowledgeBaseRoots(codes);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getVisibleKnowledgeBaseByCodesTest() {
+        List<String> body = null;
+        List<GKnowledgeBase> response = api.getVisibleKnowledgeBaseByCodes(body);
 
         // TODO: test validations
     }

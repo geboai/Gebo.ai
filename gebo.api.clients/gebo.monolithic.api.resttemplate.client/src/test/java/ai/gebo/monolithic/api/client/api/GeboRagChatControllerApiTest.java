@@ -13,12 +13,11 @@
 package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.GBaseChatModelChoice;
+import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GChatProfileConfiguration;
-import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatRequest;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.GeboChatUserInfo;
-import ai.gebo.monolithic.api.client.model.GeboTemplatedChatResponseRichResponse;
 import ai.gebo.monolithic.api.client.model.ModelProviderCapabilities;
 import ai.gebo.monolithic.api.client.model.ServerSentEventString;
 import org.junit.Test;
@@ -37,21 +36,6 @@ public class GeboRagChatControllerApiTest {
 
     private final GeboRagChatControllerApi api = new GeboRagChatControllerApi();
 
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void createCleanRagChatByProfileCodeTest() {
-        String profileCode = null;
-        GUserChatInfo response = api.createCleanRagChatByProfileCode(profileCode);
-
-        // TODO: test validations
-    }
     /**
      * 
      *
@@ -120,6 +104,21 @@ public class GeboRagChatControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void getVisibleKnowledgeBasesByProfileCodeTest() {
+        String profileCode = null;
+        List<GBaseObject> response = api.getVisibleKnowledgeBasesByProfileCode(profileCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void ragChatTest() {
         GeboChatRequest body = null;
         GeboChatResponse response = api.ragChat(body);
@@ -135,39 +134,9 @@ public class GeboRagChatControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void richRagChatTest() {
-        GeboChatRequest body = null;
-        GeboTemplatedChatResponseRichResponse response = api.richRagChat(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
     public void streamRagResponseTest() {
         GeboChatRequest body = null;
         List<ServerSentEventString> response = api.streamRagResponse(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void suggestRagChatDescriptionTest() {
-        String id = null;
-        GUserChatInfo response = api.suggestRagChatDescription(id);
 
         // TODO: test validations
     }

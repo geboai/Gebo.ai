@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -35,9 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import ai.gebo.architecture.ai.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
@@ -57,18 +54,22 @@ class GoogleSearchApi {
 	 * search with google api documentation:
 	 * https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list?hl=it
 	 * 
-	 * @param apiKey                Google API key for authorization
-	 * @param customSearchEngineId  Custom Search Engine ID to specify which search engine to use
-	 * @param request               The search request containing query and other parameters
-	 * @return                      Results from the Google search
-	 * @throws MalformedURLException           If the constructed URL is invalid
-	 * @throws UnsupportedEncodingException    If encoding parameters fails
-	 * @throws RestClientException             If the REST call fails
-	 * @throws URISyntaxException              If the URL can't be converted to a URI
+	 * @param apiKey               Google API key for authorization
+	 * @param customSearchEngineId Custom Search Engine ID to specify which search
+	 *                             engine to use
+	 * @param request              The search request containing query and other
+	 *                             parameters
+	 * @return Results from the Google search
+	 * @throws MalformedURLException        If the constructed URL is invalid
+	 * @throws UnsupportedEncodingException If encoding parameters fails
+	 * @throws RestClientException          If the REST call fails
+	 * @throws URISyntaxException           If the URL can't be converted to a URI
 	 */
 	public GoogleSearchResults search(String apiKey, String customSearchEngineId, GoogleSearchRequest request)
 			throws MalformedURLException, UnsupportedEncodingException, RestClientException, URISyntaxException {
-		LOGGER.info("Calling google search with:" + request.getQuery());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Calling google search with:" + request.getQuery());
+		}
 		String charset = "UTF-8";
 		String language = request.getLanguage();
 		language = "lang_en";
@@ -88,8 +89,8 @@ class GoogleSearchApi {
 	/**
 	 * Creates a ToolCallback that can be used to perform Google searches.
 	 * 
-	 * @param config    Configuration containing API key and Custom Search Engine ID
-	 * @return          A ToolCallback that can execute Google searches
+	 * @param config Configuration containing API key and Custom Search Engine ID
+	 * @return A ToolCallback that can execute Google searches
 	 */
 	ToolCallback create(GoogleSearchConfig config) {
 		BiFunction<GoogleSearchRequest, ToolContext, GoogleSearchResults> thisFunction = (GoogleSearchRequest request,

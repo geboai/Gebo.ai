@@ -14,8 +14,8 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.model.base.GObjectRef;
 
 /**
  * Interface representing the DAO (Data Access Object) for runtime 
@@ -27,7 +27,7 @@ import ai.gebo.model.base.GObjectRef;
  * provided base chat model configuration.
  */
 public interface IGChatModelRuntimeConfigurationDao
-        extends IGRuntimeModelConfigurationDao<IGConfigurableChatModel>, IGRuntimeModuleComponent {
+        extends IGRuntimeModelConfigurationDao<IGConfigurableChatModel,GBaseChatModelConfig>, IGRuntimeModuleComponent {
 
     /**
      * Adds a runtime configuration based on the specified base chat 
@@ -39,7 +39,10 @@ public interface IGChatModelRuntimeConfigurationDao
      *                            due to an invalid or unsupported 
      *                            configuration.
      */
-    public void addRuntimeByConfig(GBaseChatModelConfig config) throws LLMConfigException;
+    
+
+	public IGConfigurableChatModel findByUses(ChatModelsUses ...graphExtraction);
+	public IGConfigurableChatModel findByUsesOrGetDefault(ChatModelsUses ...graphExtraction);
 
 	
 }

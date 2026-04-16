@@ -27,7 +27,7 @@ import java.util.List;
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
@@ -92,6 +92,9 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("otherSearchSimilarityThreshold")
   private Double otherSearchSimilarityThreshold = null;
+
+  @JsonProperty("manualThreasholdsConfiguration")
+  private Boolean manualThreasholdsConfiguration = null;
 
   public GChatProfileConfiguration code(String code) {
     this.code = code;
@@ -511,6 +514,24 @@ public class GChatProfileConfiguration {
     this.otherSearchSimilarityThreshold = otherSearchSimilarityThreshold;
   }
 
+  public GChatProfileConfiguration manualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
+    this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
+    return this;
+  }
+
+   /**
+   * Get manualThreasholdsConfiguration
+   * @return manualThreasholdsConfiguration
+  **/
+  @Schema(description = "")
+  public Boolean isManualThreasholdsConfiguration() {
+    return manualThreasholdsConfiguration;
+  }
+
+  public void setManualThreasholdsConfiguration(Boolean manualThreasholdsConfiguration) {
+    this.manualThreasholdsConfiguration = manualThreasholdsConfiguration;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -541,12 +562,13 @@ public class GChatProfileConfiguration {
         Objects.equals(this.forcedRequestDocuments, gchatProfileConfiguration.forcedRequestDocuments) &&
         Objects.equals(this.forcedRequestDocumentsReadonly, gchatProfileConfiguration.forcedRequestDocumentsReadonly) &&
         Objects.equals(this.disableMultiHopRag, gchatProfileConfiguration.disableMultiHopRag) &&
-        Objects.equals(this.otherSearchSimilarityThreshold, gchatProfileConfiguration.otherSearchSimilarityThreshold);
+        Objects.equals(this.otherSearchSimilarityThreshold, gchatProfileConfiguration.otherSearchSimilarityThreshold) &&
+        Objects.equals(this.manualThreasholdsConfiguration, gchatProfileConfiguration.manualThreasholdsConfiguration);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, prompt, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, prompt, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration);
   }
 
 
@@ -576,6 +598,7 @@ public class GChatProfileConfiguration {
     sb.append("    forcedRequestDocumentsReadonly: ").append(toIndentedString(forcedRequestDocumentsReadonly)).append("\n");
     sb.append("    disableMultiHopRag: ").append(toIndentedString(disableMultiHopRag)).append("\n");
     sb.append("    otherSearchSimilarityThreshold: ").append(toIndentedString(otherSearchSimilarityThreshold)).append("\n");
+    sb.append("    manualThreasholdsConfiguration: ").append(toIndentedString(manualThreasholdsConfiguration)).append("\n");
     sb.append("}");
     return sb.toString();
   }

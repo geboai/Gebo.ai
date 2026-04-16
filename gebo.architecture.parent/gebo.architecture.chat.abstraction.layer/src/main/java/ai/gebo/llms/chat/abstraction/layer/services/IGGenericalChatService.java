@@ -9,20 +9,19 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
-import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.fulltext.service.FullTextException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
-import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import reactor.core.publisher.Flux;
 
 /**
@@ -86,39 +85,14 @@ public interface IGGenericalChatService {
 	 * @return A Flux of chat message envelopes.
 	 * @throws GeboChatException  If there is an error processing the chat.
 	 * @throws LLMConfigException If there is an error with the LLM configuration.
+	 * @throws GeboPersistenceException 
+	 * @throws IOException 
+	 * @throws FullTextException 
 	 */
 	public Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request)
-			throws GeboChatException, LLMConfigException;
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException;
 
-	/**
-	 * Conducts a chat based on provided template response type.
-	 *
-	 * @param <T>          The type of the templated chat response.
-	 * @param request      The chat request with interaction data.
-	 * @param responseType The class type of the response.
-	 * @return A templated chat response.
-	 * @throws GeboChatException  If there is an error processing the chat.
-	 * @throws LLMConfigException If there is a configuration error.
-	 */
-	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, Class<T> responseType)
-			throws GeboChatException, LLMConfigException;
-
-	/**
-	 * Conducts a chat using custom environment settings and content functions.
-	 *
-	 * @param <T>               The type of the templated chat response.
-	 * @param request           The chat request with interaction details.
-	 * @param prompt            The prompt guiding the chat interaction.
-	 * @param customEnvironment Custom environment settings for the chat.
-	 * @param contents          Content functions mapping context to objects.
-	 * @param responseType      The class type for the response.
-	 * @return A templated chat response.
-	 * @throws GeboChatException  If there is an error processing the chat.
-	 * @throws LLMConfigException If there is a configuration issue.
-	 */
-	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, String prompt,
-			Map<String, Object> customEnvironment, Map<String, Function<KBContext, Object>> contents,
-			Class<T> responseType) throws GeboChatException, LLMConfigException;
+	
 
 	/**
 	 * Initiates a chat interaction based on the provided request.
@@ -127,8 +101,11 @@ public interface IGGenericalChatService {
 	 * @return A response from the chat model.
 	 * @throws GeboChatException  If chat processing encounters an error.
 	 * @throws LLMConfigException If there are configuration errors detected.
+	 * @throws GeboPersistenceException 
+	 * @throws IOException 
+	 * @throws FullTextException 
 	 */
-	public GeboChatResponse chat(GeboChatRequest request) throws GeboChatException, LLMConfigException;
+	public GeboChatResponse chat(GeboChatRequest request) throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException;
 
 	/**
 	 * Retrieves user information for a specific chat model.
@@ -141,15 +118,11 @@ public interface IGGenericalChatService {
 	 */
 	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
 
-	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException;
+	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
+			GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException;
 
-	/***************************************************************************
-	 * Creates a new Chat user context
-	 * 
-	 * @param chatProfileCode
-	 * @return
-	 * @throws GeboPersistenceException
-	 * @throws LLMConfigException
-	 */
-	public GUserChatInfo createNewChat(String referenceCode) throws GeboPersistenceException, LLMConfigException;
+	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
+			GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException;
 }

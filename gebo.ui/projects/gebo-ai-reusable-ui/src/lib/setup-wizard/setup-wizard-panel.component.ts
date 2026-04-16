@@ -15,10 +15,10 @@ import { SetupWizardItem } from "./setup-wizard-step";
 import { SetupStatus, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
-import { MenuItem, ToastMessageOptions, MessageService } from "primeng/api";
+import { MenuItem, ToastMessageOptions } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
-import { map, Observable, of, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { findMatchingTranlations, UIExistingText } from "../controls/field-translation-container/text-language-resources";
 /**
  * AI generated comments
@@ -37,6 +37,7 @@ function filterNotContained<T>(v1: T[], v2: T[]): T[] {
 }
 const moduleId: string = "SetupWizardPanelModule";
 const fieldHostId: string = "SetupWizardPanelComponent";
+interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<BaseWizardSectionComponent> };
 /**
  * Component that renders a wizard panel to guide users through a sequence of setup steps.
  * This component manages the navigation, state, and validation of a multi-step setup process.
@@ -45,7 +46,7 @@ const fieldHostId: string = "SetupWizardPanelComponent";
 @Component({
     selector: "gebo-setup-wizard-panel-component",
     templateUrl: "setup-wizard-panel.component.html",
-    providers: [SetupWizardComunicationService, MessageService, {
+    providers: [SetupWizardComunicationService, {
         provide: GEBO_AI_MODULE, useValue: "SetupWizardPanelModule", multi: false
     }, {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SetupWizardPanelComponent")
@@ -60,6 +61,11 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     public userMessages: ToastMessageOptions[] = [];
     /** List of all wizard steps available to the user */
     public wizardsEntries: SetupWizardItem[] = [];
+    /** List of mandatory unsatisfied wizard steps to display in a popup */
+    public mandatoryUnsatisfiedEntries: MandatoryUIEntry[] = [];
+    public mandatoryUnsatisfiedEntriesWindowOpened: boolean = false;
+    public userShowedMandatoryUnsatisfiedEntries:boolean=false;
+    @Input() public popupOnMandatoryUnsatisfiedEntriesExisting: boolean = true;
     /** Currently selected wizard item */
     public actualItem?: SetupWizardItem;
     /** Component type for the currently active wizard section */
@@ -91,8 +97,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     constructor(
         private setupWizardService: SetupWizardService,
         private setupWizardComunicationService: SetupWizardComunicationService,
-        private geboLanguageService: GeboAITranslationService,
-        private messagesService: MessageService) {
+        private geboLanguageService: GeboAITranslationService) {
     }
     private actualLanguage(items: SetupWizardItem[]): Observable<SetupWizardItem[] | undefined> {
         const texts: UIExistingText[] = [];
@@ -157,35 +162,35 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
                     }
                 });
                 this.actualSetupStatus = this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
+                this.mandatoryUnsatisfiedEntries = this.wizardsEntries.filter(x => x.mandatory === true && x.alreadyCompleted !== true)?.map(y => {
+                    const m: MandatoryUIEntry = {
+                        config: y,
+                        wizardComponent: y.wizardComponent
+                    };
+                    return m;
+                });
+                this.mandatoryUnsatisfiedEntriesWindowOpened=this.userShowedMandatoryUnsatisfiedEntries===false && this.mandatoryUnsatisfiedEntries && this.mandatoryUnsatisfiedEntries.length>0;
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
-                let messageObservable: Observable<ToastMessageOptions | undefined> | undefined = undefined;
-                const completeMessage: ToastMessageOptions = { summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
-                const completeMessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "mandatory-done", completeMessage);
-                const incompleteMessage: ToastMessageOptions = { summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" };
-                const incompletemessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "mandatory-missing", incompleteMessage);
-                const okMessage: ToastMessageOptions = { summary: "Gebo.ai setup OK!", detail: "", severity: "success" };
-                const okmessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "setup-ok", okMessage);
+                
+                const completeMessage: ToastMessageOptions = {id:"SETUP-DONE_DO_MORE", summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
+                const incompleteMessage: ToastMessageOptions = {id:"SETUP-MISSING_SOME", summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" };
+                const okMessage: ToastMessageOptions = {id:"SETUP-OK", summary: "Gebo.ai setup OK!", detail: "", severity: "success" };
                 this.viewSelectedStep(this.stepId);
                 switch (this.actualSetupStatus) {
                     case "complete": {
-                        messageObservable = completeMessageObservable;
+                        this.userMessages=[completeMessage];
 
                     } break;
                     case "incomplete": {
-                        messageObservable = incompletemessageObservable;
+                        this.userMessages=[incompleteMessage];
 
                     } break;
                     case "full": {
-                        messageObservable = okmessageObservable;
+                        this.userMessages=[okMessage];
 
                     } break;
                 }
-                if (messageObservable)
-                    this.subscription = messageObservable.subscribe({
-                        next: (message) => {
-                            this.userMessages = message ? [message] : [];
-                        }
-                    });
+                
             },
             complete: () => {
                 this.loading = false;

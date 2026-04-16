@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { GBaseModelConfig, GeboFastLlmsSetupControllerService, LLMExistingConfiguration, LLMSModelsPresets, LLMSSetupConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedType, GeboActionType, GeboAITranslationService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { GBaseModelConfig, GeboFastLlmsSetupControllerService, LLMExistingConfiguration, LLMSSetupConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 @Component({
     selector: "gebo-ai-llms-vendor-configuration",
     templateUrl: "llms-vendor-configuration.component.html",
@@ -13,7 +13,7 @@ export class GeboAILLMSVendorConfiguration implements OnInit, OnChanges {
     @Input() vendorConfiguration?: LLMSSetupConfiguration;
     @Output() vendorConfigurationChanged: EventEmitter<boolean> = new EventEmitter();
     protected loading: boolean = false;
-    constructor(private geboTranslationService: GeboAITranslationService,
+    constructor(
         private setupService: GeboFastLlmsSetupControllerService,
         private geboUIRouterService: GeboUIActionRoutingService) {
 

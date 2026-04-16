@@ -30,7 +30,9 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GVirtualFilesystemProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.systems.abstraction.layer.model.StreamingPurpose;
 
 /**
  * Abstract class providing a framework for implementing remote virtual
@@ -49,7 +51,8 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
  *                                AI generated comments
  */
 public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GVirtualFilesystemProjectEndpoint, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemIntegrationType, ProjectEndpointType, ResourceReferenceType>>
-		extends GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> {
+		extends
+		GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType, RemoteVirtualFileSystemContentConsumingSessionParam> {
 
 	// The consuming service responsible for managing interaction with the remote
 	// virtual filesystem.
@@ -103,7 +106,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationType contentManagementConfig, List<GBuildSystem> buildSystems,
-			ProjectEndpointType endpoint, IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			ProjectEndpointType endpoint, RemoteVirtualFileSystemContentConsumingSessionParam sessionParam,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 
 		// Create a root item for the virtual folder structure and consume it
@@ -111,7 +115,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 		consumer.accept(root);
 
 		// Delegate further consumption to the consuming service
-		consumingService.consumeAll(contentManagementConfig, endpoint, root, consumer, messagesConsumer, errorConsumer);
+		consumingService.consumeAll(contentManagementConfig, endpoint, sessionParam, root, consumer, messagesConsumer,
+				errorConsumer, getMessagingModuleId(), getMessagingSystemId());
 	}
 
 	// Constant keys used for caching
@@ -121,16 +126,17 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	/**
 	 * Streams content associated with a document reference, leveraging caching
 	 * mechanisms for performance optimization and managing remote resources.
-	 *
+	 * 
 	 * @param reference The reference of the document to be streamed.
 	 * @param cache     Cache containing context-specific values.
+	 *
 	 * @return InputStream The stream of the content.
 	 * @throws GeboContentHandlerSystemException For handler related exceptions.
 	 * @throws IOException                       If IO operation fails.
 	 */
 	@Override
-	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
-			throws GeboContentHandlerSystemException, IOException {
+	public TypedInputStream streamContent(StreamingPurpose streamingPurpose, GDocumentReference reference,
+			Map<String, Object> cache) throws GeboContentHandlerSystemException, IOException {
 
 		// Check if the reference is null
 		if (reference == null)
@@ -176,7 +182,11 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 			LOGGER.debug("Getting stream for [" + reference.getUri() + "] native remote reference=> " + remoteReference
 					+ " document code:" + reference.getCode() + reference.getCustomMetaInfos());
 		}
-		return consumingService.streamResource(system, endpoint, remoteReference, cache);
+		InputStream is = consumingService.streamResource(system, endpoint, remoteReference, cache);
+
+		if (is == null)
+			return null;
+		return TypedInputStream.of(is, reference.getContentType(), reference.getExtension());
 	}
 
 	/**

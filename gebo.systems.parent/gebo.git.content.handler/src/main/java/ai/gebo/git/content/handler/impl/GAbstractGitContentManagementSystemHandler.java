@@ -55,6 +55,7 @@ import ai.gebo.systems.abstraction.layer.IGContentManagementSystemConfigurationD
 import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
 
@@ -70,7 +71,7 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
  *                                      configuration
  */
 public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrationConfigType extends GGitContentManagementSystem, EndpointConfigType extends GGitProjectEndpoint>
-		extends GAbstractContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType>
+		extends GAbstractContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType,NoContentConsumingSessionParam>
 		implements IGBaseGitContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType> {
 	/** Service for accessing secrets, primarily for repository credentials */
 	IGeboSecretsAccessService secretsAccessService = null;
@@ -125,7 +126,7 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationConfigType contentManagementConfig,
-			List<GBuildSystem> buildSystems, EndpointConfigType endpoint, IGContentConsumer consumer,
+			List<GBuildSystem> buildSystems, EndpointConfigType endpoint,NoContentConsumingSessionParam param, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException {
 		if (LOGGER.isDebugEnabled()) {

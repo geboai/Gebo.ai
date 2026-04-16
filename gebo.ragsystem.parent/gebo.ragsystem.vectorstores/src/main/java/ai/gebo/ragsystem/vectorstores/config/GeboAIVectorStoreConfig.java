@@ -16,7 +16,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
-import ai.gebo.ragsystem.vectorstores.lucene.model.LuceneConfig;
 import ai.gebo.ragsystem.vectorstores.mongoatlas.model.MongoConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;
@@ -35,8 +34,7 @@ public class GeboAIVectorStoreConfig {
 	String use = VectorStoreProduct.QDRANT.name();
 	/** Configuration properties for Qdrant vector store */
 	QdrantConfig qdrant = null;
-	/** Configuration properties for Lucene vector store */
-	LuceneConfig lucene = null;
+	
 	/** Configuration properties for Redis vector store */
 	RedisConfig redis = null;
 	/** Configuration properties for MongoDB vector store */
@@ -81,21 +79,7 @@ public class GeboAIVectorStoreConfig {
 		this.qdrant = qdrant;
 	}
 
-	/**
-	 * Gets the Lucene vector store configuration
-	 * @return the Lucene configuration object
-	 */
-	public LuceneConfig getLucene() {
-		return lucene;
-	}
-
-	/**
-	 * Sets the Lucene vector store configuration
-	 * @param lucene the Lucene configuration object
-	 */
-	public void setLucene(LuceneConfig lucene) {
-		this.lucene = lucene;
-	}
+	
 
 	/**
 	 * Gets the Redis vector store configuration

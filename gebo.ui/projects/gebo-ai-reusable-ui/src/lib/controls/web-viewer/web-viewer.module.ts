@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { MessageModule } from 'primeng/message';
 import { WebViewerComponent } from './web-viewer.component';
-import { GeboAIFieldTranslationContainerModule } from '@Gebo.ai/reusable-ui';
+
 import { BlockUIModule } from 'primeng/blockui';
+import { GeboAIFieldTranslationContainerModule } from '../field-translation-container/field-container.module';
 
 @NgModule({
   

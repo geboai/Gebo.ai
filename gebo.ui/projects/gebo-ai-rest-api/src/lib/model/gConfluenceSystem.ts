@@ -24,6 +24,7 @@ export interface GConfluenceSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GConfluenceSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
     confluenceVersion?: GConfluenceSystem.ConfluenceVersionEnum;
     secretCode?: string;
 }

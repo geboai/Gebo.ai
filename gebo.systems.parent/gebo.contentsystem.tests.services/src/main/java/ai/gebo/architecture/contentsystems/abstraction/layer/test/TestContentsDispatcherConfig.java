@@ -24,6 +24,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
+import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 
 /**
  * Configuration class for the test content dispatcher system. AI generated
@@ -35,7 +36,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  * provide a singleton instance of the content dispatcher.
  */
 @Configuration
-public class TestContentsDispatcherConfig extends SingletonBuilder<TestContentManagementSystem, TestProjectEndpoint> {
+public class TestContentsDispatcherConfig extends SingletonBuilder<TestContentManagementSystem, TestProjectEndpoint,NoContentConsumingSessionParam> {
 
 	/**
 	 * Constructor that initializes the TestContentsDispatcherConfig with all
@@ -74,7 +75,7 @@ public class TestContentsDispatcherConfig extends SingletonBuilder<TestContentMa
 	@Bean
 	@Scope("singleton")
 	@Qualifier("testContentsDispatcher")
-	public GIOCModuleContentsDispatcher<TestContentManagementSystem, TestProjectEndpoint> getTestContentsDispatcher() {
+	public GIOCModuleContentsDispatcher<TestContentManagementSystem, TestProjectEndpoint,NoContentConsumingSessionParam> getTestContentsDispatcher() {
 		return super.getDispatcher();
 	}
 }

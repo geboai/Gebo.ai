@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Вход"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операцията се провали",
+        "detail" : "Не може да се удостоверят предоставените данни"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Интеграция с Google Drive/Workspaces",
         "description" : "Конфигурирайте Gebo.ai, за да има достъп до данните на екипа ви в Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Конфигурирайте Google search api",
+        "description" : "Добавете данни за достъп на Google search api за AI уеб търсения"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Конфигурирайте Deep search",
+        "description" : "Настройте параметрите за Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. автоматична настройка",
+        "description" : "Автоматично настройване на параметри за разширено извличане и генериране"
+      },
+      "Description" : {
+        "label" : "Описание"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Последна актуализация на настройката"
+      },
+      "Code" : {
+        "label" : "Код за embedding модел / VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Изчислен праг"
+      },
+      "Autotuned" : {
+        "label" : "Автоматично настроено"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Задължителните стъпки при настройката на Gebo.ai са изпълнени...",
+        "detail" : "Задължителните стъпки са приключени, но липсващи стъпки могат да ограничат максималното използване на този софтуер"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Липсват задължителни стъпки при настройката на Gebo.ai",
+        "detail" : "Моля, прегледайте червените стъпки в процеса на настройка"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Confluence система"
+      },
+      "EditSystemBtn" : {
+        "label" : "Редактиране на система"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Настройте достъп на Gebo.ai llms доставчици"
+      },
+      "ExtensiveStup" : {
+        "label" : "Разширени опции за инфраструктура/доставчици"
+      },
+      "MainPanelTitle" : {
+        "label" : "Настройване на използваните големи езикови модели"
+      },
+      "EasySetup" : {
+        "label" : "Лесна начална настройка/поправка на конфигурация"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Настройване на големи езикови модели"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Описание"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api ключ"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Създайте google search удостоверения"
+      },
+      "CreateBtn" : {
+        "label" : "Създай"
+      },
+      "customSearchEngineId" : {
+        "label" : "Идентификатор на търсачката",
+        "help" : "Въведете идентификатора на търсачката, получен при регистрацията на google search api удостоверения."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код за конфигурация"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "apiKey" : {
+        "label" : "Api ключ",
+        "help" : "Въведете api ключа, получен при регистрация на google search api удостоверения."
+      },
+      "MainPanel" : {
+        "label" : "Настройте google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Изтрий",
+        "help" : "Изтрийте Google search api удостоверения"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Конфигурация на Deep search",
+        "help" : "Добавете конфигурация за deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Редактирай конфигурация"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "деактивиран"
+      },
+      "EditGroupBtn" : {
+        "label" : "Редактиране"
+      },
+      "CodeHeader" : {
+        "label" : "код"
+      },
+      "DescriptionHeader" : {
+        "label" : "описание"
+      },
+      "UsersHeader" : {
+        "label" : "потребители"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Настройки за достъп до модел"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI отдалечен доставчик - ОК",
+        "detail" : "Доставчикът работи и е успешно конфигуриран"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Изключение при операцията: Грешка при работа с url: https://api.openai.com/v1/models",
+        "detail" : "Сървърна грешка: Грешка при работа с url: https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "задай като embedding модел по подразбиране",
         "help" : "Ако е вярно, ще бъде използван като embedding модел по подразбиране, когато не е указан друг"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI отдалечен доставчик - ОК",
+        "detail" : "Доставчикът работи и е успешно конфигуриран"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Редактиране на Ollama локален (или lan) сървър чат модел"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Редактиране на Anthropic чат модел конфигурация"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Редактиране на MistralAI чат модел конфигурация"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Редактиране на Google Vertex AI чат модел конфигурация"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Настройки за достъп до модел"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Настройки за достъп до модел"
+      },
+      "forUses" : {
+        "label" : "Използване на модела",
+        "help" : "Употребите, за които Gebo.ai платформата ще разглежда този модел.",
+        "placeholder" : "Употребите, за които Gebo.ai платформата ще разглежда този модел."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Действието беше успешно извършено"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Сигурни ли сте, че искате да изтриете този чат?",
         "header" : "Изтриване на чат"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Добавете съдържание или променете поведението на търсенето"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Източници",
+        "help" : "Отворете списъка с анализираните документи"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Детайли за deep search отговора и източниците"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Резултат от анализа с deep search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Грешка при търсене в Confluence Search",
+        "detail" : "Сървърна грешка: Проблеми с достъпа до confluence системата"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Нов чат зареден",
+        "detail" : "Новият чат беше зареден успешно"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Избери източници"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Изберете поне една от опциите"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Пропусни deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Избрани бази знания"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Избрани системи"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Добави документ към списъка 'чат с'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Изпълнява се deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Изпълнява се retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Задаване на въпрос към llm"
+      },
+      "Waiting" : {
+        "label" : "Анализиране на най-добрия план за отговор..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Изпълняват се инструменти"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI помагнато търсене"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Анализиран файл"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Анализиран резултат от търсене"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Анализиран резултат от търсене в система за"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Консолидиране на финалния доклад"
+      },
+      "RUNNING" : {
+        "label" : "Работи "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Анализирам вашата заявка"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Избран е агентски поток, агентът отговаря"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Открито ниво на услуга: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Изпълнява се избраният от вас агент"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Качи файл(ове)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Преглед/търсене на фирмени файлове"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Чат с избран документ"
+      },
+      "agenticChat" : {
+        "label" : "Агентски чат"
+      },
+      "rag" : {
+        "label" : "R.a.g. чат"
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Множество източници"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Търсене в база знания"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Чат с файл(ове)"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Google потребител за имитиране",
         "help" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни",
         "placeholder" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни"
+      },
+      "OK" : {
+        "summary" : "Успешно запазено",
+        "detail" : "Актуализацията е извършена успешно"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Обработени документи",
         "dataset-2-label" : "Документи с грешка",
         "dataset-3-label" : "Отхвърлени документи"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Индекс за цял текст"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Непроцесирани документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Получени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи с грешка",
+        "dataset-3-label" : "Отхвърлени документи"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "разреши всички функции",
         "help" : "Разрешете всички налични инструменти и функции; ако не е отбелязано, ще можете да ги разрешите по-късно в админ панела на llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Изключение при операцията: Anthropic api не може да работи без необходимата api key конфигурация",
+        "detail" : "Сървърна грешка: Anthropic api не може да работи без необходимата api key конфигурация"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI отдалечен доставчик ОК",
+        "detail" : "Доставчикът работи и е успешно конфигуриран"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Грешка по време на операцията:401 UNAUTHORIZED",
+        "detail" : "Сървърна грешка: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Грешка по време на операцията:Lипсва basePath",
+        "detail" : "Сървърна грешка: Липсва basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Създай и активирай"
+      },
+      "vendorId" : {
+        "label" : "Изберете доставчик на големи езикови модели",
+        "help" : "Изберете начален доставчик за вашите стандартни chat и embedding модели"
+      },
+      "secretId" : {
+        "label" : "Изберете идентификационни данни на доставчика (api key)",
+        "help" : "Изберете един от съществуващите ключове за избрания llm доставчик"
+      },
+      "InternalServiceModel" : {
+        "label" : "Модел за чат на вътрешни услуги",
+        "help" : "Конфигурираният модел за вътрешни услуги ще извлича информация, обобщава и изпълнява вътрешни работни процеси."
+      },
+      "ChatModel" : {
+        "label" : "Основен модел за чат",
+        "help" : "Основният модел за чат ще отговаря на потребителските въпроси и ще изпълнява работни потоци, за които няма специално конфигурирани модели. Трябва да е мощен и надежден, с добър баланс между цена, производителност и качество на резултатите."
+      },
+      "ProviderBuy" : {
+        "label" : "Линк за покупка на Apy ключ кредити"
+      },
+      "ProviderWWW" : {
+        "label" : "Линк към уебсайт"
+      },
+      "WebSiteLink" : {
+        "label" : "Уебсайт на доставчика",
+        "help" : "Щракнете тук за обща информация за доставчика."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Закупуване на кредит от доставчика",
+        "help" : "Щракнете тук, за да закупите кредит за вашите api ключ(ове)."
+      },
+      "EmbeddingModel" : {
+        "label" : "Основен embedding модел",
+        "help" : "Този модел ще е отговорен за семантично индексиране (embedding) и извличане на вашите данни и документи"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Не можете да изтриете това",
         "detail" : "Този обект е свързан с друга част на приложението"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Изключение по време на операция: Грешка при работа с url:http://localhost:11434/v1/models",
+        "detail" : "Грешка на сървъра: Грешка при работа с url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Изключение по време на операция: apiKey трябва да бъде зададен",
+        "detail" : "Грешка на сървъра: apiKey трябва да бъде зададен"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Грешка при поточно получаване на chat отговор",
+        "detail" : "Грешка на сървъра: 400 Bad Request от POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Изключение при операцията: Грешка при работа с url: http://localhost:8000/v1/models",
+        "detail" : "Сървърна грешка: Грешка при работа с url: http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Грешка при поточното предаване на чат отговор",
+        "detail" : "Сървърна грешка: Връзката е нулирана"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Изключение при операцията: Грешка при работа с url: https://api.openai.com/v1/models",
+        "detail" : "Сървърна грешка: Грешка при работа с url: https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Изключение при операцията: Anthropic api не може да работи без необходимата api key конфигурация",
+        "detail" : "Сървърна грешка: Anthropic api не може да работи без необходимата api key конфигурация"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Завършено"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Действието беше успешно извършено"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Използвана идентичност",
         "help" : "Изберете или създайте идентичност за достъп до google drive системата"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Чат"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Търсене на релевантна информация"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Консолидиране на крайния доклад"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Анализиран резултат от търсенето"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Анализиран системен резултат от търсенето за"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Изберете поне една от следните опции"
+      },
+      "LaunchBtn" : {
+        "label" : "Стартиране на търсене"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Пропусни дълбоко търсене"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Избрани бази знания"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Избрани системи"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Избор на източници"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Анализиран файл"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Добави"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "SearchSettingTab" : {
+        "label" : "Настройки на търсенето"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Въведете prompt за извличане на релевантна информация от документите"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Въведете prompt за консолидиране на извлечената релевантна информация"
+      },
+      "MainPanel" : {
+        "label" : "Редактиране на Deep search конфигурация"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Настройки на големи езикови модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на Deep search конфигурацията"
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код за Deep search конфигурацията"
+      },
+      "searchType" : {
+        "label" : "Тип търсене",
+        "help" : "Изберете между едностъпково семантично търсене или многостъпково"
+      },
+      "topK" : {
+        "label" : "Брой извлечени текстови сегменти (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Използван llm",
+        "help" : "Изберете голям езиков модел за Deep search, ако не е избран ще се използва\n                                    по подразбиране."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt за анализа на документи",
+        "help" : "Редактирайте prompt-а, който ще се използва за извличане на релевантна информация от фрагментите на документите."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt за консолидиране на извлечена информация",
+        "help" : "Редактирайте prompt-а, който ще се използва за консолидиране в един доклад на релевантната информация, извлечена от откритите документи."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Праг за прилика при първа стъпка в търсенето",
+        "help" : "Праг за семантична прилика при първа стъпка (между 0.5 и 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Праг за прилика при втора стъпка",
+        "help" : "Праг за семантична прилика при втора стъпка (между 0.5 и 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Модел по подразбиране",
+        "help" : "Стандартният голям езиков модел ще се използва при Deep search обработка"
+      },
+      "similarityThreashold" : {
+        "label" : "Праг за прилика в търсенето",
+        "help" : "Праг за семантична прилика (между 0.5 и 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Настройки за сигурност"
+      },
+      "accessibleToAll" : {
+        "label" : "Достъпно за всички"
+      },
+      "datasource" : {
+        "label" : "Източник на данни"
+      },
+      "allowedGroups" : {
+        "label" : "Позволени групи"
+      },
+      "allowedUsers" : {
+        "label" : "Позволени потребители"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Достъп по източник на данни за потребители/групи",
+        "help" : "Deep search ще бъде активиран за всеки външен източник на данни и за потребител или група"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Опростен достъп по потребител/група"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Достъп по източник на данни за потребител/група"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Използвайте или създайте api ключ идентификационни данни"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ключ/идентификационни данни",
+        "help" : "Изберете api ключ или идентификационни данни за този доставчик"
+      },
+      "NewApiKey" : {
+        "label" : "Нов api ключ",
+        "help" : "Въведете нов api ключ за използване с този доставчик"
+      },
+      "PiSave" : {
+        "label" : "Запази"
+      },
+      "NewUserName" : {
+        "label" : "Потребителско име",
+        "help" : "Потребителско име за достъп до услугите на доставчика"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Използвай налични или нови",
+        "help" : "Използвайте налични или създайте нови идентификационни данни за този доставчик"
+      },
+      "newSecretDescription" : {
+        "label" : "Описание на идентификационните данни",
+        "help" : "Описание на api ключ идентификационни данни"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Данните са създадени",
+        "detail" : "Данните са създадени успешно"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Грешка при комуникация със сървъра Ollama",
+        "detail" : "Мрежова грешка при комуникация с отдалечена система за достъп до съдържание\n списък с модели Грешка при работа с url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Чат с потребители"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Модел, използван за вътрешни услуги"
       }
     }
   }

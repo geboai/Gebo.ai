@@ -34,7 +34,7 @@ import { errorStatus, IOperationStatus } from "./operation-status";
 import { GeboActionType, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
-import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 
 
 /**
@@ -763,28 +763,20 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     if (messages && messages.length) {
       if (this.injector) {
         try {
-          const geboAITranslationService: GeboAITranslationService = this.injector.get(GeboAITranslationService);
-          if (geboAITranslationService) {
-            const withoutDuplicates: GUserMessage[] = [];
-            messages.forEach(msg => {
-              if (!withoutDuplicates.find(x => x.id === msg.id)) {
-                withoutDuplicates.push(msg);
-              }
-            });
-            this._msgsSubscription = geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
-              next: (msgs) => {
-                if (msgs)
-                  this.userMessages = msgs;
-                else 
-                  this.userMessages = withoutDuplicates;
-              }
-            });
-          }
+          const withoutDuplicates: GUserMessage[] = [];
+          messages.forEach(msg => {
+            if (!withoutDuplicates.find(x => x.id === msg.id)) {
+              withoutDuplicates.push(msg);
+            }
+          });
+          this.userMessages = withoutDuplicates;
+
+
         } catch (e) {
           console.error(e);
           this.userMessages = messages;
         }
-      }else {
+      } else {
         this.userMessages = messages;
       }
 

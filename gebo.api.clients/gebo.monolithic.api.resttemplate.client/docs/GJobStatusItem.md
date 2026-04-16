@@ -3,15 +3,17 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**processing** | **Boolean** |  |  [optional]
-**finished** | **Boolean** |  |  [optional]
-**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **error** | **Boolean** |  |  [optional]
 **description** | **String** |  |  [optional]
-**code** | **String** |  |  [optional]
-**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
-**startDateTime** | [**Date**](Date.md) |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
+**workflowType** | **String** |  |  [optional]
+**code** | **String** |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
+**startDateTime** | [**Date**](Date.md) |  |  [optional]
+**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
+**workflowId** | **String** |  |  [optional]
+**processing** | **Boolean** |  |  [optional]
+**finished** | **Boolean** |  |  [optional]
 
 <a name="JobTypeEnum"></a>
 ## Enum: JobTypeEnum

@@ -90,7 +90,7 @@ public class RedisVectorStoreFactory implements IGVectorStoreFactory<RedisConfig
 		builder=builder.metadataFields(metas.toArray(new MetadataField[0]));
 		builder=builder.batchingStrategy(new TokenCountBatchingStrategy());
 		builder=builder.initializeSchema(true);
-		builder=builder.vectorAlgorithm(Algorithm.HSNW);
+		builder=builder.vectorAlgorithm(Algorithm.HNSW);
 		
 		// Build the Redis vector store
 		final RedisVectorStore redisVectorStore = builder.build();

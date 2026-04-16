@@ -15,8 +15,8 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #endPointUI header="Editing existing filesystem content" [formGroup]="formGroup">
   <div class="geboDialogContent">
-    <p-messages id="UserMessages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <p-toast id="Toast" gebo-ai-label />
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    
     <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
       <p-tabPanel id="SettingsTab" gebo-ai-label header="Settings">
         <div class="grid">

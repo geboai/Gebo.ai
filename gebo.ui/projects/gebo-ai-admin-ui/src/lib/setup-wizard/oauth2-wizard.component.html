@@ -5,7 +5,7 @@
 
 <p-panel id="MainPanel" gebo-ai-label #instModeUI header="Oauth2 security settings">
 
-    <p-messages id="MessagesComponent" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
 
     <p-table id="TableComponent" gebo-ai-label [value]="providers" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template #header pTemplate="header">

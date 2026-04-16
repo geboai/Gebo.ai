@@ -25,11 +25,23 @@ import java.util.List;
  * LLMSSetupConfigurationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class LLMSSetupConfigurationData {
   @JsonProperty("configurations")
   private List<LLMSSetupConfiguration> configurations = null;
+
+  @JsonProperty("canRunAutoconfigure")
+  private Boolean canRunAutoconfigure = null;
+
+  @JsonProperty("embeddingModelExists")
+  private Boolean embeddingModelExists = null;
+
+  @JsonProperty("defaultChatModelExists")
+  private Boolean defaultChatModelExists = null;
+
+  @JsonProperty("internalServicesChatModelExists")
+  private Boolean internalServicesChatModelExists = null;
 
   public LLMSSetupConfigurationData configurations(List<LLMSSetupConfiguration> configurations) {
     this.configurations = configurations;
@@ -57,6 +69,78 @@ public class LLMSSetupConfigurationData {
     this.configurations = configurations;
   }
 
+  public LLMSSetupConfigurationData canRunAutoconfigure(Boolean canRunAutoconfigure) {
+    this.canRunAutoconfigure = canRunAutoconfigure;
+    return this;
+  }
+
+   /**
+   * Get canRunAutoconfigure
+   * @return canRunAutoconfigure
+  **/
+  @Schema(description = "")
+  public Boolean isCanRunAutoconfigure() {
+    return canRunAutoconfigure;
+  }
+
+  public void setCanRunAutoconfigure(Boolean canRunAutoconfigure) {
+    this.canRunAutoconfigure = canRunAutoconfigure;
+  }
+
+  public LLMSSetupConfigurationData embeddingModelExists(Boolean embeddingModelExists) {
+    this.embeddingModelExists = embeddingModelExists;
+    return this;
+  }
+
+   /**
+   * Get embeddingModelExists
+   * @return embeddingModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isEmbeddingModelExists() {
+    return embeddingModelExists;
+  }
+
+  public void setEmbeddingModelExists(Boolean embeddingModelExists) {
+    this.embeddingModelExists = embeddingModelExists;
+  }
+
+  public LLMSSetupConfigurationData defaultChatModelExists(Boolean defaultChatModelExists) {
+    this.defaultChatModelExists = defaultChatModelExists;
+    return this;
+  }
+
+   /**
+   * Get defaultChatModelExists
+   * @return defaultChatModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isDefaultChatModelExists() {
+    return defaultChatModelExists;
+  }
+
+  public void setDefaultChatModelExists(Boolean defaultChatModelExists) {
+    this.defaultChatModelExists = defaultChatModelExists;
+  }
+
+  public LLMSSetupConfigurationData internalServicesChatModelExists(Boolean internalServicesChatModelExists) {
+    this.internalServicesChatModelExists = internalServicesChatModelExists;
+    return this;
+  }
+
+   /**
+   * Get internalServicesChatModelExists
+   * @return internalServicesChatModelExists
+  **/
+  @Schema(description = "")
+  public Boolean isInternalServicesChatModelExists() {
+    return internalServicesChatModelExists;
+  }
+
+  public void setInternalServicesChatModelExists(Boolean internalServicesChatModelExists) {
+    this.internalServicesChatModelExists = internalServicesChatModelExists;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -67,12 +151,16 @@ public class LLMSSetupConfigurationData {
       return false;
     }
     LLMSSetupConfigurationData llMSSetupConfigurationData = (LLMSSetupConfigurationData) o;
-    return Objects.equals(this.configurations, llMSSetupConfigurationData.configurations);
+    return Objects.equals(this.configurations, llMSSetupConfigurationData.configurations) &&
+        Objects.equals(this.canRunAutoconfigure, llMSSetupConfigurationData.canRunAutoconfigure) &&
+        Objects.equals(this.embeddingModelExists, llMSSetupConfigurationData.embeddingModelExists) &&
+        Objects.equals(this.defaultChatModelExists, llMSSetupConfigurationData.defaultChatModelExists) &&
+        Objects.equals(this.internalServicesChatModelExists, llMSSetupConfigurationData.internalServicesChatModelExists);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(configurations);
+    return Objects.hash(configurations, canRunAutoconfigure, embeddingModelExists, defaultChatModelExists, internalServicesChatModelExists);
   }
 
 
@@ -82,6 +170,10 @@ public class LLMSSetupConfigurationData {
     sb.append("class LLMSSetupConfigurationData {\n");
     
     sb.append("    configurations: ").append(toIndentedString(configurations)).append("\n");
+    sb.append("    canRunAutoconfigure: ").append(toIndentedString(canRunAutoconfigure)).append("\n");
+    sb.append("    embeddingModelExists: ").append(toIndentedString(embeddingModelExists)).append("\n");
+    sb.append("    defaultChatModelExists: ").append(toIndentedString(defaultChatModelExists)).append("\n");
+    sb.append("    internalServicesChatModelExists: ").append(toIndentedString(internalServicesChatModelExists)).append("\n");
     sb.append("}");
     return sb.toString();
   }

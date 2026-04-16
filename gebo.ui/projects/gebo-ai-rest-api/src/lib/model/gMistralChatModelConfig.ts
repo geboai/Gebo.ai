@@ -32,11 +32,20 @@ export interface GMistralChatModelConfig {
     contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GMistralChatModelConfig.ForUsesEnum>;
+    features?: Array<GMistralChatModelConfig.FeaturesEnum>;
 }
 export namespace GMistralChatModelConfig {
-    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
     export const ForUsesEnum = {
         CHAT: 'CHAT' as ForUsesEnum,
-        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+        INTERNALSERVICES: 'INTERNAL_SERVICES' as ForUsesEnum
+    };
+    export type FeaturesEnum = 'CHAT' | 'REASONING' | 'STRUCTURED_OUTPUT' | 'MULTIMEDIA' | 'FUNCTION_CALLING';
+    export const FeaturesEnum = {
+        CHAT: 'CHAT' as FeaturesEnum,
+        REASONING: 'REASONING' as FeaturesEnum,
+        STRUCTUREDOUTPUT: 'STRUCTURED_OUTPUT' as FeaturesEnum,
+        MULTIMEDIA: 'MULTIMEDIA' as FeaturesEnum,
+        FUNCTIONCALLING: 'FUNCTION_CALLING' as FeaturesEnum
     };
 }

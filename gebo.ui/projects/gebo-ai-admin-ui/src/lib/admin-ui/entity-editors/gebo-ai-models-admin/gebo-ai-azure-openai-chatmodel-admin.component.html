@@ -14,7 +14,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #openaiUI header="Editing OpenAI chat model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         
         <p-tabView class="standardTabDialogueHeight">
             <p-tabPanel header="General infos">
@@ -51,6 +51,10 @@
                                 [required]="true" [options]="modelChoicesData" optionLabel="description"
                                 gebo-ai-field-element>
                             </p-select>
+                        </gebo-ai-field>
+                    </div><div class="col-6">
+                        <gebo-ai-field id="forUses" label="Model usage(s)" help="Uses that the Gebo.ai platform will consider this model for." placeholder="Choose model uses">
+                            <gebo-ai-chat-model-use-component formControlName="forUses" gebo-ai-field-element></gebo-ai-chat-model-use-component>
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">

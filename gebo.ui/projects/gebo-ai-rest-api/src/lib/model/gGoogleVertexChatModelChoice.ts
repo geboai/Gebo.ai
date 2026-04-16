@@ -24,6 +24,7 @@ export interface GGoogleVertexChatModelChoice {
     metaInfos?: ModelMetaInfo;
     informativeUrl?: string;
     contextLength?: number;
+    nativeModelMetaInfos?: any;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
 }

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.restintegration.abstraction.layer;
 
@@ -38,15 +35,15 @@ import org.springframework.web.client.RestTemplate;
 import ai.gebo.model.GUserMessage;
 
 /**
- * AI generated comments
- * Service class that wraps the functionality of RestTemplate for HTTP requests.
+ * AI generated comments Service class that wraps the functionality of
+ * RestTemplate for HTTP requests.
  */
 @Service
 public class RestTemplateWrapperService {
-    // Logger for this class
+	// Logger for this class
 	private static Logger LOGGER = LoggerFactory.getLogger(RestTemplateWrapperService.class);
-	
-    // RestTemplate instance to perform HTTP requests
+
+	// RestTemplate instance to perform HTTP requests
 	RestTemplate restTemplate = new RestTemplate();
 
 	/**
@@ -115,7 +112,7 @@ public class RestTemplateWrapperService {
 	 * Converts HttpClientErrorException into GUserMessage to provide user-friendly
 	 * error messages.
 	 * 
-	 * @param exc        Exception thrown during HTTP client operation
+	 * @param exc         Exception thrown during HTTP client operation
 	 * @param serviceName Name of the service being accessed
 	 * @param content     Content or resource being accessed
 	 * @return GUserMessage with error details
@@ -147,12 +144,12 @@ public class RestTemplateWrapperService {
 	 * Exchanges HTTP requests with specified URL, method, request entity, and
 	 * variables, returning a response entity of the specified type.
 	 * 
-	 * @param url          URL to send the request to
-	 * @param method       HTTP method to use
+	 * @param url           URL to send the request to
+	 * @param method        HTTP method to use
 	 * @param requestEntity HTTP entity with the request data
-	 * @param responseType Class type of the response expected
-	 * @param uriVariables Variables for URI template
-	 * @param <T>          Type of the response body
+	 * @param responseType  Class type of the response expected
+	 * @param uriVariables  Variables for URI template
+	 * @param <T>           Type of the response body
 	 * @return ResponseEntity of the given response type
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
@@ -225,19 +222,19 @@ public class RestTemplateWrapperService {
 	 * @return String message from the exception
 	 */
 	private static String toString(Throwable exc) {
-		
-		return exc.getMessage(); 
+
+		return exc.getMessage();
 	}
 
 	/**
 	 * Executes a general HTTP request using the RestTemplate, by providing URI,
 	 * method, request callback, and response extractor.
 	 * 
-	 * @param uri        URI to send the request to
-	 * @param method     HTTP method to use
-	 * @param callback   Callback to prepare the request
-	 * @param extractor  Extractor to process the response
-	 * @param <T>        Type of the response body
+	 * @param uri       URI to send the request to
+	 * @param method    HTTP method to use
+	 * @param callback  Callback to prepare the request
+	 * @param extractor Extractor to process the response
+	 * @param <T>       Type of the response body
 	 * @return The processed response
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
@@ -262,11 +259,11 @@ public class RestTemplateWrapperService {
 	 * Executes a general HTTP request using the RestTemplate by providing URL,
 	 * method, request callback, and response extractor.
 	 * 
-	 * @param url        URL to send the request to
-	 * @param method     HTTP method to use
-	 * @param callback   Callback to prepare the request
-	 * @param extractor  Extractor to process the response
-	 * @param <T>        Type of the response body
+	 * @param url       URL to send the request to
+	 * @param method    HTTP method to use
+	 * @param callback  Callback to prepare the request
+	 * @param extractor Extractor to process the response
+	 * @param <T>       Type of the response body
 	 * @return The processed response
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
@@ -514,8 +511,9 @@ public class RestTemplateWrapperService {
 	}
 
 	/**
-	 * Exchanges HTTP requests with specified RequestEntity and ParameterizedTypeReference,
-	 * returning a response entity of the specified type.
+	 * Exchanges HTTP requests with specified RequestEntity and
+	 * ParameterizedTypeReference, returning a response entity of the specified
+	 * type.
 	 * 
 	 * @param requestEntity Request entity to send
 	 * @param returnType    Expected return type with parameterized type reference
@@ -537,5 +535,28 @@ public class RestTemplateWrapperService {
 			LOGGER.error("Error in exchange(...)", exc);
 			throw new GeboRestIntegrationException("Error in exchange(...)", exc);
 		}
+	}
+
+	public static String urlConcat(String... partialAddresses) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < partialAddresses.length; i++) {
+			String current = partialAddresses[i];
+			if (current.startsWith("/")) {
+				if (current.length() > 1)
+					current = current.substring(1);
+				else
+					current = "";
+			}
+			if (i < (partialAddresses.length - 1)) {
+				if (current.endsWith("/")) {
+					current = current.substring(0, current.length() - 1);
+				}
+			}
+			sb.append(current);
+			if (i < (partialAddresses.length - 1)) {
+				sb.append("/");
+			}
+		}
+		return sb.toString();
 	}
 }

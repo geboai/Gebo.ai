@@ -14,7 +14,6 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.model.OperationStatusPromptTemplateResponse;
 import ai.gebo.monolithic.api.client.model.PromptTemplateParam;
-import ai.gebo.monolithic.api.client.model.PromptTemplateWizardConfigs;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -43,20 +42,6 @@ public class PromptTemplateWizardControllerApiTest {
     public void generatePromptTemplateTest() {
         PromptTemplateParam body = null;
         OperationStatusPromptTemplateResponse response = api.generatePromptTemplate(body);
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getTemplateWizardConfigsTest() {
-        PromptTemplateWizardConfigs response = api.getTemplateWizardConfigs();
 
         // TODO: test validations
     }

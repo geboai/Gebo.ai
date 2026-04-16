@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.atlassian.confluence.handler.impl.model;
 
@@ -17,9 +14,10 @@ import ai.gebo.systems.abstraction.layer.IGRemoteVirtualFilesystemResourceRefere
 /**
  * AI generated comments
  * 
- * This class represents a reference to a Confluence resource in the virtual filesystem.
- * It implements the IGRemoteVirtualFilesystemResourceReference interface to provide
- * a standardized way to reference Confluence resources like pages and attachments.
+ * This class represents a reference to a Confluence resource in the virtual
+ * filesystem. It implements the IGRemoteVirtualFilesystemResourceReference
+ * interface to provide a standardized way to reference Confluence resources
+ * like pages and attachments.
  */
 public class ConfluenceResourceReference implements IGRemoteVirtualFilesystemResourceReference {
 
@@ -37,6 +35,7 @@ public class ConfluenceResourceReference implements IGRemoteVirtualFilesystemRes
 	public String resourceType = null;
 	/** The ID of the parent page for this resource */
 	public String parentPageId = null;
+	public String downloadUrl = null;
 
 	/**
 	 * Returns a string representation of this Confluence resource reference.

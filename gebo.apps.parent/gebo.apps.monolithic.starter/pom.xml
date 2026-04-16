@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.0.0-rc1</version>
+		<version>1.0.1.0-ALPHA</version>
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
@@ -85,11 +85,6 @@
 
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.lucene</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.multilanguage.support</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -98,11 +93,7 @@
 			<artifactId>gebo.architecture.documents.cache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.ragsystem</groupId>
-			<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.neo4j</artifactId>

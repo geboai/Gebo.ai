@@ -59,6 +59,10 @@
       },
       "LoginBtn" : {
         "label" : "Ingia"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operesheni imeshindwa",
+        "detail" : "Haiwezekani kuthibitisha kwa vih credentials ulivyotoa"
       }
     },
     "message" : {
@@ -173,6 +177,41 @@
       "googleDriveWorkspacesSystemSetupSection" : {
         "label" : "Muunganiko wa Google Drive/Workspaces",
         "description" : "Sanidi Gebo.ai ili kufikia data ya timu yako ya Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Sanidi Google search api",
+        "description" : "Sanidi hati za Google search api kwa utaftaji wa wavuti wa AI"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Sanidi Deep search",
+        "description" : "Sanidi vigezo vya Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Urekebishaji wa vigezo vya uzalishaji ulioboreshwa otomatiki"
+      },
+      "Description" : {
+        "label" : "Maelezo"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Sasisho la mwisho la urekebishaji"
+      },
+      "Code" : {
+        "label" : "Nambari ya mfano wa Embedding/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Kiwango kilichokadiriwa"
+      },
+      "Autotuned" : {
+        "label" : "Imerekebishwa otomatiki"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Hatua muhimu za usanidi wa Gebo.ai zimekamilika...",
+        "detail" : "Hatua muhimu za usanidi zimekamilika lakini hatua fulani zilizokosekana zinazuia shirika lako kufurahia zaidi programu hii"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Kuna hatua muhimu iliyokosekana kwenye usanidi wa Gebo.ai",
+        "detail" : "Tafadhali kagua hatua nyekundu za mchakato wa usanidi"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -190,6 +229,9 @@
       },
       "ConfluenceSystemBtn" : {
         "label" : "Mfumo wa Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Hariri mfumo"
       }
     },
     "JiraWizardComponent" : {
@@ -265,6 +307,18 @@
       },
       "MainPanelHeader" : {
         "label" : "Sanidi ufikiaji wa watoa huduma wa Gebo.ai llms"
+      },
+      "ExtensiveStup" : {
+        "label" : "Chaguo za miundombinu/wasambazaji zilizopanuliwa"
+      },
+      "MainPanelTitle" : {
+        "label" : "Sanidi mifano mikubwa ya lugha inayotumika"
+      },
+      "EasySetup" : {
+        "label" : "Usanidi/urekebishaji rahisi wa awali"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Sanidi mifano mikubwa ya lugha"
       }
     },
     "GraphRagWizardComponent" : {
@@ -444,6 +498,48 @@
       },
       "DescriptionHeader" : {
         "label" : "Maelezo"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Ufunguzi wa Google search api"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Tengeneza hati za Google search"
+      },
+      "CreateBtn" : {
+        "label" : "Tengeneza"
+      },
+      "customSearchEngineId" : {
+        "label" : "Nambari ya injini ya utafutaji",
+        "help" : "Weka nambari ya injini ya utafutaji iliyopatikana wakati wa usajili wa hati za Google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Msimbo wa usanidi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Weka api key iliyopatikana wakati wa usajili wa hati za Google search api."
+      },
+      "MainPanel" : {
+        "label" : "Sanidi Google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Futa",
+        "help" : "Futa hati za Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Usanidi wa Deep search",
+        "help" : "Ongeza usanidi wa deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Hariri usanidi"
       }
     }
   },
@@ -679,6 +775,18 @@
       },
       "DisabledHeader" : {
         "label" : "kimezimwa"
+      },
+      "EditGroupBtn" : {
+        "label" : "Hariri"
+      },
+      "CodeHeader" : {
+        "label" : "msimbo"
+      },
+      "DescriptionHeader" : {
+        "label" : "maelezo"
+      },
+      "UsersHeader" : {
+        "label" : "watumiaji"
       }
     }
   },
@@ -1303,6 +1411,19 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa mbali wa AI yuko sawa",
+        "detail" : "Mtoa huduma yuko tayari na amesanidiwa vyema"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:https://api.openai.com/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GOpenAIEmbeddingModelConfig" : {
@@ -1337,6 +1458,10 @@
       "defaultModel" : {
         "label" : "weka hii kama modeli chaguo-msingi ya embedding",
         "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa mbali wa AI yuko sawa",
+        "detail" : "Mtoa huduma yuko tayari na amesanidiwa vyema"
       }
     },
     "GOllamaChatModelConfig" : {
@@ -1376,6 +1501,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya seva ya Ollama ya ndani (au lan)"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1420,6 +1550,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya Anthropic"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GMistralChatModelConfig" : {
@@ -1463,6 +1598,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya MistralAI"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GGoogleVertexChatModelConfig" : {
@@ -1506,6 +1646,11 @@
       },
       "MainPanel" : {
         "label" : "Inahariri usanidi wa modeli ya gumzo ya Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GDeepseekChatModelConfig" : {
@@ -1550,6 +1695,11 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
       }
     },
     "GenericOpenAIAPIChatModelConfig" : {
@@ -1597,6 +1747,15 @@
       },
       "ModelAccessSettingsTab" : {
         "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "forUses" : {
+        "label" : "Matumizi ya mfano",
+        "help" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu.",
+        "placeholder" : "Matumizi ambayo jukwaa la Gebo.ai litazingatia mfano huu."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -1798,6 +1957,48 @@
       "DELETE_CHAT_ACTION" : {
         "message" : "Una uhakika unataka kufuta gumzo hili?",
         "header" : "Kitendo cha kufuta gumzo"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Ongeza maudhui au rekebisha tabia ya utafutaji"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Ongeza maudhui au rekebisha tabia ya utafutaji"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Ongeza maudhui au rekebisha tabia ya utafutaji"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Vyanzo",
+        "help" : "Fungua orodha ya nyaraka zilizochambuliwa"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Maelezo ya majibu ya deep search na vyanzo"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Matokeo ya uchambuzi wa Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Hitilafu kutafuta Confluence Search",
+        "detail" : "Hitilafu ya seva: Tatizo kupata mfumo wa confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Chat mpya imepakiwa",
+        "detail" : "Chat mpya imepakiwa kwa mafanikio"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chagua vyanzo"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chagua angalau moja kati ya chaguzi zifuatazo"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ruka deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Bodimaarifa zilizochaguliwa"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Mifumo iliyochaguliwa"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1842,6 +2043,99 @@
     "DocumentRefComponent" : {
       "AddDocsBtn" : {
         "help" : "Ongeza hati kwenye orodha ya 'zungumza na' "
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Inaendeshwa deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Inaendeshwa retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Inauliza llm"
+      },
+      "Waiting" : {
+        "label" : "Inachambua mpango bora wa majibu.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Inaendesha zana"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Inaendeshwa utafutaji unaosaidiwa na AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Faili iliyochambuliwa"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Matokeo ya utafutaji yaliyopitiwa"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Matokeo ya utafutaji wa mfumo yaliyopitiwa kwa"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Inakamilisha ripoti ya mwisho"
+      },
+      "RUNNING" : {
+        "label" : "Inaendeshwa "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Ninachambua ombi lako"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Umepitisha mtiririko wa agentic, agent anayejibu anaendeshwa"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Kiwango cha huduma ni: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Inaendesha agent uliyechagua"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Pakia faili"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Vinjari/tafuta faili za kampuni"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Mazungumzo ya doc iliyochaguliwa"
+      },
+      "agenticChat" : {
+        "label" : "Mazungumzo ya agentic"
+      },
+      "rag" : {
+        "label" : "Mazungumzo ya r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Vyanzo vingi"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Utafutaji wa bodimaarifa"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Chat na faili"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
       }
     }
   },
@@ -2076,6 +2370,10 @@
         "label" : "Mtumiaji wa Google wa kuigwa",
         "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
         "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
+      },
+      "OK" : {
+        "summary" : "Imehifadhiwa kwa mafanikio",
+        "detail" : "Operesheni ya kusasisha imekamilika kwa mafanikio"
       }
     }
   },
@@ -2872,6 +3170,24 @@
         "dataset-1-label" : "Nyaraka zilizochakatwa",
         "dataset-2-label" : "Nyaraka zenye hitilafu",
         "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Uorodheshaji wa maandishi kamili"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nyaraka zisizotibiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizokataliwa"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata tokeni"
       }
     }
   },
@@ -3019,6 +3335,61 @@
       "enableAllFunctions" : {
         "label" : "wezesha simu zote za kazi",
         "help" : "Washa zana zote na simu za kazi zinazopatikana, kama haitowekwa itawezekana kuzianisha baadaye kwenye paneli ya utawala wa llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
+        "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider Sawa",
+        "detail" : "Mtoa huduma anaendelea na amesanidiwa kwa mafanikio"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Isipokuwa wakati wa operesheni:401 HURUHUSIWI",
+        "detail" : "Hitilafu ya seva: 401 HURUHUSIWI"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Isipokuwa wakati wa operesheni:Missing basePath",
+        "detail" : "Hitilafu ya seva: Missing basePath"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Unda na washa"
+      },
+      "vendorId" : {
+        "label" : "Chagua msambazaji wa mfano wako mkubwa wa lugha",
+        "help" : "Chagua msambazaji wa awali kwa mifano yako chaguo-msingi ya gumzo na embedding"
+      },
+      "secretId" : {
+        "label" : "Chagua kitambulisho cha mtoa huduma (api key)",
+        "help" : "Chagua mojawapo ya kitambulisho kilichopo kwa mtoa huduma aliyechaguliwa"
+      },
+      "InternalServiceModel" : {
+        "label" : "Mfano wa mazungumzo kwa huduma za ndani",
+        "help" : "Mfano wa gumzo uliosanidiwa kwa huduma za ndani utahusika na kutoa taarifa, kufupisha na kutekeleza kazi za ndani."
+      },
+      "ChatModel" : {
+        "label" : "Mfano wa gumzo chaguo-msingi",
+        "help" : "Mfano wa gumzo chaguo-msingi utahusika kujibu maswali ya watumiaji, na kutekeleza kazi ambazo hazina mifano mahususi ya kufanya hivyo. Lazima uwe na nguvu na kutegemewa, ukiwa na uwiano mzuri kati ya gharama, utendaji na ubora wa matokeo."
+      },
+      "ProviderBuy" : {
+        "label" : "Kiungo cha kununua mkopo wa Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Kiungo cha tovuti"
+      },
+      "WebSiteLink" : {
+        "label" : "Tovuti ya mtoa huduma",
+        "help" : "Bofya hapa kwa taarifa za jumla za mtoa huduma."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Nunua mkopo wa mtoa huduma",
+        "help" : "Bofya hapa kununua mkopo kwa api key zako."
+      },
+      "EmbeddingModel" : {
+        "label" : "Mfano wa embedding chaguo-msingi",
+        "help" : "Mfano huu utakuwa na jukumu la kufanya uorodheshaji wa kisemantiki (embedding) na kurejesha data na hati zako"
       }
     }
   },
@@ -3055,6 +3426,34 @@
       "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
         "summary" : "Huwezi kufuta hii",
         "detail" : "Kitu hiki kinarejelewa kutoka sehemu nyingine za programu"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Hitilafu wakati wa operesheni: Hitilafu ya kufanya kazi na url:http://localhost:11434/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu ya kufanya kazi na url:http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Hitilafu wakati wa operesheni: apiKey lazima iwekwe",
+        "detail" : "Hitilafu ya seva: apiKey lazima iwekwe"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Hitilafu wakati wa kusambaza majibu ya gumzo",
+        "detail" : "Hitilafu ya seva: 400 Ombi Mbaya kutoka kwa POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:http://localhost:8000/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Hitilafu wakati wa mchakato wa kutuma jibu la gumzo",
+        "detail" : "Hitilafu ya seva: Muunganisho kukatizwa"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Hitilafu wakati wa operesheni:Hitilafu kwenye url:https://api.openai.com/v1/models",
+        "detail" : "Hitilafu ya seva: Hitilafu kwenye url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
+        "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
       }
     }
   },
@@ -3080,6 +3479,10 @@
       },
       "CompletedData" : {
         "label" : "Imekamilika"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
       }
     }
   },
@@ -3208,6 +3611,200 @@
       "driveAccessSecret" : {
         "label" : "Utambulisho unaotumika",
         "help" : "Chagua au unda utambulisho wa kufikia mfumo wa google drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Gumzo"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Inatafuta taarifa husika"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Inaunganisha ripoti ya mwisho"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Matokeo ya utafutaji yaliyotathminiwa"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Matokeo ya utafutaji wa mfumo yaliyotathminiwa kwa"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Chagua angalau moja kati ya chaguo zifuatazo"
+      },
+      "LaunchBtn" : {
+        "label" : "Anzisha utafutaji"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Ruka utafutaji wa kina"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Misingi ya maarifa iliyochaguliwa"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Mifumo iliyochaguliwa"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Chagua vyanzo"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Faili iliyochambuliwa"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Ingiza"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SearchSettingTab" : {
+        "label" : "Mipangilio ya utafutaji"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Ingiza amri ya kuchambua taarifa husika kutoka kwenye hati"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Ingiza amri ya kuunganisha taarifa muhimu zilizochambuliwa"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Mipangilio ya large language model"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya usanidi wa deep search"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee uliotengenezwa kiotomatiki wa usanidi wa deep search"
+      },
+      "searchType" : {
+        "label" : "Aina ya utafutaji",
+        "help" : "Chagua kati ya single hop semantic search au multi hop"
+      },
+      "topK" : {
+        "label" : "Idadi ya sehemu za maandishi zitakazopatikana (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Large language model inayotumika",
+        "help" : "Toa large language model inayotumika kwa Deep search, ile ya kawaida itatumika kama haijachaguliwa."
+      },
+      "analisysPrompt" : {
+        "label" : "Amri ya kuchambua nyaraka",
+        "help" : "Hariri amri itakayotumika kuchambua taarifa muhimu kutoka sehemu za nyaraka."
+      },
+      "consolidationPrompt" : {
+        "label" : "Amri ya kuunganisha taarifa zilizopatikana",
+        "help" : "Hariri amri itakayotumika kuunganisha taarifa muhimu zilizopatikana katika ripoti moja kutoka kwa nyaraka zilizotafutwa."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Kizingiti cha ufanano wa utafutaji",
+        "help" : "Kizingiti cha ufanano wa semantic katika hop ya kwanza (kati ya 0.5 hadi 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Kizingiti cha ufanano wa pili",
+        "help" : "Kizingiti cha ufanano wa semantic katika hop ya pili (kati ya 0.5 hadi 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Large language model chaguomsingi",
+        "help" : "Large language model chaguomsingi itatumika kwa usindikaji wa Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Kizingiti cha ufanano wa utafutaji",
+        "help" : "Kizingiti cha ufanano wa semantic (kati ya 0.5 hadi 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Mipangilio ya usalama"
+      },
+      "accessibleToAll" : {
+        "label" : "Inapatikana kwa Wote"
+      },
+      "datasource" : {
+        "label" : "Chanzo cha data"
+      },
+      "allowedGroups" : {
+        "label" : "Vikundi Vilivyoruhusiwa"
+      },
+      "allowedUsers" : {
+        "label" : "Watumiaji Walioruhusiwa"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Upatikanaji wa mtumiaji/kikundi kwa kila chanzo cha data",
+        "help" : "Deep search itawashwa kwa kila chanzo cha data cha nje na mtumiaji au kikundi"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Upatikanaji rahisi kwa mtumiaji/kikundi"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Upatikanaji kwa kila chanzo cha data mtumiaji/kikundi"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Tumia au tengeneza kitambulisho cha api key"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/vitambulisho",
+        "help" : "Chagua api key au kitambulisho cha mtoa huduma huyu"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mpya",
+        "help" : "Ingiza api key mpya ya kutumiwa na mtoa huduma huyu"
+      },
+      "PiSave" : {
+        "label" : "Hifadhi"
+      },
+      "NewUserName" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Jina la mtumiaji linalotumika kufikia huduma za mtoa huduma"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Tumia kilichopo au kipya",
+        "help" : "Tumia kitambulisho kilichopo au tengeneza kipya kwa mtoa huduma huyu"
+      },
+      "newSecretDescription" : {
+        "label" : "Maelezo ya kitambulisho",
+        "help" : "Maelezo ya kitambulisho cha api key"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Kitambulisho kimeundwa",
+        "detail" : "Kitambulisho kimeundwa kwa mafanikio"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Hitilafu ya kuwasiliana na seva ya Ollama ",
+        "detail" : "Hitilafu ya mtandao kuwasiliana na mfumo wa mbali kupata yaliyomo\n orodha ya models Hitilafu ya kufanya kazi na url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Gumzo na watumiaji"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Mfano unaotumika kwa huduma za ndani"
       }
     }
   }

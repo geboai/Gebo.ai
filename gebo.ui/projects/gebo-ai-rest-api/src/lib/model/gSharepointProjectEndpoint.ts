@@ -31,6 +31,7 @@ export interface GSharepointProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GSharepointProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GSharepointProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     paths?: Array<VFilesystemReference>;
     sharePointSystemCode?: string;
 }

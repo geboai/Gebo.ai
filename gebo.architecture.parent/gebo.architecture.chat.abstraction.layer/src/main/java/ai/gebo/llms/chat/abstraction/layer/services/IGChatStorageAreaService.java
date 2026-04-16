@@ -10,10 +10,9 @@ import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
-import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadedContent;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
@@ -21,11 +20,11 @@ public interface IGChatStorageAreaService {
 	/************************************************************************************************
 	 * Get the base path for a user session
 	 * 
-	 * @param context
+	 * @param userChatContextCode
 	 * @return
 	 * @throws IOException
 	 */
-	public Path getSessionPath(GUserChatContext context) throws IOException;
+	public Path getSessionPath(String userChatContextCode) throws IOException;
 
 	/***************************************************************************************************
 	 * adds the file to ths storage area for the actual session and ingests it
@@ -52,10 +51,10 @@ public interface IGChatStorageAreaService {
 	/*****************************************************************************************************
 	 * Delete full session contents
 	 * 
-	 * @param context
+	 * @param userSessionCode
 	 * @throws IOException
 	 */
-	public void deleteSessionContents(GUserChatContext context) throws IOException;
+	public void deleteSessionContents(String userSessionCode) throws IOException;
 
 	/******************************************************************************************************
 	 * Gets the phisical path of the content
@@ -88,11 +87,14 @@ public interface IGChatStorageAreaService {
 	 */
 	public List<Document> getIngestedContentsOf(UserUploadedContent uploaded) throws IOException;
 
-	public LLMGeneratedResource addMedia(Media media, GUserChatContext userContext) throws IOException;
+	public LLMGeneratedResource addMedia(Media media, String userSessionCode) throws IOException;
 
 	public LLMGeneratedResource getGeneratedContent(String userSessionCode, String generatedResourceCode)
 			throws IOException;
 
 	public InputStream streamContent(LLMGeneratedResource generated) throws IOException;
+
+	public List<Document> getIngestedContentsOf(LLMGeneratedResource uploaded)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
 }

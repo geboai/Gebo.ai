@@ -6,105 +6,139 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import reactor.core.publisher.Flux;
 
 /**
  * Gebo.ai comment agent
  * 
- * Interface for a configurable chat model that defines the
- * methods required for configuring and interacting with 
- * chat models in the system.
+ * Interface for a configurable chat model that defines the methods required for
+ * configuring and interacting with chat models in the system.
  *
- * @param <ModelConfig> The type of the model configuration, extending GBaseChatModelConfig.
+ * @param <ModelConfig> The type of the model configuration, extending
+ *                      GBaseChatModelConfig.
  */
 public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfig>
-        extends IGConfigurableModel<ModelConfig, GChatModelType> {
+		extends IGConfigurableModel<ModelConfig, GChatModelType> {
 
-    /**
-     * Retrieves the chat model instance.
-     *
-     * @return The chat model.
-     */
-    public ChatModel getChatModel();
+	/**
+	 * Retrieves the chat model instance.
+	 *
+	 * @return The chat model.
+	 */
+	public ChatModel getChatModel();
 
-    /**
-     * Gets the length of the context maintained by the chat model.
-     *
-     * @return The context length.
-     */
-    public int getContextLength();
+	/**
+	 * Gets the length of the context maintained by the chat model.
+	 *
+	 * @return The context length.
+	 */
+	public int getContextLength();
 
-    /**
-     * Checks if the chat model supports function calls.
-     *
-     * @return True if supports functions, false otherwise.
-     */
-    public default boolean isSupportsFunctionsCall() {
-        return false;
-    }
+	/**
+	 * Checks if the chat model supports function calls.
+	 *
+	 * @return True if supports functions, false otherwise.
+	 */
+	public default boolean isSupportsFunctionsCall() {
+		return false;
+	}
 
-    /**
-     * Checks if the chat model supports structured output.
-     *
-     * @return True if supports structured output, false otherwise.
-     */
-    public default boolean isSupportsStructuredOutput() {
-        return false;
-    }
+	/**
+	 * Checks if the chat model supports structured output.
+	 *
+	 * @return True if supports structured output, false otherwise.
+	 */
+	public default boolean isSupportsStructuredOutput() {
+		return false;
+	}
 
-    /**
-     * Checks if the chat model supports generating transcripts.
-     *
-     * @return True if supports transcripts, false otherwise.
-     */
-    public default boolean isSupportsTranscript() {
-        return false;
-    }
+	/**
+	 * Checks if the chat model supports generating transcripts.
+	 *
+	 * @return True if supports transcripts, false otherwise.
+	 */
+	public default boolean isSupportsTranscript() {
+		return false;
+	}
 
-    /**
-     * Provides a model for generating transcripts.
-     * 
-     * @return An instance of IGConfigurableTranscriptModel.
-     * @throws LLMConfigException if transcript functionalities are not implemented.
-     */
-    public default IGConfigurableTranscriptModel getTranscriptModel() throws LLMConfigException {
-        throw new LLMConfigException("This provider does not implement transcript functionalities");
-    }
+	/**
+	 * Provides a model for generating transcripts.
+	 * 
+	 * @return An instance of IGConfigurableTranscriptModel.
+	 * @throws LLMConfigException if transcript functionalities are not implemented.
+	 */
+	public default IGConfigurableTranscriptModel getTranscriptModel() throws LLMConfigException {
+		throw new LLMConfigException("This provider does not implement transcript functionalities");
+	}
 
-    /**
-     * Checks if the chat model supports speech output.
-     *
-     * @return True if supports speech, false otherwise.
-     */
-    public default boolean isSupportsSpeech() {
-        return false;
-    }
+	/**
+	 * Checks if the chat model supports speech output.
+	 *
+	 * @return True if supports speech, false otherwise.
+	 */
+	public default boolean isSupportsSpeech() {
+		return false;
+	}
 
-    /**
-     * Provides a model for text-to-speech conversion.
-     * 
-     * @return An instance of IGConfigurableTextToSpeechModel.
-     * @throws LLMConfigException if speech functionalities are not implemented.
-     */
-    public default IGConfigurableTextToSpeechModel getSpeechModel() throws LLMConfigException {
-        throw new LLMConfigException("This provider does not implement speech functionalities");
-    }
+	/**
+	 * Provides a model for text-to-speech conversion.
+	 * 
+	 * @return An instance of IGConfigurableTextToSpeechModel.
+	 * @throws LLMConfigException if speech functionalities are not implemented.
+	 */
+	public default IGConfigurableTextToSpeechModel getSpeechModel() throws LLMConfigException {
+		throw new LLMConfigException("This provider does not implement speech functionalities");
+	}
 
-    /**
-     * Retrieves the chat client used for communication.
-     *
-     * @return The chat client instance.
-     * @throws LLMConfigException if the chat client is not configured correctly.
-     */
-    public ChatClient getChatClient() throws LLMConfigException;
+	/**
+	 * Retrieves the chat client used for communication.
+	 *
+	 * @return The chat client instance.
+	 * @throws LLMConfigException if the chat client is not configured correctly.
+	 */
+	public ChatClient getChatClient() throws LLMConfigException;
+
+	/*********************************************************************************
+	 * Adaptes streaming response to specific infrastructure element calling
+	 * requirement
+	 * 
+	 * @param prompt
+	 * @param chatContext
+	 * @return
+	 * @throws LLMConfigException
+	 */
+	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
+
+	/***********************************************************************************************
+	 * Adaptes response to specific infrastructure element calling requirement
+	 * 
+	 * @param prompt
+	 * @param chatContext
+	 * @return
+	 * @throws LLMConfigException
+	 */
+	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
+
+	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
+			Class<ResponseType> rt) throws LLMConfigException;
+
+	public default boolean isApplyThinkingMarkupHandling() {
+		return false;
+	}
+
+	public default <T> BeanOutputConverter<T> createConverter(Class<T> type) {
+		return new BeanOutputConverter<T>(type);
+	}
 }

@@ -17,7 +17,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #gvUI header="Editing Google Vertex AI chat model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
             <p-tabPanel id="TabGeneralInfos" gebo-ai-label header="General infos">
 
@@ -49,7 +49,11 @@
                                 optionLabel="description" gebo-ai-field-element></p-select>
                         </gebo-ai-field>
                     </div>
-
+                    <div class="col-6">
+                        <gebo-ai-field id="forUses" label="Model usage(s)" help="Uses that the Gebo.ai platform will consider this model for." placeholder="Choose model uses">
+                            <gebo-ai-chat-model-use-component formControlName="forUses" gebo-ai-field-element></gebo-ai-chat-model-use-component>
+                        </gebo-ai-field>
+                    </div>
                     <div class="col-6">
                         <gebo-ai-field id="defaultModel" label="set this as default chat model" help="If true this will be used as default chat model where chat model is not indicated">
                             <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true"

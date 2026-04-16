@@ -24,7 +24,7 @@ import java.util.Date;
  * GONNXTransformersEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
 
 public class GONNXTransformersEmbeddingModelChoice {
   @JsonProperty("code")
@@ -62,6 +62,9 @@ public class GONNXTransformersEmbeddingModelChoice {
 
   @JsonProperty("contextLength")
   private Integer contextLength = null;
+
+  @JsonProperty("nativeModelMetaInfos")
+  private Object nativeModelMetaInfos = null;
 
   @JsonProperty("optimalTokenizationParam")
   private Integer optimalTokenizationParam = null;
@@ -282,6 +285,24 @@ public class GONNXTransformersEmbeddingModelChoice {
     this.contextLength = contextLength;
   }
 
+  public GONNXTransformersEmbeddingModelChoice nativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+    return this;
+  }
+
+   /**
+   * Get nativeModelMetaInfos
+   * @return nativeModelMetaInfos
+  **/
+  @Schema(description = "")
+  public Object getNativeModelMetaInfos() {
+    return nativeModelMetaInfos;
+  }
+
+  public void setNativeModelMetaInfos(Object nativeModelMetaInfos) {
+    this.nativeModelMetaInfos = nativeModelMetaInfos;
+  }
+
   public GONNXTransformersEmbeddingModelChoice optimalTokenizationParam(Integer optimalTokenizationParam) {
     this.optimalTokenizationParam = optimalTokenizationParam;
     return this;
@@ -322,12 +343,13 @@ public class GONNXTransformersEmbeddingModelChoice {
         Objects.equals(this.metaInfos, goNNXTransformersEmbeddingModelChoice.metaInfos) &&
         Objects.equals(this.informativeUrl, goNNXTransformersEmbeddingModelChoice.informativeUrl) &&
         Objects.equals(this.contextLength, goNNXTransformersEmbeddingModelChoice.contextLength) &&
+        Objects.equals(this.nativeModelMetaInfos, goNNXTransformersEmbeddingModelChoice.nativeModelMetaInfos) &&
         Objects.equals(this.optimalTokenizationParam, goNNXTransformersEmbeddingModelChoice.optimalTokenizationParam);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, optimalTokenizationParam);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, metaInfos, informativeUrl, contextLength, nativeModelMetaInfos, optimalTokenizationParam);
   }
 
 
@@ -348,6 +370,7 @@ public class GONNXTransformersEmbeddingModelChoice {
     sb.append("    metaInfos: ").append(toIndentedString(metaInfos)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
+    sb.append("    nativeModelMetaInfos: ").append(toIndentedString(nativeModelMetaInfos)).append("\n");
     sb.append("    optimalTokenizationParam: ").append(toIndentedString(optimalTokenizationParam)).append("\n");
     sb.append("}");
     return sb.toString();

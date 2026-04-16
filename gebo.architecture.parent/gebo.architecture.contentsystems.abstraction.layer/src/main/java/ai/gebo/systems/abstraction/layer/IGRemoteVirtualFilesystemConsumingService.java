@@ -57,6 +57,7 @@ public interface IGRemoteVirtualFilesystemConsumingService<SystemType extends GC
 	 * @param system           The content management system instance.
 	 * @param endpoint         The endpoint pointing to the virtual filesystem
 	 *                         project.
+	 * @param sessionParam TODO
 	 * @param root             The root folder within the remote virtual filesystem
 	 *                         to start consumption.
 	 * @param consumer         The consumer responsible for processing each
@@ -64,11 +65,13 @@ public interface IGRemoteVirtualFilesystemConsumingService<SystemType extends GC
 	 * @param messagesConsumer The consumer responsible for handling user-facing
 	 *                         messages.
 	 * @param errorConsumer    The consumer responsible for handling access errors during processing.
+	 * @param messageModuleId TODO
+	 * @param messageSystemId TODO
 	 * @throws GeboContentHandlerSystemException if any exception occurs during
 	 *                                           resource consumption.
 	 */
-	public void consumeAll(SystemType system, EndpointType endpoint, GVirtualFolder root, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException;
+	public void consumeAll(SystemType system, EndpointType endpoint, RemoteVirtualFileSystemContentConsumingSessionParam sessionParam, GVirtualFolder root,
+			IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer, String messageModuleId, String messageSystemId) throws GeboContentHandlerSystemException;
 
 	/**
 	 * Retrieves a reference (handle) to a particular resource in the remote virtual

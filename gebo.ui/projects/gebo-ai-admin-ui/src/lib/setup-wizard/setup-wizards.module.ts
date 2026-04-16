@@ -23,7 +23,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { LLMSetupWizardComponent } from "./llms-setup-wizard.component";
-import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI, TranslableModule } from "@Gebo.ai/reusable-ui";
+import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTranslationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, TranslableModule, GeboAIApiKeyModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { SetupWizardsComponent } from "./setup-wizards.component";
 import { DialogModule } from "primeng/dialog";
@@ -35,14 +35,14 @@ import { ToggleButtonModule } from "primeng/togglebutton";
 import { ButtonModule } from "primeng/button";
 import { InputTextModule } from "primeng/inputtext";
 import { TextareaModule } from "primeng/textarea";
-import { MessagesModule } from "primeng/messages";
+
 import { TableModule } from 'primeng/table';
 import { VectorStoreWizardComponent, VectorStoreWizardService } from "./vectorstore-wizard.component";
 import { CheckboxModule } from "primeng/checkbox";
 import { WorkFolderWizardComponent, WorkFolderWizardEnabledService, WorkFolderWizardStatusService } from "./work-folder-wizard.component";
 import { SharedFilesystemAlreadySetupService, SharedFilesystemEnabledService, SharedFilesystemWizardComponent } from "./shared-filesystem-wizard.component";
 import { KnowledgeBasePresentService, KnowledgeBaseWizardComponent } from "./knowledge-base-wizard.component";
-import { GeboAiAdminModule } from "@Gebo.ai/gebo-ai-admin-ui";
+import { GeboAiAdminModule } from "../admin-ui/gebo-ai-admin.module";
 import { GeboSetupWizardService } from "./gebo-setup-wizards.service";
 import { ChatProfileStatusService, ChatProfileWizardComponent } from "./chat-profile-wizard.component";
 import { PaginatorModule } from "primeng/paginator";
@@ -58,8 +58,11 @@ import { GeboAILLMSVendorConfiguration } from "./llms-setup-components/llms-vend
 import { GeboAILlmsVendorModelTypeConfig } from "./llms-setup-components/llms-vendor-modeltype.component";
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabViewModule } from 'primeng/tabview';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from "primeng/api";
+
+import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./google-search-wizard.component";
+import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
+import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
+import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -269,7 +272,40 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
     wizardSectionId: "firstChatProfileBaseSetupSection",
     mandatory: false
 };
+const ragAutotuneSetupSection: SetupWizardsSection = {
+    orderEntry: 15,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: RagAutotuneStatusService,
+    label: "R.a.g. autotune",
+    description: "Automatic retrieve augmented generation parameters tuning",
+    wizardComponent: GeboAIRagAutotuneWizardComponent,
+    wizardSectionId: "ragAutotuneSetupSection",
+    mandatory: false
+};
 
+const googleSearchApiSetupSection: SetupWizardsSection = {
+    orderEntry: 16,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: GoogleSearcStatusService,
+    label: "Configure Google search api",
+    description: "Configure Google search api credentials for AI web searches",
+    wizardComponent: GeboAIGoogleSearchWizardComponent,
+    wizardSectionId: "googleSearchApiSetupSection",
+    mandatory: false
+};
+const deepSearchApiSetupSection: SetupWizardsSection = {
+    orderEntry: 17,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: AlwaysTrueStatusService,
+    label: "Configure Deep search",
+    description: "Configure Deep search parameters",
+    wizardComponent: GeboAIDeepSearchWizardComponent,
+    wizardSectionId: "deepSearchApiSetupSection",
+    mandatory: false
+};
 
 
 /**
@@ -279,12 +315,11 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
  * multiple sequential wizard sections that guide users through the configuration process.
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
-@NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig],
+@NgModule({ 
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule,GeboAINotificationsModule],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent,GeboAIRagAutotuneWizardComponent,GeboAIEasyVendorConfigurationComponent],
     exports: [SetupWizardsComponent],
     providers: [
-        MessageService,
         Oauth2SetupWizardService,
         Oauth2SetupEnabledService,
         LLMSetupWizardService,
@@ -306,6 +341,8 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         JiraStatusService,
         GraphRagStatusService,
         Neo4jModuleEnabledService,
+        GoogleSearcStatusService,
+        RagAutotuneStatusService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },
@@ -319,6 +356,9 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: googleSearchApiSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
 

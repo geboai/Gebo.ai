@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
@@ -19,23 +16,25 @@ import ai.gebo.llms.abstraction.layer.model.GTextToSpeechModelType;
 /**
  * Gebo.ai comment agent
  * 
- * This interface defines the contract for configuring text-to-speech models.
- * It extends a generic model configuration support service interface,
- * providing additional methods specific to text-to-speech models.
+ * This interface defines the contract for configuring text-to-speech models. It
+ * extends a generic model configuration support service interface, providing
+ * additional methods specific to text-to-speech models.
  *
  * @param <ModelChoice> A choice of model extending GBaseTextToSpeachModelChice
- * @param <ModelConfig> The configuration type extending GBaseTextToSpeachModelConfig
+ * @param <ModelConfig> The configuration type extending
+ *                      GBaseTextToSpeachModelConfig
  */
 public interface IGTextToSpeechModelConfigurationSupportService<ModelChoice extends GBaseTextToSpeachModelChice, ModelConfig extends GBaseTextToSpeachModelConfig<ModelChoice>>
-        extends IGModelConfigurationSupportService<GTextToSpeechModelType, ModelChoice, ModelConfig> {
+		extends
+		IGModelConfigurationSupportService<GTextToSpeechModelType, ModelChoice, ModelConfig, IGConfigurableTextToSpeechModel> {
 
-    /**
-     * Creates an instance of a configurable text-to-speech model
-     * based on the provided configuration.
-     *
-     * @param config The model configuration
-     * @return An instance of IGConfigurableTextToSpeechModel
-     * @throws LLMConfigException if configuration fails
-     */
-    public IGConfigurableTextToSpeechModel<ModelConfig> create(ModelConfig config) throws LLMConfigException;
+	/**
+	 * Creates an instance of a configurable text-to-speech model based on the
+	 * provided configuration.
+	 *
+	 * @param config The model configuration
+	 * @return An instance of IGConfigurableTextToSpeechModel
+	 * @throws LLMConfigException if configuration fails
+	 */
+	public IGConfigurableTextToSpeechModel<ModelConfig> create(ModelConfig config) throws LLMConfigException;
 }

@@ -114,23 +114,24 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		// Create a document reference for the file using the reference factory
 		GDocumentReference document = docreferenceFactory.createReference(file,
 				"runSinglePDFContentsReadingAndEmbedding", null, null, endpoint, folder,
-				TestConstants.TEST_CONTENT_SYSTEM_MODULE);
+				TestConstants.TEST_CONTENT_SYSTEM_MODULE, TestConstants.TEST_CONTENT_SYSTEM_MODULE);
 		endpoint.getTestDocumentReferences().add(document);
 		persistentObjectManager.update(endpoint);
 		// Execute the ingestion synchronously and obtain job status
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		
+
 		int NMAXCYCLES = 20;
 		int nCycles = 0;
 		do {
 			Thread.sleep(10000);
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 			nCycles++;
-			LOGGER.info("Cycle " + nCycles );
+			LOGGER.info("Cycle " + nCycles);
 			printSummary(summary);
-		} while ((!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished())) && nCycles < NMAXCYCLES);
+		} while ((!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished()))
+				&& nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging;
 
@@ -17,13 +14,14 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import ai.gebo.application.messaging.model.ComponentMetaInfo;
+import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GModuleMetaInfo;
 
 /**
  * Gebo.ai comment agent
  * 
- * Interface to define message broker operations, including managing 
- * system components, retrieving system information, and filtering components.
+ * Interface to define message broker operations, including managing system
+ * components, retrieving system information, and filtering components.
  */
 public interface IGMessageBroker extends IGMessageConsumer {
 
@@ -88,10 +86,19 @@ public interface IGMessageBroker extends IGMessageConsumer {
 	/**
 	 * Checks if a receiving component is present in a module with the specified ID.
 	 *
-	 * @param module The name of the module.
+	 * @param module      The name of the module.
 	 * @param componentId The ID of the component to check.
 	 * @return true if the receiving component is present, false otherwise.
 	 */
 	public boolean checkReceivingComponentPresent(String module, String componentId);
+
+	/**********************************************************************************
+	 * Send a message to each consumer able to receive the payload
+	 * 
+	 * @param envelope
+	 */
+	public void broadcast(GMessageEnvelope envelope);
+
+	public GeboCurrentApplication getCurrentApplication();
 
 }

@@ -31,6 +31,7 @@ export interface GConfluenceProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GConfluenceProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GConfluenceProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     paths?: Array<VFilesystemReference>;
     confluenceSystemCode?: string;
     extractedFormat?: GConfluenceProjectEndpoint.ExtractedFormatEnum;

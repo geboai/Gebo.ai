@@ -20,10 +20,9 @@
 
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem, AuthProviderDto } from "@Gebo.ai/gebo-ai-rest-api";
+import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
-import { UploadEvent } from "primeng/fileupload";
+import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo.ai/reusable-ui";
@@ -43,7 +42,7 @@ const sharepointCode: string = "sharepoint-module";
 @Component({
     selector: "gebo-ai-sharepoint-endpoint-component",
     templateUrl: "gebo-ai-sharepoint-endpoint.component.html",
-    providers: [MessageService, SharepointUrlService,  
+    providers: [ SharepointUrlService,  
         { provide: GEBO_AI_MODULE, useValue: "GeboAISharepointModule", multi: false }, 
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISharepointEndpointComponent), multi: false
     }],
@@ -161,8 +160,6 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
         private projectsController: ProjectsControllerService,
         private JobLauncherControllerService: JobLauncherControllerService,
         private actionsRouter: GeboUIActionRoutingService,
-        private messageService: MessageService,
-
         confirmService: ConfirmationService,
         outputForwardingService?: GeboUIOutputForwardingService
     ) {
@@ -286,14 +283,7 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
         return of({ canBeDeleted: true, message: "" });
     }
 
-    /**
-     * Handles automatic file upload events
-     * @param event The upload event containing file data
-     */
-    onBasicUploadAuto(event: UploadEvent) {
-        this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
-    }
+   
 
     /**
      * Performs a save and publish operation on the endpoint

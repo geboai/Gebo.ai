@@ -6,23 +6,24 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.knlowledgebase.model.systems;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.acl.GAclEntry;
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.base.GBaseVersionableObject;
+import lombok.Data;
 
 /**
- * AI generated comments
- * Represents a content management system within the application.
- * Extends the GBaseVersionableObject to inherit version control functionality.
+ * AI generated comments Represents a content management system within the
+ * application. Extends the GBaseVersionableObject to inherit version control
+ * functionality.
  */
-public class GContentManagementSystem extends GBaseVersionableObject {
+@Data
+public class GContentManagementSystem extends GBaseVersionableObject implements IAclGrantedResource {
 
 	/**
 	 * Unique identifier for serialization purposes.
@@ -48,77 +49,6 @@ public class GContentManagementSystem extends GBaseVersionableObject {
 	 * List of capabilities used by the system, represented by GSystemRole.
 	 */
 	private List<GSystemRole> usedCapabilities = new ArrayList<GSystemRole>();
-
-	/**
-	 * Retrieves the type of the content management system.
-	 * 
-	 * @return the content management system type as a String.
-	 */
-	public String getContentManagementSystemType() {
-		return contentManagementSystemType;
-	}
-
-	/**
-	 * Sets the type of the content management system.
-	 * 
-	 * @param contentManagementSystemType the type to set for the content management system.
-	 */
-	public void setContentManagementSystemType(String contentManagementSystemType) {
-		this.contentManagementSystemType = contentManagementSystemType;
-	}
-
-	/**
-	 * Retrieves the base URI of the content management system.
-	 * 
-	 * @return the base URI as a String.
-	 */
-	public String getBaseUri() {
-		return baseUri;
-	}
-
-	/**
-	 * Sets the base URI of the content management system.
-	 * 
-	 * @param baseUri the base URI to set for the content management system.
-	 */
-	public void setBaseUri(String baseUri) {
-		this.baseUri = baseUri;
-	}
-
-	/**
-	 * Retrieves the list of capabilities used by the system.
-	 * 
-	 * @return a List of GSystemRole representing the used capabilities.
-	 */
-	public List<GSystemRole> getUsedCapabilities() {
-		return usedCapabilities;
-	}
-
-	/**
-	 * Sets the list of capabilities used by the system.
-	 * 
-	 * @param usedCapabilities the list of capabilities to set.
-	 */
-	public void setUsedCapabilities(List<GSystemRole> usedCapabilities) {
-		this.usedCapabilities = usedCapabilities;
-	}
-
-	/**
-	 * Checks if the content management system is read-only.
-	 * 
-	 * @return a Boolean indicating if the system is read-only.
-	 */
-	public Boolean getReadonly() {
-		return readonly;
-	}
-
-	/**
-	 * Sets the read-only status of the content management system.
-	 * 
-	 * @param readonly the Boolean status to set for read-only mode.
-	 */
-	public void setReadonly(Boolean readonly) {
-		this.readonly = readonly;
-	}
-
+	
+	private List<Integer> aclAliases = null;
 }

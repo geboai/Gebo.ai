@@ -30,6 +30,7 @@ export interface GIntegrationProjectEndpoint {
     vectorizeOnlyExtensions?: Array<string>;
     synchroStrategy?: GIntegrationProjectEndpoint.SynchroStrategyEnum;
     objectSpaceType?: GIntegrationProjectEndpoint.ObjectSpaceTypeEnum;
+    aclAliases?: Array<number>;
     allowedApplicationUsers?: Array<string>;
 }
 export namespace GIntegrationProjectEndpoint {

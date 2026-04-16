@@ -24,6 +24,7 @@ export interface GGoogleDriveSystem {
     readonly?: boolean;
     baseUri?: string;
     usedCapabilities?: Array<GGoogleDriveSystem.UsedCapabilitiesEnum>;
+    aclAliases?: Array<number>;
     driveAccessSecret?: string;
 }
 export namespace GGoogleDriveSystem {
