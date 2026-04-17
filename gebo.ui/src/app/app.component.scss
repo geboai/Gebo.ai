@@ -18,3 +18,14 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.version-display {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.8rem;
+    color: #666;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.7;
+}

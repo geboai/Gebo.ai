@@ -19,6 +19,7 @@ import { GeboAITranslationService, resetAuth, saveAuth, SetupStatus } from '@Geb
 import { PrimeNG } from 'primeng/config';
 import { Subscription } from 'rxjs';
 import { TrashIcon } from 'primeng/icons';
+import packageInfo from '../../package.json';
 const editMyProfileMenuItemId: string = "editMyProfileMenuItem";
 const setupItemId: string = "setupMenuItem";
 const adminItemId: string = "adminMenuItem";
@@ -40,6 +41,7 @@ const menuItemsProtos: MegaMenuItem[] = [
 export class AppComponent implements OnInit {
   @ViewChild("userEditProfile") userEditProfile: any;
   public loading: boolean = false;
+  public version: string = packageInfo.version;
   public userLogged: boolean = false;
   public userInfo?: UserInfo;
   public menuItems: MegaMenuItem[] = [];
