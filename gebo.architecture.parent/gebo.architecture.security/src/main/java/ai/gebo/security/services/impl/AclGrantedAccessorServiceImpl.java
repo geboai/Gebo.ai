@@ -1,11 +1,14 @@
 package ai.gebo.security.services.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
@@ -215,6 +218,26 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		List<String> groupIds = group.stream().map(x -> getUniqueId(x)).toList();
 		List<Integer> data = this.aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(groupIds, grantType);
 		return data;
+	}
+
+	final Map<AclGrantType, Integer> everyoneAliases = new HashMap<>();
+
+	@Override
+	public Integer aliasForEveryone(AclGrantType grantType) {
+		if (everyoneAliases.isEmpty()) {
+			synchronized (everyoneAliases) {
+				List<GAclEntry> acls = List.of(GAclEntry.EVERYONE_READ_ACCESS, GAclEntry.EVERYONE_WRITE_ACCESS,
+						GAclEntry.EVERYONE_EXECUTE_ACCESS);
+				for (GAclEntry gAclEntry : acls) {
+					Integer alias = this.aliasesDao.findAlias(gAclEntry);
+					if (alias == null) {
+						alias = this.aliasesDao.addAcl(gAclEntry);
+					}
+					this.everyoneAliases.put(gAclEntry.getGrant(), alias);
+				}
+			}
+		}
+		return this.everyoneAliases.get(grantType);
 	}
 
 }

@@ -24,8 +24,8 @@ import ai.gebo.model.virtualfs.PathInfo;
  */
 public abstract class AbstractNativePositionObject implements Serializable {
 	// Path information associated with the position object
-	PathInfo path = null;
-
+	protected PathInfo path = null;
+	protected List<Integer> aclAliases=null;
 	/**
 	 * Gets the PathInfo object associated with this position object.
 	 *
@@ -108,7 +108,7 @@ public abstract class AbstractNativePositionObject implements Serializable {
 	public abstract Long getResourceFileSize();
 
 	public List<Integer> getAclAliases() {
-		return null;
+		return aclAliases;
 	}
 
 	/**
@@ -122,5 +122,9 @@ public abstract class AbstractNativePositionObject implements Serializable {
 				+ ",resourceContentType=" + getResourceContentType() + ",url=" + getUrl() + ",resourceFileSize="
 				+ getResourceFileSize() + " metainfos=" + getResourceReferenceMetaInfos() + "}";
 		return _string;
+	}
+
+	public void setAclAliases(List<Integer> aclAliases) {
+		this.aclAliases = aclAliases;
 	}
 }
