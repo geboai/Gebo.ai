@@ -8,7 +8,7 @@ public interface IAclAliasesDao {
 	public GAclEntry findAcl(int alias);
 
 	public List<Integer> findAliasesByAclGrantedUniqueId(String aclGrantedUniqueId);
-
+	
 	public List<Integer> findAliasesByAclGrantedUniqueIdAndAclGrantType(String aclGrantedUniqueId,
 			AclGrantType grantType);
 

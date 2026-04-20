@@ -78,7 +78,8 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 	@Override
 	public IAclGrantedAccessor fromUser(UserInfos user) {
 		final String uniqueId = getUniqueId(user);
-		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueId(uniqueId);
+		final List<Integer> aliases = aliasesDao
+				.findAliasesByAclGrantedUniqueIdIn(List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID));
 		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(this::fromGroup).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();
@@ -161,7 +162,8 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 	@Override
 	public IAclGrantedAccessor fromUser(UserInfos user, AclGrantType grantType) {
 		final String uniqueId = getUniqueId(user);
-		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
+		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(
+				List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID), grantType);
 		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(x -> this.fromGroup(x, grantType)).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();

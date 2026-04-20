@@ -14,4 +14,11 @@ import lombok.NoArgsConstructor;
 public class GAclEntry implements Serializable {
 	private String aclGrantedUniqueId = null;
 	private AclGrantType grant = null;
+
+	public static final GAclEntry EVERYONE_READ_ACCESS = new GAclEntry(IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID,
+			AclGrantType.READ);
+	public static final GAclEntry EVERYONE_WRITE_ACCESS = new GAclEntry(IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID,
+			AclGrantType.WRITE);
+	public static final GAclEntry EVERYONE_EXECUTE_ACCESS = new GAclEntry(IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID,
+			AclGrantType.EXECUTE);
 }
