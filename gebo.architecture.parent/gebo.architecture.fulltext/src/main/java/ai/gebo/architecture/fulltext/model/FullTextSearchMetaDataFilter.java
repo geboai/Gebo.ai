@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class MetaDataFilter {
+public class FullTextSearchMetaDataFilter {
 	private List<String> knowledgebaseCodes; // DocumentMetaInfos.KNOWLEDGEBASE_CODE
 	private String projectCode; // DocumentMetaInfos.PROJECT_CODE
 	private String projectEndpointCode; // DocumentMetaInfos.PROJECT_ENDPOINT_CODE

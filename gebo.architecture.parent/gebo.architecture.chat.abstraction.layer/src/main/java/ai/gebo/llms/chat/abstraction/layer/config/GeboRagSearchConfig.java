@@ -83,13 +83,11 @@ public class GeboRagSearchConfig {
 	@Bean
 	@Scope("singleton")
 	public IInternalKnowledgeLLMAssistedRetrieveService internalKnowledgeLLMAssistedRetrieveService(
-			IGAIDocumentsCacheService documentsCacheService, IGChatStorageAreaService chatStorageAreaService,
-			DocumentReferenceRepository docreferenceRepo, UserUploadContentServerSideRepository uploadsRepo,
+			
 			LLMGeneratedResourceRepository generatedRepo, IGChatSessionLifeCycleService chatSessionLifecycleService,
 			ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
 			IGDocumentsSearchService searchesService) {
-		return new InternalKnowledgeLLMAssistedRetrieveServiceImpl(documentsCacheService, chatStorageAreaService,
-				docreferenceRepo, uploadsRepo, generatedRepo, chatSessionLifecycleService, configuration, promptsDao,
-				searchesService);
+		return new InternalKnowledgeLLMAssistedRetrieveServiceImpl(chatSessionLifecycleService, configuration,
+				promptsDao, searchesService, securityService);
 	}
 }

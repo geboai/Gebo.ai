@@ -4,10 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
@@ -28,10 +32,10 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
-
 
 @AllArgsConstructor
 public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInvokingService
@@ -39,15 +43,12 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	private static final String DOCUMENTS = "documents";
 	private static final String FULL_TEXT_QUERIES_FIELD = "fullTextQueries";
 	private static final String SEMANTIC_QUERIES_FIELD = "semanticQueries";
-	protected final IGAIDocumentsCacheService documentsCacheService;
-	protected final IGChatStorageAreaService chatStorageAreaService;
-	protected final DocumentReferenceRepository docreferenceRepo;
-	protected final UserUploadContentServerSideRepository uploadsRepo;
-	protected final LLMGeneratedResourceRepository generatedRepo;
-	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
-	protected final ChatPipelinesConfiguration configuration;
-	protected final IGPromptConfigDao promptsDao;
+	
+	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	private final ChatPipelinesConfiguration configuration;
+	private final IGPromptConfigDao promptsDao;
 	private final IGDocumentsSearchService searchesService;
+	private final IGSecurityService securityService;
 
 	private SearchesSuggestions askSearchesSuggestion(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel) {
@@ -103,24 +104,35 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 			IGConfigurableChatModel targetChatModel, SearchesSuggestions searchSuggestions,
 			List<GKnowledgeBase> knowledgeBases, LLMRequestGenerationPolicy policy)
 			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
-
+		
 		AIDocumentsSet out = new AIDocumentsSet();
-
+		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
+		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
+		if (securityService.getPlatformContentAccessPolicy()==ContentAccessPolicy.ACL_BASED && !securityService.isCurrentUserAdmin()) {
+			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
+			semanticSearchMetaDataFilter.setAclAliases(aclAliases);
+		}
+		fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
+		semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 		AIDocumentsSet searchResult = this.search(minimalChatContext, searchSuggestions, targetChatModel,
-				targetChatModel.getContextLength());
+				targetChatModel.getContextLength(), semanticSearchMetaDataFilter, fullTextSearchMetaDataFilter);
 		out = AIDocumentsSet.join(out, searchResult);
 
 		return out;
 	}
 
 	private AIDocumentsSet search(MinimalChatContext minimalChatContext, SearchesSuggestions searchRewritings,
-			IGConfigurableChatModel targetChatModel, int contextWindowLength)
+			IGConfigurableChatModel targetChatModel, int contextWindowLength,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter,
+			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter)
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
 
 		int tokensBudget = contextWindowLength / 4;
 		AIDocumentsSet documentSet = searchesService.search(minimalChatContext.getCurrentRequest(),
-				searchRewritings.getRewrittenSemanticSearchSentences(),
-				searchRewritings.getRewrittenFullTextSearchSentences(),
+				searchRewritings.getRewrittenSemanticSearchSentences(), semanticSearchMetaDataFilter,
+				searchRewritings.getRewrittenFullTextSearchSentences(), fullTextSearchMetaDataFilter,
 				GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()), configuration.getGlobalRagTopK(),
 				tokensBudget);
 
