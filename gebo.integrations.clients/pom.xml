@@ -26,5 +26,6 @@
 		<!-- 
 		<module>gebo.regolo_ai.client</module>
 		-->
+		<module>gebo.ranker.api</module>
 	</modules>
 </project>
