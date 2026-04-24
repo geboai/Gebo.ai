@@ -24,7 +24,7 @@ public class GenericOpenAIRankerModelConfigurationSupportService extends
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelsListProviderProxyService modelsListProxyService, IGOpenAIApiUtil openaiApiUtil) {
 		super(secretAccessService, type, type.getBaseUrl(), STANDARD_RERANK_RELATIVE_URL, null, configureHandler,
-				serviceClientsProviderFactory,type.isOptionalAuthentication());
+				serviceClientsProviderFactory, type.isOptionalAuthentication());
 		this.modelsListProxyService = modelsListProxyService;
 		this.openaiApiUtil = openaiApiUtil;
 	}
@@ -48,6 +48,11 @@ public class GenericOpenAIRankerModelConfigurationSupportService extends
 
 		return result;
 
+	}
+
+	@Override
+	public String getId() {
+		return type.getCode();
 	}
 
 	@Override
