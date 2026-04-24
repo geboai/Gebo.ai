@@ -21,7 +21,7 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 	private final String baseUrl;
 	private final String relativeServiceUrl;
 	private final String defaultModel;
-
+	private final boolean optionalAuthentication;
 	private GRankerModelType type;
 	private ModelConfig config = null;
 	private RankerModel model = null;
@@ -30,12 +30,13 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 
 	public GBaseConfigurableRankerModel(IGeboSecretsAccessService secretAccessService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactor, String baseUrl, String relativeServiceUrl,
-			String defaultModel) {
+			String defaultModel, boolean optionalAuthentication) {
 		this.secretAccessService = secretAccessService;
 		this.baseUrl = baseUrl;
 		this.relativeServiceUrl = relativeServiceUrl;
 		this.defaultModel = defaultModel;
 		this.serviceClientsProviderFactory = serviceClientsProviderFactor;
+		this.optionalAuthentication = optionalAuthentication;
 	}
 
 	@Override
@@ -78,12 +79,16 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 					apiKey = token.getToken();
 				}
 			}
+			if (!optionalAuthentication) {
+				if (apiKey == null)
+					throw new LLMConfigException("ApiKey is required in this ranker client");
+			}
 			String thisBaseUrl = this.baseUrl;
 			if (thisBaseUrl == null)
 				thisBaseUrl = config.getBaseUrl();
 			String thisRelativeUrl = this.relativeServiceUrl;
 			if (thisRelativeUrl == null)
-				thisRelativeUrl = "/v1/ranker";
+				thisRelativeUrl = IGRankerModelConfigurationSupportService.STANDARD_RERANK_RELATIVE_URL;
 			String thisCompleteUrl = thisBaseUrl + thisRelativeUrl;
 			this.model = new GeboStandardRankerClient(apiKey, thisCompleteUrl,
 					config.getChoosedModel() != null ? config.getChoosedModel().getCode() : this.defaultModel);

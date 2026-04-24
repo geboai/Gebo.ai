@@ -29,8 +29,11 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
+import ai.gebo.llms.abstraction.layer.model.GRankerModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
@@ -310,6 +313,14 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 
 		}, modelConfig.getApiSecretCode(), config.isApiKeyMandatory());
 		return throwed.isEmpty()?llmTypeFiltrerRepoPattern.filterEmbeddingModels(modelType, returnValue):OperationStatus.of(throwed.get(0));
+	}
+
+	@Override
+	public <ModelChoice extends GBaseRankerModelChoice, RankerConfigType extends GBaseRankerModelConfig<ModelChoice>, RankerTypeClass extends GRankerModelType> OperationStatus<List<ModelChoice>> getRankerModels(
+			Class<ModelChoice> class1, OpenAIApiConfig providerConfig, RankerConfigType config,
+			Function<ModelChoice, ModelMetaInfo> defaultMetainfoFactory, RankerTypeClass type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
