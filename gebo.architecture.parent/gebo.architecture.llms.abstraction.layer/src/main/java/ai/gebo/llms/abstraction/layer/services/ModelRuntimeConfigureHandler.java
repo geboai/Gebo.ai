@@ -13,6 +13,7 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,11 @@ public class ModelRuntimeConfigureHandler {
 			dao.addRuntimeByConfig(embeddingModel);
 			handleDefaultModel(GBaseEmbeddingModelConfig.class, embeddingModel, dao);
 		}
-
+		if (model instanceof GBaseRankerModelConfig rankerConfig) {
+			IGRankerModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGRankerModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfig(rankerConfig);
+		}
 		return OperationStatus.of(model);
 	}
 
