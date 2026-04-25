@@ -23,13 +23,13 @@ export interface GenericOpenAIAPIChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GenericOpenAIAPIChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GenericOpenAIAPIChatModelConfig.ForUsesEnum>;
     features?: Array<GenericOpenAIAPIChatModelConfig.FeaturesEnum>;

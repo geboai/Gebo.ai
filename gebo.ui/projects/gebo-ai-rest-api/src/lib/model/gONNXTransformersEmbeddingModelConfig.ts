@@ -23,5 +23,6 @@ export interface GONNXTransformersEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GONNXTransformersEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

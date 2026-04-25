@@ -23,13 +23,13 @@ export interface GAzureOpenAIChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GAzureOpenAIChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GAzureOpenAIChatModelConfig.ForUsesEnum>;
     features?: Array<GAzureOpenAIChatModelConfig.FeaturesEnum>;

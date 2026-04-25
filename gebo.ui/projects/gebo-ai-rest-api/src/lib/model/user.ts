@@ -19,6 +19,7 @@ export interface User {
     disabled?: boolean;
     provider: User.ProviderEnum;
     roles?: Array<string>;
+    langCode?: string;
 }
 export namespace User {
     export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';

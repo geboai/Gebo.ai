@@ -2,6 +2,9 @@ package ai.gebo.llms.abstraction.layer.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.retry.support.RetryTemplate;
+import org.springframework.web.client.RestClient.Builder;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
@@ -18,8 +21,7 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 		implements IGConfigurableRankerModel<ModelConfig> {
 	private final IGeboSecretsAccessService secretAccessService;
 	private final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
-	private final String baseUrl;
-	private final String relativeServiceUrl;
+
 	private final String defaultModel;
 	private final boolean optionalAuthentication;
 	private GRankerModelType type;
@@ -29,11 +31,9 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	public GBaseConfigurableRankerModel(IGeboSecretsAccessService secretAccessService,
-			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactor, String baseUrl, String relativeServiceUrl,
-			String defaultModel, boolean optionalAuthentication) {
+			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactor, String defaultModel,
+			boolean optionalAuthentication) {
 		this.secretAccessService = secretAccessService;
-		this.baseUrl = baseUrl;
-		this.relativeServiceUrl = relativeServiceUrl;
 		this.defaultModel = defaultModel;
 		this.serviceClientsProviderFactory = serviceClientsProviderFactor;
 		this.optionalAuthentication = optionalAuthentication;
@@ -83,15 +83,19 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 				if (apiKey == null)
 					throw new LLMConfigException("ApiKey is required in this ranker client");
 			}
-			String thisBaseUrl = this.baseUrl;
-			if (thisBaseUrl == null)
-				thisBaseUrl = config.getBaseUrl();
-			String thisRelativeUrl = this.relativeServiceUrl;
-			if (thisRelativeUrl == null)
-				thisRelativeUrl = IGRankerModelConfigurationSupportService.STANDARD_RERANK_RELATIVE_URL;
-			String thisCompleteUrl = thisBaseUrl + thisRelativeUrl;
-			this.model = new GeboStandardRankerClient(apiKey, thisCompleteUrl,
-					config.getChoosedModel() != null ? config.getChoosedModel().getCode() : this.defaultModel);
+
+			String thisCompleteUrl = config.generateEndpointUrl();
+
+			String model = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : this.defaultModel;
+			IGLlmsServiceClientsProvider serviceClientProvider = this.serviceClientsProviderFactory
+					.get(config.getModelTypeCode());
+			Builder restClientBuilder = serviceClientProvider.getRestClientBuilder();
+			RetryTemplate retryTemplate = serviceClientProvider.getRetryTemplate();
+			org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder = serviceClientProvider
+					.getWebClientBuilder();
+			this.model = new GeboStandardRankerClient(apiKey, thisCompleteUrl, model, restClientBuilder, retryTemplate,
+					config.getContextLength(), config.getMaxDocumentsPerRequest(), config.getMaxDocumentTokens(),
+					config.getResponseReserveTokens());
 		} catch (GeboCryptSecretException e) {
 			throw new LLMConfigException("Exception configuring ranker module", e);
 		}

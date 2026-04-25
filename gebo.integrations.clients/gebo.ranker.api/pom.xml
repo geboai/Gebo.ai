@@ -7,7 +7,7 @@
 		<artifactId>gebo.integrations.clients.parent</artifactId>
 		<version>1.0.1.0-ALPHA</version>
 	</parent>
-	
+
 	<artifactId>gebo.ranker.api</artifactId>
 	<packaging>jar</packaging>
 	<dependencies>
@@ -15,6 +15,10 @@
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-commons</artifactId>
 			<version>${spring.ai.version}</version>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
 	</dependencies>
 </project>

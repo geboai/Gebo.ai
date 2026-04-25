@@ -9,20 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelChoice } from './gMistralEmbeddingModelChoice';
+import { ModelMetaInfo } from './modelMetaInfo';
 
-export interface GMistralEmbeddingModelConfig { 
+export interface GenericOpenAIRankerModelChoice { 
     code?: string;
     description?: string;
     userModified?: string;
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    modelTypeCode?: string;
-    defaultModel?: boolean;
-    apiSecretCode?: string;
-    choosedModel?: GMistralEmbeddingModelChoice;
-    baseUrl?: string;
+    creationDate?: Date;
+    modificationDate?: Date;
+    version?: string;
+    metaInfos?: ModelMetaInfo;
+    informativeUrl?: string;
     contextLength?: number;
-    tokenizationThreshold?: number;
+    nativeModelMetaInfos?: any;
 }

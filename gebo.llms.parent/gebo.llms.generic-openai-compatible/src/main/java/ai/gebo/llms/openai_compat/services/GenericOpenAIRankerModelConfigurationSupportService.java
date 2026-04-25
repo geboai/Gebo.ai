@@ -9,22 +9,22 @@ import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelConfig;
-import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelType;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 
 public class GenericOpenAIRankerModelConfigurationSupportService extends
-		GAbstractRankerModelConfigurationSupportService<GenericOpenAIRankerModelChoice, GenericOpenAIRankerModelConfig, GenericOpenAIRankerModelType> {
+		GAbstractRankerModelConfigurationSupportService<GenericOpenAIRankerModelChoice, GenericOpenAIRankerModelConfig, GenericOpenAIRankerModelTypeConfig> {
 	final ModelsListProviderProxyService modelsListProxyService;
 	final IGOpenAIApiUtil openaiApiUtil;
 
-	public GenericOpenAIRankerModelConfigurationSupportService(GenericOpenAIRankerModelType type,
+	public GenericOpenAIRankerModelConfigurationSupportService(GenericOpenAIRankerModelTypeConfig type,
 			IGeboSecretsAccessService secretAccessService, ModelRuntimeConfigureHandler configureHandler,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelsListProviderProxyService modelsListProxyService, IGOpenAIApiUtil openaiApiUtil) {
-		super(secretAccessService, type, type.getBaseUrl(), STANDARD_RERANK_RELATIVE_URL, null, configureHandler,
-				serviceClientsProviderFactory, type.isOptionalAuthentication());
+		super(secretAccessService, type, type.getDefaultModel(), configureHandler, serviceClientsProviderFactory,
+				type.isOptionalAuthentication());
 		this.modelsListProxyService = modelsListProxyService;
 		this.openaiApiUtil = openaiApiUtil;
 	}
@@ -57,7 +57,7 @@ public class GenericOpenAIRankerModelConfigurationSupportService extends
 
 	@Override
 	public GenericOpenAIRankerModelConfig createBaseConfiguration(String presetModel) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

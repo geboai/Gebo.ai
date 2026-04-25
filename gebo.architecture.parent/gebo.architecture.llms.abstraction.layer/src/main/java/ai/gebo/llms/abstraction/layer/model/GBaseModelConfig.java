@@ -48,5 +48,10 @@ public class GBaseModelConfig<ModelChoiceType extends GBaseModelChoice> extends 
 	 * Base URL for connecting to the model's API.
 	 */
 	protected String baseUrl = null;
+	
+	/**
+	 * The context length setting of the model, null by default.
+	 */
+	protected Integer contextLength = null;
 
 }

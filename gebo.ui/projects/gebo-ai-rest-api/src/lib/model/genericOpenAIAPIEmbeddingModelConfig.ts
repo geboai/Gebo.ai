@@ -23,5 +23,6 @@ export interface GenericOpenAIAPIEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GenericOpenAIAPIEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

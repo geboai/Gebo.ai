@@ -35,7 +35,7 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
-import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelType;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
@@ -155,7 +155,7 @@ public class GenericOpenAIProvidersAssembler {
 			}
 		}
 		if (config.getRankerModelProviders() != null) {
-			for (GenericOpenAIRankerModelType rm : config.getRankerModelProviders()) {
+			for (GenericOpenAIRankerModelTypeConfig rm : config.getRankerModelProviders()) {
 				GenericOpenAIRankerModelConfigurationSupportService service = new GenericOpenAIRankerModelConfigurationSupportService(
 						rm, secretService, configureHandler, serviceClientsProviderFactory, modelsListProxyService,
 						openaiApiUtil);

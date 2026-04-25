@@ -23,13 +23,13 @@ export interface GBaseChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GBaseChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GBaseChatModelConfig.ForUsesEnum>;
     features?: Array<GBaseChatModelConfig.FeaturesEnum>;

@@ -23,13 +23,13 @@ export interface GOpenAIChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GOpenAIChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GOpenAIChatModelConfig.ForUsesEnum>;
     features?: Array<GOpenAIChatModelConfig.FeaturesEnum>;

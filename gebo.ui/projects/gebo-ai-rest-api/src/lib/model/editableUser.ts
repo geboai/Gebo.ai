@@ -17,6 +17,7 @@ export interface EditableUser {
     disabled?: boolean;
     roles: Array<string>;
     authProvider: EditableUser.AuthProviderEnum;
+    langCode?: string;
 }
 export namespace EditableUser {
     export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';

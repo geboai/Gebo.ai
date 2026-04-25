@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class RankingOutput {
+
 	@AllArgsConstructor
 	@Getter
 	public static class RankingItem {
@@ -19,5 +20,5 @@ public class RankingOutput {
 		private final Double ranking;
 	}
 
-	final List<RankingItem> ranked;
+	private final List<RankingItem> ranked;
 }
