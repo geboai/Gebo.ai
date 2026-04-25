@@ -50,6 +50,7 @@ import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsC
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
+import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
@@ -147,6 +148,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
     GeboVectorStoreConfigurationControllerService,
+    GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,
     GitSystemsControllerService,

@@ -23,13 +23,13 @@ export interface GMistralChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GMistralChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GMistralChatModelConfig.ForUsesEnum>;
     features?: Array<GMistralChatModelConfig.FeaturesEnum>;

@@ -16,7 +16,7 @@ import org.opensearch.client.json.JsonData;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.fulltext.model.MetaDataFilter;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.model.FullTextChunk;
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
 import ai.gebo.architecture.fulltext.model.FullTextDocument;
@@ -37,7 +37,7 @@ public class OpenSearchFullTextChunkSearchService {
 		this.client = client;
 	}
 
-	public List<FullTextChunkSearchHit> searchTopKChunks(List<String> q, int topK, MetaDataFilter filter)
+	public List<FullTextChunkSearchHit> searchTopKChunks(List<String> q, int topK, FullTextSearchMetaDataFilter filter)
 			throws OpenSearchException, IOException {
 
 		if (q == null || q.isEmpty())
@@ -117,7 +117,7 @@ public class OpenSearchFullTextChunkSearchService {
 	 * @throws IOException
 	 * @throws OpenSearchException
 	 */
-	public List<FullTextChunkSearchHit> searchTopKChunks(String q, int topK, MetaDataFilter filter)
+	public List<FullTextChunkSearchHit> searchTopKChunks(String q, int topK, FullTextSearchMetaDataFilter filter)
 			throws OpenSearchException, IOException {
 		if (q == null || q.trim().isEmpty())
 			return List.of();
@@ -178,7 +178,7 @@ public class OpenSearchFullTextChunkSearchService {
 				.type(org.opensearch.client.opensearch._types.query_dsl.TextQueryType.BestFields)));
 	}
 
-	private List<Query> buildFilters(MetaDataFilter f) {
+	private List<Query> buildFilters(FullTextSearchMetaDataFilter f) {
 		if (f == null) {
 			return List.of();
 		}
@@ -269,7 +269,7 @@ public class OpenSearchFullTextChunkSearchService {
 		filters.add(Query.of(q -> q.term(t -> t.field(field).value(val -> val.stringValue(v)))));
 	}
 
-	private List<FullTextChunkSearchHit> flattenHits(SearchResponse<Map> resp, MetaDataFilter filter) {
+	private List<FullTextChunkSearchHit> flattenHits(SearchResponse<Map> resp, FullTextSearchMetaDataFilter filter) {
 		List<FullTextChunkSearchHit> out = new ArrayList<>();
 
 		boolean collapsed = filter != null && filter.isCollapseByDocument();

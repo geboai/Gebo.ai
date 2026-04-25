@@ -23,13 +23,13 @@ export interface GOllamaChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GOllamaChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GOllamaChatModelConfig.ForUsesEnum>;
     features?: Array<GOllamaChatModelConfig.FeaturesEnum>;

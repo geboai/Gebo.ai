@@ -14,8 +14,8 @@ import { SortObject } from './sortObject';
 import { UserInfos } from './userInfos';
 
 export interface PageUserInfos { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     first?: boolean;
     last?: boolean;
     size?: number;

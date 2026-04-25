@@ -23,13 +23,13 @@ export interface GAnthropicChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GAnthropicChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
     defaultModelPrompt?: string;
     forUses?: Array<GAnthropicChatModelConfig.ForUsesEnum>;
     features?: Array<GAnthropicChatModelConfig.FeaturesEnum>;

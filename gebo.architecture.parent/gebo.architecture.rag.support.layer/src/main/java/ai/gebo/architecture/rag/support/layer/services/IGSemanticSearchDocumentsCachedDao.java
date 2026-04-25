@@ -6,111 +6,125 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.rag.support.layer.services;
 
-import java.util.List;
-
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
 /**
- * This interface defines the contract for interacting with cached RAG (Retrieval-Augmented Generation) documents.
- * It provides methods for performing various types of searches on these documents.
+ * This interface defines the contract for interacting with cached RAG
+ * (Retrieval-Augmented Generation) documents. It provides methods for
+ * performing various types of searches on these documents.
  * 
  * AI generated comments
  */
 public interface IGSemanticSearchDocumentsCachedDao {
 
-    /**
-     * Performs a chat-based search on the documents using the specified query and options.
-     * 
-     * @param query The search query to be executed.
-     * @param ragQueryOptions Options to customize the RAG query.
-     * @param codes A list of document codes to include in the search.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param user TODO
-     * @return The result of the documents search.
-     */
-    public AIDocumentsSet chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
-            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
+	/**
+	 * Performs a chat-based search on the documents using the specified query and
+	 * options.
+	 * 
+	 * @param query                        The search query to be executed.
+	 * @param semanticSearchMetaDataFilter TODO
+	 * @param ragQueryOptions              Options to customize the RAG query.
+	 * @param embeddingModel               The model used for embeddings in the
+	 *                                     search.
+	 * @param user                         TODO
+	 * @return The result of the documents search.
+	 */
+	public AIDocumentsSet chatWithDocumentsSearch(String query,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, RagQueryOptions ragQueryOptions,
+			IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
-    /**
-     * Performs a semantic search on a list of documents using the specified query and options.
-     * 
-     * @param query The search query to be executed.
-     * @param options Options to customize the search process.
-     * @param codes A list of document codes to include in the search.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param user TODO
-     * @return The result of the semantic search.
-     */
-    public AIDocumentsSet semanticSearchOnDocumentsList(String query, RagQueryOptions options,
-            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
+	/**
+	 * Performs a semantic search on a list of documents using the specified query
+	 * and options.
+	 * 
+	 * @param query                        The search query to be executed.
+	 * @param semanticSearchMetaDataFilter TODO
+	 * @param options                      Options to customize the search process.
+	 * @param embeddingModel               The model used for embeddings in the
+	 *                                     search.
+	 * @param user                         TODO
+	 * @return The result of the semantic search.
+	 */
+	public AIDocumentsSet semanticSearchOnDocumentsList(String query,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, RagQueryOptions options,
+			IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
-    /**
-     * Performs a semantic search on a list of documents using default query options.
-     * 
-     * @param query The search query to be executed.
-     * @param codes A list of document codes to include in the search.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param user TODO
-     * @return The result of the semantic search.
-     */
-    public default AIDocumentsSet semanticSearchOnDocumentsList(String query, List<String> codes,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
-        return this.semanticSearchOnDocumentsList(query, RagQueryOptions.defaultOptions, codes, knowledgeBases,
-                embeddingModel, user);
-    };
+	/**
+	 * Performs a semantic search on a list of documents using default query
+	 * options.
+	 * 
+	 * @param query                        The search query to be executed.
+	 * @param codes                        A list of document codes to include in
+	 *                                     the search.
+	 * @param knowledgeBases               A list of knowledge bases to search
+	 *                                     within.
+	 * @param embeddingModel               The model used for embeddings in the
+	 *                                     search.
+	 * @param user                         TODO
+	 * @param semanticSearchMetaDataFilter
+	 * @return The result of the semantic search.
+	 */
+	public default AIDocumentsSet semanticSearchOnDocumentsList(String query,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, IGConfigurableEmbeddingModel<?> embeddingModel,
+			UserInfos user) {
+		return this.semanticSearchOnDocumentsList(query, semanticSearchMetaDataFilter, RagQueryOptions.defaultOptions,
+				embeddingModel, user);
+	};
 
-    /**
-     * Performs a multi-hop semantic search using the specified initial query and options.
-     * 
-     * @param initialQuery The initial query for starting the search.
-     * @param options Options to customize the search process.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param firstSearchThreshold Threshold for the first search.
-     * @param otherSearchThreshold Threshold for subsequent searches.
-     * @param user TODO
-     * @return The result of the multi-hop semantic search.
-     */
-    public AIDocumentsSet multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold, UserInfos user);
+	/**
+	 * Performs a multi-hop semantic search using the specified initial query and
+	 * options.
+	 * 
+	 * @param initialQuery                 The initial query for starting the
+	 *                                     search.
+	 * @param semanticSearchMetaDataFilter TODO
+	 * @param options                      Options to customize the search process.
+	 * @param embeddingModel               The model used for embeddings in the
+	 *                                     search.
+	 * @param firstSearchThreshold         Threshold for the first search.
+	 * @param otherSearchThreshold         Threshold for subsequent searches.
+	 * @param user                         TODO
+	 * @return The result of the multi-hop semantic search.
+	 */
+	public AIDocumentsSet multiHopSemanticSearch(String initialQuery,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, RagQueryOptions options,
+			IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold,
+			UserInfos user);
 
-    /**
-     * Performs a semantic search using the specified query and options.
-     * 
-     * @param query The search query to be executed.
-     * @param options Options to customize the search process.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param user TODO
-     * @return The result of the semantic search.
-     */
-    public AIDocumentsSet semanticSearch(String query, RagQueryOptions options,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
+	/**
+	 * Performs a semantic search using the specified query and options.
+	 * 
+	 * @param query          The search query to be executed.
+	 * @param semanticSearchMetaDataFilter TODO
+	 * @param options        Options to customize the search process.
+	 * @param embeddingModel The model used for embeddings in the search.
+	 * @param user           TODO
+	 * @return The result of the semantic search.
+	 */
+	public AIDocumentsSet semanticSearch(String query, SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, RagQueryOptions options,
+			IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
-    /**
-     * Performs a semantic search using the specified query with default options.
-     * 
-     * @param query The search query to be executed.
-     * @param knowledgeBases A list of knowledge bases to search within.
-     * @param embeddingModel The model used for embeddings in the search.
-     * @param user 
-     * @return The result of the semantic search.
-     */
-    public default AIDocumentsSet semanticSearch(String query, List<String> knowledgeBases,
-            IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
-        return this.semanticSearch(query, RagQueryOptions.defaultOptions, knowledgeBases, embeddingModel, user);
-    }
+	/**
+	 * Performs a semantic search using the specified query with default options.
+	 * 
+	 * @param query                        The search query to be executed.
+	 * @param semanticSearchMetaDataFilter TODO
+	 * @param embeddingModel               The model used for embeddings in the
+	 *                                     search.
+	 * @param user
+	 * @return The result of the semantic search.
+	 */ 
+	public default AIDocumentsSet semanticSearch(String query,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, IGConfigurableEmbeddingModel<?> embeddingModel,
+			UserInfos user) {
+		return this.semanticSearch(query, semanticSearchMetaDataFilter, RagQueryOptions.defaultOptions, embeddingModel, user);
+	}
 
 }

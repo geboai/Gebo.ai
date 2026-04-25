@@ -20,6 +20,7 @@ import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 
@@ -48,8 +49,10 @@ public class GenericOpenAICompatibleProvidersConfig {
 	private List<GenericOpenAIImageModelTypeConfig> imageModelProviders = new ArrayList<GenericOpenAIImageModelTypeConfig>();
 
 	private List<GenericOpenAITextToSpeechModelType> textToSpeechModelProviders = new ArrayList<GenericOpenAITextToSpeechModelType>();
-	
-	private List<GenericOpenAITranscriptModelType> transcriptModelProviders=new ArrayList<GenericOpenAITranscriptModelType>();
+
+	private List<GenericOpenAITranscriptModelType> transcriptModelProviders = new ArrayList<GenericOpenAITranscriptModelType>();
+
+	private List<GenericOpenAIRankerModelTypeConfig> rankerModelProviders = new ArrayList<>();
 
 	/**
 	 * Returns the list of configured chat model providers
@@ -110,6 +113,14 @@ public class GenericOpenAICompatibleProvidersConfig {
 
 	public void setTranscriptModelProviders(List<GenericOpenAITranscriptModelType> transcriptModelProviders) {
 		this.transcriptModelProviders = transcriptModelProviders;
+	}
+
+	public List<GenericOpenAIRankerModelTypeConfig> getRankerModelProviders() {
+		return rankerModelProviders;
+	}
+
+	public void setRankerModelProviders(List<GenericOpenAIRankerModelTypeConfig> rankerModelProviders) {
+		this.rankerModelProviders = rankerModelProviders;
 	}
 
 }

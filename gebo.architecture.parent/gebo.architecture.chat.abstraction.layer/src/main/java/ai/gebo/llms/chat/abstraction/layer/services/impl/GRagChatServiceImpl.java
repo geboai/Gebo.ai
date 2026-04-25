@@ -17,16 +17,20 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -145,8 +149,20 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-
-			AIDocumentsSet retrieved = this.ragSearchService.search(request, handler.getContextLength() / 3);
+			List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService.getSessionAvailableKnowledgeBases(request);
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
+			List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
+			if (securityService.getPlatformContentAccessPolicy()==ContentAccessPolicy.ACL_BASED && !securityService.isCurrentUserAdmin()) {
+				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+				fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
+				semanticSearchMetaDataFilter.setAclAliases(aclAliases);
+			}
+			fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
+			semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
+			
+			AIDocumentsSet retrieved = this.ragSearchService.search(request, semanticSearchMetaDataFilter,
+					fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
@@ -272,12 +288,23 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
 		this.chatSessionLifecycleService.ensureChatSessionExists(request);
-
+		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService.getSessionAvailableKnowledgeBases(request);
+		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
+		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
+		if (securityService.getPlatformContentAccessPolicy()==ContentAccessPolicy.ACL_BASED && !securityService.isCurrentUserAdmin()) {
+			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
+			semanticSearchMetaDataFilter.setAclAliases(aclAliases);
+		}
+		fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
+		semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
 		LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		AIDocumentsSet extractedDocuments = ragSearchService.search(request, handler.getContextLength() / 3);
+		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
+				fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
 		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 		response.setDocumentsRef(docrefs);
 		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,

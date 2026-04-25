@@ -56,10 +56,7 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	 */
 	protected Double temperature = null;
 
-	/**
-	 * The context length setting of the model, null by default.
-	 */
-	protected Integer contextLength = null;
+	
 
 	/**
 	 * The default prompt used when interacting with the model.
