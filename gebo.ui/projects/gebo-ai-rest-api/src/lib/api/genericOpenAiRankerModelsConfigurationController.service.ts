@@ -17,11 +17,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GenericOpenAIRankerModelConfig } from '../model/genericOpenAIRankerModelConfig';
+import { GenericOpenAIAPIRankerModelConfig } from '../model/genericOpenAIAPIRankerModelConfig';
 import { GenericOpenAIRankerModelTypeConfig } from '../model/genericOpenAIRankerModelTypeConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
-import { OperationStatusGenericOpenAIRankerModelConfig } from '../model/operationStatusGenericOpenAIRankerModelConfig';
-import { OperationStatusListGenericOpenAIRankerModelChoice } from '../model/operationStatusListGenericOpenAIRankerModelChoice';
+import { OperationStatusGenericOpenAIAPIRankerModelConfig } from '../model/operationStatusGenericOpenAIAPIRankerModelConfig';
+import { OperationStatusListGenericOpenAIAPIRankerModelChoice } from '../model/operationStatusListGenericOpenAIAPIRankerModelChoice';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,10 +66,10 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling deleteGenericOpenAIAPIRankerModelConfig.');
@@ -113,9 +113,9 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIRankerModelConfig>;
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIRankerModelConfig>>;
-    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIRankerModelConfig>>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GenericOpenAIAPIRankerModelConfig>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GenericOpenAIAPIRankerModelConfig>>;
+    public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GenericOpenAIAPIRankerModelConfig>>;
     public findGenericOpenAIAPIRankerModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
@@ -142,7 +142,7 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GenericOpenAIRankerModelConfig>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/findGenericOpenAIAPIRankerModelConfigByCode`,
+        return this.httpClient.request<GenericOpenAIAPIRankerModelConfig>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/findGenericOpenAIAPIRankerModelConfigByCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -160,10 +160,10 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGenericOpenAIRankerModelChoice>;
-    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGenericOpenAIRankerModelChoice>>;
-    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGenericOpenAIRankerModelChoice>>;
-    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIAPIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGenericOpenAIAPIRankerModelChoice>;
+    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIAPIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGenericOpenAIAPIRankerModelChoice>>;
+    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIAPIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGenericOpenAIAPIRankerModelChoice>>;
+    public getGenericOpenAIAPIRankerModels(body: GenericOpenAIAPIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling getGenericOpenAIAPIRankerModels.');
@@ -189,9 +189,45 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusListGenericOpenAIRankerModelChoice>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIAPIRankerModels`,
+        return this.httpClient.request<OperationStatusListGenericOpenAIAPIRankerModelChoice>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIAPIRankerModels`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGenericOpenAIRankerModelConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GenericOpenAIAPIRankerModelConfig>>;
+    public getGenericOpenAIRankerModelConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GenericOpenAIAPIRankerModelConfig>>>;
+    public getGenericOpenAIRankerModelConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GenericOpenAIAPIRankerModelConfig>>>;
+    public getGenericOpenAIRankerModelConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GenericOpenAIAPIRankerModelConfig>>('get',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/getGenericOpenAIRankerModelConfigs`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -243,10 +279,10 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGenericOpenAIRankerModelConfig>;
-    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGenericOpenAIRankerModelConfig>>;
-    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGenericOpenAIRankerModelConfig>>;
-    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGenericOpenAIAPIRankerModelConfig>;
+    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGenericOpenAIAPIRankerModelConfig>>;
+    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGenericOpenAIAPIRankerModelConfig>>;
+    public insertGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling insertGenericOpenAIAPIRankerModelConfig.');
@@ -272,7 +308,7 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGenericOpenAIRankerModelConfig>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/insertGenericOpenAIAPIRankerModelConfig`,
+        return this.httpClient.request<OperationStatusGenericOpenAIAPIRankerModelConfig>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/insertGenericOpenAIAPIRankerModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -290,10 +326,10 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGenericOpenAIRankerModelConfig>;
-    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGenericOpenAIRankerModelConfig>>;
-    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGenericOpenAIRankerModelConfig>>;
-    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGenericOpenAIAPIRankerModelConfig>;
+    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGenericOpenAIAPIRankerModelConfig>>;
+    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGenericOpenAIAPIRankerModelConfig>>;
+    public updateGenericOpenAIAPIRankerModelConfig(body: GenericOpenAIAPIRankerModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateGenericOpenAIAPIRankerModelConfig.');
@@ -319,7 +355,7 @@ export class GenericOpenAiRankerModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGenericOpenAIRankerModelConfig>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/updateGenericOpenAIAPIRankerModelConfig`,
+        return this.httpClient.request<OperationStatusGenericOpenAIAPIRankerModelConfig>('post',`${this.basePath}/api/admin/GenerigOpenAIRankerModelsConfigurationController/updateGenericOpenAIAPIRankerModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

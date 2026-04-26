@@ -43,7 +43,7 @@ import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigu
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIImageModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITranscriptModelConfigurationSupportService;
-import ai.gebo.llms.openai_compat.services.GenericOpenAIRankerModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.annotation.PostConstruct;
@@ -156,7 +156,7 @@ public class GenericOpenAIProvidersAssembler {
 		}
 		if (config.getRankerModelProviders() != null) {
 			for (GenericOpenAIRankerModelTypeConfig rm : config.getRankerModelProviders()) {
-				GenericOpenAIRankerModelConfigurationSupportService service = new GenericOpenAIRankerModelConfigurationSupportService(
+				GenericOpenAIAPIRankerModelConfigurationSupportService service = new GenericOpenAIAPIRankerModelConfigurationSupportService(
 						rm, secretService, configureHandler, serviceClientsProviderFactory, modelsListProxyService,
 						openaiApiUtil);
 				this.rankerProvidersRepo.addImplementation(service);

@@ -9,20 +9,24 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelMetaInfo } from './modelMetaInfo';
+import { GenericOpenAIAPIRankerModelChoice } from './genericOpenAIAPIRankerModelChoice';
 
-export interface GenericOpenAIRankerModelChoice { 
+export interface GenericOpenAIAPIRankerModelConfig { 
     code?: string;
     description?: string;
     userModified?: string;
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    creationDate?: Date;
-    modificationDate?: Date;
-    version?: string;
-    metaInfos?: ModelMetaInfo;
-    informativeUrl?: string;
+    modelTypeCode?: string;
+    defaultModel?: boolean;
+    apiSecretCode?: string;
+    choosedModel?: GenericOpenAIAPIRankerModelChoice;
+    baseUrl?: string;
     contextLength?: number;
-    nativeModelMetaInfos?: any;
+    maxDocumentsPerRequest?: number;
+    maxDocumentTokens?: number;
+    responseReserveTokens?: number;
+    fullServiceUrl?: string;
+    relativeServiceUrl?: string;
 }

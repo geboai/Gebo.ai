@@ -96,5 +96,5 @@ ai.gebo.llms.generic.config:
           baseUrl:
         - code: ranker-generic-openai
           providerId: generic-openai
-          description: Generic OpenAI compatible ranking model
+          description: Standard ranking API ranking model
           baseUrl:

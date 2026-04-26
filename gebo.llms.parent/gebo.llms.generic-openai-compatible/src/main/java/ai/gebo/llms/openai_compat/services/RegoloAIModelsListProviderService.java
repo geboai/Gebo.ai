@@ -13,6 +13,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
@@ -110,6 +111,28 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 						return new ModelMetaInfo();
 					});
 					models = new ArrayList(chatmodels);
+				}
+			} else if (GBaseRankerModelChoice.class.isAssignableFrom(choiceType)) {
+				HttpEntity<String> request = new HttpEntity<String>(ModelsListCommonUtils.getHeaders(clearApiKey));
+				ResponseEntity<RegoloAIModelList> response = restTemplateWrapper.exchange(REGOLO_AI_MODELS_INFO_URL,
+						HttpMethod.GET, request, RegoloAIModelList.class);
+				RegoloAIModelList result = response.hasBody() ? response.getBody() : new RegoloAIModelList();
+				if (result.getData() != null) {
+					List<GBaseRankerModelChoice> rankermodels = new ArrayList<GBaseRankerModelChoice>();
+					for (RegoloAIModel m : result.getData()) {
+						GBaseRankerModelChoice entry = (GBaseRankerModelChoice) ModelsListCommonUtils
+								.newInstance(choiceType);
+						entry.setCode(m.getModel_name());
+						entry.setDescription(m.getModel_name());
+						entry.setContextLength(getContextWindowLength(m));
+						entry.setNativeModelMetaInfos(m);
+						String mode = getMode(m);
+						if (mode == null || !mode.equalsIgnoreCase(EMBEDDING)) {
+							rankermodels.add(entry);
+						}
+					}
+
+					models = new ArrayList(rankermodels);
 				}
 			} else
 				throw new RuntimeException("This service does not handle=>" + choiceType.getName());

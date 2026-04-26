@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 import { GUserMessage } from './gUserMessage';
-import { GenericOpenAIRankerModelChoice } from './genericOpenAIRankerModelChoice';
+import { GenericOpenAIAPIRankerModelConfig } from './genericOpenAIAPIRankerModelConfig';
 
-export interface OperationStatusListGenericOpenAIRankerModelChoice { 
-    result?: Array<GenericOpenAIRankerModelChoice>;
+export interface OperationStatusGenericOpenAIAPIRankerModelConfig { 
+    result?: GenericOpenAIAPIRankerModelConfig;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

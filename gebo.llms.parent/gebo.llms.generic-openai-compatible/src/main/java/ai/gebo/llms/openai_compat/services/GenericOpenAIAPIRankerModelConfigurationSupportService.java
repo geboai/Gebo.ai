@@ -7,19 +7,19 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelConfig;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 
-public class GenericOpenAIRankerModelConfigurationSupportService extends
-		GAbstractRankerModelConfigurationSupportService<GenericOpenAIRankerModelChoice, GenericOpenAIRankerModelConfig, GenericOpenAIRankerModelTypeConfig> {
+public class GenericOpenAIAPIRankerModelConfigurationSupportService extends
+		GAbstractRankerModelConfigurationSupportService<GenericOpenAIAPIRankerModelChoice, GenericOpenAIAPIRankerModelConfig, GenericOpenAIRankerModelTypeConfig> {
 	final ModelsListProviderProxyService modelsListProxyService;
 	final IGOpenAIApiUtil openaiApiUtil;
 
-	public GenericOpenAIRankerModelConfigurationSupportService(GenericOpenAIRankerModelTypeConfig type,
+	public GenericOpenAIAPIRankerModelConfigurationSupportService(GenericOpenAIRankerModelTypeConfig type,
 			IGeboSecretsAccessService secretAccessService, ModelRuntimeConfigureHandler configureHandler,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
 			ModelsListProviderProxyService modelsListProxyService, IGOpenAIApiUtil openaiApiUtil) {
@@ -30,18 +30,18 @@ public class GenericOpenAIRankerModelConfigurationSupportService extends
 	}
 
 	@Override
-	public OperationStatus<List<GenericOpenAIRankerModelChoice>> getRawModelChoices(
-			GenericOpenAIRankerModelConfig config) {
-		OperationStatus<List<GenericOpenAIRankerModelChoice>> result = null;
+	public OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> getRawModelChoices(
+			GenericOpenAIAPIRankerModelConfig config) {
+		OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
 		if (providerConfig.getBasePath() == null)
 			providerConfig.setBasePath(type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
 			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
-					GenericOpenAIRankerModelChoice.class, type);
+					GenericOpenAIAPIRankerModelChoice.class, type);
 		} else
-			result = this.openaiApiUtil.getRankerModels(GenericOpenAIRankerModelChoice.class, providerConfig, config,
+			result = this.openaiApiUtil.getRankerModels(GenericOpenAIAPIRankerModelChoice.class, providerConfig, config,
 					(choice) -> {
 						return new ModelMetaInfo();
 					}, type);
@@ -56,7 +56,7 @@ public class GenericOpenAIRankerModelConfigurationSupportService extends
 	}
 
 	@Override
-	public GenericOpenAIRankerModelConfig createBaseConfiguration(String presetModel) {
+	public GenericOpenAIAPIRankerModelConfig createBaseConfiguration(String presetModel) {
 		
 		return null;
 	}

@@ -20,18 +20,18 @@ import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupport
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.openai_compat.config.GenericOpenAICompatibleProvidersConfig;
 
-import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelConfig;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
-import ai.gebo.llms.openai_compat.services.GenericOpenAIRankerModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/GenerigOpenAIRankerModelsConfigurationController")
 public class GenericOpenAIRankerModelsConfigurationController extends
-		AbstractRankerModelsConfigurationCRUDController<GenericOpenAIRankerModelConfig, GenericOpenAIRankerModelChoice> {
+		AbstractRankerModelsConfigurationCRUDController<GenericOpenAIAPIRankerModelConfig, GenericOpenAIAPIRankerModelChoice> {
 	private final IGRankerModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern;
 	private final GenericOpenAICompatibleProvidersConfig config;
 
@@ -39,14 +39,14 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 			IGRankerModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
 			IGRankerModelConfigurationSupportServiceRepositoryPattern supportServiceRepoPattern,
 			GenericOpenAICompatibleProvidersConfig config) {
-		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIRankerModelConfig.class);
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIRankerModelConfig.class);
 		this.supportServiceRepoPattern = supportServiceRepoPattern;
 		this.config = config;
 	}
 
 	@Override
-	protected OperationStatus<List<GenericOpenAIRankerModelChoice>> getModelChoices(
-			GenericOpenAIRankerModelConfig cfg) {
+	protected OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> getModelChoices(
+			GenericOpenAIAPIRankerModelConfig cfg) {
 		if (cfg.getModelTypeCode() == null)
 			throw new RuntimeException("modelTypeCode cannot be null");
 		IGRankerModelConfigurationSupportService handler = supportServiceRepoPattern.findByCode(cfg.getModelTypeCode());
@@ -67,6 +67,10 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	public List<GenericOpenAIRankerModelTypeConfig> getGenericOpenAIRankerModelTypes() {
 		return config.getRankerModelProviders();
 	}
+	@GetMapping(value = "getGenericOpenAIRankerModelConfigs", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GenericOpenAIAPIRankerModelConfig> getGenericOpenAIRankerModelConfigs() throws GeboPersistenceException {
+		return this.persistentObjectManager.findAll(GenericOpenAIAPIRankerModelConfig.class);
+	}
 
 	/**
 	 * Creates a new OpenAI-compatible ranker model configuration
@@ -75,8 +79,8 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	 * @return Operation status with the inserted configuration
 	 */
 	@PostMapping(value = "insertGenericOpenAIAPIRankerModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GenericOpenAIRankerModelConfig> insertGenericOpenAIAPIRankerModelConfig(
-			@RequestBody GenericOpenAIRankerModelConfig config) {
+	public OperationStatus<GenericOpenAIAPIRankerModelConfig> insertGenericOpenAIAPIRankerModelConfig(
+			@RequestBody GenericOpenAIAPIRankerModelConfig config) {
 		return super.insert(config);
 
 	}
@@ -88,8 +92,8 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	 * @return Operation status with the updated configuration
 	 */
 	@PostMapping(value = "updateGenericOpenAIAPIRankerModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GenericOpenAIRankerModelConfig> updateGenericOpenAIAPIRankerModelConfig(
-			@RequestBody GenericOpenAIRankerModelConfig config) {
+	public OperationStatus<GenericOpenAIAPIRankerModelConfig> updateGenericOpenAIAPIRankerModelConfig(
+			@RequestBody GenericOpenAIAPIRankerModelConfig config) {
 
 		return super.update(config);
 	}
@@ -102,7 +106,7 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	 */
 	@PostMapping(value = "deleteGenericOpenAIAPIRankerModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<Boolean> deleteGenericOpenAIAPIRankerModelConfig(
-			@RequestBody GenericOpenAIRankerModelConfig config) {
+			@RequestBody GenericOpenAIAPIRankerModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -116,8 +120,8 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	 *                                  configuration
 	 */
 	@GetMapping(value = "findGenericOpenAIAPIRankerModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GenericOpenAIRankerModelConfig findGenericOpenAIAPIRankerModelConfigByCode(@RequestParam("code") String code)
-			throws GeboPersistenceException {
+	public GenericOpenAIAPIRankerModelConfig findGenericOpenAIAPIRankerModelConfigByCode(
+			@RequestParam("code") String code) throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
 
@@ -128,8 +132,8 @@ public class GenericOpenAIRankerModelsConfigurationController extends
 	 * @return Operation status with list of available ranker model choices
 	 */
 	@PostMapping(value = "getGenericOpenAIAPIRankerModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GenericOpenAIRankerModelChoice>> getGenericOpenAIAPIRankerModels(
-			@RequestBody GenericOpenAIRankerModelConfig config) {
+	public OperationStatus<List<GenericOpenAIAPIRankerModelChoice>> getGenericOpenAIAPIRankerModels(
+			@RequestBody GenericOpenAIAPIRankerModelConfig config) {
 		return getModelChoices(config);
 	}
 
