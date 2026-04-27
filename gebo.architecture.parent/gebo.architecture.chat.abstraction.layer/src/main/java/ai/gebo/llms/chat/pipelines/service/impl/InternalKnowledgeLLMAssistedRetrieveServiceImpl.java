@@ -30,6 +30,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleExce
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.SearchesSuggestions;
@@ -51,7 +52,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	private final IGPromptConfigDao promptsDao;
 	private final IGDocumentsSearchService searchesService;
 	private final IGSecurityService securityService;
-	private final IGRankerModelRuntimeConfigurationDao rankerModelsDao;
+	private final IGRankerService rankerService;
 
 	private SearchesSuggestions askSearchesSuggestion(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel) {
@@ -121,15 +122,16 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 		}
 		fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
 		semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
-		IGConfigurableRankerModel rankerModel = this.rankerModelsDao.defaultHandler();
-		final int calculatedTopK=rankerModel!=null?topK*2:topK;
+		final boolean userRanker = rankerService.isRankerConfigured();
+		final int calculatedTopK = userRanker ? topK * 2 : topK;
 		AIDocumentsSet searchResult = this.search(minimalChatContext, searchSuggestions, targetChatModel,
-				targetChatModel.getContextLength(), semanticSearchMetaDataFilter, fullTextSearchMetaDataFilter, calculatedTopK);
+				targetChatModel.getContextLength(), semanticSearchMetaDataFilter, fullTextSearchMetaDataFilter,
+				calculatedTopK);
 		out = AIDocumentsSet.join(out, searchResult);
-		
-		return rankerModel != null
-				? rankerModel.getRankerModel().call(out,
-						GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()), topK)
+
+		return userRanker
+				? this.rankerService.call(out, GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()),
+						topK)
 				: out;
 	}
 

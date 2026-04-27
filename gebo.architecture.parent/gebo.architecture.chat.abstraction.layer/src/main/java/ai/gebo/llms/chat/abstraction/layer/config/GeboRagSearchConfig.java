@@ -26,6 +26,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSid
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.GDocumentsSearchServiceImpl;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
@@ -86,8 +87,8 @@ public class GeboRagSearchConfig {
 			
 			LLMGeneratedResourceRepository generatedRepo, IGChatSessionLifeCycleService chatSessionLifecycleService,
 			ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGDocumentsSearchService searchesService) {
+			IGDocumentsSearchService searchesService,IGRankerService rankerService) {
 		return new InternalKnowledgeLLMAssistedRetrieveServiceImpl(chatSessionLifecycleService, configuration,
-				promptsDao, searchesService, securityService);
+				promptsDao, searchesService, securityService, rankerService);
 	}
 }

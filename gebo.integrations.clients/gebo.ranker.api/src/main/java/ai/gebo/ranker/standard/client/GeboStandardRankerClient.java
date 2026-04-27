@@ -13,7 +13,6 @@ import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.ranker.model.RankerModel;
 import ai.gebo.ranker.model.RankingInput;
 import ai.gebo.ranker.model.RankingOutput;
@@ -273,15 +272,6 @@ public class GeboStandardRankerClient implements RankerModel {
 			private Double relevanceScore;
 		}
 	}
-	@Override
-	public AIDocumentsSet call(AIDocumentsSet input, String query, int topK) {
-		final int nFragments = input.countFragments();
-		if (nFragments <= topK || nFragments <= 0)
-			return input;
-		RankingInput _input = new RankingInput(query, input.aiDocumentsList(), topK);
-		RankingOutput out = this.call(_input);
-		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
-		return AIDocumentsSet.from(documents);
-	}
+	
 
 }

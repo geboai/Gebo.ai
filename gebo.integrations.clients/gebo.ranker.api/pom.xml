@@ -20,10 +20,6 @@
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.rag.support.layer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 	</dependencies>
 </project>
