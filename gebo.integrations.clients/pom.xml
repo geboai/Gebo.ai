@@ -27,5 +27,6 @@
 		<module>gebo.regolo_ai.client</module>
 		-->
 		<module>gebo.ranker.api</module>
+		<module>gebo.openrouter.ai.client</module>
 	</modules>
 </project>

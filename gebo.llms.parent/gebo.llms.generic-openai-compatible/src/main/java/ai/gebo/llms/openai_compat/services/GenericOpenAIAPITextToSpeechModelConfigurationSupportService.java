@@ -168,7 +168,10 @@ public class GenericOpenAIAPITextToSpeechModelConfigurationSupportService implem
 		model.initialize(config, type);
 		return model;
 	}
-
+	@Override
+	public String getId() {
+		return type.getCode();
+	}
 	@Override
 	public OperationStatus<GenericOpenAIAPITextToSpeechModelConfig> insertAndConfigure(
 			GenericOpenAIAPITextToSpeechModelConfig config) {

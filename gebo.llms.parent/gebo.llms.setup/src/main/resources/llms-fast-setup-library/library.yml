@@ -1,6 +1,44 @@
 ai.gebo.llms.vendors.setup.config:
   vendors:
     - vendorInfo:
+        vendorId: regolo.ai
+        name: Regolo.ai
+        description: Regolo.ai AI provider (Italian)
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://regolo.ai
+        apiKeySecretContext: regolo.ai
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: deepseek-r1-70b
+              description: DeepSeek R1 70b
+              uses: CHAT
+            - code: gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              uses: CHAT
+              defaultChoice: true
+            - code: Llama-3.3-70B-Instruct
+              description: Meta LLama 3.3 70b instruct
+              uses: CHAT
+            - code: gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: gte-Qwen2
+              description: Gte Qwen2 Embedding
+            - code: Qwen3-Embedding-8B
+              description: Qwen3 Embedding 8b
+              defaultChoice: true
+
+    - vendorInfo:
         vendorId: openai
         name: OpenAI
         description: OpenAI chatgpt
@@ -215,43 +253,6 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
             - code: codestral-embed
               description: codestral-embed code extraction embedding model
-    - vendorInfo:
-        vendorId: regolo.ai
-        name: Regolo.ai
-        description: Regolo.ai AI provider (Italian)
-        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
-        requiresApiKeY: true
-        requiresCustomUrl: false
-        webSite: https://regolo.ai
-        apiKeySecretContext: regolo.ai
-        supportsAutoconfig: true
-      presets:
-        - type: CHAT
-          serviceHandler: chatmodel-regolo.ai
-          doModelsLookup: true
-          choices:
-            - code: deepseek-r1-70b
-              description: DeepSeek R1 70b
-              uses: CHAT
-            - code: gpt-oss-120b
-              description: OpenAI Gpt OSS 120b
-              uses: CHAT
-              defaultChoice: true
-            - code: Llama-3.3-70B-Instruct
-              description: Meta LLama 3.3 70b instruct
-              uses: CHAT
-            - code: gpt-oss-20b
-              description: OpenAI Gpt OSS 20b
-              uses: INTERNAL_SERVICES
-        - type: EMBEDDING
-          serviceHandler: embedding-regolo.ai
-          doModelsLookup: true
-          choices:
-            - code: gte-Qwen2
-              description: Gte Qwen2 Embedding
-            - code: Qwen3-Embedding-8B
-              description: Qwen3 Embedding 8b
-              defaultChoice: true
 
     - vendorInfo:
         vendorId: groq
@@ -268,6 +269,23 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
         - type: EMBEDDING
           serviceHandler: embedding-groq
+          doModelsLookup: true
+    - vendorInfo:
+        vendorId: openrouter.ai
+        name: OpenRouter.ai
+        description: OpenRouter.ai AI provider
+        acquireKeyUrl: https://openrouter.ai/workspaces/default/keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://openrouter.ai
+        apiKeySecretContext: openrouter.ai
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-openrouter.ai
+          doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-openrouter.ai
           doModelsLookup: true
 
     - vendorInfo:

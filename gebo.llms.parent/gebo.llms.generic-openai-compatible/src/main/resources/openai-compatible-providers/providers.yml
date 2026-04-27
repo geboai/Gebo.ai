@@ -1,100 +1,141 @@
 ai.gebo.llms.generic.config:
-    chatModelProviders:
-        - code: chatmodel-nvidia
-          providerId: nvidia
-          description: NVidia Cloud chat model
-          baseUrl: https://integrate.api.nvidia.com
+  chatModelProviders:
+    - code: chatmodel-nvidia
+      providerId: nvidia
+      description: NVidia Cloud chat model
+      baseUrl: https://integrate.api.nvidia.com
 
-        - code: chatmodel-groq
-          providerId: groq
-          description: Groq chat model
-          baseUrl: https://api.groq.com/openai
+    - code: chatmodel-groq
+      providerId: groq
+      description: Groq chat model
+      baseUrl: https://api.groq.com/openai
 
-        - code: chatmodel-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai chat models
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
+    - code: chatmodel-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai chat models
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
 
-        - code: chatmodel-xai
-          providerId: xai
-          description: X.ai (Grok) chat model
-          baseUrl: https://api.x.ai/
-          modelsListProvider: XaiModelsList
+    - code: chatmodel-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai chat models
+      baseUrl: https://openrouter.ai/api/
+      #modelsListProvider: openrouter-ai-models-list
 
-        - code: chatmodel-generic-openai
-          providerId: generic-openai
-          description: Generic OpenAI compatible chat model
-          baseUrl:
-        - code: chatmodel-vllm
-          providerId: vllm
-          description: VLLM hosted chat model
-          applyThinkingMarkupHandling: true
-          baseUrl:
-    embeddingModelProviders:
-        #  Nvidia seems do not give embedding services
-        - code: embedding-nvidia
-          providerId: nvidia
-          description: NVidia Cloud embedding model
-          baseUrl: https://integrate.api.nvidia.com
+    - code: chatmodel-xai
+      providerId: xai
+      description: X.ai (Grok) chat model
+      baseUrl: https://api.x.ai/
+      modelsListProvider: XaiModelsList
 
-        - code: embedding-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai embedding model
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
+    - code: chatmodel-generic-openai
+      providerId: generic-openai
+      description: Generic OpenAI compatible chat model
+      baseUrl:
+    - code: chatmodel-vllm
+      providerId: vllm
+      description: VLLM hosted chat model
+      applyThinkingMarkupHandling: true
+      baseUrl:
+  embeddingModelProviders:
+    #  Nvidia seems do not give embedding services
+    - code: embedding-nvidia
+      providerId: nvidia
+      description: NVidia Cloud embedding model
+      baseUrl: https://integrate.api.nvidia.com
 
-        - code: embedding-groq
-          providerId: groq
-          description: Groq embedding model
-          baseUrl: https://api.groq.com/openai
+    - code: embedding-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai embedding model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
 
-        - code: embedding-xai
-          providerId: xai
-          description: X.ai (Grok) embedding model
-          baseUrl: https://api.x.ai/
-          modelsListProvider: XaiModelsList
+    - code: embedding-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai embedding models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
 
-        - code: embedding-generic-openai
-          providerId: generic-openai
-          description: Generic OpenAI compatible embedding model
-          baseUrl:
-        - code: embedding-vllm
-          providerId: vllm
-          description: VLLM hosted embedding model
-          baseUrl:
+    - code: embedding-groq
+      providerId: groq
+      description: Groq embedding model
+      baseUrl: https://api.groq.com/openai
 
-    imageModelProviders:
-        - code: images-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai image generation model
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
+    - code: embedding-xai
+      providerId: xai
+      description: X.ai (Grok) embedding model
+      baseUrl: https://api.x.ai/
+      modelsListProvider: XaiModelsList
 
-    textToSpeechModelProviders:
-        - code: tts-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai text to speech model
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
+    - code: embedding-generic-openai
+      providerId: generic-openai
+      description: Generic OpenAI compatible embedding model
+      baseUrl:
+    - code: embedding-vllm
+      providerId: vllm
+      description: VLLM hosted embedding model
+      baseUrl:
 
-    transcriptModelProviders:
-        - code: transcript-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai transcript model
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
-    rankerModelProviders:
-        - code: ranker-regolo.ai
-          providerId: regolo.ai
-          description: Regolo.ai ranker model
-          baseUrl: https://api.regolo.ai/
-          modelsListProvider: regolo-ai-models-list
-        - code: ranker-vllm
-          providerId: vllm
-          description: VLLM hosted ranker model
-          baseUrl:
-        - code: ranker-generic-openai
-          providerId: generic-openai
-          description: Standard ranking API ranking model
-          baseUrl:
+  imageModelProviders:
+    - code: images-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai image generation model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+    - code: images-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai image generation models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
+  textToSpeechModelProviders:
+    - code: tts-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai text to speech model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+    - code: tts-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai text to speech models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
+  transcriptModelProviders:
+    - code: transcript-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai transcript model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+    - code: transcript-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai transcript models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+  rankerModelProviders:
+    - code: ranker-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai ranker model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+    - code: ranker-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai ranker models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
+    - code: ranker-vllm
+      providerId: vllm
+      description: VLLM hosted ranker model
+      baseUrl:
+    - code: ranker-generic-openai
+      providerId: generic-openai
+      description: Standard ranking API ranking model
+      baseUrl:

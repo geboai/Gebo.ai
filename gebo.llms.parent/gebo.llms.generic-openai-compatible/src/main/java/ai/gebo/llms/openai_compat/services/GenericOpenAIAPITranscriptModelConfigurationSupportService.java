@@ -200,7 +200,10 @@ public class GenericOpenAIAPITranscriptModelConfigurationSupportService implemen
 		tModel.initialize(config, type);
 		return tModel;
 	}
-
+	@Override
+	public String getId() {
+		return type.getCode();
+	}
 	@Override
 	public OperationStatus<GenericOpenAIAPITranscriptModelConfig> insertAndConfigure(
 			GenericOpenAIAPITranscriptModelConfig config) {
