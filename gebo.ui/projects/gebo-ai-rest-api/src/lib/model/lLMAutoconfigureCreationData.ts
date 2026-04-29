@@ -18,4 +18,8 @@ export interface LLMAutoconfigureCreationData {
     defaultChatModel?: string;
     internalServicesModel?: string;
     embeddingModel?: string;
+    rankerModel?: string;
+    transcriptModel?: string;
+    ttsModel?: string;
+    imagesModel?: string;
 }

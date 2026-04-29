@@ -23,10 +23,14 @@ export interface LLMCreateModelData {
     uses?: Array<LLMCreateModelData.UsesEnum>;
 }
 export namespace LLMCreateModelData {
-    export type TypeEnum = 'CHAT' | 'EMBEDDING';
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,
-        EMBEDDING: 'EMBEDDING' as TypeEnum
+        EMBEDDING: 'EMBEDDING' as TypeEnum,
+        RANKING: 'RANKING' as TypeEnum,
+        IMAGESGEN: 'IMAGESGEN' as TypeEnum,
+        TTS: 'TTS' as TypeEnum,
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
     };
     export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
     export const UsesEnum = {

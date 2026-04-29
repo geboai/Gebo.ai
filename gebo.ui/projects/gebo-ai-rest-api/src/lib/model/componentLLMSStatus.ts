@@ -14,4 +14,7 @@ export interface ComponentLLMSStatus {
     isSetup?: boolean;
     chatModelSetup?: boolean;
     embeddedModelSetup?: boolean;
+    rankingModelSetup?: boolean;
+    ttsModelSetup?: boolean;
+    transcriptModelSetup?: boolean;
 }
