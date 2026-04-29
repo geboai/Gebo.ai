@@ -19,4 +19,8 @@ public class LLMSSetupConfigurationData {
 	private Boolean embeddingModelExists = null;
 	private Boolean defaultChatModelExists = null;
 	private Boolean internalServicesChatModelExists = null;
+	private Boolean rankerModelExists = null;
+	private Boolean imagesModelExists = null;
+	private Boolean ttsModelExists = null;
+	private Boolean transcriptModelExists = null;
 }
