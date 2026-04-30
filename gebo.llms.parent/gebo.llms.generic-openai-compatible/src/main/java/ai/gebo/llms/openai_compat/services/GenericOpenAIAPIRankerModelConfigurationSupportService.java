@@ -7,6 +7,8 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
@@ -57,8 +59,14 @@ public class GenericOpenAIAPIRankerModelConfigurationSupportService extends
 
 	@Override
 	public GenericOpenAIAPIRankerModelConfig createBaseConfiguration(String presetModel) {
+		GenericOpenAIAPIRankerModelConfig clean = new GenericOpenAIAPIRankerModelConfig();
+		clean.setChoosedModel(new GenericOpenAIAPIRankerModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription(getType().getProviderId()+" ranker generation model " + presetModel);
+		clean.setDescription(getType().getProviderId()+" ranker generation model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
 		
-		return null;
 	}
 
 }

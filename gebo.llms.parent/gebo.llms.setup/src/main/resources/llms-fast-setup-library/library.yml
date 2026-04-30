@@ -37,6 +37,13 @@ ai.gebo.llms.vendors.setup.config:
             - code: Qwen3-Embedding-8B
               description: Qwen3 Embedding 8b
               defaultChoice: true
+        - type: RANKING
+          serviceHandler: ranker-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: Qwen3-Reranker-4B
+              description: Qwen3 Reranker 4B
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: openai
@@ -284,9 +291,28 @@ ai.gebo.llms.vendors.setup.config:
         - type: CHAT
           serviceHandler: chatmodel-openrouter.ai
           doModelsLookup: true
+          choices:
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              uses: CHAT
+              defaultChoice: true
+            - code: openai/gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
+              uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-openrouter.ai
+          choices:
+            - code: qwen/qwen3-embedding-8b
+              description: Qwen3 Embedding 8b
+              defaultChoice: true
           doModelsLookup: true
+        - type: RANKING
+          serviceHandler: ranker-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: cohere/rerank-4-pro
+              description: Chohere Rerank 4 pro
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: ollama
@@ -323,6 +349,9 @@ ai.gebo.llms.vendors.setup.config:
         - type: EMBEDDING
           serviceHandler: embedding-vllm
           doModelsLookup: true
+        - type: RANKING
+          serviceHandler: ranker-vllm
+          doModelsLookup: true
 
     - vendorInfo:
         vendorId: generic-openai
@@ -337,7 +366,9 @@ ai.gebo.llms.vendors.setup.config:
         - type: CHAT
           serviceHandler: chatmodel-generic-openai
           doModelsLookup: true
-
         - type: EMBEDDING
           serviceHandler: embedding-generic-openai
+          doModelsLookup: true
+        - type: RANKING
+          serviceHandler: reranker-generic-openai
           doModelsLookup: true
