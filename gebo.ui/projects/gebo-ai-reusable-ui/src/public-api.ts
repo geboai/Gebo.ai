@@ -136,3 +136,11 @@ export * from "./lib/controls/content-viewer/document-opener-button.component";
 export * from "./lib/controls/browse-content-component/view-html-content.component";
 export * from "./lib/controls/audio-control/audio-control.component";
 export * from "./lib/controls/choose-documents-panel/choose-documents-panel.component";
+
+export * from "./lib/infrastructure/login/login.module";
+export * from "./lib/infrastructure/login/login.service";
+
+export * from "./lib/infrastructure/fast-setup/fast-setup.module";
+export * from "./lib/infrastructure/fast-setup/fast-setup.component";
+export * from "./lib/infrastructure/gebo-credentials";
+export * from "./lib/infrastructure/user-profile/user-profile.module";
