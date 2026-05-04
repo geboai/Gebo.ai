@@ -6,35 +6,36 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.config.services.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.config.GeboConfig;
+import ai.gebo.config.controllers.GeboModulesConfigController;
 import ai.gebo.config.model.GeboModuleInfo;
+import ai.gebo.config.services.IGeboCustomModulesProvider;
 import ai.gebo.config.services.IGeboModulesConfigurationHolder;
 
 /**
- * AI generated comments
- * Implementation of the IGeboModulesConfigurationHolder interface providing
- * configuration management for Gebo modules.
+ * AI generated comments Implementation of the IGeboModulesConfigurationHolder
+ * interface providing configuration management for Gebo modules.
  */
 @Service
 public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigurationHolder {
+
 	// Logger instance for logging activities within this class
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeboModulesConfigurationHolderImpl.class);
-
+	List<IGeboCustomModulesProvider> providers = null;
 	// Gebo configuration instance
 	GeboConfig geboConfig;
 
@@ -42,14 +43,16 @@ public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigura
 	Map<String, GeboModuleInfo> modules = null;
 
 	/**
-	 * Constructs the GeboModulesConfigurationHolderImpl using the provided GeboConfig.
-	 * Initializes the modules map and sanitizes the configuration.
+	 * Constructs the GeboModulesConfigurationHolderImpl using the provided
+	 * GeboConfig. Initializes the modules map and sanitizes the configuration.
 	 *
 	 * @param geboConfig the configuration object containing module configurations
 	 */
-	public GeboModulesConfigurationHolderImpl(GeboConfig geboConfig) {
+	public GeboModulesConfigurationHolderImpl(GeboConfig geboConfig,
+			@Autowired(required = false) List<IGeboCustomModulesProvider> providers) {
 		this.geboConfig = geboConfig;
 		this.modules = new HashMap<String, GeboModuleInfo>(this.geboConfig.getModulesConfig());
+		this.providers = providers;
 		sanitize();
 	}
 
@@ -58,7 +61,8 @@ public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigura
 	 * setting default enable/disable states based on constraints.
 	 */
 	private void sanitize() {
-		// Iterate over all standard modules and add them to the map if absent, disabling by default
+		// Iterate over all standard modules and add them to the map if absent,
+		// disabling by default
 		for (String m : GStandardModulesConstraints.ALL_MODULES) {
 			if (!modules.containsKey(m)) {
 				modules.put(m, new GeboModuleInfo());
@@ -78,6 +82,23 @@ public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigura
 				modules.get(m).setEnabled(true);
 			}
 		}
+		if (this.providers != null) {
+			for (IGeboCustomModulesProvider provider : providers) {
+				List<GeboModuleInfo> modulesList = provider.get();
+				if (modulesList != null) {
+					for (GeboModuleInfo module : modulesList) {
+						if (module.getMessagingModuleId() != null) {
+							if (modules.containsKey(module.getMessagingModuleId())) {
+								throw new RuntimeException(
+										"Module " + module.getMessagingModuleId() + " is a duplicate");
+							} else {
+								modules.put(module.getMessagingModuleId(), module);
+							}
+						}
+					}
+				}
+			}
+		}
 		// Log the modules that have been enabled
 		Collection<GeboModuleInfo> values = modules.values();
 		for (GeboModuleInfo minfo : values) {
@@ -89,7 +110,8 @@ public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigura
 	}
 
 	/**
-	 * Retrieves the full configuration map of modules and their respective information.
+	 * Retrieves the full configuration map of modules and their respective
+	 * information.
 	 *
 	 * @return a map containing module identifiers and their configurations
 	 */
@@ -99,7 +121,8 @@ public class GeboModulesConfigurationHolderImpl implements IGeboModulesConfigura
 	}
 
 	/**
-	 * Retrieves the configuration for a specific module identified by the given messagingModuleId.
+	 * Retrieves the configuration for a specific module identified by the given
+	 * messagingModuleId.
 	 *
 	 * @param messagingModuleId the identifier of the module
 	 * @return the GeboModuleInfo object associated with the given identifier
