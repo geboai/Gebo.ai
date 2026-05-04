@@ -29,7 +29,7 @@ import { findMatchingTranlations, UIExistingText } from "../controls/field-trans
  * in a tree structure. It handles loading different levels of the knowledge hierarchy, from knowledge bases down to
  * virtual files and folders, and generates context menus for adding new items to projects.
  */
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: "any" })
 export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
 
     /**

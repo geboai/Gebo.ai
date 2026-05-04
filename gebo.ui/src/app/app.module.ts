@@ -20,13 +20,13 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
+import { GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { providePrimeNG } from "primeng/config";
 import Aura from '@primeng/themes/aura';
@@ -108,13 +108,16 @@ const GeboAIPreset = definePreset(Aura, {
     GeboAIUserProfileModule,
     ConfirmDialogModule,
     MonacoEditorModule.forRoot(),
-    GeboAINotificationsModule.forRoot(),    
+    GeboAINotificationsModule.forRoot(),
     TranslateModule.forRoot({
-        lang: "en",
-        fallbackLang: "en",
-        loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
+      lang: "en",
+      fallbackLang: "en",
+      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
     }),
+
     GeboSetupWizardsModule,
+    GeboAICommonModulesInjectionsModule.forRoot(),
+    GeboAIModulesModule.forRoot(),
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes),
     GeboAIFieldTranslationContainerModule.forRoot(), PopoverModule],

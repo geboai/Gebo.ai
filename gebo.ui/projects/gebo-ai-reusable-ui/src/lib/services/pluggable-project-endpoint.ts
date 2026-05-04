@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @file GeboAIPluggableModulesConfigService.ts
@@ -16,7 +16,7 @@
  * AI generated comments
  */
 
-import { Inject, Injectable, InjectionToken, Injector, Type } from "@angular/core";
+import { inject, Injectable, InjectionToken, Injector, Type } from "@angular/core";
 import { GeboModuleInfo, GeboModulesConfigControllerService, GProject } from "@Gebo.ai/gebo-ai-rest-api";
 
 import { forkJoin, map, Observable } from "rxjs";
@@ -48,7 +48,7 @@ export interface GeboAIPluggableProjectEndpointModuleService {
      * @returns Observable of endpoint details
      */
     findByProjectEndpoints(code: string): Observable<{ code?: string; description?: string; parentProjectCode?: string; }[]>;
-    
+
     /**
      * Creates an action request for a specific project
      * @param project The project to create an action for
@@ -100,11 +100,11 @@ export interface GeboAIUIProjectEndpointOption {
  * their hooks to UI knowledge base browser
  */
 @Injectable({
-    providedIn: "platform"
+    providedIn: "any"
 })
 export class GeboAIPluggableModulesConfigService {
     private static modules?: GeboAIEnabledModulesConfig;
-    
+    private modulesConfiguration: GeboAIPluggableProjectEndpointModule[] = [];
     /**
      * Initializes the pluggable modules configuration service.
      * Fetches all available modules and filters for enabled ones.
@@ -113,8 +113,13 @@ export class GeboAIPluggableModulesConfigService {
      * @param geboModulesConfigService Service for accessing module configurations from the backend
      */
     constructor(
-        @Inject(GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG) private modulesConfiguration: GeboAIPluggableProjectEndpointModule[],
         private geboModulesConfigService: GeboModulesConfigControllerService) {
+        const injected = inject(GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG) as GeboAIPluggableProjectEndpointModule[] | undefined;
+        if (injected && injected.length) {
+            this.modulesConfiguration = injected;
+        } else {
+            this.modulesConfiguration = [];
+        }
         geboModulesConfigService.getAllModules().subscribe({
             next: (config) => {
                 if (config) {
@@ -153,13 +158,13 @@ export class GeboAIPluggableModulesConfigService {
  * Manages the loading, discovery, and configuration of project endpoints from various modules.
  */
 @Injectable({
-    providedIn: "platform"
+    providedIn: "any"
 })
 export class GeboAIPluggableProjectEndpointsService {
     private pluggableUIProjectEndpointServices: GeboAIPluggableProjectEndpointModuleService[] = [];
     private classNames: string[] = [];
     private modules: GeboAIPluggableProjectEndpointModule[] = [];
-    
+
     /**
      * Initializes the pluggable project endpoints service.
      * 
@@ -174,7 +179,7 @@ export class GeboAIPluggableProjectEndpointsService {
      * Initializes the service structures if they haven't been loaded yet.
      * Loads available modules and their services using the injector.
      */
-    private preloadStructures():void {
+    private preloadStructures(): void {
         if (!this.pluggableUIProjectEndpointServices.length) {
             const config = this.configService.getConfig();
             if (config && config.pluggableProjecteEndpointsModules) {
@@ -185,9 +190,9 @@ export class GeboAIPluggableProjectEndpointsService {
                 });
             }
         }
-        
+
     }
-    
+
     /***
      * Given a project returns the list of data sources exposed by Gebo.ai software modules (standard or custom)
      * 
@@ -219,7 +224,7 @@ export class GeboAIPluggableProjectEndpointsService {
         }));
 
     }
-    
+
     /***
      * exports the set of addable data sources in knowledge base editing UI 
      * 
