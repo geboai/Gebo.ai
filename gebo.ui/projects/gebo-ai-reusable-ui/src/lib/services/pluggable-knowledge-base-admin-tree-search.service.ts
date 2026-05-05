@@ -259,7 +259,8 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
                         }
                         if (data?.code) {
                             const actionRequest = option.actionRequestByProject(data);
-                            actionConsumer(actionRequest);
+                            if (actionRequest)
+                                actionConsumer(actionRequest);
                         }
                     }
                 });

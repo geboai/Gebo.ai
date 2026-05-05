@@ -542,7 +542,7 @@ const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
  * by providing their services and configuration blocks to the dependency injection system.
  */
 @NgModule({
-    imports: [CommonModule, GeboAIModulesModule],
+    imports: [CommonModule],
     providers: [
         GeboAISharedFilesystemModuleProjectEndpointService,
         GeboAIGitModuleProjectEndpointService,

@@ -56,7 +56,7 @@ export interface GeboAIPluggableProjectEndpointModuleService {
      * @param actualWizardStepConfigrationId Optional current wizard step ID
      * @returns Action request configuration
      */
-    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest;
+    byProjectCreateAction?(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest;
 };
 
 /**
@@ -92,7 +92,7 @@ export interface GeboAIUIProjectEndpointOption {
     addProjectEndpointicon?: string;
     addProjectEndpointLabel: string;
     addProjectEndpointTitle: string;
-    actionRequestByProject: (project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string) => GeboUIActionRequest;
+    actionRequestByProject: (project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string) => GeboUIActionRequest | undefined;
 }
 
 /****
@@ -240,28 +240,37 @@ export class GeboAIPluggableProjectEndpointsService {
         const out: GeboAIUIProjectEndpointOption[] = [];
         if (this.modules && this.modules.length) {
             this.modules.forEach((module, index) => {
-                out.push({
-                    addProjectEndpointicon: module.addProjectEndpointicon,
-                    addProjectEndpointLabel: module.addProjectEndpointLabel,
-                    addProjectEndpointTitle: module.addProjectEndpointTitle,
-                    projecteEndpointClassName: module.projecteEndpointClassName,
-                    actionRequestByProject: (project: GProject, wizardStepsConfigurations, actualWizardStepConfigrationId) => {
-                        //calls the specific module UI action request callback, overrides editing UI events callbacks 
-                        //calling the module UI specific callback first and action the one eventually passed as hook here
-                        const action: GeboUIActionRequest = this.pluggableUIProjectEndpointServices[index].byProjectCreateAction(project, wizardStepsConfigurations, actualWizardStepConfigrationId);
-                        const oldCallBack = action.onActionPerformed;
-                        const oldWizardCallBack = action.onWizardActionPerformed;
-                        action.onActionPerformed = (event: GeboActionPerformedEvent) => {
-                            if (oldCallBack) oldCallBack(event);
-                            if (onActionPerformed) onActionPerformed(event);
-                        };
-                        action.onWizardActionPerformed = (event: GeboWizardActionPerformedEvent) => {
-                            if (oldWizardCallBack) oldWizardCallBack(event);
-                            if (onWizardActionPerformed) onWizardActionPerformed(event);
-                        };
-                        return action;
-                    }
-                })
+                const hasCreateAction: boolean = this.pluggableUIProjectEndpointServices[index].byProjectCreateAction ? true : false;
+                if (hasCreateAction) {
+                    out.push({
+                        addProjectEndpointicon: module.addProjectEndpointicon,
+                        addProjectEndpointLabel: module.addProjectEndpointLabel,
+                        addProjectEndpointTitle: module.addProjectEndpointTitle,
+                        projecteEndpointClassName: module.projecteEndpointClassName,
+                        actionRequestByProject: (project: GProject, wizardStepsConfigurations, actualWizardStepConfigrationId) => {
+                            //calls the specific module UI action request callback, overrides editing UI events callbacks 
+                            //calling the module UI specific callback first and action the one eventually passed as hook here
+                            if (this.pluggableUIProjectEndpointServices[index].byProjectCreateAction) {
+                                const action: GeboUIActionRequest = this.pluggableUIProjectEndpointServices[index].byProjectCreateAction(project, wizardStepsConfigurations, actualWizardStepConfigrationId);
+                                const oldCallBack = action.onActionPerformed;
+                                const oldWizardCallBack = action.onWizardActionPerformed;
+                                action.onActionPerformed = (event: GeboActionPerformedEvent) => {
+                                    if (oldCallBack) oldCallBack(event);
+                                    if (onActionPerformed) onActionPerformed(event);
+                                };
+                                action.onWizardActionPerformed = (event: GeboWizardActionPerformedEvent) => {
+                                    if (oldWizardCallBack) oldWizardCallBack(event);
+                                    if (onWizardActionPerformed) onWizardActionPerformed(event);
+                                };
+                                return action;
+                            }
+                            //It will never return undefined, just for compilation purposes
+                            return undefined;
+                        }
+
+
+                    })
+                }
             });
         }
         return out;
