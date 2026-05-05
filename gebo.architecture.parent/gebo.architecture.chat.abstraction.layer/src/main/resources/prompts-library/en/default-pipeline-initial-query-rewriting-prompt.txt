@@ -54,6 +54,10 @@ rewrittenQuery rules:
 
 * Keep technical tokens (class names, error codes, versions) exactly as written if present.
 
+* if the latest user question is comprensible only considering the chat history or its meaning is related to the chat history output a rewrittenQuery that concisely summarizes 
+  the user question considering latest user question plus chat history and eventually present consolidated previus chat history in a single question phrase 
+  that summarizes the user objective and intent  
+
 deliverable rules:
 
 * Choose the user asked deliverable type using the (G) deliverable type list reporting the intent-type field value.
