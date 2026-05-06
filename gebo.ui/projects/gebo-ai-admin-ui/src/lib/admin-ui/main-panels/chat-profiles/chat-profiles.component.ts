@@ -109,7 +109,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
      * Sets the loading flag during the operation.
      */
     private loadPrompts() {
-        this.loadingPrompts = true;
+        //this.loadingPrompts = true;
         
     }
     

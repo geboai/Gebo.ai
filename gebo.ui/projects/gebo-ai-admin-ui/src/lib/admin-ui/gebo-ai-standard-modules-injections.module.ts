@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 import { ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GSharepointProjectEndpoint, GUploadsProjectEndpoint, JiraSystemsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
-import { Injectable, NgModule } from "@angular/core";
+import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 export const SHARED_FILESYSTEM_MODULE = "shared-filesystem-module";
@@ -42,7 +42,7 @@ export class GeboAISharedFilesystemModuleProjectEndpointService implements GeboA
     constructor(private sharedFilesystemService: FileSystemsControllerService) {
 
     }
-    
+
     /**
      * Fetches all filesystem endpoints for a given project by its code.
      * @param code - The project code to search endpoints for
@@ -53,7 +53,7 @@ export class GeboAISharedFilesystemModuleProjectEndpointService implements GeboA
     }[]> {
         return this.sharedFilesystemService.findFileSystemEndpointsByProject(code);
     }
-    
+
     /**
      * Creates a UI action request for creating a new filesystem endpoint for a project.
      * This method supports wizard-style creation flows by handling step configurations.
@@ -102,7 +102,7 @@ export class GeboAIGitModuleProjectEndpointService implements GeboAIPluggablePro
     constructor(private sharedFilesystemService: GitSystemsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all Git endpoints associated with a specific project.
      * @param code - The project code to search endpoints for
@@ -113,7 +113,7 @@ export class GeboAIGitModuleProjectEndpointService implements GeboAIPluggablePro
     }[]> {
         return this.sharedFilesystemService.findGitEndpointsByProject(code);
     }
-    
+
     /**
      * Creates a UI action request for creating a new Git repository endpoint.
      * Supports wizard-based configuration flow if wizard parameters are provided.
@@ -162,7 +162,7 @@ export class GeboAIUpladsModuleProjectEndpointService implements GeboAIPluggable
     constructor(private uploadsService: FileUploadsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all upload endpoints associated with a specific project.
      * @param code - The project code to search for endpoints
@@ -173,7 +173,7 @@ export class GeboAIUpladsModuleProjectEndpointService implements GeboAIPluggable
     }[]> {
         return this.uploadsService.findUploadsEndpointsByProject(code);
     }
-    
+
     /**
      * Creates an action request for adding a new file upload endpoint to a project.
      * @param project - The project to create the upload endpoint for
@@ -221,7 +221,7 @@ export class GeboAISharepointModuleProjectEndpointService implements GeboAIPlugg
     constructor(private sharepointService: SharepointSystemsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all SharePoint endpoints associated with a specific project.
      * @param code - The project code to search for endpoints
@@ -232,7 +232,7 @@ export class GeboAISharepointModuleProjectEndpointService implements GeboAIPlugg
     }[]> {
         return this.sharepointService.findSharepointEndpointsByProject(code);
     }
-    
+
     /**
      * Creates an action request for adding a new SharePoint endpoint to a project.
      * @param project - The project to create the SharePoint endpoint for
@@ -280,7 +280,7 @@ export class GeboAIConfluenceModuleProjectEndpointService implements GeboAIPlugg
     constructor(private sharedFilesystemService: ConfluenceSystemsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all Confluence endpoints associated with a specific project.
      * @param code - The project code to search for endpoints
@@ -291,7 +291,7 @@ export class GeboAIConfluenceModuleProjectEndpointService implements GeboAIPlugg
     }[]> {
         return this.sharedFilesystemService.findConfluenceEndpointsByProject(code);
     }
-    
+
     /**
      * Creates an action request for adding a new Confluence endpoint to a project.
      * @param project - The project to create the Confluence endpoint for
@@ -339,7 +339,7 @@ export class GeboAIJiraModuleProjectEndpointService implements GeboAIPluggablePr
     constructor(private jiraService: JiraSystemsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all Jira endpoints associated with a specific project.
      * @param code - The project code to search for endpoints
@@ -350,7 +350,7 @@ export class GeboAIJiraModuleProjectEndpointService implements GeboAIPluggablePr
     }[]> {
         return this.jiraService.findJiraEndpointsByProject(code);
     }
-    
+
     /**
      * Creates an action request for adding a new Jira endpoint to a project.
      * @param project - The project to create the Jira endpoint for
@@ -398,7 +398,7 @@ export class GeboAIGoogleDriveModuleProjectEndpointService implements GeboAIPlug
     constructor(private jiraService: GoogleDriveSystemsControllerService) {
 
     }
-    
+
     /**
      * Retrieves all Google Drive endpoints associated with a specific project.
      * @param code - The project code to search for endpoints
@@ -409,7 +409,7 @@ export class GeboAIGoogleDriveModuleProjectEndpointService implements GeboAIPlug
     }[]> {
         return this.jiraService.findGoogleDriveEndpointsByProject(code);
     }
-    
+
     /**
      * Creates an action request for adding a new Google Drive endpoint to a project.
      * @param project - The project to create the Google Drive endpoint for
@@ -542,7 +542,7 @@ const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
  * by providing their services and configuration blocks to the dependency injection system.
  */
 @NgModule({
-    imports: [CommonModule, GeboAIModulesModule],
+    imports: [CommonModule],
     providers: [
         GeboAISharedFilesystemModuleProjectEndpointService,
         GeboAIGitModuleProjectEndpointService,
@@ -561,4 +561,26 @@ const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
 })
 export class GeboAICommonModulesInjectionsModule {
 
+    public static forRoot(): ModuleWithProviders<GeboAICommonModulesInjectionsModule> {
+        const moduleWithProv: ModuleWithProviders<GeboAICommonModulesInjectionsModule> = {
+            ngModule: GeboAICommonModulesInjectionsModule,
+            providers: [
+                GeboAISharedFilesystemModuleProjectEndpointService,
+                GeboAIGitModuleProjectEndpointService,
+                GeboAIUpladsModuleProjectEndpointService,
+                GeboAISharepointModuleProjectEndpointService,
+                GeboAIConfluenceModuleProjectEndpointService,
+                GeboAIJiraModuleProjectEndpointService,
+                GeboAIGoogleDriveModuleProjectEndpointService,
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharepointModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: confluenceModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: jiraModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: googleDriveModuleConfigurationBlock, multi: true }]
+        }
+        return moduleWithProv;
+
+    }
 }
