@@ -9,6 +9,8 @@
 
 package ai.gebo.architecture.rag.support.layer.model;
 
+import static org.mockito.Mockito.framework;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -152,6 +154,25 @@ public class AIDocumentReferenceItem implements IAIContent, Cloneable {
 			}
 		}
 		return outDoc;
+	}
+
+	public String extractTokens(int sampleTextTokensSize) {
+		StringBuffer buffer = new StringBuffer();
+		int tokensSize = 0;
+		for (AIDocumentFragment fragment : fragments) {
+			if (tokensSize + fragment.getTokensSize() <= sampleTextTokensSize) {
+				tokensSize += fragment.getTokensSize();
+				buffer.append(fragment.getDocumentContent());
+				buffer.append("...");
+			} else {
+				double delta = fragment.getTokensSize() - tokensSize;
+				if (delta > 0.0) {
+					int nChars = (int) (delta * 4.2);
+					buffer.append(fragment.getDocumentContent().substring(0,nChars));
+				}
+			}
+		}
+		return buffer.toString();
 	}
 
 }

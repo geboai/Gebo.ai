@@ -675,7 +675,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		});
 
 		ParallelFlux<AbstractPureSearchDocumentResultEntry> parallelResult = chunksFlux.map(resultEntry -> {
-			if (resultEntry.isErrorState()) {
+			if (!resultEntry.isErrorState()) {
 				SearchResult entry = (SearchResult) resultEntry.getDocumentRef();
 				PureSearchExternalDataSourceResultEntry value = new PureSearchExternalDataSourceResultEntry(entry,
 						resultEntry.getChunk().getChunkData());

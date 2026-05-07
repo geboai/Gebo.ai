@@ -28,6 +28,6 @@ public interface IGInternalKnlowledgeBaseRagDeepSearchService {
 
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String chunkingSessionId, int topK, int sampleTextTokensSize)
-			throws LLMConfigException;
+			throws LLMConfigException, GeboChatSessionLifecycleException;
 
 }

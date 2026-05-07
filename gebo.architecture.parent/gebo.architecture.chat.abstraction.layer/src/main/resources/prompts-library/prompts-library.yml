@@ -63,4 +63,12 @@ ai.gebo.prompts:
       reference: /prompts-library/en/default-pipeline-chat-with-documents-prompt.txt
     - promptUse: default-pipeline-pure-search-datasources-selection-prompt
       langCode: en
-      reference: /prompts-libray/en/default-pipeline-pure-search-datasources-selection-prompt.txt  	  
+      reference: /prompts-libray/en/default-pipeline-pure-search-datasources-selection-prompt.txt 
+    - promptUse: default-pipeline-pure-search-fallback-prompt
+      langCode: en
+      reference: /prompts-libray/en/default-pipeline-pure-search-fallback-prompt.txt
+    - promptUse: default-pipeline-pure-search-fallback-prompt	  
+      langCode: en
+      reference: /prompts-libray/en/default-pipeline-pure-search-fallback-prompt.txt
+	  
+	     	  
