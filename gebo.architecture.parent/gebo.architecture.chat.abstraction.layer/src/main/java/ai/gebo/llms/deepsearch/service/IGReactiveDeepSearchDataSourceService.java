@@ -69,7 +69,7 @@ public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, St
 			SearchServiceException;
 
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
-			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK, String chunkingSessionId) throws LLMConfigException,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK, int sampleTextTokensSize, String chunkingSessionId) throws LLMConfigException,
 			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
 
 }

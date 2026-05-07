@@ -285,7 +285,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				rewrited_query, params, List.of(SEARCHED_SYSTEMS));
 
 		return toBeSearched.containsKey(SEARCHED_SYSTEMS) ? toBeSearched.get(SEARCHED_SYSTEMS)
-				: List.of("IKB_DATASOURCE");
+				: List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
 	}
 
 	private String deepSearchDataSourcesListPromptPart(List<GKnowledgeBase> knowledgeBases) {

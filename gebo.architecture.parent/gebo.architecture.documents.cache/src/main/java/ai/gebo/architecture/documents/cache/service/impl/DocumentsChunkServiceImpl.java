@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.Flow.Publisher;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -30,11 +31,12 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
-import ai.gebo.architecture.documents.cache.model.ChinkingPolicy;
+import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkType;
@@ -133,7 +135,7 @@ public class DocumentsChunkServiceImpl
 			GeboIngestionException, SearchServiceException {
 		checkExistence(chunkSessionId);
 		if (params.getChunkingPolicy() != null
-				&& params.getChunkingPolicy() == ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD
+				&& params.getChunkingPolicy() == ChunkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD
 				&& (params.getTokensThreashold() == null || params.getTokensThreashold() <= 0)) {
 			throw new IllegalStateException(
 					"When the chunking policy is MATCHING_CHUNKS_AFTER_THREASHOLD tokensThreashold is to be >0");
@@ -143,6 +145,8 @@ public class DocumentsChunkServiceImpl
 		}
 		List<AbstractChunkingSpecs> chunkingSpecs = params.getChunkingSpecs();
 		final boolean enrichWithMetaData = params.isEnrichWithMetaData();
+		final boolean samplingMode = params.isSamplingMode();
+		final long sampledTokens = params.getSampledTokens();
 		final long tokensPerChunkSet = params.getTokensPerChunkSet();
 		// Take work directory
 		String workDirectory = configService.getGeboWorkDirectory();
@@ -251,10 +255,12 @@ public class DocumentsChunkServiceImpl
 						LOGGER.debug("Start looping contents stream");
 					}
 					final boolean chunkAll = params.getChunkingPolicy() == null
-							|| params.getChunkingPolicy() == ChinkingPolicy.SPLIT_CHUNKS;
+							|| params.getChunkingPolicy() == ChunkingPolicy.SPLIT_CHUNKS;
 					final AtomicLong atomicLong = new AtomicLong(0l);
+					final AtomicBoolean samplingBudgetReached = new AtomicBoolean(false);
 					docsStream.forEach(doc -> {
-
+						if (samplingBudgetReached.get())
+							return;
 						try {
 							MetaDataHeaderInfos metaDataHeader = null;
 							// We calculate metaDataHeader if enrichWithMetaData is true (it will be the
@@ -303,6 +309,8 @@ public class DocumentsChunkServiceImpl
 									int tokensSize = _document.getText() != null && _document.isText()
 											? estimator.estimate(_document.getText())
 											: 0;
+									long currentTokensLength = chunkOperation.getTotalTokensSize()
+											+ ((long) tokensSize);
 									if (!chunkAll && params.getChunkingPolicy() != null) {
 										int nhits = 1;
 										if (params.getKeywordHits() != null && params.getKeywordHits() > 0) {
@@ -310,8 +318,7 @@ public class DocumentsChunkServiceImpl
 										}
 										switch (params.getChunkingPolicy()) {
 										case MATCHING_CHUNKS_AFTER_THREASHOLD: {
-											long currentTokensLength = chunkOperation.getTotalTokensSize()
-													+ ((long) tokensSize);
+
 											if (currentTokensLength >= params.getTokensThreashold().longValue()) {
 
 												considerChunk = this.keywordMatcherService.isMatching(
@@ -327,6 +334,10 @@ public class DocumentsChunkServiceImpl
 										}
 											break;
 										}
+									}
+									if (samplingMode) {
+										if (currentTokensLength > sampledTokens)
+											samplingBudgetReached.set(true);
 									}
 									if (considerChunk) {
 										_document.getMetadata().put(DocumentMetaInfos.GEBO_BYTES_LENGTH, bytesSize);
@@ -358,7 +369,8 @@ public class DocumentsChunkServiceImpl
 												.setTotalBytes(currentChunkSet.getTotalBytes() + chunk.getBytesSize());
 										currentChunkSet.setTotalTokens(
 												currentChunkSet.getTotalTokens() + chunk.getTokensSize());
-										if (currentChunkSet.getTotalTokens() > tokensPerChunkSet) {
+
+										if ((!samplingMode) && currentChunkSet.getTotalTokens() > tokensPerChunkSet) {
 											Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME,
 													currentChunkSet.getId());
 											if (LOGGER.isDebugEnabled()) {
@@ -391,6 +403,11 @@ public class DocumentsChunkServiceImpl
 					}
 					if (!chunkSets.isEmpty()) {
 						DocumentChunksSet currentChunkSet = chunkSets.get(0);
+						if (samplingMode) {
+							currentChunkSet = this.mergeInSingleton(chunkSets, sampledTokens);
+							chunkOperation.setChunkSetsList(List.of(currentChunkSet.getId()));
+							response.setCurrentChunkSet(currentChunkSet);
+						}
 						Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, currentChunkSet.getId());
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("document " + document.getCode() + " Writing chunk=>" + currentChunkSet.getId()
@@ -433,6 +450,50 @@ public class DocumentsChunkServiceImpl
 		}
 		return response;
 
+	}
+
+	private DocumentChunksSet mergeInSingleton(List<DocumentChunksSet> chunkSets, long sampledTokens) {
+		DocumentChunksSet singleton = chunkSets.get(0);
+		DocumentChunk singletonChunk = new DocumentChunk();
+		singletonChunk.setChunkingSessionId(singleton.getChunkingSessionId());
+		singletonChunk.setChunkPosition(1l);
+		singletonChunk.setMetaData(new HashMap<>());
+		singletonChunk.setId(UUID.randomUUID().toString());
+
+		List<DocumentChunk> chunks = new ArrayList<>();
+		for (DocumentChunksSet set : chunkSets) {
+			chunks.addAll(set.getChunks());
+		}
+		StringBuffer buffer = new StringBuffer();
+		long tokensSize = 0;
+		for (DocumentChunk documentChunk : chunks) {
+			if (singletonChunk.getMimeType() == null)
+				singletonChunk.setMimeType(documentChunk.getMimeType());
+			if (singletonChunk.getOriginalDocumentCode() == null)
+				singletonChunk.setOriginalDocumentCode(documentChunk.getOriginalDocumentCode());
+			if (singletonChunk.getMetaData().isEmpty() && documentChunk.getMetaData() != null) {
+				singletonChunk.getMetaData().putAll(documentChunk.getMetaData());
+			}
+			if (tokensSize + documentChunk.getTokensSize() < sampledTokens) {
+				buffer.append(documentChunk.getChunkData());
+				buffer.append("...");
+				tokensSize += documentChunk.getTokensSize();
+			} else {
+				double tokensBudget = (sampledTokens - tokensSize);
+				double trailSize = tokensBudget * 4.2;
+				String fragment = documentChunk.getChunkData().substring(0, (int) trailSize);
+				buffer.append(fragment);
+				break;
+			}
+		}
+		singletonChunk.setChunkData(buffer.toString());
+		singletonChunk.setChunksCount(1l);
+		singletonChunk.setBytesSize((long) singletonChunk.getChunkData().length());
+		singletonChunk.setTokensSize((long) ITokensCountable.stringsTokensSize(singletonChunk.getChunkData()));
+		singleton.setChunks(List.of(singletonChunk));
+		singleton.setTotalBytes(singletonChunk.getBytesSize());
+		singleton.setTotalTokens(singletonChunk.getTokensSize());
+		return singleton;
 	}
 
 	private boolean sameKeyWords(List<String> matchingKeywords, List<String> filteredKeywords) {
@@ -633,7 +694,7 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
-			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
+			org.reactivestreams.Publisher<List<? extends IGComponentOriginatedDocument>> documentsPublisher,
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency) {
 		checkExistence(chunkSessionId);
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();

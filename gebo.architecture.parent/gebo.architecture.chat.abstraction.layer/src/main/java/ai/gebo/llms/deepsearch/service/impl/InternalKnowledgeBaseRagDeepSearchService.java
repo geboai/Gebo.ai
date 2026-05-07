@@ -258,7 +258,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String chunkingSessionId, int topK) throws LLMConfigException {
+			String chunkingSessionId, int topK, int sampleTextTokensSize) throws LLMConfigException {
 		// TODO Auto-generated method stub
 		return null;
 	}

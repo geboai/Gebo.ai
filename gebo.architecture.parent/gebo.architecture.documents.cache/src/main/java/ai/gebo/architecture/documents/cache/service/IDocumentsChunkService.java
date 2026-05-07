@@ -35,7 +35,7 @@ public interface IDocumentsChunkService {
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency);
 
 	public ParallelFlux<IDocumentChunkWithRef> streamChunks(
-			org.reactivestreams.Publisher<List<IGComponentOriginatedDocument>> documentsPublisher,
+			org.reactivestreams.Publisher<List<? extends IGComponentOriginatedDocument>> documentsPublisher,
 			ChunkingParams chunkingSpecs, String chunkSessionId, int docConcurrency);
 
 	public Flux<IDocumentChunkWithRef> streamChunks(IGComponentOriginatedDocument document,

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
-import ai.gebo.architecture.documents.cache.model.ChinkingPolicy;
+import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
 import ai.gebo.architecture.documents.cache.service.impl.AbstractCachedEntry;
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	private List<AbstractChunkingSpecs> chunkingSpecs = new ArrayList<AbstractChunkingSpecs>();
 	private List<String> matchingKeywords = null;
 	private boolean enrichWithMetaData = false;
-	private ChinkingPolicy chunkingPolicy = null;
+	private ChunkingPolicy chunkingPolicy = null;
 	private long totalBytesSize = 0l, totalTokensSize = 0l;
 	private int totalChunks = 0;
 	@HashIndexed

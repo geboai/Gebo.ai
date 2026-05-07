@@ -19,7 +19,7 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
-import ai.gebo.architecture.documents.cache.model.ChinkingPolicy;
+import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
@@ -44,6 +45,8 @@ import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchExternalDataSourceResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
@@ -60,6 +63,7 @@ import ai.gebo.llms.deepsearch.model.ratings.SharedRatingsStructure;
 import ai.gebo.llms.deepsearch.service.impl.Common;
 import ai.gebo.llms.deepsearch.service.impl.SearchEndingDetectionLogic;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
@@ -133,6 +137,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin streamSearch(....) handler=" + getHandlerId());
 		}
+		final int topK = this.deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		final SharedRatingsStructure sharedRatingStructure = new SharedRatingsStructure();
 		final Map<String, Object> chatContextTemplateParams = CommonChatPromptParamsUtil
 				.preparePromptParameters(minimalChatContext);
@@ -162,7 +167,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 				try {
 					queryResults = executeSearches(request, minimalChatContext, pastSystemsResponses, deepSearchConfig,
-							chatModel, serviceModel, "");
+							chatModel, serviceModel, "", topK);
 				} catch (Throwable e) {
 					LOGGER.error("Exception executing searches", e);
 					throw new RuntimeException("Exception executing searches", e);
@@ -210,9 +215,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_KEYWORD_GENERATION_PROMPT).getPrompt(),
 				request.getQuery(), chatContextTemplateParams, KeywordsList.class);
 
-		final ChunkingParams params = new ChunkingParams(ChinkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
+		final ChunkingParams params = new ChunkingParams(ChunkingPolicy.MATCHING_CHUNKS_AFTER_THREASHOLD,
 				(serviceModel.getContextLength() / 2) * NCONTEXT_WINDOW_LENGTH_THREASHOLD, 1,
-				chunkingKeywordsMatching.getKeywords(), specs, false, serviceModel.getContextLength() * 50);
+				chunkingKeywordsMatching.getKeywords(), specs, false, serviceModel.getContextLength() * 50, -1, false);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("chunkingParams=" + params);
 		}
@@ -392,7 +397,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected abstract List<SearchWithResults> executeSearches(DeepSearchRequest request,
 			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
 			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String string) throws LLMConfigException, IOException, SearchServiceException;
+			String string, int topK) throws LLMConfigException, IOException, SearchServiceException;
 
 	private Flux<AbstractDeepSearchEvent> additionalAnalisys(
 			Function<List<SearchResult>, ParallelFlux<IDocumentChunkWithRef>> chunksLoadFunction,
@@ -624,8 +629,62 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
-			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK, String chunkingSessionId) throws LLMConfigException,
-			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
-		return null;
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK,
+			int sampleTextTokensSize, String chunkingSessionId) throws LLMConfigException, IOException,
+			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+		DeepSearchRequest dsr = new DeepSearchRequest();
+		dsr.setChatRequestCode(minimalChatContext.getCurrentRequest().getId());
+		dsr.setUserChatContextCode(minimalChatContext.getCurrentRequest().getUserChatContextCode());
+		dsr.setQuery(GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()));
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
+			return runAs.doRunAsWithReturn(() -> {
+				try {
+					return Flux.just(executeSearches(dsr, minimalChatContext, List.of(), deepSearchDefaultConfig,
+							chatModel, serviceModel, chunkingSessionId, topK));
+				} catch (Throwable e) {
+					throw new RuntimeException(e);
+
+				}
+			});
+		});
+		Flux<List<SearchResult>> resultsFlux = searchBlockFlux.concatMap(searchResults -> {
+			List<SearchResult> results = new ArrayList<>();
+			for (SearchWithResults result : searchResults) {
+				results.addAll(result.getResults());
+			}
+
+			return Flux.just(results);
+		}).subscribeOn(threadManager.getBoundedElastic());
+		ParallelFlux<List<SearchResult>> searchResults = ParallelFlux.from(resultsFlux);
+		final ChunkingParams chunkingParams = new ChunkingParams();
+		chunkingParams.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
+		chunkingParams.setEnrichWithMetaData(false);
+		chunkingParams.setTokensPerChunkSet(sampleTextTokensSize);
+		chunkingParams.setTokensThreashold(sampleTextTokensSize);
+
+		TextChunkingSpecs textChunkingSpecs = TextChunkingSpecs.of(sampleTextTokensSize);
+		chunkingParams.getChunkingSpecs().add(textChunkingSpecs);
+		chunkingParams.setSamplingMode(true);
+		chunkingParams.setSampledTokens(sampleTextTokensSize);
+		ParallelFlux<IDocumentChunkWithRef> chunksFlux = searchResults.concatMap(results -> {
+			return runAs.doRunAsWithReturn(() -> {
+				return this.chunkingService.streamChunks(results, chunkingParams, chunkingSessionId,
+						deepSearchDefaultConfig.getDocumentsParallelism());
+			});
+		});
+
+		ParallelFlux<AbstractPureSearchDocumentResultEntry> parallelResult = chunksFlux.map(resultEntry -> {
+			if (resultEntry.isErrorState()) {
+				SearchResult entry = (SearchResult) resultEntry.getDocumentRef();
+				PureSearchExternalDataSourceResultEntry value = new PureSearchExternalDataSourceResultEntry(entry,
+						resultEntry.getChunk().getChunkData());
+				return value;
+			}
+			GUserMessage message = resultEntry.getErrorMessage();
+			message.setSeverity(MsgServerity.warn);
+			return new PureSearchDocumentResultError(null, null, message);
+		});
+		return parallelResult.sequential();
 	}
 }

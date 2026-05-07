@@ -49,6 +49,7 @@ import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -491,12 +492,48 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources, int perDataSourceK,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> searchDataSources, int perDataSourceK,
 			int globalK, int sampleTextTokensSize) throws LLMConfigException, GeboChatSessionLifecycleException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		final ReactiveIdentityUtil runAs=ReactiveIdentityUtil.create();
+		return Flux.defer(() -> {
+			return runAs.doRunAsWithReturn(() -> {
+				final IDocumentsChunkService chunkService = runtimeBinder
+						.getImplementationOf(IDocumentsChunkService.class);
+				final String chunkSessionId = chunkService.createChunkingSession("pureSearch:" + request.getCurrentRequest().getId());
+				final FullReactiveDeepsearchWorker worker = runtimeBinder
+						.getImplementationOf(FullReactiveDeepsearchWorker.class);
 
-	
+				Flux<AbstractPureSearchDocumentResultEntry> flow=null;
+				try {
+					flow = worker.streamPureSearch(request, minimalChatContext, geboChatRequest, emitter, chatModel, serviceModel, searchDataSources, perDataSourceK, globalK, sampleTextTokensSize,chunkSessionId);
+					if (flow != null) {
+						flow = flow.transform(ReactiveMonitor.monitor("pure-search"));
+					}
+					 
+				} catch (Throwable e) {
+					LOGGER.error("Error doing pure search", e);
+					PureSearchDocumentResultError error=new PureSearchDocumentResultError(null, null, GUserMessage.errorMessage("Error searching", e));
+					flow = Flux.just(error);
+				}
+				if (chunkSessionId != null && flow != null) {
+					Runnable deleteChunkingSessionRunnable = new Runnable() {
+						@Override
+						public void run() {
+							try {
+								runAs.doAsWithException(() -> {
+									chunkService.disposeChunkingSession(chunkSessionId);
+								});
+							} catch (Throwable th) {
+								LOGGER.error("Exception disposing", th);
+							}
+						}
+					};
+					flow.doAfterTerminate(deleteChunkingSessionRunnable);
+				}
+				return flow;
+			});
+		}).subscribeOn(deepSearchScheduler);
+
+	}
 
 }
