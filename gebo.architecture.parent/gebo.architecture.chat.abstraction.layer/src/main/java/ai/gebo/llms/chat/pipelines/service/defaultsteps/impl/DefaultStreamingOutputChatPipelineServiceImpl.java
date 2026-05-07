@@ -17,6 +17,7 @@ import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -43,7 +44,7 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {

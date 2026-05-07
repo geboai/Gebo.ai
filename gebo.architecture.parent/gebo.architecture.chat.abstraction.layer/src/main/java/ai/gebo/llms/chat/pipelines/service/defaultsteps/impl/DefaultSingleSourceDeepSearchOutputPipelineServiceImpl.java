@@ -18,6 +18,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter.StepEnvironmentType;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
@@ -53,7 +54,7 @@ public class DefaultSingleSourceDeepSearchOutputPipelineServiceImpl implements I
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		DeepSearchConfig config = deepSearchConfigProvider.get();
 		Object _choosedSourceId = runtimeData.getSharedEnvironment()

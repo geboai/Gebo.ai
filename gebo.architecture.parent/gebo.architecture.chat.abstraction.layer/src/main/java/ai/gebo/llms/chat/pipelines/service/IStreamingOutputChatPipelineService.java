@@ -21,6 +21,6 @@ public interface IStreamingOutputChatPipelineService extends IChatPipelineStepSe
 	public List<StepEnvironmentParameter> getRequiredParameters();
 
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException, IOException;
 }

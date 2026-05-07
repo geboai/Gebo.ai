@@ -35,7 +35,9 @@ import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -251,6 +253,14 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				"Searching documents", "Internal knowledge base");
 		return Flux.concat(notificationFlux, body, trail).onErrorResume(Common.commonFallBack(request))
 				.subscribeOn(this.threadManager.getScheduler());
+	}
+
+	@Override
+	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String chunkingSessionId, int topK) throws LLMConfigException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

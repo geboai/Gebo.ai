@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Sinks;
@@ -24,6 +26,14 @@ public class SinkUIEmitterImpl implements ISinkUIEmitter {
 	@Override
 	public void complete() {
 		sink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
+
+	}
+
+	@Override
+	public void notifyUser(String code, String message, String icon, Long duration, NotificationType notificationType) {
+		ChatNotificationContent content = new ChatNotificationContent(code, message, icon, duration, notificationType);
+		GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(content);
+		this.next(envelope);
 
 	}
 

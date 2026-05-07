@@ -17,8 +17,10 @@ import java.util.Map;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import lombok.Data;
 
 /**
@@ -51,6 +53,8 @@ public class GResponseDocumentRef implements Serializable {
 	private String geboFileTypeDescription = null; // Description of the file type
 	private String geboFileTypeId = null; // File type identifier
 	private String name = null; // Name of the document
+	private boolean knowledgeBaseDocument;
+	private SearchResult nestedSearchResult = null;
 	private long NTokensRelevant = 0l; // Number of relevant tokens in the document
 	private long NTotalContentTokens = 0l; // Total number of content tokens in the document
 	private double loadPercentage = 0.0; // Load percentage of tokens relevant to total content
@@ -88,11 +92,36 @@ public class GResponseDocumentRef implements Serializable {
 		this.extension = document.getExtension();
 		this.contentType = document.getContentType();
 		String referenceType = get(metadata, DocumentMetaInfos.GEBO_REFERENCE_TYPE);
+		this.knowledgeBaseDocument = true;
 		if (referenceType != null) {
 			try {
 				this.referenceType = ReferenceRefType.valueOf(referenceType);
 			} catch (Throwable t) {
 			}
+		}
+	}
+
+	public static GResponseDocumentRef of(IGComponentOriginatedDocument document) {
+		if (document instanceof GDocumentReference reference) {
+			return new GResponseDocumentRef(reference);
+		}
+		if (document instanceof SearchResult reference) {
+			return new GResponseDocumentRef(reference);
+		}
+		return null;
+	}
+
+	public GResponseDocumentRef(SearchResult nestedSearchResult) {
+		this.nestedSearchResult = nestedSearchResult;
+		this.description = nestedSearchResult.getDescriptiveText();
+		this.documentCode = nestedSearchResult.getCode();
+		if (nestedSearchResult.getNavigationReference() != null
+				&& nestedSearchResult.getNavigationReference().path != null
+				&& nestedSearchResult.getNavigationReference().path.name != null) {
+			this.name = nestedSearchResult.getNavigationReference().path.name;
+		} else if (nestedSearchResult.getResultReference() != null
+				&& nestedSearchResult.getResultReference().getName() != null) {
+			this.name = nestedSearchResult.getResultReference().getName();
 		}
 	}
 

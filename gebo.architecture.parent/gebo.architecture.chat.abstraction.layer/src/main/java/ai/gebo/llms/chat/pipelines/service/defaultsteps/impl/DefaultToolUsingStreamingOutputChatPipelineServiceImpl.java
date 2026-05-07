@@ -16,6 +16,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -42,7 +43,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) throws ChatPipelineException {
 		Map<String, Object> params = DefaultPipelineSharedPromptPlaceholders.extractSharedPromptParameters(
 				runtimeData.getSharedEnvironment(), DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM);
 		PromptTemplate promptTemplate = new PromptTemplate(
