@@ -16,10 +16,12 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
@@ -44,7 +46,9 @@ import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResul
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.base.IGComponentOriginatedDocument;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -202,10 +206,9 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		Flux<String> reactiveLLMOutput = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				Stream<LLMInputDocument> inputStream = ranked.stream().map(entry -> {
-					LLMInputDocument inputDocument = super.createInputDocument(entry.getDocument(),
-							entry.getSampleText());
+					LLMInputDocument inputDocument = createInputDocument(entry.getDocument(), entry.getSampleText());
 					return inputDocument;
-				});
+				}).filter(x -> x != null);
 				MinimalChatContext minimalContext = runtimeData.getMinimalChatContext();
 
 				String prompt = promptsDao
@@ -238,6 +241,25 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		});
 
 		return Flux.concat(firstFullResponseSending, streamingText, trailingEnd);
+	}
+
+	private LLMInputDocument createInputDocument(IGComponentOriginatedDocument document, String sampleText) {
+		if (document instanceof ai.gebo.architecture.search.model.SearchResult actualSearchResultToLoad) {
+			LLMInputDocument cInput = new LLMInputDocument(actualSearchResultToLoad.getResultReference().getName(),
+					actualSearchResultToLoad.getResultReference().getUri(),
+					actualSearchResultToLoad.getResultReference().getTitle(), sampleText);
+			return cInput;
+		}
+		if (document instanceof GDocumentReference reference) {
+			String title = reference.getName();
+			Map<String, Object> metaInfos = reference.getCustomMetaInfos();
+			if (metaInfos.containsKey(DocumentMetaInfos.TITLE)) {
+				title = (String) metaInfos.get(DocumentMetaInfos.TITLE);
+			}
+			LLMInputDocument cInput = new LLMInputDocument(reference.getName(), reference.getUri(), title, sampleText);
+			return cInput;
+		}
+		return null;
 	}
 
 	private GeboChatMessageEnvelope createEnvelope(AbstractPureSearchDocumentResultEntry entry) {

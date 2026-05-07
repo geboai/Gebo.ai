@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.StreamResponseSpec;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -33,9 +32,6 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.model.DocumentMetaInfos;
-import ai.gebo.model.base.IGComponentOriginatedDocument;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import reactor.core.publisher.Flux;
 
 public class BaseLLMSInvokingService {
@@ -51,15 +47,6 @@ public class BaseLLMSInvokingService {
 		List<Document> inputs = new ArrayList<Document>();
 		int totaltokens = 0;
 		boolean complete = false;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class LLMInputDocument {
-		final String documentReference;
-		final String documentUrl;
-		final String title;
-		final String text;
 	}
 
 	static class ConsolidationInputBatch {
@@ -926,10 +913,7 @@ public class BaseLLMSInvokingService {
 		return filterCSVLines(content, nColumns).map(reader).filter(y -> y != null);
 	}
 
-	protected LLMInputDocument createInputDocument(IGComponentOriginatedDocument document, String sampleText) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, String prompt, String query,
 			Map<String, Object> params, Stream<LLMInputDocument> inputStream) throws LLMConfigException {
