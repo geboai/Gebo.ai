@@ -144,3 +144,5 @@ export * from "./lib/infrastructure/fast-setup/fast-setup.module";
 export * from "./lib/infrastructure/fast-setup/fast-setup.component";
 export * from "./lib/infrastructure/gebo-credentials";
 export * from "./lib/infrastructure/user-profile/user-profile.module";
+export * from "./lib/architecture/desktop/gebo-ai-desktop.component";
+export * from "./lib/architecture/desktop/application-menu-provider.service";

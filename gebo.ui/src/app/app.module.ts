@@ -20,7 +20,7 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
@@ -35,6 +35,7 @@ import { definePreset } from "@primeng/themes";
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
+import { AppMenuProviderService } from './app-menu-provider.service';
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PopoverModule } from 'primeng/popover';
@@ -102,6 +103,7 @@ const GeboAIPreset = definePreset(Aura, {
     MegaMenuModule,
     LoginModule,
     FastSetupModule,
+    GeboUIArchitectureModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,
@@ -135,6 +137,7 @@ const GeboAIPreset = definePreset(Aura, {
     }),
     { provide: BASE_PATH, useFactory: getBaseUrl },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: ApplicationMenuProviderService, useClass: AppMenuProviderService },
 
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,

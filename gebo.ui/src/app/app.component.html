@@ -8,31 +8,4 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
-<gebo-ai-display-messages></gebo-ai-display-messages>
-<p-confirm-dialog></p-confirm-dialog>
-<div class="grid" style="height: 100%;">
-    <div style="width: 240px;" class="col-2 align-self-end">
-        <img src="assets/Gebo.png" width="240" height="60">
-
-    </div>
-    <div class="col-9 col-xs-1 col-sm-1 align-self-end" #MenuArea>
-        <p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal" class="megaMenuWhite"
-            [style]="{border:'0px solid'}" />
-
-    </div>
-    <div class="col-1 col-xs-12 col-sm-12 align-self-end " #serviceMenuArea style="text-align: right;">
-        <gebo-ai-language-resource-download></gebo-ai-language-resource-download>
-        <gebo-ai-main-language-choice></gebo-ai-main-language-choice>
-    </div>
-
-
-    <div class="col-12 " style="height: 100%;">
-        <router-outlet />
-
-    </div>
-
-</div>
-
-<div class="version-display">
-    Gebo.ai version: {{version}}
-</div>
+<gebo-ai-desktop [version]="version"></gebo-ai-desktop>
