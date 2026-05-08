@@ -31,8 +31,11 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/assets/i18n",
+              {
+                "glob": "**/*",
+                "input": "projects/gebo-ai-reusable-ui/src/assets",
+                "output": "/assets/"
+              },
               {
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor",
@@ -50,12 +53,12 @@
               },
               {
                 "glob": "**/*",
-                "input": "src/assets/i18n",
+                "input": "projects/gebo-ai-reusable-ui/src/assets/i18n",
                 "output": "/assets/bleeding-edge/locale/"
               }
             ],
             "styles": [
-              "src/styles.scss",
+              "projects/gebo-ai-reusable-ui/src/styles.scss",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/primeflex/primeflex.css",
               "node_modules/prismjs/themes/prism-okaidia.css",
@@ -64,7 +67,7 @@
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
             ],
             "scripts": [
-              "src/assets/scripts/open-document.js",
+              "projects/gebo-ai-reusable-ui/src/assets/scripts/open-document.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-csharp.min.js",
               "node_modules/prismjs/components/prism-css.min.js",
@@ -129,10 +132,14 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "projects/gebo-ai-reusable-ui/src/assets",
+                "output": "/assets/"
+              }
             ],
             "styles": [
-              "src/styles.scss"
+              "projects/gebo-ai-reusable-ui/src/styles.scss"
             ],
             "scripts": []
           }

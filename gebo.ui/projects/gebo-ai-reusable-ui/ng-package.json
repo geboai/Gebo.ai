@@ -3,5 +3,10 @@
   "dest": "../../dist/gebo-ai-reusable-ui",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": [
+    "./src/assets",
+    "./src/styles",
+    "./src/styles.scss"
+  ]
 }
