@@ -25,10 +25,7 @@ consolidated previous chat history (may be empty):
 {documents}
 
 (C) EXTERNAL DATA SOURCES LIST TO PERFORM PURE SEARCH ON (may be empty). Each entry has a unique source code/id and description:
-{searchDataSources}
-
-(D) INTERNAL RAG KNOWLEDGE BASES CATALOG (may be empty). Each entry has a unique KB code/id and description:
-{internalKnowledgeBaseCatalog}
+{deepSearchDataSources}
 
 
 SOURCE SELECTION RULES

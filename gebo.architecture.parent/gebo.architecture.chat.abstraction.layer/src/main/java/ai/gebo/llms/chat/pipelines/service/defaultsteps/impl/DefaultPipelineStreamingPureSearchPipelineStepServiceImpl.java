@@ -13,8 +13,10 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -53,6 +55,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
+@Service
 @AllArgsConstructor
 public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IStreamingOutputChatPipelineService {
@@ -302,7 +305,14 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
 				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
 		params.putAll(cachedParams);
+		int variablesTokensSize = ITokensCountable.tokensSize(params);
+		int promtTokensSize = ITokensCountable.stringsTokensSize(prompt);
+		int documentsTokenBudget = serviceModel.getContextLength() - (variablesTokensSize + promtTokensSize);
 
+		String documents = documentsTokenBudget > 0
+				? RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(), documentsTokenBudget)
+				: "";
+		params.put("documents", documents);
 		Map<String, List<String>> toBeSearched = this.callLLMRepeatableFieldEntryOutput(serviceModel, prompt,
 				rewrited_query, params, List.of(SEARCHED_SYSTEMS));
 
