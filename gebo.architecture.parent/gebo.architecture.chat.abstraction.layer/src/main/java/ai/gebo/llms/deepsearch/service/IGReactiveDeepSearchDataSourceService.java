@@ -8,6 +8,8 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
@@ -65,5 +67,9 @@ public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, St
 			DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId)
 			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
 			SearchServiceException;
+
+	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK, int sampleTextTokensSize, String chunkingSessionId) throws LLMConfigException,
+			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
 
 }

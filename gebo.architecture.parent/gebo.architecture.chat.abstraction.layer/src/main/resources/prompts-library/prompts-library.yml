@@ -36,7 +36,7 @@ ai.gebo.prompts:
       reference: /prompts-library/en/deep-search-file-analisys-prompt.txt
     - promptUse: deep-search-data-sources-file-analisys-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt.txt  
+      reference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt.txt
     - promptUse: deep-search-consolidation-prompt
       langCode: en
       reference: /prompts-library/en/deep-search-consolidation-prompt.txt
@@ -51,13 +51,23 @@ ai.gebo.prompts:
       reference: /prompts-library/en/deep-search-search-query-extraction-prompt.txt
     - promptUse: default-pipeline-initial-query-rewriting-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt.txt  
+      reference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt.txt
     - promptUse: default-pipeline-rag-search-planner
       langCode: en
-      reference: /prompts-library/en/default-pipeline-rag-search-planner.txt  
+      reference: /prompts-library/en/default-pipeline-rag-search-planner.txt
     - promptUse: deep-search-empty-results-fallback-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-empty-results-fallback-prompt.txt	  
+      reference: /prompts-library/en/deep-search-empty-results-fallback-prompt.txt
     - promptUse: default-pipeline-chat-with-documents-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-chat-with-documents-prompt.txt	  
+      reference: /prompts-library/en/default-pipeline-chat-with-documents-prompt.txt
+    #pure search      
+    - promptUse: default-pipeline-pure-search-datasources-selection-prompt
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt.txt
+    - promptUse: default-pipeline-pure-search-fallback-prompt
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt.txt
+    - promptUse: default-pipeline-pure-search-summary-prompt
+      langCode: en
+      reference: /prompts-library/en/default-pipeline-pure-search-summary-prompt.txt

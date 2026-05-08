@@ -26,13 +26,14 @@ export interface DeepSearchRequest {
     userIntent?: DeepSearchRequest.UserIntentEnum;
 }
 export namespace DeepSearchRequest {
-    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'UNKNOWN';
+    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'PURE_SEARCH' | 'UNKNOWN';
     export const UserIntentEnum = {
         QA: 'QA' as UserIntentEnum,
         REPORT: 'REPORT' as UserIntentEnum,
         HOWTO: 'HOWTO' as UserIntentEnum,
         DECISION: 'DECISION' as UserIntentEnum,
         SUMMARY: 'SUMMARY' as UserIntentEnum,
+        PURESEARCH: 'PURE_SEARCH' as UserIntentEnum,
         UNKNOWN: 'UNKNOWN' as UserIntentEnum
     };
 }

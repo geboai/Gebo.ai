@@ -1,6 +1,7 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +17,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
+import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
@@ -25,6 +27,7 @@ import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
@@ -35,7 +38,10 @@ import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchInternalKnowledgeBaseResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -56,6 +62,7 @@ import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvid
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
@@ -251,6 +258,39 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				"Searching documents", "Internal knowledge base");
 		return Flux.concat(notificationFlux, body, trail).onErrorResume(Common.commonFallBack(request))
 				.subscribeOn(this.threadManager.getScheduler());
+	}
+
+	@Override
+	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
+			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String chunkingSessionId, int topK, int sampleTextTokensSize)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+		// emitter.notifyUser("", chunkingSessionId, chunkingSessionId, null, null);
+		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
+				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		Flux<AbstractPureSearchDocumentResultEntry> outFlux = retrievedFlux.concatMap(documentSet -> {
+			return runAs.doRunAsWithReturn(() -> {
+				if (documentSet.getDocumentItems().isEmpty())
+					return Flux.empty();
+				List<AIDocumentReferenceItem> documents = documentSet.getDocumentItems();
+				Map<String, AIDocumentReferenceItem> docsById = new HashMap<>();
+				for (AIDocumentReferenceItem item : documents) {
+					docsById.put(item.getCode(), item);
+				}
+				List<GDocumentReference> docRefs = this.documentRepo.findAllById(docsById.keySet());
+				List<AbstractPureSearchDocumentResultEntry> out = new ArrayList<>();
+				for (GDocumentReference ref : docRefs) {
+					AIDocumentReferenceItem contents = docsById.get(ref.getCode());
+					if (contents != null && contents.getFragments() != null && !contents.getFragments().isEmpty()) {
+						String extracted = contents.extractTokens(sampleTextTokensSize);
+						out.add(new PureSearchInternalKnowledgeBaseResultEntry(ref, extracted));
+					}
+				}
+				return Flux.fromIterable(out);
+			});
+		});
+		return outFlux;
 	}
 
 }

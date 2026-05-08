@@ -1,5 +1,7 @@
 package ai.gebo.llms.deepsearch.service;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -145,12 +148,11 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	protected List<SearchResult> executeStandardQuerySearch(SearchQuery query, DeepSearchRequest request,
-			MinimalChatContext minimalChatContext) throws IOException, SearchServiceException {
+			MinimalChatContext minimalChatContext, int topK) throws IOException, SearchServiceException {
 		List<SearchResult> results = new ArrayList<SearchResult>();
 		List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 		for (SearchableSystemMetaData searchableSystemMetaData : systems) {
-			List<SearchResult> searches = searchService.search(query, searchableSystemMetaData,
-					maxSearchesReturnedPerSystem);
+			List<SearchResult> searches = searchService.search(query, searchableSystemMetaData, topK);
 			assign(searches, serviceOriginComponent, searchableSystemMetaData.getCode());
 			results.addAll(searches);
 		}
@@ -193,11 +195,11 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		return outcome;
 	}
 
-	protected <T> List<SearchWithResults> executeNativeSearch(
+	protected <T extends INativeQueryObject> List<SearchWithResults> executeNativeSearch(
 			INativeSearchService<CustomSearchResultExtractionDataType, T> nativeSearchService,
 			DeepSearchRequest request, MinimalChatContext minimalChatContext,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK)
 			throws LLMConfigException, IOException, SearchServiceException {
 		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 		Class<T> nativeSearchServiceDataType = nativeSearchService.getNativeSearchDataStructureType();
@@ -226,27 +228,27 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 					systemTemplateCallParams, nativeSearchServiceDataType);
 
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
-					maxSearchesReturnedPerSystem);
+					topK);
 			SearchWithResults swr = new SearchWithResults();
 			swr.setResults(flattenSearchResults(data));
 			swr.setNativeQueryObject(resultingQueryObject);
 			allResults.add(swr);
 		}
 
-		return allResults;
+		return cleanAndRemoveDuplicated(allResults);
 	}
 
 	protected List<SearchWithResults> executeStandardQuerySearch(DeepSearchRequest request,
 			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
 			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String consolidated) throws LLMConfigException {
+			String consolidated, int topK) throws LLMConfigException {
 		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 		DeepSearchDataSourceExtractedSearchQueries searchQueries = extractSearchQueries(request, minimalChatContext,
 				pastSystemsResponses, deepSearchConfig, chatModel, serviceModel, "");
 
 		for (SearchQuery query : searchQueries.getSearchQuery()) {
 			try {
-				List<SearchResult> _results = executeStandardQuerySearch(query, request, minimalChatContext);
+				List<SearchResult> _results = executeStandardQuerySearch(query, request, minimalChatContext, topK);
 				if (_results.isEmpty())
 					continue;
 				SearchWithResults sr = new SearchWithResults();
@@ -257,13 +259,14 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				LOGGER.error("Error executing search", th);
 			}
 		}
-		return queryResults;
+
+		return cleanAndRemoveDuplicated(queryResults);
 	}
 
 	@Override
 	protected List<SearchWithResults> executeSearches(DeepSearchRequest request, MinimalChatContext minimalChatContext,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String consolidated)
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String consolidated, int topK)
 			throws LLMConfigException, IOException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeSearches(...) for " + getHandlerId());
@@ -272,16 +275,16 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		if (this.searchService instanceof INativeSearchService nativeSearchService) {
 			try {
 				results = executeNativeSearch(nativeSearchService, request, minimalChatContext, pastSystemsResponses,
-						deepSearchConfig, chatModel, serviceModel);
+						deepSearchConfig, chatModel, serviceModel, topK);
 			} catch (Throwable th) {
 				LOGGER.error("Error in nativeSearch,try fall back to standard search", th);
 				results = executeStandardQuerySearch(request, minimalChatContext, pastSystemsResponses,
-						deepSearchConfig, chatModel, serviceModel, consolidated);
+						deepSearchConfig, chatModel, serviceModel, consolidated, topK);
 			}
 		} else {
 
 			results = executeStandardQuerySearch(request, minimalChatContext, pastSystemsResponses, deepSearchConfig,
-					chatModel, serviceModel, consolidated);
+					chatModel, serviceModel, consolidated, topK);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeSearches(...) for " + getHandlerId());

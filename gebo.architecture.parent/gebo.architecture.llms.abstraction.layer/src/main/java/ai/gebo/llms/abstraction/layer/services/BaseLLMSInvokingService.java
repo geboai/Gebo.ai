@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClient.StreamResponseSpec;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -31,8 +32,7 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.model.DocumentMetaInfos;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import reactor.core.publisher.Flux;
 
 public class BaseLLMSInvokingService {
 
@@ -47,15 +47,6 @@ public class BaseLLMSInvokingService {
 		List<Document> inputs = new ArrayList<Document>();
 		int totaltokens = 0;
 		boolean complete = false;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	public static class LLMInputDocument {
-		final String documentReference;
-		final String documentUrl;
-		final String title;
-		final String text;
 	}
 
 	static class ConsolidationInputBatch {
@@ -596,8 +587,7 @@ public class BaseLLMSInvokingService {
 					}
 					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
 							question, consolidated, additionalParams);
-					fragmentBudget = computeFragmentBudget(pastConsolidation, promptLength, contextWindow,
-							additionalParams);
+					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
 				}
 			}
 		} while (currentInput != null);
@@ -921,6 +911,145 @@ public class BaseLLMSInvokingService {
 
 	protected <T> Stream<T> readCSVLines(String content, int nColumns, Function<String, T> reader) {
 		return filterCSVLines(content, nColumns).map(reader).filter(y -> y != null);
+	}
+
+	
+
+	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, String prompt, String query,
+			Map<String, Object> params, Stream<LLMInputDocument> inputStream) throws LLMConfigException {
+		int contextWindow = chatModel.getContextLength();
+		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
+		LLMInputDocument currentInput = null;
+		final int promptLength = tokensEstimation.estimate(prompt);
+		String consolidated = "";
+		// Following 2 variables have to be updated once a consolidation is re-run
+		Iterator<LLMInputDocument> input = inputStream.iterator();
+		Flux<String> output = Flux.empty();
+		int fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, params);
+		boolean hasNext = input.hasNext();
+		while (hasNext) {
+			currentInput = input.next();
+			hasNext = input.hasNext();
+			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
+				StringBuffer metaInfos = new StringBuffer();
+				if (currentInput.documentReference != null) {
+					metaInfos.append(DOCUMENT_REFERENCE + currentInput.documentReference);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.documentUrl != null) {
+					metaInfos.append(DOCUMENT_URL + currentInput.documentUrl);
+					metaInfos.append(NEWLINE);
+				}
+				if (currentInput.title != null) {
+					metaInfos.append(DOCUMENT_TITLE + currentInput.title);
+					metaInfos.append(NEWLINE);
+				}
+				String metaData = metaInfos.toString();
+				final int metaDataTokens = tokensEstimation.estimate(metaData);
+				final String fullTextWithMetaData = metaData + currentInput.text;
+				fragmentBudget -= metaDataTokens;
+				final int textTokensLength = tokensEstimation.estimate(fullTextWithMetaData);
+				// final PromptTemplate promptTemplate = new PromptTemplate(prompt);
+				// promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, question);
+				// promptTemplate.add(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+				// if text token is too big for the residual i consolidate inside the single
+				// text
+				if (textTokensLength > fragmentBudget) {
+					// splits will be loaded in currentBatchesQueue
+					TokenTextSplitter splitter = createTokenSplitter(fragmentBudget);
+					Document document = new Document(currentInput.text);
+					List<Document> documents = splitter.split(document);
+					final LLMInputDocument _currentInput = currentInput;
+					List<ConsolidationBatchItem> splitted = documents.stream().map(x -> {
+						ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+						LLMInputDocument ci = new LLMInputDocument(_currentInput.documentReference,
+								_currentInput.documentUrl, _currentInput.title, metaData + x.getText());
+						batchItem.input = ci;
+						batchItem.tokensCount = tokensEstimation.estimate(ci.text);
+						return batchItem;
+					}).toList();
+					List<ConsolidationInputBatch> newBatchesQueue = splitted.stream().map(x -> {
+						ConsolidationInputBatch d = new ConsolidationInputBatch();
+						d.inputs.add(x);
+						d.totaltokens += x.tokensCount;
+						d.complete = true;
+						return d;
+					}).toList();
+					currentBatchesQueue.addAll(newBatchesQueue);
+				} else {
+
+					ConsolidationInputBatch lastBatch = currentBatchesQueue.isEmpty() ? null
+							: currentBatchesQueue.get(currentBatchesQueue.size() - 1);
+					ConsolidationBatchItem batchItem = new ConsolidationBatchItem();
+					LLMInputDocument ci = new LLMInputDocument(currentInput.documentReference, currentInput.documentUrl,
+							currentInput.title, fullTextWithMetaData);
+					batchItem.input = ci;
+					batchItem.tokensCount = textTokensLength;
+					boolean allocateNewBatch = false;
+					if (lastBatch != null) {
+						if (fragmentBudget > (lastBatch.totaltokens + batchItem.tokensCount)) {
+							lastBatch.totaltokens += batchItem.tokensCount;
+							lastBatch.inputs.add(batchItem);
+						} else {
+							lastBatch.complete = true;
+							allocateNewBatch = true;
+						}
+					} else {
+						allocateNewBatch = true;
+					}
+					if (allocateNewBatch) {
+						ConsolidationInputBatch newBatch = new ConsolidationInputBatch();
+						newBatch.inputs.add(batchItem);
+						newBatch.totaltokens += batchItem.tokensCount;
+						currentBatchesQueue.add(newBatch);
+					}
+				}
+			}
+
+			for (ConsolidationInputBatch consolidationInputBatch : currentBatchesQueue) {
+				// if this batch is complete or we are at the end of contents
+				if (consolidationInputBatch.complete || !hasNext) {
+					StringBuffer currentText = new StringBuffer();
+					for (ConsolidationBatchItem d : consolidationInputBatch.inputs) {
+						String thisContent = d.input.text;
+						currentText.append(thisContent);
+						currentText.append(NEWLINE);
+					}
+					if (!hasNext) {
+						Map<String, Object> clonedParams = new HashMap<>(params);
+						clonedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+						clonedParams.put(DOCUMENTS_TEMPLATE_VARIABLE, currentText);
+						output = callLLMReactive(chatModel, prompt, query, clonedParams);
+					} else {
+						consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),
+								query, consolidated, params);
+						fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, params);
+					}
+				}
+			}
+		}
+
+		return output;
+	}
+
+	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, String prompt, String query,
+			Map<String, Object> params) throws LLMConfigException {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(USER_QUESTION_TEMPLATE_VARIABLE, query);
+		loadParams(promptTemplate, params);
+		long time = 0;
+		if (LOGGER.isDebugEnabled() || LOGGER.isTraceEnabled()) {
+			time = System.currentTimeMillis();
+			LOGGER.debug("Calling llm " + chatModel.getCode());
+		}
+		Prompt _renderedPrompt = promptTemplate.create();
+		String _completePrompt = null;
+		if (LOGGER.isTraceEnabled()) {
+			_completePrompt = _renderedPrompt.getContents();
+			LOGGER.trace("Prompt: " + _completePrompt);
+		}
+		StreamResponseSpec stream = chatModel.getChatClient().prompt(_renderedPrompt).stream();
+		return stream.content();
 	}
 
 }

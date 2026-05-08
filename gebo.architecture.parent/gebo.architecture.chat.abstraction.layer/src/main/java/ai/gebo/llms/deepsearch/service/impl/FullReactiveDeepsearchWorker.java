@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,19 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
+import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultRoutingChatPipelineStepServiceImpl;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
@@ -38,6 +46,7 @@ import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
+import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
@@ -50,6 +59,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Scheduler;
 
 @Service
@@ -64,6 +74,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private final IGPromptConfigDao promptsDao;
 	private final IGeboThreadManager threadManager;
 	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService;
+	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 
 	public FullReactiveDeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, IGeboThreadManager threadManager,
@@ -72,13 +83,15 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			DeepSearchDefaultConfig defaultDeepsearchConfig,
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,
-			IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService) {
+			IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService,
+			IGDeepSearchConfigProvider deepSearchConfigProvider) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.enabledDataSourcesLookupService = enabledDataSourcesLookupService;
 		this.defaultDeepsearchConfig = defaultDeepsearchConfig;
 		this.promptsDao = promptsDao;
 		this.threadManager = threadManager;
 		this.internalKnowledgeBaseDeepSearchService = internalKnowledgeBaseDeepSearchService;
+		this.deepSearchConfigProvider = deepSearchConfigProvider;
 	}
 
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
@@ -130,10 +143,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return handlers.stream().filter(x -> request.getDeepSearchDataSources().contains(x.getHandlerId())).toList();
 	}
 
-	public Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, AIDocumentsSet sessionDocuments,
-			List<AbstractDeepSearchEvent> history, DeepSearchConfig configuration, UserInfos userInfos,
-			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
+	Flux<AbstractDeepSearchEvent> streamDeepSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			AIDocumentsSet sessionDocuments, List<AbstractDeepSearchEvent> history, DeepSearchConfig configuration,
+			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Scheduler deepSearchScheduler, String chunkingSessionId)
 			throws LLMConfigException, GeboChatSessionLifecycleException, FullTextException {
 
@@ -278,8 +290,73 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				.count() > 0;
 	}
 
+	Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
+			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> searchDataSources,
+			int perDataSourceK, int globalK, int sampleTextTokensSize, String chunkSessionId) {
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		if (searchDataSources == null || searchDataSources.isEmpty()) {
+			if (request.getCurrentRequest().getDeepSearchDataSources() != null
+					&& !request.getCurrentRequest().getDeepSearchDataSources().isEmpty()) {
+				searchDataSources = request.getCurrentRequest().getDeepSearchDataSources();
+			} else
+				searchDataSources = List
+						.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
+		}
+		final List<String> sampledDataSources = searchDataSources;
+		DeepSearchConfig configuration = this.deepSearchConfigProvider.get();
+		if (configuration == null) {
+			configuration = this.defaultDeepsearchConfig;
+		}
+		List<IGReactiveDeepSearchDataSourceService> handlersFullList = this.enabledDataSourcesLookupService
+				.enabledDataSources(configuration);
+		List<IGReactiveDeepSearchDataSourceService> filtered = handlersFullList.stream()
+				.filter(handler -> sampledDataSources != null && sampledDataSources.contains(handler.getHandlerId()))
+				.toList();
+		List<Supplier<Flux<AbstractPureSearchDocumentResultEntry>>> suppliers = new ArrayList<>();
+		for (IGReactiveDeepSearchDataSourceService handler : filtered) {
+			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
+				return runAs.doRunAsWithReturn(() -> {
+					try {
+						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
+								perDataSourceK, sampleTextTokensSize, chunkSessionId);
+					} catch (Throwable e) {
+						PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
+								GUserMessage.warnMessage("Error running search", e.getMessage()));
+						return Flux.just((AbstractPureSearchDocumentResultEntry) error);
+					}
+				});
+			};
+			suppliers.add(supplier);
+		}
+		if (sampledDataSources.contains(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID)) {
+			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
+				return runAs.doRunAsWithReturn(() -> {
+					try {
+						return this.internalKnowledgeBaseDeepSearchService.streamPureSearch(minimalChatContext, emitter,
+								serviceModel, serviceModel, chunkSessionId, perDataSourceK, sampleTextTokensSize);
+					} catch (Throwable e) {
+						PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
+								GUserMessage.warnMessage("Error running search", e.getMessage()));
+						return Flux.just((AbstractPureSearchDocumentResultEntry) error);
+					}
+				});
+			};
+			suppliers.add(supplier);
+		}
+		if (suppliers.isEmpty()) {
+			return Flux.empty();
+		}
+
+		Flux<AbstractPureSearchDocumentResultEntry> outFlux = Flux.fromIterable(suppliers).concatMap(supplier -> {
+			return supplier.get();
+		}).subscribeOn(threadManager.getBoundedElastic());
+		return outFlux;
+
+	}
+
 	public List<GBaseObject> getDeepSearchActiveHandlers(DeepSearchConfig configuration) {
-		
+
 		IGConfigurableChatModel chatModel = null;
 
 		if (chatModel == null) {

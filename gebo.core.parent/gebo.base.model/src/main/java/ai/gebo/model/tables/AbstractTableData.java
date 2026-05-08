@@ -16,44 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * AI generated comments
  * Abstract class representing the fundamental structure for table data.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractTableData {
 	// List holding metadata about table columns
 	private List<TableColumnMetaData> columnsMetaData = new ArrayList<TableColumnMetaData>();
-
-	/**
-	 * Constructor for AbstractTableData.
-	 */
-	public AbstractTableData() {
-
-	}
-
-	/**
-	 * Retrieves the column metadata for the table.
-	 * 
-	 * @return a list of TableColumnMetaData objects.
-	 */
-	public List<TableColumnMetaData> getColumnsMetaData() {
-		return columnsMetaData;
-	}
-
-	/**
-	 * Sets the column metadata for the table.
-	 * 
-	 * @param columnsMetaData A list of TableColumnMetaData to be set.
-	 */
-	public void setColumnsMetaData(List<TableColumnMetaData> columnsMetaData) {
-		this.columnsMetaData = columnsMetaData;
-	}
-
-	/**
-	 * Abstract method that must be implemented to provide a stream of table rows.
-	 * 
-	 * @return a stream of TableDataRow objects.
-	 */
 	public abstract Stream<TableDataRow> streamRows();
 	
 }

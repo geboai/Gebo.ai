@@ -44,9 +44,12 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
+import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceDocumentResultEvent;
 import ai.gebo.llms.deepsearch.datasources.model.events.DeepSearchDataSourceProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -68,6 +71,7 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.llms.deepsearch.service.ReactiveMonitor;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -85,7 +89,7 @@ import reactor.core.scheduler.Scheduler;
 public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService implements IGDeepSearchService {
 
 	private static final String ERROR_DOING_DEEP_SEARCH = "Error doing deep search";
-static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class);
 	protected final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	protected final DeepSearchConfigRepository configRepository;
 	protected final IGRuntimeBinder runtimeBinder;
@@ -181,7 +185,7 @@ static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class
 						flow = flow.transform(ReactiveMonitor.monitor("deep-search"));
 					}
 				} catch (Throwable e) {
-					LOGGER.error(ERROR_DOING_DEEP_SEARCH,e);
+					LOGGER.error(ERROR_DOING_DEEP_SEARCH, e);
 					DeepSearchErrorEvent errorEvent = new DeepSearchErrorEvent();
 					errorEvent.setInputData(request);
 					errorEvent.setOutputData(GUserMessage.errorMessage(ERROR_DOING_DEEP_SEARCH, e));
@@ -219,8 +223,8 @@ static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class
 		IGConfigurableChatModel chatModel = getChatModel(null);
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-		out = this.executeStreamDeepSearch(runAs, request, new MinimalChatContext(), new AIDocumentsSet(),
-				chatModel, serviceModel);
+		out = this.executeStreamDeepSearch(runAs, request, new MinimalChatContext(), new AIDocumentsSet(), chatModel,
+				serviceModel);
 
 		return out.publishOn(deepSearchScheduler).doOnNext(evt -> persistSideEffects(runAs, evt))
 				.doOnError(err -> LOGGER.error("DeepSearch stream error", err));
@@ -254,8 +258,6 @@ static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class
 			}
 		});
 	}
-
-	
 
 	@Override
 	public Page<DeepSearchRequest> myDeepsearchPaged(Pageable pageable) {
@@ -407,8 +409,6 @@ static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class
 		return worker.getDeepSearchActiveHandlers(configuration);
 	}
 
-	
-
 	@Override
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
@@ -488,6 +488,65 @@ static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchServiceImpl.class
 			signal.tryEmitValue(null);
 			LOGGER.info("Deep search stopped by user: " + deepSearchRequestId);
 		}
+	}
+
+	@Override
+	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
+			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> searchDataSources,
+			int perDataSourceK, int globalK, int sampleTextTokensSize)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		return Flux.defer(() -> {
+			return runAs.doRunAsWithReturn(() -> {
+				final IDocumentsChunkService chunkService = runtimeBinder
+						.getImplementationOf(IDocumentsChunkService.class);
+				final String chunkSessionId = chunkService
+						.createChunkingSession("pureSearch:" + request.getCurrentRequest().getId());
+				final FullReactiveDeepsearchWorker worker = runtimeBinder
+						.getImplementationOf(FullReactiveDeepsearchWorker.class);
+
+				Flux<AbstractPureSearchDocumentResultEntry> flow = null;
+				try {
+					flow = worker.streamPureSearch(request, minimalChatContext, geboChatRequest, emitter, chatModel,
+							serviceModel, searchDataSources, perDataSourceK, globalK, sampleTextTokensSize,
+							chunkSessionId);
+					if (flow != null) {
+						flow = flow.transform(ReactiveMonitor.monitor("pure-search"));
+					}
+					flow.filter(x -> x != null).onErrorResume(exc -> {
+						final String msg = "Error while streaming chat respose";
+						LOGGER.error(msg, exc);
+
+						GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);
+						userMessage.setSeverity(MsgServerity.warn);
+						return Flux.just(new PureSearchDocumentResultError(null, null, userMessage));
+					});
+				} catch (Throwable e) {
+					LOGGER.error("Error doing pure search", e);
+					PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
+							GUserMessage.errorMessage("Error searching", e));
+					flow = Flux.just(error);
+				}
+				if (chunkSessionId != null && flow != null) {
+					Runnable deleteChunkingSessionRunnable = new Runnable() {
+						@Override
+						public void run() {
+							try {
+								runAs.doAsWithException(() -> {
+									chunkService.disposeChunkingSession(chunkSessionId);
+								});
+							} catch (Throwable th) {
+								LOGGER.error("Exception disposing", th);
+							}
+						}
+					};
+					flow.doAfterTerminate(deleteChunkingSessionRunnable);
+				}
+				return flow;
+			});
+		}).subscribeOn(deepSearchScheduler);
+
 	}
 
 }

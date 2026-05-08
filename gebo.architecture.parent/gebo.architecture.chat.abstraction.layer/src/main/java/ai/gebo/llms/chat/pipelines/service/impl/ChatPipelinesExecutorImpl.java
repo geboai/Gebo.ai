@@ -204,7 +204,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 						Flux<GeboChatMessageEnvelope> first = Flux.just(buildRoutingInfos(lastStepData.getRuntimeData(),
 								streamingOutputService, response, chatModel, serviceModel));
 						Flux<GeboChatMessageEnvelope> out = streamingOutputService
-								.execute(lastStepData.getRuntimeData(), chatModel, serviceModel);
+								.execute(lastStepData.getRuntimeData(), emitter, chatModel, serviceModel);
 						return Flux.concat(first, out);
 					});
 				}

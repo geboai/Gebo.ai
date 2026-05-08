@@ -12,37 +12,22 @@
 
 package ai.gebo.model.tables;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * AI generated comments
  * Represents a cell in a table structure that can hold any type of content.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TableDataCell {
 
     // The content of the cell, which can be of any object type.
     private Object content = null;
 
-    /**
-     * Default constructor for TableDataCell.
-     * Initializes the cell with no content.
-     */
-    public TableDataCell() {
-
-    }
-
-    /**
-     * Retrieves the content of the cell.
-     * @return the current content of the cell
-     */
-    public Object getContent() {
-        return content;
-    }
-
-    /**
-     * Sets the content of the cell.
-     * @param content the new content to be set in the cell
-     */
-    public void setContent(Object content) {
-        this.content = content;
-    }
+   
 
 }

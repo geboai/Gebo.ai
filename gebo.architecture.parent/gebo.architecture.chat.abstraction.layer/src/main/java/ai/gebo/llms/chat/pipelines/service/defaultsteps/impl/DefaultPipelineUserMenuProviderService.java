@@ -21,6 +21,8 @@ import lombok.AllArgsConstructor;
 @Scope("singleton")
 @AllArgsConstructor
 public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenuProviderService {
+	private static final String PURE_SEARCH_ICON = "pi pi-search";
+	private static final String ASSISTED_SEARCH = "Assisted search";
 	private static final String INTERNAL_KNOWLEDGEBASE_DEEP_SEARCH_ICON = "pi pi-sitemap";
 	private static final String RAG_CHAT_ICON = "pi pi-database";
 	private static final String MULTIPLE_SOURCES_DEEP_SEARCH_DESCRIPTION = "Multiple sources";
@@ -39,6 +41,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	static final PipelineChatMenu agenticChatMenu = new PipelineChatMenu();
 	static final PipelineChatMenuItem agenticChatItem = new PipelineChatMenuItem();
+
 	static {
 		agenticChatMenu.setMenuId(AGENTIC_CHAT_MENU_ID);
 		agenticChatMenu.setOrder(1);
@@ -71,6 +74,19 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 		ragMenuItem.setRouteOption(RespondingWith.RAG_LLM_RESPONSE.name());
 		ragMenu.getItems().add(ragMenuItem);
 	}
+	static final PipelineChatMenu pureSearchMenu = new PipelineChatMenu();
+	static final PipelineChatMenuItem pureSearchChatItem = new PipelineChatMenuItem();
+	static {
+		pureSearchMenu.setDescription(ASSISTED_SEARCH);
+		pureSearchMenu.setIcon(PURE_SEARCH_ICON);
+		pureSearchMenu.setMenuId(RespondingWith.PURE_SEARCH.name() + "_MENU");
+		pureSearchChatItem.setOptionId(RespondingWith.PURE_SEARCH.name());
+		pureSearchChatItem.setPipelineId(null);
+		pureSearchChatItem.setDescription(ASSISTED_SEARCH);
+		pureSearchChatItem.setDefaultOption(false);
+		pureSearchChatItem.setIcon(PURE_SEARCH_ICON);
+		pureSearchMenu.setItems(List.of(pureSearchChatItem));
+	}
 
 	@Override
 	public String getPipelineId() {
@@ -86,6 +102,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 				.enabledDataSources(deepSearchConfig);
 		outMenu.add((PipelineChatMenu) agenticChatMenu.clone());
 		outMenu.add((PipelineChatMenu) ragMenu.clone());
+
 		if (!enabledDataSources.isEmpty()) {
 			PipelineChatMenu thisDeepSearchMenu = (PipelineChatMenu) deepSearchMenu.clone();
 			thisDeepSearchMenu.getItems().add(deepSearchMenuItem);
@@ -130,6 +147,7 @@ public class DefaultPipelineUserMenuProviderService implements IPipelineUserMenu
 			ikMenu.setItems(List.of(ikMenuItem));
 			outMenu.add(ikMenu);
 		}
+		outMenu.add(pureSearchMenu);
 		return outMenu;
 	}
 

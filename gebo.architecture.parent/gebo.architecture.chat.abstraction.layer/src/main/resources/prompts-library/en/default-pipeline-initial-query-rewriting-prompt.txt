@@ -59,8 +59,7 @@ rewrittenQuery rules:
   that summarizes the user objective and intent  
 
 deliverable rules:
-
-* Choose the user asked deliverable type using the (G) deliverable type list reporting the intent-type field value.
+* Consider your generated rewrittenQuery as input and choose from the (G) deliverable type list a single the intent-type field value that mostly fits.
 
 OUTPUT:
 Return only the two required fields exactly 2 lines:

@@ -24,9 +24,11 @@ public class GRankerServiceImpl implements IGRankerService {
 		final int nFragments = input.countFragments();
 		if (nFragments <= topK || nFragments <= 0)
 			return input;
-		
+
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
-		if (rankerModel==null) throw new LLMConfigException("No ranker model configured, call first isRankerConfigured() to check if there is one");
+		if (rankerModel == null)
+			throw new LLMConfigException(
+					"No ranker model configured, call first isRankerConfigured() to check if there is one");
 		RankingInput _input = new RankingInput(query, input.aiDocumentsList(), topK);
 		RankingOutput out = rankerModel.getRankerModel().call(_input);
 		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
@@ -37,6 +39,22 @@ public class GRankerServiceImpl implements IGRankerService {
 	public boolean isRankerConfigured() {
 
 		return rankerModelDao.defaultHandler() != null;
+	}
+
+	@Override
+	public List<Document> call(List<Document> input, String query, int topK) throws LLMConfigException {
+		final int nFragments = input.size();
+		if (nFragments <= topK || nFragments <= 0)
+			return input;
+
+		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
+		if (rankerModel == null)
+			throw new LLMConfigException(
+					"No ranker model configured, call first isRankerConfigured() to check if there is one");
+		RankingInput _input = new RankingInput(query, input, topK);
+		RankingOutput out = rankerModel.getRankerModel().call(_input);
+		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
+		return documents;
 	}
 
 }

@@ -15,6 +15,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
+import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceDocumentResult;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
@@ -32,7 +34,8 @@ public interface IGDeepSearchService {
 	public Flux<AbstractDeepSearchEvent> streamDeepSearch(GeboChatRequest request)
 			throws LLMConfigException, GeboChatSessionLifecycleException, GeboPersistenceException, IOException;
 
-	public default DeepSearchResponse search(DeepSearchRequest request) throws LLMConfigException, GeboChatSessionLifecycleException {
+	public default DeepSearchResponse search(DeepSearchRequest request)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
 		AbstractDeepSearchEvent last = this.streamDeepSearch(request).blockLast();
 		if (last instanceof DeepSearchProcessedEvent result) {
 			return result.getOutputData();
@@ -70,6 +73,11 @@ public interface IGDeepSearchService {
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources)
 			throws LLMConfigException, GeboChatSessionLifecycleException;
+
+	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
+			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> deepSearchDataSources,
+			int perDataSourceK, int globalK, int sampleTextTokensSize) throws LLMConfigException, GeboChatSessionLifecycleException;
 
 	public Flux<GeboChatMessageEnvelope> mapToChatFlux(Flux<AbstractDeepSearchEvent> flux,
 			Class<? extends AbstractDeepSearchEvent> trailingType);

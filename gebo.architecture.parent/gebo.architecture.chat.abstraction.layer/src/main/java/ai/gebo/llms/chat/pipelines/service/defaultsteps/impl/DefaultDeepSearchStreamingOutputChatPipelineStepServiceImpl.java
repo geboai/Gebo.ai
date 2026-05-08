@@ -17,6 +17,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter.StepEnvironmentType;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
@@ -54,7 +55,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		Object deepSearchedSystems = runtimeData.getSharedEnvironment()
 				.get(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
@@ -63,9 +64,9 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 			if (!deepSearchDataSources.isEmpty() && deepSearchDataSources.size() == 1) {
 				if (deepSearchDataSources.get(0)
 						.equals(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID)) {
-					return internalKnowledgeBasePipelineOutput.execute(runtimeData, chatModel, serviceModel);
+					return internalKnowledgeBasePipelineOutput.execute(runtimeData, sinkUIEmitter, chatModel, serviceModel);
 				} else {
-					return singleSourcePipelineOutput.execute(runtimeData, chatModel, serviceModel);
+					return singleSourcePipelineOutput.execute(runtimeData, sinkUIEmitter, chatModel, serviceModel);
 				}
 			}
 			if (deepSearchDataSources.isEmpty()) {

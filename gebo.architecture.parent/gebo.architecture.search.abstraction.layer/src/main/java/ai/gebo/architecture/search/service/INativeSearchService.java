@@ -11,7 +11,7 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 
-public interface INativeSearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType, NativeSearchDataStructure>
+public interface INativeSearchService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType, NativeSearchDataStructure extends INativeQueryObject>
 		extends ISearchService<CustomSearchResultExtractionDataType> {
 	public List<SearchResult> nativeSearch(NativeSearchDataStructure query, SearchableSystemMetaData system,
 			int nEntryLimit) throws IOException, SearchServiceException;
@@ -20,9 +20,7 @@ public interface INativeSearchService<CustomSearchResultExtractionDataType exten
 
 	public String getNativePromptTemplateUseCode();
 
-	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData, List<CatalogueSample> cataloguesSample);
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample);
 
-	
-	
-	
 }

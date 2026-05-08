@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
-import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDataSourceDocumentResult, DeepSearchDataSourceResponse, DeepSearchDocumentAnalisysResultStep, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
@@ -36,6 +36,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
     protected deepSearchDataSourceResponse?: DeepSearchDataSourceResponse;
     protected deepSearchNotification?: { content?: string,dataSourceDescription?:string};
     protected currentNotification?:ChatNotificationContent;
+    protected inputProcessingEvent?:{document:GResponseDocumentRef};
     protected completionPercent: number = 0;
     private timer?: Subscription;
     constructor(private messageService: GeboAIRootNotificationService) {
@@ -60,6 +61,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
         this.analisysStep = undefined;
         this.deepSearchNotification = undefined;        
         this.currentNotification=undefined;
+        this.inputProcessingEvent=undefined;
         this.clearNotifiationTimer();
     }
     private startNotificationTimer(duration: number) {
@@ -92,6 +94,11 @@ export class GeboAIChatStreamEventsDisplayComponent {
                         this.completionPercent = Math.round(msg.content?.processPercentage);
                     }
                 } break;
+                case "GInputProcessingEvent": {
+                    this.clearEventsDisplay();
+                    this.inputProcessingEvent=msg.content;
+                    
+                };break;
                 case "DeepSearchResponse": {
                     this.clearEventsDisplay();
                     this.completionPercent = 100;

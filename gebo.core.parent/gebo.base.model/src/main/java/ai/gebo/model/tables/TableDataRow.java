@@ -15,6 +15,10 @@ package ai.gebo.model.tables;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Represents a row in a table, containing a list of cells.
  * Provides methods to access and modify the cells in the row.
@@ -23,34 +27,12 @@ import java.util.List;
  * 
  * AI generated comments
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TableDataRow {
 
     // A list of cells in the row, initialized as an empty list.
     private List<TableDataCell> cells = new ArrayList<TableDataCell>();
-
-    /**
-     * Default constructor for creating an empty TableDataRow.
-     */
-    public TableDataRow() {
-
-    }
-
-    /**
-     * Retrieves the list of cells in the row.
-     *
-     * @return a list of TableDataCell objects.
-     */
-    public List<TableDataCell> getCells() {
-        return cells;
-    }
-
-    /**
-     * Sets the list of cells for the row.
-     *
-     * @param cells a list of TableDataCell objects to be set in the row.
-     */
-    public void setCells(List<TableDataCell> cells) {
-        this.cells = cells;
-    }
 
 }
