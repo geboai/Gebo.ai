@@ -97,6 +97,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		final int perDataSourceK = 200;
 		final int globalK = 100;
 		final int textSampleTokensSize = 4096;
+		final GeboChatResponse response = runtimeData.getChatResponse();
 		sinkUIEmitter.notifyUser("selectDataSources", "Selecting sarch data sources", "pi pi-search", 3000l,
 				NotificationType.INFO);
 		Flux<List<String>> dataSources = Flux.defer(() -> {
@@ -134,9 +135,33 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		});
 		Flux<GeboChatMessageEnvelope> rankingFlux = this.createRankingFlux(runAs, sinkUIEmitter, runtimeData, container,
 				globalK);
-		Flux<GeboChatMessageEnvelope> trailingFlux = this.createTrailingFlux(runAs, sinkUIEmitter, runtimeData,
-				container, chatModel);
-		return Flux.concat(chatMessageEnvironmentFlux, rankingFlux, trailingFlux);
+		Flux<GeboChatMessageEnvelope> trailingFlux = this.createTrailingFlux(runAs, response, sinkUIEmitter,
+				runtimeData, container, chatModel);
+		return Flux.concat(chatMessageEnvironmentFlux, rankingFlux, trailingFlux).onErrorResume(exc -> {
+			final String msg = "Error while streaming chat respose";
+			LOGGER.error(msg, exc);
+			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
+			GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);
+			exceptionEnvelope.setContent(userMessage);
+			return Flux.just(exceptionEnvelope);
+		}).doOnComplete(() -> {
+			runAs.doAs(() -> {
+				try {
+					this.chatSessionLifecycleService.endRequest(runtimeData.getRequestResources().getCurrentRequest(),
+							response);
+				} catch (Throwable th) {
+					LOGGER.error("Error saving user context", th);
+				} finally {
+
+				}
+				try {
+					this.chatSessionLifecycleService
+							.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(), chatModel);
+				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
+					LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
+				}
+			});
+		});
 	}
 
 	private GeboChatMessageEnvelope createInputProcessingEnvelope(AbstractPureSearchDocumentResultEntry entry) {
@@ -191,10 +216,10 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		return rankedFlux.map(this::createEnvelope);
 	}
 
-	private Flux<GeboChatMessageEnvelope> createTrailingFlux(ReactiveIdentityUtil runAs, ISinkUIEmitter sinkUIEmitter,
-			ChatPipelineExecutionRuntimeData runtimeData, Vector<AbstractPureSearchDocumentResultEntry> ranked,
-			IGConfigurableChatModel chatModel) {
-		final GeboChatResponse response = runtimeData.getChatResponse();
+	private Flux<GeboChatMessageEnvelope> createTrailingFlux(ReactiveIdentityUtil runAs, GeboChatResponse response,
+			ISinkUIEmitter sinkUIEmitter, ChatPipelineExecutionRuntimeData runtimeData,
+			Vector<AbstractPureSearchDocumentResultEntry> ranked, IGConfigurableChatModel chatModel) {
+
 		Flux<GeboChatMessageEnvelope> firstFullResponseSending = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 
@@ -256,7 +281,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		if (document instanceof GDocumentReference reference) {
 			String title = reference.getName();
 			Map<String, Object> metaInfos = reference.getCustomMetaInfos();
-			if (metaInfos.containsKey(DocumentMetaInfos.TITLE)) {
+			if (metaInfos != null && metaInfos.containsKey(DocumentMetaInfos.TITLE)) {
 				title = (String) metaInfos.get(DocumentMetaInfos.TITLE);
 			}
 			LLMInputDocument cInput = new LLMInputDocument(reference.getName(), reference.getUri(), title, sampleText);

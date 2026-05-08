@@ -480,7 +480,7 @@ public class DocumentsChunkServiceImpl
 				tokensSize += documentChunk.getTokensSize();
 			} else {
 				double tokensBudget = (sampledTokens - tokensSize);
-				double trailSize = tokensBudget * 4.2;
+				double trailSize = Math.min(tokensBudget * 4.2, documentChunk.getChunkData().length() - 1);
 				String fragment = documentChunk.getChunkData().substring(0, (int) trailSize);
 				buffer.append(fragment);
 				break;
@@ -635,15 +635,17 @@ public class DocumentsChunkServiceImpl
 			LOGGER.debug("Running streamChunksSingle(" + document.getCode() + ",.....)");
 		}
 		return Mono.fromCallable(() -> unchecked(() -> {
-			try {
-				return runAs.doRunAsWithReturnAndException(() -> {
+
+			return runAs.doRunAsWithReturnAndException(() -> {
+				try {
 					DocumentChunkingResponse response = prepareChunks(document, chunkingSpecs, chunkingSessionId);
 					return response;
-				});
-			} catch (Throwable th) {
-				LOGGER.error("Error in call to prepareChunks(...)", th);
-				return null;
-			}
+				} catch (Throwable th) {
+					LOGGER.error("Error in call to prepareChunks(...)", th);
+					return null;
+				}
+			});
+
 		})).subscribeOn(chunkingScheduler).filter(x -> x != null)
 				.flatMapMany(firstResponse -> Flux.just(firstResponse).expand(resp -> {
 					String nextId = resp.getNextChunkSetId();

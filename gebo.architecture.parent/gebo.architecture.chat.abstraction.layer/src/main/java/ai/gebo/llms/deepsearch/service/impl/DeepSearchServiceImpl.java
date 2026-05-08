@@ -71,6 +71,7 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.llms.deepsearch.service.ReactiveMonitor;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -492,27 +493,39 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> searchDataSources, int perDataSourceK,
-			int globalK, int sampleTextTokensSize) throws LLMConfigException, GeboChatSessionLifecycleException {
-		final ReactiveIdentityUtil runAs=ReactiveIdentityUtil.create();
+			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, List<String> searchDataSources,
+			int perDataSourceK, int globalK, int sampleTextTokensSize)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				final IDocumentsChunkService chunkService = runtimeBinder
 						.getImplementationOf(IDocumentsChunkService.class);
-				final String chunkSessionId = chunkService.createChunkingSession("pureSearch:" + request.getCurrentRequest().getId());
+				final String chunkSessionId = chunkService
+						.createChunkingSession("pureSearch:" + request.getCurrentRequest().getId());
 				final FullReactiveDeepsearchWorker worker = runtimeBinder
 						.getImplementationOf(FullReactiveDeepsearchWorker.class);
 
-				Flux<AbstractPureSearchDocumentResultEntry> flow=null;
+				Flux<AbstractPureSearchDocumentResultEntry> flow = null;
 				try {
-					flow = worker.streamPureSearch(request, minimalChatContext, geboChatRequest, emitter, chatModel, serviceModel, searchDataSources, perDataSourceK, globalK, sampleTextTokensSize,chunkSessionId);
+					flow = worker.streamPureSearch(request, minimalChatContext, geboChatRequest, emitter, chatModel,
+							serviceModel, searchDataSources, perDataSourceK, globalK, sampleTextTokensSize,
+							chunkSessionId);
 					if (flow != null) {
 						flow = flow.transform(ReactiveMonitor.monitor("pure-search"));
 					}
-					 
+					flow.filter(x -> x != null).onErrorResume(exc -> {
+						final String msg = "Error while streaming chat respose";
+						LOGGER.error(msg, exc);
+
+						GUserMessage userMessage = GUserMessage.errorMessage(msg, exc);
+						userMessage.setSeverity(MsgServerity.warn);
+						return Flux.just(new PureSearchDocumentResultError(null, null, userMessage));
+					});
 				} catch (Throwable e) {
 					LOGGER.error("Error doing pure search", e);
-					PureSearchDocumentResultError error=new PureSearchDocumentResultError(null, null, GUserMessage.errorMessage("Error searching", e));
+					PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
+							GUserMessage.errorMessage("Error searching", e));
 					flow = Flux.just(error);
 				}
 				if (chunkSessionId != null && flow != null) {
