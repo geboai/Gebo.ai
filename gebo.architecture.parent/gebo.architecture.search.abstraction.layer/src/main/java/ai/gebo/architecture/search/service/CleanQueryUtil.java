@@ -28,6 +28,9 @@ public final class CleanQueryUtil {
 	public static SearchQuery cleanQuery(SearchQuery query) {
 		SearchQuery _query = new SearchQuery();
 		_query.setQueryText(cleanQuery(query.getQueryText()));
+		if (query.getRelevantKeywords() != null) {
+			_query.setRelevantKeywords(query.getRelevantKeywords().stream().map(CleanQueryUtil::cleanQuery).toList());
+		}
 		return _query;
 	}
 

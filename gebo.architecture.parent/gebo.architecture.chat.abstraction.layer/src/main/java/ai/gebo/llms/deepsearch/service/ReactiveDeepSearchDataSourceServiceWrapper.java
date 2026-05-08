@@ -1,5 +1,7 @@
 package ai.gebo.llms.deepsearch.service;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -192,7 +195,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		return outcome;
 	}
 
-	protected <T> List<SearchWithResults> executeNativeSearch(
+	protected <T extends INativeQueryObject> List<SearchWithResults> executeNativeSearch(
 			INativeSearchService<CustomSearchResultExtractionDataType, T> nativeSearchService,
 			DeepSearchRequest request, MinimalChatContext minimalChatContext,
 			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
@@ -232,7 +235,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			allResults.add(swr);
 		}
 
-		return allResults;
+		return cleanAndRemoveDuplicated(allResults);
 	}
 
 	protected List<SearchWithResults> executeStandardQuerySearch(DeepSearchRequest request,
@@ -256,7 +259,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 				LOGGER.error("Error executing search", th);
 			}
 		}
-		return queryResults;
+
+		return cleanAndRemoveDuplicated(queryResults);
 	}
 
 	@Override

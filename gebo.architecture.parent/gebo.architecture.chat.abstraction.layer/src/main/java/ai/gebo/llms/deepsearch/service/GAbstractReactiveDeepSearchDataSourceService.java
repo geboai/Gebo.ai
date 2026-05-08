@@ -649,28 +649,43 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				}
 			});
 		});
-		Flux<List<SearchResult>> resultsFlux = searchBlockFlux.concatMap(searchResults -> {
-			List<SearchResult> results = new ArrayList<>();
-			for (SearchWithResults result : searchResults) {
-				results.addAll(result.getResults());
-			}
 
-			return Flux.just(results);
-		}).subscribeOn(threadManager.getBoundedElastic());
-		ParallelFlux<List<SearchResult>> searchResults = ParallelFlux.from(resultsFlux);
-		final ChunkingParams chunkingParams = new ChunkingParams();
-		chunkingParams.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
-		chunkingParams.setEnrichWithMetaData(false);
-		chunkingParams.setTokensPerChunkSet(sampleTextTokensSize);
-		chunkingParams.setTokensThreashold(sampleTextTokensSize);
+		ParallelFlux<List<SearchWithResults>> searchResults = ParallelFlux.from(searchBlockFlux);
 
-		TextChunkingSpecs textChunkingSpecs = TextChunkingSpecs.of(sampleTextTokensSize);
-		chunkingParams.getChunkingSpecs().add(textChunkingSpecs);
-		chunkingParams.setSamplingMode(true);
-		chunkingParams.setSampledTokens(sampleTextTokensSize);
 		ParallelFlux<IDocumentChunkWithRef> chunksFlux = searchResults.concatMap(results -> {
+
 			return runAs.doRunAsWithReturn(() -> {
-				return this.chunkingService.streamChunks(results, chunkingParams, chunkingSessionId,
+				Map<String, Boolean> joinedKeywords = new HashMap<>();
+				List<SearchResult> found = new ArrayList<>();
+				for (SearchWithResults item : results) {
+					found.addAll(item.getResults());
+					if (item.getSearchQuery() != null && item.getSearchQuery().getRelevantKeywords() != null) {
+						for (String kw : item.getSearchQuery().getRelevantKeywords()) {
+							joinedKeywords.put(kw.toLowerCase(), true);
+						}
+
+					}
+					if (item.getNativeQueryObject() != null) {
+						List<String> kws = item.getNativeQueryObject().relevantKeywords();
+						for (String kw : kws) {
+							joinedKeywords.put(kw.toLowerCase(), true);
+						}
+					}
+
+				}
+				List<String> keywords = new ArrayList<>(joinedKeywords.keySet());
+				ChunkingParams chunkingParams = new ChunkingParams();
+				chunkingParams.setChunkingPolicy(ChunkingPolicy.ONLY_MATCHING_CHUNKS);
+				chunkingParams.setEnrichWithMetaData(false);
+				chunkingParams.setTokensPerChunkSet(sampleTextTokensSize);
+				chunkingParams.setTokensThreashold(sampleTextTokensSize);
+				chunkingParams.setKeywordHits(keywords.size() > 3 ? 2 : 1);
+				chunkingParams.setMatchingKeywords(keywords);
+				TextChunkingSpecs textChunkingSpecs = TextChunkingSpecs.of(sampleTextTokensSize);
+				chunkingParams.getChunkingSpecs().add(textChunkingSpecs);
+				chunkingParams.setSamplingMode(true);
+				chunkingParams.setSampledTokens(sampleTextTokensSize);
+				return this.chunkingService.streamChunks(found, chunkingParams, chunkingSessionId,
 						deepSearchDefaultConfig.getDocumentsParallelism());
 			});
 		});
