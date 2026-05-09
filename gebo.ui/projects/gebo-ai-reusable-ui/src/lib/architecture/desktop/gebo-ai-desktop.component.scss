@@ -7,21 +7,15 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, OnInit } from '@angular/core';
-import packageInfo from '../../package.json';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  standalone: false
-})
-export class AppComponent implements OnInit {
-  public version: string = packageInfo.version;
-
-  constructor() { }
-
-  ngOnInit() { }
-
-  title = 'Gebo.ai, the RAG system for software developers';
+.version-display {
+    position: fixed;
+    bottom: 5px;
+    right: 10px;
+    font-size: 0.8em;
+    color: #666; /* Adjust color as needed to fit your UI */
+    background-color: rgba(255, 255, 255, 0.7); /* Optional: adds a slight background for readability */
+    padding: 2px 5px;
+    border-radius: 3px;
+    z-index: 1000; /* Ensure it stays on top of other elements */
+    pointer-events: none; /* Allows clicking through it if necessary */
 }

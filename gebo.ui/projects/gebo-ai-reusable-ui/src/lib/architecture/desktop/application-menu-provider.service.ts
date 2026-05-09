@@ -7,21 +7,11 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, OnInit } from '@angular/core';
-import packageInfo from '../../package.json';
+import { Injectable } from '@angular/core';
+import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { MegaMenuItem } from 'primeng/api';
+import { Observable } from 'rxjs';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  standalone: false
-})
-export class AppComponent implements OnInit {
-  public version: string = packageInfo.version;
-
-  constructor() { }
-
-  ngOnInit() { }
-
-  title = 'Gebo.ai, the RAG system for software developers';
+export abstract class ApplicationMenuProviderService {
+    public abstract getMenuItems(userInfo?: UserInfo): Observable<MegaMenuItem[]>;
 }

@@ -23,6 +23,11 @@ import { StepsModule } from 'primeng/steps';
 import { GeboUIEntityFormsLauncherComponent } from "./gebo-ui-entity-forms-launcher.component";
 import { GeboUIModalComponent } from "./gebo-ui-modal.component";
 import {GeboAINotificationsModule} from "../notifications/notifications.module"
+import { GeboAIDesktopComponent } from "./desktop/gebo-ai-desktop.component";
+import { MegaMenuModule } from "primeng/megamenu";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { RouterModule } from "@angular/router";
+import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
 
 /**
@@ -50,10 +55,10 @@ import {GeboAINotificationsModule} from "../notifications/notifications.module"
  * - Modal display
  */
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule,GeboAINotificationsModule],
+    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule,GeboAINotificationsModule, MegaMenuModule, ConfirmDialogModule, RouterModule, GeboAIFieldTranslationContainerModule],
     providers:[GeboUIActionRoutingService,GeboFormGroupsService],
-    declarations:[GeboUIModalOpenerComponent,GeboUIModalOpenerWrapperComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent],
-    exports:[GeboUIModalOpenerComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent]
+    declarations:[GeboUIModalOpenerComponent,GeboUIModalOpenerWrapperComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent, GeboAIDesktopComponent],
+    exports:[GeboUIModalOpenerComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent, GeboAIDesktopComponent]
 
 })
 export class GeboUIArchitectureModule {}
