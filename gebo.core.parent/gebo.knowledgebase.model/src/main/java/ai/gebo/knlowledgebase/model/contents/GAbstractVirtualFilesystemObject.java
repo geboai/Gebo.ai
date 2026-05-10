@@ -12,6 +12,8 @@ package ai.gebo.knlowledgebase.model.contents;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 
@@ -76,6 +78,7 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	 */
 	@HashIndexed
 	@TextIndexed
+	@Order(value = Ordered.LOWEST_PRECEDENCE)
 	private String name = null;
 
 	/**
