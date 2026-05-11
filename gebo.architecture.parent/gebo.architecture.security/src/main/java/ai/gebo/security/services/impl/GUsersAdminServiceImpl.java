@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
@@ -50,6 +52,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	final PasswordEncoder passwordEncoder; // Encoder for hashing user passwords
 	final AclGrantedAccessorServiceImpl grantedAccessorService;
 	final IAclAliasesDao aclAliasesDao;
+	final IGeboCryptingService cryptService;
 
 	/**
 	 * Inserts a new user into the database after validating uniqueness and
@@ -235,6 +238,18 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 			user.setAuthProvider(authProvider);
 			this.insertUser(user, UUID.randomUUID().toString());
 		}
+	}
+
+	@Override
+	public void changePassword(String username, String password) throws GeboCryptSecretException {
+
+		Optional<User> user = this.userRepo.findById(username);
+		if (user.isPresent()) {
+			User usr = user.get();
+			usr.setPassword(cryptService.crypt(password));
+			userRepo.save(usr);
+		}
+
 	}
 
 }

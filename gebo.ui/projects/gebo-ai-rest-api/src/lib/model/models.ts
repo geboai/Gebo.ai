@@ -7,6 +7,7 @@ export * from './calledFunction';
 export * from './catalogingLabel';
 export * from './changePasswordParam';
 export * from './changePasswordResponse';
+export * from './changeUsernamePasswordData';
 export * from './chatInfosByQbeParam';
 export * from './chatInteractions';
 export * from './chatModelRequestContextWindowStats';

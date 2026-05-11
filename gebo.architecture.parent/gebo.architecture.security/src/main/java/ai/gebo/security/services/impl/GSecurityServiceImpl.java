@@ -23,6 +23,8 @@ import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
@@ -49,6 +51,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final IAclGrantedAccessorService aclGrantedAccessorService;
 	final IAclAliasesDao aclAliasesDao;
 	final GeboSecurityConfig securityConfig;
+	final IGeboCryptingService cryptService;
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -60,7 +63,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	public UserInfos getCurrentUser() {
 
 		String email = SecurityUtils.getCurrentUserEmail();
-		if (email == null)
+		if (email == null) 
 			throw new RuntimeException("No principal name set");
 		Optional<User> user = usersRepo.findById(email);
 		if (user.isEmpty())
@@ -360,6 +363,14 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return new ArrayList<>(objects);
 		}
 		}
+	}
+
+	@Override
+	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException {
+		String cryptedPwd = cryptService.crypt(confirmpassword);
+		UserInfos currentUser = this.getCurrentUser();
+		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
+		return fullUsr.isPresent() && fullUsr.get().getPassword().equals(cryptedPwd) ? true : false; 
 	}
 
 }

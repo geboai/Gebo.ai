@@ -16,6 +16,7 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
@@ -112,4 +113,6 @@ public interface IGSecurityService {
 			throws SecurityException;
 
 	public ContentAccessPolicy getPlatformContentAccessPolicy();
+
+	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException;
 }

@@ -9,27 +9,28 @@
  */
  -->
 
-<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="true" [modal]="true" [style]="{width:'95%',height:'95%'}"
-     [closable]="false" [showHeader]="false">
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="true" [modal]="true"
+    [style]="{width:'95%',height:'95%'}" [closable]="false" [showHeader]="false">
 
     <p-blockUI id="BlockUI" gebo-ai-label [target]="userUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
 
-    <p-panel id="MainPanel" gebo-ai-label  #userUI header="Editing user">
+    <p-panel id="MainPanel" gebo-ai-label #userUI header="Editing user">
         <div class="geboDialogContent">
             <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
             <div class="grid" [formGroup]="formGroup">
                 <div class="col-6">
-                    <gebo-ai-field id="username" label="Username" help="User username will be used also as user name" [required]="true">
+                    <gebo-ai-field id="username" label="Username" help="User username will be used also as user name"
+                        [required]="true">
                         <input pInputText id="username" formControlName="username" [required]="true"
                             [readonly]="mode==='EDIT'" gebo-ai-field-element />
                     </gebo-ai-field>
                 </div>
                 <div class="col-6">
                     <gebo-ai-field id="disabled" label="User disabled" help="If checked this user is disabled">
-                        <p-checkbox id="disabled" formControlName="disabled"
-                            [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                        <p-checkbox id="disabled" formControlName="disabled" [binary]="true" [trueValue]="true"
+                            [falseValue]="false" gebo-ai-field-element></p-checkbox>
                     </gebo-ai-field>
                 </div>
 
@@ -40,19 +41,20 @@
                 </div>
                 <div class="col-6">
                     <gebo-ai-field id="sourname" label="Sourname" help="User sourname" [required]="true">
-                        <input pInputText id="sourname" formControlName="sourname" [required]="true" gebo-ai-field-element />
+                        <input pInputText id="sourname" formControlName="sourname" [required]="true"
+                            gebo-ai-field-element />
                     </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                    <gebo-ai-field id="roles" label="User roles" 
-                        help="Roles list (At least USER role is mandatory), ADMIN has administrative rights, USER can only chat and use LLMS chat services, APPLICATION is for external applications" 
+                    <gebo-ai-field id="roles" label="User roles"
+                        help="Roles list (At least USER role is mandatory), ADMIN has administrative rights, USER can only chat and use LLMS chat services, APPLICATION is for external applications"
                         [required]="true">
-                        <p-multiSelect styleClass="w-full" formControlName="roles" id="roles"
-                            [required]="true" [options]="rolesList" gebo-ai-field-element></p-multiSelect>
+                        <p-multiSelect styleClass="w-full" formControlName="roles" id="roles" [required]="true"
+                            [options]="rolesList" gebo-ai-field-element></p-multiSelect>
                     </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                    <gebo-ai-field id="authProvider" label="Authentication provider" 
+                    <gebo-ai-field id="authProvider" label="Authentication provider"
                         help="Authentication provider that grants user identity" [required]="true">
                         <geboai-editable-listbox-component formControlName="authProvider" id="authProvider"
                             [required]="true" [optionsObservable]="authProviderObservable" gebo-ai-field-element>
@@ -61,31 +63,38 @@
                 </div>
                 <div class="col-6" *ngIf="mode==='NEW' && actualAuthProvider==='local'" [formGroup]="pwdFormGroup">
                     <gebo-ai-field id="password" label="Password" help="Insert password" [required]="true">
-                        <p-password id="password" formControlName="password" [required]="true" gebo-ai-field-element></p-password>
+                        <p-password id="password" formControlName="password" [required]="true"
+                            gebo-ai-field-element></p-password>
                     </gebo-ai-field>
                 </div>
             </div>
         </div>
-        <div class="geboButtonsBar" style="vertical-align: baseline;">
-            <div class="grid">
-                <div class="col-4">
-                    <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                        *ngIf="mode==='EDIT'" [disabled]="this.formGroup.invalid"></p-button>
-                    <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doInsert()" icon="pi pi-save"
-                        severity="success" *ngIf="mode==='NEW'"
-                        [disabled]="this.formGroup.invalid || this.pwdFormGroup.invalid"></p-button>
-                </div>
-                <div class="col-4">
-                    <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
-                        (onClick)="changedData.emit(undefined)" />
-                </div>
-                <div class="col-4">
-                    <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
-                        (onClick)="doDelete()" />
-                </div>
+        <div class="grid geboVeryLargeButtonsBar" style="vertical-align: baseline">
+
+            <div class="col-3">
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success" *ngIf="mode==='EDIT'"
+                    [disabled]="this.formGroup.invalid"></p-button>
+                <p-button id="InsertBtn" gebo-ai-label [outlined]="true" label="Insert" (onClick)="doInsert()"
+                    icon="pi pi-save" severity="success" *ngIf="mode==='NEW'"
+                    [disabled]="this.formGroup.invalid || this.pwdFormGroup.invalid"></p-button>
             </div>
+            <div class="col-3">
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="changedData.emit(undefined)" />
+            </div>
+            <div class="col-3">
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" />
+            </div>
+            <div class="col-3">
+                <p-button id="ChangePWDBtn" gebo-ai-label [outlined]="true" label="Pwd change" severity="warn"
+                    icon="pi pi-hash" (onClick)="doChangePassword()" [disabled]="mode!=='EDIT'"></p-button>
+            </div>
+
         </div>
     </p-panel>
 </p-dialog>
+<gebo-ai-change-user-password-component [openWindow]="openChangePasswordWindow" [username]="formGroup.controls['username'].value" (openWindowChange)="openChangePasswordWindow=$event;"></gebo-ai-change-user-password-component>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

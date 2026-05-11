@@ -9,13 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { SortObject } from './sortObject';
 
-export interface PageableObject { 
-    offset?: number;
-    paged?: boolean;
-    pageNumber?: number;
-    pageSize?: number;
-    sort?: SortObject;
-    unpaged?: boolean;
+export interface ChangeUsernamePasswordData { 
+    username: string;
+    password: string;
+    confirmpassword: string;
+    currentUserPassword: string;
 }
