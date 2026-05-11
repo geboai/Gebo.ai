@@ -58,6 +58,7 @@ export class GeboUIEntityFormsLauncherComponent implements OnInit,AfterViewInit 
                         environmentInjector: this.environmentInjector
                     });
                     runtimeComponent.setInput("componentType", injected.entityUI);
+                    runtimeComponent.setInput("targetType",injected.entityName);
                     this.container.insert(runtimeComponent.hostView);
                 });
             }
