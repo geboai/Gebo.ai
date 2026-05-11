@@ -167,8 +167,9 @@ export class GeboAiAdminModule {
     return {
       ngModule: GeboAiAdminModule,
       providers: [
+        /*
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GConfluenceSystem', entityUI: GeboAIConfluenceAdminComponent } as GeboUIEntityFormConfig, multi: true },
-        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGitSystem', entityUI: GeboAiGitSystemAdminComponent } as GeboUIEntityFormConfig, multi: true },
+        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGitSystem',entityAliases:["GGitContentManagementSystem"], entityUI: GeboAiGitSystemAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GraphRagExtractionConfig', entityUI: GeboAIGraphRagExtractionConfigComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGitProjectEndpoint', entityUI: GeboAiGitEndpointAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GJiraProjectEndpoint', entityUI: GeboAIJiraEndpointComponent } as GeboUIEntityFormConfig, multi: true },
@@ -190,7 +191,7 @@ export class GeboAiAdminModule {
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GenericOpenAIAPIRankerModelConfig', entityUI: GeboAIGenericOpenaAIAPiRankerAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleVertexChatModelConfig', entityUI: GeboAIGoogleVertexChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleVertexEmbeddingModelConfig', entityUI: GeboAIGoogleVertexEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
-        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'Oauth2ProviderRegistration', entityUI: GeboAIOauth2RegistrationComponent } as GeboUIEntityFormConfig, multi: true },
+        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'Oauth2ProviderRegistration', entityAliases:["Oauth2ProviderModifiableData"], entityUI: GeboAIOauth2RegistrationComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GKnowledgeBase', entityUI: GeboAiKnowledgeBaseAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOllamaChatModelConfig', entityUI: GeboAIOllamaChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOllamaEmbeddingModelConfig', entityUI: GeboAIOllamaEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
@@ -204,8 +205,87 @@ export class GeboAiAdminModule {
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GFilesystemProjectEndpoint', entityUI: GeboAIFileSystemEndpointComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GFileSystemShareReference', entityUI: GeboAIGFileSystemShareReferenceAdminComponent } as GeboUIEntityFormConfig, multi: true },
         { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleSearchApiCredentials', entityUI: GeboAIGoogleSearchAccountComponent } as GeboUIEntityFormConfig, multi: true },
-        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GChatProfile', entityUI: GeboAIChatProfileAdminComponent } as GeboUIEntityFormConfig, multi: true },
-        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleDriveSystem', entityUI: GeboAiGoogleDriveSystemAdminComponent } as GeboUIEntityFormConfig, multi: true }
+        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GChatProfile',entityAliases:["GChatProfileConfiguration"], entityUI: GeboAIChatProfileAdminComponent } as GeboUIEntityFormConfig, multi: true },
+        { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleDriveSystem', entityUI: GeboAiGoogleDriveSystemAdminComponent } as GeboUIEntityFormConfig, multi: true }*/
+        [
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GConfluenceSystem', entityAliases: ['ai.gebo.atlassian.confluence.handler.GConfluenceSystem'], entityUI: GeboAIConfluenceAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGitSystem', entityAliases: ['GGitContentManagementSystem','ai.gebo.git.content.handler.GGitContentManagementSystem'], entityUI: GeboAiGitSystemAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GraphRagExtractionConfig', entityAliases: ['ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig'], entityUI: GeboAIGraphRagExtractionConfigComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGitProjectEndpoint', entityAliases: ['ai.gebo.git.content.handler.GGitProjectEndpoint'], entityUI: GeboAiGitEndpointAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GJiraProjectEndpoint', entityAliases: ['ai.gebo.atlassian.jira.handler.GJiraProjectEndpoint'], entityUI: GeboAIJiraEndpointComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GConfluenceProjectEndpoint', entityAliases: ['ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint'], entityUI: GeboAIConfluenceEndpointComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GJiraSystem', entityAliases: ['ai.gebo.atlassian.jira.handler.GJiraSystem'], entityUI: GeboAIJiraAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'DeepSearchConfig', entityAliases: ['ai.gebo.llms.deepsearch.model.DeepSearchConfig'], entityUI: GeboAIDeepSearchConfigAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'SecretWrapper', entityAliases: ['ai.gebo.secrets.model.SecretWrapper'], entityUI: GeboAiSecretsAdminEditComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GSharepointProjectEndpoint', entityAliases: ['ai.gebo.sharepoint.handler.GSharepointProjectEndpoint'], entityUI: GeboAISharepointEndpointComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GUploadsProjectEndpoint', entityAliases: ['ai.gebo.uploads.content.handler.GUploadsProjectEndpoint'], entityUI: GeboAIUploadsEndpointComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'UsersGroup', entityAliases: ['ai.gebo.security.model.UsersGroup'], entityUI: GeboAIGroupComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GPromptConfig', entityAliases: ['ai.gebo.architecture.ai.model.GPromptConfig'], entityUI: GeboAIPromptAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GAnthropicChatModelConfig', entityAliases: ['ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig'], entityUI: GeboAIAnthropicChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GSharepointContentManagementSystem', entityAliases: ['ai.gebo.sharepoint.handler.GSharepointContentManagementSystem'], entityUI: GeboAISharepointAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GAzureOpenAIChatModelConfig', entityAliases: ['ai.gebo.llms.azure.openai.model.GAzureOpenAIChatModelConfig'], entityUI: GeboAIAzureOpenAIChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GAzureOpenAIEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.azure.openai.model.GAzureOpenAIEmbeddingModelConfig'], entityUI: GeboAIAzureOpenAIEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GDeepseekChatModelConfig', entityAliases: ['ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig'], entityUI: GeboAIDeepseekChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GenericOpenAIAPIChatModelConfig', entityAliases: ['ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelConfig'], entityUI: GeboAIGenericOpenAIAPIChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GenericOpenAIAPIEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig'], entityUI: GeboAIGenericOpenAIAPIEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GenericOpenAIAPIRankerModelConfig', entityAliases: ['ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig'], entityUI: GeboAIGenericOpenaAIAPiRankerAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleVertexChatModelConfig', entityAliases: ['ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig'], entityUI: GeboAIGoogleVertexChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleVertexEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig'], entityUI: GeboAIGoogleVertexEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'Oauth2ProviderRegistration', entityAliases: ['Oauth2ProviderModifiableData'], entityUI: GeboAIOauth2RegistrationComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GKnowledgeBase', entityAliases: ['ai.gebo.knlowledgebase.model.contents.GKnowledgeBase'], entityUI: GeboAiKnowledgeBaseAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOllamaChatModelConfig', entityAliases: ['ai.gebo.llms.ollama.model.GOllamaChatModelConfig'], entityUI: GeboAIOllamaChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOllamaEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig'], entityUI: GeboAIOllamaEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GProject', entityAliases: ['ai.gebo.knlowledgebase.model.projects.GProject'], entityUI: GeboAiProjectAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOpenAIChatModelConfig', entityAliases: ['ai.gebo.llms.openai.model.GOpenAIChatModelConfig'], entityUI: GeboAIOpenAIChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GOpenAIEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig'], entityUI: GeboAIOpenAIEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GJobStatus', entityAliases: ['ai.gebo.knlowledgebase.model.jobs.GJobStatus'], entityUI: GeboAIJobStatusViewerComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GMistralEmbeddingModelConfig', entityAliases: ['ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig'], entityUI: GeboAIMistralAIEmbedModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GMistralChatModelConfig', entityAliases: ['ai.gebo.llms.mistralai.model.GMistralChatModelConfig'], entityUI: GeboAIMistralAIChatModelAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleDriveProjectEndpoint', entityAliases: ['ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint'], entityUI: GeboAiGoogleDriveProjectEndpointAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GFilesystemProjectEndpoint', entityAliases: ['ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint'], entityUI: GeboAIFileSystemEndpointComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GFileSystemShareReference', entityAliases: ['ai.gebo.filesystem.content.handler.GFileSystemShareReference'], entityUI: GeboAIGFileSystemShareReferenceAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleSearchApiCredentials', entityAliases: ['ai.gebo.googlesearch.handler.model.GGoogleSearchApiCredentials'], entityUI: GeboAIGoogleSearchAccountComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GChatProfile', entityAliases: ['GChatProfileConfiguration'], entityUI: GeboAIChatProfileAdminComponent } as GeboUIEntityFormConfig, multi: true },
+
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleDriveSystem', entityAliases: ['ai.gebo.googledrive.handlers.GGoogleDriveSystem'], entityUI: GeboAiGoogleDriveSystemAdminComponent } as GeboUIEntityFormConfig, multi: true }
+        ]
       ]
     };
   }

@@ -100,6 +100,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
 
   /** Abstract property for the entity name that must be defined by child classes */
   protected abstract entityName: string;
+  
 
   /** Last operation status for tracking results of operations */
   private lastOperationStatus?: IOperationStatus<RecordType>;

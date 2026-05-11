@@ -59,6 +59,9 @@ export class GeboUIEntityFormsLauncherComponent implements OnInit,AfterViewInit 
                     });
                     runtimeComponent.setInput("componentType", injected.entityUI);
                     runtimeComponent.setInput("targetType",injected.entityName);
+                    if (injected.entityAliases) {
+                        runtimeComponent.setInput("targetTypeAliases",injected.entityAliases);
+                    }
                     this.container.insert(runtimeComponent.hostView);
                 });
             }

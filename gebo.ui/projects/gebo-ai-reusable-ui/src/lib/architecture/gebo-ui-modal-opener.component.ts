@@ -47,7 +47,7 @@ export class GeboUIModalOpenerComponent implements GeboUIActionRequestListener, 
     
     /** Target entity type identifier */
     @Input() targetType?: string;
-    
+    @Input() targetTypeAliases?:string[];
     /** Currently opened modal information */
     public modal?: OpenedModals;
     
