@@ -282,7 +282,7 @@ export class GeboAiAdminModule {
 
           { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleSearchApiCredentials', entityAliases: ['ai.gebo.googlesearch.handler.model.GGoogleSearchApiCredentials'], entityUI: GeboAIGoogleSearchAccountComponent } as GeboUIEntityFormConfig, multi: true },
 
-          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GChatProfile', entityAliases: ['GChatProfileConfiguration'], entityUI: GeboAIChatProfileAdminComponent } as GeboUIEntityFormConfig, multi: true },
+          { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GChatProfile', entityAliases: ['GChatProfileConfiguration','ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration'], entityUI: GeboAIChatProfileAdminComponent } as GeboUIEntityFormConfig, multi: true },
 
           { provide: GEBO_UI_ENTITY_FORM_TOKEN, useValue: { entityName: 'GGoogleDriveSystem', entityAliases: ['ai.gebo.googledrive.handlers.GGoogleDriveSystem'], entityUI: GeboAiGoogleDriveSystemAdminComponent } as GeboUIEntityFormConfig, multi: true }
         ]
