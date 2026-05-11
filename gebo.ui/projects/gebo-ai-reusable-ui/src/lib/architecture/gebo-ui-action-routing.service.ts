@@ -25,7 +25,7 @@ import { GeboUIActionRequestListener, GeboUIActionRequest } from "./actions.mode
  * The service maintains a registry of listeners and provides methods for registration,
  * removal, and action routing.
  */
-@Injectable({providedIn:"root"})
+@Injectable({providedIn:"platform"})
 export class GeboUIActionRoutingService {
         /**
          * Array of registered action request listeners

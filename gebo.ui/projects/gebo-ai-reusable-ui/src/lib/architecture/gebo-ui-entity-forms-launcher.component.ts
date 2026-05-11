@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,31 +19,36 @@
  * The component is designed to be a centralized point for launching and
  * managing various entity forms within the application.
  */
-import { Component, Inject, Injector, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
-import { GEBO_UI_ENTITY_FORM_TOKEN, GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
+import { Component, createComponent, EnvironmentInjector, Injector, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 import { GeboUIEntityFormsLauncherService } from "./gebo-ui-entity-forms-launcher.service";
+import { GeboUIModalOpenerWrapperComponent } from "./gebo-ui-modal-wrapper.component";
 
 @Component({
     selector: "gebo-ui-entities-forms-launcher-component",
     templateUrl: "gebo-ui-entity-forms-launcher.component.html",
     standalone: false
 })
-export class GeboUIEntityFormsLauncherComponent implements OnInit, OnChanges {
+export class GeboUIEntityFormsLauncherComponent implements OnInit {
+    @ViewChild("container", { read: ViewContainerRef }) container!: ViewContainerRef;
     /**
      * Stores the configurations obtained from the GeboUIEntityFormsLauncherService
      * These configurations define the entity forms that can be launched
      */
-    injectedConfigs: GeboUIEntityFormConfig[] | undefined;
-    
+    private injectedConfigs: GeboUIEntityFormConfig[] | undefined;
+
+
     /**
      * Constructor that injects the Angular Injector
      * @param injector Angular's Injector service used to retrieve the GeboUIEntityFormsLauncherService
      */
-    constructor(private injector: Injector
+    constructor(
+        private injector: Injector,
+        private environmentInjector: EnvironmentInjector
     ) {
 
     }
-    
+
     /**
      * Lifecycle hook that initializes the component
      * Retrieves the current entity form configurations from the GeboUIEntityFormsLauncherService
@@ -53,16 +58,17 @@ export class GeboUIEntityFormsLauncherComponent implements OnInit, OnChanges {
         const service = this.injector.get(GeboUIEntityFormsLauncherService);
         if (service && service.getCurrentConfigurations) {
             this.injectedConfigs = service.getCurrentConfigurations();
+            if (this.injectedConfigs && this.injectedConfigs.length) {
+                this.injectedConfigs.forEach(injected => {
+                    const runtimeComponent = createComponent(GeboUIModalOpenerWrapperComponent, {
+                        environmentInjector: this.environmentInjector
+                    });
+                    runtimeComponent.setInput("componentType", injected.entityUI);
+                    this.container.insert(runtimeComponent.hostView);
+                });
+            }
         }
     }
+
     
-    /**
-     * Lifecycle hook that responds to changes in the component's input properties
-     * Currently implemented without specific logic, can be extended for change detection
-     * @param changes SimpleChanges object containing current and previous property values
-     */
-    ngOnChanges(changes: SimpleChanges): void {
-
-    }
-
 }
