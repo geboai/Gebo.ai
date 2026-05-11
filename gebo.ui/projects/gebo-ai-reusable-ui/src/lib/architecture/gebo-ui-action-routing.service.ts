@@ -57,7 +57,7 @@ export class GeboUIActionRoutingService {
             let completed:boolean=false;
             if (this.listeners) {
                 // Filter listeners to match the action's targetType
-                const filtered=this.listeners?.filter(listener=>listener.targetType===action?.targetType);
+                const filtered=this.listeners?.filter(listener=>listener.targetType===action?.targetType || (listener.targetTypeAliases && listener.targetTypeAliases.length && listener.targetTypeAliases.find(y=>y===action?.targetType)));
                 if (filtered && filtered.length) {
                     const listener:GeboUIActionRequestListener=filtered[0];
                     if (completed===false && listener.handleAction(action)) {

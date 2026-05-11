@@ -20,13 +20,13 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
+import { GeboAiAdminModule, GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { providePrimeNG } from "primeng/config";
 import Aura from '@primeng/themes/aura';
@@ -107,6 +107,7 @@ const GeboAIPreset = definePreset(Aura, {
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,
+    GeboAiAdminModule.forRoot(),
     MonacoEditorModule.forRoot(),
     GeboAINotificationsModule.forRoot(),
     TranslateModule.forRoot({
@@ -135,9 +136,11 @@ const GeboAIPreset = definePreset(Aura, {
         }
       }
     }),
+    GeboUIActionRoutingService,
     { provide: BASE_PATH, useFactory: getBaseUrl },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: ApplicationMenuProviderService, useClass: AppMenuProviderService },
+    { provide: GeboUIEntityFormsLauncherService, useClass: GeboUIEntityFormsLauncherByInjectionService},
 
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,

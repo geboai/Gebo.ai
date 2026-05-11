@@ -35,7 +35,7 @@ export * from "./lib/setup-wizard/setup-wizards-routing.module";
 
 // Missing components exported to allow isolated partial compilation without NG3001/NG8001 errors
 export * from "./lib/admin-ui/gebo-ai-admin.component";
-export * from "./lib/admin-ui/entity-editors/gebo-ai-entity-editing-launcher/gebo-ai-entity-editing-launcher.component";
+
 export * from "./lib/admin-ui/main-panels/users-management/users-management.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-confluence-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-google-workspaces-admin/gebo-ai-google-drive-fast.component";

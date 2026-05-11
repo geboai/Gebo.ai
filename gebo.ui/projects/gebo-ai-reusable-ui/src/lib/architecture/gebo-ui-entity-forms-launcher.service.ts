@@ -6,17 +6,17 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @fileoverview This file defines the base entity forms launcher service for Gebo UI.
  * AI generated comments
  */
 
-import { Injectable } from "@angular/core";
-import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
+import { Inject, Injectable } from "@angular/core";
+import { GEBO_UI_ENTITY_FORM_TOKEN, GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 
 /**
  * Injectable service that provides functionality for launching entity forms in the Gebo UI.
@@ -24,7 +24,7 @@ import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
  * The service is provided at the root level so it's available throughout the application.
  */
 @Injectable({
-    providedIn: "root"
+    providedIn: "any"
 })
 export abstract class GeboUIEntityFormsLauncherService {
 
@@ -35,4 +35,15 @@ export abstract class GeboUIEntityFormsLauncherService {
      * @returns An array of GeboUIEntityFormConfig objects representing available form configurations
      */
     public abstract getCurrentConfigurations(): GeboUIEntityFormConfig[];
+}
+
+@Injectable({ providedIn: "any" })
+export class GeboUIEntityFormsLauncherByInjectionService extends GeboUIEntityFormsLauncherService {
+    constructor(@Inject(GEBO_UI_ENTITY_FORM_TOKEN) private forms: GeboUIEntityFormConfig[]) {
+        super()
+    }
+    public override getCurrentConfigurations(): GeboUIEntityFormConfig[] {
+        return this.forms;
+    }
+
 }
