@@ -19,17 +19,17 @@
  * The component is designed to be a centralized point for launching and
  * managing various entity forms within the application.
  */
-import { Component, createComponent, EnvironmentInjector, Injector, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Component, createComponent, EnvironmentInjector, Injector, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 import { GeboUIEntityFormsLauncherService } from "./gebo-ui-entity-forms-launcher.service";
-import { GeboUIModalOpenerWrapperComponent } from "./gebo-ui-modal-wrapper.component";
+import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
 
 @Component({
     selector: "gebo-ui-entities-forms-launcher-component",
     templateUrl: "gebo-ui-entity-forms-launcher.component.html",
     standalone: false
 })
-export class GeboUIEntityFormsLauncherComponent implements OnInit {
+export class GeboUIEntityFormsLauncherComponent implements OnInit,AfterViewInit {
     @ViewChild("container", { read: ViewContainerRef }) container!: ViewContainerRef;
     /**
      * Stores the configurations obtained from the GeboUIEntityFormsLauncherService
@@ -48,19 +48,13 @@ export class GeboUIEntityFormsLauncherComponent implements OnInit {
     ) {
 
     }
-
-    /**
-     * Lifecycle hook that initializes the component
-     * Retrieves the current entity form configurations from the GeboUIEntityFormsLauncherService
-     * and assigns them to injectedConfigs for use in the template
-     */
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         const service = this.injector.get(GeboUIEntityFormsLauncherService);
         if (service && service.getCurrentConfigurations) {
             this.injectedConfigs = service.getCurrentConfigurations();
             if (this.injectedConfigs && this.injectedConfigs.length) {
                 this.injectedConfigs.forEach(injected => {
-                    const runtimeComponent = createComponent(GeboUIModalOpenerWrapperComponent, {
+                    const runtimeComponent = createComponent(GeboUIModalOpenerComponent, {
                         environmentInjector: this.environmentInjector
                     });
                     runtimeComponent.setInput("componentType", injected.entityUI);
@@ -68,6 +62,15 @@ export class GeboUIEntityFormsLauncherComponent implements OnInit {
                 });
             }
         }
+    }
+
+    /**
+     * Lifecycle hook that initializes the component
+     * Retrieves the current entity form configurations from the GeboUIEntityFormsLauncherService
+     * and assigns them to injectedConfigs for use in the template
+     */
+    ngOnInit(): void {
+        
     }
 
     
