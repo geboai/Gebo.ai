@@ -124,7 +124,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                         if (rankingModels && rankingModels.length && this.actualProvidersConfiguration?.rankerModelExists !== true) {
                             const defaultRankingPreset = rankingModels[0].choices?.find(x => x.defaultChoice === true);
                             presets.push({ type: "RANKING", presetChoices: rankingModels[0].choices, choice: defaultRankingPreset?.code });
-                            this.formGroup.controls["rankingModel"].setValue(defaultRankingPreset?.code);
+                            this.formGroup.controls["rankerModel"].setValue(defaultRankingPreset?.code);
                         }
                         const ttsModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "TTS");
                         if (ttsModels && ttsModels.length && this.actualProvidersConfiguration?.ttsModelExists !== true) {

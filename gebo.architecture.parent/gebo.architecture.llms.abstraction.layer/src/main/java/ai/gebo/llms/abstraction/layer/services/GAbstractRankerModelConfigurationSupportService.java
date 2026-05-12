@@ -31,11 +31,5 @@ public abstract class GAbstractRankerModelConfigurationSupportService<ModelChoic
 		return configureHandler.insertAndConfigure(config, type);
 	}
 
-	@Override
-	public IGConfigurableRankerModel<ModelConfig> create(ModelConfig config) throws LLMConfigException {
-		IGConfigurableRankerModel<ModelConfig> model = new GBaseConfigurableRankerModel<ModelConfig>(
-				secretAccessService, serviceClientsProviderFactory, defaultModel, optionalAuthentication);
-		model.initialize(config, type);
-		return model;
-	}
+	
 }

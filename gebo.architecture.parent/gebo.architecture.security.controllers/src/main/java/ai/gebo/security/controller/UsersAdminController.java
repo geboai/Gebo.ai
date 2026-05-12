@@ -219,13 +219,13 @@ public class UsersAdminController {
 	@Data
 	public static class ChangeUsernamePasswordData {
 		@NotNull
-		String username = null;
+		private String username = null;
 		@NotNull
-		String password = null;
+		private String password = null;
 		@NotNull
-		String confirmpassword = null;
+		private String confirmpassword = null;
 		@NotNull
-		String currentUserPassword = null;
+		private String currentUserPassword = null;
 	}
 
 	@PostMapping(value = "changeUserPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -17,7 +17,7 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import lombok.AllArgsConstructor;
 
-public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelConfig>
+public abstract class GAbstractConfigurableRankerModel<ModelConfig extends GBaseRankerModelConfig>
 		implements IGConfigurableRankerModel<ModelConfig> {
 	private final IGeboSecretsAccessService secretAccessService;
 	private final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
@@ -30,7 +30,7 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-	public GBaseConfigurableRankerModel(IGeboSecretsAccessService secretAccessService,
+	public GAbstractConfigurableRankerModel(IGeboSecretsAccessService secretAccessService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactor, String defaultModel,
 			boolean optionalAuthentication) {
 		this.secretAccessService = secretAccessService;
@@ -85,7 +85,8 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 			}
 
 			String thisCompleteUrl = config.generateEndpointUrl();
-
+			if (thisCompleteUrl == null)
+				thisCompleteUrl = getEndpointCompleteUrl();
 			String model = config.getChoosedModel() != null ? config.getChoosedModel().getCode() : this.defaultModel;
 			IGLlmsServiceClientsProvider serviceClientProvider = this.serviceClientsProviderFactory
 					.get(config.getModelTypeCode());
@@ -100,6 +101,8 @@ public class GBaseConfigurableRankerModel<ModelConfig extends GBaseRankerModelCo
 			throw new LLMConfigException("Exception configuring ranker module", e);
 		}
 	}
+
+	protected abstract String getEndpointCompleteUrl();
 
 	@Override
 	public ModelConfig getConfig() {

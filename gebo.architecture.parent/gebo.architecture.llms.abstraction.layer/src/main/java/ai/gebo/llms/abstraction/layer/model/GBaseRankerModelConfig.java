@@ -25,6 +25,6 @@ public class GBaseRankerModelConfig<ModelChoiceType extends GBaseRankerModelChoi
 			}
 			return baseUrl + IGRankerModelConfigurationSupportService.STANDARD_RERANK_RELATIVE_URL;
 		}
-		throw new LLMConfigException("Cannot create full url for the ranker service");
+		return null;
 	}
 }

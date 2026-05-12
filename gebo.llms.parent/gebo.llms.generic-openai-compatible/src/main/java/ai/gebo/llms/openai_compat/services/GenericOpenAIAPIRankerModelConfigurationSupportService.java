@@ -2,13 +2,15 @@ package ai.gebo.llms.openai_compat.services;
 
 import java.util.List;
 
+import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.GAbstractRankerModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelChoice;
-import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIImageModelConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
@@ -52,6 +54,31 @@ public class GenericOpenAIAPIRankerModelConfigurationSupportService extends
 
 	}
 
+	class GenericOpenAIConfigurableRankerModel
+			extends GAbstractConfigurableRankerModel<GenericOpenAIAPIRankerModelConfig> {
+
+		public GenericOpenAIConfigurableRankerModel(IGeboSecretsAccessService secretAccessService,
+				IGLlmsServiceClientsProviderFactory serviceClientsProviderFactor, String defaultModel,
+				boolean optionalAuthentication) {
+			super(secretAccessService, serviceClientsProviderFactor, defaultModel, optionalAuthentication);
+		}
+
+		@Override
+		protected String getEndpointCompleteUrl() {
+			String baseUrl = type.getBaseUrl();
+			String partialUrl = IGRankerModelConfigurationSupportService.STANDARD_RERANK_RELATIVE_URL;
+			if (baseUrl == null)
+				return null;
+			if (baseUrl.endsWith("/")) {
+				return baseUrl.substring(0, baseUrl.length() - 1) + partialUrl;
+			} else {
+				return baseUrl + partialUrl;
+			}
+
+		}
+
+	}
+
 	@Override
 	public String getId() {
 		return type.getCode();
@@ -62,11 +89,20 @@ public class GenericOpenAIAPIRankerModelConfigurationSupportService extends
 		GenericOpenAIAPIRankerModelConfig clean = new GenericOpenAIAPIRankerModelConfig();
 		clean.setChoosedModel(new GenericOpenAIAPIRankerModelChoice());
 		clean.getChoosedModel().setCode(presetModel);
-		clean.getChoosedModel().setDescription(getType().getProviderId()+" ranker generation model " + presetModel);
-		clean.setDescription(getType().getProviderId()+" ranker generation model " + presetModel);
+		clean.getChoosedModel().setDescription(getType().getProviderId() + " ranker generation model " + presetModel);
+		clean.setDescription(getType().getProviderId() + " ranker generation model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
-		
+
+	}
+
+	@Override
+	public IGConfigurableRankerModel create(GenericOpenAIAPIRankerModelConfig config) throws LLMConfigException {
+
+		GenericOpenAIConfigurableRankerModel model= new GenericOpenAIConfigurableRankerModel(secretAccessService, serviceClientsProviderFactory,
+				defaultModel, optionalAuthentication);
+		model.initialize(config, type);
+		return model;
 	}
 
 }
