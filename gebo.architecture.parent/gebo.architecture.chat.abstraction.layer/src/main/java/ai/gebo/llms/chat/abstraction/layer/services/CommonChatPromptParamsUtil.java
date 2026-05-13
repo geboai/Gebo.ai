@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class CommonChatPromptParamsUtil {
 	private static final String NL = "\r\n";
 	private static final String TURN_SEP = NL + "-----" + NL;
 	public static final String CURRENT_USER_QUESTION_PROMPT_PARAM = "question";
+	public static final String ACTUAL_TIMESTAMP_PROMPT_PARAM="actualTimestamp";
 	public static final String LATEST_INTERACTIONS_PROMPT_PARAM = "latestInteractions";
 	public static final String CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM = "consolidatedChatHistory";
 
@@ -32,6 +34,7 @@ public class CommonChatPromptParamsUtil {
 		params.put(CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM, renderConsolidatedChatHistory(request));
 		params.put(LATEST_INTERACTIONS_PROMPT_PARAM, renderLatestInteractions(request));
 		params.put(CURRENT_USER_QUESTION_PROMPT_PARAM, renderCurrentUserQuestion(request));
+		params.put(ACTUAL_TIMESTAMP_PROMPT_PARAM, new Timestamp(System.currentTimeMillis()).toString());
 		return params;
 	}
 
@@ -44,6 +47,7 @@ public class CommonChatPromptParamsUtil {
 		if (requiredCompleteness == null)
 			requiredCompleteness = DeliverableIntent.UNKNOWN;
 		params.put(AGENT_DELIVERABLE_COMPLETENESS_PROMPT_PARAM, requiredCompleteness.getAgentDeliverableCompleteness());
+		params.put(ACTUAL_TIMESTAMP_PROMPT_PARAM, new Timestamp(System.currentTimeMillis()).toString());
 		return params;
 	}
 

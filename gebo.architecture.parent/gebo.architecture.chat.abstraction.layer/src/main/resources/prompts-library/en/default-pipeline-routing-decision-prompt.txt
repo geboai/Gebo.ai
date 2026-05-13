@@ -13,6 +13,8 @@ DEEP_SEARCH_RESPONSE iterative search with query refinements and analysis over s
 
 INPUTS:
 
+ 
+  
 (A) CURRENT CHAT CONVERSATION HISTORY:
 
 actual user question:
@@ -42,6 +44,8 @@ consolidated previous chat history (may be empty):
 (G) USER REQUIRED SERVICE TYPE (already decided by a previous pipeline step):
 deliverable={deliverable}
 SERVICE-TYPE-EXPLANATION={deliverableExplanation}
+
+ACTUAL DATE AND TIME: {actualTimestamp}
 
 DEFINITIONS:
 

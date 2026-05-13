@@ -41,6 +41,10 @@ INPUTS:
 - (G) deliverable types catalog:
  
  {deliverableTypesList}
+ 
+ 
+ ACTUAL DATE AND TIME: {actualTimestamp}
+ 
 
 rewrittenQuery rules:
 
