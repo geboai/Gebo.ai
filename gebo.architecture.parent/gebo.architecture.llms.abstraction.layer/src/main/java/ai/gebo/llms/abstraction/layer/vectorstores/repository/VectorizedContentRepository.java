@@ -161,4 +161,6 @@ public interface VectorizedContentRepository extends MongoRepository<GVectorized
 
 	public Stream<GVectorizedContent> findByIdVectorStoreId(String vectorStoreId);
 
+	public long countByLastestJobIdIn(List<String> jobIds);
+
 }
