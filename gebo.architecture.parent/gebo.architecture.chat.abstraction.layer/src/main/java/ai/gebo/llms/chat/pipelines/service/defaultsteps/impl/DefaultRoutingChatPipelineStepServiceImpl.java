@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,6 +172,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				NotificationType.INFO);
 		GPromptConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
+
 		final String prompt = _prompt.getPrompt();
 		Supplier<Map<String, Object>> paramsProvider = () -> {
 			try {
@@ -224,7 +226,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
 				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS));
-
+		sanitizeSearchedSystems(decisionMap);
 		// extracting user intent
 
 		RespondingWith decision = decisionMap.containsKey(ROUTING_DECISION)
@@ -234,7 +236,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		environmentMap.putAll(params);
 		environmentMap.putAll(decisionMap);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Routing decision object:" + decision);
+			LOGGER.debug("Routing decision object:" + decision + " decisionMap:" + decisionMap);
 		}
 		notifyUser(emitter, CHOOSED_AGENTIC_FLOW, CHOOSED_AGENTIC_FLOW_ANSWERING_AGENT_RUNNING, null, 2000l,
 				NotificationType.INFO);
@@ -261,6 +263,35 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		};
 
 		return new RoutingDecision(routes, routingEntry, decision.name(), new HashMap<>(decisionMap));
+	}
+
+	private void sanitizeSearchedSystems(Map<String, List<String>> decisionMap) {
+		List<DeepSearchDataSourceMetaInfos> dataSources = deepSearchDataSourcesCatalogsService
+				.getActiveDeepSearchDataSourceMetaInfos();
+		final Map<String, Boolean> validSystems = new HashMap<>();
+		validSystems.put(INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID, true);
+		dataSources.forEach(ds -> {
+			validSystems.put(ds.getHandlerId(), true);
+		});
+		final List<String> defaultDataSource = List.of(INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
+		if (!decisionMap.containsKey(DEEP_SEARCHED_SYSTEMS)) {
+			decisionMap.put(DEEP_SEARCHED_SYSTEMS, defaultDataSource);
+		} else {
+
+			List<String> cleanedList = new ArrayList<>();
+			List<String> choosen = decisionMap.get(DEEP_SEARCHED_SYSTEMS);
+			for (String ds : choosen) {
+				if (validSystems.containsValue(ds)) {
+					cleanedList.add(ds);
+				}
+			}
+			if (cleanedList.isEmpty()) {
+				decisionMap.put(DEEP_SEARCHED_SYSTEMS, defaultDataSource);
+			} else {
+				decisionMap.put(DEEP_SEARCHED_SYSTEMS, cleanedList);
+			}
+		}
+
 	}
 
 	private String createDeliverableTypesList() {
