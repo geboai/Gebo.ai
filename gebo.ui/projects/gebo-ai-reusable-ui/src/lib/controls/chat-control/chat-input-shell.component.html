@@ -9,7 +9,7 @@
       
       [knowledgeBaseCodes]="knowledgeBaseCodes" [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
       [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-      (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments">
+      (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments" (choosenDocumentsListCleared)="clearToDefaultMode()">
     </gebo-ai-choose-documents-panel-component>
 
     <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"

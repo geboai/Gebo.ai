@@ -368,6 +368,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         if (dr.documentCode) {
             actualChoosed.push(dr.documentCode);
             this.formGroup.controls["forcedRequestDocuments"].setValue(actualChoosed);
+            this.chatInputShell.switchToChatWithDocuments();
         }
     }
     isDeepSearchResponse(item?: GeboChatResponse) {

@@ -151,7 +151,18 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
     this.choosedPipelineRoutingChip = option;
     this.nextRoutingChoice.emit(option);
   }
+  public switchToChatWithDocuments(): void {
+    this.setNextPipelineRoute(chatWithFilesPipelineOption);
+  }
+  public clearToDefaultMode(): void {
+    if (this.defaultPipelineRouting) {
+      this.setNextPipelineRoute(this.defaultPipelineRouting);
+      if (this.chip) {
+        this.chip.visible = true;
+      }
+    }
 
+  }
   protected onDeepSearchSourcesChoosed(sources: any): void {
     if (this.pendingDeepSearchRoutingOption) {
       const newOption = { ...this.pendingDeepSearchRoutingOption };

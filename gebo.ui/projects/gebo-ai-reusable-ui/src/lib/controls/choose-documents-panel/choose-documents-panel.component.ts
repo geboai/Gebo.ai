@@ -84,6 +84,7 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Input("openedUploadDocumentsWindow") public openedUploadDocumentsWindow: boolean = false;
     @Output("openedUploadDocumentsWindowChange") openedUploadDocumentsWindowChange: EventEmitter<boolean> = new EventEmitter();
     @Output() successfullDocumentChosen:EventEmitter<boolean>=new EventEmitter();
+    @Output() choosenDocumentsListCleared:EventEmitter<boolean>=new EventEmitter();
     /**
      * Getter that returns the overall loading state by checking if documents or file types are loading
      */
@@ -198,6 +199,9 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
         this.listedDocuments = this.listedDocuments.filter(x => x.code !== item.code);
         this.internalValue = this.internalValue.filter(x => x !== item.code);
         this.onChange(this.internalValue);
+        if (!this.internalValue || this.internalValue.length===0) {
+            this.choosenDocumentsListCleared.emit(true);
+        }
     }
 
     /**
