@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.controllers;
 
@@ -29,38 +26,28 @@ import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus.JobType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatusItem;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.knowledgebase.repositories.UserMessageRepository;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
 /**
- * Rest controller for admin log viewing operations.
- * Manages job status and user messages retrieval and deletion.
- * AI generated comments
+ * Rest controller for admin log viewing operations. Manages job status and user
+ * messages retrieval and deletion. AI generated comments
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/LogViewController")
+@AllArgsConstructor
 public class LogViewController {
-
-	@Autowired
-	IGPersistentObjectManager persistentObjectManager;
-
-	@Autowired
-	JobStatusRepository jobsRepository;
-
-	@Autowired
-	UserMessageRepository messagesRepository;
-
-	/**
-	 * Default constructor for LogViewController.
-	 */
-	public LogViewController() {
-
-	}
+	private final IGPersistentObjectManager persistentObjectManager;
+	private final JobStatusRepository jobsRepository;
+	private final UserMessageRepository messagesRepository;
+	private final ContentsBatchProcessedRepository batchProcessedRepository;
 
 	/**
 	 * Filter for retrieving job entries based on class name and job type.
@@ -74,7 +61,8 @@ public class LogViewController {
 	/**
 	 * Retrieves job entries based on the class name and job type.
 	 *
-	 * @param filter the filter containing class name, job type, and pagination details
+	 * @param filter the filter containing class name, job type, and pagination
+	 *               details
 	 * @return a page of job status items
 	 */
 	@PostMapping(value = "getJobsEntriesForClassName", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -97,7 +85,8 @@ public class LogViewController {
 	/**
 	 * Retrieves job entries based on the project endpoint and job type.
 	 *
-	 * @param filter the filter containing project endpoint, job type, and pagination details
+	 * @param filter the filter containing project endpoint, job type, and
+	 *               pagination details
 	 * @return a page of job status items
 	 */
 	@PostMapping(value = "getJobsEntriesForProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -137,6 +126,7 @@ public class LogViewController {
 	public void deleteJobStatus(@RequestBody List<String> id) {
 		jobsRepository.deleteAllById(id);
 		messagesRepository.deleteByJobIdIn(id);
+		batchProcessedRepository.deleteByJobIdIn(id);
 	}
 
 	/**
@@ -156,7 +146,7 @@ public class LogViewController {
 	 * @return a page of user messages
 	 */
 	@PostMapping(value = "getJobMessagesPaged", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Page<GUserMessage> getJobMessagesPaged(@Valid @RequestBody GetJobMessagesParam param){
+	public Page<GUserMessage> getJobMessagesPaged(@Valid @RequestBody GetJobMessagesParam param) {
 		return messagesRepository.findByJobId(param.jobId, param.dataPage.toPageable());
 	}
 }
