@@ -22,7 +22,7 @@ public class GRankerServiceImpl implements IGRankerService {
 	@Override
 	public AIDocumentsSet call(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.countFragments();
-		if (nFragments <= topK || nFragments <= 0)
+		if (nFragments <= 0)
 			return input;
 
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
@@ -44,7 +44,7 @@ public class GRankerServiceImpl implements IGRankerService {
 	@Override
 	public List<Document> call(List<Document> input, String query, int topK) throws LLMConfigException {
 		final int nFragments = input.size();
-		if (nFragments <= topK || nFragments <= 0)
+		if (nFragments <= 0)
 			return input;
 
 		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();

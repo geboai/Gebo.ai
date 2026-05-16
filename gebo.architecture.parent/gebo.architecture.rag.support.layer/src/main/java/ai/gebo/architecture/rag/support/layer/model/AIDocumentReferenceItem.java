@@ -167,8 +167,13 @@ public class AIDocumentReferenceItem implements IAIContent, Cloneable {
 			} else {
 				double delta = fragment.getTokensSize() - tokensSize;
 				if (delta > 0.0) {
-					int nChars = (int) (delta * 4.2);
-					buffer.append(fragment.getDocumentContent().substring(0,nChars));
+					final int stringLength = fragment.getDocumentContent() != null
+							? fragment.getDocumentContent().length() - 1
+							: 0;
+					int nChars = Math.min((int) (delta * 4.2), stringLength);
+					if (nChars > 0) {
+						buffer.append(fragment.getDocumentContent().substring(0, nChars));
+					}
 				}
 			}
 		}

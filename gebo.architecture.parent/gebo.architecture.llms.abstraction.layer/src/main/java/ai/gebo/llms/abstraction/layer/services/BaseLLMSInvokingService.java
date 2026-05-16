@@ -917,7 +917,7 @@ public class BaseLLMSInvokingService {
 
 	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, String prompt, String query,
 			Map<String, Object> params, Stream<LLMInputDocument> inputStream) throws LLMConfigException {
-		int contextWindow = chatModel.getContextLength();
+		int contextWindow = chatModel.getContextLength()*2/3;
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
 		LLMInputDocument currentInput = null;
 		final int promptLength = tokensEstimation.estimate(prompt);
@@ -927,9 +927,11 @@ public class BaseLLMSInvokingService {
 		Flux<String> output = Flux.empty();
 		int fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, params);
 		boolean hasNext = input.hasNext();
+		int iteration=0;
 		while (hasNext) {
 			currentInput = input.next();
 			hasNext = input.hasNext();
+			iteration++;
 			if (currentInput != null && currentInput.text != null && currentInput.text.trim().length() > 0) {
 				StringBuffer metaInfos = new StringBuffer();
 				if (currentInput.documentReference != null) {
@@ -1018,7 +1020,7 @@ public class BaseLLMSInvokingService {
 					if (!hasNext) {
 						Map<String, Object> clonedParams = new HashMap<>(params);
 						clonedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
-						clonedParams.put(DOCUMENTS_TEMPLATE_VARIABLE, currentText);
+						clonedParams.put(DOCUMENTS_TEMPLATE_VARIABLE, currentText.toString());
 						output = callLLMReactive(chatModel, prompt, query, clonedParams);
 					} else {
 						consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, currentText.toString(),

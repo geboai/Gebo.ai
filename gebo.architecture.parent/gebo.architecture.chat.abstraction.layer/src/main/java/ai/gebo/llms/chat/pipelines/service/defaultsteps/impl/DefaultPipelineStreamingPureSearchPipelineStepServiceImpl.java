@@ -236,7 +236,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				Stream<LLMInputDocument> inputStream = ranked.stream().map(entry -> {
 					LLMInputDocument inputDocument = createInputDocument(entry.getDocument(), entry.getSampleText());
 					return inputDocument;
-				}).filter(x -> x != null);
+				}).filter(x -> x != null).sequential();
 				MinimalChatContext minimalContext = runtimeData.getMinimalChatContext();
 
 				String prompt = promptsDao
