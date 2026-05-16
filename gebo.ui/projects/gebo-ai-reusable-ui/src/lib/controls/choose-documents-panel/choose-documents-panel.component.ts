@@ -62,6 +62,16 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Input() interactionDisabled: boolean = false;
 
     /**
+     * Maximum number of documents to display inline before showing the "..." button
+     */
+    @Input() maxDisplayedDocuments?: number;
+
+    /**
+     * Flag to control visibility of the full list of documents window
+     */
+    public openedFullListDocumentsWindow: boolean = false;
+
+    /**
      * Flag to track if documents are currently being loaded
      */
     private loadingDocuments: boolean = false;
@@ -96,6 +106,23 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
      * List of document references displayed in the component
      */
     listedDocuments: EnrichedDocumentReferenceView[] = [];
+
+    /**
+     * Getter for the documents to display inline
+     */
+    public get displayedDocuments(): EnrichedDocumentReferenceView[] {
+        if (this.maxDisplayedDocuments !== undefined && this.maxDisplayedDocuments >= 0 && this.listedDocuments.length > this.maxDisplayedDocuments) {
+            return this.listedDocuments.slice(0, this.maxDisplayedDocuments);
+        }
+        return this.listedDocuments;
+    }
+
+    /**
+     * Getter to check if there are more documents than maxDisplayedDocuments
+     */
+    public get hasMoreDocuments(): boolean {
+        return this.maxDisplayedDocuments !== undefined && this.maxDisplayedDocuments >= 0 && this.listedDocuments.length > this.maxDisplayedDocuments;
+    }
 
     /**
      * Form group for managing document selection edits

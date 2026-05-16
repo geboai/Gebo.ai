@@ -1,15 +1,17 @@
 <div class="chat-input-shell">
-  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming" [actualPipelineRoutingOption]="runningPipelineRouting">
+  <gebo-ai-chat-stream-events-display [routingChoiceSelector]="routingChoiceSelector" [streaming]="streaming"
+    [actualPipelineRoutingOption]="runningPipelineRouting">
 
   </gebo-ai-chat-stream-events-display>
 
   <form [formGroup]="formGroup" (submit)="onSubmit()">
 
     <gebo-ai-choose-documents-panel-component *ngIf="ragsystem" [interactionDisabled]="loading"
-      
-      [knowledgeBaseCodes]="knowledgeBaseCodes" [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
+      [maxDisplayedDocuments]="3" [knowledgeBaseCodes]="knowledgeBaseCodes"
+      [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
       [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-      (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments" (choosenDocumentsListCleared)="clearToDefaultMode()">
+      (successfullDocumentChosen)="onChoosedDocument($event)" formControlName="forcedRequestDocuments"
+      (choosenDocumentsListCleared)="clearToDefaultMode()">
     </gebo-ai-choose-documents-panel-component>
 
     <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
@@ -45,22 +47,19 @@
           (onClick)="stopReactiveChat.emit(userChatContextCode)" type="button">
         </p-button>
       </div>
-     
-    </div>
-     <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
-        @if (choosedPipelineRoutingChip) {
-        <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon" [label]="choosedPipelineRoutingChip.description"
-          [removable]="choosedPipelineRoutingChip.defaultOption!==true" (onRemove)="removeRouteOption(choosedPipelineRoutingChip)" />
-        }
 
-      </div>
+    </div>
+    <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
+      @if (choosedPipelineRoutingChip) {
+      <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon"
+        [label]="choosedPipelineRoutingChip.description" [removable]="choosedPipelineRoutingChip.defaultOption!==true"
+        (onRemove)="removeRouteOption(choosedPipelineRoutingChip)" />
+      }
+
+    </div>
   </form>
-  <gebo-ai-deep-search-sources-choice
-      *ngIf="showDeepSearchSourcesChoice"
-      [chatProfileCode]="chatInfo?.chatProfileCode"
-      [nextRequestMode]="'deep-search'"
-      [(visible)]="showDeepSearchSourcesChoice"
-      (onChoosed)="onDeepSearchSourcesChoosed($event)"
-      (onSkip)="onDeepSearchSourcesSkipped()">
+  <gebo-ai-deep-search-sources-choice *ngIf="showDeepSearchSourcesChoice" [chatProfileCode]="chatInfo?.chatProfileCode"
+    [nextRequestMode]="'deep-search'" [(visible)]="showDeepSearchSourcesChoice"
+    (onChoosed)="onDeepSearchSourcesChoosed($event)" (onSkip)="onDeepSearchSourcesSkipped()">
   </gebo-ai-deep-search-sources-choice>
 </div>
