@@ -14,17 +14,17 @@ package ai.gebo.architecture.ai.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 
 
 /**
  * Gebo.ai comment agent
  * 
- * Repository interface for handling operations related to {@link GPromptConfig}.
+ * Repository interface for handling operations related to {@link GPromptTemplateConfig}.
  * Extends the {@link IGBaseMongoDBRepository} to provide basic MongoDB 
  * repository functionalities for GPromptConfig entities.
  */
-public interface PromptConfigRepository extends MongoRepository<GPromptConfig,String> {
+public interface PromptConfigRepository extends MongoRepository<GPromptTemplateConfig,String> {
 
     
 

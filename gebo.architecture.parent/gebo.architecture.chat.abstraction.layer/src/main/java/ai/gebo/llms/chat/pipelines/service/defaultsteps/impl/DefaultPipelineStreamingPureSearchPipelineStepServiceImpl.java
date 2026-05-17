@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -297,7 +297,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 
 	private List<String> chooseDataSources(ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel serviceModel) {
-		GPromptConfig _prompt = this.promptsDao
+		GPromptTemplateConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT);
 		final String prompt = _prompt.getPrompt();
 		Supplier<Map<String, Object>> paramsProvider = () -> {

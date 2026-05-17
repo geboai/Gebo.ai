@@ -151,7 +151,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final KBContext context, final GeboChatRequest request, final GeboChatResponse response,
 			IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments) throws LLMConfigException {
 
-		ChatResponse chatresponse = configurableChatModel.response(prompt, chatRequestContext);
+		ChatResponse chatresponse = configurableChatModel.response(prompt, params, chatRequestContext);
 		AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 		String responseText = callResponseObject.getText();
 		response.setQueryResponse(responseText);
@@ -161,37 +161,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return response;
 	}
 
-	/**
-	 * Calls the chat client for templated responses and updates the associated
-	 * GeboTemplatedChatResponse.
-	 *
-	 * @param configurableChatModel Configurable chat model
-	 * @param prompt                Chat prompt
-	 * @param context               Knowledge base context
-	 * @param request               Request object
-	 * @param response              Response object to update
-	 * @param chatRequestContext    TODO
-	 * @param rt                    Class of the response type
-	 * @return Updated GeboTemplatedChatResponse
-	 * @throws LLMConfigException if a configuration error occurs
-	 */
-	protected <ResponseType> GeboTemplatedChatResponse<ResponseType> callTemplatedChatClient(
-			IGConfigurableChatModel configurableChatModel, final Prompt prompt, final KBContext context,
-			final GeboChatRequest request, final GeboTemplatedChatResponse<ResponseType> response,
-			IChatRequestContext chatRequestContext, Class<ResponseType> rt) throws LLMConfigException {
-
-		if (rt.equals(String.class)) {
-			ChatResponse chatresponse = configurableChatModel.response(prompt, chatRequestContext);
-			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
-			String responseText = callResponseObject.getText();
-			response.setQueryResponse((ResponseType) responseText);
-		} else {
-			ResponseType entityEntry = (ResponseType) configurableChatModel.structuredResponse(prompt,
-					chatRequestContext, rt);
-			response.setQueryResponse(entityEntry);
-		}
-		return response;
-	}
+	
 
 	/**
 	 * Streams chat response and finalizes the GUserChatContext update when
@@ -215,7 +185,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			int historySizeTarget, AIDocumentsSet showedDocuments) throws LLMConfigException {
 
 		try {
-			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, chatRequestContext);
+			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
 			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
 					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
 		} catch (Throwable th) {

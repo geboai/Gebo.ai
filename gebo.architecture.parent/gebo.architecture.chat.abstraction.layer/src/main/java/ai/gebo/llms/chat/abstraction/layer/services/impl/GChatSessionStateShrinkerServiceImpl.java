@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
@@ -305,7 +305,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 					lastTurns.append(NEWLINE);
 				}
 			}
-			GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
+			GPromptTemplateConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
 			String prompt = _prompt.getPrompt();
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
@@ -386,7 +386,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,
 			IGConfigurableChatModel usedChatModel) {
 		List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
-		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
+		GPromptTemplateConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 		String prompt = _prompt.getPrompt();
 
 		String existingSummary = oldVersion != null && oldVersion.getConsolidationText() != null

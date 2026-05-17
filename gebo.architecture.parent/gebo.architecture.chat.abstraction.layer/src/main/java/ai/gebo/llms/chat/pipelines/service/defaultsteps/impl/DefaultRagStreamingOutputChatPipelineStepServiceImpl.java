@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -64,7 +64,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 					runtimeData.getMinimalChatContext(), serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK);
 			Flux<GeboChatMessageEnvelope> flux = documentSet.concatMap(ed -> {
-				GPromptConfig prompt = promptsDao
+				GPromptTemplateConfig prompt = promptsDao
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(

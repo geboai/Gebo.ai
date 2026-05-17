@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
@@ -133,7 +133,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, false);
+		GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(modelCode, false);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
@@ -312,7 +312,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		String modelCode = handler != null && handler.getConfig() != null
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
-		GPromptConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
+		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
 		return this.streamChatClient(handler, new Prompt(prompt.getPrompt()), kbcontext, request, response,
 				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);

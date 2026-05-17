@@ -19,7 +19,7 @@ import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -823,7 +823,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = get(id);
 
 		data = new GUserChatInfoData(context);
-		GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
+		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 		IGConfigurableChatModel handler = chatModelsDao.defaultHandler();
 		try {
 			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {

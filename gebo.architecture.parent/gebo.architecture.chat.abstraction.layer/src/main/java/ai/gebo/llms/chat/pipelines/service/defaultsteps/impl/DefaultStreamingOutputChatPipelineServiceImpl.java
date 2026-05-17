@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -48,7 +48,7 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
+			GPromptTemplateConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
 			return this.chatService.streamChat(prompt.getPrompt(), runtimeData.getRequestResources(),
 					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {

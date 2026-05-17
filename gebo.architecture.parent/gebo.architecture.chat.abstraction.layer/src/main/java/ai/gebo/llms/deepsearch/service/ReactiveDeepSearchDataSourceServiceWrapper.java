@@ -11,7 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -204,7 +204,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 		Class<T> nativeSearchServiceDataType = nativeSearchService.getNativeSearchDataStructureType();
 		String promptTemplateCode = nativeSearchService.getNativePromptTemplateUseCode();
-		GPromptConfig prompt = this.promptsDao.findByPromptUse(promptTemplateCode);
+		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(promptTemplateCode);
 		Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
 		List<SearchableSystemMetaData> searchables = this.searchService.getSearchableSystems();
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();

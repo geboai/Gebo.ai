@@ -6,7 +6,7 @@ import java.util.Map;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
@@ -56,7 +56,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 
 	private SearchesSuggestions askSearchesSuggestion(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel) {
-		GPromptConfig prompt = promptsDao
+		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT);
 		Map<String, Object> params = new HashMap<String, Object>();
 		Map<String, Object> chatContextParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);

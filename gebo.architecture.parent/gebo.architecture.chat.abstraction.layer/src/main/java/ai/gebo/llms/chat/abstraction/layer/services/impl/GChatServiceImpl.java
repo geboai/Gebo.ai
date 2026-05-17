@@ -18,7 +18,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -97,7 +97,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 						: null;
 		GeboChatResponse chatResponse = this.chatSessionLifecycleService.createEmptyResponse(request);
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, true);
+		GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(modelCode, true);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
@@ -255,7 +255,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			String _modelCode = handler != null && handler.getConfig() != null
 					&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 							: null;
-			GPromptConfig gprompt = promptsDao.defaultChatPrompt(_modelCode, true);
+			GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(_modelCode, true);
 			if (gprompt == null) {
 				throw new GeboChatException("The system has no default prompt configured");
 			} else {

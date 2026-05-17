@@ -17,7 +17,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -55,43 +55,6 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 	protected final IGToolCallbackSourceRepositoryPattern functionsCallbackWrapper;
 	protected final GeboRagSearchConfig ragConfig;
 
-	/**
-	 * Creates a new ChatProfileRuntimeEnvironment based on the provided chat
-	 * profile configuration.
-	 * 
-	 * @param chatProfile The configuration object for the chat profile.
-	 * @return A ChatProfileRuntimeEnvironment object initialized with the chat
-	 *         profile.
-	 * @throws LLMConfigException If there is an issue with the configuration.
-	 */
-	@Override
-	public ChatProfileRuntimeEnvironment createChatEnvironment(GChatProfileConfiguration chatProfile)
-			throws LLMConfigException {
-		// Retrieve the embedding model reference from the chat profile
-		GObjectRef<GBaseEmbeddingModelConfig> embeddingModelReference = chatProfile.getEmbeddingModelReference();
-		IGConfigurableEmbeddingModel embeddingHandler = null;
-
-		// Determine the embedding handler based on the presence of a model reference
-		if (embeddingModelReference == null) {
-			embeddingHandler = embeddingModelsDao.defaultHandler();
-		} else {
-			embeddingHandler = embeddingModelsDao.findByPredicate(x -> {
-				return x.getConfig().getClass().getName().equals(embeddingModelReference.getClassName())
-						&& x.getConfig().getCode().equals(embeddingModelReference.getCode());
-			});
-		}
-
-		// Retrieve and configure the chat model for the specified chat profile
-		IGChatProfileChatModel chatProfileChatModel = chatProfileModelsDao.getChatModel(chatProfile);
-		IGConfigurableChatModel chatHandler = chatProfileChatModel.getChatModel();
-
-		// Process the prompt from the chat profile and create a template
-		String promptTemplateText = PromptProcessorUtil.processPrompt(GPromptConfig.of(chatProfile.getPrompt()));
-		PromptTemplate promptTemplate = new PromptTemplate(promptTemplateText);
-
-		// Return the constructed ChatProfileRuntimeEnvironment
-		return new ChatProfileRuntimeEnvironment(promptTemplate, chatHandler, embeddingHandler);
-	}
 
 	/**
 	 * Retrieves all accessible chat profiles filtered by security permissions.
@@ -124,13 +87,13 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 			return existing.get();
 
 		// Retrieve or create default prompt configuration
-		GPromptConfig prompt = promptConfigDao.defaultChatPrompt(true);
+		GPromptTemplateConfig prompt = promptConfigDao.defaultChatPrompt(true);
 		if (prompt == null)
 			throw new LLMConfigException("Default prompt is not configured in this system");
 
 		// Create and configure a new default chat profile
 		GChatProfileConfiguration configuration = new GChatProfileConfiguration();
-		configuration.setPrompt(prompt.getPrompt());
+		configuration.setPrompt(prompt.getUserPromptTemplate());
 		configuration.setUserChoosesKnowledgeBases(true);
 		configuration.setAccessibleToAll(true);
 		configuration.setChatModelReference(null);

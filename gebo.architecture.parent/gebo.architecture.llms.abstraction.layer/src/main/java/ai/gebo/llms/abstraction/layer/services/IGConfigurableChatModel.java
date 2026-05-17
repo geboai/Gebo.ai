@@ -9,12 +9,15 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.Map;
+
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.converter.BeanOutputConverter;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -31,13 +34,6 @@ import reactor.core.publisher.Flux;
  */
 public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfig>
 		extends IGConfigurableModel<ModelConfig, GChatModelType> {
-
-	/**
-	 * Retrieves the chat model instance.
-	 *
-	 * @return The chat model.
-	 */
-	public ChatModel getChatModel();
 
 	/**
 	 * Gets the length of the context maintained by the chat model.
@@ -102,37 +98,47 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		throw new LLMConfigException("This provider does not implement speech functionalities");
 	}
 
-	/**
-	 * Retrieves the chat client used for communication.
-	 *
-	 * @return The chat client instance.
-	 * @throws LLMConfigException if the chat client is not configured correctly.
-	 */
-	public ChatClient getChatClient() throws LLMConfigException;
-
 	/*********************************************************************************
 	 * Adaptes streaming response to specific infrastructure element calling
 	 * requirement
 	 * 
-	 * @param prompt
+	 * @param promptTemplate
+	 * @param params         TODO
 	 * @param chatContext
 	 * @return
 	 * @throws LLMConfigException
 	 */
-	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
+	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
+
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
 
 	/***********************************************************************************************
 	 * Adaptes response to specific infrastructure element calling requirement
 	 * 
-	 * @param prompt
+	 * @param promptTemplate
+	 * @param params         TODO
 	 * @param chatContext
 	 * @return
 	 * @throws LLMConfigException
 	 */
-	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException;
+	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
 
-	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
-			Class<ResponseType> rt) throws LLMConfigException;
+	public default String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		ChatResponse response = response(promptTemplate, params, chatContext);
+		return response != null ? response.getResult().getOutput().getText() : null;
+	}
+
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
+			throws LLMConfigException;
+
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException;
 
 	public default boolean isApplyThinkingMarkupHandling() {
 		return false;
@@ -141,4 +147,7 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	public default <T> BeanOutputConverter<T> createConverter(Class<T> type) {
 		return new BeanOutputConverter<T>(type);
 	}
+
+	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
 }

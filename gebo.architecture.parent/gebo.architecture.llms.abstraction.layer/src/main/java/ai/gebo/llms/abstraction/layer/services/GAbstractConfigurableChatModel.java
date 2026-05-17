@@ -24,7 +24,10 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.converter.BeanOutputConverter;
 
+import ai.gebo.architecture.ai.model.ChatHistoryRequired;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -155,17 +158,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
-	 * Retrieves the chat model instance.
-	 * 
-	 * @return The current chat model.
-	 */
-	@Override
-	public ChatModel getChatModel() {
-
-		return model;
-	}
-
-	/**
 	 * Retrieves metadata for the chat model choice.
 	 * 
 	 * @return An instance of GBaseChatModelChoice or null if unavailable.
@@ -244,19 +236,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public ChatClient getChatClient() {
 		return chatClient;
 	}
-
-	protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
+	@Override
+	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
 		ChatClient client = getChatClient();
-		String userQuestion = chatContext.getActualUserRequest();
 		// Here prompt, documents and consolidated history
-		SystemMessage systemMessage = ClientChatCallUtil.createPromptAndContext(prompt, chatContext);
-		List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
 		List<Message> messages = new ArrayList<Message>();
+		SystemMessage systemMessage = this.createSystemMessage(prompt, params, chatContext);
 		messages.add(systemMessage);
-		messages.addAll(history);
-		if (userQuestion != null) {
-			messages.add(new UserMessage(userQuestion));
+		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ChatHistoryRequired.REQUIRED) {
+			List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
+			messages.addAll(history);
 		}
+		UserMessage lastUserMessage = this.createLastUserMessage(prompt, params, chatContext);
+		messages.add(lastUserMessage);
 		ChatClientRequestSpec reqObject = client.prompt();
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
@@ -268,27 +261,58 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return reqObject;
 	}
 
+	protected UserMessage createLastUserMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected SystemMessage createSystemMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
-	public Flux<ChatResponse> streamResponse(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
-		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		Flux<ChatResponse> res = reqObject.stream().chatResponse();
 		return res;
 	}
 
 	@Override
-	public ChatResponse response(Prompt prompt, IChatRequestContext chatContext) throws LLMConfigException {
-		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		return reqObject.stream().content();
+	}
+
+	@Override
+	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
 		return res.chatResponse();
 	}
 
 	@Override
-	public <ResponseType> ResponseType structuredResponse(Prompt prompt, IChatRequestContext chatContext,
-			Class<ResponseType> rt) throws LLMConfigException {
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
+			throws LLMConfigException {
 		ChatClient client = getChatClient();
-		ChatClientRequestSpec reqObject = prepareCall(prompt, chatContext);
+		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
 		return res.entity(rt);
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException {
+		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		CallResponseSpec res = reqObject.call();
+		return res.entity(outputConverter);
 	}
 
 }

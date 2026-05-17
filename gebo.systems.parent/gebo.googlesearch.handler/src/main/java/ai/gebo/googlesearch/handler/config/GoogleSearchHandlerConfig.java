@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import lombok.Data;
 
@@ -43,16 +43,16 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 			+ "{format}\r\n" + "\r\n" + "Rules for \"google_queries\":\r\n" + "- Between 2 and 8 queries\r\n"
 			+ "- No duplicates\r\n" + "- Each item must be a single Google search string (no line breaks)\r\n"
 			+ "- Do not include any explanation or natural language text outside the JSON structure.\r\n" + "";
-	private GPromptConfig prompt = null;
+	private GPromptTemplateConfig prompt = null;
 
 	public GoogleSearchHandlerConfig() {
-		prompt = new GPromptConfig();
+		prompt = new GPromptTemplateConfig();
 		prompt.setPrompt(queryExtractionPrompt);
 		prompt.setPromptUse(GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT);
 	}
 
 	@Override
-	public List<GPromptConfig> promptsList()  {
+	public List<GPromptTemplateConfig> promptsList()  {
 
 		return List.of(prompt);
 	}

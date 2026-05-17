@@ -4,13 +4,17 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GPromptLibraryReference {
+public class GPromptTemplateLibraryReference {
 	@NotNull
 	private String promptUse = null;
+	@NotNull
+	private ChatHistoryRequired chatHistory = null;
 	private String langCode = null;
 	private String modelProvider = null;
 	private String modelCode = null;
 	@NotNull
-	private String reference = null;
+	private String systemReference = null;
+	@NotNull
+	private String userReference = null;
 
 }

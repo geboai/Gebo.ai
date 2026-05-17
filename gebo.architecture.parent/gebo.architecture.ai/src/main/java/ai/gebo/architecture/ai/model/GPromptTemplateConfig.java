@@ -23,16 +23,18 @@ import lombok.ToString;
  */
 @Document
 @ToString
-public class GPromptConfig implements Cloneable,ITokensCountable {
-	
+public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	public static final String DEFAULT_LANGUAGE = "en";
 	private static final String SEPARATOR = "-";
 	private static final String FIELD_PLACEHOLDER = "-|-";
 	@Id
 	private String code = null;
 	private String description = null;
+	private String systemPromptTemplate = null;
 	@NotNull
-	private String prompt = null;
+	private String userPromptTemplate = null;
+	@NotNull
+	private ChatHistoryRequired chatHistory = null;
 	@HashIndexed
 	private String langCode = DEFAULT_LANGUAGE;
 	@HashIndexed
@@ -76,17 +78,11 @@ public class GPromptConfig implements Cloneable,ITokensCountable {
 	 * @param prompt2 the prompt to set in the new configuration.
 	 * @return a new instance of GPromptConfig with the specified prompt.
 	 */
-	public static GPromptConfig of(String prompt, String promptUse) {
-		GPromptConfig cfg = new GPromptConfig();
-		cfg.setPrompt(prompt);
+	public static GPromptTemplateConfig of(String systemPrompt, String userPrompt, String promptUse) {
+		GPromptTemplateConfig cfg = new GPromptTemplateConfig();
+		cfg.setUserPromptTemplate(userPrompt);
+		cfg.setSystemPromptTemplate(systemPrompt);
 		cfg.setPromptUse(promptUse);
-		return cfg;
-	}
-
-	public static GPromptConfig of(String prompt) {
-		GPromptConfig cfg = new GPromptConfig();
-		cfg.setPrompt(prompt);
-
 		return cfg;
 	}
 
@@ -104,18 +100,6 @@ public class GPromptConfig implements Cloneable,ITokensCountable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getPrompt() {
-		return prompt;
-	}
-
-	public void setPrompt(String prompt) {
-		this.prompt = prompt;
-		if (prompt != null && prompt.trim().length() > 0) {
-			tokensSize = tokensEstimator.estimate(prompt);
-		} else
-			tokensSize = 0;
 	}
 
 	public String getLangCode() {
@@ -178,18 +162,40 @@ public class GPromptConfig implements Cloneable,ITokensCountable {
 		}
 	}
 
-	public GPromptConfig copy() {
-		return (GPromptConfig) this.clone();
+	public GPromptTemplateConfig copy() {
+		return (GPromptTemplateConfig) this.clone();
 	}
 
 	public int getTokensSize() {
-		if (tokensSize == 0 && prompt != null) {
-			tokensSize = tokensEstimator.estimate(prompt);
-		}
-		return tokensSize;
+
+		return ITokensCountable.stringsTokensSize(userPromptTemplate, systemPromptTemplate);
 	}
 
 	public void setTokensSize(int tokensLength) {
 		this.tokensSize = tokensLength;
+	}
+
+	public String getSystemPromptTemplate() {
+		return systemPromptTemplate;
+	}
+
+	public void setSystemPromptTemplate(String systemPromptTemplate) {
+		this.systemPromptTemplate = systemPromptTemplate;
+	}
+
+	public String getUserPromptTemplate() {
+		return userPromptTemplate;
+	}
+
+	public void setUserPromptTemplate(String userPromptTemplate) {
+		this.userPromptTemplate = userPromptTemplate;
+	}
+
+	public ChatHistoryRequired getChatHistory() {
+		return chatHistory;
+	}
+
+	public void setChatHistory(ChatHistoryRequired chatHistory) {
+		this.chatHistory = chatHistory;
 	}
 }

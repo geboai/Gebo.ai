@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -132,7 +132,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		params.put(DefaultPipelineSharedPromptPlaceholders.DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM,
 				createDeliverableTypesList());
-		GPromptConfig rewritePrompt = promptsDao
+		GPromptTemplateConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt.getPrompt(),
 				query, params, List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
@@ -170,7 +170,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			String rewrited_query) throws GeboChatSessionLifecycleException {
 		notifyUser(emitter, CHOOSING_AGENTIC_FLOW, CHOOSING_AGENTIC_FLOW_DESCRIPTION, null, 2000l,
 				NotificationType.INFO);
-		GPromptConfig _prompt = this.promptsDao
+		GPromptTemplateConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 
 		final String prompt = _prompt.getPrompt();

@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ai.gebo.architecture.ai.model.GPromptLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
-import ai.gebo.architecture.ai.service.PromptProvidersImplementation;
+import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
 
@@ -19,7 +19,7 @@ import lombok.Data;
 @PropertySource(value = "classpath:/prompts-library/prompts-library.yml", factory = GeboYamlPropertySourceFactory.class)
 @Data
 public class GeboPromptsLibrary {
-	private List<GPromptLibraryReference> library = null;
+	private List<GPromptTemplateLibraryReference> library = null;
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
@@ -58,14 +58,14 @@ public class GeboPromptsLibrary {
 	@Bean
 	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 
 	@Bean
 	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider(
 			GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptProvidersImplementation(this, library, overridenLibrary.getLibrary());
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 
 }

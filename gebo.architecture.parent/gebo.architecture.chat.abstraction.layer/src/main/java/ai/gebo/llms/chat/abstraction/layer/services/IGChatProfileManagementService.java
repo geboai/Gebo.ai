@@ -26,15 +26,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
  */
 public interface IGChatProfileManagementService {
 
-	/**
-	 * Creates a chat environment using the provided chat profile configuration.
-	 *
-	 * @param configuration the configuration for the chat profile
-	 * @return the created ChatProfileRuntimeEnvironment
-	 * @throws LLMConfigException if there is an error in the configuration
-	 */
-	public ChatProfileRuntimeEnvironment createChatEnvironment(GChatProfileConfiguration configuration)
-			throws LLMConfigException;
+	
 
 	/**
 	 * Retrieves a list of chat profile configurations that the user has access to.

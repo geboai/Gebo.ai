@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -68,7 +68,7 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 		// additional searches
 		double contextWindow = chatModel.getContextLength();
 
-		GPromptConfig prompt = promptsDao
+		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 		double fullRequestSize = runtimeData.getRequestResources().getTokensSize() + prompt.getTokensSize();
 		if (contextWindow >= 0.8 * fullRequestSize) {
