@@ -20,6 +20,7 @@ package ai.gebo.llms.openai_compat.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
@@ -105,6 +106,7 @@ public class GenericOpenAIProvidersAssembler {
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final IGDocumentContentRendererProvider documentsContentRendererProvider;
 
 	/**
 	 * Initializes and registers all configured OpenAI-compatible providers. This
@@ -118,7 +120,8 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIChatModelTypeConfig pc : config.getChatModelProviders()) {
 				GenericOpenAIAPIChatModelConfigurationSupportService provider = new GenericOpenAIAPIChatModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern,
+						documentsContentRendererProvider);
 				chatModelProvidersRepo.addImplementation(provider);
 			}
 		}
