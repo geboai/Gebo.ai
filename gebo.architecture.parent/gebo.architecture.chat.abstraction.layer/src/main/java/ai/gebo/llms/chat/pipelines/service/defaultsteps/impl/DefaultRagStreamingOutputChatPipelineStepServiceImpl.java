@@ -70,7 +70,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(
 							runtimeData.getRequestResources().getCurrentRequest(), ed, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-					return ragChatService.streamChat(prompt.getPrompt(), req, runtimeData.getChatResponse(), chatModel);
+					return ragChatService.streamChat(prompt, req, runtimeData.getChatResponse(), chatModel);
 				} catch (GeboChatException | LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

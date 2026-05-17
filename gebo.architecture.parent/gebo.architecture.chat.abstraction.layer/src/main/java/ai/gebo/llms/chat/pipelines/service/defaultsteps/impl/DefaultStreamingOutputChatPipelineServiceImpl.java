@@ -48,15 +48,14 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
-			GPromptTemplateConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
-			return this.chatService.streamChat(prompt.getPrompt(), runtimeData.getRequestResources(),
-					runtimeData.getChatResponse(), chatModel);
+			GPromptTemplateConfig prompt = promptsDao
+					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
+			return this.chatService.streamChat(prompt, runtimeData.getRequestResources(), runtimeData.getChatResponse(),
+					chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}
 	}
-
-	
 
 	@Override
 	public List<StepEnvironmentParameter> getRequiredParameters() {

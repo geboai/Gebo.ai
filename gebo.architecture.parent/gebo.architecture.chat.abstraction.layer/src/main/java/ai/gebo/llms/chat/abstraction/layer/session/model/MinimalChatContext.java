@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,5 +17,10 @@ public class MinimalChatContext implements ITokensCountable {
 	public int getTokensSize() {
 
 		return ITokensCountable.tokensSize(currentRequest, chatHistory);
+	}
+
+	public IChatRequestContext createChatRequestContext() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

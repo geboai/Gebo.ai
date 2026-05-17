@@ -12,6 +12,7 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 import java.io.IOException;
 import java.util.List;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -122,7 +123,7 @@ public interface IGGenericalChatService {
 			GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException;
 
-	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
+	public Flux<GeboChatMessageEnvelope> streamChat(GPromptTemplateConfig prompt, LLMChatRequestResources requestResources,
 			GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException;
 }

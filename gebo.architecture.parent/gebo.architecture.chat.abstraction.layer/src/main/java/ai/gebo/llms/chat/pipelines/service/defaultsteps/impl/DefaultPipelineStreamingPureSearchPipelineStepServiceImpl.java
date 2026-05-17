@@ -20,6 +20,7 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -102,8 +103,16 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				NotificationType.INFO);
 		Flux<List<String>> dataSources = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
-				List<String> sources = this.chooseDataSources(runtimeData, serviceModel);
-				return Flux.just(sources);
+				try {
+					List<String> sources = this.chooseDataSources(runtimeData, serviceModel);
+					return Flux.just(sources);
+				} catch (Throwable th) {
+					LOGGER.error("Exception in lambda", th);
+					return Flux
+							.just(List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID));
+
+				}
+
 			});
 		});
 		Flux<AbstractPureSearchDocumentResultEntry> resultsFlux = dataSources.concatMap((dataSourcesValues) -> {
@@ -239,12 +248,11 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				}).filter(x -> x != null).sequential();
 				MinimalChatContext minimalContext = runtimeData.getMinimalChatContext();
 
-				String prompt = promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT).getPrompt();
-				Map<String, Object> params = CommonChatPromptParamsUtil.preparePromptParameters(minimalContext);
-				String query = GeboChatRequest.actualQuery(minimalContext.getCurrentRequest());
+				GPromptTemplateConfig prompt = promptsDao
+						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT);
+				IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 				try {
-					return super.callLLMReactive(chatModel, prompt, query, params, inputStream);
+					return super.callLLMReactive(chatModel, prompt, context, Map.of(), inputStream);
 				} catch (Throwable th) {
 					LOGGER.error("Error whill calling callLLMReactive", th);
 					throw new RuntimeException(th.getMessage(), th);
@@ -296,10 +304,10 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 	}
 
 	private List<String> chooseDataSources(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel serviceModel) {
+			IGConfigurableChatModel serviceModel) throws LLMConfigException {
 		GPromptTemplateConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT);
-		final String prompt = _prompt.getPrompt();
+
 		Supplier<Map<String, Object>> paramsProvider = () -> {
 			try {
 				if (LOGGER.isDebugEnabled()) {
@@ -324,6 +332,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		String rewrited_query = GeboChatRequest.actualQuery(runtimeData.getRequestResources().getCurrentRequest());
 		Map<String, Object> params = CommonChatPromptParamsUtil
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
+
 		params.put(DefaultRoutingChatPipelineStepServiceImpl.REWRITTEN_QUERY_TEMPLATE_PARAM, rewrited_query);
 		final Map<String, Object> cachedParams = this.promptsParamsCacheService.lookupCache(
 				GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT,
@@ -331,15 +340,13 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
 		params.putAll(cachedParams);
 		int variablesTokensSize = ITokensCountable.tokensSize(params);
-		int promtTokensSize = ITokensCountable.stringsTokensSize(prompt);
+		int promtTokensSize = _prompt.getTokensSize();
 		int documentsTokenBudget = serviceModel.getContextLength() - (variablesTokensSize + promtTokensSize);
 
-		String documents = documentsTokenBudget > 0
-				? RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(), documentsTokenBudget)
-				: "";
-		params.put("documents", documents);
-		Map<String, List<String>> toBeSearched = this.callLLMRepeatableFieldEntryOutput(serviceModel, prompt,
-				rewrited_query, params, List.of(SEARCHED_SYSTEMS));
+		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+
+		Map<String, List<String>> toBeSearched = this.callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context,
+				params, List.of(SEARCHED_SYSTEMS));
 
 		return toBeSearched.containsKey(SEARCHED_SYSTEMS) ? toBeSearched.get(SEARCHED_SYSTEMS)
 				: List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
