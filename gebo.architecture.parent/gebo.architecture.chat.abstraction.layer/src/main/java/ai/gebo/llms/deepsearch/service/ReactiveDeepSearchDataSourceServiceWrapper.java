@@ -90,8 +90,8 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin extractSearchQueries(...) handler:" + getHandlerId());
 		}
-		String prompt = createExtractSearchQueriesPrompt(request, minimalChatContext, pastSystemsResponses,
-				deepSearchConfig, serviceModel);
+		GPromptTemplateConfig prompt = createExtractSearchQueriesPrompt(request, minimalChatContext,
+				pastSystemsResponses, deepSearchConfig, serviceModel);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
@@ -102,8 +102,9 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
 		// deepSearchConfig, request));
 		DeepSearchDataSourceExtractedSearchQueries searches = super.callLLMWithConsolidationStructuredReturn(
-				serviceModel, prompt, request.getQuery(), consolidatedText != null ? consolidatedText : "",
-				additionalVariables, DeepSearchDataSourceExtractedSearchQueries.class);
+				serviceModel, prompt, minimalChatContext.createChatRequestContext(),
+				consolidatedText != null ? consolidatedText : "", additionalVariables,
+				DeepSearchDataSourceExtractedSearchQueries.class);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End extractSearchQueries(...) handler:" + getHandlerId() + " returning " + searches);
 		}
@@ -168,13 +169,13 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		});
 	}
 
-	protected String createExtractSearchQueriesPrompt(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel) {
+	protected GPromptTemplateConfig createExtractSearchQueriesPrompt(DeepSearchRequest request,
+			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel) {
 		String useCode = searchService.getQueriesGenerationPromptUseCode();
 		if (useCode == null)
 			useCode = GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT;
-		String prompt = promptsDao.findByPromptUse(useCode).getPrompt();
+		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(useCode);
 
 		return prompt;
 	}
@@ -224,8 +225,9 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 					.createCustomTemplateParamsMap(searchableSystemMetaData, cataloguesSample);
 			systemTemplateCallParams.putAll(promptParams);
 			systemTemplateCallParams.putAll(specificSystemParams);
-			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
-					systemTemplateCallParams, nativeSearchServiceDataType);
+			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt,
+					minimalChatContext.createChatRequestContext(), systemTemplateCallParams,
+					nativeSearchServiceDataType);
 
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
 					topK);

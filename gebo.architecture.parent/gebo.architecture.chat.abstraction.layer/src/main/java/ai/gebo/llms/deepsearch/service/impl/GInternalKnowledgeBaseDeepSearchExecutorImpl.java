@@ -34,6 +34,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchKnowledgeBasesProcessedEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
@@ -41,6 +42,7 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGHugeFilesDeepSearch;
 import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGInternalKnowledgeBaseDeepSearchExecutor;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -86,9 +88,8 @@ public class GInternalKnowledgeBaseDeepSearchExecutorImpl extends BaseLLMSInvoki
 		UserInfos userInfo = securityService.getCurrentUser();
 		final ReactiveIdentityUtil doAs = ReactiveIdentityUtil.create();
 		Flux<AbstractDeepSearchEvent> flux = internalKnowledgeBaseRagStepDeepSearchService.knowledgeBaseDeepSearch(
-				deepSearchRequest, runSearches, new DeepSearchState(), minimalChatContext,
-				forcedDocuments, deepSearchConfigProvider.get(), userInfo, chatModel, serviceModel, chunkSessionId,
-				embeddingModels);
+				deepSearchRequest, runSearches, new DeepSearchState(), minimalChatContext, forcedDocuments,
+				deepSearchConfigProvider.get(), userInfo, chatModel, serviceModel, chunkSessionId, embeddingModels);
 		Vector<DeepSearchKnowledgeBasesProcessedEvent> resultFiltered = new Vector<DeepSearchKnowledgeBasesProcessedEvent>();
 		flux = flux.map(x -> {
 			if (x instanceof DeepSearchKnowledgeBasesProcessedEvent processed) {
@@ -128,7 +129,9 @@ public class GInternalKnowledgeBaseDeepSearchExecutorImpl extends BaseLLMSInvoki
 			MinimalChatContext minimalChatContext) {
 
 		return Flux.defer(() -> {
+
 			DeepSearchProcessedEvent finalEvent = new DeepSearchProcessedEvent();
+			AbstractDeepSearchEvent ev = finalEvent;
 			finalEvent.setInputData(deepSearchRequest);
 			finalEvent.setOutputData(new DeepSearchResponse());
 			finalEvent.getOutputData().setCode(UUID.randomUUID().toString());
@@ -146,22 +149,31 @@ public class GInternalKnowledgeBaseDeepSearchExecutorImpl extends BaseLLMSInvoki
 			} else {
 				Map<String, Object> promptParams = CommonChatPromptParamsUtil
 						.preparePromptParameters(minimalChatContext);
-				String backupText = callLLM(usedModel,
-						promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT)
-								.getPrompt(),
-						GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()), promptParams);
-				finalEvent.getOutputData().setResponse(backupText);
+				String backupText;
+				try {
+					backupText = callLLM(usedModel,
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT),
+							minimalChatContext.createChatRequestContext(), promptParams);
+					finalEvent.getOutputData().setResponse(backupText);
+					finalEvent.getOutputData().setProcessPercentage(100);
+				} catch (Throwable e) {
+					DeepSearchErrorEvent evnt = new DeepSearchErrorEvent();
+					evnt.setInputData(deepSearchRequest);
+					evnt.setOutputData(GUserMessage.errorMessage("Error in deep search", e));
+					ev = evnt;
+				}
 
 			}
-			finalEvent.getOutputData().setProcessPercentage(100);
-			return Flux.just(finalEvent);
+
+			return Flux.just(ev);
 		});
 	}
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamChatWithHugeFiles(LLMChatRequestResources requestResources,
 			MinimalChatContext minimalChatContext, GeboChatResponse chatResponse, IGConfigurableChatModel serviceModel,
-			IGConfigurableChatModel chatModel) throws GeboChatSessionLifecycleException, LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+			IGConfigurableChatModel chatModel) throws GeboChatSessionLifecycleException, LLMConfigException,
+			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
 
 		return this.internalExecute(requestResources, minimalChatContext, false, chatResponse, chatModel, serviceModel);
 	}

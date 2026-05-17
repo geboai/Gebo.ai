@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -23,6 +24,7 @@ import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocuments
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -86,11 +88,11 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			IGConfigurableChatModel serviceModel, String chunkingSessionId,
 			List<IGConfigurableEmbeddingModel> embeddingModels)
 			throws GeboChatSessionLifecycleException, LLMConfigException {
-
+		IChatRequestContext context = minimalChatContext.createChatRequestContext();
 		AtomicBoolean completed = state.getCompleted();
 		Map<String, Object> promptsParameters = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
-		final String analisysPrompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT)
-				.getPrompt();
+		final GPromptTemplateConfig analisysPrompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();
 		final int topK = this.defaultDeepsearchConfig.getInternalKnowledgeDeepSearchTopK();
 		Flux<AIDocumentsSet> retrievedFlux = null;
@@ -180,7 +182,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 						}
 						try {
 
-							String result = callLLMConsolidateText(serviceModel, analisysPrompt, request.getQuery(), "",
+							String result = callLLMConsolidateText(serviceModel, analisysPrompt, context, "",
 									promptsParameters, inputs);
 							SearchEndingDetectionLogic.manageTrigger(state, result);
 							result = SearchEndingDetectionLogic.cleanFromTag(result);
@@ -234,13 +236,13 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			try {
 				if (!results.isEmpty()) {
 					String result = callLLMConsolidateText(chatModel,
-							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-							request.getQuery(), "", promptsParameters, new ArrayList(results));
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT), context,
+							"", promptsParameters, new ArrayList(results));
 					event.getOutputData().setResponse(result);
 				} else {
-					String result = callLLM(chatModel, promptsDao
-							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
-							request.getQuery(), promptsParameters);
+					String result = callLLM(chatModel,
+							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT),
+							context, promptsParameters);
 					event.getOutputData().setResponse(result);
 				}
 				evt = event;

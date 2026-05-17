@@ -2,6 +2,7 @@ package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -18,6 +19,7 @@ import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -44,6 +46,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.events.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchNotificationEvent;
 import ai.gebo.llms.deepsearch.model.events.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
@@ -156,7 +159,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				|| request.getKnowledgeBases() == null) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or null knowledge bases list");
 		}
-
+		final IChatRequestContext context = minimalChatContext.createChatRequestContext();
 		final int satisfactoryDocumentsThreashold = this.defaultDeepsearchConfig
 				.getInTopicSatisfactoryDocumentsThreashold(request.getUserIntent());
 		DeepSearchState state = new DeepSearchState();
@@ -231,20 +234,19 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return event;
 		});
-		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request,
-				minimalChatContext, history, state, configuration, userInfos, embeddingModels, chatModel,
-				intermediates);
+		Flux<AbstractDeepSearchEvent> outFlux = enqueueDeepSearchProcessedEvent(composedFlux, request, context, history,
+				state, configuration, userInfos, embeddingModels, chatModel, intermediates);
 		return outFlux;
 
 	}
 
 	private Flux<AbstractDeepSearchEvent> enqueueDeepSearchProcessedEvent(Flux<AbstractDeepSearchEvent> composedFlux,
-			DeepSearchRequest request, MinimalChatContext minimalChatContext, List<AbstractDeepSearchEvent> history,
+			DeepSearchRequest request, IChatRequestContext context, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
 			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel,
 			Vector<IDeepSearchResult> intermediates) {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-		final Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
+		final Map<String, Object> promptParams = new HashMap<>();
 		Mono<AbstractDeepSearchEvent> deferred = Mono.fromCallable(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				final DeepSearchProcessedEvent consolidatedResult = new DeepSearchProcessedEvent();
@@ -252,32 +254,41 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				consolidatedResult.setOutputData(new DeepSearchResponse());
 				consolidatedResult.getOutputData().setDeepsearchCode(request.getCode());
 				consolidatedResult.getOutputData().processedBy(chatModel);
-				if (intermediates != null && !intermediates.isEmpty()) {
-					List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
-					for (IDeepSearchResult x : intermediates) {
-						LLMInputDocument consolidated = new LLMInputDocument(x.getDataSourceDescription(), null, null,
-								x.getResponse());
-						inputs.add(consolidated);
+				try {
+					if (intermediates != null && !intermediates.isEmpty()) {
+						List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
+						for (IDeepSearchResult x : intermediates) {
+							LLMInputDocument consolidated = new LLMInputDocument(x.getDataSourceDescription(), null,
+									null, x.getResponse());
+							inputs.add(consolidated);
+						}
+						String consolidatedText = callLLMConsolidateText(chatModel,
+								promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT),
+								context, "", promptParams, inputs);
+						consolidatedResult.getOutputData().setResponse(consolidatedText);
+						consolidatedResult.getOutputData().setProcessPercentage(100);
+						boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
+						consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
+						consolidatedResult.getOutputData().setProcessPercentage(100);
+
+					} else {
+						String backupText = callLLM(chatModel,
+								promptsDao
+										.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT),
+								context, promptParams);
+						consolidatedResult.getOutputData().setResponse(backupText);
+						consolidatedResult.getOutputData().setProcessPercentage(100);
+						consolidatedResult.getOutputData().setSearchResultsEmpty(true);
+
 					}
-					String consolidatedText = callLLMConsolidateText(chatModel,
-							promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONSOLIDATION_PROMPT).getPrompt(),
-							request.getQuery(), "", promptParams, inputs);
-					consolidatedResult.getOutputData().setResponse(consolidatedText);
-					consolidatedResult.getOutputData().setProcessPercentage(100);
-					boolean haveResults = consolidatedText != null && consolidatedText.trim().length() > 0;
-					consolidatedResult.getOutputData().setSearchResultsEmpty(!haveResults);
-					consolidatedResult.getOutputData().setProcessPercentage(100);
-
-				} else {
-					String backupText = callLLM(chatModel, promptsDao
-							.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT).getPrompt(),
-							request.getQuery(), promptParams);
-					consolidatedResult.getOutputData().setResponse(backupText);
-					consolidatedResult.getOutputData().setProcessPercentage(100);
-					consolidatedResult.getOutputData().setSearchResultsEmpty(true);
-
+					return consolidatedResult;
+				} catch (Throwable th) {
+					LOGGER.error("Error in consolidation", th);
+					DeepSearchErrorEvent ee = new DeepSearchErrorEvent();
+					ee.setInputData(request);
+					ee.setOutputData(GUserMessage.errorMessage("Error in deep search", th));
+					return ee;
 				}
-				return consolidatedResult;
 			});
 		});
 		return Flux.concat(composedFlux, deferred);

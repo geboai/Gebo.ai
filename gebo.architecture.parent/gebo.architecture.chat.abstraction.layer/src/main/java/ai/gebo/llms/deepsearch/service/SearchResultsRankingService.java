@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -36,19 +38,19 @@ public class SearchResultsRankingService extends BaseLLMSInvokingAndProvidingSer
 		this.promptsDao = promptsDao;
 
 	}
-
-	public void rateReferences(IGConfigurableChatModel chatModel, MinimalChatContext minimalChatContext, DeepSearchConfig config,
-			List<SearchResult> searchResults, DeepSearchRequest request, SharedRatingsStructure ratingStructure)
-			throws IOException, LLMConfigException {
-		final String prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONTENT_RATING_PROMPT)
-				.getPrompt();
-		final double jsonBudget = chatModel.getContextLength()
-				- (estimator.estimate(prompt) + estimator.estimate(prompt));
+ 
+	public void rateReferences(IGConfigurableChatModel chatModel, MinimalChatContext minimalChatContext,
+			DeepSearchConfig config, List<SearchResult> searchResults, DeepSearchRequest request,
+			SharedRatingsStructure ratingStructure) throws IOException, LLMConfigException {
+		final GPromptTemplateConfig prompt = promptsDao
+				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_CONTENT_RATING_PROMPT);
+		final double jsonBudget = chatModel.getContextLength() - (prompt.getTokensSize());
 		List<String> splitted = splittedByBudget(searchResults, Math.round(jsonBudget * 0.8));
 		RatedDocumentsList total = new RatedDocumentsList();
+		IChatRequestContext context = minimalChatContext.createChatRequestContext();
 		for (String documents : splitted) {
-			RatedDocumentsList result = callLLMWithDocumentsStructuredReturn(chatModel, prompt, documents,
-					request.getQuery(), RatedDocumentsList.class);
+			RatedDocumentsList result = callLLMWithDocumentsStructuredReturn(chatModel, prompt, context, documents,
+					RatedDocumentsList.class);
 			if (result != null && result.getRatedDocumentRefs() != null) {
 				total.getRatedDocumentRefs().addAll(result.getRatedDocumentRefs());
 			}
