@@ -30,6 +30,7 @@ import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
@@ -147,11 +148,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @return Updated GeboChatResponse
 	 * @throws LLMConfigException if a configuration error occurs
 	 */
-	protected GeboChatResponse callChatClient(IGConfigurableChatModel configurableChatModel, final Prompt prompt,
-			final KBContext context, final GeboChatRequest request, final GeboChatResponse response,
-			IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments) throws LLMConfigException {
+	protected GeboChatResponse callChatClient(IGConfigurableChatModel configurableChatModel,
+			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
+			final GeboChatResponse response, IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments)
+			throws LLMConfigException {
 
-		ChatResponse chatresponse = configurableChatModel.response(prompt, params, chatRequestContext);
+		ChatResponse chatresponse = configurableChatModel.response(prompt, Map.of(), chatRequestContext);
 		AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 		String responseText = callResponseObject.getText();
 		response.setQueryResponse(responseText);
@@ -160,8 +162,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
 		return response;
 	}
-
-	
 
 	/**
 	 * Streams chat response and finalizes the GUserChatContext update when
@@ -180,12 +180,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @throws LLMConfigException if a configuration error occurs
 	 */
 	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
-			final Prompt prompt, final KBContext context, final GeboChatRequest request,
+			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
 			final GeboChatResponse response, IChatRequestContext chatRequestContext, boolean chatHistoryConsolidation,
 			int historySizeTarget, AIDocumentsSet showedDocuments) throws LLMConfigException {
 
 		try {
-			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, params, chatRequestContext);
+			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, Map.of(), chatRequestContext);
 			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
 					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
 		} catch (Throwable th) {
@@ -361,18 +361,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	}
 
 	@Override
-	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
+	public GeboChatResponse chat(GPromptTemplateConfig overriddenPrompt, LLMChatRequestResources requestResources,
 			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
-		return callChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext, requestResources.getCurrentRequest(),
-				response, requestResources.createChatRequestContext(), null);
+		return callChatClient(chatModel, overriddenPrompt, kbcontext, requestResources.getCurrentRequest(), response,
+				requestResources.createChatRequestContext(), null);
 	}
 
 	@Override
-	public Flux<GeboChatMessageEnvelope> streamChat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException {
+	public Flux<GeboChatMessageEnvelope> streamChat(GPromptTemplateConfig overriddenPrompt,
+			LLMChatRequestResources requestResources, GeboChatResponse response, IGConfigurableChatModel chatModel)
+			throws GeboChatException, LLMConfigException {
 		KBContext kbcontext = new KBContext();
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 		int tokensLength = requestResources.getTokensSize();
@@ -381,8 +382,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		int targetSize = shrink ? contextWindow / 3 : 0;
 
 		AIDocumentsSet allDocuments = requestResources.allDocuments();
-		return streamChatClient(chatModel, new Prompt(overriddenPrompt), kbcontext,
-				requestResources.getCurrentRequest(), response, requestResources.createChatRequestContext(), shrink,
-				targetSize, allDocuments);
+		return streamChatClient(chatModel, overriddenPrompt, kbcontext, requestResources.getCurrentRequest(), response,
+				requestResources.createChatRequestContext(), shrink, targetSize, allDocuments);
 	}
 }

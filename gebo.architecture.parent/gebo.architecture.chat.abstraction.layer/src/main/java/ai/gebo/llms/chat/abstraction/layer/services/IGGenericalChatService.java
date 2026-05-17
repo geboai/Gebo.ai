@@ -84,29 +84,29 @@ public interface IGGenericalChatService {
 	 * @param request The chat request containing necessary parameters for the
 	 *                interaction.
 	 * @return A Flux of chat message envelopes.
-	 * @throws GeboChatException  If there is an error processing the chat.
-	 * @throws LLMConfigException If there is an error with the LLM configuration.
-	 * @throws GeboPersistenceException 
-	 * @throws IOException 
-	 * @throws FullTextException 
+	 * @throws GeboChatException        If there is an error processing the chat.
+	 * @throws LLMConfigException       If there is an error with the LLM
+	 *                                  configuration.
+	 * @throws GeboPersistenceException
+	 * @throws IOException
+	 * @throws FullTextException
 	 */
 	public Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request)
 			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException;
-
-	
 
 	/**
 	 * Initiates a chat interaction based on the provided request.
 	 *
 	 * @param request The chat request containing chat parameters.
 	 * @return A response from the chat model.
-	 * @throws GeboChatException  If chat processing encounters an error.
-	 * @throws LLMConfigException If there are configuration errors detected.
-	 * @throws GeboPersistenceException 
-	 * @throws IOException 
-	 * @throws FullTextException 
+	 * @throws GeboChatException        If chat processing encounters an error.
+	 * @throws LLMConfigException       If there are configuration errors detected.
+	 * @throws GeboPersistenceException
+	 * @throws IOException
+	 * @throws FullTextException
 	 */
-	public GeboChatResponse chat(GeboChatRequest request) throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException;
+	public GeboChatResponse chat(GeboChatRequest request)
+			throws GeboChatException, LLMConfigException, GeboPersistenceException, IOException, FullTextException;
 
 	/**
 	 * Retrieves user information for a specific chat model.
@@ -119,11 +119,10 @@ public interface IGGenericalChatService {
 	 */
 	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
 
-	public GeboChatResponse chat(String overriddenPrompt, LLMChatRequestResources requestResources,
-			GeboChatResponse response, IGConfigurableChatModel chatModel)
-			throws GeboChatException, LLMConfigException;
+	public GeboChatResponse chat(GPromptTemplateConfig overriddenPrompt, LLMChatRequestResources requestResources,
+			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;
 
-	public Flux<GeboChatMessageEnvelope> streamChat(GPromptTemplateConfig prompt, LLMChatRequestResources requestResources,
-			GeboChatResponse response, IGConfigurableChatModel chatModel)
+	public Flux<GeboChatMessageEnvelope> streamChat(GPromptTemplateConfig prompt,
+			LLMChatRequestResources requestResources, GeboChatResponse response, IGConfigurableChatModel chatModel)
 			throws GeboChatException, LLMConfigException;
 }

@@ -104,19 +104,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
 
-			PromptTemplate promptTemplate = null;
-			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-			Prompt prompt = null;
-			promptTemplate = new PromptTemplate(promptTemplateText);
-
-			prompt = promptTemplate.create();
+			
 
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext, null);
+			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext, null);
 		}
 
 		// Set response details
@@ -261,16 +256,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			} else {
 				int contextWindowSize = handler.getContextLength();
 				// Prepare prompt and context for streaming
-				PromptTemplate promptTemplate = null;
-				String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-				Prompt prompt = null;
-				promptTemplate = new PromptTemplate(promptTemplateText);
-				prompt = promptTemplate.create();
+				
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
+				return streamChatClient(handler, gprompt, kbcontext, request, gresponse, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);
 			}
 		} catch (Throwable e) {

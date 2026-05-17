@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
@@ -43,6 +44,10 @@ public class GUserChatSession extends GBaseObject {
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
+	public IChatRequestContext createChatRequestContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	

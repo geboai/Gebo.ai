@@ -47,51 +47,6 @@ public class PromptTemplateWizardController {
 
 	}
 
-	/**
-	 * Parameter class for prompt template generation requests
-	 */
-	public static class PromptTemplateParam {
-		/** The query text to generate a prompt template for */
-		@NotNull
-		public String query = null;
-		
-		/** Optional model code to specify which LLM to use */
-		public String modelCode = null;
-	}
-
-	/**
-	 * Response class for prompt template generation requests
-	 */
-	public static class PromptTemplateResponse {
-		/** The generated prompt template response */
-		public String response = null;
-	}
-
-	/**
-	 * Endpoint to generate a prompt template based on the provided query
-	 * 
-	 * @param param The parameters containing the query and optional model code
-	 * @return An operation status containing either the response or error details
-	 */
-	@PostMapping(value = "generatePromptTemplate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<PromptTemplateResponse> generatePromptTemplate(@RequestBody PromptTemplateParam param) {
-		try {
-			IGConfigurableChatModel usedModel = null;
-			if (param.modelCode != null) {
-				// Use the specified model if provided
-				usedModel = chatModelsDato.findByCode(param.modelCode);
-			} else {
-				// Otherwise use the default model
-				usedModel = chatModelsDato.defaultHandler();
-			}
-			PromptTemplateResponse response = new PromptTemplateResponse();
-			response.response = usedModel.getChatModel().call(param.query);
-			return OperationStatus.of(response);
-		} catch (Throwable th) {
-			OperationStatus<PromptTemplateResponse> status = OperationStatus.of(th);
-			return status;
-		}
-	}
 
 	
 }

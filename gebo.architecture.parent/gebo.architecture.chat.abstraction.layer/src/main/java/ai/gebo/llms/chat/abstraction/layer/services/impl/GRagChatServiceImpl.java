@@ -140,27 +140,23 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
 
-			PromptTemplate promptTemplate = null;
-			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-			Prompt prompt = null;
-			promptTemplate = new PromptTemplate(promptTemplateText);
-
-			prompt = promptTemplate.create();
-
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-			List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService.getSessionAvailableKnowledgeBases(request);
+			List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
+					.getSessionAvailableKnowledgeBases(request);
 			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 			List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-			if (securityService.getPlatformContentAccessPolicy()==ContentAccessPolicy.ACL_BASED && !securityService.isCurrentUserAdmin()) {
-				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+					&& !securityService.isCurrentUserAdmin()) {
+				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
+						.getAllOwnedAclAliases();
 				fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
 				semanticSearchMetaDataFilter.setAclAliases(aclAliases);
 			}
 			fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
 			semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
-			
+
 			AIDocumentsSet retrieved = this.ragSearchService.search(request, semanticSearchMetaDataFilter,
 					fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
@@ -168,7 +164,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext,
+			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext,
 					retrieved);
 		}
 
@@ -292,8 +288,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-		if (securityService.getPlatformContentAccessPolicy()==ContentAccessPolicy.ACL_BASED && !securityService.isCurrentUserAdmin()) {
-			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+				&& !securityService.isCurrentUserAdmin()) {
+			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
+					.getAllOwnedAclAliases();
 			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
 			semanticSearchMetaDataFilter.setAclAliases(aclAliases);
 		}
@@ -314,7 +312,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 						: null;
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
-		return this.streamChatClient(handler, new Prompt(prompt.getPrompt()), kbcontext, request, response,
+		return this.streamChatClient(handler, prompt, kbcontext, request, response,
 				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
 
 	}

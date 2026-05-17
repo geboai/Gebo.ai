@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -90,11 +91,16 @@ public class OllamaChatModelConfigurationSupportService
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
+
+		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+			 
+		}
 
 		/**
 		 * Configures and creates an Ollama chat model based on the provided
@@ -186,7 +192,7 @@ public class OllamaChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
-		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel();
+		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

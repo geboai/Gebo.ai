@@ -10,6 +10,7 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,21 +19,27 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.ChatHistoryRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import reactor.core.publisher.Flux;
 
 /**
@@ -47,6 +54,9 @@ import reactor.core.publisher.Flux;
  */
 public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseChatModelConfig, ChatModelType extends ChatModel>
 		implements IGConfigurableChatModel<ModelConfig> {
+	public static final String END_CONTEXT = "END_CONTEXT";
+	public static final String BEGIN_CONTEXT = "BEGIN_CONTEXT";
+	public static final String NEWLINE = "\r\n";
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	// Configuration for the chat model
 	protected ModelConfig config = null;
@@ -56,12 +66,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected ChatModelType model = null;
 	// Client for interacting with the chat model
 	protected ChatClient chatClient = null;
+	protected final IGDocumentContentRendererProvider rendererFactory;
 
 	/**
 	 * Default constructor for GAbstractConfigurableChatModel.
 	 */
-	public GAbstractConfigurableChatModel() {
-
+	public GAbstractConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+		this.rendererFactory = rendererFactory;
 	}
 
 	/**
@@ -236,6 +247,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public ChatClient getChatClient() {
 		return chatClient;
 	}
+
 	@Override
 	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) {
@@ -245,7 +257,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		SystemMessage systemMessage = this.createSystemMessage(prompt, params, chatContext);
 		messages.add(systemMessage);
 		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ChatHistoryRequired.REQUIRED) {
-			List<Message> history = ClientChatCallUtil.getChatHistory(chatContext);
+			List<Message> history = this.createHistoryMessages(chatContext);
 			messages.addAll(history);
 		}
 		UserMessage lastUserMessage = this.createLastUserMessage(prompt, params, chatContext);
@@ -261,16 +273,104 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		return reqObject;
 	}
 
+	protected List<Message> createCompleteHistory(IChatRequestContext chatContext) {
+		List<Message> message_list = new ArrayList<>();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		if (interactions != null) {
+			for (IChatSessionEntry chatInteraction : interactions) {
+				String request = chatInteraction.getUser();
+				String assistant = chatInteraction.getAssistant();
+				if (request != null) {
+					UserMessage _request = new UserMessage(request);
+					message_list.add(_request);
+				}
+
+				if (assistant != null) {
+					AssistantMessage _response = new AssistantMessage(assistant);
+					message_list.add(_response);
+				}
+			}
+		}
+		return message_list;
+	}
+
+	protected List<Message> createHistoryMessages(IChatRequestContext chatContext) {
+		String consolidated = chatContext.getConsolidatedHistory();
+		if (consolidated == null || consolidated.trim().length() == 0) {
+			return this.createCompleteHistory(chatContext);
+		} else {
+			return this.createCompressedHistory(chatContext);
+		}
+
+	}
+
+	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER
+			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={"
+			+ IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER + "}\r\n";
+
+	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
+		List<Message> messages = new ArrayList<>();
+		String consolidated = chatContext.getConsolidatedHistory();
+		List<IChatSessionEntry> interactions = chatContext.getInteractions();
+		for (int i = 0; i < interactions.size(); i++) {
+			if (i == 0) {
+				String user = interactions.get(0).getUser();
+				String assistant = interactions.get(0).getAssistant();
+				PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE);
+				template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER, consolidated);
+				template.add(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, user != null ? user : "");
+				UserMessage firstUserMessage = new UserMessage(template.render());
+				AssistantMessage firstAssistantMessage = new AssistantMessage(assistant != null ? assistant : "");
+				messages.add(firstUserMessage);
+				messages.add(firstAssistantMessage);
+			} else {
+				String user = interactions.get(0).getUser();
+				String assistant = interactions.get(0).getAssistant();
+				UserMessage userMessage = new UserMessage(user != null ? user : "");
+				AssistantMessage assistantMessage = new AssistantMessage(assistant != null ? assistant : "");
+				messages.add(userMessage);
+				messages.add(assistantMessage);
+			}
+		}
+		return messages;
+	}
+
 	protected UserMessage createLastUserMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) {
-		// TODO Auto-generated method stub
-		return null;
+		String userTemplate = prompt.getUserPromptTemplate();
+		PromptTemplate promptTemplate = new PromptTemplate(userTemplate);
+		Map<String, Object> allParams = new HashMap<>(params);
+		StringBuffer documentsBuffer = new StringBuffer();
+		List<Document> documents = chatContext.getDocuments();
+		if (documents != null) {
+			if (!documents.isEmpty()) {
+				documentsBuffer.append(BEGIN_CONTEXT);
+				documentsBuffer.append(NEWLINE);
+				for (Document document : documents) {
+					IGDocumentContentRenderer<Document> renderer = this.rendererFactory.get(document);
+					String text = renderer.render(document);
+					documentsBuffer.append(text);
+					documentsBuffer.append(NEWLINE);
+				}
+				documentsBuffer.append(END_CONTEXT);
+				documentsBuffer.append(NEWLINE);
+			}
+		}
+		allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, documentsBuffer.toString());
+		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, chatContext.getActualUserRequest());
+		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER,
+				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
+		String content = promptTemplate.render(allParams);
+		return new UserMessage(content);
 	}
 
 	protected SystemMessage createSystemMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) {
-		// TODO Auto-generated method stub
-		return null;
+		String systemTemplate = prompt.getSystemPromptTemplate();
+		PromptTemplate template = new PromptTemplate(systemTemplate);
+		String content = template.render(params);
+		return new SystemMessage(content);
 	}
 
 	@Override
