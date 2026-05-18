@@ -12,6 +12,7 @@ package ai.gebo.llms.abstraction.layer.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -23,6 +24,7 @@ import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
@@ -253,6 +255,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)");
+		}
 		ChatClient client = getChatClient();
 		// Here prompt, documents and consolidated history
 		List<Message> messages = new ArrayList<Message>();
@@ -264,6 +269,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 		UserMessage lastUserMessage = this.createLastUserMessage(prompt, params, chatContext);
 		messages.add(lastUserMessage);
+		if (LOGGER.isDebugEnabled()) {
+			int index = 1;
+			for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+				Message message = (Message) iterator.next();
+				MessageType msgtype = message.getMessageType();
+				LOGGER.debug("Message: " + index + " type: " + msgtype.name().toUpperCase());
+				LOGGER.debug("<" + msgtype.name().toUpperCase() + ">");
+				LOGGER.debug(message.getText());
+				LOGGER.debug("</" + msgtype.name().toUpperCase() + ">");
+				index++;
+			}
+		}
 		ChatClientRequestSpec reqObject = client.prompt();
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
@@ -271,6 +288,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		Map<String, Object> toolContext = chatContext.getToolsContext();
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return reqObject;
 	}
@@ -343,27 +363,21 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		String userTemplate = prompt.getUserPromptTemplate();
 		PromptTemplate promptTemplate = new PromptTemplate(userTemplate);
 		Map<String, Object> allParams = new HashMap<>(params);
+		StringBuffer allDocs = new StringBuffer();
 
 		if (params.containsKey(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER)) {
-			String allDocumentsRendered = this
-					.createDocumentsRendering(params.get(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER));
-			allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, allDocumentsRendered);
-		} else {
-			if (prompt.getContextDocuments() == null
-					|| prompt.getContextDocuments() == ContextContentRequired.REQUIRED) {
-				List<Document> documents = chatContext.getDocuments();
-				if (documents != null) {
-
-					allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER,
-							createDocumentsRendering(documents));
-				} else {
-					allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
-				}
-			} else {
-				allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
+			allDocs.append(createDocumentsRendering(params.get(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER)));
+		}
+		if (prompt.getContextDocuments() == null || prompt.getContextDocuments() == ContextContentRequired.REQUIRED) {
+			List<Document> documents = chatContext.getDocuments();
+			if (documents != null && !documents.isEmpty()) {
+				allDocs.append(createDocumentsRendering(documents));
 			}
 		}
-
+		String docsFragment = allDocs.length() > 0
+				? BEGIN_CONTEXT + NEWLINE + (allDocs.toString()) + END_CONTEXT + NEWLINE
+				: "";
+		allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, docsFragment);
 		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, chatContext.getActualUserRequest());
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
@@ -379,15 +393,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			if (collection.isEmpty())
 				return "";
 			StringBuffer documentsBuffer = new StringBuffer();
-			documentsBuffer.append(BEGIN_CONTEXT);
-			documentsBuffer.append(NEWLINE);
+
 			for (Object thisObject : collection) {
 				String content = render(thisObject);
 				documentsBuffer.append(content);
 				documentsBuffer.append(NEWLINE);
 			}
-			documentsBuffer.append(END_CONTEXT);
-			documentsBuffer.append(NEWLINE);
+
 			return documentsBuffer.toString();
 		}
 
@@ -410,23 +422,43 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		Flux<ChatResponse> res = reqObject.stream().chatResponse();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
 		return res;
 	}
 
 	@Override
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
+
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
+
 		return reqObject.stream().content();
 	}
 
 	@Override
 	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin response(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
 		return res.chatResponse();
 	}
 
@@ -434,19 +466,38 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
 			throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
+					+ (rt != null ? rt.getName() : "NULL") + ")");
+		}
 		ChatClient client = getChatClient();
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
-		return res.entity(rt);
+		ResponseType data = res.entity(rt);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
+					+ (rt != null ? rt.getName() : "NULL") + ") returned " + data);
+		}
+
+		return data;
 	}
 
 	@Override
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
 			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
+					+ (rt != null ? rt.getName() : "NULL") + ",..)");
+		}
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
-		return res.entity(outputConverter);
+		ResponseType data = res.entity(outputConverter);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
+					+ (rt != null ? rt.getName() : "NULL") + ",..)");
+		}
+		return data;
 	}
 
 	@Override

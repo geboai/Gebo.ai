@@ -452,7 +452,8 @@ public class BaseLLMSInvokingService {
 	}
 
 	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			IChatRequestContext context, String pastConsolidation, List<LLMInputDocument> input) throws LLMConfigException {
+			IChatRequestContext context, String pastConsolidation, List<LLMInputDocument> input)
+			throws LLMConfigException {
 		return this.callLLMConsolidateText(chatModel, prompt, context, pastConsolidation, Map.of(), input);
 	}
 
@@ -565,9 +566,9 @@ public class BaseLLMSInvokingService {
 						currentText.append(thisContent);
 						currentText.append(NEWLINE);
 					}
-					
-					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, context,currentText.toString(), consolidated,
-							additionalParams);
+
+					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, context,
+							currentText.toString(), consolidated, additionalParams);
 					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
 				}
 			}
@@ -628,7 +629,7 @@ public class BaseLLMSInvokingService {
 			IChatRequestContext context, Object documents, Map<String, Object> params) throws LLMConfigException {
 
 		Map<String, Object> _params = new HashMap<>(params);
-		context = context.integrateWithDocuments(documents);
+		_params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
 		String result = chatModel.textResponse(prompt, _params, context);
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
@@ -650,7 +651,7 @@ public class BaseLLMSInvokingService {
 
 		Map<String, Object> params = new HashMap<>(additionalParams);
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
-		context = context.integrateWithDocuments(documents);
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
 		String result = chatModel.textResponse(prompt, params, context);
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
@@ -668,7 +669,7 @@ public class BaseLLMSInvokingService {
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
-		context = context.integrateWithDocuments(documents);
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
 		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
 
@@ -682,7 +683,8 @@ public class BaseLLMSInvokingService {
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
-		context = context.integrateWithDocuments(documents);
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
+
 		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
 		return data;
 	}
@@ -694,8 +696,7 @@ public class BaseLLMSInvokingService {
 
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
-		context = context.integrateWithDocuments(documents);
-
+		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		T data = (T) chatModel.structuredResponse(prompt, params, context, type, outputConverter);
 
 		return data;
@@ -878,17 +879,16 @@ public class BaseLLMSInvokingService {
 						currentText.append(thisContent);
 						currentText.append(NEWLINE);
 					}
+					Map<String, Object> clonedParams = new HashMap<>(params);
+					clonedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
+					clonedParams.put(DOCUMENTS_TEMPLATE_VARIABLE, currentText.toString());
 					if (!hasNext) {
-						Map<String, Object> clonedParams = new HashMap<>(params);
-						clonedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 
-						// clonedParams.put(DOCUMENTS_TEMPLATE_VARIABLE, currentText.toString());
-						context = context.integrateWithDocuments(currentText.toString());
 						output = callLLMReactive(chatModel, prompt, context, clonedParams);
 					} else {
 						consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, context,
 								currentText.toString(), consolidated, params);
-						fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, params);
+						fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, clonedParams);
 					}
 				}
 			}

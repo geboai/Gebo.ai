@@ -63,6 +63,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	final class NestedChatRequestContext implements IChatRequestContext {
+		@Override
+		public String getRequestID() {
+
+			return currentRequest != null ? currentRequest.getId() : "No current request";
+		}
 
 		@Override
 		public String getConsolidatedHistory() {
@@ -139,5 +144,4 @@ public class LLMChatRequestResources implements ITokensCountable {
 				llmGeneratedDocuments);
 	}
 
-	
 }

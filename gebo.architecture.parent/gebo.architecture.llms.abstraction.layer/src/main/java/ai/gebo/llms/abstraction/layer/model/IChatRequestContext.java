@@ -37,6 +37,8 @@ public interface IChatRequestContext {
 		public Document toDocument();
 	}
 
+	public String getRequestID();
+
 	public String getConsolidatedHistory();
 
 	public List<IChatSessionEntry> getInteractions();
@@ -110,6 +112,12 @@ public interface IChatRequestContext {
 		final List<Document> sampledList = docs != null ? new ArrayList<>(docs) : new ArrayList<>();
 		return new IChatRequestContext() {
 			@Override
+			public String getRequestID() {
+
+				return IChatRequestContext.this.getRequestID();
+			}
+
+			@Override
 			public String getActualUserRequest() {
 
 				return IChatRequestContext.this.getActualUserRequest();
@@ -149,6 +157,7 @@ public interface IChatRequestContext {
 	@Getter
 	@Builder
 	public static class ChatRequestContextImpl implements IChatRequestContext {
+		private final String requestID;
 		private final String actualUserRequest;
 		private final String consolidatedHistory;
 		private final List<IChatSessionEntry> interactions;
