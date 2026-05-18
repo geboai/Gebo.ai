@@ -1,1 +1,3 @@
-{question}
+INPUTS
+- Last User question:
+ {question}

@@ -12,8 +12,3 @@ INPUTS:
 {documents}
 >>>
 
-TASK:
-1. If the current report is empty, create a new report based on the partial contribution.
-2. Otherwise:
-   - merge the new partial contribution into the existing report,
-   - update the list of documents.

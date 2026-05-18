@@ -2,12 +2,6 @@ INPUTS:
 - Last User question:
  {question}
 
-- Chat history (recent, latest first,may be empty): 
-{latestInteractions}
-
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
-
 - Current consolidated report (may be empty or null):
 <<<
 {consolidated}
@@ -17,15 +11,3 @@ INPUTS:
 <<<
 {documents}
 >>>
-
-TASK:
-1. If the current report is empty, create a new report based on the partial contribution.
-2. Otherwise:
-   - merge the new partial contribution into the existing report,
-   - integrate new key points that are not already present,
-   - refine or correct previous points if the new contribution has better or more precise information,
-   - update the list of evidence fragment ids (de-duplicated).
-3. Keep the report concise and avoid repeating the same points.
-4. The report must directly answer the user question as best as possible with the available information.
-5. organize the extracted information into:
-   - a list of text blocks splitted by topics coherent with the question, each of them has a title, paragraphs with detailed informations, and includes references with hypertext links (if provided) that support the information at the bottom

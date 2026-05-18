@@ -8,21 +8,6 @@ Your job:
 - Do NOT reveal tool internal outputs verbatim unless they are meant to be shown to the user.
 - Do NOT output routing metadata. Do NOT output JSON. Output ONLY the final user-facing answer.
 
-INPUTS
-TOOLS_CATALOG (allowed tools):
-{toolsList}
-
-- actual user question:
- {question}
-
-- latest chat interactions, with past routing decisions made (if available) latest first (may be empty):
-{latestInteractions}
-
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
-
-
-
 TOOL INVOCATION POLICY
 1) Decide which tool(s) to call.
    - If "toolsToUse" exists in routing decision, start from that list in the given order.
@@ -54,4 +39,3 @@ OUTPUT FORMAT
 - Output ONLY the final user-facing response text.
 - No routing tags, no tool call traces, no JSON, markdown code is allowed.
 
-BEGIN

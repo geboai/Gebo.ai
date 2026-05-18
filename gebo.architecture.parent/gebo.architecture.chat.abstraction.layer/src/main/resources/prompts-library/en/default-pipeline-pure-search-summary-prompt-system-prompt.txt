@@ -14,3 +14,10 @@ Your job is to update the consolidated report so that:
 - it keeps track of all evidence fragment ids.
 
 IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE
+URL COMPLETION RULE: OUTPUT ONLY RECEIVED COMPLETELY WELL-FORMED  ( [http|https]://[<server>|<server>:<port>]/<path> ) URLS AS LINKS, DO NOT TRUNCATE THEM, DO NOT OUTPUT INVENTED URLS/LINKS OR RELATIVE URLS
+
+TASK:
+1. If the current report is empty, create a new report based on the partial contribution.
+2. Otherwise:
+   - merge the new partial contribution into the existing report,
+   - update the list of documents.

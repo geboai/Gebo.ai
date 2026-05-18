@@ -1,8 +1,6 @@
-TASK:
-Answer the user's last question using the selected documents as the main source.
+- INPUTS: 
+  - Last user question: {question}
 
-OUTPUT REQUIREMENTS:
-- Provide a clear and direct answer first.
-- Then provide supporting details organized by topic if useful.
-- If relevant, include a short "Sources used" section listing the document names used.
-- If the selected documents do not contain enough information to answer fully, explicitly state what is missing.
+  - Documents (can be empty)
+    {documents}
+    

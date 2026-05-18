@@ -2,21 +2,13 @@ INPUTS:
 
  
   
-(A) CURRENT CHAT CONVERSATION HISTORY:
+(A) CURRENT CHAT CONVERSATION:
 
 actual user question:
 {question}
 
-pipeline rewritten user question (already rewritten for clearer operations):
-{rewrittenQuery}
 
-latest chat interactions with past routing decisions (may be empty), latest first:
-{latestInteractions}
-
-consolidated previous chat history (may be empty):
-{consolidatedChatHistory}
-
-(B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT HISTORY (may be empty):
+(B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT  (may be empty):
 {documents}
 
 (C) EXTERNAL DATA SOURCES LIST TO PERFORM SEARCH/DEEP SEARCH ON (may be empty). Each entry has a unique source code/id and description:

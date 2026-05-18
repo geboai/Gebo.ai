@@ -1,2 +1,3 @@
-{question}
+- Last user quetion: {question}
+- Documents (can be empty)
 {documents}

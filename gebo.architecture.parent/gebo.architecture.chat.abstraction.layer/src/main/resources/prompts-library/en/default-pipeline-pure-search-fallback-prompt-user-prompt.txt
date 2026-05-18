@@ -2,24 +2,3 @@ INPUTS:
 - Last User question:
 {question}
 
-- Chat history (recent, latest first, may be empty):
-{latestInteractions}
-
-- Consolidated previous chat history (may be empty):
-{consolidatedChatHistory}
-
-TASK:
-
-1. Acknowledge transparently that the available data sources did not provide sufficient relevant information.
-2. If appropriate, briefly suggest what kind of additional data would be required.
-3. Provide a helpful response using general knowledge, reasoning and the chat history.
-4. If the question requires specific company data, internal policies, current figures, or time-sensitive information,
-   clearly state that such information is not currently available.
-5. Maintain a professional, neutral, and helpful tone.
-6. Structure the answer clearly.
-
-IMPORTANT:
-- Do not hallucinate sources.
-- Do not imply that specific internal documents were consulted.
-- Do not fabricate certainty.
-- Be honest about limitations while remaining helpful.

@@ -1,10 +1,5 @@
 INPUTS:
 
-- Chat history (recent, latest first,may be empty): 
-{latestInteractions}
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
-
 - Latest user question: {question}
 
 - (G) deliverable types catalog:
@@ -12,32 +7,4 @@ INPUTS:
  {deliverableTypesList}
  
  
- ACTUAL DATE AND TIME: {actualTimestamp}
- 
-
-rewrittenQuery rules:
-
-* If the question is already clear, apply only minimal cleanup (remove fluff, keep meaning).
-
-* If there are pronouns or references (e.g., “it”, “this”, “that”, “as before”), replace them with the explicit subject inferred from chatHistory when possible. If not possible, keep the reference but make the ambiguity explicit (e.g., “this (unspecified) …”).
-
-* If the question contains multiple goals, keep them but structure as one sentence with clear separators; do not expand scope.
-
-* Keep it short: maximum 2 sentences, maximum 280 characters unless the original is longer (in that case, do not exceed the original length).
-
-* Keep technical tokens (class names, error codes, versions) exactly as written if present.
-
-* if the latest user question is comprensible only considering the chat history or its meaning is related to the chat history output a rewrittenQuery that concisely summarizes 
-  the user question considering latest user question plus chat history and eventually present consolidated previus chat history in a single question phrase 
-  that summarizes the user objective and intent  
-
-deliverable rules:
-* Consider your generated rewrittenQuery as input and choose from the (G) deliverable type list a single the intent-type field value that mostly fits.
-
-OUTPUT:
-Return only the two required fields exactly 2 lines:
-No quotes. No markdown. No bullets.
-
-Example: 
- rewrittenQuery=<the rewritten user question (no explanations, no JSON, no extra text)>
- deliverable=<selected deliverable type (intent-type value)>
+ - ACTUAL DATE AND TIME: {actualTimestamp}
