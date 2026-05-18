@@ -13,6 +13,7 @@ import java.util.Map;
 import org.hibernate.validator.internal.util.ConcurrentReferenceHashMap.ReferenceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
@@ -88,9 +89,30 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		return prompt;
 	}
 
-	private String tryLoadString(String systemReference, Object objectFromActualClassLoader) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+	private String tryLoadString(String reference, Object objectFromActualClassLoader) throws IOException {
+		InputStream is = null;
+		try {
+			is = objectFromActualClassLoader.getClass().getResourceAsStream(reference);
+			if (is == null) {
+				Path path = Path.of(reference);
+				if (Files.exists(path)) {
+					is = Files.newInputStream(path);
+				}
+			}
+			if (is == null) {
+				throw new IOException("Cannot find resource:" + reference);
+			}
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			FileCopyUtils.copy(is, bos);
+			bos.flush();
+			return bos.toString();
+		} finally {
+			try {
+				if (is != null)
+					is.close();
+			} catch (Throwable th) {
+			}
+		}
 	}
 
 	@Override

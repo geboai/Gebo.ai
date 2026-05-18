@@ -48,6 +48,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	private List<GPromptTemplateConfig> listPrompts(List<IGStaticPromptsProvider> configs) throws IOException {
 		if (configs == null)
 			return List.of();
+		boolean hasInvalidPromptTemplates = false;
 		List<GPromptTemplateConfig> out = new ArrayList<GPromptTemplateConfig>();
 		for (IGStaticPromptsProvider provider : configs) {
 			List<GPromptTemplateConfig> prompts = provider.promptsList();
@@ -56,12 +57,18 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 					throw new IllegalStateException("The provider:" + provider.getId()
 							+ " exposes a prompt with no promptUse field value cannot be managed " + p);
 				} else {
+					if (p.getSystemPromptTemplate() == null || p.getUserPromptTemplate() == null) {
+						hasInvalidPromptTemplates = true;
+						LOGGER.error("Null template=>" + p);
+					}
 					p = p.copy();
 					p.setConfigDeclarated(true);
 					out.add(p);
 				}
 			}
 		}
+		if (hasInvalidPromptTemplates)
+			throw new RuntimeException("Invalid prompt templates in the system");
 		return out;
 	}
 
