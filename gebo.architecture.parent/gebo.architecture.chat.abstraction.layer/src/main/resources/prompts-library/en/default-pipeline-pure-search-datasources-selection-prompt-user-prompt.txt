@@ -1,18 +1,6 @@
 INPUTS:
 
-(A) CURRENT CHAT CONVERSATION HISTORY:
-
-actual user question:
-{question}
-
-pipeline rewritten user question (already rewritten for clearer operations):
-{rewrittenQuery}
-
-latest chat interactions with past routing decisions (may be empty), latest first:
-{latestInteractions}
-
-consolidated previous chat history (may be empty):
-{consolidatedChatHistory}
+(A) CURRENT USER QUESTION: {question}
 
 (B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT HISTORY (may be empty):
 {documents}

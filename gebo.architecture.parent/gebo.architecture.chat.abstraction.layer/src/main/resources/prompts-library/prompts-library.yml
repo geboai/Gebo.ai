@@ -141,4 +141,4 @@ ai.gebo.prompts:
       systemReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: REQUIRED
+      contextDocuments: NOT_REQUIRED

@@ -1,12 +1,6 @@
 INPUTS:
-- Last User question:
- {question}
+- Actual User question:  {question}
 
-- Chat history (recent, latest first,may be empty): 
-{latestInteractions}
-
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
 
 - Current consolidated report (may be empty or null):
 <<<
