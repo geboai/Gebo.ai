@@ -16,7 +16,7 @@ import lombok.Getter;
 
 public interface IChatRequestContext {
 	public static final String USER_QUESTION_PROMPT_PLACEHOLDER = "question";
-	public static final String CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER = "consolidated";
+	public static final String CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER = "consolidatedChatHistory";
 	public static final String DOCUMENTS_PROMPT_PLACEHOLDER = "documents";
 
 	public static interface IDocument {
@@ -112,13 +112,13 @@ public interface IChatRequestContext {
 			@Override
 			public String getActualUserRequest() {
 
-				return this.getActualUserRequest();
+				return IChatRequestContext.this.getActualUserRequest();
 			}
 
 			@Override
 			public String getConsolidatedHistory() {
 
-				return this.getConsolidatedHistory();
+				return IChatRequestContext.this.getConsolidatedHistory();
 			}
 
 			@Override
@@ -130,13 +130,13 @@ public interface IChatRequestContext {
 			@Override
 			public List<IChatSessionEntry> getInteractions() {
 
-				return this.getInteractions();
+				return IChatRequestContext.this.getInteractions();
 			}
 
 			@Override
 			public Map<String, Object> getToolsContext() {
 
-				return this.getToolsContext();
+				return IChatRequestContext.this.getToolsContext();
 			}
 		};
 	}
