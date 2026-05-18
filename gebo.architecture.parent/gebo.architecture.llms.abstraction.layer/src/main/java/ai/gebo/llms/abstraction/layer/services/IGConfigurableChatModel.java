@@ -22,6 +22,8 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import reactor.core.publisher.Flux;
 
 /**
@@ -149,7 +151,15 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		return new BeanOutputConverter<T>(type);
 	}
 
-	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+	@AllArgsConstructor
+	@Getter
+	public static class RequestSpec {
+		private final ChatClientRequestSpec requestSpec;
+		private final long tokensCount;
+		private final String modelCode;
+	}
+
+	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
 	@FunctionalInterface

@@ -36,6 +36,7 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -253,11 +254,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	@Override
-	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
+		long tokens = 0;
 		ChatClient client = getChatClient();
 		// Here prompt, documents and consolidated history
 		List<Message> messages = new ArrayList<Message>();
@@ -272,12 +274,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			int index = 1;
 			for (Iterator iterator = messages.iterator(); iterator.hasNext();) {
+
 				Message message = (Message) iterator.next();
 				MessageType msgtype = message.getMessageType();
+				String _content = message.getText();
 				LOGGER.debug("Message: " + index + " type: " + msgtype.name().toUpperCase());
 				LOGGER.debug("<" + msgtype.name().toUpperCase() + ">");
-				LOGGER.debug(message.getText());
+				LOGGER.debug(_content);
 				LOGGER.debug("</" + msgtype.name().toUpperCase() + ">");
+				tokens += ITokensCountable.stringsTokensSize(_content);
 				index++;
 			}
 		}
@@ -292,7 +297,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
-		return reqObject;
+		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
 	}
 
 	protected List<Message> createCompleteHistory(IChatRequestContext chatContext) {
@@ -422,42 +427,63 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
 		}
-		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
-		Flux<ChatResponse> res = reqObject.stream().chatResponse();
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		Flux<ChatResponse> res = reqObject.getRequestSpec().stream().chatResponse();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			logPerformances(reqObject, timestamp);
 		}
 		return res;
+	}
+
+	private void logPerformances(RequestSpec reqObject, long timestamp) {
+		if (LOGGER.isDebugEnabled()) {
+			long deltaTime = System.currentTimeMillis() - timestamp;
+			long tokens = reqObject.getTokensCount();
+			double dtokens = tokens;
+			double dtime = Math.round(((double) deltaTime) / 10.0) / 100.0;
+			double tokenSec = dtime != 0.0 ? dtokens / dtime : 0.0;
+			LOGGER.debug("LLM PERFORMANCES: " + reqObject.getModelCode() + " processed: " + tokens + " (tok) in " + dtime
+					+ " (sec) => input processing: " + tokenSec + " (token/sec)");
+		}
 	}
 
 	@Override
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
 		}
 
-		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			logPerformances(reqObject, timestamp);
 		}
 
-		return reqObject.stream().content();
+		return reqObject.getRequestSpec().stream().content();
 	}
 
 	@Override
 	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin response(" + promptTemplate.getPromptUse() + ", ...,...)");
 		}
-		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
-		CallResponseSpec res = reqObject.call();
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		CallResponseSpec res = reqObject.getRequestSpec().call();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)");
+			logPerformances(reqObject, timestamp);
 		}
 		return res.chatResponse();
 	}
@@ -466,17 +492,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
 			throws LLMConfigException {
+		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ")");
 		}
 		ChatClient client = getChatClient();
-		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
-		CallResponseSpec res = reqObject.call();
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		CallResponseSpec res = reqObject.getRequestSpec().call();
 		ResponseType data = res.entity(rt);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ") returned " + data);
+			logPerformances(reqObject, timestamp);
 		}
 
 		return data;
@@ -486,16 +515,19 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
 			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException {
+		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ",..)");
 		}
-		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
-		CallResponseSpec res = reqObject.call();
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		CallResponseSpec res = reqObject.getRequestSpec().call();
 		ResponseType data = res.entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ",..)");
+			logPerformances(reqObject, timestamp);
 		}
 		return data;
 	}
