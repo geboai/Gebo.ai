@@ -49,9 +49,7 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		prompt.setPromptUse(GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT);
 		prompt.setSystemPromptTemplate(queryExtractionPrompt);
-		prompt.setUserPromptTemplate("INPUT\r\n" + "The user question is:\r\n" + "\r\n" + "<<<\r\n" + "{question}\r\n"
-				+ ">>>\r\n" + "\r\n" + "CONTEXT:\r\n"
-				+ "The actual consolidated knowledge (eventually blank) is:\r\n{consolidated}\r\n");
+		prompt.setUserPromptTemplate("INPUT\r\n" + "The user question is: {question}\r\n" );
 	}
 
 	@Override
