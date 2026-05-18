@@ -1,0 +1,14 @@
+TASK
+Given:
+A) CHAT CONTEXT:
+- Last User question:
+ {question}
+
+- Chat history (recent, latest first,may be empty): 
+{latestInteractions}
+
+- consolidated previus chat history (may be empty)
+{consolidatedChatHistory}
+
+B) INPUT DOCUMENTS
+{documents}

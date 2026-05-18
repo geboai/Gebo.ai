@@ -1,10 +1,3 @@
-SYSTEM:
-
-You are an assistant that extracts ONLY information relevant to the user question
-from a batch of document fragments. Ignore everything else.
-
-IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE
-
 INPUTS:
 - Last User question:
 {question}

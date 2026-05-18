@@ -14,29 +14,3 @@ Your job is to update the consolidated report so that:
 - it keeps track of all evidence fragment ids.
 
 IMPORTANT: ALWAYS RESPOND WITH USER'S LANGUAGE
-
-INPUTS:
-- Last User question:
- {question}
-
-- Chat history (recent, latest first,may be empty): 
-{latestInteractions}
-
-- consolidated previus chat history (may be empty)
-{consolidatedChatHistory}
-
-- Current consolidated report (may be empty or null):
-<<<
-{consolidated}
->>>
-
-- New partial contribution:
-<<<
-{documents}
->>>
-
-TASK:
-1. If the current report is empty, create a new report based on the partial contribution.
-2. Otherwise:
-   - merge the new partial contribution into the existing report,
-   - update the list of documents.
