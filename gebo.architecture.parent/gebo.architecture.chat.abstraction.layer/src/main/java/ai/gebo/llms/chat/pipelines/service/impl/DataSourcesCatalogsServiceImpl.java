@@ -78,7 +78,7 @@ public class DataSourcesCatalogsServiceImpl implements IDataSourcesCatalogsServi
 						}
 					}
 
-				} catch (SearchServiceException e) {
+				} catch (Throwable e) {
 					LOGGER.error("Exception catalogue extractin for: " + messagingModuleId + ":" + messagingSystemId,
 							e);
 				}

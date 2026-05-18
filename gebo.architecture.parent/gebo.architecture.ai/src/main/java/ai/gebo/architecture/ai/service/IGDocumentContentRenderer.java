@@ -1,5 +1,9 @@
 package ai.gebo.architecture.ai.service;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
 public interface IGDocumentContentRenderer<T> {
 	public static final String STANDARD_RENDERER = "STANDARD_RENDERER";
 	public static final String CUSTOM_RENDERER = "CUSTOM_RENDERER";
@@ -8,7 +12,7 @@ public interface IGDocumentContentRenderer<T> {
 
 	public Class<T> getRenderedType();
 
-	public boolean isCanRender(T document);
+	public boolean isCanRender(Object document);
 
 	public String render(T document);
 }

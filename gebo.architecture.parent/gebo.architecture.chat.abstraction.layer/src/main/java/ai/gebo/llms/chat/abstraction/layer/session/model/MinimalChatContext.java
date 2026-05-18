@@ -47,6 +47,7 @@ public class MinimalChatContext implements ITokensCountable {
 			builder.interactions(interactions);
 
 		}
+		
 		return builder.build();
 	}
 }
