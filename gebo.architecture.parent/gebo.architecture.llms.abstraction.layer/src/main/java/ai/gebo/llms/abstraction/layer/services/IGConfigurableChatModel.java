@@ -10,6 +10,7 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
@@ -150,4 +151,18 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 
 	public ChatClientRequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
+
+	@FunctionalInterface
+	public static interface UseChatModel<T> {
+		public T call(ChatModel client);
+	}
+
+	public <T> T doWithChatModel(UseChatModel<T> chatModelCalling) throws LLMConfigException;
+
+	@FunctionalInterface
+	public static interface UseChatClient<T> {
+		public T call(ChatClient client);
+	}
+
+	public <T> T doWithChatClient(UseChatClient<T> chatClientCalling) throws LLMConfigException;
 }

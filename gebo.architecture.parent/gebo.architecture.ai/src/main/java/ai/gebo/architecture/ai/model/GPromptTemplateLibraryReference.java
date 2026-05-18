@@ -8,7 +8,9 @@ public class GPromptTemplateLibraryReference {
 	@NotNull
 	private String promptUse = null;
 	@NotNull
-	private ChatHistoryRequired chatHistory = null;
+	private ContextContentRequired chatHistory = null;
+	@NotNull
+	private ContextContentRequired contextDocuments = null;
 	private String langCode = null;
 	private String modelProvider = null;
 	private String modelCode = null;

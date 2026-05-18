@@ -34,7 +34,9 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	@NotNull
 	private String userPromptTemplate = null;
 	@NotNull
-	private ChatHistoryRequired chatHistory = null;
+	private ContextContentRequired chatHistory = null;
+	@NotNull
+	private ContextContentRequired contextDocuments = null;
 	@HashIndexed
 	private String langCode = DEFAULT_LANGUAGE;
 	@HashIndexed
@@ -191,11 +193,19 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 		this.userPromptTemplate = userPromptTemplate;
 	}
 
-	public ChatHistoryRequired getChatHistory() {
+	public ContextContentRequired getChatHistory() {
 		return chatHistory;
 	}
 
-	public void setChatHistory(ChatHistoryRequired chatHistory) {
+	public void setChatHistory(ContextContentRequired chatHistory) {
 		this.chatHistory = chatHistory;
+	}
+
+	public ContextContentRequired getContextDocuments() {
+		return contextDocuments;
+	}
+
+	public void setContextDocuments(ContextContentRequired contextDocuments) {
+		this.contextDocuments = contextDocuments;
 	}
 }

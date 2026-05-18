@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.ai.model.ChatHistoryRequired;
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotuneConfig;
 import ai.gebo.architecture.rag_threasholds_autotune.model.AutotuneVectorStoreInfo;
@@ -67,7 +67,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	private static final GPromptTemplateConfig inTopicPrompt = new GPromptTemplateConfig();
 	static {
-		inTopicPrompt.setChatHistory(ChatHistoryRequired.NOT_REQUIRED);
+		inTopicPrompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		inTopicPrompt.setSystemPromptTemplate("You are a synthetic query generator for retrieval evaluation.\r\n"
 				+ "\r\n" + "INPUT\r\n" + "You will receive a batch of N text segments (\"chunks\"). Each chunk has:\r\n"
 				+ "- chunkId: a unique identifier\r\n" + "- text: the chunk content\r\n" + "\r\n");
@@ -415,7 +415,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	private static final GPromptTemplateConfig ratingPrompt = new GPromptTemplateConfig();
 	static {
-		ratingPrompt.setChatHistory(ChatHistoryRequired.NOT_REQUIRED);
+		ratingPrompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		ratingPrompt.setSystemPromptTemplate("You are a strict RAG retrieval judge.\r\n" + "\r\n" + "INPUT\r\n"
 				+ "You will receive:\r\n" + "- A user query: {question}\r\n"
 				+ "- A list of document fragments (\"chunks\"). Each chunk has:\r\n"

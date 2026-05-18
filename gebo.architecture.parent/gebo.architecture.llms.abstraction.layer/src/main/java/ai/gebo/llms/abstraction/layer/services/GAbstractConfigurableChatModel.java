@@ -10,9 +10,11 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +32,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 
-import ai.gebo.architecture.ai.model.ChatHistoryRequired;
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -256,7 +258,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		List<Message> messages = new ArrayList<Message>();
 		SystemMessage systemMessage = this.createSystemMessage(prompt, params, chatContext);
 		messages.add(systemMessage);
-		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ChatHistoryRequired.REQUIRED) {
+		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ContextContentRequired.REQUIRED) {
 			List<Message> history = this.createHistoryMessages(chatContext);
 			messages.addAll(history);
 		}
@@ -341,28 +343,60 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		String userTemplate = prompt.getUserPromptTemplate();
 		PromptTemplate promptTemplate = new PromptTemplate(userTemplate);
 		Map<String, Object> allParams = new HashMap<>(params);
-		StringBuffer documentsBuffer = new StringBuffer();
-		List<Document> documents = chatContext.getDocuments();
-		if (documents != null) {
-			if (!documents.isEmpty()) {
-				documentsBuffer.append(BEGIN_CONTEXT);
-				documentsBuffer.append(NEWLINE);
-				for (Document document : documents) {
-					IGDocumentContentRenderer<Document> renderer = this.rendererFactory.get(document);
-					String text = renderer.render(document);
-					documentsBuffer.append(text);
-					documentsBuffer.append(NEWLINE);
+
+		if (params.containsKey(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER)) {
+			String allDocumentsRendered = this
+					.createDocumentsRendering(params.get(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER));
+			allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, allDocumentsRendered);
+		} else {
+			if (prompt.getContextDocuments() == null
+					|| prompt.getContextDocuments() == ContextContentRequired.REQUIRED) {
+				List<Document> documents = chatContext.getDocuments();
+				if (documents != null) {
+
+					allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER,
+							createDocumentsRendering(documents));
+				} else {
+					allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
 				}
-				documentsBuffer.append(END_CONTEXT);
-				documentsBuffer.append(NEWLINE);
+			} else {
+				allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
 			}
 		}
-		allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, documentsBuffer.toString());
+
 		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, chatContext.getActualUserRequest());
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
 		String content = promptTemplate.render(allParams);
 		return new UserMessage(content);
+	}
+
+	protected String createDocumentsRendering(Object object) {
+		if (object instanceof String text) {
+			return text;
+		}
+		if (object instanceof Collection collection) {
+			if (collection.isEmpty())
+				return "";
+			StringBuffer documentsBuffer = new StringBuffer();
+			documentsBuffer.append(BEGIN_CONTEXT);
+			documentsBuffer.append(NEWLINE);
+			for (Object thisObject : collection) {
+				String content = render(thisObject);
+				documentsBuffer.append(content);
+				documentsBuffer.append(NEWLINE);
+			}
+			documentsBuffer.append(END_CONTEXT);
+			documentsBuffer.append(NEWLINE);
+			return documentsBuffer.toString();
+		}
+
+		return render(object);
+	}
+
+	protected String render(Object doc) {
+		IGDocumentContentRenderer<Object> handler = this.rendererFactory.get(doc);
+		return handler.render(doc);
 	}
 
 	protected SystemMessage createSystemMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
@@ -413,6 +447,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		ChatClientRequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.call();
 		return res.entity(outputConverter);
+	}
+
+	@Override
+	public <T> T doWithChatClient(UseChatClient<T> chatClientCalling) throws LLMConfigException {
+
+		return chatClientCalling.call(chatClient);
+	}
+
+	@Override
+	public <T> T doWithChatModel(UseChatModel<T> chatModelCalling) throws LLMConfigException {
+
+		return chatModelCalling.call(model);
 	}
 
 }

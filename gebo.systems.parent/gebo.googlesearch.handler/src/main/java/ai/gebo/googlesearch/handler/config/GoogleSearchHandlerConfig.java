@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import ai.gebo.architecture.ai.model.ChatHistoryRequired;
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import lombok.Data;
@@ -46,7 +46,7 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 
 	public GoogleSearchHandlerConfig() {
 		prompt = new GPromptTemplateConfig();
-		prompt.setChatHistory(ChatHistoryRequired.NOT_REQUIRED);
+		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		prompt.setPromptUse(GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT);
 		prompt.setSystemPromptTemplate(queryExtractionPrompt);
 		prompt.setUserPromptTemplate("INPUT\r\n" + "The user question is:\r\n" + "\r\n" + "<<<\r\n" + "{question}\r\n"

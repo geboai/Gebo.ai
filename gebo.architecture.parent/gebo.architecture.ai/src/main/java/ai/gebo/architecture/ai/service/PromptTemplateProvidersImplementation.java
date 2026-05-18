@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.validator.internal.util.ConcurrentReferenceHashMap.ReferenceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,8 +60,8 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 
 		for (GPromptTemplateLibraryReference reference : overriddenList) {
 			LOGGER.info("Loading prompt:" + reference);
-			
-			GPromptTemplateConfig prompt = this.loadReference(reference,objectFromActualClassLoader);
+
+			GPromptTemplateConfig prompt = this.loadReference(reference, objectFromActualClassLoader);
 
 			out.add(prompt);
 
@@ -80,8 +81,10 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		prompt.setLangCode(reference.getLangCode());
 		prompt.setModelProvider(reference.getModelProvider());
 		prompt.setModelCode(reference.getModelCode());
-		prompt.setSystemPromptTemplate(tryLoadString(reference.getSystemReference(),objectFromActualClassLoader));
-		prompt.setUserPromptTemplate(tryLoadString(reference.getUserReference(),objectFromActualClassLoader));
+		prompt.setSystemPromptTemplate(tryLoadString(reference.getSystemReference(), objectFromActualClassLoader));
+		prompt.setUserPromptTemplate(tryLoadString(reference.getUserReference(), objectFromActualClassLoader));
+		prompt.setChatHistory(reference.getChatHistory());
+		prompt.setContextDocuments(reference.getContextDocuments());
 		return prompt;
 	}
 

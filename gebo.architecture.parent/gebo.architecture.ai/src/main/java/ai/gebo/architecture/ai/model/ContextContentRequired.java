@@ -1,5 +1,5 @@
 package ai.gebo.architecture.ai.model;
 
-public enum ChatHistoryRequired {
+public enum ContextContentRequired {
 	REQUIRED, NOT_REQUIRED
 }
