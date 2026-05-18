@@ -90,7 +90,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			throws GeboChatSessionLifecycleException, LLMConfigException {
 		IChatRequestContext context = minimalChatContext.createChatRequestContext();
 		AtomicBoolean completed = state.getCompleted();
-		Map<String, Object> promptsParameters = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
+		Map<String, Object> promptsParameters = new HashMap<>();
 		final GPromptTemplateConfig analisysPrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_FILE_ANALISYS_PROMPT);
 		final Vector<LLMInputDocument> results = new Vector<LLMInputDocument>();

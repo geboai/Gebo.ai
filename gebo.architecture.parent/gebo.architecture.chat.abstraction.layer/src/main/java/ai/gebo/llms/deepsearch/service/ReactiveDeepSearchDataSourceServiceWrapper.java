@@ -96,11 +96,6 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
-		additionalVariables.putAll(CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext));
-		// With latest specialized prompt for each data source the following is not
-		// needed
-		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
-		// deepSearchConfig, request));
 		DeepSearchDataSourceExtractedSearchQueries searches = super.callLLMWithConsolidationStructuredReturn(
 				serviceModel, prompt, minimalChatContext.createChatRequestContext(),
 				consolidatedText != null ? consolidatedText : "", additionalVariables,
@@ -206,7 +201,7 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		Class<T> nativeSearchServiceDataType = nativeSearchService.getNativeSearchDataStructureType();
 		String promptTemplateCode = nativeSearchService.getNativePromptTemplateUseCode();
 		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(promptTemplateCode);
-		Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
+		Map<String, Object> promptParams = new HashMap<>();
 		List<SearchableSystemMetaData> searchables = this.searchService.getSearchableSystems();
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();
 		for (SearchableSystemMetaData searchableSystemMetaData : searchables) {

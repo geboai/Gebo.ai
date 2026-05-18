@@ -53,7 +53,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT);
 		Map<String, Object> params = new HashMap<String, Object>();
-		Map<String, Object> chatContextParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
+		Map<String, Object> chatContextParams = new HashMap<>();
 		params.putAll(chatContextParams);
 		IChatRequestContext context = minimalChatContext.createChatRequestContext();
 		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt, context,
