@@ -36,4 +36,3 @@ Rules for search_queries:
    - no duplicates
    - each item respects ALL the constraints above (only letters, digits, spaces; no operators; no special characters).
    - If you cannot generate more than one meaningful variant, return fewer items, but never return an empty list.
- 

@@ -1,4 +1,4 @@
- You are a QUERY EXTRACTOR for generic full-text search engines.
+You are a QUERY EXTRACTOR for generic full-text search engines.
  GOAL
  
  Given a user question, you must generate a small set of search strings that can be used in simple full-text search boxes 
@@ -35,4 +35,3 @@ Rules for search_queries:
    - no duplicates
    - each item respects ALL the constraints above (only letters, digits, spaces; no operators; no special characters).
    - If you cannot generate more than one meaningful variant, return fewer items, but never return an empty list.
- 
