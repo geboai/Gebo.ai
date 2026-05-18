@@ -18,8 +18,8 @@ ai.gebo.prompts:
       langCode: en
       systemReference: /prompts-library/en/summarize-chat-description-system-prompt.txt
       userReference: /prompts-library/en/summarize-chat-description-user-prompt.txt
-      chatHistory: NOT_REQUIRED
-      contextDocuments: NOT_REQUIRED
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: history-consolidation-prompt
       langCode: en
       systemReference: /prompts-library/en/history-consolidation-prompt-system-prompt.txt
@@ -48,20 +48,20 @@ ai.gebo.prompts:
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-rag-output-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-rag-output-prompt-user-prompt.txt
-      chatHistory: NOT_REQUIRED
+      chatHistory: REQUIRED
       contextDocuments: REQUIRED
     - promptUse: default-pipeline-chat-output-prompt
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-chat-output-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-chat-output-prompt-user-prompt.txt
-      chatHistory: NOT_REQUIRED
-      contextDocuments: NOT_REQUIRED
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-tools-call-output-prompt
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-tools-call-output-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-tools-call-output-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
+      contextDocuments: REQUIRED
     # deep search prompts  
     - promptUse: deep-search-file-analisys-prompt
       langCode: en
@@ -85,8 +85,8 @@ ai.gebo.prompts:
       langCode: en
       systemReference: /prompts-library/en/deep-search-content-rating-prompt-system-prompt.txt
       userReference: /prompts-library/en/deep-search-content-rating-prompt-user-prompt.txt
-      chatHistory: REQUIRED
-      contextDocuments: REQUIRED
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: deep-search-keyword-generation-prompt
       langCode: en
       systemReference: /prompts-library/en/deep-search-keyword-generation-prompt-system-prompt.txt
@@ -104,7 +104,7 @@ ai.gebo.prompts:
       systemReference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-rag-search-planner
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-rag-search-planner-system-prompt.txt
@@ -116,13 +116,13 @@ ai.gebo.prompts:
       systemReference: /prompts-library/en/deep-search-empty-results-fallback-prompt-system-prompt.txt
       userReference: /prompts-library/en/deep-search-empty-results-fallback-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-chat-with-documents-prompt
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-chat-with-documents-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-chat-with-documents-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: NOT_REQUIRED
+      contextDocuments: REQUIRED
     #pure search      
     - promptUse: default-pipeline-pure-search-datasources-selection-prompt
       langCode: en
@@ -134,7 +134,7 @@ ai.gebo.prompts:
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-user-prompt.txt
-      chatHistory: REQUIRED
+      chatHistory: NOT_REQUIRED
       contextDocuments: NOT_REQUIRED
     - promptUse: default-pipeline-pure-search-summary-prompt
       langCode: en
