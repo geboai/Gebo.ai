@@ -18,6 +18,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.ChatSessionEntryImpl.ChatSessionEntryImplBuilder;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
@@ -43,13 +46,27 @@ public class GUserChatSession extends GBaseObject {
 	private String chatMemoryId = null; // Identifier for chat memory
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
-	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
-	public IChatRequestContext createChatRequestContext() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
 
-	
-	
+	public IChatRequestContext createChatRequestContext() {
+		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
+		List<IChatSessionEntry> _interactions = new ArrayList<>();
+		for (int i = 0; i < interactions.size(); i++) {
+			ChatInteractions interaction = interactions.get(i);
+			ChatSessionEntryImplBuilder sBuilder = IChatSessionEntry.builder();
+			String user = interaction.getRequest() != null && interaction.getRequest().getQuery() != null
+					? interaction.getRequest().getQuery()
+					: "<<empty text>>";
+			String assistant = interaction.getResponse() != null && interaction.getResponse().getQueryResponse() != null
+					? interaction.getResponse().getQueryResponse().toString()
+					: "<<empty text>>";
+			sBuilder.user(user);
+			sBuilder.assistant(assistant);
+			_interactions.add(sBuilder.build());
+		}
+		builder.interactions(_interactions);
+		builder.actualUserRequest("<<no actual user request present>>");
+		return builder.build();
+	}
 
 }

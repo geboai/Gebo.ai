@@ -1,7 +1,13 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.ChatSessionEntryImpl.ChatSessionEntryImplBuilder;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,7 +26,27 @@ public class MinimalChatContext implements ITokensCountable {
 	}
 
 	public IChatRequestContext createChatRequestContext() {
-		// TODO Auto-generated method stub
-		return null;
+		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
+		if (this.currentRequest != null)
+			builder = builder.actualUserRequest(GeboChatRequest.actualQuery(this.currentRequest));
+		if (this.chatHistory != null) {
+			String consolidated = this.chatHistory.getConsolidationText();
+			if (consolidated != null) {
+				builder = builder.consolidatedHistory(consolidated);
+			}
+			List<IChatSessionEntry> interactions = new ArrayList<>();
+
+			if (chatHistory.getLatestEntries() != null && chatHistory.getLatestEntries().getInteractions() != null) {
+				for (CSSSimplefiedInteraction entry : chatHistory.getLatestEntries().getInteractions()) {
+					ChatSessionEntryImplBuilder sBuilder = IChatSessionEntry.builder();
+					sBuilder.user(entry.getUser() != null ? entry.getUser() : "<<empty text>>");
+					sBuilder.assistant(entry.getAssistant() != null ? entry.getAssistant() : "<<empty text>>");
+					interactions.add(sBuilder.build());
+				}
+			}
+			builder.interactions(interactions);
+
+		}
+		return builder.build();
 	}
 }
