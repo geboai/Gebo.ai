@@ -6,6 +6,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -55,6 +56,15 @@ public class GRankerServiceImpl implements IGRankerService {
 		RankingOutput out = rankerModel.getRankerModel().call(_input);
 		List<Document> documents = out.getRanked().stream().map(x -> x.getDocument()).toList();
 		return documents;
+	}
+
+	@Override
+	public int getRankerConfiguredChunkSize() {
+		IGConfigurableRankerModel rankerModel = rankerModelDao.defaultHandler();
+		if (rankerModel == null)
+			return 512;
+		Integer documentTokens = ((GBaseRankerModelConfig) rankerModel.getConfig()).getMaxDocumentTokens();
+		return documentTokens == null ? 512 : documentTokens.intValue();
 	}
 
 }

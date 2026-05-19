@@ -1,7 +1,9 @@
 package ai.gebo.architecture.ai.model;
 
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +21,14 @@ public class MetaDocumentRenderer {
 	private final String project;
 	private final String knowledgeBase;
 	private final String content;
+	private final String author;
+	private final String publishedDate;
 	private final List<MetaDocumentCategory> categories;
+	private final TreeMap<String, String> customFields = new TreeMap<>();
+
+	public void addCustomField(String field, String value) {
+		customFields.put(field, value);
+	}
 
 	public String render() {
 		StringBuilder buffer = new StringBuilder(4096);
@@ -33,10 +42,15 @@ public class MetaDocumentRenderer {
 		appendField(buffer, "url", url);
 		appendField(buffer, "knowledge-base", knowledgeBase);
 		appendField(buffer, "project", project);
+		appendField(buffer, "author", author);
+		appendField(buffer, "publishedDate", publishedDate);
+		for (Entry<String, String> entry : customFields.entrySet()) {
+			appendField(buffer, entry.getKey(), entry.getValue());
+		}
 		appendCategories(buffer, categories);
 
 		buffer.append("<content>\n");
-		appendText(buffer, content!=null?content:"");
+		appendText(buffer, content != null ? content : "");
 		buffer.append("\n</content>\n");
 
 		buffer.append("</document>");

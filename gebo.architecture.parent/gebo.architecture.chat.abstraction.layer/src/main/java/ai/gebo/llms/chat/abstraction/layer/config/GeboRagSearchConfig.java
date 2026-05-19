@@ -49,6 +49,8 @@ public class GeboRagSearchConfig {
 	private final GUserChatSessionRepository sessionRepo;
 	// Default number of top elements to be considered
 	private int defaultTopK = 15;
+	private int pureSearchRankedTopK = 50;
+	private int pureSearchSingleDataSourceTopK = 150;
 	// Default similarity threshold for comparisons
 	private double defaultSimilarityThreshold = 0.50;
 
@@ -84,10 +86,10 @@ public class GeboRagSearchConfig {
 	@Bean
 	@Scope("singleton")
 	public IInternalKnowledgeLLMAssistedRetrieveService internalKnowledgeLLMAssistedRetrieveService(
-			
+
 			LLMGeneratedResourceRepository generatedRepo, IGChatSessionLifeCycleService chatSessionLifecycleService,
 			ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGDocumentsSearchService searchesService,IGRankerService rankerService) {
+			IGDocumentsSearchService searchesService, IGRankerService rankerService) {
 		return new InternalKnowledgeLLMAssistedRetrieveServiceImpl(chatSessionLifecycleService, configuration,
 				promptsDao, searchesService, securityService, rankerService);
 	}

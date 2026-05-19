@@ -12,5 +12,7 @@ public interface IGRankerService {
 
 	public List<Document> call(List<Document> input, String query, int topK) throws LLMConfigException;
 
+	public int getRankerConfiguredChunkSize();
+
 	public boolean isRankerConfigured();
 }

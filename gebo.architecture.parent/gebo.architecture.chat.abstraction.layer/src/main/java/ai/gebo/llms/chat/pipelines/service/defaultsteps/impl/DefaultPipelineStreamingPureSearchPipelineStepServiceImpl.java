@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -70,6 +71,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
 	private final IGDeepSearchService deepSearchService;
 	private final IGRankerService rankerService;
+	private final GeboRagSearchConfig ragSearchConfig;
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -95,9 +97,9 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException,
 			IOException {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-		final int perDataSourceK = 200;
-		final int globalK = 50;
-		final int textSampleTokensSize = 4096;
+		final int perDataSourceK = ragSearchConfig.getPureSearchSingleDataSourceTopK();
+		final int globalK = ragSearchConfig.getPureSearchRankedTopK();
+		final int textSampleTokensSize = this.rankerService.getRankerConfiguredChunkSize();
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		sinkUIEmitter.notifyUser("selectDataSources", "Selecting sarch data sources", "pi pi-search", 3000l,
 				NotificationType.INFO);
