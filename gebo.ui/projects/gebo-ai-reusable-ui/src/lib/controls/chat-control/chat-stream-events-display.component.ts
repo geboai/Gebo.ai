@@ -76,6 +76,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
         this.completionPercent=0;
     }
     public onMessage(msg?: IGeboChatMessage) {
+        this.currentChatMessage=msg;
         if (msg?.contentObjectType) {
             switch (msg.contentObjectType) {
                 case "ChatNotificationContent": {

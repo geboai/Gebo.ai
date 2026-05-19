@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
@@ -319,6 +320,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		if (configuration == null) {
 			configuration = this.defaultDeepsearchConfig;
 		}
+		final DeepSearchConfig sampledConfig = configuration;
 		List<IGReactiveDeepSearchDataSourceService> handlersFullList = this.enabledDataSourcesLookupService
 				.enabledDataSources(configuration);
 		List<IGReactiveDeepSearchDataSourceService> filtered = handlersFullList.stream()
@@ -329,6 +331,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
+						emitter.notifyUser("search-" + handler.getHandlerId(),
+								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
+								NotificationType.INFO);
 						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
 								perDataSourceK, sampleTextTokensSize, chunkSessionId);
 					} catch (Throwable e) {
@@ -344,6 +349,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
+						emitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", "pi pi-file",
+								3000l, NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamPureSearch(minimalChatContext, emitter,
 								serviceModel, serviceModel, chunkSessionId, perDataSourceK, sampleTextTokensSize);
 					} catch (Throwable e) {

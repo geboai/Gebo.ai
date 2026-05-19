@@ -96,7 +96,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 			IOException {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final int perDataSourceK = 200;
-		final int globalK = 100;
+		final int globalK = 50;
 		final int textSampleTokensSize = 4096;
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		sinkUIEmitter.notifyUser("selectDataSources", "Selecting sarch data sources", "pi pi-search", 3000l,
@@ -219,6 +219,8 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				}
 				container.clear();
 				container.addAll(rankedEntries);
+				sinkUIEmitter.notifyUser("rankedDocuments", "Documents short list obtained", "pi pi-ai", 3000l,
+						NotificationType.INFO);
 				return Flux.fromIterable(rankedEntries);
 			});
 		});

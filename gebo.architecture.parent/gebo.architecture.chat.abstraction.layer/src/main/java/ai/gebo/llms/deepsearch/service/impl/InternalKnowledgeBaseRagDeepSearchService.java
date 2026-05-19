@@ -267,7 +267,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String chunkingSessionId, int topK, int sampleTextTokensSize)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
-		// emitter.notifyUser("", chunkingSessionId, chunkingSessionId, null, null);
+		
 		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
 				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
