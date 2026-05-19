@@ -713,7 +713,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 chatModelCode: r.chatModelCode,
                                 userChatContextCode: response.userChatContextCode,
                                 query: null,
-                                chatPipelineProcessId: null
+                                chatPipelineProcessId: null,
+                                forcedRequestDocuments:[]
                             };
                             this.formGroup.patchValue(dataUpdate);
 

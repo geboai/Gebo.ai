@@ -17,7 +17,7 @@
                 </span>
             </div>
         </div>
-        } @else {
+        } @else if(actualPipelineRoutingOption) {
         <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i
             [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
         }

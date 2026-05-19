@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -31,9 +32,13 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter.Builder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.model.DocumentMetaInfos;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import reactor.core.publisher.Flux;
 
 public class BaseLLMSInvokingService {
@@ -659,6 +664,103 @@ public class BaseLLMSInvokingService {
 			result = ClientChatCallUtil.removeThinking(result);
 		}
 		return result;
+	}
+
+	@FunctionalInterface
+	protected static interface BatchLLMConsumer {
+		public void consume(Document document) throws LLMConfigException;
+	}
+
+	@AllArgsConstructor
+	protected static class BatchConsumer implements BatchLLMConsumer {
+		private final IGConfigurableChatModel chatModel;
+		private final GPromptTemplateConfig prompt;
+		private final IChatRequestContext context;
+		private final Map<String, Object> additionalParams;
+		private String consolidatedText = "";
+		private final List<Document> currentlyCumulated = new ArrayList<>();
+
+		public void consume(Document document) throws LLMConfigException {
+			long tokensize = weight(document);
+			long queueSize = weight(currentlyCumulated);
+			long paramssize = weight(additionalParams);
+			double promptSize = prompt.getTokensSize();
+			double windowSize = chatModel.getContextLength();
+
+			long maxTokens = (long) (windowSize * 0.7 - promptSize - paramssize);
+			if ((tokensize + queueSize) < maxTokens) {
+				currentlyCumulated.add(document);
+			} else if (queueSize > 0l && queueSize < maxTokens) {
+				this.consolidatedText = consolidate();
+			}
+		}
+
+		String consolidate() throws LLMConfigException {
+			if (!currentlyCumulated.isEmpty()) {
+				Map<String, Object> params = new HashMap<>(additionalParams);
+				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidatedText);
+				params.put(DOCUMENTS_TEMPLATE_VARIABLE, currentlyCumulated);
+				String result = chatModel.textResponse(prompt, params, context);
+				final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
+				if (result != null && skipThinkingMarkup) {
+					result = ClientChatCallUtil.removeThinking(result);
+				}
+				currentlyCumulated.clear();
+				this.consolidatedText = result;
+			}
+			return this.consolidatedText;
+		}
+
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Stream<Document> documents, String consolidated,
+			Map<String, Object> additionalParams) throws LLMConfigException {
+		if (prompt.getContextDocuments() == ContextContentRequired.REQUIRED) {
+			throw new IllegalStateException(
+					"Cannot use prompt template with session documents template: " + prompt.getPromptUse());
+		}
+		BatchConsumer consumer = new BatchConsumer(chatModel, prompt, context, additionalParams, consolidated);
+		documents.forEach((x) -> {
+			try {
+				consumer.consume(x);
+			} catch (Throwable th) {
+				LOGGER.error("Exception while consuming documents", th);
+			}
+		});
+		return consumer.consolidate();
+	}
+
+	public static long weight(Map<String, Object> additionalParams) {
+		long total = 0l;
+		for (Entry<String, Object> entry : additionalParams.entrySet()) {
+			if (entry.getValue() != null) {
+				if (entry.getValue() instanceof String val) {
+					total += ITokensCountable.stringsTokensSize(val);
+				} else if (entry.getValue() instanceof ITokensCountable countable) {
+					total += countable.getTokensSize();
+				}
+			}
+		}
+		return total;
+	}
+
+	public static long weight(Document document) {
+		if (document.getMetadata() != null && document.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) != null
+				&& document.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number tokens) {
+			return tokens.longValue();
+		} else {
+			return document.getText() != null ? ITokensCountable.stringsTokensSize(document.getText()) : 0l;
+		}
+
+	}
+
+	public static long weight(List<Document> documents) {
+		long total = 0l;
+		for (Document document : documents) {
+			total += weight(document);
+		}
+		return total;
 	}
 
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
