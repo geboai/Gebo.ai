@@ -38,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -75,6 +76,7 @@ import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService.Doc
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceServiceRepositoryPattern;
 import ai.gebo.llms.deepsearch.service.IGReactiveDynamicDataSourceServicesProvider;
 import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -439,7 +441,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		List<IGReactiveDeepSearchDataSourceService> filtered = handlersFullList.stream()
 				.filter(handler -> sampledDataSources != null && sampledDataSources.contains(handler.getHandlerId()))
 				.toList();
-		final Map<String, SearchResult> results = new Hashtable<>();
+		final Map<String, GResponseDocumentRef> results = new Hashtable<>();
+		final Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 		List<Supplier<Flux<Document>>> suppliers = new ArrayList<>();
 		for (IGReactiveDeepSearchDataSourceService handler : filtered) {
 			Supplier<Flux<Document>> supplier = () -> {
@@ -452,7 +455,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 								chatModel, serviceModel, chunkSessionId, globalK);
 						return fl.map(x -> {
 							if (!results.containsKey(x.getSearchResult().getCode())) {
-								results.put(x.getSearchResult().getCode(), x.getSearchResult());
+								GResponseDocumentRef ref = new GResponseDocumentRef(x.getSearchResult());
+								results.put(x.getSearchResult().getCode(), ref);
+								GInputProcessingEvent processingEvent = new GInputProcessingEvent(ref);
+								sinkUIEmitter.next(new GeboChatMessageEnvelope(processingEvent));
 							}
 							return x.getDocument();
 						});
@@ -472,7 +478,20 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base",
 								"pi pi-file", 3000l, NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamSearchResults(runtimeData,
-								sinkUIEmitter, chatModel, serviceModel, chunkSessionId, globalK);
+								sinkUIEmitter, chatModel, serviceModel, chunkSessionId, globalK).map(doc -> {
+
+									String code = doc.getMetadata() != null
+											&& doc.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
+													? doc.getMetadata().get(DocumentMetaInfos.CONTENT_CODE).toString()
+													: null;
+									if (code != null && !docrefs.containsKey(code)) {
+										GResponseDocumentRef ref = new GResponseDocumentRef(doc);
+										docrefs.put(code, new GResponseDocumentRef(doc));
+										GInputProcessingEvent processingEvent = new GInputProcessingEvent(ref);
+										sinkUIEmitter.next(new GeboChatMessageEnvelope(processingEvent));
+									}
+									return doc;
+								});
 					} catch (Throwable e) {
 
 						return Flux.empty();
@@ -498,7 +517,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
-		final Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
+
 		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
 			return runAs.doRunAsWithReturnAndException(() -> {
 				return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
@@ -541,7 +560,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<GeboChatMessageEnvelope> finalMessages = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				response.setQueryResponse(cumulative.toString());
-				response.setDocumentsRef(new ArrayList<>(docrefs.values()));
+				ArrayList docs = new ArrayList<>(docrefs.values());
+				docs.addAll(results.values());
+				response.setDocumentsRef(docs);
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 				envelope.setLastMessage(true);
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
