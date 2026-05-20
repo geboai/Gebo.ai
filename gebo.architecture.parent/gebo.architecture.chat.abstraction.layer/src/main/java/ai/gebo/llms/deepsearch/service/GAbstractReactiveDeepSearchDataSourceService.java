@@ -44,7 +44,9 @@ import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
@@ -710,16 +712,16 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	}
 
 	@Override
-	public Flux<DocumentWithSearchResult> streamSearchResults(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, DeepSearchState deepSearchState, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
-			List<IDeepSearchResult> pastSystemsResponses, int topK, String chunkingSessionId) throws LLMConfigException,
-			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
-
+	public Flux<DocumentWithSearchResult> streamSearchResults(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String chunkingSessionId, int topK) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException, GeboChatSessionLifecycleException {
+		GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		DeepSearchRequest dsr = new DeepSearchRequest();
-		dsr.setChatRequestCode(minimalChatContext.getCurrentRequest().getId());
-		dsr.setUserChatContextCode(minimalChatContext.getCurrentRequest().getUserChatContextCode());
-		dsr.setQuery(GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()));
+		dsr.setChatRequestCode(request.getId());
+		dsr.setUserChatContextCode(request.getUserChatContextCode());
+		dsr.setQuery(GeboChatRequest.actualQuery(request));
+		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
@@ -781,4 +783,5 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		});
 		return parallelResult.sequential().filter(x -> x != null);
 	}
+
 }

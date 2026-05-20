@@ -44,6 +44,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
@@ -547,6 +548,23 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingAndProvidingService i
 			});
 		}).subscribeOn(deepSearchScheduler);
 
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamNewDeepSearch(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			List<String> searchDataSources, int perDataSourceK, int globalK)
+			throws LLMConfigException, GeboChatSessionLifecycleException {
+
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		return Flux.defer(() -> {
+			return runAs.doRunAsWithReturn(() -> {
+				final FullReactiveDeepsearchWorker worker = runtimeBinder
+						.getImplementationOf(FullReactiveDeepsearchWorker.class);
+				return worker.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
+						searchDataSources, perDataSourceK, globalK);
+			});
+		}).subscribeOn(deepSearchScheduler);
 	}
 
 }

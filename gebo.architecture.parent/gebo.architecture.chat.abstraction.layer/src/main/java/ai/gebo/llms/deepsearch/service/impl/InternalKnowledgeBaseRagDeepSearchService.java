@@ -1,7 +1,9 @@
 package ai.gebo.llms.deepsearch.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -11,10 +13,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
@@ -22,6 +26,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
+import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -31,6 +36,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.UserUploadContentServerSide;
@@ -39,6 +47,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSid
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
@@ -65,6 +74,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
@@ -267,7 +277,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			String chunkingSessionId, int topK, int sampleTextTokensSize)
 			throws LLMConfigException, GeboChatSessionLifecycleException {
-		
+
 		Flux<AIDocumentsSet> retrievedFlux = this.llmAssistedRetriveService.doDocumentsRetrieve(minimalChatContext,
 				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK);
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
@@ -293,6 +303,36 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 			});
 		});
 		return outFlux;
+	}
+
+	@Override
+	public Flux<Document> streamSearchResults(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String chunkingSessionId, int topK) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException, GeboChatSessionLifecycleException {
+		Flux<Document> chatWithDocumentsFlux = runtimeData.getRequestResources().getChatWithDocuments() != null
+				? Flux.fromIterable(runtimeData.getRequestResources().getChatWithDocuments().aiDocumentsList())
+				: Flux.empty();
+		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
+		Flux<Document> searchFlux = llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, 50).flatMap(x -> {
+					List<Document> docsList = x.aiDocumentsList();
+					docsList.forEach(doc -> {
+						String code = doc.getMetadata() != null
+								&& doc.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
+										? doc.getMetadata().get(DocumentMetaInfos.CONTENT_CODE).toString()
+										: null;
+						if (code != null && !docrefs.containsKey(code)) {
+							GResponseDocumentRef ref = new GResponseDocumentRef(doc);
+							docrefs.put(code, new GResponseDocumentRef(doc));
+							GInputProcessingEvent processingEvent = new GInputProcessingEvent(ref);
+							sinkUIEmitter.next(new GeboChatMessageEnvelope(processingEvent));
+						}
+					});
+					return Flux.fromIterable(docsList);
+				});
+		Flux<Document> documentFlux = Flux.concat(searchFlux, chatWithDocumentsFlux);
+		return documentFlux;
 	}
 
 }

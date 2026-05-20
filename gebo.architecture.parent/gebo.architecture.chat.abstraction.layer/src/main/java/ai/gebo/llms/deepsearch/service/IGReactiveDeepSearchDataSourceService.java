@@ -10,7 +10,9 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
@@ -80,15 +82,14 @@ public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, St
 		private final Document document;
 	}
 
-	public Flux<DocumentWithSearchResult> streamSearchResults(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, DeepSearchState deepSearchState, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
-			List<IDeepSearchResult> pastSystemsResponses,int topK,String chunkingSessionId) throws LLMConfigException,
-			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
-
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK,
 			int sampleTextTokensSize, String chunkingSessionId) throws LLMConfigException, IOException,
 			GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException;
+
+	public Flux<DocumentWithSearchResult> streamSearchResults(ChatPipelineExecutionRuntimeData runtimeData,
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String chunkingSessionId, int topK) throws LLMConfigException, IOException, GeboIngestionException,
+			GeboContentHandlerSystemException, SearchServiceException, GeboChatSessionLifecycleException;
 
 }

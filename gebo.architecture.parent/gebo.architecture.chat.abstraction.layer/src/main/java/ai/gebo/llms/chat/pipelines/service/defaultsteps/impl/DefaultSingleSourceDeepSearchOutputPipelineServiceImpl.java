@@ -23,6 +23,7 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchDataSourceExecutor;
+import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGReactiveDeepSearchDataSourceService;
 import ai.gebo.llms.deepsearch.service.IGReactiveEnabledDeepSearchDataSourceLookupService;
 import ai.gebo.system.ingestion.GeboIngestionException;
@@ -38,7 +39,7 @@ public class DefaultSingleSourceDeepSearchOutputPipelineServiceImpl implements I
 			DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS, StepEnvironmentType.STRING_LIST);
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledLookupService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
-	private final IGDeepSearchDataSourceExecutor executor;
+	private final IGDeepSearchService deepSearchService;
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -70,15 +71,13 @@ public class DefaultSingleSourceDeepSearchOutputPipelineServiceImpl implements I
 				_choosedSourceId = handlers.get(0).getHandlerId();
 			}
 		}
-		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
+	
 
-		IGReactiveDeepSearchDataSourceService handler = enabledLookupService.enabledDataSourceByCode(choosedSourceId,
-				config);
+		
 		try {
-			return executor.execute(handler, runtimeData.getRequestResources().getCurrentRequest(), minimalChatContext,
-					runtimeData.getChatResponse(), chatModel, serviceModel);
-		} catch (LLMConfigException | IOException | GeboIngestionException | GeboContentHandlerSystemException
-				| SearchServiceException e) {
+			return deepSearchService.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
+					List.of(_choosedSourceId.toString()), 100, 50);
+		} catch (LLMConfigException e) {
 			throw new ChatPipelineException("Pipeline broken on search", e);
 		}
 	}
