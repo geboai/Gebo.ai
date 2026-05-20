@@ -448,8 +448,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			double dtokens = tokens;
 			double dtime = Math.round(((double) deltaTime) / 10.0) / 100.0;
 			double tokenSec = dtime != 0.0 ? dtokens / dtime : 0.0;
-			LOGGER.debug("LLM PERFORMANCES: " + reqObject.getModelCode() + " processed: " + tokens + " (tok) in " + dtime
-					+ " (sec) => input processing: " + tokenSec + " (token/sec)");
+			LOGGER.debug("LLM PERFORMANCES: " + reqObject.getModelCode() + " processed: " + tokens + " (tok) in "
+					+ dtime + " (sec) => input processing: " + tokenSec + " (token/sec)");
 		}
 	}
 
@@ -526,10 +526,28 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		ResponseType data = res.entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
-					+ (rt != null ? rt.getName() : "NULL") + ",..)");
+					+ (rt != null ? rt.getName() : "NULL") + ",..) returned:" + data);
 			logPerformances(reqObject, timestamp);
 		}
 		return data;
+	}
+
+	@Override
+	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException {
+		long timestamp = 0l;
+		if (LOGGER.isDebugEnabled()) {
+			timestamp = System.currentTimeMillis();
+			LOGGER.debug("Begin textResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+		}
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
+		CallResponseSpec response = reqObject.getRequestSpec().call();
+		String out = response.content();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End textResponse(" + promptTemplate.getPromptUse() + ", ...,...) returned: " + out);
+			logPerformances(reqObject, timestamp);
+		}
+		return out;
 	}
 
 	@Override

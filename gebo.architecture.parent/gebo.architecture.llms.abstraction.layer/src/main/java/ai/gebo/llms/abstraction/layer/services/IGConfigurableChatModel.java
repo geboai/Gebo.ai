@@ -129,11 +129,8 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException;
 
-	public default String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
-			IChatRequestContext chatContext) throws LLMConfigException {
-		ChatResponse response = response(promptTemplate, params, chatContext);
-		return response != null ? response.getResult().getOutput().getText() : null;
-	}
+	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext) throws LLMConfigException;
 
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)

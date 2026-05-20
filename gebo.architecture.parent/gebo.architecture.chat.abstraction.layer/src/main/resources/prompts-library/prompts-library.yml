@@ -43,7 +43,7 @@ ai.gebo.prompts:
       systemReference: /prompts-library/en/default-pipeline-routing-decision-prompt-system-prompt.txt
       userReference: /prompts-library/en/default-pipeline-routing-decision-prompt-user-prompt.txt
       chatHistory: REQUIRED
-      contextDocuments: REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: default-pipeline-rag-output-prompt
       langCode: en
       systemReference: /prompts-library/en/default-pipeline-rag-output-prompt-system-prompt.txt

@@ -56,28 +56,28 @@ Otherwise, choose DEEP_SEARCH_RESPONSE to gather evidence from sources (citation
 
 QA INTENT RULE:
 If deliverable=QA:
-If (A)+(B) context is sufficient, choose PURE_LLM_RESPONSE.
+If (A)+(B) and chat history context is sufficient, choose PURE_LLM_RESPONSE.
 Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE.
 Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
 Else choose PURE_LLM_RESPONSE.
 
 HOWTO INTENT RULE:
 If deliverable=HOWTO:
-If (A)+(B) context is sufficient, choose PURE_LLM_RESPONSE.
+If (A)+(B)  and chat history  context is sufficient, choose PURE_LLM_RESPONSE.
 Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE (single-pass is usually enough for procedures).
 Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
 Else choose PURE_LLM_RESPONSE.
 
 SUMMARY INTENT RULE:
 If deliverable=SUMMARY:
-If (A)+(B) already contains the material to summarize, choose PURE_LLM_RESPONSE.
+If (A)+(B)  and chat history already contains the material to summarize, choose PURE_LLM_RESPONSE.
 Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE.
 Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
 Else choose PURE_LLM_RESPONSE.
 
 UNKNOWN INTENT RULE (fallback):
 If deliverable=UNKNOWN:
-If (A)+(B) context is sufficient, choose PURE_LLM_RESPONSE.
+If (A)+(B)  and chat history context is sufficient, choose PURE_LLM_RESPONSE.
 Else if internal KB (D) is available, choose RAG_LLM_RESPONSE.
 Else if external sources (C) are available, choose DEEP_SEARCH_RESPONSE.
 Else choose PURE_LLM_RESPONSE.
@@ -106,6 +106,7 @@ If routingDecision=DEEP_SEARCH_RESPONSE, output one or more additional lines:
 deepSearchedSystems=<sourceCode taken from (C)>
 
 routingDecision must be exactly one of:
+
 PURE_LLM_RESPONSE
 RAG_LLM_RESPONSE
 DEEP_SEARCH_RESPONSE
