@@ -1,8 +1,11 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -41,6 +45,7 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.llms.deepsearch.service.IGInternalKnowledgeBaseDeepSearchExecutor;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchServiceImpl;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -53,6 +58,7 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 		extends BaseLLMSInvokingService implements IStreamingOutputChatPipelineService {
 
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
+	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
 	public static final String DEFAULT_DEEPRAG_STREAMING = "default-deeprag-streaming";
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineServiceImpl.class);
@@ -100,7 +106,7 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 			final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 			final GeboChatResponse response = runtimeData.getChatResponse();
 			final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
-			;
+			final Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 			GenerativeFunction<Document, String> intermediateProcess = (initialValue, emitter, documentsList) -> {
 				return runAs.doRunAsWithReturnAndException(() -> {
 					return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
@@ -124,19 +130,34 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 			Flux<Document> chatWithDocumentsFlux = runtimeData.getRequestResources().getChatWithDocuments() != null
 					? Flux.fromIterable(runtimeData.getRequestResources().getChatWithDocuments().aiDocumentsList())
 					: Flux.empty();
-			Flux<Document> searchFlux = assistedSearch
-					.doDocumentsRetrieve(runtimeData.getMinimalChatContext(), serviceModel,
-							LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, 50)
-					.flatMap(x -> Flux.fromIterable(x.aiDocumentsList()));
+			Flux<Document> searchFlux = assistedSearch.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+					serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, 50)
+					.flatMap(x -> {
+						List<Document> docsList = x.aiDocumentsList();
+						docsList.forEach(doc -> {
+							String code = doc.getMetadata() != null
+									&& doc.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
+											? doc.getMetadata().get(DocumentMetaInfos.CONTENT_CODE).toString()
+											: null;
+							if (code != null && !docrefs.containsKey(code)) {
+								docrefs.put(code, new GResponseDocumentRef(doc));
+							}
+						});
+						return Flux.fromIterable(docsList);
+					});
 			Flux<Document> documentFlux = Flux.concat(searchFlux, chatWithDocumentsFlux);
 			Predicate<Document> isValidDocument = (document) -> document.isText() && document.getText() != null
 					&& document.getText().trim().length() > 0;
 			TokensLimitCompute<Document> tokensLimitCompute = (list, budget) -> TokensBudgetCalculator
 					.higherThanBudget(list, budget);
 			Predicate<String> outOfBandString = (v) -> v == null || v.equals(ERROR_IN_PROCESS);
+			Predicate<String> isEndOfProcessingCondition = (text) -> text != null
+					&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
+			Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
 			Flux<String> resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(documentFlux, sinkUIEmitter,
 					isValidDocument, tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS,
-					outOfBandString, ERROR_IN_PROCESS, outOfBandString, tokensBudget);
+					outOfBandString, ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition,
+					outputShortCutFunction, tokensBudget);
 			final StringBuffer cumulative = new StringBuffer();
 			Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = resultFlux.map(x -> {
 				cumulative.append(x);
@@ -145,6 +166,7 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 			Flux<GeboChatMessageEnvelope> finalMessages = Flux.defer(() -> {
 				return runAs.doRunAsWithReturn(() -> {
 					response.setQueryResponse(cumulative.toString());
+					response.setDocumentsRef(new ArrayList<>(docrefs.values()));
 					GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 					envelope.setLastMessage(true);
 					return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));

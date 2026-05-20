@@ -2,6 +2,9 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -38,15 +41,24 @@ public class TokensBudgetFluxCoordinator {
 	public static <D, T, Y> Flux<Y> tokenBudgetCoordinate(Flux<D> source, ISinkUIEmitter emitter,
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
-			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, long tokensBudget) {
+			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
+			Function<T, Y> outputShortCutFunction, long tokensBudget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
 		}
+		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
+		final AtomicReference<Y> shortCuttedOutput = new AtomicReference<Y>(null);
 		Flux<List<T>> flux = emitQueueWhenPredicateTrue(source.filter(validDocumentCheck),
 				list -> tokensCompute.higherThanBudgetTokens(list, tokensBudget)).parallel(4)
 				.runOn(Schedulers.boundedElastic()).map(input -> {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Begin map(...) code with " + input.size() + " elements");
+					}
+					if (endOfProcessing.get()) {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Shortcutting process in map(...)");
+						}
+						return null;
 					}
 					try {
 
@@ -54,18 +66,32 @@ public class TokensBudgetFluxCoordinator {
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("End map(...) code with " + input.size() + " returning:" + result);
 						}
+						if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
+							endOfProcessing.set(true);
+							Y outputValue = outputShortCutFunction.apply(result);
+							shortCuttedOutput.set(outputValue);
+						}
 						return result;
 					} catch (Throwable th) {
 						LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
 						return outOfBandValue;
 					}
-				}).filter(V -> !isOutOfBandValue.test(V)).sequential().buffer();
+				}).filter(V -> V != null && !isOutOfBandValue.test(V)).sequential().buffer();
 		Flux<Y> finalFlux = flux.flatMap(IntermediateResult -> {
 			try {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Begin flatMap(...) code with " + IntermediateResult.size() + " input elements");
 				}
-				Flux<Y> finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
+				Flux<Y> finalResult = null;
+				if (endOfProcessing.get()) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Returning shortcutted value");
+					}
+					Y output = shortCuttedOutput.get();
+					finalResult = Flux.just(output);
+				} else {
+					finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
+				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End flatMap(...) code");
 				}
