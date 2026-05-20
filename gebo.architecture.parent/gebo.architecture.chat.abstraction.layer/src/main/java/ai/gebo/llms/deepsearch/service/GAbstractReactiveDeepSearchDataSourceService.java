@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -21,6 +22,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.ChunkingPolicy;
+import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
@@ -75,6 +77,7 @@ import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
+import reactor.core.scheduler.Schedulers;
 
 public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContentExtractionType extends BaseSearchResultsExtractionDataType>
 		extends BaseLLMSInvokingAndProvidingService implements
@@ -386,8 +389,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		});
 		Flux<AbstractDeepSearchEvent> additionalAnalisys = additionalAnalisys(chunksLoadFunction, request, chatModel,
 				deepSearchConfig, furtherAnalisys, llmElaborate, listedEvents, avoidMultipleAccess);
-		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request,
-				context, chatContextTemplateParams, chatModel, deepSearchConfig, listedEvents, deepSearchState);
+		Flux<AbstractDeepSearchEvent> trail = consolidateDeepSearchDataSourceProcessedEvent(request, context,
+				chatContextTemplateParams, chatModel, deepSearchConfig, listedEvents, deepSearchState);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End streamSearch(....) handler=" + getHandlerId());
@@ -704,5 +707,78 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			return new PureSearchDocumentResultError(null, null, message);
 		});
 		return parallelResult.sequential();
+	}
+
+	@Override
+	public Flux<DocumentWithSearchResult> streamSearchResults(DeepSearchRequest request,
+			MinimalChatContext minimalChatContext, DeepSearchState deepSearchState, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig,
+			List<IDeepSearchResult> pastSystemsResponses, int topK, String chunkingSessionId) throws LLMConfigException,
+			IOException, GeboIngestionException, GeboContentHandlerSystemException, SearchServiceException {
+
+		DeepSearchRequest dsr = new DeepSearchRequest();
+		dsr.setChatRequestCode(minimalChatContext.getCurrentRequest().getId());
+		dsr.setUserChatContextCode(minimalChatContext.getCurrentRequest().getUserChatContextCode());
+		dsr.setQuery(GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()));
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
+			return runAs.doRunAsWithReturn(() -> {
+				try {
+					return Flux.just(executeSearches(dsr, minimalChatContext, List.of(), deepSearchDefaultConfig,
+							chatModel, serviceModel, chunkingSessionId, topK));
+				} catch (Throwable e) {
+					throw new RuntimeException(e);
+
+				}
+			});
+		});
+
+		ParallelFlux<List<SearchWithResults>> searchResults = ParallelFlux.from(searchBlockFlux);
+
+		ParallelFlux<IDocumentChunkWithRef> chunksFlux = searchResults.concatMap(results -> {
+
+			return runAs.doRunAsWithReturn(() -> {
+				Map<String, Boolean> joinedKeywords = new HashMap<>();
+				List<SearchResult> found = new ArrayList<>();
+				for (SearchWithResults item : results) {
+					found.addAll(item.getResults());
+					if (item.getSearchQuery() != null && item.getSearchQuery().getRelevantKeywords() != null) {
+						for (String kw : item.getSearchQuery().getRelevantKeywords()) {
+							joinedKeywords.put(kw.toLowerCase(), true);
+						}
+
+					}
+					if (item.getNativeQueryObject() != null) {
+						List<String> kws = item.getNativeQueryObject().relevantKeywords();
+						for (String kw : kws) {
+							joinedKeywords.put(kw.toLowerCase(), true);
+						}
+					}
+
+				}
+				List<String> keywords = new ArrayList<>(joinedKeywords.keySet());
+				ChunkingParams chunkingParams = new ChunkingParams();
+				chunkingParams.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
+				chunkingParams.setEnrichWithMetaData(false);
+				chunkingParams.setMatchingKeywords(keywords);
+				TextChunkingSpecs textChunkingSpecs = TextChunkingSpecs.of(4096);
+				chunkingParams.getChunkingSpecs().add(textChunkingSpecs);
+
+				return this.chunkingService.streamChunks(found, chunkingParams, chunkingSessionId,
+						deepSearchDefaultConfig.getDocumentsParallelism());
+			});
+		}).runOn(Schedulers.parallel());
+
+		ParallelFlux<DocumentWithSearchResult> parallelResult = chunksFlux.map(resultEntry -> {
+			if (!resultEntry.isErrorState()) {
+				SearchResult entry = (SearchResult) resultEntry.getDocumentRef();
+				DocumentChunk chunk = resultEntry.getChunk();
+				Document document = new Document(chunk.getId(), chunk.getChunkData(), chunk.getMetaData());
+				DocumentWithSearchResult value = new DocumentWithSearchResult(entry, document);
+				return value;
+			} else
+				return null;
+		});
+		return parallelResult.sequential().filter(x -> x != null);
 	}
 }

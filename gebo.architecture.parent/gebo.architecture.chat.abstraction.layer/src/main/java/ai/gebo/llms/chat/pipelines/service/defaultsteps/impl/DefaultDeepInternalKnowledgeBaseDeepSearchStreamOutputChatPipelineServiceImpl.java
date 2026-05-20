@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -42,9 +43,6 @@ import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
-import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
-import ai.gebo.llms.deepsearch.service.IGInternalKnowledgeBaseDeepSearchExecutor;
-import ai.gebo.llms.deepsearch.service.impl.DeepSearchServiceImpl;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
@@ -140,7 +138,10 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 											? doc.getMetadata().get(DocumentMetaInfos.CONTENT_CODE).toString()
 											: null;
 							if (code != null && !docrefs.containsKey(code)) {
+								GResponseDocumentRef ref = new GResponseDocumentRef(doc);
 								docrefs.put(code, new GResponseDocumentRef(doc));
+								GInputProcessingEvent processingEvent = new GInputProcessingEvent(ref);
+								sinkUIEmitter.next(new GeboChatMessageEnvelope(processingEvent));
 							}
 						});
 						return Flux.fromIterable(docsList);
