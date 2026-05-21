@@ -2,12 +2,7 @@
 <div class="gebo-ai-reusable-chat_chat-status">
     @if(routingChoiceSelector) {
     <div class="gebo-ai-reusable-chat__interaction-item-pipeline-route_label">
-        @if (currentNotification) {
-        <span id="NOTIFICATION">
-            <span [id]="currentNotification.code" [className]="currentNotification.notificationType"
-                gebo-ai-text>{{currentNotification.message}}</span>
-        </span>
-        }
+        
         @if (inputProcessingEvent) {
         <div class="pure-search">
             <div class="pure-search_label">
@@ -17,7 +12,14 @@
                 </span>
             </div>
         </div>
-        } @else if(actualPipelineRoutingOption) {
+        } 
+        @else if (currentNotification) {
+        <span id="NOTIFICATION">
+            <span [id]="currentNotification.code" [className]="currentNotification.notificationType"
+                gebo-ai-text>{{currentNotification.message}}</span>
+        </span>
+        }  
+        @else if(actualPipelineRoutingOption) {
         <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i
             [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
         }
@@ -25,6 +27,6 @@
     }
     <div class="deep_search_skeleton_wait">
         <p-skeleton styleClass="mb-2" />
-    </div>    
+    </div>
 </div>
 }
