@@ -19,7 +19,7 @@
  */
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { FunctionsLookupControllerService, GLookupEntry, GPromptConfig, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FunctionsLookupControllerService, GLookupEntry,  GPromptTemplateConfig, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({
@@ -85,10 +85,8 @@ export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges 
         if (this.entityDataLoaded === true && this.formGroup && (changes["entityDataLoaded"] || changes["formGroup"]) && (!this.formGroup?.controls["defaultModelPrompt"].value)) {
             this.loading = true;
             this.promptTemplatesControllerService.getDefaultPrompt(false).subscribe({
-                next: (promptValue: GPromptConfig) => {
-                    if (promptValue && promptValue.prompt) {
-                        this.formGroup?.controls["defaultModelPrompt"].setValue(promptValue.prompt);
-                    }
+                next: (promptValue: GPromptTemplateConfig) => {
+                    
                 },
                 complete: () => {
                     this.loading = false;

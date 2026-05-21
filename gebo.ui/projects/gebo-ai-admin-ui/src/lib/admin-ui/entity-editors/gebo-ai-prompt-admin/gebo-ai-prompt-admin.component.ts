@@ -18,7 +18,7 @@
  */
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, EmbeddingModelsControllersService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, EmbeddingModelsControllersService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
@@ -36,7 +36,7 @@ import { Observable, of } from "rxjs";
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIPromptAdminComponent), multi: false}
     ]
 })
-export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GPromptConfig> {
+export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GPromptTemplateConfig> {
     /**
      * Name of the entity being managed by this component
      */
@@ -100,7 +100,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
      * @param code The unique code identifier for the prompt configuration
      * @returns An Observable containing the found GPromptConfig or null if not found
      */
-    override findByCode(code: string): Observable<GPromptConfig | null> {
+    override findByCode(code: string): Observable<GPromptTemplateConfig | null> {
         return this.geboPromptConfigurationService.findPromptConfigByCode(code);
     }
     
@@ -109,7 +109,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
      * @param value The GPromptConfig object to update
      * @returns An Observable containing the updated GPromptConfig
      */
-    override save(value: GPromptConfig): Observable<GPromptConfig> {
+    override save(value: GPromptTemplateConfig): Observable<GPromptTemplateConfig> {
         return this.geboPromptConfigurationService.updatePromptConfig(value);
     }
     
@@ -118,7 +118,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
      * @param value The GPromptConfig object to insert
      * @returns An Observable containing the inserted GPromptConfig
      */
-    override insert(value: GPromptConfig): Observable<GPromptConfig> {
+    override insert(value: GPromptTemplateConfig): Observable<GPromptTemplateConfig> {
         return this.geboPromptConfigurationService.insertPromptConfig(value);
     }
     
@@ -127,7 +127,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
      * @param value The GPromptConfig object to delete
      * @returns An Observable containing a boolean indicating success
      */
-    override delete(value: GPromptConfig): Observable<boolean> {
+    override delete(value: GPromptTemplateConfig): Observable<boolean> {
         return this.geboPromptConfigurationService.deletePromptConfig(value);
     }
     
@@ -137,7 +137,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
      * @param value The GPromptConfig to check
      * @returns An Observable containing an object with canBeDeleted flag and message
      */
-    override canBeDeleted(value: GPromptConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
+    override canBeDeleted(value: GPromptTemplateConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
         return of({ canBeDeleted: true, message: "can delete" });
     }
 }

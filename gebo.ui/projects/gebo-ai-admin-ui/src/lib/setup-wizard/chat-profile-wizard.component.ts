@@ -12,7 +12,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DataPage,  FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptConfig, KnowledgeBaseControllerService, PageGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PageGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { forkJoin, map, Observable } from "rxjs";
@@ -77,7 +77,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     /**
      * Stores the default prompt configuration to use for new chat profiles
      */
-    private defaultPrompt?: GPromptConfig;
+    private defaultPrompt?: GPromptTemplateConfig;
     
     /**
      * Getter that returns the chat profile content from the paginated response,
@@ -117,7 +117,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        const observables: [Observable<Array<GKnowledgeBase>>, Observable<Array<ToolCategoriesTree>>, Observable<GPromptConfig>] = [this.knowledgeBaseService.getKnowledgeBases(), this.functionsLookupService.getAllFunctionsTree(true), this.promptTemplatesControllerService.getDefaultPrompt(true)];
+        const observables: [Observable<Array<GKnowledgeBase>>, Observable<Array<ToolCategoriesTree>>, Observable<GPromptTemplateConfig>] = [this.knowledgeBaseService.getKnowledgeBases(), this.functionsLookupService.getAllFunctionsTree(true), this.promptTemplatesControllerService.getDefaultPrompt(true)];
 
         forkJoin(observables).subscribe({
             next: (data) => {
@@ -220,8 +220,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
                 userChoosesKnowledgeBases:false,
                 knowledgeBaseCodes:[data.knowledgeBaseCode],
                 description: "Chat with knowledge base: " + kbase.description,
-                enabledFunctions: this.functions,
-                prompt: this.defaultPrompt?.prompt
+                enabledFunctions: this.functions
             };
             const event: GeboUIActionRequest = {
                 actionType: GeboActionType.NEW,

@@ -30,7 +30,6 @@ export interface GMistralChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GMistralChatModelConfig.ForUsesEnum>;
     features?: Array<GMistralChatModelConfig.FeaturesEnum>;
 }

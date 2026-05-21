@@ -12,10 +12,11 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 /**
  * AI generated comments
  * 
@@ -64,7 +65,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
         response: new FormControl()
     });
     /** The last response received from the prompt template generation service */
-    lastResponse?: OperationStatusPromptTemplateResponse;
+    lastResponse?: IOperationStatus<any>;
     /** Available chat models for selection */
     chatModels?: GLookupEntry[];
     
@@ -75,7 +76,6 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      * @param modelsLookupService Service for retrieving available chat models
      */
     constructor(
-        private promptWizardControllerService: PromptTemplateWizardControllerService,
         private modelsLookupService: ChatModelsLookupControllerService) {
 
     }
@@ -121,21 +121,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      * Updates the response form group and user messages when the operation completes.
      */
     doGeneratePrompt(): void {
-        this.loading = true;
-        this.promptWizardControllerService.generatePromptTemplate(this.formGroup.value).subscribe(
-            {
-                next: (response) => {
-                    this.lastResponse = response;
-                    if (this.lastResponse.result) {
-                        this.responseFormGroup.patchValue(this.lastResponse.result);
-                    }
-                    this.userMessages = this.lastResponse.messages as ToastMessageOptions[];
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            }
-        );
+        
     }
 
     /**

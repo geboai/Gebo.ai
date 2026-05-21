@@ -30,7 +30,6 @@ export interface GDeepseekChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GDeepseekChatModelConfig.ForUsesEnum>;
     features?: Array<GDeepseekChatModelConfig.FeaturesEnum>;
 }

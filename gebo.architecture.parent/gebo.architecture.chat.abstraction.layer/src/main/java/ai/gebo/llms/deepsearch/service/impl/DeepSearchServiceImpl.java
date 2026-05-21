@@ -2,6 +2,7 @@ package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,7 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import jakarta.annotation.PreDestroy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Scheduler;
 
 @Component
 @Scope("singleton")
@@ -62,12 +64,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 	protected final IGDeepSearchConfigProvider configProvider;
 	protected final IGeboThreadManager threadManager;
 	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
-	
 
-	@PreDestroy
-	public void shutdown() {
-		
-	}
+	
 
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
@@ -140,7 +138,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 				final FullReactiveDeepsearchWorker worker = runtimeBinder
 						.getImplementationOf(FullReactiveDeepsearchWorker.class);
 				return worker.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
-						searchDataSources, perDataSourceK, globalK);
+						searchDataSources, perDataSourceK, globalK).transform(ReactiveMonitor.monitor("deep-search"));
 			});
 		}).subscribeOn(threadManager.getBoundedElastic());
 	}
@@ -159,7 +157,8 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 			GeboContentHandlerSystemException, SearchServiceException {
 		final FullReactiveDeepsearchWorker worker = runtimeBinder
 				.getImplementationOf(FullReactiveDeepsearchWorker.class);
-		return worker.streamChatWithHugeFiles(runtimeData, sinkUIEmitter, chatModel, serviceModel);
+		return worker.streamChatWithHugeFiles(runtimeData, sinkUIEmitter, chatModel, serviceModel)
+				.transform(ReactiveMonitor.monitor("stream-huge-file-search"));
 	}
 
 }

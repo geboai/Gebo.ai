@@ -30,7 +30,6 @@ export interface GenericOpenAIAPIChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GenericOpenAIAPIChatModelConfig.ForUsesEnum>;
     features?: Array<GenericOpenAIAPIChatModelConfig.FeaturesEnum>;
 }

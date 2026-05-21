@@ -30,7 +30,6 @@ export interface GBaseChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GBaseChatModelConfig.ForUsesEnum>;
     features?: Array<GBaseChatModelConfig.FeaturesEnum>;
 }

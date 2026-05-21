@@ -19,7 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { DefaultPromptForChatModelParam } from '../model/defaultPromptForChatModelParam';
 import { DefaultPromptForChatModelReferenceParam } from '../model/defaultPromptForChatModelReferenceParam';
-import { GPromptConfig } from '../model/gPromptConfig';
+import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -64,9 +64,9 @@ export class PromptTemplatesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultPrompt(ragPrompt: boolean, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public getDefaultPrompt(ragPrompt: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public getDefaultPrompt(ragPrompt: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public getDefaultPrompt(ragPrompt: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
     public getDefaultPrompt(ragPrompt: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (ragPrompt === null || ragPrompt === undefined) {
@@ -93,7 +93,7 @@ export class PromptTemplatesControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GPromptConfig>('get',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPrompt`,
+        return this.httpClient.request<GPromptTemplateConfig>('get',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPrompt`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -111,9 +111,9 @@ export class PromptTemplatesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
     public getDefaultPromptForChatModel(body: DefaultPromptForChatModelParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -140,7 +140,7 @@ export class PromptTemplatesControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPromptForChatModel`,
+        return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPromptForChatModel`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -158,9 +158,9 @@ export class PromptTemplatesControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
     public getDefaultPromptForChatModelReference(body: DefaultPromptForChatModelReferenceParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -187,7 +187,7 @@ export class PromptTemplatesControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference`,
+        return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -30,7 +30,6 @@ export interface GGoogleVertexChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GGoogleVertexChatModelConfig.ForUsesEnum>;
     features?: Array<GGoogleVertexChatModelConfig.FeaturesEnum>;
 }

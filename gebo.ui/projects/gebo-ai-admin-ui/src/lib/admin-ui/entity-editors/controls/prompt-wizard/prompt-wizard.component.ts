@@ -22,8 +22,8 @@
  */
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse,PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
 
@@ -92,7 +92,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**
      * Stores the most recent response from the prompt generation service
      */
-    lastResponse?: OperationStatusPromptTemplateResponse;
+    lastResponse?: IOperationStatus<any>;
 
     /**
      * Available chat models for prompt generation
@@ -108,7 +108,6 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      * @param modelsLookupService Service for retrieving available chat models
      */
     constructor(
-        private promptWizardControllerService: PromptTemplateWizardControllerService,
         private modelsLookupService: ChatModelsLookupControllerService) {
     }
 
@@ -155,21 +154,8 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
      * Updates the response form group with the generated template
      */
     doGeneratePrompt(): void {
-        this.loading = true;
-        this.promptWizardControllerService.generatePromptTemplate(this.formGroup.value).subscribe(
-            {
-                next: (response) => {
-                    this.lastResponse = response;
-                    if (this.lastResponse.result) {
-                        this.responseFormGroup.patchValue(this.lastResponse.result);
-                    }
-                    this.userMessages = this.lastResponse.messages as ToastMessageOptions[];
-                },
-                complete: () => {
-                    this.loading = false;
-                }
-            }
-        );
+        
+       
     }
 
     /**

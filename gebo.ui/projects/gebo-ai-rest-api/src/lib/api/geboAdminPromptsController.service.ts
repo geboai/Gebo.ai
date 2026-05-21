@@ -17,7 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GPromptConfig } from '../model/gPromptConfig';
+import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
 import { PromptFilter } from '../model/promptFilter';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -63,10 +63,10 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deletePromptConfig(body: GPromptConfig, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deletePromptConfig(body: GPromptConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deletePromptConfig(body: GPromptConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deletePromptConfig(body: GPromptConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deletePromptConfig(body: GPromptTemplateConfig, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deletePromptConfig(body: GPromptTemplateConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deletePromptConfig(body: GPromptTemplateConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deletePromptConfig(body: GPromptTemplateConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling deletePromptConfig.');
@@ -109,9 +109,9 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findPromptConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public findPromptConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public findPromptConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public findPromptConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public findPromptConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public findPromptConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
     public findPromptConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
@@ -138,7 +138,7 @@ export class GeboAdminPromptsControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GPromptConfig>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/findPromptConfigByCode`,
+        return this.httpClient.request<GPromptTemplateConfig>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/findPromptConfigByCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -192,9 +192,9 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPromptConfigByFilter(body: PromptFilter, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public getPromptConfigByFilter(body: PromptFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public getPromptConfigByFilter(body: PromptFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public getPromptConfigByFilter(body: PromptFilter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
     public getPromptConfigByFilter(body: PromptFilter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -221,7 +221,7 @@ export class GeboAdminPromptsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptConfigByFilter`,
+        return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/getPromptConfigByFilter`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -239,10 +239,10 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertPromptConfig(body: GPromptConfig, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public insertPromptConfig(body: GPromptConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public insertPromptConfig(body: GPromptConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
-    public insertPromptConfig(body: GPromptConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertPromptConfig(body: GPromptTemplateConfig, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public insertPromptConfig(body: GPromptTemplateConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public insertPromptConfig(body: GPromptTemplateConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
+    public insertPromptConfig(body: GPromptTemplateConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling insertPromptConfig.');
@@ -268,7 +268,7 @@ export class GeboAdminPromptsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/insertPromptConfig`,
+        return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/insertPromptConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -286,10 +286,10 @@ export class GeboAdminPromptsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updatePromptConfig(body: GPromptConfig, observe?: 'body', reportProgress?: boolean): Observable<GPromptConfig>;
-    public updatePromptConfig(body: GPromptConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptConfig>>;
-    public updatePromptConfig(body: GPromptConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptConfig>>;
-    public updatePromptConfig(body: GPromptConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updatePromptConfig(body: GPromptTemplateConfig, observe?: 'body', reportProgress?: boolean): Observable<GPromptTemplateConfig>;
+    public updatePromptConfig(body: GPromptTemplateConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GPromptTemplateConfig>>;
+    public updatePromptConfig(body: GPromptTemplateConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GPromptTemplateConfig>>;
+    public updatePromptConfig(body: GPromptTemplateConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updatePromptConfig.');
@@ -315,7 +315,7 @@ export class GeboAdminPromptsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GPromptConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/updatePromptConfig`,
+        return this.httpClient.request<GPromptTemplateConfig>('post',`${this.basePath}/api/admin/GeboAdminPromptsController/updatePromptConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -84,7 +84,6 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 
 		// Create and configure a new default chat profile
 		GChatProfileConfiguration configuration = new GChatProfileConfiguration();
-		configuration.setPrompt(prompt.getUserPromptTemplate());
 		configuration.setUserChoosesKnowledgeBases(true);
 		configuration.setAccessibleToAll(true);
 		configuration.setChatModelReference(null);

@@ -33,7 +33,6 @@ import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-ho
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
-import { GeboAIDeepSearchComponent } from "../deep-search-control/deep-search.component";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
@@ -381,12 +380,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatInputShell.switchToChatWithDocuments();
         }
     }
-    isDeepSearchResponse(item?: GeboChatResponse) {
-        return ((item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" || item?.pipelineRouterDecisionCode === "SHALLOW_SEARCH_RESPONSE") && item?.deepSearchRequestId) ? true : false;
-    }
-    getDeepSearchRequestId(item?: GeboChatResponse) {
-        return item?.deepSearchRequestId;
-    }
+
     /**
      * Handles changes to input properties
      * Loads model info and chat history when chatInfo changes
