@@ -2,13 +2,8 @@ INPUTS:
 - Last User question:
 {question}
 
-- Chat history (recent, latest first, may be empty):
-{latestInteractions}
 
-- Consolidated previous chat history (may be empty):
-{consolidatedChatHistory}
-
-- Microsoft Graph, Sharepoint, Onedrive catalog (preview of available roots; may be empty):
+- (msGraphCatalog) Microsoft Graph, Sharepoint, Onedrive catalog (preview of available roots; may be empty):
 {msGraphCatalog}
 
 CATALOG SEMANTICS (msGraphCatalog):
@@ -17,45 +12,3 @@ The catalog is a preview list of the available roots that your search can be sco
 - SharePoint sites: siteId, siteUrl/webUrl, displayName, (optionally) known library/page root paths
 Use ONLY these catalog entries when you need to scope the search (siteUrls/pathPrefixes). If a scope is not clearly implied, keep scoping fields null.
 
-TASK:
-1) Determine if the user is searching for:
-   - documents (files of any format)
-   - pages (modern SharePoint site pages)
-   - both (default)
-2) Select contentKinds:
-   - If user says “documents/files” -> include DOCUMENT
-   - If user says “pages/wiki/site pages” -> include PAGE
-   - If unclear -> include both DOCUMENT and PAGE
-3) Extract search terms:
-   - titleTerms: phrases that should appear in file/page titles (short, specific)
-   - textTerms: phrases that should appear in content/body (broader)
-   Terms must be plain phrases only (no operators, no KQL syntax).
-4) Choose match modes:
-   - ANY when alternatives/synonyms are given or user is exploring (“A or B”, “either”, multiple options).
-   - ALL when the user requires all of them (“must include X and Y”).
-   - If not specified: default ANY for titleTerms and textTerms.
-5) Scope selection using msGraphCatalog (optional, only when implied):
-   - If the user references a specific site name, team, department, or a known OneDrive owner, choose the matching entry from msGraphCatalog and set:
-     - siteUrls: include the matching siteUrl/webUrl root(s), OR
-     - pathPrefixes: include a more specific root path if shown in the catalog (preferred for precision).
-   - If the user says “in all sites / everywhere / across tenant” -> do NOT set siteUrls/pathPrefixes (leave null).
-   - If the user says “in my OneDrive” -> scope using the OneDrive root from msGraphCatalog if clearly identifiable; otherwise leave scoping null.
-6) People constraints (optional, schema-dependent):
-   - Only set createdByList / lastModifiedByList when explicit (e.g., “created by Marco”, “modified by me”).
-   - If user indicates “me/my”, use "me" (server can map it to the effective user).
-7) Do not invent:
-   - site urls, paths, drive ids, labels/tags, authors, managed properties.
-   - Only use scoping roots that appear in msGraphCatalog when you decide to scope.
-8) If request is NOT a SharePoint/OneDrive content search, output an empty filter object (all null).
-
-OUTPUT FORMAT:
-
-{format}
-
-
-HARD CONSTRAINTS:
-- Output MUST be a single JSON object, no markdown, no code fences, no extra text.
-- Keep lists small and precise (max ~10 items per list).
-- If you scope using siteUrls/pathPrefixes, use EXACT strings found in msGraphCatalog (copy them verbatim).
-- Do NOT include KQL operators inside terms (no AND/OR/NOT, no property: prefixes inside terms).
-- When in doubt, prefer leaving a field null rather than guessing.

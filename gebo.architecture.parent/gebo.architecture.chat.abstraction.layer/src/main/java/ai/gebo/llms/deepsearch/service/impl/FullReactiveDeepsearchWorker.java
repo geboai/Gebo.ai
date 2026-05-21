@@ -526,7 +526,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Flux<String> outFlux = null;
 			try {
 				Map<String, Object> params = new HashMap<>();
-				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
+				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
 				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
 				outFlux = callLLMReactive(chatModel, emptyResponsePrompt, context, params);
 			} catch (Throwable th) {
@@ -546,7 +546,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return runAs.doRunAsWithReturnAndException(() -> {
 				if (list != null && !list.isEmpty()) {
 					Map<String, Object> params = new HashMap<>();
-					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, list);
+					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
 					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
@@ -601,8 +601,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 					try {
 						Map<String, Object> params = new HashMap<>();
-						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, documents);
-						params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
+						params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
 						out = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
 					} catch (Throwable th) {
 						LOGGER.error("Exception on last summary", th);

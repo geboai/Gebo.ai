@@ -19,15 +19,16 @@
     <div class="col-12 justify-content-center" style="text-align: center;">
         <span *ngFor="let doc of displayedDocuments" style="list-style: none;break-after: avoid;">
             <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>
+            
             <p-button id="ChatWithDocsRemoveBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-times-circle"
                 [text]="true" (onClick)="doRemoveFile(doc)"
-                *ngIf="readonly===false && interactionDisabled===false"></p-button>
+                *ngIf="readonly===false && interactionDisabled===false" label=""></p-button>
         </span>
         <p-button *ngIf="hasMoreDocuments" class="custom-blue-btn" [text]="true"
             [label]="'... (' + (listedDocuments.length - (maxDisplayedDocuments || 0)) + ')'"
             (onClick)="openedFullListDocumentsWindow = true" pTooltip="Show all documents"></p-button>
         <p-button *ngIf="listedDocuments && listedDocuments.length > 0 && readonly===false && interactionDisabled===false" 
-            id="ChatWithDocsClearAllBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-trash" [text]="true" 
+            id="ChatWithDocsClearAllBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-trash" [text]="true"  label="Clear list" 
             (onClick)="doClearAllFiles()" pTooltip="Clear all selected documents"></p-button>
     </div>
 </div>
