@@ -146,6 +146,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private waitingForAudiocontent: boolean = false;
 
     /**
+     * Maximum number of documents to display inline for an interaction before requiring a toggle
+     */
+    @Input() maxDisplayedDocs: number = 3;
+
+    /**
+     * Map tracking which interactions have their full document list expanded
+     */
+    public expandedInteractionsDocs: Map<string, boolean> = new Map();
+
+    /**
      * Flag indicating if a chat response is currently streaming
      */
     public chatStreaming: boolean = false;
@@ -481,6 +491,26 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     getDocs(interaction: GeboChatInteraction): GResponseDocumentRef[] {
         return interaction?.response?.documentsRef ? interaction.response.documentsRef : [];
+    }
+
+    /**
+     * Toggles the document list expansion for a specific interaction
+     * @param interactionId The ID of the interaction request
+     */
+    public toggleInteractionDocs(interactionId?: string): void {
+        if (!interactionId) return;
+        const current = this.expandedInteractionsDocs.get(interactionId) || false;
+        this.expandedInteractionsDocs.set(interactionId, !current);
+    }
+
+    /**
+     * Checks if the document list for a specific interaction is expanded
+     * @param interactionId The ID of the interaction request
+     * @returns True if expanded, false otherwise
+     */
+    public isInteractionDocsExpanded(interactionId?: string): boolean {
+        if (!interactionId) return false;
+        return this.expandedInteractionsDocs.get(interactionId) || false;
     }
 
     /**

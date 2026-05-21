@@ -232,6 +232,16 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     }
 
     /**
+     * Clears all selected documents
+     */
+    doClearAllFiles() {
+        this.listedDocuments = [];
+        this.internalValue = [];
+        this.onChange(this.internalValue);
+        this.choosenDocumentsListCleared.emit(true);
+    }
+
+    /**
      * Handles click events on document items to view their details
      * @param item Document reference that was clicked
      */

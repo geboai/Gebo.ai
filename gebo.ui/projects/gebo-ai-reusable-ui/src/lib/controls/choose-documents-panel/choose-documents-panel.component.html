@@ -26,6 +26,9 @@
         <p-button *ngIf="hasMoreDocuments" class="custom-blue-btn" [text]="true"
             [label]="'... (' + (listedDocuments.length - (maxDisplayedDocuments || 0)) + ')'"
             (onClick)="openedFullListDocumentsWindow = true" pTooltip="Show all documents"></p-button>
+        <p-button *ngIf="listedDocuments && listedDocuments.length > 0 && readonly===false && interactionDisabled===false" 
+            id="ChatWithDocsClearAllBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-trash" [text]="true" 
+            (onClick)="doClearAllFiles()" pTooltip="Clear all selected documents"></p-button>
     </div>
 </div>
 <p-dialog [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true"
