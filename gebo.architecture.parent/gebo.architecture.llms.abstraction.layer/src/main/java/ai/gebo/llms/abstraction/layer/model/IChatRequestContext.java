@@ -15,9 +15,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 public interface IChatRequestContext {
-	public static final String USER_QUESTION_PROMPT_PLACEHOLDER = "question";
-	public static final String CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER = "consolidatedChatHistory";
-	public static final String DOCUMENTS_PROMPT_PLACEHOLDER = "documents";
+	public static final String USER_QUESTION_PROMPT_PARAM = "question";
+	public static final String CONSOLIDATED_HISTORY_PROMPT_PARAM = "consolidatedChatHistory";
+	public static final String DOCUMENTS_PROMPT_PARAM = "documents";
+	public static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
 
 	public static interface IDocument {
 		public String getId();

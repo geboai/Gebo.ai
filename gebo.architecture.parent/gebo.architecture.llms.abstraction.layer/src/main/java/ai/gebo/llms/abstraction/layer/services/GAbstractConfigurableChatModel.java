@@ -332,9 +332,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
-			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER
+			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
 			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={"
-			+ IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER + "}\r\n";
+			+ IChatRequestContext.USER_QUESTION_PROMPT_PARAM + "}\r\n";
 
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
@@ -345,8 +345,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				String user = interactions.get(0).getUser();
 				String assistant = interactions.get(0).getAssistant();
 				PromptTemplate template = new PromptTemplate(COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE);
-				template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER, consolidated);
-				template.add(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, user != null ? user : "");
+				template.add(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM, consolidated);
+				template.add(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, user != null ? user : "");
 				UserMessage firstUserMessage = new UserMessage(template.render());
 				AssistantMessage firstAssistantMessage = new AssistantMessage(assistant != null ? assistant : "");
 				messages.add(firstUserMessage);
@@ -370,8 +370,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		Map<String, Object> allParams = new HashMap<>(params);
 		StringBuffer allDocs = new StringBuffer();
 
-		if (params.containsKey(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER)) {
-			allDocs.append(createDocumentsRendering(params.get(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER)));
+		if (params.containsKey(IChatRequestContext.DOCUMENTS_PROMPT_PARAM)) {
+			allDocs.append(createDocumentsRendering(params.get(IChatRequestContext.DOCUMENTS_PROMPT_PARAM)));
 		}
 		if (prompt.getContextDocuments() == null || prompt.getContextDocuments() == ContextContentRequired.REQUIRED) {
 			List<Document> documents = chatContext.getDocuments();
@@ -382,9 +382,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		String docsFragment = allDocs.length() > 0
 				? BEGIN_CONTEXT + NEWLINE + (allDocs.toString()) + END_CONTEXT + NEWLINE
 				: "";
-		allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, docsFragment);
-		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PLACEHOLDER, chatContext.getActualUserRequest());
-		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PLACEHOLDER,
+		allParams.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, docsFragment);
+		allParams.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, chatContext.getActualUserRequest());
+		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
 		String content = promptTemplate.render(allParams);
 		return new UserMessage(content);

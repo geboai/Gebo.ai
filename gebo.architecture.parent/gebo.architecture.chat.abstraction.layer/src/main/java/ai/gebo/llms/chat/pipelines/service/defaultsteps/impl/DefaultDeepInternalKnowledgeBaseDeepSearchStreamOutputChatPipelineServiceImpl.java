@@ -116,7 +116,7 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 				return runAs.doRunAsWithReturnAndException(() -> {
 					if (list != null && !list.isEmpty()) {
 						Map<String, Object> params = new HashMap<>();
-						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, list);
+						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 						params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 						params.put("agentDeliverableCompleteness", request.getUserIntent().name());
 						return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);

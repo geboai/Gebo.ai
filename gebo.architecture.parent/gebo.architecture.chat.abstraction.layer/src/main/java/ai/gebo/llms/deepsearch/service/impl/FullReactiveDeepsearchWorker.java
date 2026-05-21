@@ -89,6 +89,9 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
+	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
+	private static final String EXCEPTION_ON_EMPTY_RESULTS = "Exception on empty results";
+	private static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
 	private static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
 	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
@@ -519,7 +522,19 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
-
+		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
+			Flux<String> outFlux = null;
+			try {
+				Map<String, Object> params = new HashMap<>();
+				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, "");
+				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+				outFlux = callLLMReactive(chatModel, emptyResponsePrompt, context, params);
+			} catch (Throwable th) {
+				LOGGER.error(EXCEPTION_ON_EMPTY_RESULTS, th);
+				outFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
+			}
+			return outFlux;
+		});
 		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
 			return runAs.doRunAsWithReturnAndException(() -> {
 				return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
@@ -536,7 +551,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
 					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
 				} else {
-					return callLLMReactive(chatModel, finalAnalisysPrompt, context, Map.of());
+					return backupNotFoundDocuments;
 				}
 			});
 		};
@@ -550,8 +565,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
 		Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
 		Flux<String> resultFlux = null;
+		
 		if (suppliers.isEmpty()) {
-
+			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
 			Flux<Document> documentFlux = suppliers.get(0).get();
 			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(documentFlux, sinkUIEmitter, isValidDocument,
@@ -579,13 +595,21 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				}
 				return preAnalisys;
 			}).concatMap(documents -> {
+
 				Flux<String> out = null;
-				try {
-					Map<String, Object> params = new HashMap<>();
-					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, documents);
-					params.put("consolidated", "");
-					out = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
-				} catch (Throwable th) {
+				if (!documents.isEmpty()) {
+
+					try {
+						Map<String, Object> params = new HashMap<>();
+						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PLACEHOLDER, documents);
+						params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+						out = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+					} catch (Throwable th) {
+						LOGGER.error("Exception on last summary", th);
+						out = Flux.just(SORRY_SOMETHING_GONE_WRONG);
+					}
+				} else {
+					out = backupNotFoundDocuments;
 				}
 				return out;
 			});
