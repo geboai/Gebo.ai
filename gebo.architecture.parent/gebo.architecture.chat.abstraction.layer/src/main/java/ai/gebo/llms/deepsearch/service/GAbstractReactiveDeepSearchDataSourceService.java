@@ -22,7 +22,6 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchResult;
-import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
@@ -41,15 +40,11 @@ import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.PureSearchExternalDataSourceResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-
-import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
@@ -77,15 +72,6 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		this.threadManager = threadManager;
 		this.deepSearchDefaultConfig = deepSearchDefaultConfig;
 		this.promptsDao = promptsDao;
-	}
-
-	@AllArgsConstructor
-	@Getter
-	static class LLMCallStep<CustomContentExtractionType extends BaseSearchResultsExtractionDataType> {
-		final CustomContentExtractionType returned;
-		final IDocumentChunkWithRef chunkWithRef;
-		final SearchResultAnalisysOutcome analisysDeepRefs;
-		final AbstractDeepSearchEvent event;
 	}
 
 	private final static int NCONTEXT_WINDOW_LENGTH_THREASHOLD = 2;
