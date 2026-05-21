@@ -1,7 +1,5 @@
 package ai.gebo.llms.deepsearch.service;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
@@ -20,7 +18,6 @@ import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
-import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -32,7 +29,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
@@ -40,8 +36,6 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSe
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig.DeepSearchDataSourceAccess;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
-import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
 import ai.gebo.model.base.GeboComponentInfo;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
@@ -63,10 +57,10 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
-			IGeboThreadManager threadManager, SearchResultsRankingService rankingService, IGPromptConfigDao promptsDao,
+			IGeboThreadManager threadManager, IGPromptConfigDao promptsDao,
 			IDataSourcesCatalogsService dataSourcesCatalogsService, IGSecurityService securityService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
-				threadManager, rankingService, deepSearchDefaultConfig, promptsDao);
+				threadManager, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;
@@ -84,26 +78,21 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	protected DeepSearchDataSourceExtractedSearchQueries extractSearchQueries(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String consolidatedText) throws LLMConfigException {
+			MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String consolidatedText) throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin extractSearchQueries(...) handler:" + getHandlerId());
 		}
-		String prompt = createExtractSearchQueriesPrompt(request, minimalChatContext, pastSystemsResponses,
-				deepSearchConfig, serviceModel);
+		GPromptTemplateConfig prompt = createExtractSearchQueriesPrompt(request, minimalChatContext, deepSearchConfig,
+				serviceModel);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Extracting queries with prompt:" + prompt);
 		}
 		Map<String, Object> additionalVariables = new HashMap<String, Object>();
-		additionalVariables.putAll(CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext));
-		// With latest specialized prompt for each data source the following is not
-		// needed
-		// additionalVariables.put(DATA_SOURCE_DESCRIPTION, getDescription(chatModel,
-		// deepSearchConfig, request));
 		DeepSearchDataSourceExtractedSearchQueries searches = super.callLLMWithConsolidationStructuredReturn(
-				serviceModel, prompt, request.getQuery(), consolidatedText != null ? consolidatedText : "",
-				additionalVariables, DeepSearchDataSourceExtractedSearchQueries.class);
+				serviceModel, prompt, minimalChatContext.createChatRequestContext(),
+				consolidatedText != null ? consolidatedText : "", additionalVariables,
+				DeepSearchDataSourceExtractedSearchQueries.class);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End extractSearchQueries(...) handler:" + getHandlerId() + " returning " + searches);
 		}
@@ -168,44 +157,27 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 		});
 	}
 
-	protected String createExtractSearchQueriesPrompt(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
+	protected GPromptTemplateConfig createExtractSearchQueriesPrompt(DeepSearchRequest request,
+			MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel) {
 		String useCode = searchService.getQueriesGenerationPromptUseCode();
 		if (useCode == null)
 			useCode = GeboPromptsLibrary.DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT;
-		String prompt = promptsDao.findByPromptUse(useCode).getPrompt();
+		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(useCode);
 
 		return prompt;
 	}
 
-	@Override
-	protected SearchResultAnalisysOutcome extractRelatedAnalisysReferences(SearchResultsStepInfo actualSearchResultRef,
-			CustomSearchResultExtractionDataType returned, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel) {
-		SearchResultAnalisysOutcome outcome = null;
-		try {
-			outcome = searchService.extractRelatedAnalisysReferences(
-					actualSearchResultRef.getActualSearchResult().getOriginComponent().getCompleteComponentId() + "<-->"
-							+ actualSearchResultRef.getActualSearchResult().getSystemConfigurationCode(),
-					returned);
-		} catch (Throwable th) {
-			LOGGER.error("Exception while trying to execute an additional search or data retrieve", th);
-		}
-		return outcome;
-	}
-
 	protected <T extends INativeQueryObject> List<SearchWithResults> executeNativeSearch(
 			INativeSearchService<CustomSearchResultExtractionDataType, T> nativeSearchService,
-			DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
+			DeepSearchRequest request, MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK)
 			throws LLMConfigException, IOException, SearchServiceException {
 		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 		Class<T> nativeSearchServiceDataType = nativeSearchService.getNativeSearchDataStructureType();
 		String promptTemplateCode = nativeSearchService.getNativePromptTemplateUseCode();
-		GPromptConfig prompt = this.promptsDao.findByPromptUse(promptTemplateCode);
-		Map<String, Object> promptParams = CommonChatPromptParamsUtil.preparePromptParameters(minimalChatContext);
+		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(promptTemplateCode);
+		Map<String, Object> promptParams = new HashMap<>();
 		List<SearchableSystemMetaData> searchables = this.searchService.getSearchableSystems();
 		List<SearchWithResults> allResults = new ArrayList<SearchWithResults>();
 		for (SearchableSystemMetaData searchableSystemMetaData : searchables) {
@@ -224,8 +196,9 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 					.createCustomTemplateParamsMap(searchableSystemMetaData, cataloguesSample);
 			systemTemplateCallParams.putAll(promptParams);
 			systemTemplateCallParams.putAll(specificSystemParams);
-			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt.getPrompt(), request.getQuery(),
-					systemTemplateCallParams, nativeSearchServiceDataType);
+			T resultingQueryObject = this.callLLMStructuredReturn(serviceModel, prompt,
+					minimalChatContext.createChatRequestContext(), systemTemplateCallParams,
+					nativeSearchServiceDataType);
 
 			List<SearchResult> data = nativeSearchService.nativeSearch(resultingQueryObject, searchableSystemMetaData,
 					topK);
@@ -239,12 +212,11 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 	}
 
 	protected List<SearchWithResults> executeStandardQuerySearch(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String consolidated, int topK) throws LLMConfigException {
+			MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String consolidated, int topK) throws LLMConfigException {
 		List<SearchWithResults> queryResults = new ArrayList<SearchWithResults>();
 		DeepSearchDataSourceExtractedSearchQueries searchQueries = extractSearchQueries(request, minimalChatContext,
-				pastSystemsResponses, deepSearchConfig, chatModel, serviceModel, "");
+				deepSearchConfig, chatModel, serviceModel, "");
 
 		for (SearchQuery query : searchQueries.getSearchQuery()) {
 			try {
@@ -265,26 +237,25 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 
 	@Override
 	protected List<SearchWithResults> executeSearches(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			List<IDeepSearchResult> pastSystemsResponses, DeepSearchConfig deepSearchConfig,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String consolidated, int topK)
-			throws LLMConfigException, IOException, SearchServiceException {
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String consolidated, int topK) throws LLMConfigException, IOException, SearchServiceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeSearches(...) for " + getHandlerId());
 		}
 		List<SearchWithResults> results = List.of();
 		if (this.searchService instanceof INativeSearchService nativeSearchService) {
 			try {
-				results = executeNativeSearch(nativeSearchService, request, minimalChatContext, pastSystemsResponses,
-						deepSearchConfig, chatModel, serviceModel, topK);
+				results = executeNativeSearch(nativeSearchService, request, minimalChatContext, deepSearchConfig,
+						chatModel, serviceModel, topK);
 			} catch (Throwable th) {
 				LOGGER.error("Error in nativeSearch,try fall back to standard search", th);
-				results = executeStandardQuerySearch(request, minimalChatContext, pastSystemsResponses,
-						deepSearchConfig, chatModel, serviceModel, consolidated, topK);
+				results = executeStandardQuerySearch(request, minimalChatContext, deepSearchConfig, chatModel,
+						serviceModel, consolidated, topK);
 			}
 		} else {
 
-			results = executeStandardQuerySearch(request, minimalChatContext, pastSystemsResponses, deepSearchConfig,
-					chatModel, serviceModel, consolidated, topK);
+			results = executeStandardQuerySearch(request, minimalChatContext, deepSearchConfig, chatModel, serviceModel,
+					consolidated, topK);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeSearches(...) for " + getHandlerId());

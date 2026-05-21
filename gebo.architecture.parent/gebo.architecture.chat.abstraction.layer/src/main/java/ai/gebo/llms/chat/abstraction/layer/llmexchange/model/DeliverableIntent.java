@@ -7,6 +7,9 @@ import lombok.Getter;
 @Getter
 public enum DeliverableIntent {
 	QA("User asked direct short answer or some sinonyms of this in all languages", "direct short answer"), // (direct
+	PURE_SEARCH(
+			"User asked a search or some sinonyms of this in all languages",
+			"pure search outcome"),
 	REPORT("*User asked a structured, report, detailed report, an analisys or some sinonyms of these in all languages\r\n"
 			+ "* report / detailed report / in-depth / deep-search / deep analysis / detailed analysis\r\n"
 			+ "* citations/sources across documents\r\n" + "* compare/analyze a broad corpus", "detailed report"), // (structured,
@@ -18,9 +21,7 @@ public enum DeliverableIntent {
 			"recommendation or tradeoff evaluation"), // (recommendation/tradeoffs)
 	SUMMARY("User wants a synthetic outcome  or some sinonyms of this in all languages", "synthetic outcome"), // (short
 																												// synthesis)
-	PURE_SEARCH(
-			"User asked for a pure search being done without without specifying any type of analisys or reporting or some sinonyms of this in all languages",
-			"pure search outcome"),
+	
 	UNKNOWN("Fallback, cannot decide clearly the user intent", "synthetic outcome");// (fallback → be
 
 	final String explanation;

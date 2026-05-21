@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.cloud.vertexai.VertexAI;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -79,12 +80,18 @@ public class GoogleVertexChatModelConfigurationSupportService
 	final VertexAIConfigurator configurator;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Inner class that handles the configuration and initialization of Google
 	 * Vertex chat models
 	 */
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, VertexAiGeminiChatModel> {
+
+		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+			 
+		    }
 
 		/**
 		 * Configures a VertexAiGeminiChatModel based on the provided configuration
@@ -156,7 +163,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GGoogleVertexChatModelConfig> create(GGoogleVertexChatModelConfig config)
 			throws LLMConfigException {
-		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel();
+		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

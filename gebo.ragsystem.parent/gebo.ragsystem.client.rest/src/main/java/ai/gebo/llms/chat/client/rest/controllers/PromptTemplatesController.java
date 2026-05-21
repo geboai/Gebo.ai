@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -72,7 +72,7 @@ public class PromptTemplatesController {
 	 * @return The default prompt configuration
 	 */
 	@PostMapping(value = "getDefaultPromptForChatModel", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig getDefaultPromptForChatModel(@RequestBody DefaultPromptForChatModelParam param) {
+	public GPromptTemplateConfig getDefaultPromptForChatModel(@RequestBody DefaultPromptForChatModelParam param) {
 		return promptConfigDao.defaultChatPrompt(param.ragPrompt);
 	}
 
@@ -96,7 +96,7 @@ public class PromptTemplatesController {
 	 *                                  referenced object
 	 */
 	@PostMapping(value = "getDefaultPromptForChatModelReference", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig getDefaultPromptForChatModelReference(
+	public GPromptTemplateConfig getDefaultPromptForChatModelReference(
 			@RequestBody DefaultPromptForChatModelReferenceParam param) throws GeboPersistenceException {
 		GBaseChatModelConfig chatModelConfig = persistentObjectManager.findByReference(param.chatModelConfigReference,
 				GBaseChatModelConfig.class);
@@ -113,7 +113,7 @@ public class PromptTemplatesController {
 	 * @return The default prompt configuration
 	 */
 	@GetMapping(value = "getDefaultPrompt", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig getDefaultPrompt(@RequestParam("ragPrompt") Boolean ragPrompt) {
+	public GPromptTemplateConfig getDefaultPrompt(@RequestParam("ragPrompt") Boolean ragPrompt) {
 		return promptConfigDao.defaultChatPrompt(ragPrompt);
 	}
 

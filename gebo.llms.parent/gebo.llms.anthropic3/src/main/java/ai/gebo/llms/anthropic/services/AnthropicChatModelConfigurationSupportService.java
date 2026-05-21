@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -92,12 +93,18 @@ public class AnthropicChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
 	 */
 	class AnthropicConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAnthropicChatModelConfig, AnthropicChatModel> {
+
+		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+			// TODO Auto-generated constructor stub
+		    }
 
 		/**
 		 * Configures an Anthropic chat model based on the provided configuration
@@ -195,7 +202,7 @@ public class AnthropicChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAnthropicChatModelConfig> create(GAnthropicChatModelConfig config)
 			throws LLMConfigException {
-		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel();
+		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

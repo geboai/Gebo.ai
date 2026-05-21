@@ -1,7 +1,13 @@
 ai.gebo.sharepoint.library:
     - promptUse: msgraph-native-search-prompts-template
       langCode: en
-      reference: /msgraph-templates/en/msgraph-native-search-prompts-template.txt
+      systemReference: /msgraph-templates/en/msgraph-native-search-prompts-template-system-prompt.txt
+      userReference: /msgraph-templates/en/msgraph-native-search-prompts-template-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: msgraph-standard-query-extraction-prompt
       langCode: en
-      reference: /msgraph-templates/en/msgraph-standard-query-extraction-prompt.txt
+      systemReference: /msgraph-templates/en/msgraph-standard-query-extraction-prompt-system-prompt.txt
+      userReference: /msgraph-templates/en/msgraph-standard-query-extraction-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: NOT_REQUIRED

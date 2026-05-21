@@ -25,24 +25,24 @@ public class CommonChatPromptParamsUtil {
 	private static final String NL = "\r\n";
 	private static final String TURN_SEP = NL + "-----" + NL;
 	public static final String CURRENT_USER_QUESTION_PROMPT_PARAM = "question";
-	public static final String ACTUAL_TIMESTAMP_PROMPT_PARAM="actualTimestamp";
+	public static final String ACTUAL_TIMESTAMP_PROMPT_PARAM = "actualTimestamp";
 	public static final String LATEST_INTERACTIONS_PROMPT_PARAM = "latestInteractions";
 	public static final String CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM = "consolidatedChatHistory";
 
 	private static Map<String, Object> preparePromptParameters(LLMChatRequestResources request) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put(CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM, renderConsolidatedChatHistory(request));
-		params.put(LATEST_INTERACTIONS_PROMPT_PARAM, renderLatestInteractions(request));
-		params.put(CURRENT_USER_QUESTION_PROMPT_PARAM, renderCurrentUserQuestion(request));
+		DeliverableIntent requiredCompleteness = request != null && request.getCurrentRequest() != null
+				? request.getCurrentRequest().getUserIntent()
+				: null;
+		if (requiredCompleteness == null)
+			requiredCompleteness = DeliverableIntent.UNKNOWN;
+		params.put(AGENT_DELIVERABLE_COMPLETENESS_PROMPT_PARAM, requiredCompleteness.getAgentDeliverableCompleteness());
 		params.put(ACTUAL_TIMESTAMP_PROMPT_PARAM, new Timestamp(System.currentTimeMillis()).toString());
 		return params;
 	}
 
 	public static Map<String, Object> preparePromptParameters(MinimalChatContext context) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put(CONSOLIDATED_CHAT_HISTORY_PROMPT_PARAM, renderConsolidatedChatHistory(context.getChatHistory()));
-		params.put(LATEST_INTERACTIONS_PROMPT_PARAM, renderLatestInteractions(context.getChatHistory()));
-		params.put(CURRENT_USER_QUESTION_PROMPT_PARAM, renderCurrentUserQuestion(context.getCurrentRequest()));
 		DeliverableIntent requiredCompleteness = context.getCurrentRequest().getUserIntent();
 		if (requiredCompleteness == null)
 			requiredCompleteness = DeliverableIntent.UNKNOWN;

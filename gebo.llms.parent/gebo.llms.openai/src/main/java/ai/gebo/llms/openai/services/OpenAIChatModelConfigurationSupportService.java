@@ -30,6 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -86,12 +87,17 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGTranscriptModelRuntimeConfigurationDao transcriptDao;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
+
+		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+			 
+		}
 
 		IGConfigurableTranscriptModel transcriptModel = null;
 		IGConfigurableTextToSpeechModel ttsModel = null;
@@ -275,7 +281,7 @@ public class OpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel();
+		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

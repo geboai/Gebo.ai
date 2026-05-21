@@ -30,7 +30,6 @@ export interface GAzureOpenAIChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GAzureOpenAIChatModelConfig.ForUsesEnum>;
     features?: Array<GAzureOpenAIChatModelConfig.FeaturesEnum>;
 }

@@ -2,72 +2,143 @@ ai.gebo.prompts:
   library:
     - promptUse: prompt-template-wizard-default
       langCode: en
-      reference: /prompts-library/en/prompt-template-wizard-default.txt
+      systemReference: /prompts-library/en/prompt-template-wizard-default-system-prompt.txt
+      userReference: /prompts-library/en/prompt-template-wizard-default-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
+      #prompt for chat history documents consolidation
     - promptUse: chat-history-documents-consolidation
       langCode: en
-      reference: /prompts-library/en/chat-history-documents-consolidation.txt
+      systemReference: /prompts-library/en/chat-history-documents-consolidation-system-prompt.txt
+      userReference: /prompts-library/en/chat-history-documents-consolidation-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
+
     - promptUse: summarize-chat-description
       langCode: en
-      reference: /prompts-library/en/summarize-chat-description.txt
+      systemReference: /prompts-library/en/summarize-chat-description-system-prompt.txt
+      userReference: /prompts-library/en/summarize-chat-description-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: history-consolidation-prompt
       langCode: en
-      reference: /prompts-library/en/history-consolidation-prompt.txt
+      systemReference: /prompts-library/en/history-consolidation-prompt-system-prompt.txt
+      userReference: /prompts-library/en/history-consolidation-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: standard-chat-prompt
       langCode: en
-      reference: /prompts-library/en/standard-chat-prompt.txt
+      systemReference: /prompts-library/en/standard-chat-prompt-system-prompt.txt
+      userReference: /prompts-library/en/standard-chat-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: standard-rag-prompt
       langCode: en
-      reference: /prompts-library/en/standard-rag-prompt.txt
+      systemReference: /prompts-library/en/standard-rag-prompt-system-prompt.txt
+      userReference: /prompts-library/en/standard-rag-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-routing-decision-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-routing-decision-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-routing-decision-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-routing-decision-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: default-pipeline-rag-output-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-rag-output-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-rag-output-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-rag-output-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-chat-output-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-chat-output-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-chat-output-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-chat-output-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-tools-call-output-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-tools-call-output-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-tools-call-output-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-tools-call-output-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     # deep search prompts  
     - promptUse: deep-search-file-analisys-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-file-analisys-prompt.txt
+      systemReference: /prompts-library/en/deep-search-file-analisys-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-file-analisys-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: deep-search-data-sources-file-analisys-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt.txt
+      systemReference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-data-sources-file-analisys-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: deep-search-consolidation-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-consolidation-prompt.txt
+      systemReference: /prompts-library/en/deep-search-consolidation-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-consolidation-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: deep-search-content-rating-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-content-rating-prompt.txt
+      systemReference: /prompts-library/en/deep-search-content-rating-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-content-rating-prompt-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: deep-search-keyword-generation-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-keyword-generation-prompt.txt
+      systemReference: /prompts-library/en/deep-search-keyword-generation-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-keyword-generation-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: deep-search-search-query-extraction-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-search-query-extraction-prompt.txt
+      systemReference: /prompts-library/en/deep-search-search-query-extraction-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-search-query-extraction-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-initial-query-rewriting-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-initial-query-rewriting-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-rag-search-planner
       langCode: en
-      reference: /prompts-library/en/default-pipeline-rag-search-planner.txt
+      systemReference: /prompts-library/en/default-pipeline-rag-search-planner-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-rag-search-planner-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: deep-search-empty-results-fallback-prompt
       langCode: en
-      reference: /prompts-library/en/deep-search-empty-results-fallback-prompt.txt
+      systemReference: /prompts-library/en/deep-search-empty-results-fallback-prompt-system-prompt.txt
+      userReference: /prompts-library/en/deep-search-empty-results-fallback-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-chat-with-documents-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-chat-with-documents-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-chat-with-documents-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-chat-with-documents-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     #pure search      
     - promptUse: default-pipeline-pure-search-datasources-selection-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-pure-search-datasources-selection-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: REQUIRED
     - promptUse: default-pipeline-pure-search-fallback-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-pure-search-fallback-prompt-user-prompt.txt
+      chatHistory: NOT_REQUIRED
+      contextDocuments: NOT_REQUIRED
     - promptUse: default-pipeline-pure-search-summary-prompt
       langCode: en
-      reference: /prompts-library/en/default-pipeline-pure-search-summary-prompt.txt
+      systemReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-system-prompt.txt
+      userReference: /prompts-library/en/default-pipeline-pure-search-summary-prompt-user-prompt.txt
+      chatHistory: REQUIRED
+      contextDocuments: NOT_REQUIRED

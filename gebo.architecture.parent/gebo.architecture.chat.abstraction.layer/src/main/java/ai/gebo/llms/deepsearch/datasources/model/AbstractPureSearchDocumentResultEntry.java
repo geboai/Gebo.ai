@@ -2,7 +2,6 @@ package ai.gebo.llms.deepsearch.datasources.model;
 
 import ai.gebo.model.base.IGComponentOriginatedDocument;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @AllArgsConstructor

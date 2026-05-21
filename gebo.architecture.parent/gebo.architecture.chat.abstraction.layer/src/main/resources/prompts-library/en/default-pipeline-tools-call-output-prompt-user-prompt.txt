@@ -1,0 +1,6 @@
+INPUTS
+TOOLS_CATALOG (allowed tools):
+{toolsList}
+
+- actual user question:
+ {question}

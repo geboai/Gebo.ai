@@ -58,10 +58,7 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 
 	
 
-	/**
-	 * The default prompt used when interacting with the model.
-	 */
-	protected String defaultModelPrompt = null;
+
 	/***
 	 * Signes the specific uses for wich the model can work and being a default
 	 */

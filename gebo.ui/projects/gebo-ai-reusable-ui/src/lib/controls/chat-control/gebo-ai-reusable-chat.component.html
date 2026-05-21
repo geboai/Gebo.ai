@@ -92,13 +92,6 @@
         <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
           [data]="interaction?.response?.queryResponse"></markdown>
       </div>
-      @if (isDeepSearchResponse(interaction?.response)) {
-      <div class="gebo-ai-reusable-chat_interactin-deep-search-details">
-        <gebo-ai-deep-search-details [deepSearchRequestCode]="getDeepSearchRequestId(interaction?.response)">
-
-        </gebo-ai-deep-search-details>
-      </div>
-      }
       @if(ragsystem && interaction?.response?.documentsRef?.length) {
       <div class="gebo-ai-reusable-chat__interaction-item">
         <span class="gebo-ai-reusable-chat__interaction-item-icon">
@@ -106,11 +99,18 @@
         </span>
         <span class="gebo-ai-reusable-chat__interaction-item-title">Found docs</span>
 
-        @for (document of getDocs(interaction); track document.uuid) {
-        @if(document) {
-        <gebo-ai-chat-docref [ref]="document" [choosed]="isChoosed(document)"
-          (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
+        @for (document of getDocs(interaction); track document.uuid; let i = $index) {
+          @if(document && (isInteractionDocsExpanded(interaction.request.id) || i < maxDisplayedDocs)) {
+          <gebo-ai-chat-docref [ref]="document" [choosed]="isChoosed(document)"
+            (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
+          }
         }
+        @if (getDocs(interaction).length > maxDisplayedDocs) {
+          <p-button class="custom-blue-btn" [text]="true" 
+            [label]="isInteractionDocsExpanded(interaction.request.id) ? 'Show less' : '... (' + (getDocs(interaction).length - maxDisplayedDocs) + ')'" 
+            (onClick)="toggleInteractionDocs(interaction.request.id)" 
+            [icon]="isInteractionDocsExpanded(interaction.request.id) ? 'pi pi-chevron-up' : 'pi pi-chevron-down'">
+          </p-button>
         }
       </div>
       }

@@ -30,7 +30,6 @@ export interface GAnthropicChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GAnthropicChatModelConfig.ForUsesEnum>;
     features?: Array<GAnthropicChatModelConfig.FeaturesEnum>;
 }

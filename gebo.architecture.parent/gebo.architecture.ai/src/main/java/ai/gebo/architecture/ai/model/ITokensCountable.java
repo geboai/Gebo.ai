@@ -1,15 +1,18 @@
 package ai.gebo.architecture.ai.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 
 public interface ITokensCountable {
 	public static final JTokkitTokenCountEstimator tokensEstimator = new JTokkitTokenCountEstimator();
 
 	public int getTokensSize();
-	
+
+	 
 	public static int tokensSize(ITokensCountable... data) {
 		int toks = 0;
 		if (data != null) {
@@ -48,10 +51,12 @@ public interface ITokensCountable {
 	}
 
 	public static int tokensSize(Map<String, Object> params) {
-		String variables[]=new String[params.size()];
-		int index=0;
-		for(Object value:params.values()) {
-			variables[index]=value.toString();
+		if (params == null)
+			return 0;
+		String variables[] = new String[params.size()];
+		int index = 0;
+		for (Object value : params.values()) {
+			variables[index] = value.toString();
 		}
 		return stringsTokensSize(variables);
 	}

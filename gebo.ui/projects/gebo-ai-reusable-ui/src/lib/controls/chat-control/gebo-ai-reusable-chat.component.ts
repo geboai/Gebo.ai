@@ -33,7 +33,6 @@ import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-ho
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
-import { GeboAIDeepSearchComponent } from "../deep-search-control/deep-search.component";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
@@ -144,6 +143,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Flag indicating if waiting for audio content to load
      */
     private waitingForAudiocontent: boolean = false;
+
+    /**
+     * Maximum number of documents to display inline for an interaction before requiring a toggle
+     */
+    @Input() maxDisplayedDocs: number = 3;
+
+    /**
+     * Map tracking which interactions have their full document list expanded
+     */
+    public expandedInteractionsDocs: Map<string, boolean> = new Map();
 
     /**
      * Flag indicating if a chat response is currently streaming
@@ -371,12 +380,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatInputShell.switchToChatWithDocuments();
         }
     }
-    isDeepSearchResponse(item?: GeboChatResponse) {
-        return ((item?.pipelineRouterDecisionCode === "DEEP_SEARCH_RESPONSE" || item?.pipelineRouterDecisionCode === "SHALLOW_SEARCH_RESPONSE") && item?.deepSearchRequestId) ? true : false;
-    }
-    getDeepSearchRequestId(item?: GeboChatResponse) {
-        return item?.deepSearchRequestId;
-    }
+
     /**
      * Handles changes to input properties
      * Loads model info and chat history when chatInfo changes
@@ -481,6 +485,26 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     getDocs(interaction: GeboChatInteraction): GResponseDocumentRef[] {
         return interaction?.response?.documentsRef ? interaction.response.documentsRef : [];
+    }
+
+    /**
+     * Toggles the document list expansion for a specific interaction
+     * @param interactionId The ID of the interaction request
+     */
+    public toggleInteractionDocs(interactionId?: string): void {
+        if (!interactionId) return;
+        const current = this.expandedInteractionsDocs.get(interactionId) || false;
+        this.expandedInteractionsDocs.set(interactionId, !current);
+    }
+
+    /**
+     * Checks if the document list for a specific interaction is expanded
+     * @param interactionId The ID of the interaction request
+     * @returns True if expanded, false otherwise
+     */
+    public isInteractionDocsExpanded(interactionId?: string): boolean {
+        if (!interactionId) return false;
+        return this.expandedInteractionsDocs.get(interactionId) || false;
     }
 
     /**
@@ -713,7 +737,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 chatModelCode: r.chatModelCode,
                                 userChatContextCode: response.userChatContextCode,
                                 query: null,
-                                chatPipelineProcessId: null
+                                chatPipelineProcessId: null,
+                                forcedRequestDocuments:[]
                             };
                             this.formGroup.patchValue(dataUpdate);
 

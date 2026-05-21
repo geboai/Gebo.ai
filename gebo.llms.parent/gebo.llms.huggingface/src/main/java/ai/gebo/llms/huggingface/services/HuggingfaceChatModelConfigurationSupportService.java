@@ -15,6 +15,7 @@ import org.springframework.ai.huggingface.HuggingfaceChatModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -67,12 +68,17 @@ public class HuggingfaceChatModelConfigurationSupportService
 	 */
 	final IGeboSecretsAccessService secretService;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Inner class implementing a HuggingFace configurable chat model.
 	 */
 	class HuggingfaceConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GHuggingfaceChatModelConfig, HuggingfaceChatModel> {
+
+		public HuggingfaceConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+
+		}
 
 		/**
 		 * Configures a HuggingFace chat model instance based on the provided
@@ -131,7 +137,7 @@ public class HuggingfaceChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GHuggingfaceChatModelConfig> create(GHuggingfaceChatModelConfig config)
 			throws LLMConfigException {
-		HuggingfaceConfigurableChatModel model = new HuggingfaceConfigurableChatModel();
+		HuggingfaceConfigurableChatModel model = new HuggingfaceConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

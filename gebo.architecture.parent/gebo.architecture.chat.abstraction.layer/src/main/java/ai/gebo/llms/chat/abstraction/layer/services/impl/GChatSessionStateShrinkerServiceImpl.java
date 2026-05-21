@@ -13,11 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -113,7 +114,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 					throw new LLMConfigException("No Internal services or default chat model present");
 				out.setChatHistory(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
 						this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(),
-						oldVersion != null ? oldVersion.getChatHistory() : null, usedChatModel));
+						oldVersion != null ? oldVersion.getChatHistory() : null, null, usedChatModel));
 				this.minimalChatContextCacheItemRepository.deleteByUserChatContextCode(out.getUserChatContextCode());
 				MinimalChatContext minimalChatContext = new MinimalChatContext();
 				minimalChatContext.setChatHistory(out.getChatHistory());
@@ -305,8 +306,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 					lastTurns.append(NEWLINE);
 				}
 			}
-			GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
-			String prompt = _prompt.getPrompt();
+			GPromptTemplateConfig _prompt = promptsDao
+					.findByPromptUse(GeboPromptsLibrary.CHAT_HISTORY_DOCUMENTS_CONSOLIDATION);
+
 			String question = lastTurns.toString();
 			String pastConsolidation = consolidated != null ? consolidated.getConsolidationText() : "";
 
@@ -347,8 +349,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							out.setInteractionIndex(content.getInteractionIndex());
 							out.setMetaData(new HashMap<String, Object>(
 									content.getAiDocument().getFragments().get(0).getMetaData()));
-							String text = callLLMConsolidateText(usedChatModel, prompt, question, pastConsolidation,
-									null, toBeConsolidated);
+							String text = callLLMConsolidateText(usedChatModel, _prompt,
+									IChatRequestContext.of(question), pastConsolidation, null, toBeConsolidated);
 							if (usedChatModel.isApplyThinkingMarkupHandling() && text != null) {
 								text = ClientChatCallUtil.removeThinking(text);
 							}
@@ -383,11 +385,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 	}
 
 	private CSSConsolidatedChatHistory consolidateHistory(CSSSimplifiedChatHistory value, int historySizeTarget,
-			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,
-			IGConfigurableChatModel usedChatModel) {
+			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,IChatRequestContext context,
+			IGConfigurableChatModel usedChatModel) throws LLMConfigException {
 		List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
-		GPromptConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
-		String prompt = _prompt.getPrompt();
+		GPromptTemplateConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
+		
 
 		String existingSummary = oldVersion != null && oldVersion.getConsolidationText() != null
 				? oldVersion.getConsolidationText()
@@ -418,7 +420,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			}
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
-			String consolidated = callLLMConsolidateText(usedChatModel, prompt, "", existingSummary, params, inputs);
+			String consolidated = callLLMConsolidateText(usedChatModel, _prompt,context, existingSummary, params, inputs);
 
 			newConsolidation.setConsolidationText(consolidated);
 			newConsolidation.setLastInteractionPointer(lastIndex);
@@ -449,12 +451,12 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		return out;
 	}
 
-	private MinimalChatContext doShrinking(String sessionCode, MinimalChatContext mc, int tokensBudget) {
+	private MinimalChatContext doShrinking(String sessionCode, MinimalChatContext mc, int tokensBudget) throws LLMConfigException {
 
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		CSSConsolidatedChatHistory consolidated = this.consolidateHistory(mc.getChatHistory().getLatestEntries(),
-				tokensBudget, 0, mc.getChatHistory(), serviceModel);
+				tokensBudget, 0, mc.getChatHistory(), null, serviceModel);
 		MinimalChatContext newMinimized = new MinimalChatContext();
 		newMinimized.setChatHistory(consolidated);
 		MinimalChatContextCacheItem item = new MinimalChatContextCacheItem();
@@ -463,7 +465,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				.get(mc.getChatHistory().getLatestEntries().getInteractions().size() - 1).getRequestId());
 		item.setUserChatContextCode(sessionCode);
 		item.recalculateId();
-		this.minimalChatContextCacheItemRepository.save(item);
+		this.minimalChatContextCacheItemRepository.save(item); 
 		return newMinimized;
 	}
 

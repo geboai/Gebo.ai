@@ -1,7 +1,5 @@
 package ai.gebo.llms.deepsearch.repository;
 
-import java.util.List;
-
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 

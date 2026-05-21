@@ -276,7 +276,7 @@ public final class RoutingPromptUtil {
 	public static String dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources,
 			List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
-		if (dataSources != null && !dataSources.isEmpty()) {
+		if (knowledgeBases != null && !knowledgeBases.isEmpty()) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
 			if (!knowledgeBases.isEmpty()) {

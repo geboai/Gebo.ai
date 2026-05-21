@@ -30,7 +30,6 @@ export interface GOllamaChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GOllamaChatModelConfig.ForUsesEnum>;
     features?: Array<GOllamaChatModelConfig.FeaturesEnum>;
 }

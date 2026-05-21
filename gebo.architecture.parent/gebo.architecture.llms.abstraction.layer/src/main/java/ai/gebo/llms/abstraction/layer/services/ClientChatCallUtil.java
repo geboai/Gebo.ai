@@ -14,6 +14,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.model.DocumentMetaInfos;
@@ -400,5 +401,17 @@ public class ClientChatCallUtil {
 	}
 
 	private static final String CONVERSATION_SUMMARY_SO_FAR = "Conversation summary so far:";
+
+	public static SystemMessage createSystemMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static UserMessage createLastUserMessage(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

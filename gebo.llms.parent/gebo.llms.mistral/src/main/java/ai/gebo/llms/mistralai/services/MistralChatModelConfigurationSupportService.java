@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -80,13 +81,18 @@ public class MistralChatModelConfigurationSupportService
 	final MistralModelsLookupService mistralModelsLookupService;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
 	 * models.
 	 */
 	class MistralConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
+
+		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+
+		}
 
 		/**
 		 * Configures a MistralAiChatModel instance based on the provided configuration.
@@ -199,7 +205,7 @@ public class MistralChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
-		MistralConfigurableChatModel model = new MistralConfigurableChatModel();
+		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

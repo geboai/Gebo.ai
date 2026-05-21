@@ -1,0 +1,10 @@
+INPUTS:
+
+- Latest user question: {question}
+
+- (G) deliverable types catalog:
+ 
+ {deliverableTypesList}
+ 
+ 
+ - ACTUAL DATE AND TIME: {actualTimestamp}

@@ -35,10 +35,7 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	 */
 	public static final String DEFAULT_CHAT_PROFILE_CODE = "default-rag-chat-profile";
 
-	/**
-	 * The prompt used in the chat profile.
-	 */
-	private String prompt = null;
+	
 
 	/**
 	 * Reference to the embedding model configuration.

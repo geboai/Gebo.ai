@@ -103,7 +103,7 @@ export * from "./lib/controls/chat-model-use-component/chat-model-use.module";
 export * from "./lib/controls/choose-documents-panel/search-documents.component";
 export * from "./lib/controls/choose-documents-panel/documents-list-panel.component";
 export * from "./lib/controls/userspace-files-component/userspace-files.component";
-export * from "./lib/controls/deep-search-control/deep-search-details.component";
+
 export * from "./lib/controls/deep-search-control/deep-search-sources-choice.component";
 export * from "./lib/directives/translable/translable.directive";
 export * from "./lib/setup-wizard/setup-wizard-panel.component";

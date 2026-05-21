@@ -1,7 +1,5 @@
 package ai.gebo.llms.chat.abstraction.layer.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,21 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
-import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
-import ai.gebo.architecture.rag.support.layer.services.IGAIDocumentsCacheService;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
-import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.GDocumentsSearchServiceImpl;
@@ -49,6 +42,8 @@ public class GeboRagSearchConfig {
 	private final GUserChatSessionRepository sessionRepo;
 	// Default number of top elements to be considered
 	private int defaultTopK = 15;
+	private int pureSearchRankedTopK = 50;
+	private int pureSearchSingleDataSourceTopK = 150;
 	// Default similarity threshold for comparisons
 	private double defaultSimilarityThreshold = 0.50;
 
@@ -84,10 +79,10 @@ public class GeboRagSearchConfig {
 	@Bean
 	@Scope("singleton")
 	public IInternalKnowledgeLLMAssistedRetrieveService internalKnowledgeLLMAssistedRetrieveService(
-			
+
 			LLMGeneratedResourceRepository generatedRepo, IGChatSessionLifeCycleService chatSessionLifecycleService,
 			ChatPipelinesConfiguration configuration, IGPromptConfigDao promptsDao,
-			IGDocumentsSearchService searchesService,IGRankerService rankerService) {
+			IGDocumentsSearchService searchesService, IGRankerService rankerService) {
 		return new InternalKnowledgeLLMAssistedRetrieveServiceImpl(chatSessionLifecycleService, configuration,
 				promptsDao, searchesService, securityService, rankerService);
 	}

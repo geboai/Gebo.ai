@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.repository.PromptConfigRepository;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import lombok.AllArgsConstructor;
@@ -18,17 +18,17 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GPromptConfigDynamicSource
 
-		implements IGDynamicConfigurationSource<GPromptConfig> {
+		implements IGDynamicConfigurationSource<GPromptTemplateConfig> {
 	final PromptConfigRepository directRepo;
 
 	@Override
-	public List<GPromptConfig> getConfigurations() {
+	public List<GPromptTemplateConfig> getConfigurations() {
 		return directRepo.findAll();
 	}
 
 	@Override
-	public GPromptConfig findByCode(String code) {
-		Optional<GPromptConfig> opt = directRepo.findById(code);
+	public GPromptTemplateConfig findByCode(String code) {
+		Optional<GPromptTemplateConfig> opt = directRepo.findById(code);
 		return opt.isPresent() ? opt.get() : null;
 	}
 	// Inherits all functionality from GDynamicConfigurationSourceAdapter

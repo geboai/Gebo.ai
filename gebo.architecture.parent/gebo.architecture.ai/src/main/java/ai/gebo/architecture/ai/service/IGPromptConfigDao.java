@@ -9,7 +9,7 @@
 
 package ai.gebo.architecture.ai.service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
 
 /**
@@ -18,7 +18,7 @@ import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
  * Interface for accessing and managing prompt configurations in an application
  * that rely in llms for a lot of different uses application.
  */
-public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConfig> {
+public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptTemplateConfig> {
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	/**
@@ -31,7 +31,7 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 *                          used
 	 * @return the default prompt configuration
 	 */
-	GPromptConfig defaultChatPrompt(String modelCode, Boolean ragPrompt);
+	GPromptTemplateConfig defaultChatPrompt(String modelCode, Boolean ragPrompt);
 
 	/**
 	 * Provides a default prompt configuration based on an optional RAG prompt flag.
@@ -39,7 +39,7 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param ragPrompt a boolean indicating whether a RAG prompt should be used
 	 * @return the default prompt configuration
 	 */
-	GPromptConfig defaultChatPrompt(Boolean ragPrompt);
+	GPromptTemplateConfig defaultChatPrompt(Boolean ragPrompt);
 
 	/****************************************************************************
 	 * Get a prompt by its specific use, preferring eventual customized by user one
@@ -47,15 +47,15 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param promptUse
 	 * @return
 	 */
-	default GPromptConfig findByPromptUse(String promptUse) {
-		GPromptConfig data = this.findByPromptUse(promptUse, "en", null, null);
+	default GPromptTemplateConfig findByPromptUse(String promptUse) {
+		GPromptTemplateConfig data = this.findByPromptUse(promptUse, "en", null, null);
 		if (data == null)
 			throw new IllegalStateException("The default prompt for use:" + promptUse
 					+ " does not exist, this can leave software in an inconsistent state");
 		return data;
 	}
 
-	public GPromptConfig exactFindByPromptUse(String promptUse, String langCode, String modelProvider,
+	public GPromptTemplateConfig exactFindByPromptUse(String promptUse, String langCode, String modelProvider,
 			String modelCode);
 
 	/************************************************************************************
@@ -67,7 +67,7 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param config
 	 * @return
 	 */
-	default GPromptConfig findByPromptUse(String promptUse, String langCode, String modelCode) {
+	default GPromptTemplateConfig findByPromptUse(String promptUse, String langCode, String modelCode) {
 		return this.findByPromptUse(promptUse, langCode, null, modelCode);
 	}
 
@@ -79,15 +79,15 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptConf
 	 * @param config
 	 * @return
 	 */
-	default GPromptConfig findByPromptUse(String promptUse, String modelCode) {
+	default GPromptTemplateConfig findByPromptUse(String promptUse, String modelCode) {
 		return this.findByPromptUse(promptUse, "en", null, modelCode);
 	}
 
-	GPromptConfig findByPromptUse(String promptUse, String langCode, String modelProvider, String modelCode);
+	GPromptTemplateConfig findByPromptUse(String promptUse, String langCode, String modelProvider, String modelCode);
 
-	public GPromptConfig insert(GPromptConfig config);
+	public GPromptTemplateConfig insert(GPromptTemplateConfig config);
 
-	public GPromptConfig update(GPromptConfig config);
+	public GPromptTemplateConfig update(GPromptTemplateConfig config);
 
-	public void delete(GPromptConfig config);
+	public void delete(GPromptTemplateConfig config);
 }

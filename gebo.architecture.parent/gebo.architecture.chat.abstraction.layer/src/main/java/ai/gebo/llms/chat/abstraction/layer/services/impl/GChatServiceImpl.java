@@ -14,11 +14,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -97,26 +95,21 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 						: null;
 		GeboChatResponse chatResponse = this.chatSessionLifecycleService.createEmptyResponse(request);
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, true);
+		GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(modelCode, true);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
 
-			PromptTemplate promptTemplate = null;
-			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-			Prompt prompt = null;
-			promptTemplate = new PromptTemplate(promptTemplateText);
-
-			prompt = promptTemplate.create();
+			
 
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext, null);
+			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext, null);
 		}
 
 		// Set response details
@@ -255,22 +248,18 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			String _modelCode = handler != null && handler.getConfig() != null
 					&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 							: null;
-			GPromptConfig gprompt = promptsDao.defaultChatPrompt(_modelCode, true);
+			GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(_modelCode, true);
 			if (gprompt == null) {
 				throw new GeboChatException("The system has no default prompt configured");
 			} else {
 				int contextWindowSize = handler.getContextLength();
 				// Prepare prompt and context for streaming
-				PromptTemplate promptTemplate = null;
-				String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-				Prompt prompt = null;
-				promptTemplate = new PromptTemplate(promptTemplateText);
-				prompt = promptTemplate.create();
+				
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, chatRequestContext,
+				return streamChatClient(handler, gprompt, kbcontext, request, gresponse, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);
 			}
 		} catch (Throwable e) {

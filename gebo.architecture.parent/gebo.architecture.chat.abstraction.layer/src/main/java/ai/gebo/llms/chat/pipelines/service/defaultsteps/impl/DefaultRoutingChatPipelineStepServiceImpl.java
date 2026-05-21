@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -23,8 +23,10 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -125,17 +127,18 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	private RewriteAndUserIntent doRequestRewriteAndUserIntent(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String latestInteractions) throws GeboChatSessionLifecycleException, IOException {
+			String latestInteractions) throws GeboChatSessionLifecycleException, IOException, LLMConfigException {
 		notifyUser(emitter, DOING_USER_INTENT_ANALISYS, I_M_ANALYZING_YOUR_REQUEST, null, 2000l, NotificationType.INFO);
 		String query = runtimeData.getRequestResources().getCurrentRequest().getQuery();
 		Map<String, Object> params = CommonChatPromptParamsUtil
 				.preparePromptParameters(runtimeData.getMinimalChatContext());
 		params.put(DefaultPipelineSharedPromptPlaceholders.DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM,
 				createDeliverableTypesList());
-		GPromptConfig rewritePrompt = promptsDao
+		GPromptTemplateConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
-		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt.getPrompt(),
-				query, params, List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
+		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD));
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
 		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
@@ -167,13 +170,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	private RoutingDecision doDecideRoute(ISinkUIEmitter emitter, ChatPipelineExecutionRuntimeData runtimeData,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
-			String rewrited_query) throws GeboChatSessionLifecycleException {
+			String rewrited_query) throws GeboChatSessionLifecycleException, LLMConfigException {
 		notifyUser(emitter, CHOOSING_AGENTIC_FLOW, CHOOSING_AGENTIC_FLOW_DESCRIPTION, null, 2000l,
 				NotificationType.INFO);
-		GPromptConfig _prompt = this.promptsDao
+		GPromptTemplateConfig _prompt = this.promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 
-		final String prompt = _prompt.getPrompt();
 		Supplier<Map<String, Object>> paramsProvider = () -> {
 			try {
 				if (LOGGER.isDebugEnabled()) {
@@ -216,15 +218,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				runtimeData.getRequestResources().getCurrentRequest().getUserChatContextCode(),
 				DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP, 120000, paramsProvider);
 		params.putAll(cachedParams);
-		int usedTokens = tokensLength(prompt, latestInteractions, params.toString(), rewrited_query);
+		int usedTokens = tokensLength(latestInteractions, params.toString(), rewrited_query) + _prompt.getTokensSize();
 		int remainingContext = (int) (((double) (serviceModel.getContextLength() - usedTokens)) * 0.8d);
 		final int documentsTokenBudget = Math.min(remainingContext,
 				this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
-		String documents = RoutingPromptUtil.documentsPromptPart(runtimeData.getRequestResources(),
-				documentsTokenBudget);
-		params.put(DOCUMENTS, documents);
-
-		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, rewrited_query,
+		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context,
 				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS));
 		sanitizeSearchedSystems(decisionMap);
 		// extracting user intent

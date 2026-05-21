@@ -108,11 +108,13 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
+		final Prompt sampledPrompt = promptObject;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Used prompt:" + promptObject.getContents());
 		}
 		LLMExtractionResult data = null;
-		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).system(text);
+		ChatClientRequestSpec requestSpec = (ChatClientRequestSpec) chatModel
+				.doWithChatClient((chatClient) -> chatClient.prompt(sampledPrompt).system(text));
 		switch (configuration.getExtractionFormat()) {
 		case JSON: {
 			if (LOGGER.isDebugEnabled()) {
@@ -137,7 +139,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 				LOGGER.debug("LLM INPUT=>" + buffer);
 			}
 			long timestamp = System.currentTimeMillis();
-			String response = chatModel.getChatModel().call(buffer.toString());
+			String response = (String) chatModel.doWithChatModel((cModel) -> cModel.call(buffer.toString()));
 			long elapsed = System.currentTimeMillis() - timestamp;
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");
@@ -294,7 +296,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			});
 		}
 		if (value == null) {
-			value=this.chatModelsConfiguration.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);			
+			value = this.chatModelsConfiguration.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		}
 		return value;
 	}
@@ -517,6 +519,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
+		final Prompt sampledPrompt = promptObject;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Used prompt:" + promptObject.getContents());
 		}
@@ -529,7 +532,11 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			List<Message> messages = documents.stream().map(x -> (Message) new UserMessage(START_CHUNK_ID + x.getId()
 					+ END_CHUNK_ID + "\r\n" + metaDataEnricher.getContentWithoutMetaData(x) + "\r\n")).toList();
 			long timestamp = System.currentTimeMillis();
-			ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
+			ChatClientRequestSpec requestSpec = (ChatClientRequestSpec) chatModel.doWithChatClient((chatClient) -> {
+				ChatClientRequestSpec outvalue = chatClient.prompt(sampledPrompt).messages(messages);
+				return outvalue;
+			});
+
 			data = clean(requestSpec.call().entity(LLMExtractionResult.class));
 			long elapsed = System.currentTimeMillis() - timestamp;
 			if (LOGGER.isInfoEnabled()) {
@@ -550,7 +557,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 				LOGGER.debug("LLM INPUT=>" + buffer);
 			}
 			long timestamp = System.currentTimeMillis();
-			String response = chatModel.getChatModel().call(buffer.toString());
+			String response = (String) chatModel.doWithChatModel((cModel) -> cModel.call(buffer.toString()));
 			long elapsed = System.currentTimeMillis() - timestamp;
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");

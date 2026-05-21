@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -82,13 +83,18 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final AzureOpenAIConfigFactory azureClientBuilderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
 	class AzureOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAzureOpenAIChatModelConfig, AzureOpenAiChatModel> {
+
+		public AzureOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+			super(rendererFactory);
+			 
+		    }
 
 		/**
 		 * Configures the OpenAI chat model based on the provided configuration.
@@ -199,7 +205,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAzureOpenAIChatModelConfig> create(GAzureOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel();
+		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

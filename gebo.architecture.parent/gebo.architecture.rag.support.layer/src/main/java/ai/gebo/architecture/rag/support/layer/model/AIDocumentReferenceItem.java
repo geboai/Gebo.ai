@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import org.springframework.ai.document.Document;
+
 import ai.gebo.model.ExtractedDocumentMetaData;
 import lombok.Data;
 
@@ -132,6 +134,16 @@ public class AIDocumentReferenceItem implements IAIContent, Cloneable {
 	public int countFragments() {
 		int i = fragments.size();
 		return i;
+	}
+
+	public List<Document> aiDocumentsList() {
+		final List<Document> documents = new ArrayList<Document>();
+
+		fragments.forEach(y -> {
+			if (y.toAIDocument() != null)
+				documents.add(y.toAIDocument());
+		});
+		return documents;
 	}
 
 	public static AIDocumentReferenceItem join(AIDocumentReferenceItem... docs) {

@@ -30,7 +30,6 @@ export interface GHuggingfaceChatModelConfig {
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GHuggingfaceChatModelConfig.ForUsesEnum>;
     features?: Array<GHuggingfaceChatModelConfig.FeaturesEnum>;
 }

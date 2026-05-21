@@ -82,7 +82,6 @@ import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from '.
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
-import { PromptTemplateWizardControllerService } from './api/promptTemplateWizardController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SecretsControllerService } from './api/secretsController.service';
@@ -180,7 +179,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     OpenAiChatModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
     ProjectsControllerService,
-    PromptTemplateWizardControllerService,
     PromptTemplatesControllerService,
     ReindexingFrequencyOptionsControllerService,
     SecretsControllerService,

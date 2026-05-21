@@ -1,0 +1,14 @@
+INPUTS:
+- Last User question:
+{question}
+
+
+- (msGraphCatalog) Microsoft Graph, Sharepoint, Onedrive catalog (preview of available roots; may be empty):
+{msGraphCatalog}
+
+CATALOG SEMANTICS (msGraphCatalog):
+The catalog is a preview list of the available roots that your search can be scoped to, typically including:
+- OneDrive roots (personal or shared drives): driveId, owner/displayName, webUrl/rootUrl, title
+- SharePoint sites: siteId, siteUrl/webUrl, displayName, (optionally) known library/page root paths
+Use ONLY these catalog entries when you need to scope the search (siteUrls/pathPrefixes). If a scope is not clearly implied, keep scoping fields null.
+
