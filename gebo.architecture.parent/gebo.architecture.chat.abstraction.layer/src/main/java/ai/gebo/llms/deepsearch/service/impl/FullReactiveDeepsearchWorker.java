@@ -229,7 +229,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
 								NotificationType.INFO);
 						Flux<DocumentWithSearchResult> fl = handler.streamSearchResults(runtimeData, sinkUIEmitter,
-								serviceModel, chatModel, chunkSessionId, globalK);
+								chatModel, serviceModel, chunkSessionId, globalK);
 						return fl.map(x -> {
 							if (!results.containsKey(x.getSearchResult().getCode())) {
 								GResponseDocumentRef ref = new GResponseDocumentRef(x.getSearchResult());
@@ -255,7 +255,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base",
 								"pi pi-file", 3000l, NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamSearchResults(runtimeData,
-								sinkUIEmitter, serviceModel, chatModel, chunkSessionId, globalK).map(doc -> {
+								sinkUIEmitter, chatModel, serviceModel, chunkSessionId, globalK).map(doc -> {
 
 									String code = doc.getMetadata() != null
 											&& doc.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
