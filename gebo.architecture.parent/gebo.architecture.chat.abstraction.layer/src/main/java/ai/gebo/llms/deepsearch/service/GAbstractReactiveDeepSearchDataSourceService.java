@@ -23,7 +23,6 @@ import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.architecture.search.model.BaseSearchResultsExtractionDataType;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
-import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
@@ -40,12 +39,9 @@ import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.datasources.model.PureSearchDocumentResultError;
 import ai.gebo.llms.deepsearch.datasources.model.PureSearchExternalDataSourceResultEntry;
-import ai.gebo.llms.deepsearch.model.DeepSearchAnalyzedDocument;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-import ai.gebo.llms.deepsearch.model.DeepSearchSourceType;
-import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
-import ai.gebo.llms.deepsearch.model.SearchResultsStepInfo;
+
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.GUserMessage.MsgServerity;
@@ -109,13 +105,9 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	}
 
 	protected abstract List<SearchWithResults> executeSearches(DeepSearchRequest request,
-			MinimalChatContext minimalChatContext, List<IDeepSearchResult> pastSystemsResponses,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			String string, int topK) throws LLMConfigException, IOException, SearchServiceException;
-
-	protected abstract SearchResultAnalisysOutcome extractRelatedAnalisysReferences(
-			SearchResultsStepInfo actualSearchResultRef, CustomContentExtractionType returned,
-			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel);
+			MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String string, int topK)
+			throws LLMConfigException, IOException, SearchServiceException;
 
 	protected List<SearchResult> flattenSearchResults(List<SearchResult> results) {
 		List<SearchResult> flattened = new ArrayList<SearchResult>();
@@ -176,45 +168,6 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 	protected abstract CustomContentExtractionType customStructureConsolidation(CustomContentExtractionType actualData,
 			CustomContentExtractionType currentConsolidation);
 
-	private DeepSearchAnalyzedDocument createAnalyzedDocument(SearchResult sr, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, DeepSearchConfig deepSearchConfig, DeepSearchRequest request) {
-		DeepSearchAnalyzedDocument doc = new DeepSearchAnalyzedDocument();
-		doc.setDataSourceCode(getHandlerId());
-		doc.setDataSourceDescription(getDescription(deepSearchConfig));
-
-		if (sr != null) {
-			StringBuffer computedCode = new StringBuffer();
-			computedCode.append(getHandlerId() + ":");
-			if (sr.getNavigationReference() != null) {
-
-				if (sr.getNavigationReference().root != null && sr.getNavigationReference().root.getCode() != null) {
-					computedCode.append(sr.getNavigationReference().root.getCode());
-					computedCode.append(":");
-				}
-				if (sr.getNavigationReference().path != null) {
-					computedCode.append(sr.getNavigationReference().path.absolutePath);
-				}
-				if (sr.getNavigationReference().path != null && sr.getNavigationReference().path.name != null) {
-					doc.setName(sr.getNavigationReference().path.name);
-				}
-			} else if (sr.getResultReference() != null && sr.getResultReference().getUri() != null) {
-				computedCode.append(sr.getResultReference().getUri());
-			}
-			doc.setCode(computedCode.toString());
-			SearchResultReference rr = sr.getResultReference();
-			if (rr != null && rr.getName() != null) {
-				doc.setName(rr.getName());
-
-			}
-			if (rr != null && rr.getUri() != null) {
-				doc.setUrl(rr.getUri());
-			}
-
-		}
-		doc.setSourceType(DeepSearchSourceType.EXTERNAL_SEARCH);
-		return doc;
-	}
-
 	@Override
 	public Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(MinimalChatContext minimalChatContext,
 			ISinkUIEmitter emitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, int topK,
@@ -228,8 +181,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
-					return Flux.just(executeSearches(dsr, minimalChatContext, List.of(), deepSearchDefaultConfig,
-							chatModel, serviceModel, chunkingSessionId, topK));
+					return Flux.just(executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel,
+							serviceModel, chunkingSessionId, topK));
 				} catch (Throwable e) {
 					throw new RuntimeException(e);
 
@@ -306,8 +259,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		Flux<List<SearchWithResults>> searchBlockFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
-					return Flux.just(executeSearches(dsr, minimalChatContext, List.of(), deepSearchDefaultConfig,
-							chatModel, serviceModel, chunkingSessionId, topK));
+					return Flux.just(executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel,
+							serviceModel, chunkingSessionId, topK));
 				} catch (Throwable e) {
 					throw new RuntimeException(e);
 
