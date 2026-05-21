@@ -2,7 +2,6 @@ package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,6 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import jakarta.annotation.PreDestroy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Scheduler;
 
 @Component
 @Scope("singleton")
@@ -64,12 +62,11 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 	protected final IGDeepSearchConfigProvider configProvider;
 	protected final IGeboThreadManager threadManager;
 	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
-	private final Scheduler deepSearchScheduler;
-	private final ExecutorService deepSearchExecutor;
+	
 
 	@PreDestroy
 	public void shutdown() {
-		deepSearchExecutor.shutdown();
+		
 	}
 
 	@Override
@@ -127,7 +124,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 				}
 				return flow;
 			});
-		}).subscribeOn(deepSearchScheduler);
+		}).subscribeOn(threadManager.getBoundedElastic());
 
 	}
 
@@ -145,7 +142,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 				return worker.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
 						searchDataSources, perDataSourceK, globalK);
 			});
-		}).subscribeOn(deepSearchScheduler);
+		}).subscribeOn(threadManager.getBoundedElastic());
 	}
 
 	@Override
