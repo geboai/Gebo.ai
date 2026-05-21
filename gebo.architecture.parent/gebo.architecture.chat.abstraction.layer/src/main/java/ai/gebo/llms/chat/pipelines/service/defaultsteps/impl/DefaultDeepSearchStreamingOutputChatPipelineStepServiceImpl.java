@@ -1,6 +1,5 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,8 +18,6 @@ import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter.StepEnvironmen
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
-import ai.gebo.llms.deepsearch.model.events.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -64,7 +61,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 				// TODO: SEARCH ALL IDS
 				deepSearchDataSources.add(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
 			}
-			return deepSearchService.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
+			return deepSearchService.streamDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
 					deepSearchDataSources, 100, 30);
 
 		} catch (LLMConfigException e) {

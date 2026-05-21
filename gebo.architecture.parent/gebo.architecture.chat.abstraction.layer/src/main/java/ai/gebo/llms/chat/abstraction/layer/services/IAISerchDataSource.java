@@ -1,7 +1,5 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
-import java.util.stream.Stream;
-
 import org.springframework.ai.document.Document;
 
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;

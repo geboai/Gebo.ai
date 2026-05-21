@@ -26,7 +26,6 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.service.IGHugeFilesDeepSearch;
-import ai.gebo.llms.deepsearch.service.IGInternalKnlowledgeBaseRagDeepSearchService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -37,7 +36,6 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 	static final String DEFAULT_CHAT_WITH_DOCS_STREAMING = "default-chat-with-docs-service";
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatService chatService;
-	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService;
 	private final IGHugeFilesDeepSearch hugeFilesDeepSearch;
 
 	@Override
@@ -72,8 +70,8 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 		double fullRequestSize = runtimeData.getRequestResources().getTokensSize() + prompt.getTokensSize();
 		if (contextWindow >= 0.8 * fullRequestSize) {
-			return chatService.streamChat(prompt, runtimeData.getRequestResources(),
-					runtimeData.getChatResponse(), chatModel);
+			return chatService.streamChat(prompt, runtimeData.getRequestResources(), runtimeData.getChatResponse(),
+					chatModel);
 		} else {
 			LLMChatRequestResources resources = new LLMChatRequestResources(
 					runtimeData.getRequestResources().getChatWithDocuments(), new AIDocumentsSet(),
@@ -86,9 +84,8 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 				return chatService.streamChat(prompt, resources, runtimeData.getChatResponse(), chatModel);
 			} else {
 				try {
-					return hugeFilesDeepSearch.streamChatWithHugeFiles(runtimeData.getRequestResources(),
-							runtimeData.getMinimalChatContext(), runtimeData.getChatResponse(), serviceModel,
-							chatModel);
+					return hugeFilesDeepSearch.streamChatWithHugeFiles(runtimeData, sinkUIEmitter, chatModel,
+							serviceModel);
 				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException | GeboIngestionException
 						| GeboContentHandlerSystemException | SearchServiceException e) {
 					throw new ChatPipelineException("Exception streaming a huge file internal deep search", e);

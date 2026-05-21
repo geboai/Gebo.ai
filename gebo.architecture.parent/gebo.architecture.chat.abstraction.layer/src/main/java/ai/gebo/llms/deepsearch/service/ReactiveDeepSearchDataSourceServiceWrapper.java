@@ -1,7 +1,5 @@
 package ai.gebo.llms.deepsearch.service;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +30,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
@@ -63,10 +60,10 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 			ISearchService<CustomSearchResultExtractionDataType> searchService,
 			IGDocumentReferenceFactory documentReferenceFactory, IGDocumentReferenceIngestionHandler ingestionHandler,
 			DeepSearchDefaultConfig deepSearchDefaultConfig, IDocumentsChunkService chunkingService,
-			IGeboThreadManager threadManager, SearchResultsRankingService rankingService, IGPromptConfigDao promptsDao,
+			IGeboThreadManager threadManager, IGPromptConfigDao promptsDao,
 			IDataSourcesCatalogsService dataSourcesCatalogsService, IGSecurityService securityService) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao, chunkingService, customContentExtractionType,
-				threadManager, rankingService, deepSearchDefaultConfig, promptsDao);
+				threadManager, deepSearchDefaultConfig, promptsDao);
 		this.searchService = searchService;
 		this.maxSearchesReturnedPerSystem = deepSearchDefaultConfig.getMaxExternalSourcesSearchResults();
 		this.documentReferenceFactory = documentReferenceFactory;

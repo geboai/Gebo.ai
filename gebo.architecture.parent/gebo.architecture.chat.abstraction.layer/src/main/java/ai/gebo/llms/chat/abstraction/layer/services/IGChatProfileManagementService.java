@@ -15,7 +15,6 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 
 /**

@@ -9,11 +9,8 @@ import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.document.Document;
 
-import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
-import ai.gebo.model.DocumentMetaInfos;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;

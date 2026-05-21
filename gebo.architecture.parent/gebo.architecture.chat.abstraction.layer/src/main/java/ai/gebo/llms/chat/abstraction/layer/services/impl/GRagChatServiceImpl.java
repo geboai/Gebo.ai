@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;

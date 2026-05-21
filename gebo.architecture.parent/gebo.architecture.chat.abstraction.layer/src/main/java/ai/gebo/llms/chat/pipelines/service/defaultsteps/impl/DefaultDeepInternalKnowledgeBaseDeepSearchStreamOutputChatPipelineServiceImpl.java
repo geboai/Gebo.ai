@@ -41,7 +41,6 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
-import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchConfigProvider;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
@@ -67,7 +66,6 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 	private final IDocumentsChunkService chunkingService;
 	private final IGeboThreadManager threadManager;
 	private final IGPromptConfigDao promptsDao;
-	private final DeepSearchRequestRepository deepSearchRequestRepository;
 	private final IInternalKnowledgeLLMAssistedRetrieveService assistedSearch;
 
 	@Override

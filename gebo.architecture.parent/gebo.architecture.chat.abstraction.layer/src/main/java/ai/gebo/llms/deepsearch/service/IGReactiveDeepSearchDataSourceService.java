@@ -1,7 +1,6 @@
 package ai.gebo.llms.deepsearch.service;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.ai.document.Document;
 
@@ -16,16 +15,13 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.deepsearch.datasources.model.AbstractPureSearchDocumentResultEntry;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
-import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
-import ai.gebo.llms.deepsearch.model.DeepSearchState;
-import ai.gebo.llms.deepsearch.model.IDeepSearchResult;
 import ai.gebo.llms.deepsearch.model.events.AbstractDeepSearchEvent;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 
-public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, StepEventType extends AbstractDeepSearchEvent<InputType, OutputType>> {
+public interface IGReactiveDeepSearchDataSourceService {
 
 	/**************************************************************************
 	 * Returns a unique identifier for this handler
@@ -50,30 +46,6 @@ public interface IGReactiveDeepSearchDataSourceService<InputType, OutputType, St
 	public String getDescription(DeepSearchConfig deepSearchConfig);
 
 	public String getProductId();
-
-	/******************************************************************
-	 * Processes next step, will be iterated untill return null or returns a
-	 * DeepSearchDataSourceResponse
-	 * 
-	 * @param request
-	 * @param minimalChatContext   TODO
-	 * @param deepSearchState      TODO
-	 * @param serviceModel         TODO
-	 * @param pastSystemsResponses
-	 * @param chunkingSessionId    TODO
-	 * @param history
-	 * @return
-	 * @throws LLMConfigException
-	 * @throws IOException
-	 * @throws GeboContentHandlerSystemException
-	 * @throws GeboIngestionException
-	 * @throws SearchServiceException
-	 */
-	public Flux<AbstractDeepSearchEvent> streamSearch(DeepSearchRequest request, MinimalChatContext minimalChatContext,
-			DeepSearchState deepSearchState, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
-			DeepSearchConfig deepSearchConfig, List<IDeepSearchResult> pastSystemsResponses, String chunkingSessionId)
-			throws LLMConfigException, IOException, GeboIngestionException, GeboContentHandlerSystemException,
-			SearchServiceException;
 
 	@AllArgsConstructor
 	@Getter

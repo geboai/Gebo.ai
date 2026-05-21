@@ -1,7 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service;
 
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Sinks;
