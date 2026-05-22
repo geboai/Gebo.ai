@@ -17,7 +17,7 @@
  */
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DataPage, EditableUser, PageUserInfos, PageUsersGroup, User, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, EditableUser, PageUserInfos, PageUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -65,6 +65,15 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
         content: []
     };
 
+    // Filter variables for user search
+    searchUsername: string = '';
+    searchName: string = '';
+    searchSourname: string = '';
+    searchRole: string = '';
+
+    // Options for role filter dropdown
+    rolesList: string[] = ["USER", "ADMIN", "APPLICATION"];
+
     /**
      * Constructor for the component
      * @param geboAiUserAdminControllerService Service for user administration operations
@@ -85,15 +94,35 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     }
 
     /**
-     * Fetches users data from the server based on current pagination settings
+     * Resets the active page to 0 and reloads the users list using the current search filters.
+     */
+    public searchUsers(): void {
+        this.usersPage.page = 0;
+        this.loadUsers();
+    }
+
+    /**
+     * Fetches users data from the server based on current pagination settings and search filters
      * Sets loadingUsers flag while operation is in progress
      */
     private loadUsers(): void {
         this.loadingUsers = true;
-        this.geboAiUserAdminControllerService.findUserByQbe({
-            qbe: {
+        const qbeUser: any = {};
+        if (this.searchUsername) {
+            qbeUser.username = this.searchUsername;
+        }
+        if (this.searchName) {
+            qbeUser.name = this.searchName;
+        }
+        if (this.searchSourname) {
+            qbeUser.sourname = this.searchSourname;
+        }
+        if (this.searchRole) {
+            qbeUser.roles = [this.searchRole];
+        }
 
-            } as User,
+        this.geboAiUserAdminControllerService.findUserByQbe({
+            qbe: qbeUser as EditableUser,
             page: this.usersPage
         }).subscribe({
             next: (value) => {
