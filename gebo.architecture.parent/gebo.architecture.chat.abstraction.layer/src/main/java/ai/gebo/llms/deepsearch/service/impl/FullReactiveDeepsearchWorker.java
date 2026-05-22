@@ -63,6 +63,7 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
+	private static final String CALLING_LLM_PROBLEM_ON_FINAL_ANALISYS = "CALLING LLM PROBLEM ON FINAL ANALISYS";
 	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
 	private static final String EXCEPTION_ON_EMPTY_RESULTS = "Exception on empty results";
 	private static final String CONSOLIDATED_SUMMARY_PROMPT_PARAM = "consolidated";
@@ -70,9 +71,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
 	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
 	private final static Logger LOGGER = LoggerFactory.getLogger(FullReactiveDeepsearchWorker.class);
-	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
-	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
-	private static final String DOCUMENT_EXTRACTION_BEGIN = "[BEGIN DOCUMENT EXTRACTION]\r\n";
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService;
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	private final IGPromptConfigDao promptsDao;
@@ -103,8 +101,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		this.chunkingService = chunkingService;
 
 	}
-
-	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	Flux<AbstractPureSearchDocumentResultEntry> streamPureSearch(LLMChatRequestResources request,
 			MinimalChatContext minimalChatContext, GeboChatRequest geboChatRequest, ISinkUIEmitter emitter,
@@ -172,12 +168,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		Flux<AbstractPureSearchDocumentResultEntry> outFlux = Flux.fromIterable(suppliers).concatMap(supplier -> {
 			return supplier.get();
-		}).subscribeOn(threadManager.getBoundedElastic());
+		}, suppliers.size()).subscribeOn(threadManager.getBoundedElastic());
 		return outFlux;
 
 	}
 
-	public List<GBaseObject> getDeepSearchActiveHandlers(DeepSearchConfig configuration) {
+	List<GBaseObject> getDeepSearchActiveHandlers(DeepSearchConfig configuration) {
 
 		IGConfigurableChatModel chatModel = null;
 
@@ -197,7 +193,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		}).toList();
 	}
 
-	Flux<GeboChatMessageEnvelope> streamNewDeepSearch(ChatPipelineExecutionRuntimeData runtimeData,
+	Flux<GeboChatMessageEnvelope> streamDeepSearch(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			List<String> searchDataSources, int perDataSourceK, int globalK) {
 		final String chunkSessionId = this.chunkingService
@@ -307,52 +303,20 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return outFlux;
 		});
-		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
-			return runAs.doRunAsWithReturnAndException(() -> {
-				return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
-						documentsList, initialValue);
-			});
 
-		};
-		LastWork<String, String> finalAnalisysWork = (list, _emitter) -> {
-			return runAs.doRunAsWithReturnAndException(() -> {
-				if (list != null && !list.isEmpty()) {
-					Map<String, Object> params = new HashMap<>();
-					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
-					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
-					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
-				} else {
-					return backupNotFoundDocuments;
-				}
-			});
-		};
-
-		Predicate<Document> isValidDocument = (document) -> document.isText() && document.getText() != null
-				&& document.getText().trim().length() > 0;
-		TokensLimitCompute<Document> tokensLimitCompute = (list, budget) -> TokensBudgetCalculator
-				.higherThanBudget(list, budget);
-		Predicate<String> outOfBandString = (v) -> v == null || v.equals(ERROR_IN_PROCESS);
-		Predicate<String> isEndOfProcessingCondition = (text) -> text != null
-				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
-		Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
 		Flux<String> resultFlux = null;
 
 		if (suppliers.isEmpty()) {
 			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
 			Flux<Document> documentFlux = suppliers.get(0).get();
-			resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(documentFlux, sinkUIEmitter, isValidDocument,
-					tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
-					ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction,
-					tokensBudget);
+			resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
+					cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel);
 		} else {
 			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).concatMap(x -> {
 				Flux<Document> documentFlux = x.get();
-				Flux<String> flux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(documentFlux, sinkUIEmitter,
-						isValidDocument, tokensLimitCompute, intermediateProcess, finalAnalisysWork, "",
-						ERROR_IN_PROCESS, outOfBandString, ERROR_IN_PROCESS, outOfBandString,
-						isEndOfProcessingCondition, outputShortCutFunction, tokensBudget);
+				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
+						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel);
 				return flux.buffer();
 			}, suppliers.size()).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
@@ -428,7 +392,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 	}
 
-	public Flux<GeboChatMessageEnvelope> streamChatWithHugeFiles(ChatPipelineExecutionRuntimeData runtimeData,
+	Flux<GeboChatMessageEnvelope> streamChatWithHugeFiles(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel) {
 		final String chunkSessionId = this.chunkingService
 				.createChunkingSession("request:" + runtimeData.getRequestResources().getCurrentRequest().getId());
@@ -439,6 +403,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			configuration = this.defaultDeepsearchConfig;
 		}
 		final DeepSearchConfig sampledConfig = configuration;
+		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
+		final GeboChatResponse response = runtimeData.getChatResponse();
 		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 		Flux<Document> docsFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
@@ -477,56 +443,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final GPromptTemplateConfig emptyResponsePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
 		// raw tokens budget calculation
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
-		final GeboChatResponse response = runtimeData.getChatResponse();
-		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
-		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
-			Flux<String> outFlux = null;
-			try {
-				Map<String, Object> params = new HashMap<>();
-				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
-				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-				outFlux = callLLMReactive(chatModel, emptyResponsePrompt, context, params);
-			} catch (Throwable th) {
-				LOGGER.error(EXCEPTION_ON_EMPTY_RESULTS, th);
-				outFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
-			}
-			return outFlux;
-		});
-		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
-			return runAs.doRunAsWithReturnAndException(() -> {
-				return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
-						documentsList, initialValue);
-			});
 
-		};
-		LastWork<String, String> finalAnalisysWork = (list, _emitter) -> {
-			return runAs.doRunAsWithReturnAndException(() -> {
-				if (list != null && !list.isEmpty()) {
-					Map<String, Object> params = new HashMap<>();
-					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
-					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
-					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
-				} else {
-					return backupNotFoundDocuments;
-				}
-			});
-		};
-
-		Predicate<Document> isValidDocument = (document) -> document.isText() && document.getText() != null
-				&& document.getText().trim().length() > 0;
-		TokensLimitCompute<Document> tokensLimitCompute = (list, budget) -> TokensBudgetCalculator
-				.higherThanBudget(list, budget);
-		Predicate<String> outOfBandString = (v) -> v == null || v.equals(ERROR_IN_PROCESS);
-		Predicate<String> isEndOfProcessingCondition = (text) -> text != null
-				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
-		Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
-		Flux<String> resultFlux = null;
-
-		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
-				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
-				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, tokensBudget);
+		Flux<String> resultFlux = generateDeepSearchFlux(docsFlux, context, runAs, sinkUIEmitter, request,
+				cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel);
 
 		final StringBuffer cumulative = new StringBuffer();
 		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = resultFlux.map(x -> {
@@ -566,4 +485,63 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return finalFlux;
 	}
 
+	private Flux<String> generateDeepSearchFlux(Flux<Document> docsFlux, IChatRequestContext context,
+			ReactiveIdentityUtil runAs, ISinkUIEmitter sinkUIEmitter, GeboChatRequest request,
+			GPromptTemplateConfig cumulativeAnalisysPrompt, GPromptTemplateConfig emptyResponsePrompt,
+			GPromptTemplateConfig finalAnalisysPrompt, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel) {
+		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
+		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
+			Flux<String> outFlux = null;
+			try {
+				Map<String, Object> params = new HashMap<>();
+				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
+				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+				outFlux = callLLMReactive(chatModel, emptyResponsePrompt, context, params);
+			} catch (Throwable th) {
+				sinkUIEmitter.notifyLLMProblems();
+				LOGGER.error(EXCEPTION_ON_EMPTY_RESULTS, th);
+				outFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
+			}
+			return outFlux;
+		});
+		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
+
+			return runAs.doRunAsWithReturnAndException(() -> {
+				return callLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
+						documentsList, initialValue);
+			});
+
+		};
+		LastWork<String, String> finalAnalisysWork = (list, _emitter) -> {
+			return runAs.doRunAsWithReturnAndException(() -> {
+				if (list != null && !list.isEmpty()) {
+
+					Map<String, Object> params = new HashMap<>();
+					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
+					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
+					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
+					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+
+				} else {
+					return backupNotFoundDocuments;
+				}
+			});
+		};
+
+		Predicate<Document> isValidDocument = (document) -> document.isText() && document.getText() != null
+				&& document.getText().trim().length() > 0;
+		TokensLimitCompute<Document> tokensLimitCompute = (list, budget) -> TokensBudgetCalculator
+				.higherThanBudget(list, budget);
+		Predicate<String> outOfBandString = (v) -> v == null || v.equals(ERROR_IN_PROCESS);
+		Predicate<String> isEndOfProcessingCondition = (text) -> text != null
+				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY);
+		Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
+		Flux<String> resultFlux = null;
+
+		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
+				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
+				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, tokensBudget);
+		return resultFlux;
+	}
 }

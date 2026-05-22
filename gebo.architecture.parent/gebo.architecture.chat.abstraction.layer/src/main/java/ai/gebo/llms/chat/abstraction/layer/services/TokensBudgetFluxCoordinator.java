@@ -70,6 +70,7 @@ public class TokensBudgetFluxCoordinator {
 						}
 						return result;
 					} catch (Throwable th) {
+						emitter.notifyLLMProblems();
 						LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
 						return outOfBandValue;
 					}
@@ -94,6 +95,7 @@ public class TokensBudgetFluxCoordinator {
 				}
 				return finalResult;
 			} catch (Throwable th) {
+				emitter.notifyLLMProblems();
 				LOGGER.error(EXCEPTION_IN_FLAT_MAP, th);
 				return Flux.just(finalOutOFBoundValue);
 			}

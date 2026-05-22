@@ -137,7 +137,7 @@ public class DeepSearchServiceImpl extends BaseLLMSInvokingService
 			return runAs.doRunAsWithReturn(() -> {
 				final FullReactiveDeepsearchWorker worker = runtimeBinder
 						.getImplementationOf(FullReactiveDeepsearchWorker.class);
-				return worker.streamNewDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
+				return worker.streamDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
 						searchDataSources, perDataSourceK, globalK).transform(ReactiveMonitor.monitor("deep-search"));
 			});
 		}).subscribeOn(threadManager.getBoundedElastic());
