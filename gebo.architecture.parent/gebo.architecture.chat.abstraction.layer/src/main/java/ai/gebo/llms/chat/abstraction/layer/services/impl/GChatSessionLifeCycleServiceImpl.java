@@ -32,6 +32,7 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -825,7 +826,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 
 		data = new GUserChatInfoData(context);
 		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
-		IGConfigurableChatModel handler = chatModelsDao.defaultHandler();
+		IGConfigurableChatModel handler = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		try {
 			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
 				IChatRequestContext ccontext = context.createChatRequestContext();

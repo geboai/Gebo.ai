@@ -63,7 +63,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	public UserInfos getCurrentUser() {
 
 		String email = SecurityUtils.getCurrentUserEmail();
-		if (email == null) 
+		if (email == null)
 			throw new RuntimeException("No principal name set");
 		Optional<User> user = usersRepo.findById(email);
 		if (user.isEmpty())
@@ -309,6 +309,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				for (AclGrantType grant : grantType) {
 					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
 						return true;
+					else if (grant == AclGrantType.READ && isCanAccess(object, adminCanDoAll)) {
+						return true;
+					}
 				}
 				return false;
 			}).toList();
@@ -370,7 +373,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		String cryptedPwd = cryptService.crypt(confirmpassword);
 		UserInfos currentUser = this.getCurrentUser();
 		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
-		return fullUsr.isPresent() && fullUsr.get().getPassword().equals(cryptedPwd) ? true : false; 
+		return fullUsr.isPresent() && fullUsr.get().getPassword().equals(cryptedPwd) ? true : false;
 	}
 
 }

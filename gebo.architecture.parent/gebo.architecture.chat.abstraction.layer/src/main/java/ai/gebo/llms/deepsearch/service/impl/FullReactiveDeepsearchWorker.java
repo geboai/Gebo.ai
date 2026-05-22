@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -364,6 +363,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				ArrayList docs = new ArrayList<>(docrefs.values());
 				docs.addAll(results.values());
 				response.setDocumentsRef(docs);
+				try {
+					sessionLifecycleService.endRequest(request, response);
+				} catch (Throwable e) {
+					LOGGER.error("Error ending request", e);
+				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 				envelope.setLastMessage(true);
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
@@ -376,11 +380,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					this.chunkingService.disposeChunkingSession(chunkSessionId);
 				} catch (Throwable th) {
 				}
-				try {
-					sessionLifecycleService.endRequest(request, response);
-				} catch (Throwable e) {
-					LOGGER.error("Error ending request", e);
-				}
+				
 				try {
 					sessionLifecycleService.chatRequestCompleted(request, chatModel);
 				} catch (Throwable e) {
@@ -456,8 +456,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return runAs.doRunAsWithReturn(() -> {
 				response.setQueryResponse(cumulative.toString());
 				ArrayList docs = new ArrayList<>(docrefs.values());
-
 				response.setDocumentsRef(docs);
+				try {
+					sessionLifecycleService.endRequest(request, response);
+				} catch (Throwable e) {
+					LOGGER.error("Error ending request", e);
+				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 				envelope.setLastMessage(true);
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
@@ -470,11 +474,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					this.chunkingService.disposeChunkingSession(chunkSessionId);
 				} catch (Throwable th) {
 				}
-				try {
-					sessionLifecycleService.endRequest(request, response);
-				} catch (Throwable e) {
-					LOGGER.error("Error ending request", e);
-				}
+
 				try {
 					sessionLifecycleService.chatRequestCompleted(request, chatModel);
 				} catch (Throwable e) {

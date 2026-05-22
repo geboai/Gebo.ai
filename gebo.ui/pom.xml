@@ -66,6 +66,15 @@
 								</goals>
 							</execution>
 							<execution>
+								<id>npm run export-libs</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>run export-libs</arguments>
+								</configuration>
+							</execution>
+							<execution>
 								<id>npm run build-prod</id>
 								<goals>
 									<goal>npm</goal>

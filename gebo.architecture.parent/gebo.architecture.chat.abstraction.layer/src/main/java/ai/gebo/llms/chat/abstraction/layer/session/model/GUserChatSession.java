@@ -36,6 +36,7 @@ import lombok.Data;
 @Data
 public class GUserChatSession extends GBaseObject {
 
+	private static final String EMPTY_TEXT = "<<empty text>>";
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
 	@HashIndexed
 	private String username = null; // Username for the chat context
@@ -51,21 +52,23 @@ public class GUserChatSession extends GBaseObject {
 	public IChatRequestContext createChatRequestContext() {
 		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
 		List<IChatSessionEntry> _interactions = new ArrayList<>();
+		String lastQuestion = EMPTY_TEXT;
 		for (int i = 0; i < interactions.size(); i++) {
 			ChatInteractions interaction = interactions.get(i);
 			ChatSessionEntryImplBuilder sBuilder = IChatSessionEntry.builder();
 			String user = interaction.getRequest() != null && interaction.getRequest().getQuery() != null
 					? interaction.getRequest().getQuery()
-					: "<<empty text>>";
+					: EMPTY_TEXT;
+			lastQuestion = user;
 			String assistant = interaction.getResponse() != null && interaction.getResponse().getQueryResponse() != null
 					? interaction.getResponse().getQueryResponse().toString()
-					: "<<empty text>>";
+					: EMPTY_TEXT;
 			sBuilder.user(user);
 			sBuilder.assistant(assistant);
 			_interactions.add(sBuilder.build());
 		}
 		builder.interactions(_interactions);
-		builder.actualUserRequest("<<no actual user request present>>");
+		builder.actualUserRequest(lastQuestion);
 		return builder.build();
 	}
 

@@ -2,7 +2,6 @@ package ai.gebo.llms.deepsearch.service.impl;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +40,8 @@ import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.system.ingestion.GeboIngestionException;
-import jakarta.annotation.PreDestroy;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Scheduler;
 
 @Component
 @Scope("singleton")
