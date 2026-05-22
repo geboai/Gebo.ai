@@ -29,7 +29,7 @@ import ai.gebo.security.model.User;
  * User collection.
  */
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, String>, UserRepositoryCustom {
 
 	/**
 	 * Interface representing a subset of User information. Typically used for

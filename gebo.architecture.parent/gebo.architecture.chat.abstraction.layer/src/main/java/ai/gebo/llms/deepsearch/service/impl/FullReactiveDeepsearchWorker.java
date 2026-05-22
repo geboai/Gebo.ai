@@ -380,7 +380,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					this.chunkingService.disposeChunkingSession(chunkSessionId);
 				} catch (Throwable th) {
 				}
-				
+
 				try {
 					sessionLifecycleService.chatRequestCompleted(request, chatModel);
 				} catch (Throwable e) {
@@ -485,6 +485,19 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		return finalFlux;
 	}
 
+	private static Function<String, Flux<String>> stringStreamer = (data) -> {
+		String inputString = data != null ? data : "";
+		List<String> separateTokens = new ArrayList();
+
+		for (int index = 0; index < inputString.length(); index += 4) {
+			if (index < inputString.length()) {
+				int stopChar = Math.min(4, inputString.length() - index);
+				separateTokens.add(inputString.substring(index, stopChar));
+			}
+		}
+		return Flux.fromIterable(separateTokens);
+	};
+
 	private Flux<String> generateDeepSearchFlux(Flux<Document> docsFlux, IChatRequestContext context,
 			ReactiveIdentityUtil runAs, ISinkUIEmitter sinkUIEmitter, GeboChatRequest request,
 			GPromptTemplateConfig cumulativeAnalisysPrompt, GPromptTemplateConfig emptyResponsePrompt,
@@ -541,7 +554,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
-				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, tokensBudget);
+				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, stringStreamer,
+				tokensBudget);
 		return resultFlux;
 	}
 }

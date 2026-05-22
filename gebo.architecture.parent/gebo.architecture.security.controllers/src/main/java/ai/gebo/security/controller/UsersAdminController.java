@@ -136,7 +136,7 @@ public class UsersAdminController {
 	 */
 	public static class FindUserByQbeParam {
 		@NotNull
-		public User qbe = null;
+		public EditableUser qbe = null;
 		@NotNull
 		public DataPage page = null;
 	}
@@ -229,16 +229,18 @@ public class UsersAdminController {
 	}
 
 	@PostMapping(value = "changeUserPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public GUserMessage changeUserPassword(@Valid @RequestBody ChangeUsernamePasswordData changePwdData) throws GeboCryptSecretException {
+	public GUserMessage changeUserPassword(@Valid @RequestBody ChangeUsernamePasswordData changePwdData)
+			throws GeboCryptSecretException {
 		boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getConfirmpassword());
 		if (pwdOk) {
 			if (changePwdData.getPassword().equals(changePwdData.getConfirmpassword())) {
-				userAdminService.changePassword(changePwdData.getUsername(),changePwdData.getPassword());
-				return GUserMessage.successMessage("Password changed with success","New password set");
-			}else {
-				return GUserMessage.errorMessage("Password and confirm password problem","New password and confirm password for the user are not equal");
+				userAdminService.changePassword(changePwdData.getUsername(), changePwdData.getPassword());
+				return GUserMessage.successMessage("Password changed with success", "New password set");
+			} else {
+				return GUserMessage.errorMessage("Password and confirm password problem",
+						"New password and confirm password for the user are not equal");
 			}
-		}else {
+		} else {
 			return GUserMessage.errorMessage("Your password is incorrect", "Let's try again digitating your password");
 		}
 	}

@@ -39,7 +39,7 @@ public class TokensBudgetFluxCoordinator {
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
-			Function<T, Y> outputShortCutFunction, long tokensBudget) {
+			Function<T, Y> outputShortCutFunction, Function<Y, Flux<Y>> streamingFunction, long tokensBudget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
 		}
@@ -86,7 +86,7 @@ public class TokensBudgetFluxCoordinator {
 						LOGGER.debug("Returning shortcutted value");
 					}
 					Y output = shortCuttedOutput.get();
-					finalResult = Flux.just(output);
+					finalResult = streamingFunction.apply(output);
 				} else {
 					finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
 				}

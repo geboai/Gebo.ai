@@ -332,7 +332,6 @@ export * from './uIExistingText';
 export * from './uiTextResourcesModule';
 export * from './uploadHandShakeCodeBody';
 export * from './uploadUserspaceFolderCodeBody';
-export * from './user';
 export * from './userChatHistory';
 export * from './userInfo';
 export * from './userInfos';

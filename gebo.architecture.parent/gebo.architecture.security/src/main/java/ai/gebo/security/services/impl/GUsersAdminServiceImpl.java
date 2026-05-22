@@ -252,4 +252,9 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 
 	}
 
+	@Override
+	public Page<UserInfos> findUserByQbe(EditableUser qbe, Pageable pageable) {
+		return this.userRepo.findByQbe(qbe, pageable);
+	}
+
 }

@@ -199,7 +199,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Time in milliseconds after which streaming is considered failed
      */
-    @Input() streamingTimeout: number = 30000;
+    @Input() streamingTimeout: number = 10*60*1000;
 
     /**
      * Flag to use only REST API calls (no WebSockets)
@@ -655,6 +655,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         const interaction: GeboChatInteraction = {
             loading: true,
             request: r,
+            response: {
+                queryResponse: ""
+            },
             pipelineRouterDecisionCode: this.currentPipelineRouterDecisionCode
         };
         this.interactions.push(interaction);
@@ -675,89 +678,82 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 }
 
                 this.chatInputShell.onStreamMessage(recvd);
-
-                if (recvd.contentObjectType === "GUserMessage") {
-                    const message = recvd.content as ToastMessageOptions;
-                    this.lastInteractionMessages = [message];
-                    if (message.severity === 'error' || message.severity === 'ERROR') {
-                        this.chatStreamingErrorOccurred = true;
-                    }
-
-                }
-                if (recvd.contentObjectType === "PipelineRoutingInfos") {
-                    const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
-                    interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
-                    this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
-                    if (recvd.content?.chatModel) {
-                        interaction.streamingModelName = recvd.content?.chatModel;
-                        this.modelName = recvd.content?.chatModel;
-                    }
-                    console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
-
-                }
-                if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
-
-                    interaction.response = recvd.content;
-                    if (interaction.response) {
-                        const response: GeboChatResponse = interaction.response;
-                        if (r.userChatContextCode !== response.userChatContextCode) {
-                            if (this.chatInfo) {
-                                this.chatInfo.code = response.userChatContextCode;
+                if (recvd && recvd.contentObjectType) {
+                    switch (recvd.contentObjectType) {
+                        case "GUserMessage": {
+                            const message = recvd.content as ToastMessageOptions;
+                            this.lastInteractionMessages = [message];
+                            
+                        } break;
+                        case "PipelineRoutingInfos": {
+                            const pipelineRouterDecisionCode: string = recvd.content?.pipelineRouterDecisionCode;
+                            interaction.pipelineRouterDecisionCode = pipelineRouterDecisionCode;
+                            this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
+                            if (recvd.content?.chatModel) {
+                                interaction.streamingModelName = recvd.content?.chatModel;
+                                this.modelName = recvd.content?.chatModel;
                             }
-                            const newContext: GUserChatInfo = { ...this.chatInfo };
-                            newContext.code = response.userChatContextCode;
-                            newContext.chatProfileCode = r.chatProfileCode;
-                            newContext.ragChat = this.ragsystem;
-                            this.addedChatAction.emit(newContext);
-                        }
-                        if (recvd.lastMessage === true) {
-                            this.currentPipelineRouterDecisionCode = undefined;
-                            interaction.pipelineRouterDecisionCode = undefined;
-                            if (suggestChatDescription === true) {
-                                if (response.userChatContextCode) {
-                                    const newChatInfoObservable: Observable<GUserChatInfo> = this.userChatControllerService.suggestChatDescription(response.userChatContextCode);
-                                    newChatInfoObservable.subscribe({
-                                        next: (value: GUserChatInfo) => {
-                                            if (this.chatInfo && value?.description) {
-                                                this.chatInfo.description = value?.description;
-                                            }
-                                            this.updatedChatAction.emit(value);
-                                        },
-                                        error: () => {
+                            console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
+                        } break;
+                        case "String": {
+                            if (interaction.response) {
+                                if (!interaction.response.queryResponse) {
+                                    interaction.response.queryResponse = "";
+                                }
+                                interaction.response.queryResponse += recvd.content;
+                                setTimeout(() => this.scrollToBottom(), 10);
+                            }
+                        } break;
+                        case "GeboChatResponse": {
+                            interaction.response = recvd.content;
+                            if (interaction.response) {
+                                const response: GeboChatResponse = interaction.response;
+                                if (r.userChatContextCode !== response.userChatContextCode) {
+                                    if (this.chatInfo) {
+                                        this.chatInfo.code = response.userChatContextCode;
+                                    }
+                                    const newContext: GUserChatInfo = { ...this.chatInfo };
+                                    newContext.code = response.userChatContextCode;
+                                    newContext.chatProfileCode = r.chatProfileCode;
+                                    newContext.ragChat = this.ragsystem;
+                                    this.addedChatAction.emit(newContext);
+                                }
+                                if (recvd.lastMessage === true) {
+                                    this.currentPipelineRouterDecisionCode = undefined;
+                                    interaction.pipelineRouterDecisionCode = undefined;
+                                    if (suggestChatDescription === true) {
+                                        if (response.userChatContextCode) {
+                                            const newChatInfoObservable: Observable<GUserChatInfo> = this.userChatControllerService.suggestChatDescription(response.userChatContextCode);
+                                            newChatInfoObservable.subscribe({
+                                                next: (value: GUserChatInfo) => {
+                                                    if (this.chatInfo && value?.description) {
+                                                        this.chatInfo.description = value?.description;
+                                                    }
+                                                    this.updatedChatAction.emit(value);
+                                                },
+                                                error: () => {
 
+                                                }
+                                            });
                                         }
-                                    });
+                                    }
+                                    this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
+                                    const dataUpdate: any = {
+                                        chatProfileCode: r.chatProfileCode,
+                                        chatModelCode: r.chatModelCode,
+                                        userChatContextCode: response.userChatContextCode,
+                                        query: null,
+                                        chatPipelineProcessId: null,
+                                        forcedRequestDocuments: []
+                                    };
+                                    this.formGroup.patchValue(dataUpdate);
+                                    if (doSpeach === true && recvd.lastMessage === true && response.queryResponse) {
+                                        this.speechPlay(response.queryResponse);
+                                    }
                                 }
                             }
-
-                            this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-
-                            const dataUpdate: any = {
-                                chatProfileCode: r.chatProfileCode,
-                                chatModelCode: r.chatModelCode,
-                                userChatContextCode: response.userChatContextCode,
-                                query: null,
-                                chatPipelineProcessId: null,
-                                forcedRequestDocuments:[]
-                            };
-                            this.formGroup.patchValue(dataUpdate);
-
-
-
-
-                            if (doSpeach === true && recvd.lastMessage === true && response.queryResponse) {
-                                this.speechPlay(response.queryResponse);
-                            }
-                        }
-                    }
-                    this.scrollToBottom();
-                } else if (recvd.contentObjectType === "String") {
-                    if (interaction.response) {
-                        if (!interaction.response.queryResponse) {
-                            interaction.response.queryResponse = "";
-                        }
-                        interaction.response.queryResponse += recvd.content;
-                        setTimeout(() => this.scrollToBottom(), 10);
+                            setTimeout(() => this.scrollToBottom(), 10);
+                        } break;
                     }
                 }
                 if (recvd.lastMessage === true) {
