@@ -491,7 +491,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		for (int index = 0; index < inputString.length(); index += 4) {
 			if (index < inputString.length()) {
-				int stopChar = Math.min(4, inputString.length() - index);
+				int stopChar = Math.min(index + 4, inputString.length() - 1);
 				separateTokens.add(inputString.substring(index, stopChar));
 			}
 		}
