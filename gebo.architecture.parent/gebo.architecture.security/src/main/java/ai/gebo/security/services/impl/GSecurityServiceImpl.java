@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclAccessCheck;
@@ -52,6 +53,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final IAclAliasesDao aclAliasesDao;
 	final GeboSecurityConfig securityConfig;
 	final IGeboCryptingService cryptService;
+	final PasswordEncoder passwordEncoder;
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -370,7 +372,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 
 	@Override
 	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException {
-		String cryptedPwd = cryptService.crypt(confirmpassword);
+		String cryptedPwd = this.passwordEncoder.encode(confirmpassword);
 		UserInfos currentUser = this.getCurrentUser();
 		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
 		return fullUsr.isPresent() && fullUsr.get().getPassword().equals(cryptedPwd) ? true : false;

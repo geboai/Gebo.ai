@@ -246,7 +246,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 		Optional<User> user = this.userRepo.findById(username);
 		if (user.isPresent()) {
 			User usr = user.get();
-			usr.setPassword(cryptService.crypt(password));
+			usr.setPassword(passwordEncoder.encode(password));
 			userRepo.save(usr);
 		}
 
