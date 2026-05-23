@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -29,8 +30,8 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineServiceImpl.class);
 
-	
 	private final IGDeepSearchService deepSearchService;
+	private final GeboRagSearchConfig searchConfig;
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -51,7 +52,8 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 		try {
 
 			return deepSearchService.streamDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
-					List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID), 50, 50);
+					List.of(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID),
+					searchConfig.getDeepSearchSingleDataSourceTopK(), searchConfig.getDeepSearchGlobalTopK());
 		} catch (Throwable e) {
 			LOGGER.error("Error calling internal knowledge base executor", e);
 			GUserMessage errorMessage = GUserMessage.errorMessage("Cannot execute internal knowledge base deep search",

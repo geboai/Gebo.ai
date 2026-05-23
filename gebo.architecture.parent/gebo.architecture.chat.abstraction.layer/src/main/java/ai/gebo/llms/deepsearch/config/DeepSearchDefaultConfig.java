@@ -52,7 +52,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		DeepSearchUserIntentThreashold midLevelsThreashold = new DeepSearchUserIntentThreashold(
 				List.of(DeliverableIntent.HOWTO, DeliverableIntent.SUMMARY), 8);
 		DeepSearchUserIntentThreashold highLevelsThreashold = new DeepSearchUserIntentThreashold(
-				List.of(DeliverableIntent.DECISION, DeliverableIntent.REPORT), 20);
+				List.of(DeliverableIntent.DECISION, DeliverableIntent.ANALISYS), 20);
 		this.deepSearchUserIntentThreasholds.add(lowerLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(midLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(highLevelsThreashold);

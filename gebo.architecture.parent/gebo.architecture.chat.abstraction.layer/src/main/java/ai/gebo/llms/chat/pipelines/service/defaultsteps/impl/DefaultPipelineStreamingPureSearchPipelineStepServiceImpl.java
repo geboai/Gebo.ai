@@ -99,7 +99,8 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final int perDataSourceK = ragSearchConfig.getPureSearchSingleDataSourceTopK();
 		final int globalK = ragSearchConfig.getPureSearchRankedTopK();
-		final int textSampleTokensSize = this.rankerService.getRankerConfiguredChunkSize();
+		final int textSampleTokensSize = Math.min(rankerService.getRankerConfiguredChunkSize(),
+				ragSearchConfig.getPureSearchMaximumChunkSize());
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		sinkUIEmitter.notifyUser("selectDataSources", "Selecting sarch data sources", "pi pi-search", 3000l,
 				NotificationType.INFO);

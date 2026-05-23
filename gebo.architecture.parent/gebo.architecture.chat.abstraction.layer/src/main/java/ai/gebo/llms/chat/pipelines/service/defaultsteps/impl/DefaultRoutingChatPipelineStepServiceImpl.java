@@ -159,10 +159,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			}
 		}
 		notifyUser(emitter, "SERVICE_LEVEL_DETECTED", "Service level is: " + userIntent.name(), null, 1000l,
-				NotificationType.DEBUG);
+				NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("**********************************************************************************************");
 			LOGGER.debug("User intent:" + userIntent.name());
 			LOGGER.debug("Rewritten query:" + rewrited_query);
+			LOGGER.debug("**********************************************************************************************");
 		}
 		runtimeData.getRequestResources().getCurrentRequest().setUserIntent(userIntent);
 		return new RewriteAndUserIntent(rewrited_query, userIntent);
@@ -293,11 +295,21 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 
 	}
 
+	private final static List<DeliverableIntent> orderedIntents = new ArrayList<>();
+	static {
+		TreeMap<Integer, DeliverableIntent> ordered = new TreeMap<>();
+		for (DeliverableIntent intent : DeliverableIntent.values()) {
+			ordered.put(intent.getOrder(), intent);
+		}
+		orderedIntents.addAll(ordered.values());
+	}
+
 	private String createDeliverableTypesList() {
 		StringBuffer buffer = new StringBuffer();
+
 		buffer.append(DELIVERABLE_TYPES_CATALOG);
 		buffer.append(NEWLINE);
-		for (DeliverableIntent intent : DeliverableIntent.values()) {
+		for (DeliverableIntent intent : orderedIntents) {
 			buffer.append(INTENT_TYPE);
 			buffer.append(intent.name());
 			buffer.append(NEWLINE);

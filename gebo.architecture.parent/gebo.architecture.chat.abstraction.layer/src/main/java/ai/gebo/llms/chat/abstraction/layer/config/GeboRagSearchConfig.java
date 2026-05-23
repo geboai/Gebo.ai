@@ -42,8 +42,11 @@ public class GeboRagSearchConfig {
 	private final GUserChatSessionRepository sessionRepo;
 	// Default number of top elements to be considered
 	private int defaultTopK = 15;
-	private int pureSearchRankedTopK = 50;
-	private int pureSearchSingleDataSourceTopK = 150;
+	private int pureSearchRankedTopK = 30;
+	private int pureSearchSingleDataSourceTopK = 60;
+	private int deepSearchSingleDataSourceTopK = 50;
+	private int deepSearchGlobalTopK = 30;
+	private int pureSearchMaximumChunkSize = 512;
 	// Default similarity threshold for comparisons
 	private double defaultSimilarityThreshold = 0.50;
 

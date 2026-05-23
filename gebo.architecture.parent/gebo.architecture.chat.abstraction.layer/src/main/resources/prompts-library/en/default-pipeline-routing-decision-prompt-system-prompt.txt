@@ -6,7 +6,8 @@ routingDecision=<your routing decision>
 deepSearchedSystems=<selected search sources codes>
 
 Options for routingDecision:
-TOOLS_USE_RESPONSE executor llm will call a tool
-PURE_LLM_RESPONSE a straight direct response from an llm, to be chosen when context is sufficient for a satisfactory answer at the required service level
-RAG_LLM_RESPONSE single-pass internal RAG (semantic + full text) then answer
-DEEP_SEARCH_RESPONSE iterative search with query refinements and analysis over selected sources (one or multiple), then answer/report
+
+TOOLS_USE_RESPONSE :  executor llm will call a tool
+PURE_LLM_RESPONSE :  a straight direct response from an llm, to be chosen when context is sufficient for a satisfactory answer at the required service level
+RAG_LLM_RESPONSE :  single-pass internal RAG (semantic + full text) then answer
+DEEP_SEARCH_RESPONSE :  iterative search with query refinements and analysis over selected sources (one or multiple), then answer/report

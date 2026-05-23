@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -30,6 +31,7 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 	private final IGDeepSearchService deepSearchService;
 	private final IGeboThreadManager threadManager;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
+	private final GeboRagSearchConfig searchConfig;
 	private static final StepEnvironmentParameter searchedSystems = new StepEnvironmentParameter(
 			DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS, StepEnvironmentType.STRING_LIST);
 	public static final String DEFAULT_DEEPSEARCH_STREAMING = "default-deepsearch-streaming";
@@ -56,13 +58,14 @@ public class DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl
 				.get(DefaultRoutingChatPipelineStepServiceImpl.DEEP_SEARCHED_SYSTEMS);
 		List<String> deepSearchDataSources = deepSearchedSystems instanceof List list ? list : List.of();
 		try {
-			
+
 			if (deepSearchDataSources.isEmpty()) {
 				// TODO: SEARCH ALL IDS
 				deepSearchDataSources.add(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID);
 			}
 			return deepSearchService.streamDeepSearch(runtimeData, sinkUIEmitter, chatModel, serviceModel,
-					deepSearchDataSources, 100, 30);
+					deepSearchDataSources, searchConfig.getDeepSearchSingleDataSourceTopK(),
+					searchConfig.getDeepSearchGlobalTopK());
 
 		} catch (LLMConfigException e) {
 			LOGGER.error(ERROR_EXECUTING_DEEP_SEARCH, e);

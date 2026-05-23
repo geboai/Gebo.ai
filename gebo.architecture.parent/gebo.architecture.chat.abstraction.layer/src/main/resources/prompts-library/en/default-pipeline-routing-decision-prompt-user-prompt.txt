@@ -2,10 +2,8 @@ INPUTS:
 
  
   
-(A) CURRENT CHAT CONVERSATION:
+(A) CURRENT USER QUESTION: {question}
 
-actual user question:
-{question}
 
 
 (B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT  (may be empty):
@@ -21,7 +19,9 @@ actual user question:
 {toolsList}
 
 (G) USER REQUIRED SERVICE TYPE (already decided by a previous pipeline step):
+
 deliverable={deliverable}
+
 SERVICE-TYPE-EXPLANATION={deliverableExplanation}
 
 ACTUAL DATE AND TIME: {actualTimestamp}
