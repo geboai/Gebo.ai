@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
@@ -26,16 +26,23 @@ interface ChatNotificationContent {
         }
     ]
 })
-export class GeboAIChatStreamEventsDisplayComponent {
+export class GeboAIChatStreamEventsDisplayComponent implements OnChanges{
     @Input() streaming: boolean = false;
     protected currentChatMessage?: IGeboChatMessage;
     @Input() routingChoiceSelector?: string;
     @Input() actualPipelineRoutingOption?:PipelineRoutingOption;
     protected currentNotification?:ChatNotificationContent;
     protected inputProcessingEvent?:{document:GResponseDocumentRef};
+    protected notifiedPipelineRouting?:PipelineRoutingOption;
     private timer?: Subscription;
     constructor(private messageService: GeboAIRootNotificationService) {
 
+    }
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.actualPipelineRoutingOption && changes["actualPipelineRoutingOption"]) {
+            this.clearEventsDisplay();
+            this.notifiedPipelineRouting=this.actualPipelineRoutingOption;
+        }
     }
     protected get inEventsLoop(): boolean {
         return this.streaming;
@@ -51,6 +58,7 @@ export class GeboAIChatStreamEventsDisplayComponent {
     private clearEventsDisplay(): void {
         this.currentNotification=undefined;
         this.inputProcessingEvent=undefined;
+        this.notifiedPipelineRouting=undefined;
         this.clearNotifiationTimer();
     }
     private startNotificationTimer(duration: number) {

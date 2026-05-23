@@ -19,9 +19,9 @@
                 gebo-ai-text>{{currentNotification.message}}</span>
         </span>
         }  
-        @else if(actualPipelineRoutingOption) {
+        @else if(notifiedPipelineRouting) {
         <span id="RUNNING" gebo-ai-text>Running </span>&nbsp;<i
-            [className]="actualPipelineRoutingOption?.icon"></i>&nbsp;<span>{{actualPipelineRoutingOption?.description}}</span>
+            [className]="notifiedPipelineRouting?.icon"></i>&nbsp;<span>{{notifiedPipelineRouting?.description}}</span>
         }
     </div>
     }
