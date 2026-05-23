@@ -21,9 +21,9 @@ public class SemanticSearchMetaDataFilter {
 
 	public void add(String metaDataField, Op operand) {
 		if (!operandsMap.containsKey(metaDataField.toLowerCase())) {
-			operandsMap.put(metaDataField.toLowerCase(), new ArrayList<>());
+			operandsMap.put(metaDataField, new ArrayList<>());
 		}
-		operandsMap.get(metaDataField.toLowerCase()).add(operand);
+		operandsMap.get(metaDataField).add(operand);
 	}
 
 	public List<Integer> getAclAliases() {
@@ -38,7 +38,7 @@ public class SemanticSearchMetaDataFilter {
 		List<Op> allOperands = new ArrayList<>();
 		if (aclAliases != null && !aclAliases.isEmpty()) {
 			FilterExpressionBuilder feb = new FilterExpressionBuilder();
-			
+
 			allOperands.add(feb.in(DocumentMetaInfos.GEBO_ACL_ALIASES, new ArrayList<Object>(aclAliases)));
 		}
 		if (knowledgeBasesCodes != null && !knowledgeBasesCodes.isEmpty()) {
