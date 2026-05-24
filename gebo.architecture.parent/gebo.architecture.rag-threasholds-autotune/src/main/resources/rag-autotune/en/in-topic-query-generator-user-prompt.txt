@@ -1,0 +1,4 @@
+INPUT:
+CONTENTS TO EXTRACT FROM:
+
+{documents}

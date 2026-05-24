@@ -32,7 +32,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotuneConfig;
+import ai.gebo.architecture.rag_threasholds_autotune.config.RagThreasholdAutotunePromptConfig;
 import ai.gebo.architecture.rag_threasholds_autotune.model.AutotuneVectorStoreInfo;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
 import ai.gebo.architecture.rag_threasholds_autotune.model.ThreasholdAutotuneProcessResult;
@@ -62,43 +64,20 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	private final ThreasholdAutotuneProcessResultRepository resultRepo;
 	private final VectorizedContentRepository vectorizedContentsRepository;
 	private final RagThreasholdAutotuneConfig config;
+	private final IGPromptConfigDao promptsDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RagThreasholdAutotuneServiceImpl.class);
 	private static boolean runningTuning = false;
-
-	private static final GPromptTemplateConfig inTopicPrompt = new GPromptTemplateConfig();
-	static {
-		inTopicPrompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
-		inTopicPrompt.setSystemPromptTemplate("You are a synthetic query generator for retrieval evaluation.\r\n"
-				+ "\r\n" + "INPUT\r\n" + "You will receive a batch of N text segments (\"chunks\"). Each chunk has:\r\n"
-				+ "- chunkId: a unique identifier\r\n" + "- text: the chunk content\r\n" + "\r\n");
-		inTopicPrompt.setUserPromptTemplate("TASK\r\n" + "For each chunk, generate K strings that are:\r\n"
-				+ "1) Semantically IN-TOPIC: the chunk should plausibly contain the answer or directly support it.\r\n"
-				+ "2) Semantically COHERENT: the string must be a realistic user query or statement (natural language, single intent).\r\n"
-				+ "3) Not a copy: do not quote verbatim phrases longer than 6 consecutive words from the chunk.\r\n"
-				+ "4) Lexical diversity: avoid reusing the same key terms from the chunk; use paraphrases and synonyms when possible.\r\n"
-				+ "5) Answerability: the query must be answerable using only the chunk content (or overwhelmingly supported by it).\r\n"
-				+ "\r\n" + "DIFFICULTY MIX (per chunk)\r\n"
-				+ "Produce K strings split like this (if K is divisible by 3; otherwise keep proportions):\r\n"
-				+ "- Easy (≈ 1/3): direct, explicit questions about facts/procedures clearly present.\r\n"
-				+ "- Medium (≈ 1/3): paraphrased or implicit questions (same meaning, different wording).\r\n"
-				+ "- Hard (≈ 1/3): compositional questions that combine two details present in the chunk, or require inference that is still fully supported by the chunk.\r\n"
-				+ "\r\n" + "OUTPUT FORMAT IS STRICT CSV HAVING ; as column separator WITH FOLLOWING LINES \r\n"
-				+ "<query text>;<difficulty: easy|medium|hard>;<document id>\r\n" + "\r\n" + "CONSTRAINTS\r\n"
-				+ "- Do not add any extra keys.\r\n" + "- Do not include markdown.\r\n"
-				+ "- Generate exactly K inTopic strings per chunk.\r\n"
-				+ "- Do not mention that you are generating synthetic data.\r\n"
-				+ "- Keep each \"text\" between 6 and 22 words (unless the chunk is very technical; then up to 28 words).\r\n"
-				+ "{question}" + "CONTENTS TO EXTRACT FROM:\r\n" + "{documents}\r\n");
-	}
 
 	public RagThreasholdAutotuneServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao,
 			ThreasholdAutotuneProcessResultRepository resultRepo,
-			VectorizedContentRepository vectorizedContentsRepository, RagThreasholdAutotuneConfig config) {
+			VectorizedContentRepository vectorizedContentsRepository, RagThreasholdAutotuneConfig config,
+			IGPromptConfigDao promptsDao) {
 		super(chatModelsConfigDao, embeddingModelsConfigDao);
 		this.resultRepo = resultRepo;
 		this.vectorizedContentsRepository = vectorizedContentsRepository;
 		this.config = config;
+		this.promptsDao = promptsDao;
 	}
 
 	@Override
@@ -216,7 +195,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			} else {
 				LOGGER.info("Running tuning with module:" + serviceChatModel.getCode());
 			}
-			String csvResult = callLLMConcatenateText(serviceChatModel, inTopicPrompt, null, null, sampled.stream());
+			final GPromptTemplateConfig inTopicPrompt = promptsDao
+					.findByPromptUse(RagThreasholdAutotunePromptConfig.RAG_IN_TOPIC_QUERY_GENERATOR_PROMPT);
+			String csvResult = callLLMConcatenateText(serviceChatModel, inTopicPrompt,
+					IChatRequestContext.of("Sampling queries"), Map.of(), sampled.stream());
 			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
 			while (questions.size() > MAXQUESTIONS) {
 				questions.remove(questions.size() - 1);
@@ -413,35 +395,6 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	}
 
-	private static final GPromptTemplateConfig ratingPrompt = new GPromptTemplateConfig();
-	static {
-		ratingPrompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
-		ratingPrompt.setSystemPromptTemplate("You are a strict RAG retrieval judge.\r\n" + "\r\n" + "INPUT\r\n"
-				+ "You will receive:\r\n" + "- A user query: {question}\r\n"
-				+ "- A list of document fragments (\"chunks\"). Each chunk has:\r\n"
-				+ "  - documentId: a stable identifier (string)\r\n" + "  - text: the chunk content\r\n" + "\r\n");
-		ratingPrompt.setUserPromptTemplate("TASK\r\n"
-				+ "For EACH chunk, assign a relevance/coherence rating with respect to the query, from 0 to 100:\r\n"
-				+ "- 0  = totally irrelevant / wrong topic / cannot help answer the query\r\n"
-				+ "- 25 = weakly related (same broad domain, but not useful)\r\n"
-				+ "- 50 = partially relevant (some overlap; could help but incomplete or indirect)\r\n"
-				+ "- 75 = highly relevant (strong evidence/support; likely useful to answer)\r\n"
-				+ "- 100 = directly answers the query or contains the key information needed\r\n" + "\r\n"
-				+ "RATING RULES (IMPORTANT)\r\n"
-				+ "1) Judge ONLY based on the chunk text. Do not use external knowledge.\r\n"
-				+ "2) Do not reward generic statements. Prefer chunks that contain specific facts, procedures, definitions, constraints, or data answering the query.\r\n"
-				+ "3) If the chunk is about the same general area but does not address the query intent, keep rating <= 25.\r\n"
-				+ "4) If the chunk contradicts the query intent or is about a different entity/system/version, rating must be <= 25.\r\n"
-				+ "5) If the chunk is mostly boilerplate (headers, navigation, legal footer) and not informative, rating must be <= 10.\r\n"
-				+ "6) If the query requires a concrete answer and the chunk provides it clearly, rating should be 90–100.\r\n"
-				+ "7) Be consistent across chunks: use the same criteria and scale.\r\n" + "\r\n"
-				+ "OUTPUT (STRICT)\r\n" + "Return ONLY a CSV text (no markdown, no explanations, no extra lines).\r\n"
-				+ "Format:\r\n" + "<documentId>;<rating>\r\n"
-				+ "One line per chunk, in the same order as the input chunks.\r\n"
-				+ "Rating must be an integer between 0 and 100.\r\n" + "Do not include a header row.\r\n"
-				+ "Do not quote or escape fields unless documentId contains ';' (if it does, replace ';' with '_').\r\n"
-				+ "DOCUMENT FRAGMENTS\r\n\r\n{documents}\r\n");
-	}
 
 	private AutoTuneRatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
 			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
@@ -450,6 +403,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		double evaluationPoints = 0.0;
 		double totalDistance = 0.0;
 		double answeredQuestions = 0.0;
+		GPromptTemplateConfig ratingPrompt = promptsDao
+				.findByPromptUse(RagThreasholdAutotunePromptConfig.RAG_AUTOTUNE_RATING_PROMPT);
 		List<AutoTuneRatedThreashold> allComputed = new ArrayList<AutoTuneRatedThreashold>();
 		rateOrderedOptimizationThreasholds.values().forEach(x -> {
 			allComputed.addAll(x);

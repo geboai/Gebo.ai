@@ -375,7 +375,11 @@ public class GSecurityServiceImpl implements IGSecurityService {
 		String cryptedPwd = this.passwordEncoder.encode(confirmpassword);
 		UserInfos currentUser = this.getCurrentUser();
 		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
-		return fullUsr.isPresent() && fullUsr.get().getPassword().equals(cryptedPwd) ? true : false;
+		if (fullUsr.isPresent()) {
+			String encodedPwd = fullUsr.get().getPassword();
+			return passwordEncoder.matches(confirmpassword, encodedPwd);
+		} else
+			return false;
 	}
 
 }

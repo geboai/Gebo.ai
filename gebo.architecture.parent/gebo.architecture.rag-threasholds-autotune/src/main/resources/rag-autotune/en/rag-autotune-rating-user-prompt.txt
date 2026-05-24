@@ -1,0 +1,6 @@
+INPUT:
+
+- actual user question: {question}
+
+- documents (eventual empty):
+  {documents}

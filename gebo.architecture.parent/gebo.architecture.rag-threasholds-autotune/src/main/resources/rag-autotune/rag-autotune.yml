@@ -1,0 +1,14 @@
+ai.gebo.rag-threashold-autotune.prompts:
+    library:
+        - promptUse: rag-autotune-rating
+          langCode: en
+          systemReference: /rag-autotune/en/rag-autotune-rating-system-prompt.txt
+          userReference: /rag-autotune/en/rag-autotune-rating-user-prompt.txt
+          chatHistory: NOT_REQUIRED
+          contextDocuments: NOT_REQUIRED
+        - promptUse: in-topic-query-generator
+          langCode: en
+          systemReference: /rag-autotune/en/in-topic-query-generator-system-prompt.txt
+          userReference: /rag-autotune/en/in-topic-query-generator-user-prompt.txt
+          chatHistory: NOT_REQUIRED
+          contextDocuments: NOT_REQUIRED
