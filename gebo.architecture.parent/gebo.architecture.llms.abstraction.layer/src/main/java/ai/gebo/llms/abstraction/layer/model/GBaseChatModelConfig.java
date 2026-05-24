@@ -12,7 +12,9 @@ package ai.gebo.llms.abstraction.layer.model;
 import java.util.List;
 
 import ai.gebo.model.IGObjectWithSecurity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * AI generated comments The GBaseChatModelConfig class represents the
@@ -24,6 +26,14 @@ import lombok.Data;
 @Data
 public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> extends GBaseModelConfig<ModelChoice>
 		implements IGObjectWithSecurity {
+	@AllArgsConstructor
+	@Getter
+	public static enum ChatModelThinkingOption {
+		NO_THINKING("Disable thinking"), LOW_THINKING("Low thinking"), MEDIUM_THINKING("Medium thinking"),
+		HIGH_THINKING("Maximum thinking"), AUTO("Default thinking");
+
+		private final String description;
+	}
 
 	/**
 	 * The probability threshold used for sampling, null by default.
@@ -56,12 +66,10 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	 */
 	protected Double temperature = null;
 
-	
-
-
 	/***
 	 * Signes the specific uses for wich the model can work and being a default
 	 */
 	protected List<ChatModelsUses> forUses = null;
 	protected List<ChatModelFeatures> features = null;
+	protected ChatModelThinkingOption thinking = null;
 }

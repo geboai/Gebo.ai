@@ -1,7 +1,9 @@
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -27,8 +29,10 @@ public class MinimalChatContext implements ITokensCountable {
 
 	public IChatRequestContext createChatRequestContext() {
 		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
-		if (this.currentRequest != null)
-			builder = builder.actualUserRequest(GeboChatRequest.actualQuery(this.currentRequest));
+		if (this.currentRequest != null) {
+			builder = builder.actualUserRequest(GeboChatRequest.actualQuery(this.currentRequest))
+					.sessionID(currentRequest.getUserChatContextCode());
+		}
 		if (this.chatHistory != null) {
 			String consolidated = this.chatHistory.getConsolidationText();
 			if (consolidated != null) {
@@ -47,7 +51,17 @@ public class MinimalChatContext implements ITokensCountable {
 			builder.interactions(interactions);
 
 		}
-		
+		if (currentRequest != null) {
+			Map<String, Object> pipelineInfos = new HashMap<>();
+			if (currentRequest.getChatPipelineProcessId() != null) {
+				pipelineInfos.put("user-choosed-pipelineId", currentRequest.getChatPipelineProcessId());
+			}
+			if (currentRequest.getUserIntent() != null) {
+				pipelineInfos.put("user-intent", currentRequest.getUserIntent().name());
+			}
+			builder.pipelineInfos(pipelineInfos);
+		}
+
 		return builder.build();
 	}
 }

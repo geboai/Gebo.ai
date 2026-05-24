@@ -77,7 +77,6 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
 	}
 
-	
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
@@ -88,6 +87,7 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
@@ -96,7 +96,7 @@ public class OpenAIChatModelConfigurationSupportService
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
 			super(rendererFactory);
-			 
+
 		}
 
 		IGConfigurableTranscriptModel transcriptModel = null;
@@ -162,6 +162,22 @@ public class OpenAIChatModelConfigurationSupportService
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
 
+			}
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case LOW_THINKING: {
+					builder.reasoningEffort("low");
+				}
+					break;
+				case MEDIUM_THINKING: {
+					builder.reasoningEffort("medium");
+				}
+					break;
+				case HIGH_THINKING: {
+					builder.reasoningEffort("high");
+				}
+					break;
+				}
 			}
 			if (user != null) {
 				builder = builder.user(user);
@@ -259,8 +275,6 @@ public class OpenAIChatModelConfigurationSupportService
 		}
 	};
 
-	
-
 	/**
 	 * Gets the model type supported by this service.
 	 * 
@@ -322,8 +336,9 @@ public class OpenAIChatModelConfigurationSupportService
 	}
 
 	@Override
-	public OperationStatus<GOpenAIChatModelConfig> insertAndConfigure(GOpenAIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
-	 
+	public OperationStatus<GOpenAIChatModelConfig> insertAndConfigure(GOpenAIChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 }

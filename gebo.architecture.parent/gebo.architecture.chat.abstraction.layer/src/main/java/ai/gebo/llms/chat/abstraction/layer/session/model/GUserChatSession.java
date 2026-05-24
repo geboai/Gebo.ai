@@ -11,7 +11,9 @@ package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -51,6 +53,7 @@ public class GUserChatSession extends GBaseObject {
 
 	public IChatRequestContext createChatRequestContext() {
 		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
+		builder.sessionID(getCode());
 		List<IChatSessionEntry> _interactions = new ArrayList<>();
 		String lastQuestion = EMPTY_TEXT;
 		for (int i = 0; i < interactions.size(); i++) {
@@ -66,6 +69,27 @@ public class GUserChatSession extends GBaseObject {
 			sBuilder.user(user);
 			sBuilder.assistant(assistant);
 			_interactions.add(sBuilder.build());
+			if (i == interactions.size() - 1) {
+				if (interaction.getRequest() != null) {
+					Map<String, Object> pipelineInfos = new HashMap<>();
+					if (interaction.getRequest().getChatPipelineProcessId() != null) {
+						pipelineInfos.put("user-choosed-pipelineId",
+								interaction.getRequest().getChatPipelineProcessId());
+					}
+					if (interaction.getRequest().getUserIntent() != null) {
+						pipelineInfos.put("user-intent", interaction.getRequest().getUserIntent().name());
+					}
+					if (interaction.getResponse() != null
+							&& interaction.getResponse().getPipelineRouterDecisionCode() != null) {
+						pipelineInfos.put("routed-pipelineId",
+								interaction.getResponse().getPipelineRouterDecisionCode());
+					}
+					if (interaction.getResponse() != null && interaction.getResponse().getPipelineParams() != null) {
+						pipelineInfos.put("routed-params", interaction.getResponse().getPipelineParams());
+					}
+					builder.pipelineInfos(pipelineInfos);
+				}
+			}
 		}
 		builder.interactions(_interactions);
 		builder.actualUserRequest(lastQuestion);

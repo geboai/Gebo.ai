@@ -40,6 +40,8 @@ public interface IChatRequestContext {
 
 	public String getRequestID();
 
+	public String getSessionID();
+
 	public String getConsolidatedHistory();
 
 	public List<IChatSessionEntry> getInteractions();
@@ -49,6 +51,8 @@ public interface IChatRequestContext {
 	public String getActualUserRequest();
 
 	public Map<String, Object> getToolsContext();
+
+	public Map<String, Object> getPipelineInfos();
 
 	public default IChatRequestContext integrateWithDocuments(Object documents) {
 		if (documents == null) {
@@ -119,6 +123,11 @@ public interface IChatRequestContext {
 			}
 
 			@Override
+			public Map<String, Object> getPipelineInfos() {
+				return IChatRequestContext.this.getPipelineInfos();
+			}
+
+			@Override
 			public String getActualUserRequest() {
 
 				return IChatRequestContext.this.getActualUserRequest();
@@ -147,6 +156,12 @@ public interface IChatRequestContext {
 
 				return IChatRequestContext.this.getToolsContext();
 			}
+
+			@Override
+			public String getSessionID() {
+
+				return IChatRequestContext.this.getSessionID();
+			}
 		};
 	}
 
@@ -161,9 +176,11 @@ public interface IChatRequestContext {
 		private final String requestID;
 		private final String actualUserRequest;
 		private final String consolidatedHistory;
+		private final String sessionID;
 		private final List<IChatSessionEntry> interactions;
 		private final List<Document> documents;
 		private final Map<String, Object> toolsContext;
+		private final Map<String, Object> pipelineInfos;
 	}
 
 	public static ChatRequestContextImplBuilder builder() {

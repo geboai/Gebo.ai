@@ -70,6 +70,12 @@ public class LLMChatRequestResources implements ITokensCountable {
 		}
 
 		@Override
+		public String getSessionID() {
+
+			return currentRequest != null ? currentRequest.getUserChatContextCode() : "No current context code";
+		}
+
+		@Override
 		public String getConsolidatedHistory() {
 
 			return chathistory != null && chathistory.getConsolidationText() != null
@@ -104,6 +110,22 @@ public class LLMChatRequestResources implements ITokensCountable {
 		public Map<String, Object> getToolsContext() {
 
 			return new HashMap<String, Object>();
+		}
+
+		@Override
+		public Map<String, Object> getPipelineInfos() {
+			Map<String, Object> pipelineInfos = new HashMap<>();
+			if (currentRequest != null) {
+
+				if (currentRequest.getChatPipelineProcessId() != null) {
+					pipelineInfos.put("user-choosed-pipelineId", currentRequest.getChatPipelineProcessId());
+				}
+				if (currentRequest.getUserIntent() != null) {
+					pipelineInfos.put("user-intent", currentRequest.getUserIntent().name());
+				}
+
+			}
+			return pipelineInfos; 
 		}
 	}
 

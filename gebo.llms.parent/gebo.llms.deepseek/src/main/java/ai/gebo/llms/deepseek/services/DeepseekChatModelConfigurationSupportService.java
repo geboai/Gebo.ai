@@ -96,10 +96,10 @@ public class DeepseekChatModelConfigurationSupportService
 	 * incorrectly named "AnthropicConfigurableChatModel" but implements DeepSeek
 	 * functionality
 	 */
-	class AnthropicConfigurableChatModel
+	class DeepseekConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GDeepseekChatModelConfig, DeepSeekChatModel> {
 
-		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
+		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
 			super(rendererFactory);
 			 
 		    }
@@ -192,7 +192,7 @@ public class DeepseekChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
-		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(documentContentRenderProvider);
+		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider);
 		model.initialize(config, type);
 		return model;
 	}

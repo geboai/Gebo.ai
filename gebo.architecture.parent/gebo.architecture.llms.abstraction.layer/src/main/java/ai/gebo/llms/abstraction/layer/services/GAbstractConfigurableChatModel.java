@@ -333,8 +333,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	protected final static String COMPRESSED_HISTORY_FIRST_MESSAGE_CHAT_TEMPLATE = "BEGIN_CONSOLIDATED_HISTORY\r\n{"
 			+ IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM
-			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={"
-			+ IChatRequestContext.USER_QUESTION_PROMPT_PARAM + "}\r\n";
+			+ "}\r\nEND_CONSOLIDATED_HISTORY\\r\\nUSER-QUESTION={" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM
+			+ "}\r\n";
 
 	protected List<Message> createCompressedHistory(IChatRequestContext chatContext) {
 		List<Message> messages = new ArrayList<>();
@@ -430,12 +430,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
-			LOGGER.debug("Begin streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)"+"[session:" + chatContext.getSessionID() + " request: "
+					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		Flux<ChatResponse> res = reqObject.getRequestSpec().stream().chatResponse();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("End streamResponse(" + promptTemplate.getPromptUse() + ", ...,...)"+"[session:" + chatContext.getSessionID() + " request: "
+					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 			logPerformances(reqObject, timestamp);
 		}
 		return res;
@@ -449,7 +451,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			double dtime = Math.round(((double) deltaTime) / 10.0) / 100.0;
 			double tokenSec = dtime != 0.0 ? dtokens / dtime : 0.0;
 			LOGGER.debug("LLM PERFORMANCES: " + reqObject.getModelCode() + " processed: " + tokens + " (tok) in "
-					+ dtime + " (sec) => input processing: " + tokenSec + " (token/sec)");
+					+ dtime + " (sec) => input processing: " + tokenSec + " (token/sec) ");
 		}
 	}
 
@@ -459,12 +461,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
-			LOGGER.debug("Begin streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) "+"[session:" + chatContext.getSessionID() + " request: "
+					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
 
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) "+"[session:" + chatContext.getSessionID() + " request: "
+					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 			logPerformances(reqObject, timestamp);
 		}
 
@@ -477,12 +481,16 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
-			LOGGER.debug("Begin response(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin response(" + promptTemplate.getPromptUse() + ", ...,...) [session:"
+					+ chatContext.getSessionID() + " request:" + chatContext.getRequestID() + " pipelineInfos:"
+					+ chatContext.getPipelineInfos() + "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)  [session:"
+					+ chatContext.getSessionID() + " request:" + chatContext.getRequestID() + " pipelineInfos:"
+					+ chatContext.getPipelineInfos() + "]");
 			logPerformances(reqObject, timestamp);
 		}
 		return res.chatResponse();
@@ -496,7 +504,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
-					+ (rt != null ? rt.getName() : "NULL") + ")");
+					+ (rt != null ? rt.getName() : "NULL") + ")  [session:" + chatContext.getSessionID() + " request: "
+					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
 		ChatClient client = getChatClient();
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
@@ -504,8 +513,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		ResponseType data = res.entity(rt);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
-					+ (rt != null ? rt.getName() : "NULL") + ") returned " + data);
+					+ (rt != null ? rt.getName() : "NULL") + ") " + "[session:" + chatContext.getSessionID()
+					+ " request: " + chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos()
+					+ "]" + " returned " + data);
 			logPerformances(reqObject, timestamp);
+
 		}
 
 		return data;
@@ -519,14 +531,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
 			LOGGER.debug("Begin structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
-					+ (rt != null ? rt.getName() : "NULL") + ",..)");
+					+ (rt != null ? rt.getName() : "NULL") + ",..) " + "[session:" + chatContext.getSessionID()
+					+ " request: " + chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos()
+					+ "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		ResponseType data = res.entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
-					+ (rt != null ? rt.getName() : "NULL") + ",..) returned:" + data);
+					+ (rt != null ? rt.getName() : "NULL") + ",..) " + "[session:" + chatContext.getSessionID()
+					+ " request: " + chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos()
+					+ "]" + " returned:" + data);
 			logPerformances(reqObject, timestamp);
 		}
 		return data;
@@ -538,13 +554,17 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
 			timestamp = System.currentTimeMillis();
-			LOGGER.debug("Begin textResponse(" + promptTemplate.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin textResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
+					+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
+					+ chatContext.getPipelineInfos() + "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext);
 		CallResponseSpec response = reqObject.getRequestSpec().call();
 		String out = response.content();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End textResponse(" + promptTemplate.getPromptUse() + ", ...,...) returned: " + out);
+			LOGGER.debug("End textResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
+					+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
+					+ chatContext.getPipelineInfos() + "]" + " returned: " + out);
 			logPerformances(reqObject, timestamp);
 		}
 		return out;
