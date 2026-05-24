@@ -182,15 +182,30 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			VectorStore vectorStore = embeddingModel.getVectorStore();
 			final int budgetTotal = 30;
 			final List<Document> sampled = new ArrayList<Document>();
-			Builder builder = SearchRequest.builder();
-			builder.filterExpression(
-					DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
-			builder.topK(budgetTotal);
-			builder.similarityThresholdAll();
-			builder.query("Meaningless query");
-			SearchRequest request = builder.build();
-			List<Document> documents = vectorStore.similaritySearch(request);
-			sampled.addAll(documents);
+			if (config.getAutotuneSamples() != null && config.getAutotuneSamples().getPhrases() != null
+					&& !config.getAutotuneSamples().getPhrases().isEmpty()) {
+				for (String query : config.getAutotuneSamples().getPhrases()) {
+					Builder builder = SearchRequest.builder();
+					builder.filterExpression(
+							DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
+					builder.topK(budgetTotal / config.getAutotuneSamples().getPhrases().size());
+					builder.similarityThreshold(config.getAutotuneSamples().getDefaultThreashold());
+					builder.query(query);
+					SearchRequest request = builder.build();
+					List<Document> documents = vectorStore.similaritySearch(request);
+					sampled.addAll(documents);
+				}
+			} else {
+				Builder builder = SearchRequest.builder();
+				builder.filterExpression(
+						DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
+				builder.topK(budgetTotal);
+				builder.similarityThresholdAll();
+				builder.query("Meaningless query");
+				SearchRequest request = builder.build();
+				List<Document> documents = vectorStore.similaritySearch(request);
+				sampled.addAll(documents);
+			}
 			final int topK = sampled.size();
 			IGConfigurableChatModel serviceChatModel = chatModelsConfigDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
