@@ -33,6 +33,7 @@ export class GeboAIBaseStreamingService {
                     const dataLength: number = data.length;
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
+                    let buffer = '';
                     
                     /**
                      * Recursive function to process chunks of the stream as they arrive
@@ -41,6 +42,9 @@ export class GeboAIBaseStreamingService {
                         reader.read().then(({ done, value }) => {
                             if (done) {
                                 console.log('Stream completed');
+                                if (buffer.trim() !== '') {
+                                    processLine(buffer);
+                                }
                                 if (onComplete) {
                                     onComplete();
                                 }
@@ -48,31 +52,13 @@ export class GeboAIBaseStreamingService {
                             }
     
                             const chunk = decoder.decode(value, { stream: true });
-                            // Handle new-line separated messages
-                            const messages = chunk.split('\n').filter(line => line.trim() !== ''); 
+                            buffer += chunk;
+                            const lines = buffer.split('\n');
+                            buffer = lines.pop() || '';
     
-                            messages.forEach(msg => {
-                                try {
-                                    let json: string | undefined = undefined;
-                                    if (msg && msg.startsWith(data)) {
-                                        json = msg.substring(dataLength);
-                                    } else if (msg) {
-                                        json = msg;
-                                    }
-                                    try {
-                                        if (json) {
-                                            const msgObject: any = JSON.parse(json);
-                                            lastMessageReceived = lastMessageReceived || msgObject?.lastMessage === true;
-                                            onMessage(msgObject);
-                                        }
-                                    } catch (e) {
-                                        if (json) {
-                                            onMessage(json);
-                                        }
-                                    }
-                                    // Parse and emit each JSON message
-                                } catch (error) {
-                                    console.error('Error parsing JSON:', error);
+                            lines.forEach(line => {
+                                if (line.trim() !== '') {
+                                    processLine(line);
                                 }
                             });
     
@@ -81,6 +67,31 @@ export class GeboAIBaseStreamingService {
                         }).catch(error => {
                             if (onError && lastMessageReceived !== true) onError(error);
                         });
+                    };
+
+                    const processLine = (msg: string) => {
+                        try {
+                            let json: string | undefined = undefined;
+                            if (msg && msg.startsWith(data)) {
+                                json = msg.substring(dataLength);
+                            } else if (msg) {
+                                json = msg;
+                            }
+                            try {
+                                if (json) {
+                                    const msgObject: any = JSON.parse(json);
+                                    lastMessageReceived = lastMessageReceived || msgObject?.lastMessage === true;
+                                    onMessage(msgObject);
+                                }
+                            } catch (e) {
+                                if (json) {
+                                    onMessage(json);
+                                }
+                            }
+                            // Parse and emit each JSON message
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                        }
                     };
     
                     processStream();
