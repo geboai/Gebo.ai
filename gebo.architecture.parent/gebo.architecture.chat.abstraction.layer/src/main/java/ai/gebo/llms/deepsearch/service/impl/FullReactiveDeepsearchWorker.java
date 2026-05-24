@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -304,16 +305,27 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		});
 
 		Flux<String> resultFlux = null;
-
+		final AtomicLong docsCounter = new AtomicLong(0l);
+		final Function<Document, Document> countingMapper = x -> {
+			docsCounter.incrementAndGet();
+			return x;
+		};
 		if (suppliers.isEmpty()) {
 			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
-			Flux<Document> documentFlux = suppliers.get(0).get();
+			Flux<Document> documentFlux = suppliers.get(0).get().map(countingMapper);
 			resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 					cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel);
+			resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
+				if (docsCounter.get() == 0l) {
+					return backupNotFoundDocuments;
+				} else {
+					return Flux.fromIterable(List.of());
+				}
+			}));
 		} else {
 			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).concatMap(x -> {
-				Flux<Document> documentFlux = x.get();
+				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
 						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel);
 				return flux.buffer();
@@ -332,7 +344,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}).concatMap(documents -> {
 
 				Flux<String> out = null;
-				if (!documents.isEmpty()) {
+				if (!documents.isEmpty() && docsCounter.get() > 0l) {
 
 					try {
 						Map<String, Object> params = new HashMap<>();
@@ -350,7 +362,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			});
 
 		}
-		Flux<Document> documentFlux = null;
 
 		final StringBuffer cumulative = new StringBuffer();
 		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = resultFlux.map(x -> {
@@ -373,21 +384,21 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
 			});
 		});
-		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages);
-		finalFlux.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
-			runAs.doAs(() -> {
-				try {
-					this.chunkingService.disposeChunkingSession(chunkSessionId);
-				} catch (Throwable th) {
-				}
+		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages)
+				.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
+					runAs.doAs(() -> {
+						try {
+							sessionLifecycleService.chatRequestCompleted(request, chatModel);
+						} catch (Throwable e) {
+							LOGGER.error("Error completing request", e);
+						}
+						try {
+							this.chunkingService.disposeChunkingSession(chunkSessionId);
+						} catch (Throwable th) {
+						}
+					});
+				});
 
-				try {
-					sessionLifecycleService.chatRequestCompleted(request, chatModel);
-				} catch (Throwable e) {
-					LOGGER.error("Error completing request", e);
-				}
-			});
-		});
 		return finalFlux;
 
 	}
