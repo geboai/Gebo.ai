@@ -153,12 +153,12 @@ public class BaseLLMSInvokingService {
 	}
 
 	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			IChatRequestContext context, Map<String, Object> additionalParams, Stream<Document> toCalculate) {
+			IChatRequestContext context, Map<String, Object> additionalParams, Stream<Document> toCalculate) throws LLMConfigException {
 		return callLLMConcatenateText(chatModel, prompt, context, additionalParams, stream2supplier(toCalculate));
 	}
 
 	protected String callLLMConcatenateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			IChatRequestContext context, Map<String, Object> additionalParams, Supplier<Document> input) {
+			IChatRequestContext context, Map<String, Object> additionalParams, Supplier<Document> input) throws LLMConfigException {
 		final int contextWindow = chatModel.getContextLength();
 
 		Document currentInput = null;
@@ -239,9 +239,10 @@ public class BaseLLMSInvokingService {
 	}
 
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			IChatRequestContext context, Map<String, Object> additionalParams, List<Document> inputs) {
-		// TODO Auto-generated method stub
-		return null;
+			IChatRequestContext context, Map<String, Object> additionalParams, List<Document> inputs)
+			throws LLMConfigException {
+
+		return callLLMWithDocuments(chatModel, prompt, context, inputs);
 	}
 
 	Map<Integer, TokenTextSplitter> splittersCache = new HashMap<Integer, TokenTextSplitter>();

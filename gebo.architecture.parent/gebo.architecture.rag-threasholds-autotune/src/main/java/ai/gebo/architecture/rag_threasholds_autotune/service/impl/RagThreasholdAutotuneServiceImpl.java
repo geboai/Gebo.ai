@@ -54,6 +54,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
 
@@ -125,7 +126,11 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			List<String> vectorStoreIds = embeddingModelsRuntimeDao.getConfigurations().stream().map(x -> x.getCode())
 					.toList();
 			for (String vectorStoreId : vectorStoreIds) {
-				processAutotune(vectorStoreId);
+				try {
+					processAutotune(vectorStoreId);
+				} catch (LLMConfigException e) {
+					LOGGER.error("Error in processAutotune(" + vectorStoreId + ")", e);
+				}
 			}
 		} finally {
 			synchronized (this) {
@@ -135,7 +140,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	}
 
 	@Override
-	public void processAutotune(String vectorStoreId) {
+	public void processAutotune(String vectorStoreId) throws LLMConfigException {
 		final int MAXQUESTIONS = this.config.getAutotuneMaxGeneratedQuestions();
 
 		ThreasholdAutotuneProcessResult lastEntry = internalFindByVectorStoreId(vectorStoreId);
@@ -197,8 +202,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			}
 			final GPromptTemplateConfig inTopicPrompt = promptsDao
 					.findByPromptUse(RagThreasholdAutotunePromptConfig.RAG_IN_TOPIC_QUERY_GENERATOR_PROMPT);
-			String csvResult = callLLMConcatenateText(serviceChatModel, inTopicPrompt,
-					IChatRequestContext.of("Sampling queries"), Map.of(), sampled.stream());
+			String csvResult = callLLMWithDocuments(serviceChatModel, inTopicPrompt,
+					IChatRequestContext.of("Sampling queries"), Map.of(), sampled);
 			List<AutoTuneQuestion> questions = parseQuestions(csvResult);
 			while (questions.size() > MAXQUESTIONS) {
 				questions.remove(questions.size() - 1);
@@ -320,7 +325,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	private AutoTuneRatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,
 			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions,
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds,
-			Map<String, Double> cache, int topK) {
+			Map<String, Double> cache, int topK) throws LLMConfigException {
 		boolean isInRange = Math.abs(upperBound - lowerBound) < fineIncrement;
 		lowerBound = round3decimal(lowerBound);
 		upperBound = round3decimal(upperBound);
@@ -395,10 +400,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	}
 
-
 	private AutoTuneRatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
 			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
-			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds) {
+			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds)
+			throws LLMConfigException {
 		double globalRating = 0.0;
 		double evaluationPoints = 0.0;
 		double totalDistance = 0.0;
@@ -460,8 +465,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			}
 			final List<AutoTuneMatchWithRate> alreadyMatched = matchWithRate.stream().filter(x -> x.rating != null)
 					.toList();
-			Stream<Document> toCalculate = matchWithRate.stream().filter(x -> x.rating == null).map(y -> y.document);
-			String csvExtracted = callLLMConcatenateText(defaultChatModel, ratingPrompt,
+			List<Document> toCalculate = matchWithRate.stream().filter(x -> x.rating == null).map(y -> y.document)
+					.toList();
+			String csvExtracted = callLLMWithDocuments(defaultChatModel, ratingPrompt,
 					IChatRequestContext.of(question.text), new HashMap<String, Object>(), toCalculate);
 			List<AutoTuneMatchRate> matches = readCSVLines(csvExtracted, 2, this::readMatchRate).toList();
 			List<AutoTuneMatchWithRate> rated = new ArrayList<AutoTuneMatchWithRate>(alreadyMatched);
@@ -502,15 +508,22 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	private AutoTuneMatchRate readMatchRate(String csvExtracted) {
 		AutoTuneMatchRate rate = new AutoTuneMatchRate();
-		StringTokenizer tokenizer = new StringTokenizer(csvExtracted, CSV_COLUMN_SEPARATOR_STRING);
-		rate.documentId = tokenizer.nextToken();
+		rate.documentId = "<unknown id>";
 		rate.rating = 0.0;
-		String rateValue = tokenizer.nextToken();
-		if (rateValue != null && rateValue.trim().length() > 0) {
-			try {
-				rate.rating = Double.valueOf(rateValue);
-			} catch (Throwable th) {
+		try {
+			StringTokenizer tokenizer = new StringTokenizer(csvExtracted, CSV_COLUMN_SEPARATOR_STRING);
+			rate.documentId = tokenizer.nextToken();
+			rate.rating = 0.0;
+
+			String rateValue = tokenizer.nextToken();
+			if (rateValue != null && rateValue.trim().length() > 0) {
+				try {
+					rate.rating = Double.valueOf(rateValue);
+				} catch (Throwable th) {
+				}
 			}
+		} catch (Throwable error) {
+			LOGGER.error("Promblem in received:" + csvExtracted);
 		}
 		return rate;
 	}
@@ -566,6 +579,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	}
 
 	private List<AutoTuneQuestion> parseQuestions(String csvResult) {
+		Map<String, Boolean> ensureUnique = new HashMap<>();
 		if (csvResult != null && csvResult.trim().length() > 0) {
 			List<AutoTuneQuestion> out = new ArrayList<AutoTuneQuestion>();
 			ByteArrayInputStream bis = new ByteArrayInputStream(csvResult.getBytes());
@@ -576,8 +590,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 					line = br.readLine();
 					AutoTuneQuestion question = readCSVLine(line);
-					if (question != null) {
+					if (question != null && question.text != null && !ensureUnique.containsKey(question.text)) {
 						out.add(question);
+						ensureUnique.put(question.text, true);
 					}
 				} while (line != null);
 			} catch (IOException e) {
