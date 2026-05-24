@@ -185,6 +185,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			if (config.getAutotuneSamples() != null && config.getAutotuneSamples().getPhrases() != null
 					&& !config.getAutotuneSamples().getPhrases().isEmpty()) {
 				for (String query : config.getAutotuneSamples().getPhrases()) {
+					LOGGER.info("Autoune with sample: \"" + query + "\" threashold:"
+							+ config.getAutotuneSamples().getDefaultThreashold());
 					Builder builder = SearchRequest.builder();
 					builder.filterExpression(
 							DocumentMetaInfos.GEBO_TOKEN_LENGTH + ">" + config.getSampleFragmentsMinTokenLength());
@@ -193,6 +195,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 					builder.query(query);
 					SearchRequest request = builder.build();
 					List<Document> documents = vectorStore.similaritySearch(request);
+					LOGGER.info("Found "+documents.size()+" docs on this sample");
 					sampled.addAll(documents);
 				}
 			} else {
