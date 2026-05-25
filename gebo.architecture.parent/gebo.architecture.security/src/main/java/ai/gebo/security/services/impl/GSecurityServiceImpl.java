@@ -372,7 +372,6 @@ public class GSecurityServiceImpl implements IGSecurityService {
 
 	@Override
 	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException {
-		String cryptedPwd = this.passwordEncoder.encode(confirmpassword);
 		UserInfos currentUser = this.getCurrentUser();
 		Optional<User> fullUsr = this.usersRepo.findById(currentUser.getUsername());
 		if (fullUsr.isPresent()) {

@@ -231,7 +231,7 @@ public class UsersAdminController {
 	@PostMapping(value = "changeUserPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GUserMessage changeUserPassword(@Valid @RequestBody ChangeUsernamePasswordData changePwdData)
 			throws GeboCryptSecretException {
-		boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getConfirmpassword());
+		boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getCurrentUserPassword());
 		if (pwdOk) {
 			if (changePwdData.getPassword().equals(changePwdData.getConfirmpassword())) {
 				userAdminService.changePassword(changePwdData.getUsername(), changePwdData.getPassword());
