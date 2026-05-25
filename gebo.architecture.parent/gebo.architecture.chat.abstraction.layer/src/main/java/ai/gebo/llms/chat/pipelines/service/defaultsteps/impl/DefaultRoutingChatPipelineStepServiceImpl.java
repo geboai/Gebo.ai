@@ -349,18 +349,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 								.length() > 0) {
 					rd = doHandleUserRequestedRouting(emitter, runtimeData);
 				} else {
-					DeliverableIntent serviceType = firstDecision.getUserIntent();
-					switch (serviceType) {
-					case PURE_SEARCH: {
-						rd = createPureSearchPipelineRoute(runtimeData);
-					}
-						break;
-					default: {
-						rd = doDecideRoute(emitter, runtimeData, chatModel, serviceModel, latestInteractions,
-								rewrited_query);
-					}
-						break;
-					}
+					rd = doDecideRoute(emitter, runtimeData, chatModel, serviceModel, latestInteractions,
+							rewrited_query);
 				}
 			}
 			this.chatSessionLifecycleService.updateRequest(runtimeData.getRequestResources().getCurrentRequest());

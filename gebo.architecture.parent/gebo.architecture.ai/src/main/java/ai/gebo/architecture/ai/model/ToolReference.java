@@ -26,7 +26,9 @@ public class ToolReference {
     // Description of the tool
     description = null, 
     // User interface function description of the tool
-    userUIfunctionDescription = null;
+    userUIfunctionDescription = null,
+    // Input schema of the tool
+    inputSchema = null;
 
     /**
      * Default constructor for ToolReference.
@@ -44,6 +46,7 @@ public class ToolReference {
         // Initialize name and description using the tool definition provided by the ToolCallback
         this.name = wraps.getToolDefinition().name();
         this.description = wraps.getToolDefinition().description();
+        this.inputSchema = wraps.getToolDefinition().inputSchema();
     }
 
     /**
@@ -98,6 +101,24 @@ public class ToolReference {
      */
     public void setUserUIfunctionDescription(String userUIfunctionDescription) {
         this.userUIfunctionDescription = userUIfunctionDescription;
+    }
+
+    /**
+     * Returns the input schema of the tool.
+     * 
+     * @return the input schema of the tool.
+     */
+    public String getInputSchema() {
+        return inputSchema;
+    }
+
+    /**
+     * Sets the input schema of the tool.
+     * 
+     * @param inputSchema The input schema to set for the tool.
+     */
+    public void setInputSchema(String inputSchema) {
+        this.inputSchema = inputSchema;
     }
 
 }

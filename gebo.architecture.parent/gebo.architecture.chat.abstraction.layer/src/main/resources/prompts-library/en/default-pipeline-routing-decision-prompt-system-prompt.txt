@@ -11,3 +11,4 @@ TOOLS_USE_RESPONSE :  executor llm will call a tool
 PURE_LLM_RESPONSE :  a straight direct response from an llm, to be chosen when context is sufficient for a satisfactory answer at the required service level
 RAG_LLM_RESPONSE :  single-pass internal RAG (semantic + full text) then answer
 DEEP_SEARCH_RESPONSE :  iterative search with query refinements and analysis over selected sources (one or multiple), then answer/report
+PURE_SEARCH :  a search across data sources/internal knowledge base to return matching files, documents, or search results

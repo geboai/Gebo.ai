@@ -36,6 +36,8 @@ multiple passes of query refinement/expansion, re-ranking/dedup, observing docum
 It can search one source or multiple sources, including internal KB.
 Internal KB deep-search is represented by the special source code: IKB_SYSTEM.
 
+PURE_SEARCH means a search across data sources or knowledge bases to retrieve matching files, documents, or lists of content.
+
 DECISION RULES (apply in this exact priority order):
 
 GLOBAL TOOL OVERRIDE:
@@ -48,6 +50,13 @@ If the user explicitly asks to search the internal knowledge base / internal dat
 REPORT INTENT RULE:
 If deliverable=REPORT, choose DEEP_SEARCH_RESPONSE.
 Rationale: REPORT implies structured, detailed, multi-section output and/or citations/corpus comparison; it requires iterative search and aggregation.
+
+PURE_SEARCH INTENT RULE:
+If deliverable=PURE_SEARCH:
+If (A)+(B) and chat history context is sufficient, choose PURE_LLM_RESPONSE.
+Else if the request requires in-depth analysis, comparisons, or multi-step iterative research across sources, choose DEEP_SEARCH_RESPONSE.
+Else if search/retrieval is required to locate files, documents, or retrieve search results, choose PURE_SEARCH.
+Else choose PURE_LLM_RESPONSE.
 
 DECISION INTENT RULE:
 If deliverable=DECISION:
@@ -111,6 +120,7 @@ PURE_LLM_RESPONSE
 RAG_LLM_RESPONSE
 DEEP_SEARCH_RESPONSE
 TOOLS_USE_RESPONSE
+PURE_SEARCH
 
 deepSearchedSystems rules:
 
