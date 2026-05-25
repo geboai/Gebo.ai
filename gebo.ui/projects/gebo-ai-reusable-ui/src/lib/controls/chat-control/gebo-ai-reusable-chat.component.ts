@@ -579,7 +579,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * @param doSpeach Flag to trigger speech playback of response
      */
     private callRestChat(r: GeboChatRequest, doSpeach: boolean): void {
-
+        const suggestChatDescription: boolean = !this.interactions || this.interactions.length === 0;
 
         const interaction: GeboChatInteraction = {
 
@@ -606,14 +606,39 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         interaction.response = response;
 
                         if (r.userChatContextCode !== response.userChatContextCode) {
+                            if (!this.chatInfo) {
+                                this.chatInfo = {
+                                    code: response.userChatContextCode,
+                                    chatProfileCode: r.chatProfileCode,
+                                    ragChat: this.ragsystem
+                                };
+                            } else {
+                                this.chatInfo.code = response.userChatContextCode;
+                            }
+                            r.userChatContextCode = response.userChatContextCode;
+                            this.userChatContextCode = response.userChatContextCode;
+
                             const newContext: GUserChatInfo = { ...this.chatInfo };
                             newContext.code = response.userChatContextCode;
                             newContext.chatProfileCode = r.chatProfileCode;
                             newContext.ragChat = this.ragsystem;
-                            if (this.chatInfo) {
-                                this.chatInfo.code = response.userChatContextCode;
-                            }
                             this.addedChatAction.emit(newContext);
+                        }
+                        if (suggestChatDescription === true) {
+                            if (response.userChatContextCode) {
+                                const newChatInfoObservable: Observable<GUserChatInfo> = this.userChatControllerService.suggestChatDescription(response.userChatContextCode);
+                                newChatInfoObservable.subscribe({
+                                    next: (value: GUserChatInfo) => {
+                                        if (this.chatInfo && value?.description) {
+                                            this.chatInfo.description = value?.description;
+                                        }
+                                        this.updatedChatAction.emit(value);
+                                    },
+                                    error: () => {
+
+                                    }
+                                });
+                            }
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
 
@@ -663,9 +688,18 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
         if (interaction.response) {
             if (r.userChatContextCode !== response.userChatContextCode) {
-                if (this.chatInfo) {
+                if (!this.chatInfo) {
+                    this.chatInfo = {
+                        code: response.userChatContextCode,
+                        chatProfileCode: r.chatProfileCode,
+                        ragChat: this.ragsystem
+                    };
+                } else {
                     this.chatInfo.code = response.userChatContextCode;
                 }
+                r.userChatContextCode = response.userChatContextCode;
+                this.userChatContextCode = response.userChatContextCode;
+
                 const newContext: GUserChatInfo = { ...this.chatInfo };
                 newContext.code = response.userChatContextCode;
                 newContext.chatProfileCode = r.chatProfileCode;
@@ -712,7 +746,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
         this.currentPipelineRouterDecisionCode = (this.ragsystem === true ? "WAITING" : undefined);
-        const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
+        const suggestChatDescription: boolean = !this.interactions || this.interactions.length === 0;
         const interaction: GeboChatInteraction = {
             loading: true,
             request: r,
