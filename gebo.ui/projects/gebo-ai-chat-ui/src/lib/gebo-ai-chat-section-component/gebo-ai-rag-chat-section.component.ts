@@ -95,7 +95,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected chatProfilesData: GChatProfileConfiguration[] = [];
     /** Stores available chat models data */
     protected chatModelsData: { code?: string, description?: string }[] = [];
-    protected chatUIOptions?:ChatUIOptions;
+    protected chatUIOptions?: ChatUIOptions;
     protected id?: string;
 
     /**
@@ -132,7 +132,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected routeNewRagChat(): void {
         const value = this.formGroup.value;
         const chatProfileCode = value.chatProfileCode;
-        this.chatDataLoading=true;
+        this.chatDataLoading = true;
         this.geboUserChatsControllerService.createCleanChatByChatProfileCode(chatProfileCode).subscribe({
             next: (chatInfo: GUserChatInfo) => {
                 if (chatInfo.code) {
@@ -142,7 +142,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
             },
             complete: () => {
-                this.chatDataLoading=false;
+                this.chatDataLoading = false;
             }
         });
 
@@ -160,7 +160,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected routeNewChat(): void {
         const value = this.chatFormGroup.value;
         const chatModelCode = value.chatModelCode;
-         this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
+        this.geboUserChatsControllerService.createCleanChatByModelCode(chatModelCode).subscribe({
             next: (chatInfo: GUserChatInfo) => {
                 if (chatInfo.code) {
                     this.doOpenChat();
@@ -169,7 +169,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
             },
             complete: () => {
-                this.chatDataLoading=false;
+                this.chatDataLoading = false;
             }
         });
     }
@@ -194,43 +194,42 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Loads the user's chat history with pagination
      * Updates the chatsPage property with the retrieved data
      */
-    protected loadChatList(page: number = 0): void {
+    protected loadChatList(): void {
         if (!this.chatsTree) {
             this.chatsTree = [{ label: "Chats", leaf: false, children: [], expanded: true }];
 
         }
 
-        if (this.page.page !== undefined && this.page.pageSize !== undefined) {
-            this.page.page = page;
-            this.chatsPageLoading = true;
-            this.geboUserChatsControllerService.getMyChats().subscribe({
-                next: (chats) => {
 
-                    const childrens: GUserChatInfo[] = chats ? chats : [];
-                    const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
-                        const item: TreeNode = {
-                            label: x.description,
-                            leaf: true,
-                            data: toExtended(x),
-                            icon: "pi pi-comments"
-                        };
+        this.chatsPageLoading = true;
+        this.geboUserChatsControllerService.getMyChats().subscribe({
+            next: (chats) => {
 
-                        return item;
-                    });
+                const childrens: GUserChatInfo[] = chats ? chats : [];
+                const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
+                    const item: TreeNode = {
+                        label: x.description,
+                        leaf: true,
+                        data: toExtended(x),
+                        icon: "pi pi-comments"
+                    };
 
-                    this.chatsTree[0].children = newItems;
+                    return item;
+                });
 
-                }, error: (err) => {
-                    this.chatsPageLoading = false;
-                },
-                complete: () => {
-                    this.chatsPageLoading = false;
-                }
-            });
-        }
+                this.chatsTree[0].children = newItems;
+
+            }, error: (err) => {
+                this.chatsPageLoading = false;
+            },
+            complete: () => {
+                this.chatsPageLoading = false;
+            }
+        });
+
     }
     protected onUpdatedChat(chatInfo: GUserChatInfo) {
-        if (this.chatsTree && this.chatsTree.length) {
+        if (this.chatsTree && this.chatsTree.length !== undefined) {
             const childs = this.chatsTree[0].children as TreeNode<GUserChatInfo>[];
             if (childs) {
                 for (let i: number = 0; i < childs.length; i++) {
@@ -240,6 +239,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                 }
             }
         }
+        
+            this.loadChatList();
+       
     }
 
     protected openChatItem(event: TreeNodeSelectEvent) {
@@ -265,8 +267,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     protected loadChatOptions(): void {
         this.chatsProfilesLoading = true;
         this.geboUserChatsControllerService.getUIConfig().subscribe({
-            next:(options)=>{
-                this.chatUIOptions=options;
+            next: (options) => {
+                this.chatUIOptions = options;
             }
         })
         this.geboChatModelsControllerService.getRuntimeConfiguredChatModelsLookup().subscribe({
