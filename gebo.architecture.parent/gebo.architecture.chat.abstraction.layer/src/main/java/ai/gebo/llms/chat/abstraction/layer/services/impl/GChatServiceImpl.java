@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -88,8 +89,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
 		this.chatSessionLifecycleService.ensureChatSessionExists(request);
-		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request
-				);
+		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
 		String modelCode = handler != null && handler.getConfig() != null
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
@@ -101,8 +101,6 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
-
-			
 
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
@@ -254,12 +252,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			} else {
 				int contextWindowSize = handler.getContextLength();
 				// Prepare prompt and context for streaming
-				
+
 				LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 						LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				return streamChatClient(handler, gprompt, kbcontext, request, gresponse, chatRequestContext,
+				return streamChatClient(handler, gprompt, Map.of(), kbcontext, request, gresponse, chatRequestContext,
 						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);
 			}
 		} catch (Throwable e) {

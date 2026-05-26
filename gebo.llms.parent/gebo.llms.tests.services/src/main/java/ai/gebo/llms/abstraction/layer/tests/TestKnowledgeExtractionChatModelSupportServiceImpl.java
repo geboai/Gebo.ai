@@ -15,6 +15,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -47,6 +48,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	/** Base chat model choice instance used for testing */
 	static final GBaseChatModelChoice model = new GBaseChatModelChoice();
 	final IGDocumentContentRendererProvider documentsRenderProvider;
+	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -55,8 +57,9 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	static class TestConfigurableKnowledgeExtractionChatModel extends
 			GAbstractConfigurableChatModel<TestKnowledgeExtractionModelConfiguration, TestKnowledgeExtractionChatModel> {
 
-		public TestConfigurableKnowledgeExtractionChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public TestConfigurableKnowledgeExtractionChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 
 		}
 
@@ -151,7 +154,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	public IGConfigurableChatModel<TestKnowledgeExtractionModelConfiguration> create(
 			TestKnowledgeExtractionModelConfiguration config) throws LLMConfigException {
 		TestConfigurableKnowledgeExtractionChatModel out = new TestConfigurableKnowledgeExtractionChatModel(
-				documentsRenderProvider);
+				documentsRenderProvider, toolCallbacksRepository);
 		out.initialize(config, type);
 		return out;
 	}

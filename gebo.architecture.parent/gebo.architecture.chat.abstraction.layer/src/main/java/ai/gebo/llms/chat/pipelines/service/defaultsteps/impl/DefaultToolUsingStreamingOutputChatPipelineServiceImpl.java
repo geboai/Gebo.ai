@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 
 	private final IGChatService chatService;
 	private final IGPromptConfigDao promptsDao;
+	private final DefaultPipelineSharedPromptParamsManager paramsManager;
 	public static final String DEFAULT_TOOL_USING_STREAMING = "default-tool-using-streaming";
 
 	@Override
@@ -45,14 +47,15 @@ public class DefaultToolUsingStreamingOutputChatPipelineServiceImpl implements I
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException {
-		Map<String, Object> params = DefaultPipelineSharedPromptPlaceholders.extractSharedPromptParameters(
-				runtimeData.getSharedEnvironment(), DefaultPipelineSharedPromptPlaceholders.TOOLS_LIST_TEMPLATE_PARAM);
+		Map<String, Object> params = new HashMap<>();
+		params.put(DefaultPipelineSharedPromptParamsManager.TOOLS_LIST_TEMPLATE_PARAM,
+				paramsManager.toolsListPromptPart(chatModel));
 		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT);
 
 		try {
-			return chatService.streamChat(prompt, runtimeData.getRequestResources(), runtimeData.getChatResponse(),
-					chatModel);
+			return chatService.streamChat(prompt, params, runtimeData.getRequestResources(),
+					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception in tools execution output", e);
 		}

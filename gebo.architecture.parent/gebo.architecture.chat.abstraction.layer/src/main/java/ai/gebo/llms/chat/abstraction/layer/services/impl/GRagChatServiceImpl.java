@@ -11,6 +11,7 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -310,8 +311,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 						: null;
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
-		return this.streamChatClient(handler, prompt, kbcontext, request, response,
-				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
+		return this.streamChatClient(handler, prompt, Map.of(), kbcontext, request,
+				response, fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
 
 	}
 

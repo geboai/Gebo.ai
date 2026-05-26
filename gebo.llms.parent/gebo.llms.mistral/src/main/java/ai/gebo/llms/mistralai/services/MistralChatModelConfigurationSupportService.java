@@ -89,8 +89,8 @@ public class MistralChatModelConfigurationSupportService
 	class MistralConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
 
-		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 
 		}
 
@@ -205,7 +205,7 @@ public class MistralChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
-		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider);
+		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

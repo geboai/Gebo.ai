@@ -566,7 +566,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
 				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, stringStreamer,
-				tokensBudget);
+				tokensBudget, runAs);
 		return resultFlux;
 	}
 }

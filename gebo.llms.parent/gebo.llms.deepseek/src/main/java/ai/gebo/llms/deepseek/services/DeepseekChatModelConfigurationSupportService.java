@@ -91,6 +91,7 @@ public class DeepseekChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	
 	/**
 	 * Implementation of configurable chat model for DeepSeek Note: The class is
 	 * incorrectly named "AnthropicConfigurableChatModel" but implements DeepSeek
@@ -99,8 +100,8 @@ public class DeepseekChatModelConfigurationSupportService
 	class DeepseekConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GDeepseekChatModelConfig, DeepSeekChatModel> {
 
-		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 			 
 		    }
 
@@ -192,7 +193,7 @@ public class DeepseekChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GDeepseekChatModelConfig> create(GDeepseekChatModelConfig config)
 			throws LLMConfigException {
-		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider);
+		DeepseekConfigurableChatModel model = new DeepseekConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

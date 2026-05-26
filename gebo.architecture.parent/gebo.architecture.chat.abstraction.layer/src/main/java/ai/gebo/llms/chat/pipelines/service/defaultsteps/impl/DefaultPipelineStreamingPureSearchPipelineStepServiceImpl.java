@@ -323,7 +323,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				Map<String, Object> templateParams = new HashMap<String, Object>();
 
 				String deepSearchDataSources = deepSearchDataSourcesListPromptPart(knowledgeBases);
-				templateParams.put(DefaultPipelineSharedPromptPlaceholders.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
+				templateParams.put(DefaultPipelineSharedPromptParamsManager.DEEP_SEARCH_DATA_SOURCES_TEMPLATE_PARAM,
 						deepSearchDataSources);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("End Calculating router params to be cached");

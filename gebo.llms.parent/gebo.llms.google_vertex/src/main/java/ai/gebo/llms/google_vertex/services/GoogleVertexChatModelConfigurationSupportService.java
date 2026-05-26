@@ -88,8 +88,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, VertexAiGeminiChatModel> {
 
-		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 			 
 		    }
 
@@ -163,7 +163,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GGoogleVertexChatModelConfig> create(GGoogleVertexChatModelConfig config)
 			throws LLMConfigException {
-		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider);
+		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

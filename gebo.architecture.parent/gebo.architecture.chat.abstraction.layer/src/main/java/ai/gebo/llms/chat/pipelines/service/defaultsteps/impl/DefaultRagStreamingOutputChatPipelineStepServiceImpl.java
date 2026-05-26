@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -69,7 +70,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(
 							runtimeData.getRequestResources().getCurrentRequest(), ed, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-					return ragChatService.streamChat(prompt, req, runtimeData.getChatResponse(), chatModel);
+					return ragChatService.streamChat(prompt, Map.of(), req, runtimeData.getChatResponse(), chatModel);
 				} catch (GeboChatException | LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

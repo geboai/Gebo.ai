@@ -97,8 +97,8 @@ public class OllamaChatModelConfigurationSupportService
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
 
-		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 			 
 		}
 
@@ -192,7 +192,7 @@ public class OllamaChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
-		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider);
+		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

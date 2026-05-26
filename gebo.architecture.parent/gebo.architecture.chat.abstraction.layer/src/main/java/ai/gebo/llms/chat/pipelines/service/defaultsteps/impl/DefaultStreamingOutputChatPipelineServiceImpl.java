@@ -1,6 +1,7 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -50,8 +51,8 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 		try {
 			GPromptTemplateConfig prompt = promptsDao
 					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT);
-			return this.chatService.streamChat(prompt, runtimeData.getRequestResources(), runtimeData.getChatResponse(),
-					chatModel);
+			return this.chatService.streamChat(prompt, Map.of(), runtimeData.getRequestResources(),
+					runtimeData.getChatResponse(), chatModel);
 		} catch (GeboChatException | LLMConfigException e) {
 			throw new ChatPipelineException("Exception handing standard chat output", e);
 		}

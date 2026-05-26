@@ -91,8 +91,8 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	class AzureOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAzureOpenAIChatModelConfig, AzureOpenAiChatModel> {
 
-		public AzureOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public AzureOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 			 
 		    }
 
@@ -205,7 +205,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAzureOpenAIChatModelConfig> create(GAzureOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel(documentContentRenderProvider);
+		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

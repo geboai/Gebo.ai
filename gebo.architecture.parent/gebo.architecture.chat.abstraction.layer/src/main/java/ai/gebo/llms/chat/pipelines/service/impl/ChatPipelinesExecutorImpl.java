@@ -191,13 +191,14 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 
 				return new StreamingLastStep(runtimeData, nextStep, null);
 			});
-		}).subscribeOn(threadManager.getBoundedElastic()).onErrorResume(th -> {
+		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic())).onErrorResume(th -> {
 			GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
 
 			return Mono.just(new StreamingLastStep(null, null, errorMessage));
 		}).cache();
 
-		Flux<GeboChatMessageEnvelope> sideChannelFlux = sink.asFlux();
+		Flux<GeboChatMessageEnvelope> sideChannelFlux = sink.asFlux()
+				.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 
 		Flux<GeboChatMessageEnvelope> mainFlux = routingMono.flatMapMany(lastStepData -> {
 			try {
@@ -230,9 +231,10 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			}
 		}).doFinally(signalType -> {
 			emitter.complete();
-		});
+		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 
-		return Flux.defer(() -> Flux.merge(sideChannelFlux, mainFlux));
+		return Flux.defer(() -> Flux.merge(sideChannelFlux, mainFlux))
+				.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 	}
 
 	protected PipelineRoutingInfosMessageEnvelope buildRoutingInfos(ChatPipelineExecutionRuntimeData runtimeData,

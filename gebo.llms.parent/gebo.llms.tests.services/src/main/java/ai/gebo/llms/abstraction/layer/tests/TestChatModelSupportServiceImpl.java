@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -46,6 +47,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	/** Base chat model choice instance used for testing */
 	static final GBaseChatModelChoice model = new GBaseChatModelChoice();
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -54,8 +56,9 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	static class TestConfigurableChatModel
 			extends GAbstractConfigurableChatModel<TestChatModelConfiguration, TestChatModel> {
 
-		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 
 		}
 
@@ -134,7 +137,8 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	@Override
 	public IGConfigurableChatModel<TestChatModelConfiguration> create(TestChatModelConfiguration config)
 			throws LLMConfigException {
-		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider);
+		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider,
+				toolCallbacksRepository);
 		out.initialize(config, type);
 		return out;
 	}

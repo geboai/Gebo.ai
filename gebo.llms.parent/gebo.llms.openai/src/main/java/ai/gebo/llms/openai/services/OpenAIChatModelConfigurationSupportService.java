@@ -94,8 +94,8 @@ public class OpenAIChatModelConfigurationSupportService
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
 
-		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory) {
-			super(rendererFactory);
+		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
 
 		}
 
@@ -295,7 +295,7 @@ public class OpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider);
+		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

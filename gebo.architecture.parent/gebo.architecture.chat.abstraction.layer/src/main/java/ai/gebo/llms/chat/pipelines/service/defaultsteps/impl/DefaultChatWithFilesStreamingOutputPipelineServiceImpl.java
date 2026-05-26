@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -70,8 +71,8 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT);
 		double fullRequestSize = runtimeData.getRequestResources().getTokensSize() + prompt.getTokensSize();
 		if (contextWindow >= 0.8 * fullRequestSize) {
-			return chatService.streamChat(prompt, runtimeData.getRequestResources(), runtimeData.getChatResponse(),
-					chatModel);
+			return chatService.streamChat(prompt, Map.of(), runtimeData.getRequestResources(),
+					runtimeData.getChatResponse(), chatModel);
 		} else {
 			LLMChatRequestResources resources = new LLMChatRequestResources(
 					runtimeData.getRequestResources().getChatWithDocuments(), new AIDocumentsSet(),
@@ -81,7 +82,7 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
 			double minimizedContextRequestSize = ITokensCountable.tokensSize(prompt, resources);
 			if (contextWindow > 0.8 * minimizedContextRequestSize) {
-				return chatService.streamChat(prompt, resources, runtimeData.getChatResponse(), chatModel);
+				return chatService.streamChat(prompt, Map.of(), resources, runtimeData.getChatResponse(), chatModel);
 			} else {
 				try {
 					return hugeFilesDeepSearch.streamChatWithHugeFiles(runtimeData, sinkUIEmitter, chatModel,
