@@ -139,7 +139,7 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 
 	private SearchRequest createSimilarityQuery(RagQueryOptions options, String query,
 			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter) {
-
+		
 		SearchRequest.Builder builder = SearchRequest.builder().query(query);
 
 		if (options.getTopK() > 0) {
@@ -414,8 +414,8 @@ public class GSemanticSearchDocumentsCachedDaoImpl implements IGSemanticSearchDo
 			IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold,
 			UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin multiHopSemanticSearch({" + initialQuery.length() + " chars}, " + options + ", ..."
-					+ ", " + firstSearchThreshold + ", " + otherSearchThreshold + ")");
+			LOGGER.debug("Begin multiHopSemanticSearch({" + initialQuery.length() + " chars}, " + options + ", "
+					+ semanticSearchMetaDataFilter + ", " + firstSearchThreshold + ", " + otherSearchThreshold + ")");
 		}
 		if (options.getMaxTokens() <= 0) {
 			throw new IllegalArgumentException("Token budget richiesto per multi-hop");

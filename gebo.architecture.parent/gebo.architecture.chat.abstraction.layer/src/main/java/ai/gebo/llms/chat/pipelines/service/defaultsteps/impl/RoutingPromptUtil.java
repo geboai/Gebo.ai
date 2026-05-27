@@ -343,12 +343,14 @@ public final class RoutingPromptUtil {
 				buffer.append(NEWLINE);
 				buffer.append(DESCRIPTION);
 				buffer.append(INTERNAL_KNOWLEDGE_BASE);
+				buffer.append(NEWLINE);
 				buffer.append(MAIN_SECTIONS_SAMPLE);
 				buffer.append(NEWLINE);
 				for (GKnowledgeBase catalog : knowledgeBases) {
 					buffer.append(LIST_ITEM);
 					buffer.append(SPACE);
 					buffer.append(catalog.getDescription());
+					buffer.append(NEWLINE);
 					buffer.append(NEWLINE);
 				}
 				buffer.append(END_MAIN_SECTIONS_SAMPLE);

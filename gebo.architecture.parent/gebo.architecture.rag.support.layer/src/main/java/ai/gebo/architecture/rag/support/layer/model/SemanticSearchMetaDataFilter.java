@@ -12,7 +12,8 @@ import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder.Op;
 
 import ai.gebo.model.DocumentMetaInfos;
-
+import lombok.ToString;
+@ToString
 public class SemanticSearchMetaDataFilter {
 	private Map<String, List<Op>> operandsMap = new HashMap<>();
 	private List<Integer> aclAliases = null;
@@ -20,7 +21,7 @@ public class SemanticSearchMetaDataFilter {
 	private List<String> codesList = null;
 
 	public void add(String metaDataField, Op operand) {
-		if (!operandsMap.containsKey(metaDataField.toLowerCase())) {
+		if (!operandsMap.containsKey(metaDataField)) {
 			operandsMap.put(metaDataField, new ArrayList<>());
 		}
 		operandsMap.get(metaDataField).add(operand);
