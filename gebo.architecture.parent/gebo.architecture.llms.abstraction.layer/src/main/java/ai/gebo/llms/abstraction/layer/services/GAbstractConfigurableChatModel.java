@@ -308,7 +308,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			}
 		}
 
-		ChatClientRequestSpec reqObject = client.prompt().toolCallbacks(wrapTools(runAs));
+		ChatClientRequestSpec reqObject = client.prompt();
+		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
+			reqObject = reqObject.toolCallbacks(wrapTools(runAs));
+		} else {
+			reqObject = reqObject.toolCallbacks(List.of()).toolNames(new String[0]);
+		}
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
