@@ -1,6 +1,17 @@
 .gebo-ai-rag-chat-section {
   &__content {
-    max-width: 40rem;
     margin: auto;
+
+    @media (min-width: 1400px) {
+      width: 80%;
+    }
+
+    @media (min-width: 1800px) {
+      width: 50%;
+    }
+
+    @media (min-width: 2700px) {
+      width: 30%;
+    }
   }
 }
