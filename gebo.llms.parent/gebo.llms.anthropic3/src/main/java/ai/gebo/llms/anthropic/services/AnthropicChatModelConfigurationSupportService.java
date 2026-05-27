@@ -95,17 +95,17 @@ public class AnthropicChatModelConfigurationSupportService
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
-
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
 	 */
 	class AnthropicConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAnthropicChatModelConfig, AnthropicChatModel> {
 
-		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
 			super(rendererFactory, toolCallbacksRepository);
 			// TODO Auto-generated constructor stub
-		    }
+		}
 
 		/**
 		 * Configures an Anthropic chat model based on the provided configuration
@@ -156,7 +156,9 @@ public class AnthropicChatModelConfigurationSupportService
 
 			// Configure Anthropic chat options
 			Builder builder = AnthropicChatOptions.builder();
-			builder.maxTokens(16000);
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -203,7 +205,8 @@ public class AnthropicChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAnthropicChatModelConfig> create(GAnthropicChatModelConfig config)
 			throws LLMConfigException {
-		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider, functionsRepo);
+		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

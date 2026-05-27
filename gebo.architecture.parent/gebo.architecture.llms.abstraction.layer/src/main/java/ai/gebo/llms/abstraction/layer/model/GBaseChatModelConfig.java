@@ -72,4 +72,5 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	protected List<ChatModelsUses> forUses = null;
 	protected List<ChatModelFeatures> features = null;
 	protected ChatModelThinkingOption thinking = null;
+	protected Integer maxGeneratedTokens = null;
 }

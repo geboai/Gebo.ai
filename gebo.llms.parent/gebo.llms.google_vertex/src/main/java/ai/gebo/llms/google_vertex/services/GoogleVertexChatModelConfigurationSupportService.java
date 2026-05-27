@@ -123,7 +123,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
-
+			
 			// Configure enabled functions if specified
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));

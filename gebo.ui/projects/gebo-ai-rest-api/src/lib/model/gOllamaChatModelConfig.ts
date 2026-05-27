@@ -32,6 +32,8 @@ export interface GOllamaChatModelConfig {
     temperature?: number;
     forUses?: Array<GOllamaChatModelConfig.ForUsesEnum>;
     features?: Array<GOllamaChatModelConfig.FeaturesEnum>;
+    thinking?: GOllamaChatModelConfig.ThinkingEnum;
+    maxGeneratedTokens?: number;
 }
 export namespace GOllamaChatModelConfig {
     export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
@@ -46,5 +48,13 @@ export namespace GOllamaChatModelConfig {
         STRUCTUREDOUTPUT: 'STRUCTURED_OUTPUT' as FeaturesEnum,
         MULTIMEDIA: 'MULTIMEDIA' as FeaturesEnum,
         FUNCTIONCALLING: 'FUNCTION_CALLING' as FeaturesEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
     };
 }

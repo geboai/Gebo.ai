@@ -148,7 +148,9 @@ public class DeepseekChatModelConfigurationSupportService
 			DeepSeekApi deepseekApi = apiBuilder.build();
 
 			org.springframework.ai.deepseek.DeepSeekChatOptions.Builder builder = DeepSeekChatOptions.builder();
-			builder.maxTokens(16000);
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}

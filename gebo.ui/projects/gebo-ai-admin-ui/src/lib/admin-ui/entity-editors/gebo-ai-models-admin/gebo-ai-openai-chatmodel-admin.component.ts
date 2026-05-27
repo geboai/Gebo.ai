@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /*
  * AI generated comments
@@ -34,7 +34,7 @@ import { isValidUrl } from "../utils/url-ok";
 @Component({
     selector: "gebo-ai-open-ai-chat-model-admin-component",
     templateUrl: "gebo-ai-openai-chatmodel-admin.component.html",
-    standalone: false, providers: [ { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false },{
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOpenAIChatModelAdminComponent),
         multi: false
     }]
@@ -44,12 +44,12 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
      * Name of the entity type being managed by this component
      */
     protected override entityName: string = "GOpenAIChatModelConfig";
-    
+
     /**
      * The allowed secret types for OpenAI API credentials
      */
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [ SecretInfo.SecretTypeEnum.TOKEN];
-    
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.TOKEN];
+
     /**
      * Form group to manage the OpenAI chat model configuration fields
      */
@@ -57,66 +57,68 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        defaultModel:new FormControl(),
+        defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),
         temperature: new FormControl(),
         topP: new FormControl(),
         contextLength: new FormControl(),
-        accessibleGroups: new FormControl(), 
-        accessibleUsers: new FormControl(), 
+        accessibleGroups: new FormControl(),
+        accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
-        defaultModelPrompt:new FormControl(),
-        forUses:new FormControl()
+        defaultModelPrompt: new FormControl(),
+        forUses: new FormControl(),
+        thinking: new FormControl(),
+        maxGeneratedTokens: new FormControl()
     });
-    
+
     /**
      * Stores previous form values to detect changes
      */
-    private oldValue:any={};
-    
+    private oldValue: any = {};
+
     /**
      * Available OpenAI model choices for selection
      */
     modelChoicesData: GBaseChatModelChoice[] = [];
-    
+
     /**
      * Observable for retrieving OpenAI secrets
      */
     identitiesObservable = this.secretControllerService.getSecretsByContextCode("openai");
-    
+
     /**
      * Action for creating a new OpenAI secret
      */
-    public newSecretAction= newSecretActionRequest("openai",this.entityName,this.entity);
-    
+    public newSecretAction = newSecretActionRequest("openai", this.entityName, this.entity);
+
     /**
      * List of available functions for the chat model
      */
-    public functionsList:GLookupEntry[]=[];
+    public functionsList: GLookupEntry[] = [];
 
     /**
      * Constructor initializes the component with necessary services and sets up form change handling
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService,
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
         private openaiChatModelConfigService: OpenAiChatModelsConfigurationControllerService,
-        private functionsLookupControllerService:FunctionsLookupControllerService,
+        private functionsLookupControllerService: FunctionsLookupControllerService,
         private secretControllerService: SecretsControllerService,
-        confirmService:ConfirmationService,
+        confirmService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService?: GeboUIOutputForwardingService) {
-        super(injector,geboFormGroupsService, confirmService,geboUIActionRoutingService,outputForwardingService);
-        this.formGroup.valueChanges.subscribe(newValue=>{
+        super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
+        this.formGroup.valueChanges.subscribe(newValue => {
             if (!newValue.baseUrl && !newValue.apiSecretCode) {
-                this.modelChoicesData=[];
-            }else if ((newValue.baseUrl!==this.oldValue.baseUrl && isValidUrl(newValue.baseUrl))  || newValue.apiSecretCode!==this.oldValue.apiSecretCode) {
+                this.modelChoicesData = [];
+            } else if ((newValue.baseUrl !== this.oldValue.baseUrl && isValidUrl(newValue.baseUrl)) || newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
                 this.loadModels(newValue);
             }
-            this.oldValue=newValue;
+            this.oldValue = newValue;
 
-        }); 
-        this.manageOperationStatus=true;
+        });
+        this.manageOperationStatus = true;
     }
 
     /**
@@ -124,13 +126,13 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
         this.functionsLookupControllerService.getAllFunctions().subscribe({
-            next:(value)=>{
-                this.functionsList=value;
+            next: (value) => {
+                this.functionsList = value;
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
     }
@@ -146,8 +148,8 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
                 this.updateLastOperationStatus(r as any);
                 this.modelChoicesData = r.result ? r.result : []
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
     }
@@ -216,6 +218,6 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
         }))
     }
 
-    
+
 
 }

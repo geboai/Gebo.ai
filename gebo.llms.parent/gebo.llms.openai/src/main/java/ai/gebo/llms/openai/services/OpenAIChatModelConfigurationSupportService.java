@@ -163,6 +163,9 @@ public class OpenAIChatModelConfigurationSupportService
 				builder = builder.toolNames(new HashSet<String>(names));
 
 			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {
 				case LOW_THINKING: {

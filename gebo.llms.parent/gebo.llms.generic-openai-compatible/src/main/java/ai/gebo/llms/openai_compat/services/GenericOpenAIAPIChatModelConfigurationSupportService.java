@@ -194,6 +194,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
 
 			// Configure tool callbacks (functions)
 

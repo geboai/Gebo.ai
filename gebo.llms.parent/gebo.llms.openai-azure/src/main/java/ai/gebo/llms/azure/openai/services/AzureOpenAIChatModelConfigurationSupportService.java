@@ -132,6 +132,25 @@ public class AzureOpenAIChatModelConfigurationSupportService
 
 			}
 			AzureOpenAiChatOptions options = builder.build();
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case LOW_THINKING: {
+					builder.reasoningEffort("low");
+				}
+					break;
+				case MEDIUM_THINKING: {
+					builder.reasoningEffort("medium");
+				}
+					break;
+				case HIGH_THINKING: {
+					builder.reasoningEffort("high");
+				}
+					break;
+				}
+			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			AzureOpenAiChatModel model = new AzureOpenAiChatModel(clientBuilder, options, toolCallingManager,

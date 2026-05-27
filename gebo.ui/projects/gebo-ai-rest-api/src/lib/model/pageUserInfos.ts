@@ -14,15 +14,15 @@ import { SortObject } from './sortObject';
 import { UserInfos } from './userInfos';
 
 export interface PageUserInfos { 
-    totalPages?: number;
     totalElements?: number;
-    numberOfElements?: number;
-    sort?: SortObject;
+    totalPages?: number;
     first?: boolean;
     last?: boolean;
     size?: number;
     content?: Array<UserInfos>;
     number?: number;
+    numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

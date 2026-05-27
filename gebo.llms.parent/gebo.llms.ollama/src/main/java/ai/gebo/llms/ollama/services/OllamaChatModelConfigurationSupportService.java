@@ -92,14 +92,16 @@ public class OllamaChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
 
-		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
 			super(rendererFactory, toolCallbacksRepository);
-			 
+
 		}
 
 		/**
@@ -134,7 +136,18 @@ public class OllamaChatModelConfigurationSupportService
 			if (config.getTemperature() != null && config.getTemperature() > 0) {
 				builder = builder.temperature(config.getTemperature());
 			}
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case NO_THINKING: {
+					builder.disableThinking();
+				}
+					break;
+				default: {
+					builder.enableThinking();
+				}
+				}
 
+			}
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
@@ -160,11 +173,13 @@ public class OllamaChatModelConfigurationSupportService
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
+
 		@Override
 		public boolean isApplyThinkingMarkupHandling() {
-			
+
 			return true;
 		}
+
 		@Override
 		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
 			return new ThinkTagSkippingOutputConverter<T>(type);
@@ -192,7 +207,8 @@ public class OllamaChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
-		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider, functionsRepo);
+		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}
