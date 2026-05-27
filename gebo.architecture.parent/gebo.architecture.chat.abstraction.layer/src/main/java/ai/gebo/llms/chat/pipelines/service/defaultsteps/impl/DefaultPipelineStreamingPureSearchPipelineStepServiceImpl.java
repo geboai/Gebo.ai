@@ -245,22 +245,35 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 				return Flux.just(envelope);
 			});
 		});
+		final MinimalChatContext minimalContext = runtimeData.getMinimalChatContext();
+		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Flux<String> reactiveLLMOutput = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
-				Stream<LLMInputDocument> inputStream = ranked.stream().map(entry -> {
-					LLMInputDocument inputDocument = createInputDocument(entry.getDocument(), entry.getSampleText());
-					return inputDocument;
-				}).filter(x -> x != null).sequential();
-				MinimalChatContext minimalContext = runtimeData.getMinimalChatContext();
+				if (!ranked.isEmpty()) {
+					Stream<LLMInputDocument> inputStream = ranked.stream().map(entry -> {
+						LLMInputDocument inputDocument = createInputDocument(entry.getDocument(),
+								entry.getSampleText());
+						return inputDocument;
+					}).filter(x -> x != null).sequential();
 
-				GPromptTemplateConfig prompt = promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT);
-				IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-				try {
-					return super.callLLMReactive(chatModel, prompt, context, Map.of(), inputStream);
-				} catch (Throwable th) {
-					LOGGER.error("Error whill calling callLLMReactive", th);
-					throw new RuntimeException(th.getMessage(), th);
+					GPromptTemplateConfig prompt = promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT);
+
+					try {
+						return super.callLLMReactive(chatModel, prompt, context, Map.of(), inputStream);
+					} catch (Throwable th) {
+						LOGGER.error("Error whill calling callLLMReactive", th);
+						throw new RuntimeException(th.getMessage(), th);
+					}
+				} else {
+					GPromptTemplateConfig prompt = promptsDao
+							.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT);
+					try {
+						return super.callLLMReactive(chatModel, prompt, context, Map.of());
+					} catch (Throwable th) {
+						LOGGER.error("Error whill calling callLLMReactive", th);
+						throw new RuntimeException(th.getMessage(), th);
+					}
 				}
 			});
 		});
