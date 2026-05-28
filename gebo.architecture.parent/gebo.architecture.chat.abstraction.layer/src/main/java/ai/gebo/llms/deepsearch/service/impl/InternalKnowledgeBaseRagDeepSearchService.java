@@ -98,7 +98,7 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				: Flux.empty();
 		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 		Flux<Document> searchFlux = llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
-				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, 50).flatMap(x -> {
+				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK).flatMap(x -> {
 					List<Document> docsList = x.aiDocumentsList();
 					docsList.forEach(doc -> {
 						String code = doc.getMetadata() != null

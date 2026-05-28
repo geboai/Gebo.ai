@@ -41,13 +41,13 @@ public class TokensBudgetFluxCoordinator {
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
-			Function<T, Y> outputCleaningFunction, Function<Y, Flux<Y>> streamingFunction, long tokensBudget,
+			Function<T, T> outputCleaningFunction, Function<T, Flux<Y>> streamingFunction, long tokensBudget,
 			ReactiveIdentityUtil runAs, int parallelism, Consumer<D> unprocessedCumulator) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
 		}
 		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
-		final AtomicReference<Y> shortCuttedOutput = new AtomicReference<Y>(null);
+
 		Flux<List<T>> flux = emitQueueWhenPredicateTrue(source.filter(validDocumentCheck),
 				list -> tokensCompute.higherThanBudgetTokens(list, tokensBudget)).parallel(parallelism)
 				.runOn(runAs.wrap(Schedulers.boundedElastic())).map(input -> {
@@ -72,10 +72,8 @@ public class TokensBudgetFluxCoordinator {
 							}
 							if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
 								endOfProcessing.set(true);
-								Y outputValue = outputCleaningFunction.apply(result);
-								shortCuttedOutput.set(outputValue);
 							}
-							return result;
+							return outputCleaningFunction.apply(result);
 						} catch (Throwable th) {
 							emitter.notifyLLMProblems();
 							LOGGER.error(EXCEPTION_IN_MAP_PROCESS, th);
@@ -90,12 +88,12 @@ public class TokensBudgetFluxCoordinator {
 						LOGGER.debug("Begin flatMap(...) code with " + IntermediateResult.size() + " input elements");
 					}
 					Flux<Y> finalResult = null;
-					if (endOfProcessing.get() && IntermediateResult.size() == 1) {
+					if (IntermediateResult.size() == 1) {
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Returning shortcutted value");
 						}
-						Y output = shortCuttedOutput.get();
-						finalResult = streamingFunction.apply(output);
+
+						finalResult = streamingFunction.apply(IntermediateResult.get(0));
 					} else {
 						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
 					}

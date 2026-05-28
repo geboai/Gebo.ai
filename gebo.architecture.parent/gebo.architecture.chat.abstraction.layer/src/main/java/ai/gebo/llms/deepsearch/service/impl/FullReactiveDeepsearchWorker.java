@@ -605,17 +605,17 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Predicate<String> isEndOfProcessingCondition = (text) -> text != null
 				&& text.toUpperCase().contains(PARTIAL_ANALISYS_SATISFACTORY)
 				&& satisfactorySubanalisys.incrementAndGet() > subanalisysThreashold;
-		Function<String, String> outputShortCutFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
+		Function<String, String> outputCleaningFunction = (text) -> text.replace(PARTIAL_ANALISYS_SATISFACTORY, "");
 		Flux<String> resultFlux = null;
 		final Consumer<Document> unprocessedCumulator = (document) -> {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Unprocessed document:" + document.getId());
 			}
-			discardedFragmentIds.add(document.getId());
+			discardedFragmentIds.add(document.getId()); 
 		};
 		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
-				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputShortCutFunction, stringStreamer,
+				ERROR_IN_PROCESS, outOfBandString, isEndOfProcessingCondition, outputCleaningFunction, stringStreamer,
 				tokensBudget, runAs, 4, unprocessedCumulator);
 		return resultFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
