@@ -14,14 +14,14 @@ import lombok.Getter;
 @Getter
 public class MetaDocumentRenderer {
 	public static final String END_CONTENT = "\n</content>\n";
-	private static final String BEGIN_CONTENT = "<content>\n";
+	public static final String BEGIN_CONTENT = "<content>\n";
 	public static final String PUBLISHED_DATE = "publishedDate";
 	public static final String AUTHOR = "author";
 	public static final String PROJECT = "project";
 	public static final String KNOWLEDGE_BASE = "knowledge-base";
 	public static final String URL = "url";
 	public static final String NAME = "name";
-	private static final String TITLE = "title";
+	public static final String TITLE = "title";
 	public static final String DOCUMENT_CODE = "documentCode";
 	public static final String FRAGMENT_ID = "fragmentId";
 	public static final String END_DOCUMENT = "</document>";

@@ -70,6 +70,7 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
+	private static final String UTF_8 = "UTF-8";
 	private static final String COMMA_CHARACTER = ",";
 	private static final String CALLING_LLM_PROBLEM_ON_FINAL_ANALISYS = "CALLING LLM PROBLEM ON FINAL ANALISYS";
 	private static final String SORRY_SOMETHING_GONE_WRONG = "Sorry, something gone wrong on last step of the execution";
@@ -611,7 +612,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Unprocessed document:" + document.getId());
 			}
-			discardedFragmentIds.add(document.getId()); 
+			discardedFragmentIds.add(document.getId());
 		};
 		resultFlux = TokensBudgetFluxCoordinator.tokenBudgetCoordinate(docsFlux, sinkUIEmitter, isValidDocument,
 				tokensLimitCompute, intermediateProcess, finalAnalisysWork, "", ERROR_IN_PROCESS, outOfBandString,
@@ -625,21 +626,24 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 
 		if (intermediateAnalisys == null || intermediateAnalisys.trim().length() == 0)
 			return "";
-		StringBuffer output = new StringBuffer();
-		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(intermediateAnalisys.getBytes()));
-		String line = null;
-		try {
-			while ((line = dis.readLine()) != null) {
-				if (line.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase()) >= 0) {
-					extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
-				} else {
-					output.append(line);
-					output.append("\n");
-				}
-			}
-		} catch (IOException exc) {
+		final int startCharacter = intermediateAnalisys.toLowerCase().indexOf(IRRELEVANT_FRAGMENT_MARKER.toLowerCase());
+		if (startCharacter < 0)
+			return intermediateAnalisys;
+		final int endCharacter = Math.max(intermediateAnalisys.indexOf("\r", startCharacter),
+				intermediateAnalisys.indexOf("\n", startCharacter));
+		if (endCharacter <  0) {
+			String line = intermediateAnalisys.substring(startCharacter);
+			extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
+			String cleaned = intermediateAnalisys.substring(0, startCharacter);
+			return cleaned;
+		} else {
+			String line = intermediateAnalisys.substring(startCharacter, endCharacter);
+			extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
+			String cleaned = intermediateAnalisys.substring(0, startCharacter)
+					+ intermediateAnalisys.substring(endCharacter);
+			return cleaned;
 		}
-		return output.toString();
+
 	}
 
 	private void extractIrrelevantFragmentsFromLine(String line, Vector<String> discardedFragmentIds) {
