@@ -7,15 +7,19 @@ INPUTS:
 
 
 (B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT  (may be empty):
+
 {documents}
 
 (C) EXTERNAL DATA SOURCES LIST TO PERFORM SEARCH/DEEP SEARCH ON (may be empty). Each entry has a unique source code/id and description:
+
 {deepSearchDataSources}
 
 (D) INTERNAL RAG KNOWLEDGE BASES CATALOG (may be empty). Each entry has a unique KB code/id and description:
+
 {internalKnowledgeBaseCatalog}
 
 (F) TOOLS LIST (may be empty):
+
 {toolsList}
 
 (G) USER REQUIRED SERVICE TYPE (already decided by a previous pipeline step):
@@ -36,7 +40,7 @@ multiple passes of query refinement/expansion, re-ranking/dedup, observing docum
 It can search one source or multiple sources, including internal KB.
 Internal KB deep-search is represented by the special source code: IKB_SYSTEM.
 
-PURE_SEARCH means a search across data sources or knowledge bases to retrieve matching files, documents, or lists of content.
+
 
 DECISION RULES (apply in this exact priority order):
 
@@ -51,12 +55,6 @@ REPORT INTENT RULE:
 If deliverable=REPORT, choose DEEP_SEARCH_RESPONSE.
 Rationale: REPORT implies structured, detailed, multi-section output and/or citations/corpus comparison; it requires iterative search and aggregation.
 
-PURE_SEARCH INTENT RULE:
-If deliverable=PURE_SEARCH:
-If (A)+(B) and chat history context is sufficient, choose PURE_LLM_RESPONSE.
-Else if the request requires in-depth analysis, comparisons, or multi-step iterative research across sources, choose DEEP_SEARCH_RESPONSE.
-Else if search/retrieval is required to locate files, documents, or retrieve search results, choose PURE_SEARCH.
-Else choose PURE_LLM_RESPONSE.
 
 DECISION INTENT RULE:
 If deliverable=DECISION:
@@ -120,7 +118,7 @@ PURE_LLM_RESPONSE
 RAG_LLM_RESPONSE
 DEEP_SEARCH_RESPONSE
 TOOLS_USE_RESPONSE
-PURE_SEARCH
+
 
 deepSearchedSystems rules:
 
@@ -128,8 +126,15 @@ Only output deepSearchedSystems lines when routingDecision=DEEP_SEARCH_RESPONSE 
 Each deepSearchedSystems line must contain exactly one source code taken from (C) 
 considering the matching between user intent/request (A) and the listed example contents in the (C) catalogs.
 
+pipelineExecutorSuggestion rules:
+
+if routingDecision is one of: DEEP_SEARCH_RESPONSE, RAG_LLM_RESPONSE  suggest the most adequate searches to find documents grounding the response.
+if routingDecision is TOOLS_USE_RESPONSE output the list of usefull tools to call and some suggestions on parameters.
+if routingDecision is PURE_LLM_RESPONSE suggest some key points to answer the user. 
+
+
 CONSTRAINTS:
 
-Do not output any fields other than routingDecision and deepSearchedSystems.
+Do not output any fields other than routingDecision , deepSearchedSystems and pipelineExecutorSuggestion.
 Do not output deepSearchedSystems lines for routingDecision other than DEEP_SEARCH_RESPONSE.
 No markdown, no extra text.

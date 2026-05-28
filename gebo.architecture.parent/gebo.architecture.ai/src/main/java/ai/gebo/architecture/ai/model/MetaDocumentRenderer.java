@@ -13,6 +13,19 @@ import lombok.Getter;
 @Builder
 @Getter
 public class MetaDocumentRenderer {
+	public static final String END_CONTENT = "\n</content>\n";
+	private static final String BEGIN_CONTENT = "<content>\n";
+	public static final String PUBLISHED_DATE = "publishedDate";
+	public static final String AUTHOR = "author";
+	public static final String PROJECT = "project";
+	public static final String KNOWLEDGE_BASE = "knowledge-base";
+	public static final String URL = "url";
+	public static final String NAME = "name";
+	private static final String TITLE = "title";
+	public static final String DOCUMENT_CODE = "documentCode";
+	public static final String FRAGMENT_ID = "fragmentId";
+	public static final String END_DOCUMENT = "</document>";
+	public static final String BEGIN_DOCUMENT = "<document>\n";
 	private final String id;
 	private final String documentCode;
 	private final String title;
@@ -33,27 +46,26 @@ public class MetaDocumentRenderer {
 	public String render() {
 		StringBuilder buffer = new StringBuilder(4096);
 
-		buffer.append("<document>\n");
+		buffer.append(BEGIN_DOCUMENT);
 
-		appendField(buffer, "id", id);
-		appendField(buffer, "documentCode", documentCode);
-		appendField(buffer, "title", title);
-		appendField(buffer, "name", name);
-		appendField(buffer, "url", url);
-		appendField(buffer, "knowledge-base", knowledgeBase);
-		appendField(buffer, "project", project);
-		appendField(buffer, "author", author);
-		appendField(buffer, "publishedDate", publishedDate);
+		appendField(buffer, FRAGMENT_ID, id);
+		appendField(buffer, DOCUMENT_CODE, documentCode);
+		appendField(buffer, TITLE, title);
+		appendField(buffer, NAME, name);
+		appendField(buffer, URL, url);
+		appendField(buffer, KNOWLEDGE_BASE, knowledgeBase);
+		appendField(buffer, PROJECT, project);
+		appendField(buffer, AUTHOR, author);
+		appendField(buffer, PUBLISHED_DATE, publishedDate);
 		for (Entry<String, String> entry : customFields.entrySet()) {
 			appendField(buffer, entry.getKey(), entry.getValue());
 		}
 		appendCategories(buffer, categories);
 
-		buffer.append("<content>\n");
+		buffer.append(BEGIN_CONTENT);
 		appendText(buffer, content != null ? content : "");
-		buffer.append("\n</content>\n");
-
-		buffer.append("</document>");
+		buffer.append(END_CONTENT);
+		buffer.append(END_DOCUMENT);
 
 		return buffer.toString();
 	}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -40,15 +41,15 @@ public class TokensBudgetFluxCoordinator {
 			Predicate<D> validDocumentCheck, TokensLimitCompute<D> tokensCompute, GenerativeFunction<D, T> generative,
 			LastWork<T, Y> finalWork, T initialValue, T outOfBandValue, Predicate<T> isOutOfBandValue,
 			Y finalOutOFBoundValue, Predicate<Y> isFinalOutOFBoundValue, Predicate<T> isEndOfProcessingCondition,
-			Function<T, Y> outputShortCutFunction, Function<Y, Flux<Y>> streamingFunction, long tokensBudget,
-			ReactiveIdentityUtil runAs) {
+			Function<T, Y> outputCleaningFunction, Function<Y, Flux<Y>> streamingFunction, long tokensBudget,
+			ReactiveIdentityUtil runAs, int parallelism, Consumer<D> unprocessedCumulator) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin tokenBudgetCoordinate(..) ");
 		}
 		final AtomicBoolean endOfProcessing = new AtomicBoolean(false);
 		final AtomicReference<Y> shortCuttedOutput = new AtomicReference<Y>(null);
 		Flux<List<T>> flux = emitQueueWhenPredicateTrue(source.filter(validDocumentCheck),
-				list -> tokensCompute.higherThanBudgetTokens(list, tokensBudget)).parallel(4)
+				list -> tokensCompute.higherThanBudgetTokens(list, tokensBudget)).parallel(parallelism)
 				.runOn(runAs.wrap(Schedulers.boundedElastic())).map(input -> {
 					return runAs.doRunAsWithReturn(() -> {
 						if (LOGGER.isDebugEnabled()) {
@@ -57,6 +58,9 @@ public class TokensBudgetFluxCoordinator {
 						if (endOfProcessing.get()) {
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("Shortcutting process in map(...)");
+							}
+							if (input != null) {
+								input.forEach(unprocessedCumulator);
 							}
 							return null;
 						}
@@ -68,7 +72,7 @@ public class TokensBudgetFluxCoordinator {
 							}
 							if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
 								endOfProcessing.set(true);
-								Y outputValue = outputShortCutFunction.apply(result);
+								Y outputValue = outputCleaningFunction.apply(result);
 								shortCuttedOutput.set(outputValue);
 							}
 							return result;
@@ -86,7 +90,7 @@ public class TokensBudgetFluxCoordinator {
 						LOGGER.debug("Begin flatMap(...) code with " + IntermediateResult.size() + " input elements");
 					}
 					Flux<Y> finalResult = null;
-					if (endOfProcessing.get()) {
+					if (endOfProcessing.get() && IntermediateResult.size() == 1) {
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Returning shortcutted value");
 						}

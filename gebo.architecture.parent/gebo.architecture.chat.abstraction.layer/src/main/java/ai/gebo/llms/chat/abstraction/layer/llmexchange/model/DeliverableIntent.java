@@ -19,7 +19,7 @@ public enum DeliverableIntent {
 			"pure search outcome, files or document files search", 5),
 	ANALISYS("*User asked a structured report,a report, detailed report, an analisys or some sinonyms of these in all languages\r\n"
 			+ "* report / detailed report / in-depth / deep-search / deep analysis / detailed analysis\r\n"
-			+ "* citations/sources across documents\r\n" + "* compare/analyze a broad corpus", "detailed report", 6), // (structured,
+			+ "* citations/sources across documents\r\n" + "* compare/analyze a broad corpus", "detailed analisys report", 6), // (structured,
 																														// detailed,
 																														// multi-section)
 	UNKNOWN("Fallback, cannot decide clearly the user intent", "synthetic outcome", 7);// (fallback → be

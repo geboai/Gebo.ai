@@ -252,7 +252,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 
 				}
 			});
-		});
+		}).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 
 		ParallelFlux<List<SearchWithResults>> searchResults = ParallelFlux.from(searchBlockFlux);
 
@@ -288,7 +288,7 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 				return this.chunkingService.streamChunks(found, chunkingParams, chunkingSessionId,
 						deepSearchDefaultConfig.getDocumentsParallelism());
 			});
-		}).runOn(Schedulers.parallel());
+		}).runOn(runAs.wrap(Schedulers.parallel()));
 
 		ParallelFlux<DocumentWithSearchResult> parallelResult = chunksFlux.map(resultEntry -> {
 			if (!resultEntry.isErrorState()) {

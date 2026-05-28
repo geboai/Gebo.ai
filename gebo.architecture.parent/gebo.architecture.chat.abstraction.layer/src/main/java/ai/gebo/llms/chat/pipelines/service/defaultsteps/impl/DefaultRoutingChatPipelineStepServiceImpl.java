@@ -55,6 +55,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
+	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
 	private static final String EXECUTING_YOUR_CHOOSED_AGENT = "Executing your choosed agent";
@@ -226,7 +227,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
 		Map<String, List<String>> decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context,
-				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS));
+				params, List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS,PIPELINE_EXECUTOR_SUGGESTION));
 		sanitizeSearchedSystems(decisionMap);
 		// extracting user intent
 

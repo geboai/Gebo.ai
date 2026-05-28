@@ -60,7 +60,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.setPerDataSourceConfigured(false);
 	}
 
-	public int getInTopicSatisfactoryDocumentsThreashold(DeliverableIntent intent) {
+	public int getSatisfactorySubAnalisysThreashold(DeliverableIntent intent) {
 		if (intent == null)
 			intent = DeliverableIntent.QA;
 		final DeliverableIntent finalIntent = intent;
