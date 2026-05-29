@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -11,6 +12,7 @@ import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
@@ -65,10 +67,19 @@ public class TokensBudgetFluxCoordinator {
 							return null;
 						}
 						try {
-
+							try {
+								emitter.notifyUser(UUID.randomUUID().toString(),
+										"Analyzing " + input.size() + " documents", null, 3000l, NotificationType.INFO);
+							} catch (Throwable th) {
+							}
 							T result = generative.iterateCumulation(initialValue, emitter, input);
 							if (LOGGER.isDebugEnabled()) {
 								LOGGER.debug("End map(...) code with " + input.size() + " returning:" + result);
+							}
+							try {
+								emitter.notifyUser(UUID.randomUUID().toString(),
+										"Analyzed " + input.size() + " documents!", null, 3000l, NotificationType.INFO);
+							} catch (Throwable th) {
 							}
 							if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
 								endOfProcessing.set(true);
@@ -95,7 +106,19 @@ public class TokensBudgetFluxCoordinator {
 
 						finalResult = streamingFunction.apply(IntermediateResult.get(0));
 					} else {
+						try {
+							emitter.notifyUser(UUID.randomUUID().toString(),
+									"Aggregating " + IntermediateResult.size() + " analisys", null, 3000l,
+									NotificationType.INFO);
+						} catch (Throwable th) {
+						}
 						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
+						try {
+							emitter.notifyUser(UUID.randomUUID().toString(),
+									"Aggregated " + IntermediateResult.size() + " analisys!", null, 3000l,
+									NotificationType.INFO);
+						} catch (Throwable th) {
+						}
 					}
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("End flatMap(...) code");

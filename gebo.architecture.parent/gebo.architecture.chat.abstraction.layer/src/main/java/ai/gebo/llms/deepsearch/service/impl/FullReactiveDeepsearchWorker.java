@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -79,7 +80,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private static final String AGENT_DELIVERABLE_COMPLETENESS = "agentDeliverableCompleteness";
 	private static final String ERROR_IN_PROCESS = "<!-ERROR-IN-PROCESS->";
 	private static final String PARTIAL_ANALISYS_SATISFACTORY = "<IS-COMPLETELY-SATISFACTORY/>";
-	private static final String IRRELEVANT_FRAGMENT_MARKER = "irrilevantFragments";
+	private static final String IRRELEVANT_FRAGMENT_MARKER = "IRRILEVANT";
 	private final static Logger LOGGER = LoggerFactory.getLogger(FullReactiveDeepsearchWorker.class);
 	private final IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService;
 	private final DeepSearchDefaultConfig defaultDeepsearchConfig;
@@ -309,6 +310,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
 			Flux<String> outFlux = null;
 			try {
+				try {
+					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", "pi pi-file", 3000l,
+							NotificationType.INFO);
+				} catch (Throwable th) {
+				}
 				Map<String, Object> params = new HashMap<>(commonParams);
 				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
 				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
@@ -366,6 +372,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				if (!documents.isEmpty() && docsCounter.get() > 0l) {
 
 					try {
+						try {
+							sinkUIEmitter.notifyUser("aggregate-multple-src", "Finalizing multiple sources analisys",
+									"pi pi-file", 3000l, NotificationType.INFO);
+						} catch (Throwable th) {
+						}
 						Map<String, Object> params = new HashMap<>(commonParams);
 						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 						params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
@@ -631,7 +642,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return intermediateAnalisys;
 		final int endCharacter = Math.max(intermediateAnalisys.indexOf("\r", startCharacter),
 				intermediateAnalisys.indexOf("\n", startCharacter));
-		if (endCharacter <  0) {
+		if (endCharacter < 0) {
 			String line = intermediateAnalisys.substring(startCharacter);
 			extractIrrelevantFragmentsFromLine(line, discardedFragmentIds);
 			String cleaned = intermediateAnalisys.substring(0, startCharacter);
