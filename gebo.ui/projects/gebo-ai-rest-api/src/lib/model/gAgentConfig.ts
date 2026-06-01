@@ -25,7 +25,6 @@ export interface GAgentConfig {
     completeEvaluationPromptUseCode?: string;
     completeEvaluationPrompt?: GPromptTemplateConfig;
     subscribeAllTools?: boolean;
-    enabledTools?: Array<string>;
     choosedModel: GObjectRefGBaseChatModelConfig;
     maxLoopIterations?: number;
     topP?: number;

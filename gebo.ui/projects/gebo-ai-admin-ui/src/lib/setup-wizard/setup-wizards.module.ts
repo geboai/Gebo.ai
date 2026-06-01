@@ -63,7 +63,7 @@ import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./g
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
-import { GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
+import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -312,7 +312,7 @@ const agentSetupSection: SetupWizardsSection = {
     orderEntry: 18,
     requredStepsIds: [adminLLMSSetupSection.wizardSectionId],
     enabledService: AlwaysTrueStatusService,
-    setupCompletedService: AlwaysTrueStatusService,
+    setupCompletedService: AgentStatusService,
     label: "Configure Agent Services",
     description: "Configure Agent Services and their available tools",
     wizardComponent: GeboAIAgentSetupWizardComponent,
@@ -356,6 +356,7 @@ const agentSetupSection: SetupWizardsSection = {
         Neo4jModuleEnabledService,
         GoogleSearcStatusService,
         RagAutotuneStatusService,
+        AgentStatusService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },

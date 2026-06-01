@@ -156,6 +156,42 @@ export class GeboAgentAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getAgents(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
+    public getAgents(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
+    public getAgents(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
+    public getAgents(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgents`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getAgentsChoices(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
     public getAgentsChoices(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
     public getAgentsChoices(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
