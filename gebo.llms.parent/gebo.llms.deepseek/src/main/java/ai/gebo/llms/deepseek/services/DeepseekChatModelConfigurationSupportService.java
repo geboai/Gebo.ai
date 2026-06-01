@@ -173,6 +173,12 @@ public class DeepseekChatModelConfigurationSupportService
 					retryTemplate, ObservationRegistry.create());
 			return model;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			
+			return new DeepseekConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**

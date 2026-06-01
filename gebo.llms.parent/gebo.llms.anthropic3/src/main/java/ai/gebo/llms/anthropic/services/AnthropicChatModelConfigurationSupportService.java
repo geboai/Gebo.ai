@@ -183,6 +183,12 @@ public class AnthropicChatModelConfigurationSupportService
 					retryTemplate, ObservationRegistry.create());
 			return model;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			AnthropicConfigurableChatModel anthropicChatModel=new AnthropicConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			return anthropicChatModel;
+		}
 	}
 
 	/**

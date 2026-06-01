@@ -276,6 +276,12 @@ public class OpenAIChatModelConfigurationSupportService
 			}
 			return transcriptModel;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**

@@ -200,6 +200,12 @@ public class AzureOpenAIChatModelConfigurationSupportService
 			return false;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new AzureOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	 

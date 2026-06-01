@@ -185,6 +185,12 @@ public class MistralChatModelConfigurationSupportService
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**

@@ -78,6 +78,12 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 			return m;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	/**

@@ -184,6 +184,12 @@ public class OllamaChatModelConfigurationSupportService
 		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
 			return new ThinkTagSkippingOutputConverter<T>(type);
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**

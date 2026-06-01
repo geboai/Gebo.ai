@@ -90,6 +90,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	final IGDocumentContentRendererProvider documentContentRenderProvider;
+
 	/**
 	 * Constructor that initializes all required dependencies
 	 * 
@@ -106,7 +107,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGeboSecretsAccessService secretService, IGOpenAIApiUtil openaiApiUtil,
 			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern, IGDocumentContentRendererProvider documentContentRenderProvider) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
+			IGDocumentContentRendererProvider documentContentRenderProvider) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -126,10 +128,11 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
 
-		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
 			super(rendererFactory, toolCallbacksRepository);
-			
-		    }
+
+		}
 
 		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
 
@@ -195,7 +198,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				builder = builder.topP(config.getTopP());
 			}
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());				
+				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
 
 			// Configure tool callbacks (functions)
@@ -272,6 +275,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 
 			return GenericOpenAIAPIChatModelConfigurationSupportService.this.type.isApplyThinkingMarkupHandling();
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+
+			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**
@@ -294,7 +303,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	@Override
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
-		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider, functionsRepo);
+		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

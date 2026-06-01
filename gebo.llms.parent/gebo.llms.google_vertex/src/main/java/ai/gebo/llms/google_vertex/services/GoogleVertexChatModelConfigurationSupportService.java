@@ -141,6 +141,12 @@ public class GoogleVertexChatModelConfigurationSupportService
 					ObservationRegistry.create());
 			return model;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			
+			return new GoogleVertexConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**

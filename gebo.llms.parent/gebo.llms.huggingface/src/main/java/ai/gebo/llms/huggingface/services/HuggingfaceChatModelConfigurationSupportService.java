@@ -118,6 +118,12 @@ public class HuggingfaceChatModelConfigurationSupportService
 			return model;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			
+			return new HuggingfaceConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	/**

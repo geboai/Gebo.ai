@@ -93,6 +93,12 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 			return 8192;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new TestConfigurableKnowledgeExtractionChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	/**
