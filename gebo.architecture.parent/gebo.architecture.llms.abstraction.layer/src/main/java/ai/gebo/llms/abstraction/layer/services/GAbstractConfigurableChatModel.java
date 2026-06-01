@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +35,9 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ContextContentRequired;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -77,6 +81,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected ChatClient chatClient = null;
 	protected final IGDocumentContentRendererProvider rendererFactory;
 	protected final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
+	protected static final ObjectMapper mapper = new ObjectMapper();
+
+	protected abstract IGConfigurableChatModel cloneMeWithInjection();
 
 	/**
 	 * Default constructor for GAbstractConfigurableChatModel.
@@ -622,6 +629,22 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <T> T doWithChatModel(UseChatModel<T> chatModelCalling) throws LLMConfigException {
 
 		return chatModelCalling.call(model);
+	}
+
+	@Override
+	public IGConfigurableChatModel<ModelConfig> cloneWithTools(List<String> toolsName, String codePrefix)
+			throws LLMConfigException {
+		try {
+			String asString = mapper.writeValueAsString(config);
+			ModelConfig modelConfigClone = (ModelConfig) mapper.readValue(asString.getBytes(), config.getClass());
+			modelConfigClone.setCode(codePrefix + modelConfigClone.getCode());
+			modelConfigClone.setEnabledFunctions(toolsName);
+			IGConfigurableChatModel handler = cloneMeWithInjection();
+			handler.initialize(modelConfigClone, type);
+			return handler;
+		} catch (IOException e) {
+			throw new LLMConfigException("Cannot clone model correctly");
+		}
 	}
 
 }

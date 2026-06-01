@@ -26,10 +26,10 @@ import ai.gebo.model.GUserMessage.MsgServerity;
 public class OperationStatus<Type> {
 
     // Holds the result of an operation, can be null if operation failed
-	private Type result = null;
+	protected Type result = null;
 	
 	// List of messages related to the operation, such as errors or warnings
-	private List<GUserMessage> messages = new ArrayList<GUserMessage>();
+	protected List<GUserMessage> messages = new ArrayList<GUserMessage>();
 
     /**
      * Default constructor that initializes an empty OperationStatus.

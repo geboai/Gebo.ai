@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -173,4 +174,6 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	}
 
 	public <T> T doWithChatClient(UseChatClient<T> chatClientCalling) throws LLMConfigException;
+
+	public IGConfigurableChatModel<ModelConfig> cloneWithTools(List<String> toolsName, String codePrefix) throws LLMConfigException;
 }
