@@ -68,4 +68,10 @@ public class GeboAgentAdminController {
 		this.persistenceObjectManager.delete(config);
 	}
 
+	@GetMapping(value = "getAgents", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GBaseObject> getAgents() throws GeboPersistenceException {
+		List<GAgentConfig> list = persistenceObjectManager.findAll(GAgentConfig.class);
+		return list.stream().map(x -> new GBaseObject(x)).toList();
+	}
+
 }

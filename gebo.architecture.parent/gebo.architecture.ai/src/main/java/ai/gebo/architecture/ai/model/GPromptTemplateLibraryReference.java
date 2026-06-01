@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class GPromptTemplateLibraryReference {
 	@NotNull
+	private String description=null;
+	@NotNull
 	private String promptUse = null;
 	@NotNull
 	private ContextContentRequired chatHistory = null;

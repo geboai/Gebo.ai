@@ -17,6 +17,7 @@ import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
@@ -51,7 +52,14 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		if (copiedModel == null)
 			throw new LLMConfigException(
 					"Referred model with code:" + agentConfig.getChoosedModel() + " is not configured");
-		IGConfigurableChatModel agentModel = copiedModel.cloneWithTools(agentConfig.getEnabledTools(), getId());
+		List<String> allFunctions = agentConfig.getEnabledFunctions();
+		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
+			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
+			if (toolsList != null) {
+				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
+			}
+		}
+		IGConfigurableChatModel agentModel = copiedModel.cloneWithTools(allFunctions, getId());
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
 				: 4;
@@ -163,7 +171,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 
 		if (!org.springframework.util.CollectionUtils.isEmpty(toolCalls)) {
 			for (AssistantMessage.ToolCall toolCall : toolCalls) {
-				
+
 				rawToolCallsCumulator.add(toolCall);
 			}
 		}
@@ -176,7 +184,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			}
 			if (rawToolCalls != null)
 				rawToolCallsCumulator.add(rawToolCalls);
-			
+
 		}
 	}
 

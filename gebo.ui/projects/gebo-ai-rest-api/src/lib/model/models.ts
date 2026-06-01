@@ -48,6 +48,7 @@ export * from './formControl';
 export * from './formGroupMetaInfo';
 export * from './gAbstractBuildSystemConfig';
 export * from './gAclEntry';
+export * from './gAgentConfig';
 export * from './gAnthropicChatModelChoice';
 export * from './gAnthropicChatModelConfig';
 export * from './gAzureOpenAIChatModelChoice';

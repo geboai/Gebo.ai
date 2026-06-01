@@ -20,7 +20,7 @@ public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity {
 	private String completeEvaluationPromptUseCode = null;
 	private GPromptTemplateConfig completeEvaluationPrompt = null;
 	private Boolean subscribeAllTools = null;
-	private List<String> enabledTools = null;
+	
 	@NotNull
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> choosedModel = null;

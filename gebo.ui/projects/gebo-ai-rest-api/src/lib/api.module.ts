@@ -29,6 +29,7 @@ import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUs
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
+import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
@@ -126,6 +127,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
     GeboAdvancedSetupStatusControllerService,
+    GeboAgentAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
     GeboChatPipelinesControllerService,

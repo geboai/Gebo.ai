@@ -89,6 +89,7 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		prompt.setToolsCalling(reference.getToolsCalling());
 		prompt.setAgentId(reference.getAgentId());
 		prompt.setAgentPrompt(reference.getAgentPrompt());
+		prompt.setDescription(reference.getDescription());
 		return prompt;
 	}
 

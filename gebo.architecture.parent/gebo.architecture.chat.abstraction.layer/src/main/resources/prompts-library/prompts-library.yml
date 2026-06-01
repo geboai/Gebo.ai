@@ -173,3 +173,4 @@ ai.gebo.prompts:
       chatHistory: REQUIRED
       contextDocuments: REQUIRED
       toolsCalling: NOT_REQUIRED
+      description: Default Chat Agent prompt
