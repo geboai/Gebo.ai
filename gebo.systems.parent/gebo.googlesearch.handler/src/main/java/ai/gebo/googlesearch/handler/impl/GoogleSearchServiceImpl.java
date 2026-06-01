@@ -26,6 +26,7 @@ import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.WebSearchQueryObject;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData.RelevantLink;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
@@ -166,6 +167,25 @@ public class GoogleSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	public String getProductId() {
 		 
 		return GOOGLE;
+	}
+
+	@Override
+	public Class<WebSearchQueryObject> getNativeSearchDataStructureType() {
+		
+		return WebSearchQueryObject.class;
+	}
+
+	@Override
+	public String getNativePromptTemplateUseCode() {
+		
+		return GoogleSearchHandlerConfig.GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT;
+	}
+
+	@Override
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
+		
+		return Map.of();
 	}
 
 }

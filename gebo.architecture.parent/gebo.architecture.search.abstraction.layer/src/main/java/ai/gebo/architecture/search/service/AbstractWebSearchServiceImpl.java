@@ -17,15 +17,19 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+import ai.gebo.architecture.search.model.SearchQuery;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultAnalisysOutcome;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.WebSearchQueryObject;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData;
 import ai.gebo.architecture.search.model.WebSearchResultsExtractionData.RelevantLink;
 import ai.gebo.model.base.TypedInputStream;
 
-public abstract class AbstractWebSearchServiceImpl implements ISearchService<WebSearchResultsExtractionData> {
+public abstract class AbstractWebSearchServiceImpl implements ISearchService<WebSearchResultsExtractionData>,
+		INativeSearchService<WebSearchResultsExtractionData, WebSearchQueryObject> {
 
 	protected int SocketTimeout = 20000;
 	protected int ConnectTimeout = 10000;
@@ -152,6 +156,24 @@ public abstract class AbstractWebSearchServiceImpl implements ISearchService<Web
 
 	public AbstractWebSearchServiceImpl() {
 		super();
+	}
+
+	@Override
+	public List<SearchResult> nativeSearch(WebSearchQueryObject query, SearchableSystemMetaData system, int nEntryLimit)
+			throws IOException, SearchServiceException {
+
+		List<SearchResult> results = new ArrayList<>();
+		if (query != null && query.getSearchedTexts() != null && !query.getSearchedTexts().isEmpty()) {
+			for (String text : query.getSearchedTexts()) {
+				SearchQuery searchQuery = new SearchQuery();
+				searchQuery.setQueryText(text);
+				List<SearchResult> res = search(searchQuery, system, nEntryLimit);
+				if (res != null) {
+					results.addAll(res);
+				}
+			}
+		}
+		return results;
 	}
 
 	private CloseableHttpClient createClient() {

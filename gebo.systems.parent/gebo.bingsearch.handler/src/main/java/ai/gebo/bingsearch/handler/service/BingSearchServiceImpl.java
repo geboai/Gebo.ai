@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchResultReference;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.model.WebSearchQueryObject;
 import ai.gebo.architecture.search.service.AbstractWebSearchServiceImpl;
 import ai.gebo.bingsearch.handler.config.BingSearchHandlerConfig;
 import ai.gebo.bingsearch.handler.model.BingNewsArticle;
@@ -184,6 +186,25 @@ public class BingSearchServiceImpl extends AbstractWebSearchServiceImpl {
 	public String getProductId() {
 		
 		return BING;
+	}
+
+	@Override
+	public Class<WebSearchQueryObject> getNativeSearchDataStructureType() {
+		
+		return WebSearchQueryObject.class;
+	}
+
+	@Override
+	public String getNativePromptTemplateUseCode() {
+		
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> createCustomTemplateParamsMap(SearchableSystemMetaData searchableSystemMetaData,
+			List<CatalogueSample> cataloguesSample) {
+		
+		return Map.of();
 	}
 
 }
