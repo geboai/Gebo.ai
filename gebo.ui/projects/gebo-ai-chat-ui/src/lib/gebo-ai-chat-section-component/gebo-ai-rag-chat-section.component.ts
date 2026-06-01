@@ -11,7 +11,7 @@
 
 
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";

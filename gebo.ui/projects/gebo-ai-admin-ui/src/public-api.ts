@@ -45,6 +45,7 @@ export * from "./lib/setup-wizard/llms-setup-wizard.component";
 export * from "./lib/setup-wizard/setup-wizards.component";
 export * from "./lib/setup-wizard/vectorstore-wizard.component";
 export * from "./lib/setup-wizard/work-folder-wizard.component";
+export * from "./lib/setup-wizard/agent-setup-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-ranker-admin.component";
 export * from "./lib/admin-ui/gebo-ai-standard-modules-injections.module";
 export * from "./lib/admin-ui/main-panels/build-packaging-systems/build-packaging-systems.component";
@@ -109,3 +110,4 @@ export * from "./lib/admin-ui/entity-editors/gebo-graph-rag-extraction-config-ad
 export * from "./lib/admin-ui/entity-editors/gebo-ai-job-status-viewer/graphic-visualizer.component";
 export * from "./lib/admin-ui/entity-editors/controls/graphrag-config/graphrag-config.component";
 export * from "./lib/admin-ui/entity-editors/gebo-deep-search-admin/gebo-deep-search-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-agents-admin/gebo-ai-agents-admin.component";
