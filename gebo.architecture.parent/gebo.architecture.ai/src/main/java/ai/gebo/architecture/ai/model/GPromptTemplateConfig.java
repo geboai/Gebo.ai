@@ -53,7 +53,8 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	private String promptCategory = null;
 	private int tokensSize = 0;
 	private Boolean configDeclarated;
-
+	private Boolean agentPrompt = null;
+	private String agentId = null;
 	private void regenerateCode() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(value(promptUse));
@@ -217,5 +218,21 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 
 	public void setToolsCalling(ContextContentRequired toolsCalling) {
 		this.toolsCalling = toolsCalling;
+	}
+
+	public Boolean getAgentPrompt() {
+		return agentPrompt;
+	}
+
+	public void setAgentPrompt(Boolean agentPrompt) {
+		this.agentPrompt = agentPrompt;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
 	}
 }

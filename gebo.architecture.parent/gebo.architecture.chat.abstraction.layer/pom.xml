@@ -50,5 +50,10 @@
 			<artifactId>gebo.architecture.documents.cache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

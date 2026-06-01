@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import ai.gebo.model.IJsonClonable;
+
 /**
  * Gebo.ai comment agent
  * 
@@ -19,7 +21,7 @@ package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
  * the functionality of a templated chat response with a specific type
  * parameter of String.
  */
-public class GeboChatResponse extends GeboTemplatedChatResponse<String> {
+public class GeboChatResponse extends GeboTemplatedChatResponse<String> implements IJsonClonable<GeboChatResponse> {
 	
     /**
      * Default constructor for GeboChatResponse. Initializes a new instance 

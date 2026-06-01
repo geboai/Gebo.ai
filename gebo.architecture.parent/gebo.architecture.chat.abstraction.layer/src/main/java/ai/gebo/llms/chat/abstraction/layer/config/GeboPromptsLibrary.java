@@ -36,7 +36,7 @@ public class GeboPromptsLibrary {
 	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
 	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
 	public static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
-
+	public static final String DEFAULT_CHAT_AGENT_PROMPT = "default-chat-agent-prompt";
 	public static final String DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT = "deep-search-search-query-extraction-prompt";
 	public static final String DEEP_SEARCH_KEYWORD_GENERATION_PROMPT = "deep-search-keyword-generation-prompt";
 	public static final String DEEP_SEARCH_CONTENT_RATING_PROMPT = "deep-search-content-rating-prompt";
@@ -53,7 +53,7 @@ public class GeboPromptsLibrary {
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
 			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT,
 			DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT, DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT,
-			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT);
+			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT, DEFAULT_CHAT_AGENT_PROMPT);
 
 	@Bean
 	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {

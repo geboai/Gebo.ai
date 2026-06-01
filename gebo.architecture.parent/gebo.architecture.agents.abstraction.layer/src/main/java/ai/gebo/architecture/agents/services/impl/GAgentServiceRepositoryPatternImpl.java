@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.IGAgentService;
+import ai.gebo.architecture.agents.services.IGAgentServiceRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 @Service
-public class GAgentServiceRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<IGAgentService> {
+public class GAgentServiceRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<IGAgentService> implements IGAgentServiceRepositoryPattern{
 
 	public GAgentServiceRepositoryPatternImpl(@Autowired(required = false) List<IGAgentService> implementations) {
 		super(implementations);

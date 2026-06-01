@@ -16,6 +16,8 @@ public class GPromptTemplateLibraryReference {
 	private String langCode = null;
 	private String modelProvider = null;
 	private String modelCode = null;
+	private Boolean agentPrompt = null;
+	private String agentId = null;
 	@NotNull
 	private String systemReference = null;
 	@NotNull

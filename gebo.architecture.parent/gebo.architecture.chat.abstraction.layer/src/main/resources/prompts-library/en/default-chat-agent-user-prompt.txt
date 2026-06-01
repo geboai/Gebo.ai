@@ -1,0 +1,5 @@
+- Current user question: {question}
+
+
+- Previous loop history (from first to last): 
+{AGENT_SESSION_STORY}

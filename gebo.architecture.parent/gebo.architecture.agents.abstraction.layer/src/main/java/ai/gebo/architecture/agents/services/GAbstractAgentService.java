@@ -2,11 +2,22 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
+import org.springframework.ai.chat.metadata.ChatResponseMetadata;
+import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
+
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -15,6 +26,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -47,6 +59,9 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GPromptTemplateConfig completenessPrompt = resolvePrompt(agentConfig.getCompleteEvaluationPrompt(),
 				agentConfig.getCompleteEvaluationPromptUseCode(), true);
+		IGConfigurableChatModel verificationModel = completenessPrompt != null
+				? copiedModel.cloneWithTools(List.of(), getId() + "-verifier")
+				: null;
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
 				new ArrayList<AggregatedResponses>());
@@ -54,24 +69,32 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			return Flux.range(0, maxLoop).concatMap(index -> {
 				Flux<IGPartialOperation<ResponseType>> iterationStream = Flux.defer(() -> {
 					return runAs.doRunAsWithReturn(() -> {
-						if (!iterationFinished.get()) {
-							if (LOGGER.isDebugEnabled()) {
-								LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
-							}
-							List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-							Flux<IGPartialOperation<ResponseType>> iteration = createResponseFlux(request,
-									pastResponses, agentModel, agentConfig, index, agentPrompt, completenessPrompt);
-							Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
-									aggregatedResponses);
-							
-							return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
-									.map(x -> {
-										if (x.isLastMessage())
-											iterationFinished.set(true);
-										return x;
-									}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} index={}", getId(), index));
-						} else
-							return Flux.empty();
+						try {
+							if (!iterationFinished.get()) {
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
+								}
+								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
+								Flux<IGPartialOperation<ResponseType>> iteration = createResponseFlux(request,
+										pastResponses, agentModel, verificationModel, agentConfig, index, maxLoop,
+										agentPrompt, completenessPrompt, runAs);
+								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
+										aggregatedResponses);
+
+								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
+										.map(x -> {
+											if (x.isLastMessage())
+												iterationFinished.set(true);
+											return x;
+										}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} index={}", getId(),
+												index));
+							} else
+								return Flux.empty();
+						} catch (Throwable th) {
+							LOGGER.error("Error in agent execution", th);
+							return Flux.just(IGPartialOperation.of(null,
+									GUserMessage.errorMessage("Error in agent execution", th)));
+						}
 					});
 				});
 				return iterationStream;
@@ -94,9 +117,111 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 	}
 
 	protected abstract Flux<IGPartialOperation<ResponseType>> createResponseFlux(RequestType request,
-			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
-			int i, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt);
+			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel,
+			IGConfigurableChatModel verificationModel, GAgentConfig agentConfig, int i, int maxLoops,
+			GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt, ReactiveIdentityUtil runAs)
+			throws LLMConfigException;
 
-	protected abstract <T extends Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>>> T createAggregator(
+	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
 			AtomicReference<List<AggregatedResponses>> aggregatorList);
+
+	protected static String extractContent(ChatResponse chatResponse) {
+		if (chatResponse == null) {
+			return "";
+		}
+
+		Generation result = chatResponse.getResult();
+		if (result == null || result.getOutput() == null) {
+			return "";
+		}
+
+		AssistantMessage output = result.getOutput();
+
+		String text = output.getText();
+		return text != null ? text : "";
+	}
+
+	protected static void inspectToolCalls(ChatResponse chatResponse, Vector<Object> rawToolCallsCumulator) {
+		if (chatResponse == null) {
+			return;
+		}
+
+		Generation result = chatResponse.getResult();
+		if (result == null || result.getOutput() == null) {
+			return;
+		}
+
+		AssistantMessage output = result.getOutput();
+
+		/*
+		 * Nota: con tool execution gestita internamente da Spring AI, spesso le
+		 * tool-call intermedie non sono esposte nello stream applicativo. Spring AI
+		 * documenta che, nel framework-controlled tool execution, i messaggi interni di
+		 * tool execution non sono esposti all’utente.
+		 */
+		List<AssistantMessage.ToolCall> toolCalls = output.getToolCalls();
+
+		if (!org.springframework.util.CollectionUtils.isEmpty(toolCalls)) {
+			for (AssistantMessage.ToolCall toolCall : toolCalls) {
+				
+				rawToolCallsCumulator.add(toolCall);
+			}
+		}
+
+		Map<String, Object> metadata = output.getMetadata();
+		if (metadata != null && !metadata.isEmpty()) {
+			Object rawToolCalls = metadata.get("tool_calls");
+			if (rawToolCalls == null) {
+				rawToolCalls = metadata.get("toolCalls");
+			}
+			if (rawToolCalls != null)
+				rawToolCallsCumulator.add(rawToolCalls);
+			
+		}
+	}
+
+	protected static void inspectMetadata(ChatResponse chatResponse, Logger logger) {
+		if (chatResponse == null) {
+			return;
+		}
+
+		ChatResponseMetadata metadata = chatResponse.getMetadata();
+
+		if (metadata != null) {
+			Usage usage = metadata.getUsage();
+
+			if (usage != null) {
+				logger.debug("LLM token usage: promptTokens={}, completionTokens={}, totalTokens={}",
+						usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
+			}
+
+			Object model = metadata.get("model");
+			if (model != null) {
+				logger.debug("LLM model: {}", model);
+			}
+
+			Object id = metadata.get("id");
+			if (id != null) {
+				logger.debug("LLM response id: {}", id);
+			}
+		}
+
+		Generation result = chatResponse.getResult();
+		if (result != null) {
+			ChatGenerationMetadata generationMetadata = result.getMetadata();
+
+			if (generationMetadata != null) {
+				String finishReason = generationMetadata.getFinishReason();
+
+				if (finishReason == null) {
+					Object rawFinishReason = generationMetadata.get("FINISH_REASON");
+					finishReason = Objects.toString(rawFinishReason, null);
+				}
+
+				if (finishReason != null) {
+					logger.debug("LLM finish reason: {}", finishReason);
+				}
+			}
+		}
+	}
 }
