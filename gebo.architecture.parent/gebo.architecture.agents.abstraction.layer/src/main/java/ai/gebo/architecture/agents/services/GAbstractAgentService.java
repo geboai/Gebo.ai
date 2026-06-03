@@ -29,6 +29,7 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
@@ -54,10 +55,19 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...)");
 		}
-		IGConfigurableChatModel copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
-		if (copiedModel == null)
-			throw new LLMConfigException(
-					"Referred model with code:" + agentConfig.getChatModelReference() + " is not configured");
+		IGConfigurableChatModel copiedModel = null;
+		if (agentConfig.getUseDefaultChatModel() != null && agentConfig.getUseDefaultChatModel()) {
+			copiedModel = chatModelsDao.defaultHandler();
+		} else {
+			copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
+		}
+		if (copiedModel == null) {
+			LOGGER.warn("Setting backup default chat model for actual Agent");
+			copiedModel = chatModelsDao.defaultHandler();
+			if (copiedModel == null)
+				throw new LLMConfigException("Default chat model not set in the system");
+		}
+
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -65,7 +75,9 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				allFunctions = toolsList.stream().map(x -> x.getToolDefinition().name()).toList();
 			}
 		}
-		IGConfigurableChatModel agentModel = copiedModel.cloneWithTools(allFunctions, getId());
+		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions);
+		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
 				: 4;
@@ -73,8 +85,10 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GPromptTemplateConfig completenessPrompt = resolvePrompt(agentConfig.getCompleteEvaluationPrompt(),
 				agentConfig.getCompleteEvaluationPromptUseCode(), true);
+		ChatModelConfigOptions  verificatorOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
+				agentConfig.getTopP(), agentConfig.getThinking(), List.of());
 		IGConfigurableChatModel verificationModel = completenessPrompt != null
-				? copiedModel.cloneWithTools(List.of(), getId() + "-verifier")
+				? copiedModel.cloneWithOptions(getId() + "-verifier", verificatorOptions)
 				: null;
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(

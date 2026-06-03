@@ -632,13 +632,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	@Override
-	public IGConfigurableChatModel<ModelConfig> cloneWithTools(List<String> toolsName, String codePrefix)
-			throws LLMConfigException {
+	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix,
+			ChatModelConfigOptions configOptions) throws LLMConfigException {
 		try {
 			String asString = mapper.writeValueAsString(config);
 			ModelConfig modelConfigClone = (ModelConfig) mapper.readValue(asString.getBytes(), config.getClass());
 			modelConfigClone.setCode(codePrefix + modelConfigClone.getCode());
-			modelConfigClone.setEnabledFunctions(toolsName);
+			modelConfigClone.setEnabledFunctions(
+					configOptions.getToolsName() != null ? configOptions.getToolsName() : List.of());
+			if (configOptions.getTemperature() != null) {
+				modelConfigClone.setTemperature(configOptions.getTemperature());
+			}
+			if (configOptions.getThinking() != null) {
+				modelConfigClone.setThinking(configOptions.getThinking());
+			}
+			if (configOptions.getTopP() != null) {
+				modelConfigClone.setTopP(configOptions.getTopP());
+			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
 			handler.initialize(modelConfigClone, type);
 			return handler;

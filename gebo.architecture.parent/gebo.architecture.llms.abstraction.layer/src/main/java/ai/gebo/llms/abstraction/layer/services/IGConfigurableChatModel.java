@@ -21,6 +21,7 @@ import org.springframework.ai.converter.BeanOutputConverter;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -174,6 +175,13 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	}
 
 	public <T> T doWithChatClient(UseChatClient<T> chatClientCalling) throws LLMConfigException;
-
-	public IGConfigurableChatModel<ModelConfig> cloneWithTools(List<String> toolsName, String codePrefix) throws LLMConfigException;
+	@AllArgsConstructor
+	@Getter
+	public static class ChatModelConfigOptions {
+		private final Double temperature;
+		private final Double topP;
+		private final ChatModelThinkingOption thinking;
+		private final List<String> toolsName;
+	}
+	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix, ChatModelConfigOptions configOptions) throws LLMConfigException;
 }
