@@ -51,5 +51,6 @@
   	<module>gebo.architecture.rag.support.layer</module>
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
+  	<module>gebo.architecture.agents.standardtools</module>
   </modules>
 </project>
