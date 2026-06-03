@@ -47,7 +47,10 @@ export class GeboAIAgentSetupWizardComponent extends BaseWizardSectionComponent 
             accessibleToAll: true,
             enabledFunctions: [],
             maxLoopIterations: 5,
-            subscribeAllTools: true
+            subscribeAllTools: true,
+            useDefaultChatModel:true,
+            defaultConfiguration: true,
+            description:"Default Chat Agent"
         };
         this.geboUIRoutingService.routeEvent({
             actionType: GeboActionType.NEW,

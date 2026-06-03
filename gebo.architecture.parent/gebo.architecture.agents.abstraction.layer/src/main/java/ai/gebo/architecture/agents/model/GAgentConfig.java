@@ -2,8 +2,10 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
@@ -12,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity {
+public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
 	@NotNull
 	private String agentServiceId = null;
 	private String mainLoopPromptUseCode = null;
@@ -20,15 +22,21 @@ public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity {
 	private String completeEvaluationPromptUseCode = null;
 	private GPromptTemplateConfig completeEvaluationPrompt = null;
 	private Boolean subscribeAllTools = null;
-	
-	@NotNull
+
+	private Boolean useDefaultChatModel = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
-	private GObjectRef<GBaseChatModelConfig> choosedModel = null;
+	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
+	@NotNull
 	private Integer maxLoopIterations = null;
+	private List<Integer> aclAliases = null;
+	private Boolean defaultConfiguration = null;
 	/**
 	 * The probability threshold used for sampling, null by default.
 	 */
 	private Double topP = null;
+
+	private Double temperature = null;
+	private ChatModelThinkingOption thinking = null;
 
 	/**
 	 * A list of group identifiers that have access to the model configuration.

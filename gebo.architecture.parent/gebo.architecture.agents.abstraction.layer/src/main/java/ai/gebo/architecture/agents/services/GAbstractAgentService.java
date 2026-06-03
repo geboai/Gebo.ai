@@ -19,15 +19,19 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -37,9 +41,11 @@ import reactor.core.scheduler.Schedulers;
 public abstract class GAbstractAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
 		implements IGAgentService<RequestType, ResponseType, NotificationObject> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	protected IGChatModelRuntimeConfigurationDao chatModelsDao;
-	protected IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
-	protected IGPromptConfigDao promptsDao;
+	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
+	protected final IGPromptConfigDao promptsDao;
+	protected final GAgentConfigRepository configsRepository;
+	protected final IGSecurityService securityService;
 
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(RequestType request, GAgentConfig agentConfig,
@@ -48,10 +54,10 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...)");
 		}
-		IGConfigurableChatModel copiedModel = chatModelsDao.findByModelReference(agentConfig.getChoosedModel());
+		IGConfigurableChatModel copiedModel = chatModelsDao.findByModelReference(agentConfig.getChatModelReference());
 		if (copiedModel == null)
 			throw new LLMConfigException(
-					"Referred model with code:" + agentConfig.getChoosedModel() + " is not configured");
+					"Referred model with code:" + agentConfig.getChatModelReference() + " is not configured");
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -231,5 +237,11 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<GAgentConfig> getAccessibleConfigurations() {
+		List<GAgentConfig> configs = this.configsRepository.findByAgentServiceId(getId());
+		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
 	}
 }

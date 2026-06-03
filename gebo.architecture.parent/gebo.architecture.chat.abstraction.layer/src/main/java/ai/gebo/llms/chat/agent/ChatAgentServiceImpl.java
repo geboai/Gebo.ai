@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.GAbstractAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -26,8 +27,10 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+
 @Service
 public class ChatAgentServiceImpl extends
 		GAbstractAgentService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
@@ -49,8 +52,9 @@ public class ChatAgentServiceImpl extends
 	public static final String AGENT_CONTROL_MORE_TOOLS = "<AGENT-CONTROL-MORE-TOOLS/>";
 
 	public ChatAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
-			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao);
+			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
+			GAgentConfigRepository configsRepository, IGSecurityService securityService) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService);
 
 	}
 
@@ -105,7 +109,7 @@ public class ChatAgentServiceImpl extends
 			});
 			Flux<IGPartialOperation<GeboChatMessageEnvelope>> lastItem = null;
 
-			if (verificationModel != null && completenessPrompt != null) {
+			if (verificationModel != null && completenessPrompt != null && i < maxLoop) {
 				lastItem = Flux.defer(() -> {
 					String queryResponse = cumulatedContent.toString();
 					response.setCalledFunctions(renderFunctions(cumulatedToolCalls));
@@ -137,8 +141,8 @@ public class ChatAgentServiceImpl extends
 			} else {
 				lastItem = Flux.defer(() -> {
 					String queryResponse = cumulatedContent.toString();
-					boolean lastMessage = completenessPrompt == null
-							&& queryResponse.indexOf(AGENT_CONTROL_FINISHED) >= 0;
+					boolean lastMessage = (i == maxLoop)
+							|| (completenessPrompt == null && queryResponse.indexOf(AGENT_CONTROL_FINISHED) >= 0);
 					response.setQueryResponse(
 							queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
 					response.setCalledFunctions(renderFunctions(cumulatedToolCalls));

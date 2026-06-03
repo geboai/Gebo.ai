@@ -1,6 +1,6 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntry, GAgentConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ChatModelsControllerService, ConfigurationEntry, GAgentConfig, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -29,17 +29,25 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         completeEvaluationPromptUseCode: new FormControl(),
         completeEvaluationPrompt: new FormControl(),
         subscribeAllTools: new FormControl(),
-        choosedModel: new FormControl(),
+        chatModelReference: new FormControl(),
+        useDefaultChatModel:new FormControl(),
         maxLoopIterations: new FormControl(),
         topP: new FormControl(),
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
-        enabledFunctions: new FormControl()
+        enabledFunctions: new FormControl(), 
+        aclAliases: new FormControl(),
+        defaultConfiguration: new FormControl(),
+        temperature: new FormControl(),
+        thinking: new FormControl()
     });
     protected chatModelsData: ConfigurationEntry[] = [];
     protected agentTypes: GBaseObject[] = [];
-    protected promptLoadingObservable: Observable<GPromptTemplateConfig[]>=of([]);
+    protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
+    protected defaultChatModel?:ConfigurationEntry;
+    protected isChooseChatModel:boolean=false;
+    protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
@@ -56,11 +64,59 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                     this.formGroup.controls["enabledFunctions"].enable();
             }
         });
-        this.formGroup.controls["agentServiceId"].valueChanges.subscribe(agentServiceId=>{
+        this.formGroup.controls["agentServiceId"].valueChanges.subscribe(agentServiceId => {
             if (agentServiceId) {
-                this.promptLoadingObservable=this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x=>{return x?.map(y=>{y.code=y.promptUse; return y;})}));
-             }
+                this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x => { return x?.map(y => { y.code = y.promptUse; return y; }) }));
+            }
         });
+         // Enable/disable chat model selection based on useDefaultChatModel value
+        this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
+            x => {
+              
+                    this.isChooseChatModel = x === true;
+                    this.setControlEnabledAndRequired("chatModelReference", !this.isChooseChatModel);
+               
+            }
+        );
+    }
+    /**
+     * Adds or removes the required validator for a form control
+     * 
+     * @param ctrlName Name of the form control
+     * @param required Whether the control should be required
+     */
+    private setControlRequired(ctrlName: string, required: boolean) {
+        const ctrl = this.formGroup.controls[ctrlName];
+        if (required) {
+            if (ctrl.hasValidator(Validators.required)) {
+                ctrl.clearValidators();
+                this.formGroup.updateValueAndValidity();
+            }
+        } else {
+            if (!ctrl.hasValidator(Validators.required)) {
+                ctrl.setValidators(Validators.required);
+                this.formGroup.updateValueAndValidity();
+            }
+        }
+    }
+      /**
+     * Enables or disables a form control and sets its required status accordingly
+     * 
+     * @param ctrlName Name of the form control
+     * @param enabled Whether the control should be enabled
+     */
+    private setControlEnabledAndRequired(ctrlName: string, enabled: boolean) {
+        const ctrl = this.formGroup.controls[ctrlName];
+        if (ctrl.enabled !== enabled) {
+            if (enabled === true) {
+                ctrl.enable();
+                this.setControlRequired(ctrlName, true);
+            } else {
+                ctrl.disable();
+                this.setControlRequired(ctrlName, false);
+            }
+        }
+        this.formGroup.updateValueAndValidity();
     }
     override ngOnInit(): void {
         super.ngOnInit();
@@ -69,6 +125,9 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         forkJoin(observables).subscribe({
             next: (values) => {
                 this.chatModelsData = values[0];
+                if (values[0]) {
+                  this.defaultChatModel=values[0].find(x=>x.configuration?.defaultModel===true);
+                }
                 this.agentTypes = values[1];
             },
             complete: () => {
@@ -90,7 +149,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         return this.agentsAdminService.deleteAgent(value).pipe(map(x => true));
     }
     override canBeDeleted(value: GAgentConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: false, message: "" });
+        return of({ canBeDeleted: true, message: "" });
     }
 
 }
