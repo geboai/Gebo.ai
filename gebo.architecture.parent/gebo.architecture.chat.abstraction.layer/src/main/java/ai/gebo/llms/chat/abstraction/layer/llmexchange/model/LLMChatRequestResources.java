@@ -13,6 +13,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
@@ -81,6 +82,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 			return chathistory != null && chathistory.getConsolidationText() != null
 					? chathistory.getConsolidationText()
 					: "";
+		}
+		@Override
+		public ToolCallsListener getToolCallListener() {
+			
+			return null;
 		}
 
 		@Override

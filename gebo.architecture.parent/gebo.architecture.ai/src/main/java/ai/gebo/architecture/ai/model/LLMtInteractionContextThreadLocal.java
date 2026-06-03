@@ -17,6 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Provides a thread-local interaction context for managing knowledge base interactions and function calls.
  * This class contains static nested classes to hold information about called functions and context data.
@@ -27,64 +33,16 @@ public class LLMtInteractionContextThreadLocal {
     /**
      * Represents a function that has been called within the interaction context.
      */
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
     public static class CalledFunction {
         private String functionName = null;
         private String functionDescription = null;
         private List<String> paramsDescription = new ArrayList<String>();
+        @JsonIgnore
+        private List<String> params=new ArrayList<>();
 
-        /**
-         * Gets the name of the called function.
-         *
-         * @return the function name.
-         */
-        public String getFunctionName() {
-            return functionName;
-        }
-
-        /**
-         * Sets the name of the function that was called.
-         *
-         * @param functionName the name of the function.
-         */
-        public void setFunctionName(String functionName) {
-            this.functionName = functionName;
-        }
-
-        /**
-         * Gets the description of the called function.
-         *
-         * @return the function description.
-         */
-        public String getFunctionDescription() {
-            return functionDescription;
-        }
-
-        /**
-         * Sets the description for the called function.
-         *
-         * @param functionDescription a description of the function.
-         */
-        public void setFunctionDescription(String functionDescription) {
-            this.functionDescription = functionDescription;
-        }
-
-        /**
-         * Gets the descriptions of the parameters used in the function call.
-         *
-         * @return a list of parameter descriptions.
-         */
-        public List<String> getParamsDescription() {
-            return paramsDescription;
-        }
-
-        /**
-         * Sets the descriptions for the parameters used in the function call.
-         *
-         * @param paramsDescription a list of parameter descriptions.
-         */
-        public void setParamsDescription(List<String> paramsDescription) {
-            this.paramsDescription = paramsDescription;
-        }
     }
 
     /**

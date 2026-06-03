@@ -23,6 +23,8 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -96,15 +98,18 @@ public class ChatAgentServiceImpl extends
 		params.put(MAX_ITERATIONS_PROMPT_PARAM, "" + maxLoop);
 		params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 		params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+
+		final IChatRequestContext sampledContext = runtimeData.getRequestResources().createChatRequestContext();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			final StringBuffer cumulatedContent = new StringBuffer();
+			final ToolCallsListener callsListener = new ToolCallsListener();
+			final IChatRequestContext context = sampledContext.withToolCallListener(callsListener);
 			Flux<ChatResponse> stream = agentModel.streamResponse(agentPrompt, params, context);
 			final Vector<Object> cumulatedToolCalls = new Vector<>();
 			Flux<IGPartialOperation<GeboChatMessageEnvelope>> bodyStream = stream.map(cr -> {
 				String contentExtracted = extractContent(cr);
 				cumulatedContent.append(contentExtracted);
-				inspectToolCalls(cr, cumulatedToolCalls);
+				// inspectToolCalls(cr, cumulatedToolCalls);
 				return IGPartialOperation.of(new GeboChatMessageEnvelope(contentExtracted), false);
 			});
 			Flux<IGPartialOperation<GeboChatMessageEnvelope>> lastItem = null;
@@ -112,7 +117,7 @@ public class ChatAgentServiceImpl extends
 			if (verificationModel != null && completenessPrompt != null && i < maxLoop) {
 				lastItem = Flux.defer(() -> {
 					String queryResponse = cumulatedContent.toString();
-					response.setCalledFunctions(renderFunctions(cumulatedToolCalls));
+					response.setCalledFunctions(renderFunctions(callsListener.getCalls()));
 					response.setQueryResponse(
 							queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
 					List<GeboChatResponse> fullResponses = new ArrayList<>(pastResponses);
@@ -127,7 +132,7 @@ public class ChatAgentServiceImpl extends
 					boolean lastMessage = false;
 					String result = null;
 					try {
-						result = verificationModel.textResponse(completenessPrompt, verificationparams, context);
+						result = verificationModel.textResponse(completenessPrompt, verificationparams, sampledContext);
 						lastMessage = result.toLowerCase().indexOf(AGENT_CONTROL_FINISHED.toLowerCase()) >= 0;
 					} catch (LLMConfigException e) {
 						LOGGER.error("Error calling validation llm", e);
@@ -145,7 +150,7 @@ public class ChatAgentServiceImpl extends
 							|| (completenessPrompt == null && queryResponse.indexOf(AGENT_CONTROL_FINISHED) >= 0);
 					response.setQueryResponse(
 							queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
-					response.setCalledFunctions(renderFunctions(cumulatedToolCalls));
+					response.setCalledFunctions(renderFunctions(callsListener.getCalls()));
 					GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 					envelope.setLastMessage(lastMessage);
 					return Flux.just(IGPartialOperation.of(envelope, lastMessage));
@@ -156,9 +161,10 @@ public class ChatAgentServiceImpl extends
 		});
 	}
 
-	private List<CalledFunction> renderFunctions(Vector<Object> cumulatedToolCalls) {
+	private List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
 
-		return List.of();
+		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
+				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
 	}
 
 	private String createCycleHistoryVariable(List<GeboChatResponse> pastResponses,
@@ -173,7 +179,7 @@ public class ChatAgentServiceImpl extends
 				int tcIndex = 0;
 				for (CalledFunction callF : geboChatResponse.getCalledFunctions()) {
 					buffer.append(TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:"
-							+ callF.getParamsDescription());
+							+ callF.getParams());
 					buffer.append(NEWLINE);
 					tcIndex++;
 				}

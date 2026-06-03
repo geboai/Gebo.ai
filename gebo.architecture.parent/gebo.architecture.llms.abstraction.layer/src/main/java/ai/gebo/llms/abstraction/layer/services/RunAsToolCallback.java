@@ -13,6 +13,7 @@ public class RunAsToolCallback implements ToolCallback {
 
 	private final ToolCallback delegate;
 	private final ReactiveIdentityUtil runAs;
+	private final ToolCallsListener toolCallListener;
 
 	@Override
 	public ToolDefinition getToolDefinition() {
@@ -26,11 +27,27 @@ public class RunAsToolCallback implements ToolCallback {
 
 	@Override
 	public String call(String toolInput) {
-		return runAs.doRunAsWithReturn(() -> delegate.call(toolInput));
+		return runAs.doRunAsWithReturn(() -> {
+			String result = delegate.call(toolInput);
+			if (toolCallListener != null) {
+				String name = delegate.getToolDefinition().name();
+				String description = delegate.getToolDefinition().description();
+				toolCallListener.addCall(name, description, toolInput, result);
+			}
+			return result;
+		});
 	}
-	
+
 	@Override
 	public String call(String toolInput, ToolContext toolContext) {
-		return runAs.doRunAsWithReturn(() -> delegate.call(toolInput, toolContext));
+		return runAs.doRunAsWithReturn(() -> {
+			String result = delegate.call(toolInput, toolContext);
+			if (toolCallListener != null) {
+				String name = delegate.getToolDefinition().name();
+				String description = delegate.getToolDefinition().description();
+				toolCallListener.addCall(name, description, toolInput, result);
+			}
+			return result;
+		});
 	}
 }

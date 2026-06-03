@@ -154,7 +154,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		this.chatClient = ChatClient.create(configureModel(config, type));
 	}
 
-	protected List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs) {
+	protected List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
 		List<String> toolNames = config.getEnabledFunctions();
 		if (toolNames == null)
 			toolNames = List.of();
@@ -162,7 +162,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs));
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs,toolCallListener));
 		}
 		return wrapped;
 
@@ -317,7 +317,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
-			reqObject = reqObject.toolCallbacks(wrapTools(runAs));
+			reqObject = reqObject.toolCallbacks(wrapTools(runAs,chatContext.getToolCallListener()));
 		} else {
 			reqObject = reqObject.toolCallbacks(List.of()).toolNames(new String[0]);
 		}

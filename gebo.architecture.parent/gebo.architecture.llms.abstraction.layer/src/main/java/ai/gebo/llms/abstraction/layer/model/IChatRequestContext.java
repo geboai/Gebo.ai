@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,6 +54,8 @@ public interface IChatRequestContext {
 	public Map<String, Object> getToolsContext();
 
 	public Map<String, Object> getPipelineInfos();
+
+	public ToolCallsListener getToolCallListener();
 
 	public default IChatRequestContext integrateWithDocuments(Object documents) {
 		if (documents == null) {
@@ -162,6 +165,10 @@ public interface IChatRequestContext {
 
 				return IChatRequestContext.this.getSessionID();
 			}
+
+			public ToolCallsListener getToolCallListener() {
+				return IChatRequestContext.this.getToolCallListener();
+			}
 		};
 	}
 
@@ -181,10 +188,15 @@ public interface IChatRequestContext {
 		private final List<Document> documents;
 		private final Map<String, Object> toolsContext;
 		private final Map<String, Object> pipelineInfos;
+		private final ToolCallsListener toolCallListener;
 	}
 
 	public static ChatRequestContextImplBuilder builder() {
 		return ChatRequestContextImpl.builder();
 	}
 
+	public default IChatRequestContext withToolCallListener(ToolCallsListener listener) {
+		return new ChatRequestContextImpl(getRequestID(), getActualUserRequest(), getConsolidatedHistory(),
+				getSessionID(), getInteractions(), getDocuments(), getToolsContext(), getPipelineInfos(), listener);
+	}
 }
