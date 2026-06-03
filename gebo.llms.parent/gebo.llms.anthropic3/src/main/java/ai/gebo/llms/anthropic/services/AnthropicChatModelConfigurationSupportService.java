@@ -116,8 +116,8 @@ public class AnthropicChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -157,7 +157,7 @@ public class AnthropicChatModelConfigurationSupportService
 			// Configure Anthropic chat options
 			Builder builder = AnthropicChatOptions.builder();
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());				
+				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -176,7 +176,8 @@ public class AnthropicChatModelConfigurationSupportService
 				builder = builder.toolCallbacks(functions);
 			}
 			AnthropicChatOptions anthropicChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 
 			// Create the final AnthropicChatModel
 			AnthropicChatModel model = new AnthropicChatModel(anthropicApi, anthropicChatOptions, toolCallingManager,
@@ -186,7 +187,8 @@ public class AnthropicChatModelConfigurationSupportService
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			AnthropicConfigurableChatModel anthropicChatModel=new AnthropicConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
+					toolCallbacksRepository);
 			return anthropicChatModel;
 		}
 	}

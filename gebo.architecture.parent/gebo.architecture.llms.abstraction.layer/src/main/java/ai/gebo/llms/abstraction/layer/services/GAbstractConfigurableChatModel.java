@@ -34,6 +34,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -132,12 +133,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Abstract method for configuring the chat model. Implementations must define
 	 * how the model is configured.
 	 * 
-	 * @param config The model configuration to use.
-	 * @param type   The type of the chat model.
+	 * @param config            The model configuration to use.
+	 * @param type              The type of the chat model.
+	 * @param toolsCallsManager TODO
 	 * @return An instance of ChatModelType.
 	 * @throws LLMConfigException If configuration fails.
 	 */
-	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type) throws LLMConfigException;
+	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type,
+			ToolCallingManager toolsCallsManager) throws LLMConfigException;
 
 	/**
 	 * Initializes the chat model with the given configuration and type.
@@ -150,11 +153,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public void initialize(ModelConfig config, GChatModelType type) throws LLMConfigException {
 		this.config = config;
 		this.type = type;
-		this.model = configureModel(config, type);
-		this.chatClient = ChatClient.create(configureModel(config, type));
+		this.model = configureModel(config, type, null);
+		this.chatClient = ChatClient.create(configureModel(config, type, null));
 	}
 
-	protected List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
+	@Override
+	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener) {
 		List<String> toolNames = config.getEnabledFunctions();
 		if (toolNames == null)
 			toolNames = List.of();
@@ -162,10 +166,23 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs,toolCallListener));
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
 		}
 		return wrapped;
+	}
 
+	public static List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener,
+			List<String> toolNames, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+
+		if (toolNames == null)
+			toolNames = List.of();
+		List<ToolCallback> tools = toolCallbacksRepository.getTools(toolNames);
+
+		List<ToolCallback> wrapped = new ArrayList<>();
+		for (ToolCallback toolCallback : tools) {
+			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener));
+		}
+		return wrapped;
 	}
 
 	/**
@@ -317,7 +334,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		ChatClientRequestSpec reqObject = client.prompt();
 		if (prompt.getToolsCalling() == null || prompt.getToolsCalling() == ContextContentRequired.REQUIRED) {
-			reqObject = reqObject.toolCallbacks(wrapTools(runAs,chatContext.getToolCallListener()));
+			reqObject = reqObject.toolCallbacks(wrapTools(runAs, chatContext.getToolCallListener()));
 		} else {
 			reqObject = reqObject.toolCallbacks(List.of()).toolNames(new String[0]);
 		}
@@ -650,7 +667,19 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
-			handler.initialize(modelConfigClone, type);
+			if (configOptions.getToolCallingManager() == null) {
+				handler.initialize(modelConfigClone, type);
+			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
+				configurableChatModel.config = modelConfigClone;
+				configurableChatModel.type = this.type;
+				configurableChatModel.model = configurableChatModel.configureModel(modelConfigClone, type,
+						configOptions.getToolCallingManager());
+				configurableChatModel.chatClient = ChatClient.create(
+						configurableChatModel.configureModel(config, type, configOptions.getToolCallingManager()));
+			} else
+				throw new IllegalStateException(
+						"The actual configurable chat model is not an GAbstractConfigurableChatModel");
+
 			return handler;
 		} catch (IOException e) {
 			throw new LLMConfigException("Cannot clone model correctly");

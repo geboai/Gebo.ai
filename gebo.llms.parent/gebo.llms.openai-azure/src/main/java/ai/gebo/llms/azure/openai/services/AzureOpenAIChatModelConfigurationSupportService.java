@@ -105,7 +105,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected AzureOpenAiChatModel configureModel(GAzureOpenAIChatModelConfig config, GChatModelType type)
+		protected AzureOpenAiChatModel configureModel(GAzureOpenAIChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 
 			AzureOpenAIBaseConfig coords = azureClientBuilderFactory.createClientBulder(config);
@@ -151,7 +151,8 @@ public class AzureOpenAIChatModelConfigurationSupportService
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());				
 			}
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 
 			AzureOpenAiChatModel model = new AzureOpenAiChatModel(clientBuilder, options, toolCallingManager,
 					ObservationRegistry.NOOP);

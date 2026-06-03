@@ -12,6 +12,7 @@ package ai.gebo.llms.huggingface.services;
 import java.util.List;
 
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -95,7 +96,7 @@ public class HuggingfaceChatModelConfigurationSupportService
 		 *                            missing
 		 */
 		@Override
-		protected HuggingfaceChatModel configureModel(GHuggingfaceChatModelConfig config, GChatModelType type)
+		protected HuggingfaceChatModel configureModel(GHuggingfaceChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;

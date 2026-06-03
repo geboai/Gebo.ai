@@ -12,6 +12,7 @@ package ai.gebo.llms.abstraction.layer.tests;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -73,7 +74,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 		 */
 		@Override
 		protected TestKnowledgeExtractionChatModel configureModel(TestKnowledgeExtractionModelConfiguration config,
-				GChatModelType type) throws LLMConfigException {
+				GChatModelType type, ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			TestKnowledgeExtractionChatModel m = new TestKnowledgeExtractionChatModel();
 			m.setConfiguration(config);
 			return m;

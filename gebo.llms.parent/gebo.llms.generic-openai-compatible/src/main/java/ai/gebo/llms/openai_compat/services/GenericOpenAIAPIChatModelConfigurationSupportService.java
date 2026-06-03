@@ -145,7 +145,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GenericOpenAIAPIChatModelConfig config, GChatModelType type)
+		protected OpenAiChatModel configureModel(GenericOpenAIAPIChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
@@ -216,7 +216,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				builder = builder.user(user);
 			}
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.create());
 			return model;

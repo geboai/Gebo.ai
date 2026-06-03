@@ -113,7 +113,7 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type)
+		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 
 			this.transcriptModel = null;
@@ -187,7 +187,8 @@ public class OpenAIChatModelConfigurationSupportService
 			}
 
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager =  toolsCallsManager != null ? toolsCallsManager
+					:functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.NOOP);
 

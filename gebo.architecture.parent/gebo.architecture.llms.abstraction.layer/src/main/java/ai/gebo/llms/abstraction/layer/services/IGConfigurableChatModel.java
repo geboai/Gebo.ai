@@ -18,6 +18,9 @@ import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.model.tool.ToolCallingManager;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -175,6 +178,7 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	}
 
 	public <T> T doWithChatClient(UseChatClient<T> chatClientCalling) throws LLMConfigException;
+
 	@AllArgsConstructor
 	@Getter
 	public static class ChatModelConfigOptions {
@@ -182,6 +186,10 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		private final Double topP;
 		private final ChatModelThinkingOption thinking;
 		private final List<String> toolsName;
+		private final ToolCallingManager toolCallingManager;
 	}
-	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix, ChatModelConfigOptions configOptions) throws LLMConfigException;
+
+	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix,
+			ChatModelConfigOptions configOptions) throws LLMConfigException;
+	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener);
 }

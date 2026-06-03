@@ -89,7 +89,7 @@ public class ChatAgentServiceImpl extends
 			ChatPipelineExecutionRuntimeData runtimeData, List<GeboChatResponse> pastResponses,
 			IGConfigurableChatModel agentModel, IGConfigurableChatModel verificationModel, GAgentConfig agentConfig,
 			int i, int maxLoop, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt,
-			ReactiveIdentityUtil runAs) throws LLMConfigException {
+			ReactiveIdentityUtil runAs, ToolCallsListener callsListener) throws LLMConfigException {
 		String loopHistory = createCycleHistoryVariable(pastResponses, runtimeData);
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		Map<String, Object> params = new HashMap<>();
@@ -102,7 +102,7 @@ public class ChatAgentServiceImpl extends
 		final IChatRequestContext sampledContext = runtimeData.getRequestResources().createChatRequestContext();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			final StringBuffer cumulatedContent = new StringBuffer();
-			final ToolCallsListener callsListener = new ToolCallsListener();
+			
 			final IChatRequestContext context = sampledContext.withToolCallListener(callsListener);
 			Flux<ChatResponse> stream = agentModel.streamResponse(agentPrompt, params, context);
 			final Vector<Object> cumulatedToolCalls = new Vector<>();
@@ -178,8 +178,8 @@ public class ChatAgentServiceImpl extends
 			if (geboChatResponse.getCalledFunctions() != null && !geboChatResponse.getCalledFunctions().isEmpty()) {
 				int tcIndex = 0;
 				for (CalledFunction callF : geboChatResponse.getCalledFunctions()) {
-					buffer.append(TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:"
-							+ callF.getParams());
+					buffer.append(
+							TOOL_CALLED + tcIndex + ": " + callF.getFunctionName() + " params:" + callF.getParams());
 					buffer.append(NEWLINE);
 					tcIndex++;
 				}

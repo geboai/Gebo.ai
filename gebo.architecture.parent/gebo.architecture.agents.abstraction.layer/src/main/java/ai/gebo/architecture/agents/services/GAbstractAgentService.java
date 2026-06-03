@@ -1,6 +1,7 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,7 +18,12 @@ import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
+import org.springframework.ai.model.tool.ToolCallingManager;
+import org.springframework.ai.model.tool.ToolExecutionResult;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.definition.ToolDefinition;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
@@ -27,10 +33,12 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -67,7 +75,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			if (copiedModel == null)
 				throw new LLMConfigException("Default chat model not set in the system");
 		}
-
+		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -76,7 +84,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			}
 		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
+				createToolCallingManager(callBacksListener, allFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
@@ -85,8 +94,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GPromptTemplateConfig completenessPrompt = resolvePrompt(agentConfig.getCompleteEvaluationPrompt(),
 				agentConfig.getCompleteEvaluationPromptUseCode(), true);
-		ChatModelConfigOptions  verificatorOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), List.of());
+		ChatModelConfigOptions verificatorOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
+				agentConfig.getTopP(), agentConfig.getThinking(), List.of(), null);
 		IGConfigurableChatModel verificationModel = completenessPrompt != null
 				? copiedModel.cloneWithOptions(getId() + "-verifier", verificatorOptions)
 				: null;
@@ -105,7 +114,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
 								Flux<IGPartialOperation<ResponseType>> iteration = createResponseFlux(request,
 										pastResponses, agentModel, verificationModel, agentConfig, index, maxLoop,
-										agentPrompt, completenessPrompt, runAs);
+										agentPrompt, completenessPrompt, runAs, callBacksListener);
 								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
 										aggregatedResponses);
 
@@ -135,6 +144,17 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		return out;
 	}
 
+	private ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener, List<String> allFunctions,
+			ReactiveIdentityUtil runAs) {
+		final List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
+				allFunctions, toolsRepositoryPattern);
+		final Map<String, ToolCallback> map = new HashMap<>();
+		for (ToolCallback toolCallback : wrapped) {
+			map.put(toolCallback.getToolDefinition().name(), toolCallback);
+		}
+		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
+	}
+
 	private GPromptTemplateConfig resolvePrompt(GPromptTemplateConfig prompt, String useCode, boolean nullable)
 			throws AgentException {
 		GPromptTemplateConfig resolved = prompt != null ? prompt
@@ -147,8 +167,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 	protected abstract Flux<IGPartialOperation<ResponseType>> createResponseFlux(RequestType request,
 			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel,
 			IGConfigurableChatModel verificationModel, GAgentConfig agentConfig, int i, int maxLoops,
-			GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt, ReactiveIdentityUtil runAs)
-			throws LLMConfigException;
+			GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt, ReactiveIdentityUtil runAs,
+			ToolCallsListener callBacksListener) throws LLMConfigException;
 
 	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
 			AtomicReference<List<AggregatedResponses>> aggregatorList);

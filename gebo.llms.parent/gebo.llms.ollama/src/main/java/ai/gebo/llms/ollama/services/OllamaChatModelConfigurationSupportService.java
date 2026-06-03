@@ -12,6 +12,7 @@ package ai.gebo.llms.ollama.services;
 import java.util.List;
 
 import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
@@ -114,7 +115,7 @@ public class OllamaChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type)
+		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			org.springframework.ai.ollama.api.OllamaApi.Builder apiBuilder = OllamaApi.builder();
 			apiBuilder.baseUrl(config.getBaseUrl());
@@ -159,7 +160,8 @@ public class OllamaChatModelConfigurationSupportService
 				builder = builder.toolCallbacks(functions);
 			}
 			OllamaChatOptions options = builder.build();
-			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, functionsRepo.createToolCallingManager(),
+			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager(),
 					ObservationRegistry.create(), ModelManagementOptions.defaults());
 			return model;
 		}
