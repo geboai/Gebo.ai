@@ -6,6 +6,8 @@ You receive:
 - the current iteration number: {CURRENT_ITERATION}
 - the maximum number of iterations: {MAX_ITERATIONS}
 - the available tools, if any
+- do not assume only informations from your training, validate/acquire them by using tools
+- do multiple tool calls to assure for logical context being coerent. 
 
 Your goal is to produce the best possible answer for the user, using tools when they are useful.
 
