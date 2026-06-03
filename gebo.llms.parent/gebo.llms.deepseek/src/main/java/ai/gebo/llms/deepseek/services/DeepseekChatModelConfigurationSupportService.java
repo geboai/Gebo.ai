@@ -166,6 +166,9 @@ public class DeepseekChatModelConfigurationSupportService
 				functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			
 			DeepSeekChatOptions deepseekChatOptions = builder.build();
 			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
 					: functionsRepo.createToolCallingManager();

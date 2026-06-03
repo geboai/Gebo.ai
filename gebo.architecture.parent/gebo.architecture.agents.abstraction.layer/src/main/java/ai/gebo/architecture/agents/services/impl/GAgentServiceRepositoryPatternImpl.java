@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.agents.services.IGAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
 import ai.gebo.architecture.agents.services.IGAgentServiceRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 @Service
-public class GAgentServiceRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<IGAgentService> implements IGAgentServiceRepositoryPattern{
+public class GAgentServiceRepositoryPatternImpl extends GAbstractImplementationsRepositoryPattern<IGReactiveAgentService> implements IGAgentServiceRepositoryPattern{
 
-	public GAgentServiceRepositoryPatternImpl(@Autowired(required = false) List<IGAgentService> implementations) {
+	public GAgentServiceRepositoryPatternImpl(@Autowired(required = false) List<IGReactiveAgentService> implementations) {
 		super(implementations);
 	}
 
 	@Override
-	public String getCodeValue(IGAgentService x) {
+	public String getCodeValue(IGReactiveAgentService x) {
 
 		return x.getId();
 	}

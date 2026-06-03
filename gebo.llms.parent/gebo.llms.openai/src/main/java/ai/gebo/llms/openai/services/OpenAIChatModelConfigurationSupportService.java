@@ -94,7 +94,8 @@ public class OpenAIChatModelConfigurationSupportService
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
 
-		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
 			super(rendererFactory, toolCallbacksRepository);
 
 		}
@@ -113,8 +114,8 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
-				throws LLMConfigException {
+		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			this.transcriptModel = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -144,6 +145,7 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).build();
 
 			Builder builder = OpenAiChatOptions.builder();
+
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -161,10 +163,12 @@ public class OpenAIChatModelConfigurationSupportService
 					return x.getToolDefinition().name();
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
-
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			builder.parallelToolCalls(config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxTokens(config.getMaxGeneratedTokens());				
+				builder.maxTokens(config.getMaxGeneratedTokens());
 			}
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {
@@ -187,8 +191,8 @@ public class OpenAIChatModelConfigurationSupportService
 			}
 
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager =  toolsCallsManager != null ? toolsCallsManager
-					:functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.NOOP);
 
@@ -280,7 +284,7 @@ public class OpenAIChatModelConfigurationSupportService
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			 
+
 			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 	};
@@ -305,7 +309,8 @@ public class OpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider, functionsRepo);
+		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

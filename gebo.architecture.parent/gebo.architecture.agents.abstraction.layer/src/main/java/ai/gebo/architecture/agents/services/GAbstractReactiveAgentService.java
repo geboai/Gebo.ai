@@ -47,8 +47,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 @AllArgsConstructor
-public abstract class GAbstractAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
-		implements IGAgentService<RequestType, ResponseType, NotificationObject> {
+public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
+		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
@@ -57,7 +57,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 	protected final IGSecurityService securityService;
 
 	@Override
-	public ResponseType execute(RequestType request, GAgentConfig agentConfig,
+	public Flux<IGPartialOperation<ResponseType>> execute(RequestType request, GAgentConfig agentConfig,
 			INotificationSink<NotificationObject> notificationSink) throws AgentException, LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		if (LOGGER.isDebugEnabled()) {
@@ -102,19 +102,42 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
 				new ArrayList<AggregatedResponses>());
-		ResponseType out = null;
-		for (int i = 0; i < maxLoop; i++) {
-			if (!iterationFinished.get()) {
+		Flux<IGPartialOperation<ResponseType>> out = Flux.defer(() -> {
+			return Flux.range(0, maxLoop).concatMap(index -> {
+				Flux<IGPartialOperation<ResponseType>> iterationStream = Flux.defer(() -> {
+					return runAs.doRunAsWithReturn(() -> {
+						try {
+							if (!iterationFinished.get()) {
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
+								}
+								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
+								Flux<IGPartialOperation<ResponseType>> iteration = createResponseFlux(request,
+										pastResponses, agentModel, verificationModel, agentConfig, index, maxLoop,
+										agentPrompt, completenessPrompt, runAs, callBacksListener);
+								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
+										aggregatedResponses);
 
-				List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-				out = createResponse(request, pastResponses, agentModel, verificationModel, agentConfig, i, maxLoop,
-						agentPrompt, completenessPrompt, runAs, callBacksListener);
-				Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
-						aggregatedResponses);
+								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
+										.map(x -> {
+											if (x.isLastMessage())
+												iterationFinished.set(true);
+											return x;
+										}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} index={}", getId(),
+												index));
+							} else
+								return Flux.empty();
+						} catch (Throwable th) {
+							LOGGER.error("Error in agent execution", th);
+							return Flux.just(IGPartialOperation.of(null,
+									GUserMessage.errorMessage("Error in agent execution", th)));
+						}
+					});
+				});
+				return iterationStream;
+			});
 
-			}
-		}
-
+		});
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End execute(...)");
 		}
@@ -141,10 +164,11 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		return resolved;
 	}
 
-	protected abstract ResponseType createResponse(RequestType request, List<AggregatedResponses> pastResponses,
-			IGConfigurableChatModel agentModel, IGConfigurableChatModel verificationModel, GAgentConfig agentConfig,
-			int i, int maxLoops, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException;
+	protected abstract Flux<IGPartialOperation<ResponseType>> createResponseFlux(RequestType request,
+			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel,
+			IGConfigurableChatModel verificationModel, GAgentConfig agentConfig, int i, int maxLoops,
+			GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt, ReactiveIdentityUtil runAs,
+			ToolCallsListener callBacksListener) throws LLMConfigException;
 
 	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
 			AtomicReference<List<AggregatedResponses>> aggregatorList);

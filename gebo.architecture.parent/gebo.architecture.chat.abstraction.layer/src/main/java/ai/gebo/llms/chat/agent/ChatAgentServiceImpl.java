@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
-import ai.gebo.architecture.agents.services.GAbstractAgentService;
+import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -35,7 +35,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 public class ChatAgentServiceImpl extends
-		GAbstractAgentService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
+		GAbstractReactiveAgentService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
 		implements IChatAgentService {
 
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";

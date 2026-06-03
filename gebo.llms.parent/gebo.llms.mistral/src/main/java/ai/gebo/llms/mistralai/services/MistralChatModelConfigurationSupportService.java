@@ -160,6 +160,9 @@ public class MistralChatModelConfigurationSupportService
 				builder = builder.toolNames(new HashSet<String>(names));
 				builder.internalToolExecutionEnabled(!functions.isEmpty());
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			
 			ToolExecutionEligibilityPredicate toolEligibilityPredicate = new DefaultToolExecutionEligibilityPredicate();
 			MistralAiChatOptions options = builder.build();
 			MistralAiChatModel model = new MistralAiChatModel(mistralApi, options,

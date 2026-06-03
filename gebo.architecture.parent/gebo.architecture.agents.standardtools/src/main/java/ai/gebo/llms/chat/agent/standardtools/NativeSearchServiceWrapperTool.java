@@ -10,6 +10,7 @@ import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
@@ -23,9 +24,16 @@ import lombok.Setter;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
 
-@AllArgsConstructor
 public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapperTool {
+	private static final String NATIVE_SEARCHING_FUNCTION_DESCRIPTION = " native searching function";
+	private static final String NATIVE_SEARCH = "NativeSearch";
 	private final INativeSearchService wrapped;
+
+	public NativeSearchServiceWrapperTool(IDocumentsChunkService chunkingService, INativeSearchService wrapped) {
+
+		super(chunkingService);
+		this.wrapped = wrapped;
+	}
 
 	@Override
 	public ToolCallback toTool() {
@@ -37,8 +45,8 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 			final WrappedNativeSearcher wrapped = (WrappedNativeSearcher) dynamicType.newInstance();
 			wrapped.setWrapped(this.wrapped);
 			wrapped.setWrappedTool(this);
-			final String functionName = this.wrapped.getProductId() + "NativeSearch";
-			final String description = this.wrapped.getProductId() + " searching function";
+			final String functionName = this.wrapped.getProductId() + NATIVE_SEARCH;
+			final String description = this.wrapped.getProductId() + NATIVE_SEARCHING_FUNCTION_DESCRIPTION;
 			final TypeDescription.Generic genericParam = TypeDescription.Generic.Builder
 					.parameterizedType(NativeSearchParam.class, this.wrapped.getNativeSearchDataStructureType())
 					.build();
@@ -56,8 +64,8 @@ public class NativeSearchServiceWrapperTool extends AbstractSearchServiceWrapper
 
 	@Override
 	public ToolReference toToolReference() {
-		final String functionName = this.wrapped.getProductId() + "NativeSearch";
-		final String description = this.wrapped.getProductId() + " searching function";
+		final String functionName = this.wrapped.getProductId() + NATIVE_SEARCH;
+		final String description = this.wrapped.getProductId() + NATIVE_SEARCHING_FUNCTION_DESCRIPTION;
 		ToolReference toolReference = new ToolReference(toTool());
 		return toolReference;
 	}

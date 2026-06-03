@@ -137,7 +137,9 @@ public class GoogleVertexChatModelConfigurationSupportService
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
 			}
-
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			
 			options = builder.build();
 			VertexAiGeminiChatModel model = new VertexAiGeminiChatModel(vertexAI, options,
 					toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager(),
