@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.repository.Query;
 
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
@@ -170,4 +171,6 @@ public interface DocumentReferenceRepository extends IGAbstractVirtualFilesystem
 		return this.countByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
 				endpoint.getClass().getName(), endpoint.getCode());
 	}
+
+	
 }
