@@ -34,4 +34,5 @@ export interface GChatProfileConfiguration {
     disableMultiHopRag?: boolean;
     otherSearchSimilarityThreshold?: number;
     manualThreasholdsConfiguration?: boolean;
+    useAlsoKeywordSearch?: boolean;
 }

@@ -212,9 +212,11 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				builder = builder.toolNames(new HashSet<String>(names));
 
 			}
-			builder.internalToolExecutionEnabled(
-					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
-			builder.parallelToolCalls(config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				builder.parallelToolCalls(true);
+				builder.internalToolExecutionEnabled(true);
+			}
 			if (user != null) {
 				builder = builder.user(user);
 			}

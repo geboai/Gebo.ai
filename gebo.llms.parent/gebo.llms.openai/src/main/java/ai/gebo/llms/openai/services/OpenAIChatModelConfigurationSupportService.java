@@ -164,9 +164,10 @@ public class OpenAIChatModelConfigurationSupportService
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
 			}
-			builder.internalToolExecutionEnabled(
-					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
-			builder.parallelToolCalls(config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				builder.parallelToolCalls(true);
+				builder.internalToolExecutionEnabled(true);
+			}
 			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
 				builder.maxTokens(config.getMaxGeneratedTokens());
 			}

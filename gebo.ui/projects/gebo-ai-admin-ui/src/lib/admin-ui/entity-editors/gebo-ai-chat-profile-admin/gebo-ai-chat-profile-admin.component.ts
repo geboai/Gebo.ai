@@ -102,7 +102,9 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         userChoosesKnowledgeBases: new FormControl(),
         similaritySearchThreshold: new FormControl(),
         disableMultiHopRag: new FormControl(),
-        otherSearchSimilarityThreshold: new FormControl()
+        otherSearchSimilarityThreshold: new FormControl(),
+        manualThreasholdsConfiguration: new FormControl(),
+        useAlsoKeywordSearch: new FormControl()
     });
 
     /** Available chat models to choose from */
