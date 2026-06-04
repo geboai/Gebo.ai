@@ -9,6 +9,7 @@ import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
@@ -21,7 +22,7 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 	private static final String STANDARD_SEARCH_TOOLS = "Standard search tools";
 	public static final String STANDARD_SEARCHES_TOOLS_SOURCE = "standard-searches-tools-source";
 	private final ISearchServiceRepositoryPattern searchServicesRepoPattern;
-	private final IDocumentsChunkService chunkingService;
+	private final IGRuntimeBinder runtimeBinder;
 	private final static ToolsCategory category = new ToolsCategory();
 	static {
 		category.setCode(STANDARD_SEARCHES_TOOLS_SOURCE);
@@ -84,19 +85,24 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 
 	private ToolCallback createSearchTool(ISearchService searchService) {
 
-		return new SearchServiceWrapperTool(chunkingService, searchService).toTool();
+		return new SearchServiceWrapperTool(getChunkingService(), searchService).toTool();
+	}
+
+	private IDocumentsChunkService getChunkingService() {
+
+		return runtimeBinder.getImplementationOf(IDocumentsChunkService.class);
 	}
 
 	private ToolCallback createNativeSearchTool(INativeSearchService nativeSearchService) {
 
-		return new NativeSearchServiceWrapperTool(chunkingService, nativeSearchService).toTool();
+		return new NativeSearchServiceWrapperTool(getChunkingService(), nativeSearchService).toTool();
 	}
 
 	private ToolReference createSearchToolReference(ISearchService searchService) {
-		return new SearchServiceWrapperTool(chunkingService, searchService).toToolReference();
+		return new SearchServiceWrapperTool(getChunkingService(), searchService).toToolReference();
 	}
 
 	private ToolReference createNativeSearchToolReference(INativeSearchService nativeSearchService) {
-		return new NativeSearchServiceWrapperTool(chunkingService, nativeSearchService).toToolReference();
+		return new NativeSearchServiceWrapperTool(getChunkingService(), nativeSearchService).toToolReference();
 	}
 }
