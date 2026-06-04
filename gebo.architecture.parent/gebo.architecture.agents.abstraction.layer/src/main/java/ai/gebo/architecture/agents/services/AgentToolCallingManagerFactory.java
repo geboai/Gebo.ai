@@ -11,7 +11,8 @@ import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor class AgentToolCallingManagerFactory implements ToolCallbackResolver {
+@AllArgsConstructor
+public class AgentToolCallingManagerFactory implements ToolCallbackResolver {
 	private final ToolCallsListener callBacksListener;
 	private final List<String> allFunctions;
 	private final List<ToolCallback> wrapped;

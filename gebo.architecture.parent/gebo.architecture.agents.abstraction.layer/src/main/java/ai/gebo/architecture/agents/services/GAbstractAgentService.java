@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -100,17 +101,20 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 				? copiedModel.cloneWithOptions(getId() + "-verifier", verificatorOptions)
 				: null;
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
-		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
-				new ArrayList<AggregatedResponses>());
+		final List<AggregatedResponses> aggregatedResponses = new ArrayList<AggregatedResponses>();
 		ResponseType out = null;
 		for (int i = 0; i < maxLoop; i++) {
 			if (!iterationFinished.get()) {
 
-				List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-				out = createResponse(request, pastResponses, agentModel, verificationModel, agentConfig, i, maxLoop,
+				out = createResponse(request, aggregatedResponses, agentModel, verificationModel, agentConfig, i, maxLoop,
 						agentPrompt, completenessPrompt, runAs, callBacksListener);
-				Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
+				BiFunction<ResponseType, List<AggregatedResponses>, AggregatedResponses> aggregator = createAggregator(
 						aggregatedResponses);
+				if (aggregator != null) {
+					AggregatedResponses historyStep = aggregator.apply(out, aggregatedResponses);
+					aggregatedResponses.add(historyStep);
+
+				}
 
 			}
 		}
@@ -121,8 +125,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		return out;
 	}
 
-	private ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener, List<String> allFunctions,
-			ReactiveIdentityUtil runAs) {
+	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
+			List<String> allFunctions, ReactiveIdentityUtil runAs) {
 		final List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
 				allFunctions, toolsRepositoryPattern);
 		final Map<String, ToolCallback> map = new HashMap<>();
@@ -132,7 +136,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
 	}
 
-	private GPromptTemplateConfig resolvePrompt(GPromptTemplateConfig prompt, String useCode, boolean nullable)
+	protected GPromptTemplateConfig resolvePrompt(GPromptTemplateConfig prompt, String useCode, boolean nullable)
 			throws AgentException {
 		GPromptTemplateConfig resolved = prompt != null ? prompt
 				: useCode != null ? promptsDao.findByPromptUse(useCode) : null;
@@ -146,8 +150,8 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 			int i, int maxLoops, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt,
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException;
 
-	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
-			AtomicReference<List<AggregatedResponses>> aggregatorList);
+	protected abstract BiFunction<ResponseType, List<AggregatedResponses>, AggregatedResponses> createAggregator(
+			List<AggregatedResponses> aggregatorList);
 
 	protected static String extractContent(ChatResponse chatResponse) {
 		if (chatResponse == null) {

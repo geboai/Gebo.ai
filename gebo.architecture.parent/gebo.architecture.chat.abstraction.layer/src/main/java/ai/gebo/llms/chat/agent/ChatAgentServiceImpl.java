@@ -85,7 +85,7 @@ public class ChatAgentServiceImpl extends
 	}
 
 	@Override
-	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponseFlux(
+	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(
 			ChatPipelineExecutionRuntimeData runtimeData, List<GeboChatResponse> pastResponses,
 			IGConfigurableChatModel agentModel, IGConfigurableChatModel verificationModel, GAgentConfig agentConfig,
 			int i, int maxLoop, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt,
@@ -102,7 +102,7 @@ public class ChatAgentServiceImpl extends
 		final IChatRequestContext sampledContext = runtimeData.getRequestResources().createChatRequestContext();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			final StringBuffer cumulatedContent = new StringBuffer();
-			
+
 			final IChatRequestContext context = sampledContext.withToolCallListener(callsListener);
 			Flux<ChatResponse> stream = agentModel.streamResponse(agentPrompt, params, context);
 			final Vector<Object> cumulatedToolCalls = new Vector<>();
@@ -161,7 +161,7 @@ public class ChatAgentServiceImpl extends
 		});
 	}
 
-	private List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
+	protected List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
 
 		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
 				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
@@ -194,7 +194,7 @@ public class ChatAgentServiceImpl extends
 	}
 
 	@Override
-	protected Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> createAggregator(
+	protected Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> createRAggregator(
 			AtomicReference<List<GeboChatResponse>> aggregatorList) {
 		Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> aggregator = new Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>>() {
 

@@ -1,29 +1,23 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.model.tool.ToolCallingChatOptions;
-import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionResult;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.definition.ToolDefinition;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
@@ -32,8 +26,6 @@ import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
-import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
@@ -42,19 +34,19 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-@AllArgsConstructor
 public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
+		extends
+		GAbstractAgentService<RequestType, Flux<IGPartialOperation<ResponseType>>, NotificationObject, AggregatedResponses>
 		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
-	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
-	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
-	protected final IGPromptConfigDao promptsDao;
-	protected final GAgentConfigRepository configsRepository;
-	protected final IGSecurityService securityService;
+	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
+			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
+			GAgentConfigRepository configsRepository, IGSecurityService securityService) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService);
+
+	}
 
 	@Override
 	public Flux<IGPartialOperation<ResponseType>> execute(RequestType request, GAgentConfig agentConfig,
@@ -112,10 +104,10 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 									LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
 								}
 								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-								Flux<IGPartialOperation<ResponseType>> iteration = createResponseFlux(request,
+								Flux<IGPartialOperation<ResponseType>> iteration = createResponse(request,
 										pastResponses, agentModel, verificationModel, agentConfig, index, maxLoop,
 										agentPrompt, completenessPrompt, runAs, callBacksListener);
-								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
+								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createRAggregator(
 										aggregatedResponses);
 
 								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
@@ -144,138 +136,15 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		return out;
 	}
 
-	private ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener, List<String> allFunctions,
-			ReactiveIdentityUtil runAs) {
-		final List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
-				allFunctions, toolsRepositoryPattern);
-		final Map<String, ToolCallback> map = new HashMap<>();
-		for (ToolCallback toolCallback : wrapped) {
-			map.put(toolCallback.getToolDefinition().name(), toolCallback);
-		}
-		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
+	@Override
+	protected final BiFunction<Flux<IGPartialOperation<ResponseType>>, List<AggregatedResponses>, AggregatedResponses> createAggregator(
+			List<AggregatedResponses> aggregatorList) {
+
+		return null;
 	}
 
-	private GPromptTemplateConfig resolvePrompt(GPromptTemplateConfig prompt, String useCode, boolean nullable)
-			throws AgentException {
-		GPromptTemplateConfig resolved = prompt != null ? prompt
-				: useCode != null ? promptsDao.findByPromptUse(useCode) : null;
-		if (resolved == null && !nullable)
-			throw new AgentException("Mandatory prompt not present");
-		return resolved;
-	}
-
-	protected abstract Flux<IGPartialOperation<ResponseType>> createResponseFlux(RequestType request,
-			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel,
-			IGConfigurableChatModel verificationModel, GAgentConfig agentConfig, int i, int maxLoops,
-			GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt, ReactiveIdentityUtil runAs,
-			ToolCallsListener callBacksListener) throws LLMConfigException;
-
-	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
+	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createRAggregator(
 			AtomicReference<List<AggregatedResponses>> aggregatorList);
 
-	protected static String extractContent(ChatResponse chatResponse) {
-		if (chatResponse == null) {
-			return "";
-		}
-
-		Generation result = chatResponse.getResult();
-		if (result == null || result.getOutput() == null) {
-			return "";
-		}
-
-		AssistantMessage output = result.getOutput();
-
-		String text = output.getText();
-		return text != null ? text : "";
-	}
-
-	protected static void inspectToolCalls(ChatResponse chatResponse, Vector<Object> rawToolCallsCumulator) {
-		if (chatResponse == null) {
-			return;
-		}
-
-		Generation result = chatResponse.getResult();
-		if (result == null || result.getOutput() == null) {
-			return;
-		}
-
-		AssistantMessage output = result.getOutput();
-
-		/*
-		 * Nota: con tool execution gestita internamente da Spring AI, spesso le
-		 * tool-call intermedie non sono esposte nello stream applicativo. Spring AI
-		 * documenta che, nel framework-controlled tool execution, i messaggi interni di
-		 * tool execution non sono esposti all’utente.
-		 */
-		List<AssistantMessage.ToolCall> toolCalls = output.getToolCalls();
-
-		if (!org.springframework.util.CollectionUtils.isEmpty(toolCalls)) {
-			for (AssistantMessage.ToolCall toolCall : toolCalls) {
-
-				rawToolCallsCumulator.add(toolCall);
-			}
-		}
-
-		Map<String, Object> metadata = output.getMetadata();
-		if (metadata != null && !metadata.isEmpty()) {
-			Object rawToolCalls = metadata.get("tool_calls");
-			if (rawToolCalls == null) {
-				rawToolCalls = metadata.get("toolCalls");
-			}
-			if (rawToolCalls != null)
-				rawToolCallsCumulator.add(rawToolCalls);
-
-		}
-	}
-
-	protected static void inspectMetadata(ChatResponse chatResponse, Logger logger) {
-		if (chatResponse == null) {
-			return;
-		}
-
-		ChatResponseMetadata metadata = chatResponse.getMetadata();
-
-		if (metadata != null) {
-			Usage usage = metadata.getUsage();
-
-			if (usage != null) {
-				logger.debug("LLM token usage: promptTokens={}, completionTokens={}, totalTokens={}",
-						usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
-			}
-
-			Object model = metadata.get("model");
-			if (model != null) {
-				logger.debug("LLM model: {}", model);
-			}
-
-			Object id = metadata.get("id");
-			if (id != null) {
-				logger.debug("LLM response id: {}", id);
-			}
-		}
-
-		Generation result = chatResponse.getResult();
-		if (result != null) {
-			ChatGenerationMetadata generationMetadata = result.getMetadata();
-
-			if (generationMetadata != null) {
-				String finishReason = generationMetadata.getFinishReason();
-
-				if (finishReason == null) {
-					Object rawFinishReason = generationMetadata.get("FINISH_REASON");
-					finishReason = Objects.toString(rawFinishReason, null);
-				}
-
-				if (finishReason != null) {
-					logger.debug("LLM finish reason: {}", finishReason);
-				}
-			}
-		}
-	}
-
-	@Override
-	public List<GAgentConfig> getAccessibleConfigurations() {
-		List<GAgentConfig> configs = this.configsRepository.findByAgentServiceId(getId());
-		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
-	}
+	
 }
