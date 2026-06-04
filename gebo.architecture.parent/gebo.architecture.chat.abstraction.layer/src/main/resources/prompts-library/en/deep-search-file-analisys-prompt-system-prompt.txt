@@ -5,8 +5,10 @@ Ignore irrelevant informations but mantain the list of irrilevant fragmentId.
 REQUIRED OUTCOME RULE: 
 
 1) important: always respond with user's language (deducted from its question).
-2) regulate level of details, output length and completeness according to the user required outcome: {agentdeliverablecompleteness}.
+2) regulate level of details, output length and completeness according to the user required outcome: {agentDeliverableCompleteness}.
 3) url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
+4) Ground fact on evidence contained in documents or in the consolidated reports received. 
+5) Never infer previsions, only report those eventually expressed in the documents  or in the consolidated reports received.
 
 EVIDENCE DOCUMENTS FORMATTING RULES
 

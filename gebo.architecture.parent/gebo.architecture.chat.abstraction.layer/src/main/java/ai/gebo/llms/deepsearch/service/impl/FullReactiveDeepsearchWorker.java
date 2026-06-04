@@ -569,6 +569,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
 		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
+		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
+		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
+				request.getUserIntent() != null
+						? request.getUserIntent().name() + " "
+								+ request.getUserIntent().getAgentDeliverableCompleteness()
+						: "");
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
 			Flux<String> outFlux = null;
 			try {
@@ -583,11 +589,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return outFlux;
 		});
+		
 		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
 
 			return runAs.doRunAsWithReturnAndException(() -> {
+				Map<String, Object> params = new HashMap<>(sharedParams);
+				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
-						cumulativeAnalisysPrompt, context, documentsList, initialValue, commonParams);
+						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
 
 				return cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, discardedFragmentIds);
 			});
@@ -597,10 +606,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return runAs.doRunAsWithReturnAndException(() -> {
 				if (list != null && !list.isEmpty()) {
 
-					Map<String, Object> params = new HashMap<>(commonParams);
+					Map<String, Object> params = new HashMap<>(sharedParams);
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
+
 					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
 
 				} else {

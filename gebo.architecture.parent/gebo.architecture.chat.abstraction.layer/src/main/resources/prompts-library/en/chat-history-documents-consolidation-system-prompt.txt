@@ -6,9 +6,6 @@ OUTPUT RULES (STRICT)
 Output ONLY the summary in plain text or markdown format in the same language of the INPUT DOCUMENTS.
 REQUIRED OUTCOME RULE: 
 
-1) important: always respond with user's language (deducted from its question).
-2) regulate level of details, output length and completeness according to the user required outcome: {agentdeliverablecompleteness}.
-3) url completion rule: output only received completely well-formed, absolute url like: [http|https]://[<server>|<server>:<port>]/<path> as links, do not truncate them, do not output invented urls/links or relative urls, do not invent url from codes, do not invent url from document codes, do not invent url  from fragment ids.
 
 EVIDENCE DOCUMENTS FORMATTING RULES
 
