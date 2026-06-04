@@ -55,7 +55,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
-	private final DefaultPipelineStreamingAgenticStepServiceImpl defaultPipelineStreamingAgenticStepServiceImpl;
+
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
@@ -181,7 +181,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		RespondingWith decision = null;
 		final Map<String, Object> environmentMap = new HashMap<String, Object>();
 		Map<String, List<String>> decisionMap = new HashMap<>();
-		if (this.chatAgentService.getDefaultConfiguration().isEmpty()) {
+		final boolean defaultPipelineIsChatAgent = this.chatPipelinesConfig.isDefaultPipelineStepIsChatAgent();
+		if (this.chatAgentService.getDefaultConfiguration().isEmpty() || !defaultPipelineIsChatAgent) {
+			//GO ON WITH INTELLIGENT ROUTER
 			GPromptTemplateConfig _prompt = this.promptsDao
 					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 
@@ -245,6 +247,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			environmentMap.putAll(params);
 			environmentMap.putAll(decisionMap);
 		} else {
+			//GO ON WITH INTELLIGENT ROUTER
 			decision = RespondingWith.CHAT_AGENT;
 		}
 		if (LOGGER.isDebugEnabled()) {
@@ -307,8 +310,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	}
 
 	private final static List<DeliverableIntent> orderedIntents = new ArrayList<>();
-
-	
 
 	static {
 		TreeMap<Integer, DeliverableIntent> ordered = new TreeMap<>();
@@ -555,7 +556,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
 		case CHAT_AGENT: {
-			return List.of(defaultPipelineStreamingAgenticStepServiceImpl.AGENTIC_CHAT_STEP_SERVICE);
+			return List.of(DefaultPipelineStreamingAgenticStepServiceImpl.AGENTIC_CHAT_STEP_SERVICE);
 		}
 		case PURE_LLM_RESPONSE:
 		default:
