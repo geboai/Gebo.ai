@@ -72,6 +72,9 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
+	private static final String PI_PI_FILE = "pi pi-file";
+	private static final String GENERATING_ANALISYS = "Generating analisys..";
+	private static final String STREAMING_RESULTS = "StreamingResults";
 	private static final String UTF_8 = "UTF-8";
 	private static final String COMMA_CHARACTER = ",";
 	private static final String CALLING_LLM_PROBLEM_ON_FINAL_ANALISYS = "CALLING LLM PROBLEM ON FINAL ANALISYS";
@@ -144,7 +147,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				return runAs.doRunAsWithReturn(() -> {
 					try {
 						emitter.notifyUser("search-" + handler.getHandlerId(),
-								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
+								"Running search on " + handler.getDescription(sampledConfig), PI_PI_FILE, 3000l,
 								NotificationType.INFO);
 						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
 								perDataSourceK, sampleTextTokensSize, chunkSessionId);
@@ -161,8 +164,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
-						emitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", "pi pi-file",
-								3000l, NotificationType.INFO);
+						emitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", PI_PI_FILE, 3000l,
+								NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamPureSearch(minimalChatContext, emitter,
 								serviceModel, serviceModel, chunkSessionId, perDataSourceK, sampleTextTokensSize);
 					} catch (Throwable e) {
@@ -235,7 +238,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				return runAs.doRunAsWithReturn(() -> {
 					try {
 						sinkUIEmitter.notifyUser("search-" + handler.getHandlerId(),
-								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
+								"Running search on " + handler.getDescription(sampledConfig), PI_PI_FILE, 3000l,
 								NotificationType.INFO);
 						Flux<DocumentWithSearchResult> fl = handler.streamSearchResults(runtimeData, sinkUIEmitter,
 								chatModel, serviceModel, chunkSessionId, globalK)
@@ -264,8 +267,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Supplier<Flux<Document>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
-						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base",
-								"pi pi-file", 3000l, NotificationType.INFO);
+						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", PI_PI_FILE,
+								3000l, NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamSearchResults(runtimeData,
 								sinkUIEmitter, chatModel, serviceModel, chunkSessionId, globalK).map(doc -> {
 
@@ -314,7 +317,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Flux<String> outFlux = null;
 			try {
 				try {
-					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", "pi pi-file", 3000l,
+					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", PI_PI_FILE, 3000l,
 							NotificationType.INFO);
 				} catch (Throwable th) {
 				}
@@ -342,7 +345,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Flux<Document> documentFlux = suppliers.get(0).get().map(countingMapper);
 			if (containsIKB) {
 				List<Document> documents = documentFlux.buffer().blockFirst();
-				if (documents.isEmpty()) {
+				if (documents == null || documents.isEmpty()) {
 					resultFlux = backupNotFoundDocuments;
 				} else {
 					int totalTokens = 0;
@@ -356,6 +359,11 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					}
 					if (totalTokens <= (chatModel.getContextLength() * 3 / 4)) {
 						try {
+							try {
+								sinkUIEmitter.notifyUser(STREAMING_RESULTS, GENERATING_ANALISYS, PI_PI_FILE, 3000l,
+										NotificationType.INFO);
+							} catch (Throwable th) {
+							}
 							Map<String, Object> params = new HashMap<>(commonParams);
 							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
@@ -412,7 +420,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					try {
 						try {
 							sinkUIEmitter.notifyUser("aggregate-multple-src", "Finalizing multiple sources analisys",
-									"pi pi-file", 3000l, NotificationType.INFO);
+									PI_PI_FILE, 3000l, NotificationType.INFO);
 						} catch (Throwable th) {
 						}
 						Map<String, Object> params = new HashMap<>(commonParams);
@@ -507,7 +515,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<Document> docsFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
-					sinkUIEmitter.notifyUser("search-ikb", "Doing analisys on selected documents", "pi pi-file", 3000l,
+					sinkUIEmitter.notifyUser("search-ikb", "Doing analisys on selected documents", PI_PI_FILE, 3000l,
 							NotificationType.INFO);
 					AIDocumentsSet aiDoc = runtimeData.getRequestResources().allDocuments();
 					return Flux.fromIterable(aiDoc.aiDocumentsList());
