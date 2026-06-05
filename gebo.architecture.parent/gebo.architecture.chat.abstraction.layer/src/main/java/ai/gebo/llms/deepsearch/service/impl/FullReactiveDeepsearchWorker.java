@@ -24,6 +24,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -228,6 +229,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final Map<String, DocumentWithSearchResult> resultsByFragmentId = new Hashtable<>();
 		final Map<String, Document> docrefsByFragmentId = new Hashtable<>();
 		List<Supplier<Flux<Document>>> suppliers = new ArrayList<>();
+		boolean containsIKB = false;
 		for (IGReactiveDeepSearchDataSourceService handler : filtered) {
 			Supplier<Flux<Document>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
@@ -258,6 +260,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		}
 
 		if (sampledDataSources.contains(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID)) {
+			containsIKB = true;
 			Supplier<Flux<Document>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
@@ -337,17 +340,52 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
 			Flux<Document> documentFlux = suppliers.get(0).get().map(countingMapper);
-			resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
-					cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-					commonParams, irrelevantFragments);
-			resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
-				if (docsCounter.get() == 0l) {
-					return backupNotFoundDocuments;
+			if (containsIKB) {
+				List<Document> documents = documentFlux.buffer().blockFirst();
+				if (documents.isEmpty()) {
+					resultFlux = backupNotFoundDocuments;
 				} else {
-					return Flux.fromIterable(List.of());
+					int totalTokens = 0;
+					for (Document document : documents) {
+						if (document.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH) && document
+								.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number t) {
+							totalTokens += t.intValue();
+						} else {
+							totalTokens += ITokensCountable.stringsTokensSize(document.getText());
+						}
+					}
+					if (totalTokens <= (chatModel.getContextLength() * 3 / 4)) {
+						try {
+							Map<String, Object> params = new HashMap<>(commonParams);
+							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
+							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+							resultFlux = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+						} catch (Throwable th) {
+							LOGGER.error("Exception on last summary", th);
+							resultFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
+						}
+					} else {
+						documentFlux = Flux.fromIterable(documents);
+					}
 				}
-			}));
-		} else {
+
+			}
+			if (resultFlux == null) {
+
+				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
+						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
+						commonParams, irrelevantFragments);
+				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
+					if (docsCounter.get() == 0l) {
+						return backupNotFoundDocuments;
+					} else {
+						return Flux.fromIterable(List.of());
+					}
+				}));
+			}
+		} else
+
+		{
 			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).concatMap(x -> {
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
@@ -568,7 +606,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
+		final long tokensBudget = serviceModel.getContextLength() * 3 / 4;
 		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				request.getUserIntent() != null
@@ -589,7 +627,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return outFlux;
 		});
-		
+
 		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
 
 			return runAs.doRunAsWithReturnAndException(() -> {
