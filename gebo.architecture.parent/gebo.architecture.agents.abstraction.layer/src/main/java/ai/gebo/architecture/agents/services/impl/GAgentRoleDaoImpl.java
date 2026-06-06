@@ -1,0 +1,26 @@
+package ai.gebo.architecture.agents.services.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
+import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
+
+@Service
+public class GAgentRoleDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentRole> implements IAgentRoleDao {
+
+	public GAgentRoleDaoImpl(List<GAgentRole> staticConfigs, IGDynamicConfigurationSource<GAgentRole> dynamic) {
+		super(staticConfigs, dynamic);
+
+	}
+
+	@Override
+	public GAgentRole findByCode(String code) {
+
+		return findByPredicate(x -> x.getCode() != null && code != null && code.equals(x.getCode()));
+	}
+
+}

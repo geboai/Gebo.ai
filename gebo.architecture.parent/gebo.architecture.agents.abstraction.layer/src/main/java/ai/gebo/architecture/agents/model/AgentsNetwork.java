@@ -1,0 +1,59 @@
+package ai.gebo.architecture.agents.model;
+
+import java.util.List;
+
+import ai.gebo.model.base.GBaseObject;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+public class AgentsNetwork extends GBaseObject {
+	public static enum MessagesTargetsDecision {
+		ALLOWED, NOT_ALLOWED
+	}
+
+	public static enum CommunicationPolicy {
+		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
+	}
+
+	
+	int maxLoopIteration = 5;
+
+	@Data
+	public static class AgentNetworkParticipant {
+		@NotNull
+		private String agentConfigCode;
+
+		private String agentContextualName;
+
+		private boolean inputNode;
+
+		private boolean outputNode;
+
+		@NotNull
+		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
+
+		private List<String> communicationList;
+
+		private Integer maxInvocations;
+
+		private Integer maxConsecutiveInvocations;
+
+		private boolean canCallTools = true;
+
+		private boolean canCallOtherAgents = false;
+
+		public String getNetworkAgentName() {
+
+			return agentConfigCode + (agentContextualName != null ? "-" + agentContextualName : "");
+		}
+	}
+
+	@NotNull
+	private String scenarioDescription = null;
+	@NotNull
+	@NotEmpty
+	private List<AgentNetworkParticipant> agents = null;
+
+}

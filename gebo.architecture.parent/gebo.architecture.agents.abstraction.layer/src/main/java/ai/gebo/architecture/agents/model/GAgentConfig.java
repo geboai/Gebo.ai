@@ -19,10 +19,10 @@ public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, I
 	private String agentServiceId = null;
 	private String mainLoopPromptUseCode = null;
 	private GPromptTemplateConfig customLoopPrompt = null;
-	private String completeEvaluationPromptUseCode = null;
-	private GPromptTemplateConfig completeEvaluationPrompt = null;
 	private Boolean subscribeAllTools = null;
-
+	@NotNull
+	private String agentRoleCode = null;
+	
 	private Boolean useDefaultChatModel = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;

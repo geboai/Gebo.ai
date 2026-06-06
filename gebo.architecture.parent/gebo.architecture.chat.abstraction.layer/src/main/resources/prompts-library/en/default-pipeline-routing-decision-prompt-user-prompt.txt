@@ -48,13 +48,18 @@ GLOBAL TOOL OVERRIDE:
 If the user explicitly asks to use tools or perform an action that requires a tool in (F), choose TOOLS_USE_RESPONSE.
 
 EXPLICIT SOURCE TARGETING:
-If the user explicitly names one or more sources/systems that match entries in (C), choose DEEP_SEARCH_RESPONSE and include those matching (C) source codes in deepSearchedSystems.
-If the user explicitly asks to search the internal knowledge base / internal database / internal data (any language/synonyms), choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM in deepSearchedSystems.
+If the user explicitly names one or more sources/systems by their specific name/code matching entries in (C), choose DEEP_SEARCH_RESPONSE and include those matching (C) source codes in deepSearchedSystems.
+If the user explicitly asks to perform an in-depth or iterative search on the internal knowledge base (e.g., "do a deep search", "search all databases", "find everything about"), choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM in deepSearchedSystems. Simple queries asking to answer a question or find a specific procedure should NOT trigger this rule, even if they use search verbs; they must be evaluated by the intent rules below.
 
-REPORT INTENT RULE:
-If deliverable=REPORT, choose DEEP_SEARCH_RESPONSE.
-Rationale: REPORT implies structured, detailed, multi-section output and/or citations/corpus comparison; it requires iterative search and aggregation.
+ANALISYS INTENT RULE:
+If deliverable=ANALISYS, choose DEEP_SEARCH_RESPONSE.
+Rationale: ANALISYS implies structured, detailed, multi-section output and/or citations/corpus comparison; it requires iterative search and aggregation.
 
+PURE_SEARCH INTENT RULE:
+If deliverable=PURE_SEARCH:
+If external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
+Else if internal KB (D) is available and relevant, choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM.
+Else choose PURE_LLM_RESPONSE.
 
 DECISION INTENT RULE:
 If deliverable=DECISION:
@@ -96,8 +101,8 @@ Valid source codes are:
 any code present in (C)
 the special internal code IKB_SYSTEM
 Prefer explicit user-mentioned sources first.
-If deliverable=REPORT, select up to 3 best matching sources; include IKB_SYSTEM if internal KB is relevant or if no external source clearly matches.
-If deliverable is QA/HOWTO/SUMMARY/DECISION, select the single best matching source (unless the question explicitly requires multiple sources).
+If deliverable=ANALISYS, select up to 3 best matching sources; include IKB_SYSTEM if internal KB is relevant or if no external source clearly matches.
+If deliverable is QA/HOWTO/SUMMARY/DECISION/PURE_SEARCH, select the single best matching source (unless the question explicitly requires multiple sources).
 If no external (C) source matches but internal KB exists and retrieval is required, include IKB_SYSTEM.
 
 OUTPUT RULES:

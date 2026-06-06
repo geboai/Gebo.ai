@@ -11,10 +11,12 @@ import java.util.function.Function;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
-import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
+import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.impl.GAbstractReactiveAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -55,8 +57,8 @@ public class ChatAgentServiceImpl extends
 
 	public ChatAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService);
+			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 
 	}
 
@@ -73,23 +75,11 @@ public class ChatAgentServiceImpl extends
 	}
 
 	@Override
-	public String getDefaultLoopPromptUseCode() {
-
-		return GeboPromptsLibrary.DEFAULT_CHAT_AGENT_PROMPT;
-	}
-
-	@Override
-	public String getDefaultCompleteEvaluationPromptUseCode() {
-
-		return null;
-	}
-
-	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(
 			ChatPipelineExecutionRuntimeData runtimeData, List<GeboChatResponse> pastResponses,
-			IGConfigurableChatModel agentModel, IGConfigurableChatModel verificationModel, GAgentConfig agentConfig,
-			int i, int maxLoop, GPromptTemplateConfig agentPrompt, GPromptTemplateConfig completenessPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callsListener) throws LLMConfigException {
+			IGConfigurableChatModel agentModel, GAgentConfig agentConfig, GAgentRole agentRole, int i, int maxLoop,
+			GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs, ToolCallsListener callsListener)
+			throws LLMConfigException {
 		String loopHistory = createCycleHistoryVariable(pastResponses, runtimeData);
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		Map<String, Object> params = new HashMap<>();
@@ -114,48 +104,17 @@ public class ChatAgentServiceImpl extends
 			});
 			Flux<IGPartialOperation<GeboChatMessageEnvelope>> lastItem = null;
 
-			if (verificationModel != null && completenessPrompt != null && i < maxLoop) {
-				lastItem = Flux.defer(() -> {
-					String queryResponse = cumulatedContent.toString();
-					response.setCalledFunctions(renderFunctions(callsListener.getCalls()));
-					response.setQueryResponse(
-							queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
-					List<GeboChatResponse> fullResponses = new ArrayList<>(pastResponses);
-					fullResponses.add(response);
-					Map<String, Object> verificationparams = new HashMap<>();
-					verificationparams.put(AGENT_SESSION_STORY_PROMPT_PARAM,
-							createCycleHistoryVariable(fullResponses, runtimeData));
-					verificationparams.put(CURRENT_ITERATION_PROMPT_PARAM, "" + i);
-					verificationparams.put(MAX_ITERATIONS_PROMPT_PARAM, "" + maxLoop);
-					verificationparams.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
-					verificationparams.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-					boolean lastMessage = false;
-					String result = null;
-					try {
-						result = verificationModel.textResponse(completenessPrompt, verificationparams, sampledContext);
-						lastMessage = result.toLowerCase().indexOf(AGENT_CONTROL_FINISHED.toLowerCase()) >= 0;
-					} catch (LLMConfigException e) {
-						LOGGER.error("Error calling validation llm", e);
-					}
+			lastItem = Flux.defer(() -> {
+				String queryResponse = cumulatedContent.toString();
+				boolean lastMessage = (i == maxLoop) || (queryResponse.indexOf(AGENT_CONTROL_FINISHED) >= 0);
+				response.setQueryResponse(
+						queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
+				response.setCalledFunctions(renderFunctions(callsListener.getCalls()));
+				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
+				envelope.setLastMessage(lastMessage);
+				return Flux.just(IGPartialOperation.of(envelope, lastMessage));
+			});
 
-					GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
-					envelope.setLastMessage(lastMessage);
-					return Flux.just(IGPartialOperation.of(envelope, lastMessage));
-				});
-
-			} else {
-				lastItem = Flux.defer(() -> {
-					String queryResponse = cumulatedContent.toString();
-					boolean lastMessage = (i == maxLoop)
-							|| (completenessPrompt == null && queryResponse.indexOf(AGENT_CONTROL_FINISHED) >= 0);
-					response.setQueryResponse(
-							queryResponse.replace(AGENT_CONTROL_FINISHED, "").replace(AGENT_CONTROL_MORE_TOOLS, ""));
-					response.setCalledFunctions(renderFunctions(callsListener.getCalls()));
-					GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
-					envelope.setLastMessage(lastMessage);
-					return Flux.just(IGPartialOperation.of(envelope, lastMessage));
-				});
-			}
 			return Flux.concat(bodyStream, lastItem);
 
 		});

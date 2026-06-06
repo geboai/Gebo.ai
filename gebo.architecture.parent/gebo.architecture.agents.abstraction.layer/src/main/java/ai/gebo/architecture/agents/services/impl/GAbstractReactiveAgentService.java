@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services;
+package ai.gebo.architecture.agents.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,14 @@ import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -43,8 +48,8 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
 	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService);
+			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 
 	}
 
@@ -84,13 +89,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 				: 4;
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
-		final GPromptTemplateConfig completenessPrompt = resolvePrompt(agentConfig.getCompleteEvaluationPrompt(),
-				agentConfig.getCompleteEvaluationPromptUseCode(), true);
-		ChatModelConfigOptions verificatorOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), List.of(), null);
-		IGConfigurableChatModel verificationModel = completenessPrompt != null
-				? copiedModel.cloneWithOptions(getId() + "-verifier", verificatorOptions)
-				: null;
+		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
 		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
 		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
 				new ArrayList<AggregatedResponses>());
@@ -105,8 +104,8 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 								}
 								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
 								Flux<IGPartialOperation<ResponseType>> iteration = createResponse(request,
-										pastResponses, agentModel, verificationModel, agentConfig, index, maxLoop,
-										agentPrompt, completenessPrompt, runAs, callBacksListener);
+										pastResponses, agentModel, agentConfig, agentRole, index, maxLoop,
+										agentPrompt, runAs, callBacksListener);
 								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createRAggregator(
 										aggregatedResponses);
 

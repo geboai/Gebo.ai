@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services;
+package ai.gebo.architecture.agents.services.impl;
 
 import java.util.List;
 import java.util.Map;

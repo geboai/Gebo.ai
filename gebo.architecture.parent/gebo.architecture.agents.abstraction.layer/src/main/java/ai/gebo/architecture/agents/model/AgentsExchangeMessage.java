@@ -1,0 +1,45 @@
+package ai.gebo.architecture.agents.model;
+
+import java.util.List;
+
+import ai.gebo.application.messaging.model.GBaseMessagePayload;
+import ai.gebo.security.services.ReactiveIdentityUtil;
+import jakarta.validation.constraints.NotNull;
+import jakarta.websocket.Session;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AgentsExchangeMessage<PayloadType> {
+	public enum MessageSemantic {
+		AS_FUNCTION_CALL, RESPONSE
+
+	}
+
+	@NotNull
+	private String collaborationContextId;
+	@NotNull
+	private MessageSemantic messageSemantic;
+	@NotNull
+	private String fromAgent;
+	@NotNull
+	private GAgentRole fromAgentRole;
+	@NotNull
+	private List<String> toAgent;
+	@NotNull
+	private PayloadType payload;
+
+	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(
+			AgentsCollaborationSessionContext context, String targetAgent, PayloadType data,
+			MessageSemantic messageSemantic) {
+		AgentsExchangeMessage<PayloadType> m = new AgentsExchangeMessage<PayloadType>();
+		m.setCollaborationContextId(context.getId());
+		m.setMessageSemantic(messageSemantic);
+		m.setPayload(data);
+		m.setToAgent(List.of(targetAgent));
+		return m;
+	}
+}
