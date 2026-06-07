@@ -17,6 +17,6 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	public Class<OutputType> getOutputType();
 
 	public List<AgentsExchangeMessage<OutputType>> onMessage(GAgentConfig config, AgentsExchangeMessage<InputType> msg,
-			AgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext) throws LLMConfigException, AgentException;
+			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
+			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext, ReactiveIdentityUtil runAs) throws LLMConfigException, AgentException;
 }

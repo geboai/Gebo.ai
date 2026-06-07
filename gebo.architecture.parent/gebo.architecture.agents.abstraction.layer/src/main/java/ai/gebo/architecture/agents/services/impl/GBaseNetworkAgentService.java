@@ -17,6 +17,7 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -57,9 +58,9 @@ public class GBaseNetworkAgentService<InputType, OutputType> extends GAbstractGe
 
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(GAgentConfig config, AgentsExchangeMessage<InputType> msg,
-			AgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext)
-			throws LLMConfigException, AgentException {
+			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext,
+			ReactiveIdentityUtil runAs) throws LLMConfigException, AgentException {
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -81,7 +82,7 @@ public class GBaseNetworkAgentService<InputType, OutputType> extends GAbstractGe
 				contextAgentPersona.getAgentConfigCode() + (contextAgentPersona.getAgentContextualName() != null
 						? "-" + contextAgentPersona.getAgentContextualName()
 						: ""),
-				agentRole, List.of(msg.getFromAgent()), output);
+				agentRole, List.of(msg.getFromAgent()), output, 1);
 		return List.of(out);
 	}
 

@@ -32,13 +32,15 @@ public class AgentsExchangeMessage<PayloadType> {
 	@NotNull
 	private PayloadType payload;
 
-	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(
-			AgentsCollaborationSessionContext context, String targetAgent, PayloadType data,
-			MessageSemantic messageSemantic) {
+	private int executionOrder = 0;
+
+	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(AgentsCollaborationSessionContext context,
+			String targetAgent, PayloadType data, MessageSemantic messageSemantic) {
 		AgentsExchangeMessage<PayloadType> m = new AgentsExchangeMessage<PayloadType>();
 		m.setCollaborationContextId(context.getId());
 		m.setMessageSemantic(messageSemantic);
 		m.setPayload(data);
+		m.setExecutionOrder(1);
 		m.setToAgent(List.of(targetAgent));
 		return m;
 	}
