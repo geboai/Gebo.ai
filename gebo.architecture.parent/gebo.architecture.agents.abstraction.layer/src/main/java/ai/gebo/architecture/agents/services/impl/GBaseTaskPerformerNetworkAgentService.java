@@ -32,7 +32,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Data;
 
 @Data
-public class GBaseNetworkAgentService<InputType, OutputType> extends GAbstractGenericalAgentService
+public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType> extends GAbstractGenericalAgentService
 		implements IGNetworkAgentService<InputType, OutputType> {
 	private static final String INPUT_TEMPLATE_PARAM = "INPUT";
 	private static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
@@ -44,7 +44,7 @@ public class GBaseNetworkAgentService<InputType, OutputType> extends GAbstractGe
 	protected final String description;
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 
-	public GBaseNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
+	public GBaseTaskPerformerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
 			Class<InputType> inputType, Class<OutputType> outputType, String id, String description) {
@@ -82,7 +82,7 @@ public class GBaseNetworkAgentService<InputType, OutputType> extends GAbstractGe
 				contextAgentPersona.getAgentConfigCode() + (contextAgentPersona.getAgentContextualName() != null
 						? "-" + contextAgentPersona.getAgentContextualName()
 						: ""),
-				agentRole, List.of(msg.getFromAgent()), output, 1);
+				agentRole, msg.getFromAgent(), output, 1);
 		return List.of(out);
 	}
 

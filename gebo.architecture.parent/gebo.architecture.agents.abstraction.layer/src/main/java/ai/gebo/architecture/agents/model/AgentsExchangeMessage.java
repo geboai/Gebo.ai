@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AgentsExchangeMessage<PayloadType> {
 	public enum MessageSemantic {
-		AS_FUNCTION_CALL, RESPONSE
+		EXECUTE_AND_SHARE_RESULT, RESPONSE
 
 	}
 
@@ -28,7 +28,7 @@ public class AgentsExchangeMessage<PayloadType> {
 	@NotNull
 	private GAgentRole fromAgentRole;
 	@NotNull
-	private List<String> toAgent;
+	private String toAgent;
 	@NotNull
 	private PayloadType payload;
 
@@ -41,7 +41,7 @@ public class AgentsExchangeMessage<PayloadType> {
 		m.setMessageSemantic(messageSemantic);
 		m.setPayload(data);
 		m.setExecutionOrder(1);
-		m.setToAgent(List.of(targetAgent));
+		m.setToAgent(targetAgent);
 		return m;
 	}
 }

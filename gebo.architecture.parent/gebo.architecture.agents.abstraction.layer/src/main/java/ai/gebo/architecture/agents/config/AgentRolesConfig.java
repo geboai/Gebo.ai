@@ -11,7 +11,7 @@ import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
 
 @Configuration
-@ConfigurationProperties(value = "ai.gebo.agentRoles")
+@ConfigurationProperties(value = "ai.gebo.agents.roles")
 @Data
 @PropertySource(value = "classpath:/agent-roles-library/agent-roles.yml", factory = GeboYamlPropertySourceFactory.class)
 public class AgentRolesConfig {

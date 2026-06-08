@@ -71,7 +71,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType> extends GAbs
 			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext, ReactiveIdentityUtil runAs)
 			throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
-		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, null);
+		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		return null;
 	}
 

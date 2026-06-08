@@ -10,9 +10,9 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.security.services.IGSecurityService;
 
 @Service
-public class TextProcessingAgentService extends GBaseNetworkAgentService<String, String> {
+public class TextProcessingTaskPerformerAgentService extends GBaseTaskPerformerNetworkAgentService<String, String> {
 
-	public TextProcessingAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
+	public TextProcessingTaskPerformerAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao,
