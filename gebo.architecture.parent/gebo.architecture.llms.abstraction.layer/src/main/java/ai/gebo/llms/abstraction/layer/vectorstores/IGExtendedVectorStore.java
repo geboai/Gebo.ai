@@ -6,33 +6,39 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.vectorstores;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.ai.vectorstore.VectorStore;
 
+import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorizedFragmentMetadata;
+
 /**
- * Gebo.ai comment agent
- * This interface IGExtendedVectorStore extends the VectorStore interface 
- * and adds functionality for resource management by also extending the Closeable interface.
+ * Gebo.ai comment agent This interface IGExtendedVectorStore extends the
+ * VectorStore interface and adds functionality for resource management by also
+ * extending the Closeable interface.
  */
 public interface IGExtendedVectorStore extends VectorStore, Closeable {
+	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException;
 
-    /**
-     * This default method provides an implementation for the close() method 
-     * from the Closeable interface, allowing implementing classes to handle 
-     * any resource cleanup when the store is no longer needed.
-     * 
-     * @throws IOException if an I/O error occurs during closing.
-     */
-    @Override
-    default void close() throws IOException {
-        // No specific resource cleanup is implemented in this default method.
-    }
+	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException;
+
+	public void overwriteMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException;
+
+	/**
+	 * This default method provides an implementation for the close() method from
+	 * the Closeable interface, allowing implementing classes to handle any resource
+	 * cleanup when the store is no longer needed.
+	 * 
+	 * @throws IOException if an I/O error occurs during closing.
+	 */
+	@Override
+	default void close() throws IOException {
+		// No specific resource cleanup is implemented in this default method.
+	}
 }
