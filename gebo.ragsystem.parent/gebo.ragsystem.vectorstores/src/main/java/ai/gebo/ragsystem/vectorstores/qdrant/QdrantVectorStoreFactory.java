@@ -80,11 +80,7 @@ public class QdrantVectorStoreFactory implements IGVectorStoreFactory {
 			client.close();
 		}
 
-		@Override
-		public void overwriteMetadataByIds(List<VectorizedFragmentMetadata> entries)
-				throws ExecutionException, InterruptedException {
-			metaDataService.overwriteMetadataByIds(entries);
-		}
+		
 
 		@Override
 		public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException {

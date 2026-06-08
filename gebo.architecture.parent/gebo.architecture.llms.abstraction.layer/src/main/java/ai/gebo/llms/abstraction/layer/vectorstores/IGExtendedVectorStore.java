@@ -28,7 +28,7 @@ public interface IGExtendedVectorStore extends VectorStore, Closeable {
 
 	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException;
 
-	public void overwriteMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException;
+	
 
 	/**
 	 * This default method provides an implementation for the close() method from

@@ -22,7 +22,8 @@ public class QdrantMetadataService {
 	private final QdrantClient qdrantClient;
 	private final String collectionName;
 
-	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException {
+	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids)
+			throws ExecutionException, InterruptedException {
 
 		if (ids == null || ids.isEmpty()) {
 			return List.of();
@@ -41,17 +42,17 @@ public class QdrantMetadataService {
 		List<VectorizedFragmentMetadata> result = new ArrayList<>();
 
 		for (RetrievedPoint point : points) {
-			result.add(new VectorizedFragmentMetadata(fromPointId(point.getId()), fromQdrantPayload(point.getPayloadMap())));
+			result.add(new VectorizedFragmentMetadata(fromPointId(point.getId()),
+					fromQdrantPayload(point.getPayloadMap())));
 		}
 
 		return result;
 	}
 
-	/**
-	 * Aggiorna solo le chiavi presenti in metadata. Non tocca né il vettore né le
-	 * altre chiavi payload già presenti.
-	 */
-	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
+	private static final Set<String> RESERVED_PAYLOAD_KEYS = Set.of("doc_content", "content", "text", "document");
+
+	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries)
+			throws ExecutionException, InterruptedException {
 
 		if (entries == null || entries.isEmpty()) {
 			return;
@@ -69,8 +70,9 @@ public class QdrantMetadataService {
 			}
 
 			Map<String, Value> payloadPatch = metadata.entrySet().stream().filter(e -> e.getKey() != null)
-					.filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
-							e -> toQdrantValue(e.getValue()), (a, b) -> b, LinkedHashMap::new));
+					.filter(e -> e.getValue() != null).filter(e -> !RESERVED_PAYLOAD_KEYS.contains(e.getKey()))
+					.collect(Collectors.toMap(Map.Entry::getKey, e -> toQdrantValue(e.getValue()), (a, b) -> b,
+							LinkedHashMap::new));
 
 			if (payloadPatch.isEmpty()) {
 				continue;
@@ -78,32 +80,6 @@ public class QdrantMetadataService {
 
 			qdrantClient
 					.setPayloadAsync(collectionName, payloadPatch, List.of(toPointId(entry.getId())), true, null, null)
-					.get();
-		}
-	}
-
-	/**
-	 * Variante: sostituisce completamente il payload.
-	 */
-	public void overwriteMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
-
-		if (entries == null || entries.isEmpty()) {
-			return;
-		}
-
-		for (VectorizedFragmentMetadata entry : entries) {
-			if (entry == null || entry.getId() == null) {
-				continue;
-			}
-
-			Map<String, Object> metadata = entry.getMetadata() != null ? entry.getMetadata() : Map.of();
-
-			Map<String, Value> payload = metadata.entrySet().stream().filter(e -> e.getKey() != null)
-					.filter(e -> e.getValue() != null).collect(Collectors.toMap(Map.Entry::getKey,
-							e -> toQdrantValue(e.getValue()), (a, b) -> b, LinkedHashMap::new));
-
-			qdrantClient
-					.overwritePayloadAsync(collectionName, payload, List.of(toPointId(entry.getId())), true, null, null)
 					.get();
 		}
 	}

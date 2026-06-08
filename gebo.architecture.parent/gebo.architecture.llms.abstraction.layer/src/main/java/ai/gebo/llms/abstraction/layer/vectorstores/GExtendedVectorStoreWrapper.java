@@ -115,13 +115,5 @@ public class GExtendedVectorStoreWrapper<VSType extends VectorStore> implements 
 		throw new MethodNotFoundException("The wrapped vector store does not implement this");
 	}
 
-	@Override
-	public void overwriteMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
-		if (vs instanceof IGExtendedVectorStore evs) {
-			evs.overwriteMetadataByIds(entries);
-			return;
-		}
-		throw new MethodNotFoundException("The wrapped vector store does not implement this");
-
-	}
+	
 }
