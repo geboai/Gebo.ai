@@ -30,8 +30,9 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGNetworkAgentService<InputType, OutputType> {
@@ -63,7 +64,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, session, mySessionContext, msg);
+		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session, mySessionContext, msg, agentsDao);
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {

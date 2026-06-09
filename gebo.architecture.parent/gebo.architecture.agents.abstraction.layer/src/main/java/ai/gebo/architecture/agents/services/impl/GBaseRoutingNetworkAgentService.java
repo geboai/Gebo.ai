@@ -33,9 +33,11 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import lombok.Getter;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
 
+@Getter
 public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGRoutingNetworkAgentService<InputType, OutputType> {
@@ -83,8 +85,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -96,7 +99,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					+ " has no agents to communicate with");
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, session, mySessionContext, msg);
+		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
+				mySessionContext, msg, agentsDao);
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();
 		for (String coordAgent : toCoordinate) {

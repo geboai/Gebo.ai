@@ -14,9 +14,11 @@ import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsNetwork;
+import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -25,6 +27,12 @@ import ai.gebo.security.services.IGSecurityService;
 public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalAgentService {
 
+	public static final String AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM = "AGENT_COMUNICATION_CAPABILITY";
+	public static final String AGENT_IDENTITY_TEMPLATE_PARAM = "AGENT_IDENTITY";
+	private static final String DESCRIPTION_OF_YOUR_ROLE = "Description of your role: ";
+	private static final String NEWLINE = "\r\n";
+	private static final String YOU_ARE_AN_AGENT_WITH_ROLE = "Your agent role is: ";
+	private static final String THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS = "The description of the network scenario is: ";
 	public static final String INPUT_TEMPLATE_PARAM = "INPUT";
 	public static final String NETWORK_SCENARY_TEMPLATE_PARAM = "NETWORK_SCENARY";
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
@@ -81,19 +89,38 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	}
 
 	protected Map<String, Object> createAgentTemplateParams(AgentsNetwork network, GAgentRole agentRole,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, AgentsExchangeMessage<InputType> msg) {
+			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, AgentsExchangeMessage<InputType> msg,
+			IGAgentsNetworkRuntimeDao agentsDao) {
 		Map<String, Object> params = new HashMap<>();
-		params.put(NETWORK_SCENARY_TEMPLATE_PARAM, createNetworkScenaryDescription(network, agentRole));
+		params.put(NETWORK_SCENARY_TEMPLATE_PARAM, createNetworkScenaryDescription(network));
+		params.put(AGENT_IDENTITY_TEMPLATE_PARAM, createAgentIdentityDescription(agentRole, contextAgentPersona));
+		params.put(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
+				createAgentCommunicationCapabilityDescription(agentRole, contextAgentPersona, network, agentsDao));
 		params.put(SHARED_CONTEXT_TEMPLATE_PARAM, render(session));
 		params.put(PRIVATE_CONTEXT_TEMPLATE_PARAM, render(mySessionContext));
 		params.put(INPUT_TEMPLATE_PARAM, render(msg));
 		return params;
 	}
 
-	protected Object createNetworkScenaryDescription(AgentsNetwork network, GAgentRole agentRole) {
+	protected String createAgentCommunicationCapabilityDescription(GAgentRole agentRole,
+			AgentNetworkParticipant contextAgentPersona, AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	protected String createAgentIdentityDescription(GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	protected Object createNetworkScenaryDescription(AgentsNetwork network) {
+		StringBuffer buffer = new StringBuffer();
+		if (network.getScenarioDescription() != null) {
+			buffer.append(THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS + network.getScenarioDescription());
+			buffer.append(NEWLINE);
+		}
+		return buffer.toString();
 	}
 
 	protected Object render(AgentPrivateSessionContext<InputType, OutputType> mySessionContext) {
