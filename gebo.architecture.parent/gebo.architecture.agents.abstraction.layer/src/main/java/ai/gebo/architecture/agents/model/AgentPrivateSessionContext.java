@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public final class AgentPrivateSessionContext<OutputType> {
+public final class AgentPrivateSessionContext<InputType,OutputType> {
 	@NotNull
 	String id = UUID.randomUUID().toString();
 	@NotNull
@@ -19,11 +19,11 @@ public final class AgentPrivateSessionContext<OutputType> {
 	@Getter
 	class AgentInteraction {
 		@NotNull
-		final AgentsExchangeMessage<?> inputMessage;
+		final AgentsExchangeMessage<InputType> inputMessage;
 		@NotNull
 		final OutputType output;
 	}
-	public void addInteraction(AgentsExchangeMessage<?> inputMessage, OutputType payload) {
+	public void addInteraction(AgentsExchangeMessage<InputType> inputMessage, OutputType payload) {
 		interactions.add(new AgentInteraction(inputMessage, payload));
 	}
 }

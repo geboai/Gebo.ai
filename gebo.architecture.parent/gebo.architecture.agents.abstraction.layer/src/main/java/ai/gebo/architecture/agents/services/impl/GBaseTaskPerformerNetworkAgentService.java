@@ -1,10 +1,9 @@
 package ai.gebo.architecture.agents.services.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.ai.converter.BeanOutputConverter;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
@@ -32,17 +31,13 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Data;
 
 @Data
-public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType> extends GAbstractGenericalAgentService
+public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
+		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGNetworkAgentService<InputType, OutputType> {
-	private static final String INPUT_TEMPLATE_PARAM = "INPUT";
-	private static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
-	private static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
-	private static final String NETWORK_SCENARY_TEMPLATE_PARAM = "NETWORK_SCENARY";
 	protected final Class<InputType> inputType;
 	protected final Class<OutputType> outputType;
 	protected final String id;
 	protected final String description;
-	protected static final ObjectMapper objectMapper = new ObjectMapper();
 
 	public GBaseTaskPerformerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -59,22 +54,22 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType> extend
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(GAgentConfig config, AgentsExchangeMessage<InputType> msg,
 			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext mySessionContext,
-			ReactiveIdentityUtil runAs) throws LLMConfigException, AgentException {
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs)
+			throws LLMConfigException, AgentException {
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
-		Map<String, Object> params = new HashMap<>();
-		params.put(NETWORK_SCENARY_TEMPLATE_PARAM, createNetworkScenaryDescription(network, agentRole));
-		params.put(SHARED_CONTEXT_TEMPLATE_PARAM, render(session));
-		params.put(PRIVATE_CONTEXT_TEMPLATE_PARAM, render(mySessionContext));
-		params.put(INPUT_TEMPLATE_PARAM, render(msg));
+		Map<String, Object> params = createAgentTemplateParams(network, agentRole, session, mySessionContext, msg);
+
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
 			output = (OutputType) agentModel.textResponse(prompt, params, IChatRequestContext.of(""));
 		} else {
+			BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
+			params.put("format", converter.getFormat());
 			output = (OutputType) agentModel.structuredResponse(prompt, params, IChatRequestContext.of(""), outputType);
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
@@ -84,26 +79,6 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType> extend
 						: ""),
 				agentRole, msg.getFromAgent(), output, 1);
 		return List.of(out);
-	}
-
-	protected Object render(AgentsExchangeMessage<InputType> msg) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	protected Object render(AgentPrivateSessionContext mySessionContext) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	protected Object render(AgentsCollaborationSessionContext session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	protected Object createNetworkScenaryDescription(AgentsNetwork network, GAgentRole agentRole) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
