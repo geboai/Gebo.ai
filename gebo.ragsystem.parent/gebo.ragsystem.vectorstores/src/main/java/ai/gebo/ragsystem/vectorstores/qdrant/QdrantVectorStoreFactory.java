@@ -66,10 +66,10 @@ public class QdrantVectorStoreFactory implements IGVectorStoreFactory {
 		 * @param client the Qdrant client
 		 * @param vs     the underlying Spring AI QdrantVectorStore
 		 */
-		public QdrantExtendedVectorStore(QdrantClient client, QdrantVectorStore vs) {
+		public QdrantExtendedVectorStore(QdrantClient client, QdrantVectorStore vs, String collectionName) {
 			super(vs);
 			this.client = client;
-			metaDataService = new QdrantMetadataService(client, vs.getName());
+			metaDataService = new QdrantMetadataService(client, collectionName);
 		}
 
 		/**
@@ -80,15 +80,15 @@ public class QdrantVectorStoreFactory implements IGVectorStoreFactory {
 			client.close();
 		}
 
-		
-
 		@Override
-		public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException {
+		public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids)
+				throws ExecutionException, InterruptedException {
 			return metaDataService.readMetadataByIds(ids);
 		}
 
 		@Override
-		public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
+		public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries)
+				throws ExecutionException, InterruptedException {
 			metaDataService.patchMetadataByIds(entries);
 		}
 	};
@@ -127,15 +127,15 @@ public class QdrantVectorStoreFactory implements IGVectorStoreFactory {
 			QdrantGrpcClient client = grpcClientBuilder.build();
 
 			QdrantClient qdrantClient = new QdrantClient(client);
-
+			final String collectionName = embeddingConfiguration.getCode();
 			// Configure Spring AI's QdrantVectorStore
 			Builder builder = QdrantVectorStore.builder(qdrantClient, embeddingModel);
-			builder.collectionName(embeddingConfiguration.getCode());
+			builder.collectionName(collectionName);
 			builder.initializeSchema(true);
 
 			QdrantVectorStore qdrantVectorStore = builder.build();
 			qdrantVectorStore.afterPropertiesSet();
-			return new QdrantExtendedVectorStore(qdrantClient, qdrantVectorStore);
+			return new QdrantExtendedVectorStore(qdrantClient, qdrantVectorStore, collectionName);
 		} catch (Throwable e) {
 			throw new LLMConfigException(
 					"Cannot create vector store or embedding model initialization exception: " + e.getMessage(), e);
