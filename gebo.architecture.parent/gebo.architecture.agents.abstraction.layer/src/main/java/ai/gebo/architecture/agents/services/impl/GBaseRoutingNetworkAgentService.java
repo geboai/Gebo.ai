@@ -79,11 +79,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	}
 
 	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(GAgentConfig config, AgentsExchangeMessage<InputType> msg,
-			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs)
-			throws LLMConfigException, AgentException {
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -110,7 +110,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			typesMap.put(coordAgent, dynamicType);
 		}
 		params.put("format", super.buildRootJsonSchema(typesMap));
-		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, IChatRequestContext.of(""),
+		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> messagesInOrder = new TreeMap<>();
 		List<TargetAgentEnvelope<?>> toBeScheduled = new ArrayList<>();

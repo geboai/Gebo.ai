@@ -52,11 +52,11 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 	}
 
 	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(GAgentConfig config, AgentsExchangeMessage<InputType> msg,
-			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs)
-			throws LLMConfigException, AgentException {
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -66,11 +66,11 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
-			output = (OutputType) agentModel.textResponse(prompt, params, IChatRequestContext.of(""));
+			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
 			BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
 			params.put("format", converter.getFormat());
-			output = (OutputType) agentModel.structuredResponse(prompt, params, IChatRequestContext.of(""), outputType);
+			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
 				MessageSemantic.RESPONSE,

@@ -27,6 +27,7 @@ import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -36,8 +37,9 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
+
 @AllArgsConstructor
-public abstract class GAbstractGenericalAgentService  implements IGGenericAgentService{
+public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingService implements IGGenericAgentService {
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
@@ -45,14 +47,12 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 	protected final GAgentConfigRepository configsRepository;
 	protected final IGSecurityService securityService;
 	protected final IAgentRoleDao agentRoleDao;
-	
 
 	@Override
 	public List<GAgentConfig> getAccessibleConfigurations() {
 		List<GAgentConfig> configs = this.configsRepository.findByAgentServiceId(getId());
 		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
 	}
-
 
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
 			ReactiveIdentityUtil runAs) throws LLMConfigException {
@@ -68,7 +68,7 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 			if (copiedModel == null)
 				throw new LLMConfigException("Default chat model not set in the system");
 		}
-	
+
 		List<String> allFunctions = agentConfig.getEnabledFunctions();
 		if (agentConfig.getSubscribeAllTools() != null && agentConfig.getSubscribeAllTools()) {
 			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
@@ -83,7 +83,6 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 		return agentModel;
 	}
 
-
 	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
 			List<String> allFunctions, ReactiveIdentityUtil runAs) {
 		final List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener,
@@ -95,62 +94,60 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
 	}
 
-
 	protected static String extractContent(ChatResponse chatResponse) {
 		if (chatResponse == null) {
 			return "";
 		}
-	
+
 		Generation result = chatResponse.getResult();
 		if (result == null || result.getOutput() == null) {
 			return "";
 		}
-	
+
 		AssistantMessage output = result.getOutput();
-	
+
 		String text = output.getText();
 		return text != null ? text : "";
 	}
-
 
 	protected static void inspectMetadata(ChatResponse chatResponse, Logger logger) {
 		if (chatResponse == null) {
 			return;
 		}
-	
+
 		ChatResponseMetadata metadata = chatResponse.getMetadata();
-	
+
 		if (metadata != null) {
 			Usage usage = metadata.getUsage();
-	
+
 			if (usage != null) {
 				logger.debug("LLM token usage: promptTokens={}, completionTokens={}, totalTokens={}",
 						usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens());
 			}
-	
+
 			Object model = metadata.get("model");
 			if (model != null) {
 				logger.debug("LLM model: {}", model);
 			}
-	
+
 			Object id = metadata.get("id");
 			if (id != null) {
 				logger.debug("LLM response id: {}", id);
 			}
 		}
-	
+
 		Generation result = chatResponse.getResult();
 		if (result != null) {
 			ChatGenerationMetadata generationMetadata = result.getMetadata();
-	
+
 			if (generationMetadata != null) {
 				String finishReason = generationMetadata.getFinishReason();
-	
+
 				if (finishReason == null) {
 					Object rawFinishReason = generationMetadata.get("FINISH_REASON");
 					finishReason = Objects.toString(rawFinishReason, null);
 				}
-	
+
 				if (finishReason != null) {
 					logger.debug("LLM finish reason: {}", finishReason);
 				}
@@ -158,19 +155,18 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 		}
 	}
 
-
 	protected static void inspectToolCalls(ChatResponse chatResponse, Vector<Object> rawToolCallsCumulator) {
 		if (chatResponse == null) {
 			return;
 		}
-	
+
 		Generation result = chatResponse.getResult();
 		if (result == null || result.getOutput() == null) {
 			return;
 		}
-	
+
 		AssistantMessage output = result.getOutput();
-	
+
 		/*
 		 * Nota: con tool execution gestita internamente da Spring AI, spesso le
 		 * tool-call intermedie non sono esposte nello stream applicativo. Spring AI
@@ -178,14 +174,14 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 		 * tool execution non sono esposti all’utente.
 		 */
 		List<AssistantMessage.ToolCall> toolCalls = output.getToolCalls();
-	
+
 		if (!org.springframework.util.CollectionUtils.isEmpty(toolCalls)) {
 			for (AssistantMessage.ToolCall toolCall : toolCalls) {
-	
+
 				rawToolCallsCumulator.add(toolCall);
 			}
 		}
-	
+
 		Map<String, Object> metadata = output.getMetadata();
 		if (metadata != null && !metadata.isEmpty()) {
 			Object rawToolCalls = metadata.get("tool_calls");
@@ -194,10 +190,9 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 			}
 			if (rawToolCalls != null)
 				rawToolCallsCumulator.add(rawToolCalls);
-	
+
 		}
 	}
-
 
 	protected GPromptTemplateConfig resolvePrompt(GPromptTemplateConfig prompt, String useCode, boolean nullable)
 			throws AgentException {
@@ -207,7 +202,5 @@ public abstract class GAbstractGenericalAgentService  implements IGGenericAgentS
 			throw new AgentException("Mandatory prompt not present");
 		return resolved;
 	}
-
-	 
 
 }
