@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.model.IGObjectWithSecurity;
@@ -47,6 +51,9 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GSecurityServiceImpl implements IGSecurityService {
+	private static final String USER = "user:";
+	private static final String GROUP = "group:";
+	private final static Logger LOGGER = LoggerFactory.getLogger(GSecurityServiceImpl.class);
 	final UserRepository usersRepo;
 	final UsersGroupRepository groupsRepo;
 	final IAclGrantedAccessorService aclGrantedAccessorService;
@@ -54,6 +61,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final GeboSecurityConfig securityConfig;
 	final IGeboCryptingService cryptService;
 	final PasswordEncoder passwordEncoder;
+	final IGPersistentObjectManager persistenceManager;
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -379,6 +387,60 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return passwordEncoder.matches(confirmpassword, encodedPwd);
 		} else
 			return false;
+	}
+
+	@Override
+	public <T extends GBaseObject & IAclGrantedResource> void setAclAliases(List<T> aclGrantedObject,
+			List<AclInfo> acls) throws GeboPersistenceException {
+
+		List<Integer> acl = new ArrayList<>();
+		for (AclInfo aclInfo : acls) {
+			if (aclInfo.getGrants() != null) {
+				for (AclGrantType grant : aclInfo.getGrants()) {
+					List<Integer> aclId = aclAliasesDao
+							.findAliasesByAclGrantedUniqueIdAndAclGrantType(aclInfo.getUniqueId(), grant);
+					if (aclId == null || aclId.isEmpty()) {
+						LOGGER.error("Acl: " + aclInfo.getUniqueId() + " " + grant + " is not existing!!");
+					} else
+						acl.addAll(aclId);
+				}
+			}
+		}
+		if (!acl.isEmpty()) {
+			for (T toBeGranted : aclGrantedObject) {
+				toBeGranted.setAclAliases(acl);
+				this.persistenceManager.update(toBeGranted);				
+			}
+		} else {
+			LOGGER.error("Cannot set an empty acl");
+		}
+
+	}
+
+	@Override
+	public <T extends GBaseObject & IAclGrantedResource> void setAclAliasesForOwners(List<T> aclGrantedObject,
+			List<AclOwnerInfo> acls) throws GeboPersistenceException {
+
+		List<AclInfo> aclsEncoded = new ArrayList<>();
+		for (AclOwnerInfo aclOwnerInfo : acls) {
+			String uniqueId = null;
+			if (aclOwnerInfo.getOwnerType() == null)
+				throw new IllegalStateException("ownerType cannot be null here");
+			switch (aclOwnerInfo.getOwnerType()) {
+			case GROUP: {
+				uniqueId = GROUP;
+			}
+				break;
+			case USER: {
+				uniqueId = USER;
+			}
+				break;
+			}
+			uniqueId += aclOwnerInfo.getOwnerCode();
+			AclInfo aclInfo = new AclInfo(uniqueId, aclOwnerInfo.getGrants());
+			aclsEncoded.add(aclInfo);
+		}
+		setAclAliases(aclGrantedObject, aclsEncoded);
 	}
 
 }
