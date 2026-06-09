@@ -18,6 +18,7 @@ import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -54,9 +55,9 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -69,7 +70,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
 			BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
-			params.put("format", converter.getFormat());
+			params.put(FORMAT, converter.getFormat());
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),

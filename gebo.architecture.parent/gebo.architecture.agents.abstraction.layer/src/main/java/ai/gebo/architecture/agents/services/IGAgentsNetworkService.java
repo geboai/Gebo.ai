@@ -8,5 +8,5 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 public interface IGAgentsNetworkService {
 	String getId();
 	String getDescription();
-	<InputType, OutputType> OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,AgentsNetwork network, Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException;
+	<InputType, OutputType> OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,AgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException;
 }

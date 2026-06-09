@@ -30,6 +30,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 	public static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
 	public static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
+	public static final String FORMAT = "format";
 
 	public GAbstractGenericalNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,

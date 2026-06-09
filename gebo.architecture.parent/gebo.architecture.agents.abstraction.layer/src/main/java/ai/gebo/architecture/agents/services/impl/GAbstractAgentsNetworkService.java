@@ -24,6 +24,7 @@ import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkService;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -39,7 +40,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 	@Override
 	public <InputType, OutputType> OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			AgentsNetwork network, Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
+			AgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
 		final Map<String, RuntimeAgentInfos> agents = allocateAgents(network);
 		if (network.getAgents() != null || network.getAgents().isEmpty())
 			throw new AgentException("No agents configured");
@@ -65,22 +66,22 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 			}
 		};
 		try {
-			return executeNetworkLoops(chatRequestContext, network, agentsDao, session, inputRuntime, inputMessage, outputType, runAs);
+			return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, inputRuntime, inputMessage, outputType, runAs);
 		} catch (LLMConfigException | AgentException | InterruptedException | ExecutionException e) {
 			throw new AgentException("Exception in agents network execution", e);
 		}
 	}
 
 	protected <InputType, OutputType> OutputType executeNetworkLoops(IChatRequestContext chatRequestContext,
-			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
-			AgentsCollaborationSessionContext session, RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage,
-			Class<OutputType> outputType, ReactiveIdentityUtil runAs)
+			AgentsNetwork network, INotificationSink notificationSink,
+			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session, RuntimeAgentInfos inputRuntime,
+			AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType, ReactiveIdentityUtil runAs)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
 		if (checkContinueLoop(network, agentsDao)) {
 			List<AgentsExchangeMessage<?>> messages = inputRuntime.getService().onMessage(chatRequestContext,
-					inputRuntime.getConfig(), inputMessage, network, inputRuntime.getNetworkParticipantConfig(), session,
-					inputRuntime.getAgentContext(), runAs, agentsDao);
+					inputRuntime.getConfig(), inputMessage, network, inputRuntime.getNetworkParticipantConfig(), notificationSink,
+					session, inputRuntime.getAgentContext(), runAs, agentsDao);
 			inputRuntime.setTurnOfExecution(inputRuntime.getTurnOfExecution() + 1);
 			TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
 			for (AgentsExchangeMessage<?> msg : messages) {
@@ -105,8 +106,8 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 				}
 			}
 			for (List<AgentsExchangeMessage<?>> parallelExecs : deliveryOrder.values()) {
-				OutputType loopOutput = executeNetworkLoopsGroup(chatRequestContext, network, agentsDao, session, parallelExecs,
-						outputType, runAs);
+				OutputType loopOutput = executeNetworkLoopsGroup(chatRequestContext, notificationSink, network, agentsDao, session,
+						parallelExecs, outputType, runAs);
 				if (loopOutput != null) {
 					output = compose(output, loopOutput);
 				}
@@ -119,8 +120,8 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 	}
 
 	protected <OutputType> OutputType executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
-			AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
-			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup, Class<OutputType> outputType, ReactiveIdentityUtil runAs)
+			INotificationSink notificationSink, AgentsNetwork network,
+			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup, Class<OutputType> outputType, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
 		OutputType out = null;
 		if (executionGroup.isEmpty())
@@ -128,7 +129,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 		if (executionGroup.size() == 1) {
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
-			out = executeNetworkLoops(chatRequestContext, network, agentsDao, session, agentRuntime, msg, outputType, runAs);
+			out = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agentRuntime, msg, outputType, runAs);
 		} else {
 			List<CompletableFuture<OutputType>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
@@ -137,10 +138,10 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 					try {
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
-								return executeNetworkLoops(chatRequestContext, network, agentsDao, session, agent, msg, outputType, runAs);
+								return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agent, msg, outputType, runAs);
 							});
 						else
-							return executeNetworkLoops(chatRequestContext, network, agentsDao, session, agent, msg, outputType, runAs);
+							return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agent, msg, outputType, runAs);
 					} catch (Throwable e) {
 
 						return null;

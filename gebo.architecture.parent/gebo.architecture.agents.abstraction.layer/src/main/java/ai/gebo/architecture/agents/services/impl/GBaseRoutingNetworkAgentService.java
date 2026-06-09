@@ -22,6 +22,7 @@ import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGRoutingNetworkAgentService;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -81,9 +82,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -109,7 +110,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					.getLoaded();
 			typesMap.put(coordAgent, dynamicType);
 		}
-		params.put("format", super.buildRootJsonSchema(typesMap));
+		params.put(FORMAT, super.buildRootJsonSchema(typesMap));
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> messagesInOrder = new TreeMap<>();
