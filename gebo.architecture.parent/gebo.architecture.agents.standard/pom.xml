@@ -7,7 +7,7 @@
 		<artifactId>gebo.architecture.parent</artifactId>
 		<version>1.0.1.0-ALPHA</version>
 	</parent>
-	<artifactId>gebo.architecture.agents.standardtools</artifactId>
+	<artifactId>gebo.architecture.agents.standard</artifactId>
 
 	<dependencies>
 

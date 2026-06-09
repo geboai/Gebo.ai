@@ -57,7 +57,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.agents.standardtools</artifactId>
+			<artifactId>gebo.architecture.agents.standard</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
