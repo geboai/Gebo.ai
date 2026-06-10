@@ -19,6 +19,7 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -42,7 +43,7 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 
 	public GAbstractAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 
 	}

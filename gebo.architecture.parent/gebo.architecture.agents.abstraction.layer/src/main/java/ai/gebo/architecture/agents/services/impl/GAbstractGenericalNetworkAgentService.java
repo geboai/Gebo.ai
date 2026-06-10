@@ -17,6 +17,7 @@ import ai.gebo.architecture.agents.model.AgentsNetwork;
 import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -42,7 +43,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 
 	public GAbstractGenericalNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 
 	}

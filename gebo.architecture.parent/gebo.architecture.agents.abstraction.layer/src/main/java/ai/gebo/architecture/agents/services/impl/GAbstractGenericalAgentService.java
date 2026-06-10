@@ -22,6 +22,7 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -44,13 +45,13 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
 	protected final IGPromptConfigDao promptsDao;
-	protected final GAgentConfigRepository configsRepository;
+	protected final IAgentConfigDao configsDao;
 	protected final IGSecurityService securityService;
 	protected final IAgentRoleDao agentRoleDao;
 
 	@Override
 	public List<GAgentConfig> getAccessibleConfigurations() {
-		List<GAgentConfig> configs = this.configsRepository.findByAgentServiceId(getId());
+		List<GAgentConfig> configs = this.configsDao.findByAgentServiceId(getId());
 		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
 	}
 

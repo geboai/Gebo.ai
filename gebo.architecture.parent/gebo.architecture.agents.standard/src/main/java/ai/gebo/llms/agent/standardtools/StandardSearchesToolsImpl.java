@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.agent.standardtools;
+package ai.gebo.llms.agent.standardtools;
 
 import java.util.List;
 

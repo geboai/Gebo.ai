@@ -7,6 +7,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.model.IGObjectWithSecurity;
+import ai.gebo.model.IJsonClonable;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -14,7 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
+public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource,IJsonClonable<GAgentConfig> {
 	@NotNull
 	private String agentServiceId = null;
 	private String mainLoopPromptUseCode = null;
@@ -22,7 +23,7 @@ public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, I
 	private Boolean subscribeAllTools = null;
 	@NotNull
 	private String agentRoleCode = null;
-	
+
 	private Boolean useDefaultChatModel = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
@@ -37,7 +38,7 @@ public class GAgentConfig extends GBaseObject implements IGObjectWithSecurity, I
 
 	private Double temperature = null;
 	private ChatModelThinkingOption thinking = null;
-
+	private Boolean readOnly = null;
 	/**
 	 * A list of group identifiers that have access to the model configuration.
 	 */

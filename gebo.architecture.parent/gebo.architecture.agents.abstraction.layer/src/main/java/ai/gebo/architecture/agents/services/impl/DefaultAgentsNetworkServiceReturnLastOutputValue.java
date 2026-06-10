@@ -4,13 +4,13 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentServiceRepositoryPattern;
+import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 
 @Service
 public class DefaultAgentsNetworkServiceReturnLastOutputValue extends GAbstractAgentsNetworkService {
 
-	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRepositoryPattern agentsServicesRepository,
+	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRuntimeDao agentsServicesRepository,
 			IAgentRoleDao rolesDao, GAgentConfigRepository agentConfigRepo, IGeboThreadManager threadManager) {
 		super(agentsServicesRepository, rolesDao, agentConfigRepo, threadManager);
 	}

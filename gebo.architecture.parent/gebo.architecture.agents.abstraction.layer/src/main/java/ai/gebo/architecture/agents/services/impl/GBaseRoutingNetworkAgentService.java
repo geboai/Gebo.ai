@@ -19,6 +19,7 @@ import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGRoutingNetworkAgentService;
@@ -48,7 +49,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	public GBaseRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
 			String id, String description, Class<OutputType> outputType, Class<InputType> inputType) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 		this.id = id;

@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.agent.standardtools.model;
+package ai.gebo.llms.agent.standardtools.model;
 
 import java.util.ArrayList;
 import java.util.List;

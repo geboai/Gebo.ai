@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * Gebo.ai comment agent
@@ -19,23 +16,56 @@
  */
 package ai.gebo.architecture.patterns;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IGDynamicConfigurationSource<ConfigTypes> {
 
-    /**
-     * Retrieves a list of configuration objects.
-     *
-     * @return a List of configuration objects of type ConfigTypes.
-     */
-    public List<ConfigTypes> getConfigurations();
+	/**
+	 * Retrieves a list of configuration objects.
+	 *
+	 * @return a List of configuration objects of type ConfigTypes.
+	 */
+	public List<ConfigTypes> getConfigurations();
 
-    /**
-     * Finds a configuration object by its unique code.
-     *
-     * @param code the unique code associated with a configuration.
-     * @return the configuration object of type ConfigTypes matching the provided code.
-     */
-    public ConfigTypes findByCode(String code);
+	/**
+	 * Finds a configuration object by its unique code.
+	 *
+	 * @param code the unique code associated with a configuration.
+	 * @return the configuration object of type ConfigTypes matching the provided
+	 *         code.
+	 */
+	public ConfigTypes findByCode(String code);
+
+	public static <ConfigTypes> IGDynamicConfigurationSource<ConfigTypes> compose(
+			IGDynamicConfigurationSource<ConfigTypes>... configs) {
+		return new IGDynamicConfigurationSource<ConfigTypes>() {
+			@Override
+			public ConfigTypes findByCode(String code) {
+				if (configs != null) {
+					for (IGDynamicConfigurationSource<ConfigTypes> ds : configs) {
+						ConfigTypes cf = ds.findByCode(code);
+						if (cf != null)
+							return cf;
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public List<ConfigTypes> getConfigurations() {
+				List<ConfigTypes> out = new ArrayList<>();
+				if (configs != null) {
+					for (IGDynamicConfigurationSource<ConfigTypes> ds : configs) {
+						List<ConfigTypes> list = ds.getConfigurations();
+						if (list != null) {
+							out.addAll(list);
+						}
+					}
+				}
+				return out;
+			}
+		};
+	}
 
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.ai.document.Document;
 
-public interface IGDocumentsSearchNetworkAgentService extends IGNetworkAgentService<String, List<Document>> {
+import ai.gebo.architecture.agents.model.SearchAgentCommand;
+
+public interface IGDocumentsSearchNetworkAgentService extends IGNetworkAgentService<SearchAgentCommand, List<Document>> {
 
 }

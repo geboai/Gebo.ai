@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.agent.standardtools;
+package ai.gebo.llms.agent.standardtools;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,8 +10,8 @@ import ai.gebo.architecture.documents.cache.model.ChunkingParams;
 import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.model.SearchResult;
-import ai.gebo.llms.chat.agent.standardtools.model.SearchResultSample;
-import ai.gebo.llms.chat.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
+import ai.gebo.llms.agent.standardtools.model.SearchResultSample;
+import ai.gebo.llms.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.ParallelFlux;
 

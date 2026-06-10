@@ -15,6 +15,7 @@ import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
@@ -43,7 +44,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 
 	public GBaseTaskPerformerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
 			Class<InputType> inputType, Class<OutputType> outputType, String id, String description) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 		this.inputType = inputType;

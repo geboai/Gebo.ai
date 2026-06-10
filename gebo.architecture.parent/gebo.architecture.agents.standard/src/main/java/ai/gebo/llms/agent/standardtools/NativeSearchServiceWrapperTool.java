@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.agent.standardtools;
+package ai.gebo.llms.agent.standardtools;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.architecture.search.service.INativeSearchService;
-import ai.gebo.llms.chat.agent.standardtools.model.NativeSearchParam;
-import ai.gebo.llms.chat.agent.standardtools.model.SearchResultSample;
-import ai.gebo.llms.chat.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
+import ai.gebo.llms.agent.standardtools.model.NativeSearchParam;
+import ai.gebo.llms.agent.standardtools.model.SearchResultSample;
+import ai.gebo.llms.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import net.bytebuddy.ByteBuddy;

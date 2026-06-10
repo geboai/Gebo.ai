@@ -21,7 +21,7 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentServiceRepositoryPattern;
+import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkService;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -33,7 +33,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkService {
-	private final IGAgentServiceRepositoryPattern agentsServicesRepository;
+	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
 	private final GAgentConfigRepository agentConfigRepo;
 	private final IGeboThreadManager threadManager;

@@ -12,9 +12,11 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.AgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGDocumentsSearchNetworkAgentService;
@@ -31,21 +33,34 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 public abstract class GAbstractDocumentsSearchNetworkAgentService
-		extends GAbstractGenericalNetworkAgentService<String, List<Document>> implements IGDocumentsSearchNetworkAgentService {
+		extends GAbstractGenericalNetworkAgentService<SearchAgentCommand, List<Document>>
+		implements IGDocumentsSearchNetworkAgentService {
 
 	public GAbstractDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			GAgentConfigRepository configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 
 	}
 
 	@Override
+	public Class<List<Document>> getOutputType() {
+
+		return (Class<List<Document>>) (Class<?>) List.class;
+	}
+
+	@Override
+	public Class<SearchAgentCommand> getInputType() {
+
+		return SearchAgentCommand.class;
+	}
+
+	@Override
 	public List<AgentsExchangeMessage<List<Document>>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<String> msg, AgentsNetwork network,
+			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, AgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<String, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
@@ -54,16 +69,18 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener, runAs);
 		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg, agentsDao);
-		List<Document> documents = retrieveDocuments(prompt, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao,notificationSink);
+		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
 				MessageSemantic.RESPONSE);
 		return List.of(outMsg);
 	}
 
 	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, AgentsNetwork network, GAgentRole agentRole,
-			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<String, List<Document>> mySessionContext, AgentsExchangeMessage<String> msg,
-			IGAgentsNetworkRuntimeDao agentsDao, INotificationSink notificationSink);
+			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel, Map<String, Object> params,
+			AgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink);
 }
