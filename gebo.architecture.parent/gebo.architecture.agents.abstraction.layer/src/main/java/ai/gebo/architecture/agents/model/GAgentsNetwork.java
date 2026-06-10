@@ -2,13 +2,14 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import ai.gebo.model.IJsonClonable;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class AgentsNetwork extends GBaseObject {
+public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgentsNetwork> {
 	public static enum MessagesTargetsDecision {
 		ALLOWED, NOT_ALLOWED
 	}
@@ -17,7 +18,6 @@ public class AgentsNetwork extends GBaseObject {
 		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
 	}
 
-	
 	int maxLoopIteration = 5;
 
 	@Data
@@ -55,5 +55,7 @@ public class AgentsNetwork extends GBaseObject {
 	@NotNull
 	@NotEmpty
 	private List<AgentNetworkParticipant> agents = null;
+	private Boolean readOnly = null;
+	private Boolean defaultUserInteractionNetwork = null;
 
 }

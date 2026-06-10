@@ -5,8 +5,8 @@ import java.util.List;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -18,6 +18,6 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	public Class<OutputType> getOutputType();
 
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
+			AgentsExchangeMessage<InputType> msg, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException;
 }

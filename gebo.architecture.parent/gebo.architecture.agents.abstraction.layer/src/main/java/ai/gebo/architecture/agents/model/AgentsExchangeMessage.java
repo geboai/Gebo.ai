@@ -1,6 +1,7 @@
 package ai.gebo.architecture.agents.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import ai.gebo.application.messaging.model.GBaseMessagePayload;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -16,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class AgentsExchangeMessage<PayloadType> {
 	public enum MessageSemantic {
 		EXECUTE_AND_SHARE_RESULT, RESPONSE
-
 	}
-
+	@NotNull
+	private final String id = UUID.randomUUID().toString();
 	@NotNull
 	private String collaborationContextId;
 	@NotNull
@@ -31,9 +32,7 @@ public class AgentsExchangeMessage<PayloadType> {
 	private String toAgent;
 	@NotNull
 	private PayloadType payload;
-
 	private int executionOrder = 0;
-
 	public static <PayloadType> AgentsExchangeMessage<PayloadType> of(AgentsCollaborationSessionContext context,
 			String targetAgent, PayloadType data, MessageSemantic messageSemantic) {
 		AgentsExchangeMessage<PayloadType> m = new AgentsExchangeMessage<PayloadType>();

@@ -9,12 +9,12 @@ import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
@@ -57,7 +57,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 
 	@Override
 	public List<AgentsExchangeMessage<List<Document>>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, AgentsNetwork network,
+			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
@@ -78,7 +78,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 
 	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,
 			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel, Map<String, Object> params,
-			AgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,

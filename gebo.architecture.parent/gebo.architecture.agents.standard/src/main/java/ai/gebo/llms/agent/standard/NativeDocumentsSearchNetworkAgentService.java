@@ -8,8 +8,8 @@ import org.springframework.ai.document.Document;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
@@ -31,8 +31,8 @@ import ai.gebo.security.services.IGSecurityService;
 
 public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtractionDataType extends BaseSearchResultsExtractionDataType, NativeSearchDataStructure extends INativeQueryObject>
 		extends GAbstractDocumentsSearchNetworkAgentService {
-	private static final String NATIVE_SEARCH_AGENT_FOR = "Native search Agent for ";
-	private static final String NATIVE_SEARCHER_AGENT = "NativeSearcherAgent";
+	public static final String NATIVE_SEARCH_AGENT_FOR = "Native search Agent for ";
+	public static final String NATIVE_SEARCHER_AGENT = "NativeSearcherAgent";
 	final INativeSearchService<CustomSearchResultExtractionDataType, NativeSearchDataStructure> nativeSearchWrapper;
 	final IGRankerModelRuntimeConfigurationDao rankersDao;
 
@@ -61,7 +61,7 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, AgentsNetwork network, GAgentRole agentRole,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network, GAgentRole agentRole,
 			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,

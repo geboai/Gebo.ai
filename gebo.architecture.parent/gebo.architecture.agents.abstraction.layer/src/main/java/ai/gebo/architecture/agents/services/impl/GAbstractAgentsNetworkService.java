@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -30,17 +30,19 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkService {
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
-	private final GAgentConfigRepository agentConfigRepo;
+	private final AgentConfigRepository agentConfigRepo;
 	private final IGeboThreadManager threadManager;
 
 	@Override
 	public <InputType, OutputType> OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			AgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
+			GAgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType,
+			ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
 		final Map<String, RuntimeAgentInfos> agents = allocateAgents(network);
 		if (network.getAgents() != null || network.getAgents().isEmpty())
 			throw new AgentException("No agents configured");
@@ -48,42 +50,65 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 				.findFirst();
 		if (inputNode.isEmpty())
 			throw new AgentException("No input node configured in agents network");
-		AgentNetworkParticipant inputNodeAgentConfig = inputNode.get();
-		String inputNodeName = inputNodeAgentConfig.getNetworkAgentName();
-		AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
-		AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
+		final AgentNetworkParticipant inputNodeAgentConfig = inputNode.get();
+		final String inputNodeName = inputNodeAgentConfig.getNetworkAgentName();
+		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
+		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
-		RuntimeAgentInfos inputRuntime = agents.get(inputNodeName);
+		final RuntimeAgentInfos inputRuntime = agents.get(inputNodeName);
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
 			throw new AgentException(
 					"Network input node does not support a matching type " + input.getClass().getName());
-		IGAgentsNetworkRuntimeDao agentsDao = new IGAgentsNetworkRuntimeDao() {
-
-			@Override
-			public RuntimeAgentInfos findAgentByCode(String agentName) {
-
-				return agents.get(agentName);
-			}
-		};
+		final IGAgentsNetworkRuntimeDao agentsDao = IGAgentsNetworkRuntimeDao.of(agents);
+		CallsResult<OutputType> iterationResult = null;
 		try {
-			return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, inputRuntime, inputMessage, outputType, runAs);
+			int cycles = 0;
+			iterationResult = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session,
+					inputRuntime, inputMessage, outputType, runAs);
+			while (iterationResult != null && iterationResult.getDeliveryOrder() != null
+					&& !iterationResult.getDeliveryOrder().isEmpty()) {
+				CallsResult<OutputType> levelResult = new CallsResult<OutputType>(new TreeMap<>(),
+						iterationResult.getOutput());
+				for (List<AgentsExchangeMessage<?>> group : iterationResult.getDeliveryOrder().values()) {
+					CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
+							network, agentsDao, session, group, outputType, runAs);
+					levelResult = join(levelResult, rowResult);
+				}
+				iterationResult = levelResult;
+			}
 		} catch (LLMConfigException | AgentException | InterruptedException | ExecutionException e) {
 			throw new AgentException("Exception in agents network execution", e);
 		}
+		return iterationResult != null ? iterationResult.getOutput() : null;
 	}
 
-	protected <InputType, OutputType> OutputType executeNetworkLoops(IChatRequestContext chatRequestContext,
-			AgentsNetwork network, INotificationSink notificationSink,
-			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session, RuntimeAgentInfos inputRuntime,
-			AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType, ReactiveIdentityUtil runAs)
+	private <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
+			CallsResult<OutputType> rowResult) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	class CallsResult<OutputType> {
+		private final TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder;
+		private final OutputType output;
+	}
+
+	protected <InputType, OutputType> CallsResult<OutputType> executeNetworkLoops(
+			IChatRequestContext chatRequestContext, GAgentsNetwork network, INotificationSink notificationSink,
+			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session,
+			RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType,
+			ReactiveIdentityUtil runAs)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
+		final TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
 		if (checkContinueLoop(network, agentsDao)) {
 			List<AgentsExchangeMessage<?>> messages = inputRuntime.getService().onMessage(chatRequestContext,
-					inputRuntime.getConfig(), inputMessage, network, inputRuntime.getNetworkParticipantConfig(), notificationSink,
-					session, inputRuntime.getAgentContext(), runAs, agentsDao);
+					inputRuntime.getConfig(), inputMessage, network, inputRuntime.getNetworkParticipantConfig(),
+					notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao);
 			inputRuntime.setTurnOfExecution(inputRuntime.getTurnOfExecution() + 1);
-			TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
+
 			for (AgentsExchangeMessage<?> msg : messages) {
 				addTo(msg, session);
 				addTo(msg, inputMessage, inputRuntime.getAgentContext());
@@ -105,55 +130,59 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 				}
 			}
-			for (List<AgentsExchangeMessage<?>> parallelExecs : deliveryOrder.values()) {
-				OutputType loopOutput = executeNetworkLoopsGroup(chatRequestContext, notificationSink, network, agentsDao, session,
-						parallelExecs, outputType, runAs);
-				if (loopOutput != null) {
-					output = compose(output, loopOutput);
-				}
-			}
+			/*
+			 * for (List<AgentsExchangeMessage<?>> parallelExecs : deliveryOrder.values()) {
+			 * OutputType loopOutput = executeNetworkLoopsGroup(chatRequestContext,
+			 * notificationSink, network, agentsDao, session, parallelExecs, outputType,
+			 * runAs); if (loopOutput != null) { output = compose(output, loopOutput); } }
+			 */
 
 		}
 
-		return output;
+		return new CallsResult<OutputType>(deliveryOrder, output);
 
 	}
 
-	protected <OutputType> OutputType executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
-			INotificationSink notificationSink, AgentsNetwork network,
-			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup, Class<OutputType> outputType, ReactiveIdentityUtil runAs)
+	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
+			INotificationSink notificationSink, GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
+			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup,
+			Class<OutputType> outputType, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
-		OutputType out = null;
+		CallsResult<OutputType> out = null;
 		if (executionGroup.isEmpty())
 			return null;
 		if (executionGroup.size() == 1) {
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
-			out = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agentRuntime, msg, outputType, runAs);
+			out = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agentRuntime,
+					msg, outputType, runAs);
 		} else {
-			List<CompletableFuture<OutputType>> completables = new ArrayList<>();
+			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
 				RuntimeAgentInfos agent = agentsDao.findAgentByCode(msg.getToAgent());
-				Supplier<OutputType> supplier = () -> {
+				Supplier<CallsResult<OutputType>> supplier = () -> {
 					try {
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
-								return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agent, msg, outputType, runAs);
+								return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao,
+										session, agent, msg, outputType, runAs);
 							});
 						else
-							return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agent, msg, outputType, runAs);
+							return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao,
+									session, agent, msg, outputType, runAs);
 					} catch (Throwable e) {
 
 						return null;
 					}
 				};
 				Executor executor = threadManager.getExecutorService();
-				CompletableFuture<OutputType> completable = CompletableFuture.supplyAsync(supplier, executor);
+				CompletableFuture<CallsResult<OutputType>> completable = CompletableFuture.supplyAsync(supplier,
+						executor);
 				completables.add(completable);
 			}
-			for (CompletableFuture<OutputType> completableFuture : completables) {
-				OutputType iterationOut = completableFuture.get();
-				out = compose(out, iterationOut);
+			for (CompletableFuture<CallsResult<OutputType>> completableFuture : completables) {
+				CallsResult<OutputType> iterationOut = completableFuture.get();
+				out = join(out, iterationOut);
 			}
 		}
 		return out;
@@ -161,16 +190,16 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 	private void addTo(AgentsExchangeMessage<?> msg, AgentsExchangeMessage<?> inputMessage,
 			AgentPrivateSessionContext agentContext) {
-		agentContext.addInteraction(inputMessage,msg.getPayload());
+		agentContext.addInteraction(inputMessage, msg.getPayload());
 	}
 
 	private void addTo(AgentsExchangeMessage<?> msg, AgentsCollaborationSessionContext session) {
-		if (msg.getMessageSemantic()==MessageSemantic.RESPONSE) {
+		if (msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
 			session.addContribution(msg);
 		}
 	}
 
-	private boolean checkContinueLoop(AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao)
+	private boolean checkContinueLoop(GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao)
 			throws AgentException {
 		int loopDone = Integer.MIN_VALUE;
 		for (AgentNetworkParticipant agent : network.getAgents()) {
@@ -182,7 +211,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 	protected abstract <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental);
 
-	private Map<String, RuntimeAgentInfos> allocateAgents(AgentsNetwork network) {
+	private Map<String, RuntimeAgentInfos> allocateAgents(GAgentsNetwork network) {
 		// TODO Auto-generated method stub
 		return null;
 	}

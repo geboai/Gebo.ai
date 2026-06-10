@@ -8,8 +8,8 @@ import org.springframework.ai.document.Document;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
@@ -55,7 +55,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractDoc
 
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, AgentsNetwork network, GAgentRole agentRole,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network, GAgentRole agentRole,
 			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,

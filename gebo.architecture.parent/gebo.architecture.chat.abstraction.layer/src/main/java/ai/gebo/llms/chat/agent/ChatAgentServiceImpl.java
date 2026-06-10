@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.impl.GAbstractReactiveAgentService;

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
@@ -21,7 +21,7 @@ public class AgentConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentC
 	private final IGPersistentObjectManager persistentObjectManager;
 
 	public AgentConfigDaoImpl(@Autowired(required = false) List<IGDynamicAgentConfigDataSource> dataSources,
-			GAgentConfigRepository agentsRepo, IGPersistentObjectManager persistentObjectManager) {
+			AgentConfigRepository agentsRepo, IGPersistentObjectManager persistentObjectManager) {
 		super(new ArrayList<>(), compose(dataSources, agentsRepo));
 		this.persistentObjectManager = persistentObjectManager;
 
@@ -34,7 +34,7 @@ public class AgentConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GAgentC
 	}
 
 	private static IGDynamicConfigurationSource<GAgentConfig> compose(List<IGDynamicAgentConfigDataSource> dataSources,
-			GAgentConfigRepository agentsRepo) {
+			AgentConfigRepository agentsRepo) {
 		IGDynamicConfigurationSource staticDss = new IGDynamicConfigurationSource<GAgentConfig>() {
 
 			@Override

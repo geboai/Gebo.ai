@@ -13,10 +13,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
@@ -89,7 +89,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 		}
 	}
 
-	protected Map<String, Object> createAgentTemplateParams(AgentsNetwork network, GAgentRole agentRole,
+	protected Map<String, Object> createAgentTemplateParams(GAgentsNetwork network, GAgentRole agentRole,
 			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, AgentsExchangeMessage<InputType> msg,
 			IGAgentsNetworkRuntimeDao agentsDao) {
@@ -105,7 +105,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	}
 
 	protected String createAgentCommunicationCapabilityDescription(GAgentRole agentRole,
-			AgentNetworkParticipant contextAgentPersona, AgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao) {
+			AgentNetworkParticipant contextAgentPersona, GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -115,7 +115,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 		return null;
 	}
 
-	protected Object createNetworkScenaryDescription(AgentsNetwork network) {
+	protected Object createNetworkScenaryDescription(GAgentsNetwork network) {
 		StringBuffer buffer = new StringBuffer();
 		if (network.getScenarioDescription() != null) {
 			buffer.append(THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS + network.getScenarioDescription());

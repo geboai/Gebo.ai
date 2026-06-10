@@ -11,13 +11,13 @@ import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.model.AgentsNetwork;
-import ai.gebo.architecture.agents.model.AgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
-import ai.gebo.architecture.agents.repository.GAgentConfigRepository;
+import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
@@ -84,7 +84,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, AgentsNetwork network,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
