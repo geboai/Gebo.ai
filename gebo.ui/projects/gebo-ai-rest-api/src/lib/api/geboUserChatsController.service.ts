@@ -250,6 +250,68 @@ export class GeboUserChatsControllerService {
     /**
      * 
      * 
+     * @param userContextCode 
+     * @param responseId 
+     * @param format 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public exportResponse2file(userContextCode: string, responseId: string, format: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userContextCode === null || userContextCode === undefined) {
+            throw new Error('Required parameter userContextCode was null or undefined when calling exportResponse2file.');
+        }
+
+        if (responseId === null || responseId === undefined) {
+            throw new Error('Required parameter responseId was null or undefined when calling exportResponse2file.');
+        }
+
+        if (format === null || format === undefined) {
+            throw new Error('Required parameter format was null or undefined when calling exportResponse2file.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userContextCode !== undefined && userContextCode !== null) {
+            queryParameters = queryParameters.set('userContextCode', <any>userContextCode);
+        }
+        if (responseId !== undefined && responseId !== null) {
+            queryParameters = queryParameters.set('responseId', <any>responseId);
+        }
+        if (format !== undefined && format !== null) {
+            queryParameters = queryParameters.set('format', <any>format);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatsController/exportResponse2file`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param code 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
