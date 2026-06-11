@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Nõustun tingimustega",
         "help" : "Klikkides siin, nõustud litsentsi tingimustega"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin kasutaja loodud !",
+        "detail" : "Admin kasutaja PAOLO.ZAVALLONI@GMAIL.COM edukalt loodud"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai seadistamisel puudub mõni kohustuslik samm",
         "detail" : "Palun vaadake üle punasega tähistatud etapid seadistamise protsessis"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigureeri Agendi teenuseid",
+        "description" : "Seadista agenditeenused ja nende saadaolevad tööriistad"
+      },
+      "AgentAddBtn" : {
+        "label" : "Lisa agent"
+      },
+      "MainPanel" : {
+        "label" : "Agendi seadistamine"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguratsioonikood"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "EditAgentBtn" : {
+        "label" : "Muuda agenti"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Suurte keelemudelite seadistamine"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Erind toimingul: Vektorpood või manustamismudeli initsialiseerimine ebaõnnestus: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Serveri viga: Vektorpoodi või manustamismudeli initsialiseerimine ebaõnnestus: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "kasutajad"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Otsi nime"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Otsi kasutajanime"
+      },
+      "SearchUsersBtn" : {
+        "label" : "otsi"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Vali roll"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Otsi perekonnanime"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Kasutajate loend",
         "help" : "Vali grupis osalevad kasutajad"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Muuda kasutaja parooli"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Muuda"
+      },
+      "username" : {
+        "label" : "Kasutajanimi",
+        "help" : "Selle toimingu kinnitamiseks sisesta oma parool"
+      },
+      "currentUserPassword" : {
+        "label" : "Sinu parool",
+        "help" : "Selle toimingu kinnitamiseks sisesta oma parool"
+      },
+      "confirmpassword" : {
+        "label" : "kasutaja parooli kinnitus",
+        "help" : "Muudetava kasutaja parooli kinnitus"
+      },
+      "password" : {
+        "label" : "Kasutaja uus parool",
+        "help" : "Muudetava kasutaja uus parool"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Uus sisseehitamise mudel",
         "help" : "Vali tarnija, et lisada uus sisseehitamise mudel, mis võimaldab sisu semantilist indekseerimist",
         "placeholder" : "Vali tarnija, et lisada uus sisseehitamise mudel, mis võimaldab sisu semantilist indekseerimist"
+      },
+      "ranker" : {
+        "label" : "Uus reastamismudel",
+        "help" : "Vali pakkuja, et lisada uus reastamismudel",
+        "placeholder" : "Vali pakkuja, et lisada uus reastamismudel"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Uue reastamismudeli konfiguratsioon"
+      },
+      "CodeHeader3" : {
+        "label" : "Kood"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Kirjeldus"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Mudeli pakkuja"
+      },
+      "ModelHeader3" : {
+        "label" : "Mudel "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Seadistatud reastamismudelid"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding mudeli API token",
         "help" : "Vali selle mudeli jaoks kasutatav embedding mudeli API token"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiming edukalt sooritatud"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "TitleFragment" : {
+        "label" : "Reastamismudeli pakkuja muutmine:"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli konfiguratsiooni kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli konfiguratsiooni automaatselt genereeritud unikaalne kood"
+      },
+      "baseUrl" : {
+        "label" : "reastamismudeli API baasserveri aadress",
+        "help" : "Reastamismudeli baasaadress."
+      },
+      "apiSecretCode" : {
+        "label" : "reastamismudeli API token",
+        "help" : "Vali selles mudelis kasutatav reastamismudeli API token (valikuline)"
+      },
+      "choosedModel" : {
+        "label" : "reastamismudeli valik",
+        "help" : "Vali reastamismudel, millega töötada."
+      },
+      "defaultModel" : {
+        "label" : "määra see vaikimisi reastamismudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi reastamismudelina, kui mujale mudelit pole määratud"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiming edukalt sooritatud"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valitud süsteemid"
+      },
+      "wordExport" : {
+        "help" : "Ekspordi vastus Wordi"
+      },
+      "pdfExport" : {
+        "help" : "Ekspordi vastus PDF-i"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Täidan sinu valitud agenti"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Dokumendi töötlemine:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Sügav otsing/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Abistatud otsing"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Käivitus",
         "help" : "Muuda retrieve augmented generation seansside käivitusvälja."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuaalne või automaatselt häälestatud läve seadistus",
+        "help" : "Kasuta käsitsi kauguse läve sisestust, mitte automaatset häälestust"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Kasuta märksõnaotsingut, kui see on saadaval",
+        "help" : "Kui seadistatud, tehakse lisaks semantilisele otsingule ka märksõnaotsinguid"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Sirvi või otsi ja vali dokumendid, millega vestelda"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valitud dokumendid"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Vestlus"
       },
       "setupMenuItem" : {
-        "label" : "Seadistus"
+        "label" : "Seadistus",
+        "help" : "Seadistamine on pooleli – vajuta siia ja hallake seda"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Tõrge toimingul: Anthropic api ei saa töötada ilma vajaliku api võtmeta",
         "detail" : "Serveri viga: Anthropic api ei saa töötada ilma vajaliku api võtmeta"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fail eksporditud",
+        "detail" : "Mine brauseri allalaadimiste sektsiooni"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Siseteenusteks kasutatav mudel"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agendi kasutatav vestlusmudel"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vali"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vali vestlusmudeli konfiguratsioon"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Kasuta süsteemi vaikimisi vestlusmudelit agendi ülesannete täitmiseks või täpsusta."
+      },
+      "LanguageModelTab" : {
+        "label" : "Suurte keelemudelite & tööriistade seaded"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Turva- ja ligipääsu seaded"
+      },
+      "MainPanel" : {
+        "label" : "Agendi konfiguratsiooni muutmine"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta agendi vestluse kirjeldus."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Agendi automaatselt genereeritud unikaalne kood."
+      },
+      "agentServiceId" : {
+        "label" : "Agendi teenuse tüüp",
+        "help" : "Vali, millist agendi teenust kasutatakse."
+      },
+      "defaultConfiguration" : {
+        "label" : "Vaikimisi agendi konfiguratsioon",
+        "help" : "Määra see selle agendi teenuse tüübi vaikimisi konfiguratsiooniks"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Vali peatsükli viipa mall",
+        "help" : "Vali agendi peatsükli viip."
+      },
+      "maxLoopIterations" : {
+        "label" : "Agendi tsüklite maksimaalne arv",
+        "help" : "Määra agendi maksimaalne tsüklite arv (see parandab tulemuse kvaliteeti)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Luba kõik saadaolevad tööriistad",
+        "help" : "Kui see on märgitud, määratakse käivitamisel kõik saadaolevad tööriistad agentidele"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiveeritud funktsioonide kutsumine sellele agendile",
+        "help" : "Funktsionaalsused, mida agent saab oma töö tegemisel kasutada"
+      },
+      "temperature" : {
+        "label" : "Temperatuur",
+        "help" : "Mudeli vastuste temperatuur, 0 kuni 1 (kui pole kindel, jäta tühjaks)"
+      },
+      "thinking" : {
+        "label" : "Mõtlemise pingutus",
+        "help" : "Seadista mõtlemise taset, mida mudel teeb (kõik mudelid ei toeta seda)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parameeter, 0 kuni 1 (kui pole kindel, jäta tühjaks)"
       }
     }
   }

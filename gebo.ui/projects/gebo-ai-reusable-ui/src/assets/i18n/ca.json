@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Accepto els termes",
         "help" : "En fer clic aquí acceptes els termes i condicions de la llicència"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Usuari administrador creat!",
+        "detail" : "Usuari administrador PAOLO.ZAVALLONI@GMAIL.COM creat correctament"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Falten alguns passos obligatoris a la configuració de Gebo.ai",
         "detail" : "Reviseu els passos en vermell del procés de configuració"
+      },
+      "agentSetupSection" : {
+        "label" : "Configura els serveis d’agent",
+        "description" : "Configura els serveis d’agent i les eines disponibles"
+      },
+      "AgentAddBtn" : {
+        "label" : "Afegeix agent"
+      },
+      "MainPanel" : {
+        "label" : "Configuració d'agents"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "EditAgentBtn" : {
+        "label" : "Edita agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Configura models de llenguatge gran"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Excepció durant l’operació: No es pot crear l’emmagatzematge de vectors o excepció durant la inicialització del model d’embeddings: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Error del servidor: No es pot crear l’emmagatzematge de vectors o excepció durant la inicialització del model d’embeddings: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "usuaris"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Cerca nom"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Cerca nom d’usuari"
+      },
+      "SearchUsersBtn" : {
+        "label" : "cerca"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Selecciona rol"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Cerca cognom"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Llista d'usuaris",
         "help" : "Selecciona els usuaris que participen al grup"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Canvia la contrasenya de l’usuari"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Canvia"
+      },
+      "username" : {
+        "label" : "Nom d’usuari",
+        "help" : "Introdueix la teva contrasenya per validar aquesta acció"
+      },
+      "currentUserPassword" : {
+        "label" : "La teva contrasenya",
+        "help" : "Introdueix la teva contrasenya per validar aquesta acció"
+      },
+      "confirmpassword" : {
+        "label" : "Confirmació de contrasenya de l’usuari",
+        "help" : "Confirmació de contrasenya per a l’usuari editat"
+      },
+      "password" : {
+        "label" : "Nova contrasenya de l’usuari",
+        "help" : "Nova contrasenya per a l’usuari editat"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Nou model d'incrustació",
         "help" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts",
         "placeholder" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts"
+      },
+      "ranker" : {
+        "label" : "Nou model de reranking",
+        "help" : "Selecciona el proveïdor per afegir un nou model de reranking",
+        "placeholder" : "Selecciona el proveïdor per afegir un nou model de reranking"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Configuració de nou model de reranking"
+      },
+      "CodeHeader3" : {
+        "label" : "Codi"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Descripció"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Proveïdor de model"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Models de reranking configurats"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API del model d'embeddings",
         "help" : "Tria el token API del model d'embeddings que s'utilitzarà per a aquest model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operació realitzada correctament"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "TitleFragment" : {
+        "label" : "Editant el proveïdor del model de ranking:"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "baseUrl" : {
+        "label" : "Adreça base de l'API del model de ranking",
+        "help" : "Adreça base del model de ranking."
+      },
+      "apiSecretCode" : {
+        "label" : "Token d'API del model de ranking",
+        "help" : "Escull el token d'API del model de ranking que s’utilitzarà per a aquest model (opcional)"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de ranking",
+        "help" : "Escull el model de ranking amb el qual treballar."
+      },
+      "defaultModel" : {
+        "label" : "defineix aquest com a model de ranking per defecte",
+        "help" : "Si és cert, s’utilitzarà com a model de ranking per defecte quan no s’indiqui cap model de ranking"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operació realitzada correctament"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Sistemes escollits"
+      },
+      "wordExport" : {
+        "help" : "Exporta la resposta a Word"
+      },
+      "pdfExport" : {
+        "help" : "Exporta la resposta a PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Executant l'agent escollit"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Processant document:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Cerca de Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Cerca assistida"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Edita el prompt per a les sessions de retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Configuració manual o autotune llindar",
+        "help" : "Utilitza llindar de distància manual en lloc d’autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Utilitza cerca per paraula clau quan sigui disponible",
+        "help" : "Executa cerques per paraula clau addicionals a les cerques semàntiques si estan configurades en aquesta instal·lació"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Explora o cerca i selecciona documents per xatejar"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Documents seleccionats"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Xat"
       },
       "setupMenuItem" : {
-        "label" : "Configuració"
+        "label" : "Configuració",
+        "help" : "La configuració no està completa, prem aquí per gestionar-la"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Excepció durant l'operació: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària",
         "detail" : "Error del servidor: l'api Anthropic no pot funcionar sense la configuració de la clau d'API necessària"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fitxer exportat",
+        "detail" : "Vés a la secció de baixades del navegador"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model utilitzat per a serveis interns"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Model de xat utilitzat per l’agent"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "escull"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selecciona una configuració de model de xat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Utilitza el model de xat per defecte del sistema per fer la tasca de l’agent o especifica’n un. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Configuració de models de llenguatge i eines utilitzables"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Configuració d’accés de seguretat"
+      },
+      "MainPanel" : {
+        "label" : "Editant la configuració de l’agent"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de l’agent de xat."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament per a l’agent."
+      },
+      "agentServiceId" : {
+        "label" : "Tipus de servei de l’agent",
+        "help" : "Escull quin tipus de servei d’agent s’executarà."
+      },
+      "defaultConfiguration" : {
+        "label" : "Configuració per defecte de l’agent",
+        "help" : "Estableix aquesta configuració com a predeterminada per a aquest tipus de servei d’agent"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Escull la plantilla de prompt de bucle principal",
+        "help" : "Escull el prompt principal de l’agent."
+      },
+      "maxLoopIterations" : {
+        "label" : "Nombre màxim de bucles de l’agent",
+        "help" : "Estableix el nombre màxim de bucles de l’agent (donarà un resultat més refinat)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Activa totes les eines disponibles",
+        "help" : "Si aquesta opció està activada, totes les eines disponibles s’assignaran quan aquest agent s’executi"
+      },
+      "enabledFunctions" : {
+        "label" : "Funcions habilitades per aquest agent",
+        "help" : "Funcionalitats que podrà utilitzar l’agent mentre treballa"
+      },
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura amb què respondrà el model, de 0 a 1 (si tens dubtes deixa-ho en blanc)"
+      },
+      "thinking" : {
+        "label" : "Esforços de reflexió",
+        "help" : "Configura els esforços de reflexió que farà el model (no tots els models ho suporten)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paràmetre TopP, de 0 a 1 (si tens dubtes deixa-ho en blanc)"
       }
     }
   }

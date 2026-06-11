@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Accept termenii",
         "help" : "Prin apăsarea aici accepți termenii și condițiile din licență"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Utilizator admin creat!",
+        "detail" : "Utilizator admin PAOLO.ZAVALLONI@GMAIL.COM a fost creat cu succes"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Lipsesc unii pași obligatorii din configurarea Gebo.ai",
         "detail" : "Vă rugăm să verificați pașii marcați cu roșu din procesul de configurare"
+      },
+      "agentSetupSection" : {
+        "label" : "Configurează serviciile agentului",
+        "description" : "Configurează serviciile agentului și instrumentele disponibile"
+      },
+      "AgentAddBtn" : {
+        "label" : "Adaugă agent"
+      },
+      "MainPanel" : {
+        "label" : "Configurare agenți"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "EditAgentBtn" : {
+        "label" : "Editează agentul"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Configurează modelele lingvistice mari"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Excepție în timpul operațiunii: Nu se poate crea magazinul de vectori sau excepție la inițializarea modelului de embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Eroare server: Nu se poate crea magazinul de vectori sau excepție la inițializarea modelului de embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "utilizatori"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Caută nume"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Caută nume utilizator"
+      },
+      "SearchUsersBtn" : {
+        "label" : "caută"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Selectează rol"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Caută prenume"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Lista utilizatorilor",
         "help" : "Selectează utilizatorii care participă în grup"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Schimbă parola utilizatorului"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Schimbă"
+      },
+      "username" : {
+        "label" : "Nume utilizator",
+        "help" : "Introduceți parola pentru a valida această acțiune"
+      },
+      "currentUserPassword" : {
+        "label" : "Parola ta",
+        "help" : "Introduceți parola pentru a valida această acțiune"
+      },
+      "confirmpassword" : {
+        "label" : "Confirmă parola utilizatorului",
+        "help" : "Confirmarea parolei pentru utilizatorul editat"
+      },
+      "password" : {
+        "label" : "Parolă nouă a utilizatorului",
+        "help" : "Noua parolă pentru utilizatorul editat"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Model nou de embedding",
         "help" : "Selectează furnizorul pentru a adăuga un nou model de embedding capabil de indexare semantică a conținutului",
         "placeholder" : "Selectează furnizorul pentru a adăuga un nou model de embedding capabil de indexare semantică a conținutului"
+      },
+      "ranker" : {
+        "label" : "Model nou de rerank",
+        "help" : "Selectați furnizorul pentru a adăuga un nou model de rerank",
+        "placeholder" : "Selectați furnizorul pentru a adăuga un nou model de rerank"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Configurare model reranker nou"
+      },
+      "CodeHeader3" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Descriere"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Furnizor model"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Modele de rerank configurate"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API model embedding",
         "help" : "Alegeți tokenul API model embedding care va fi folosit pentru acest model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "TitleFragment" : {
+        "label" : "Editare furnizor model de ranking:"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "baseUrl" : {
+        "label" : "Adresa server API a modelului de ranking",
+        "help" : "Adresa de bază a modelului de ranking."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model de ranking",
+        "help" : "Alegeți tokenul API al modelului de ranking utilizat pentru acest model (opțional)"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model de ranking",
+        "help" : "Alegeți modelul de ranking cu care să lucrați."
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de ranking implicit",
+        "help" : "Dacă este adevărat acesta va fi folosit ca model implicit unde nu este indicat un model de ranking"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Sisteme alese"
+      },
+      "wordExport" : {
+        "help" : "Exportă răspunsul în Word"
+      },
+      "pdfExport" : {
+        "help" : "Exportă răspunsul în PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Se execută agentul ales de tine"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Se procesează documentul:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Căutare Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Căutare asistată"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Editează promptul pentru sesiunile retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Configurare prag manual sau autotunat",
+        "help" : "Folosește prag de distanță manual în loc de Autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Folosește căutarea cu cuvinte cheie când este disponibilă",
+        "help" : "Rulează căutări cu cuvinte cheie în plus față de căutările semantice dacă sunt configurate și aici"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Răsfoiește sau caută și selectează documente pentru a conversa"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Documente selectate"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Configurare"
+        "label" : "Configurare",
+        "help" : "Configurarea nu este completă, te rugăm apasă aici pentru a o gestiona"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Excepție în timpul operației:Anthropic api nu poate funcționa fără configurarea necesară a cheii api",
         "detail" : "Eroare server: Anthropic api nu poate funcționa fără configurarea necesară a cheii api"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fișier exportat",
+        "detail" : "Mergi la secțiunea de descărcări din browser"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model utilizat pentru servicii interne"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Model chat folosit de agent"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "alege"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selectează configurarea modelului de chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Folosește modelul de chat implicit al sistemului pentru sarcina agentului sau specifică unul. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Setări pentru large language model & instrumente utilizabile"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Setări de acces și securitate"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurare Agent"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea agentului de chat."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru Agent."
+      },
+      "agentServiceId" : {
+        "label" : "Tip serviciu agent",
+        "help" : "Alegeți tipul de serviciu Agent care va fi rulat."
+      },
+      "defaultConfiguration" : {
+        "label" : "Configurație Agent implicită",
+        "help" : "Setează această configurație ca implicită pentru acest tip de serviciu Agent"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Alege sablonul prompt pentru bucla principală",
+        "help" : "Alege promptul principal pentru agent."
+      },
+      "maxLoopIterations" : {
+        "label" : "Număr maxim de bucle ale Agentului",
+        "help" : "Stabilește numărul maxim de bucle ale Agentului (va conduce la un rezultat mult mai rafinat)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Activează toate instrumentele disponibile",
+        "help" : "Dacă această opțiune este bifată, toate instrumentele disponibile vor fi atribuite când rulează acest agent"
+      },
+      "enabledFunctions" : {
+        "label" : "Funcții active pentru acest Agent",
+        "help" : "Funcționalități ce pot fi folosite de Agent în timpul activității"
+      },
+      "temperature" : {
+        "label" : "Temperatură",
+        "help" : "Temperatura cu care răspunde modelul, de la 0 la 1 (dacă nu ești sigur, lasă gol)"
+      },
+      "thinking" : {
+        "label" : "Eforturi de gândire",
+        "help" : "Configurează eforturile de gândire ale modelului (nu toate modelele suportă)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parametru TopP, de la 0 la 1 (dacă nu ești sigur, lasă gol)"
       }
     }
   }

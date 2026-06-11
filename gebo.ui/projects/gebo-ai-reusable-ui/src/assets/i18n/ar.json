@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "أوافق على الشروط",
         "help" : "بالنقر هنا، أنت توافق على الشروط والأحكام في الرخصة"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "تم إنشاء مستخدم المسؤول!",
+        "detail" : "تم إنشاء مستخدم المسؤول PAOLO.ZAVALLONI@GMAIL.COM بنجاح"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "هناك خطوة إلزامية مفقودة في إعداد Gebo.ai",
         "detail" : "يرجى مراجعة الخطوات ذات اللون الأحمر في عملية الإعداد"
+      },
+      "agentSetupSection" : {
+        "label" : "تكوين خدمات الوكلاء",
+        "description" : "قم بتكوين خدمات الوكلاء والأدوات المتاحة لها"
+      },
+      "AgentAddBtn" : {
+        "label" : "إضافة وكيل"
+      },
+      "MainPanel" : {
+        "label" : "إعداد الوكلاء"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز التكوين"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "EditAgentBtn" : {
+        "label" : "تعديل الوكيل"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "إعداد نماذج اللغة الكبيرة"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "استثناء أثناء العملية: لا يمكن إنشاء متجر المتجهات أو استثناء تهيئة نموذج التضمين: 401 - {\"error\":{\"message\":\"خطأ في المصادقة، تم تمرير رمز خادم وكيل غير صالح. تم استلام مفتاح API = sk-...vUCn، تجزئة المفتاح (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. غير قادر على العثور على الرمز في ذاكرة التخزين المؤقت\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "خطأ في الخادم: لا يمكن إنشاء متجر المتجهات أو استثناء تهيئة نموذج التضمين: 401 - {\"error\":{\"message\":\"خطأ في المصادقة، تم تمرير رمز خادم وكيل غير صالح. تم استلام مفتاح API = sk-...vUCn، تجزئة المفتاح (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. غير قادر على العثور على الرمز في ذاكرة التخزين المؤقت\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "المستخدمون"
+      },
+      "searchNameInput" : {
+        "placeholder" : "بحث بالاسم"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "بحث باسم المستخدم"
+      },
+      "SearchUsersBtn" : {
+        "label" : "بحث"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "اختر الدور"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "بحث باللقب"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "قائمة المستخدمين",
         "help" : "اختر المستخدمين المشاركين في المجموعة"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "تغيير كلمة مرور المستخدم"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "تغيير"
+      },
+      "username" : {
+        "label" : "اسم المستخدم",
+        "help" : "أدخل كلمة المرور الخاصة بك لتأكيد هذا الإجراء"
+      },
+      "currentUserPassword" : {
+        "label" : "كلمتك السرية",
+        "help" : "أدخل كلمة المرور الخاصة بك لتأكيد هذا الإجراء"
+      },
+      "confirmpassword" : {
+        "label" : "تأكيد كلمة مرور المستخدم",
+        "help" : "تأكيد كلمة المرور للمستخدم الذي تم تعديله"
+      },
+      "password" : {
+        "label" : "كلمة المرور الجديدة للمستخدم",
+        "help" : "كلمة مرور جديدة للمستخدم الذي تم تعديله"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "نموذج تضمين جديد",
         "help" : "اختر المورّد لإضافة نموذج تضمين جديد يمكنه القيام بفهرسة دلالية للمحتوى",
         "placeholder" : "اختر المورّد لإضافة نموذج تضمين جديد يمكنه القيام بفهرسة دلالية للمحتوى"
+      },
+      "ranker" : {
+        "label" : "نموذج إعادة الترتيب الجديد",
+        "help" : "اختر المزود لإضافة نموذج إعادة ترتيب جديد",
+        "placeholder" : "اختر المزود لإضافة نموذج إعادة ترتيب جديد"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "تهيئة نموذج إعادة الترتيب الجديد"
+      },
+      "CodeHeader3" : {
+        "label" : "الرمز"
+      },
+      "DescriptionHeader3" : {
+        "label" : "الوصف"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "مقدم النموذج"
+      },
+      "ModelHeader3" : {
+        "label" : "النموذج"
+      },
+      "RerankerModelsZone" : {
+        "label" : "نماذج إعادة الترتيب التي تم تكوينها"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "رمز واجهة برمجة تطبيقات نموذج التضمين",
         "help" : "اختر رمز واجهة برمجة تطبيقات نموذج التضمين لاستخدامه مع هذا النموذج"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم!",
+        "detail" : "تمت العملية بنجاح"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "TitleFragment" : {
+        "label" : "تعديل مزود نموذج التصنيف:"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف تهيئة النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لتهيئة النموذج"
+      },
+      "baseUrl" : {
+        "label" : "عنوان خادم واجهة برمجة تطبيقات نموذج التصنيف الأساسي",
+        "help" : "العنوان الأساسي لنموذج التصنيف."
+      },
+      "apiSecretCode" : {
+        "label" : "رمز واجهة برمجة تطبيقات نموذج التصنيف",
+        "help" : "اختر رمز واجهة برمجة تطبيقات نموذج التصنيف لاستخدامه لهذا النموذج (اختياري)"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج التصنيف",
+        "help" : "اختر نموذج التصنيف للعمل معه."
+      },
+      "defaultModel" : {
+        "label" : "تعيين هذا كنموذج التصنيف الافتراضي",
+        "help" : "إذا كان صحيحًا، سيتم استخدام هذا كنموذج التصنيف الافتراضي عند عدم الإشارة إلى نموذج آخر"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم!",
+        "detail" : "تمت العملية بنجاح"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "الأنظمة المختارة"
+      },
+      "wordExport" : {
+        "help" : "تصدير الرد إلى Word"
+      },
+      "pdfExport" : {
+        "help" : "تصدير الرد إلى PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "جاري تنفيذ الوكيل الذي اخترته"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "جارٍ معالجة المستند:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "بحث متعمق/بحث Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "بحث مساعد"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "الموجه",
         "help" : "حرر الموجه لجلسات استرجاع الدردشة المعززة."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "تكوين الحد يدوياً أو تلقائياً",
+        "help" : "استخدم حد المسافة اليدوي بدلاً من التلقائي"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "استخدم البحث بالكلمات المفتاحية عند التوفر",
+        "help" : "نفذ عمليات البحث بالكلمات المفتاحية بالإضافة إلى البحث الدلالي إذا كانت مفعلة في هذا التثبيت"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "تصفح أو ابحث وحدد مستندات للدردشة معها"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "المستندات المحددة"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "دردشة"
       },
       "setupMenuItem" : {
-        "label" : "إعداد"
+        "label" : "إعداد",
+        "help" : "الإعداد غير مكتمل، يرجى الضغط هنا وإدارته"
       },
       "adminMenuItem" : {
         "label" : "إدارة"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "استثناء أثناء العملية: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم",
         "detail" : "خطأ في الخادم: لا يمكن لـ Anthropic api العمل بدون إعداد مفتاح api اللازم"
+      },
+      "fileExportLoaded" : {
+        "summary" : "تم تصدير الملف",
+        "detail" : "انتقل إلى قسم التنزيلات في المتصفح"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "نموذج يستخدم للخدمات الداخلية"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "نموذج الدردشة المستخدم للوكيل"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "اختر"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "اختر إعداد تكوين نموذج الدردشة"
+      },
+      "defaultChatModel-help" : {
+        "label" : " استخدم نموذج الدردشة الافتراضي للنظام لتنفيذ مهمة الوكيل أو حدد واحداً."
+      },
+      "LanguageModelTab" : {
+        "label" : "إعدادات النماذج اللغوية الضخمة والأدوات المتاحة"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "إعدادات صلاحيات الأمان"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات الوكيل"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف وكيل الدردشة."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا للوكيل."
+      },
+      "agentServiceId" : {
+        "label" : "نوع خدمة الوكيل",
+        "help" : "اختر نوع خدمة الوكيل الذي سيتم تشغيله."
+      },
+      "defaultConfiguration" : {
+        "label" : "إعداد الوكيل الافتراضي",
+        "help" : "عيّن هذا كإعداد افتراضي لنوع خدمة الوكيل هذا"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "اختر قالب مطالبة الحلقة الرئيسية",
+        "help" : "اختر مطالبة الحلقة الرئيسية للوكيل."
+      },
+      "maxLoopIterations" : {
+        "label" : "أقصى عدد لتكرار حلقات الوكيل",
+        "help" : "حدد الحد الأقصى لعدد تكرارات حلقات الوكيل (سيؤدي ذلك إلى نتيجة أكثر تفصيلاً)."
+      },
+      "subscribeAllTools" : {
+        "label" : "تمكين جميع الأدوات المتاحة",
+        "help" : "عند تفعيل هذا الخيار سيتم تعيين جميع الأدوات المتاحة عند تشغيل هذا الوكيل"
+      },
+      "enabledFunctions" : {
+        "label" : "وظائف مفعلة لهذا الوكيل",
+        "help" : "الوظائف التي يمكن أن يستخدمها الوكيل أثناء تنفيذ عمله"
+      },
+      "temperature" : {
+        "label" : "درجة الحرارة",
+        "help" : "تتراوح درجة الاستجابة من 0 إلى 1 (اتركها فارغة إذا لم تكن متأكدًا)"
+      },
+      "thinking" : {
+        "label" : "جهود التفكير",
+        "help" : "حدد جهود التفكير التي سيقوم بها النموذج (قد لا تكون مدعومة في كل النماذج)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "معامل TopP، من 0 إلى 1 (اتركها فارغة إذا لم تكن متأكدًا)"
       }
     }
   }

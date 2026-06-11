@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ನಾನು ನಿಬಂಧನೆಗಳನ್ನು ಅಂಗೀಕರಿಸುತ್ತೇನೆ",
         "help" : "ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ನೀವು ಪರವಾನಗಿ ನಿಬಂಧನೆಗಳನ್ನು ಅಂಗೀಕರಿಸುತ್ತೀರಿ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "ಆಡ್ಮಿನ್ ಬಳಕೆದಾರನು ರಚಿಸಲಾಗಿದೆ!",
+        "detail" : "ಆಡ್ಮಿನ್ ಬಳಕೆದಾರ PAOLO.ZAVALLONI@GMAIL.COM ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai ಸೆಟಪ್‌ನಲ್ಲಿ ಕೆಲವು ಅಗತ್ಯ ಹಂತ ಬಾಕಿಯಿದೆ",
         "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
+      },
+      "agentSetupSection" : {
+        "label" : "ಏಜೆಂಟ್ ಸೇವೆಗಳು ಸಿದ್ಧಪಡಿಸಿ",
+        "description" : "ಏಜೆಂಟ್ ಸೇವೆಗಳು ಮತ್ತು ಅವುಗಳ ಲಭ್ಯವಿರುವ ಉಪಕರಣಗಳನ್ನು ರೂಪಗೊಳಿಸಿ"
+      },
+      "AgentAddBtn" : {
+        "label" : "ಏಜೆಂಟ್ ಸೇರಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಏಜೆಂಟ್‌ಗಳನ್ನು ರೂಪಗೊಳಿಸಿ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ರೂಪಗೊಳಿಸುವ ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "EditAgentBtn" : {
+        "label" : "ಏಜೆಂಟ್ ಸಂಪಾದಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಗಳನ್ನು ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿವೆ: ವೆಕ್ಟರ್ ಸ್ಟೋರ್ ಅಥವಾ ಅಡಗು ಮಾದರಿ ಪ್ರಾರಂಭಿಸುವಲ್ಲಿ ದೋಷ: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ವೆಕ್ಟರ್ ಸ್ಟೋರ್ ಅಥವಾ ಅಡಗು ಮಾದರಿ ಪ್ರಾರಂಭಿಸುವಲ್ಲಿ ದೋಷ: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "ಬಳಕೆದಾರರು"
+      },
+      "searchNameInput" : {
+        "placeholder" : "ಹೆಸರನ್ನು ಹುಡುಕಿ"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ಬಳಕೆದಾರ ಹೆಸರು ಹುಡುಕಿ"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ಹುಡುಕಿ"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "ಸೌರ್‌ನಾಮ್ ಹುಡುಕಿ"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "ಬಳಕೆದಾರರ ಪಟ್ಟಿ",
         "help" : "ಗುಂಪಿನಲ್ಲಿ ಭಾಗವಹಿಸುವ ಬಳಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ಬಳಕೆದಾರರ ಗುಪ್ತಪದವನ್ನು ಬದಲಾಯಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ಬದಲಾಯಿಸಿ"
+      },
+      "username" : {
+        "label" : "ಬಳಕೆದಾರರ ಹೆಸರು",
+        "help" : "ಈ ಕ್ರಿಯೆಯನ್ನು ಪರಿಶೀಲಿಸಲು ನಿಮ್ಮ ಗುಪ್ತಪದವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "currentUserPassword" : {
+        "label" : "ನಿಮ್ಮ ಗುಪ್ತಪದ",
+        "help" : "ಈ ಕ್ರಿಯೆಯನ್ನು ಪರಿಶೀಲಿಸಲು ನಿಮ್ಮ ಗುಪ್ತಪದವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "confirmpassword" : {
+        "label" : "ಬಳಕೆದಾರರ ಗುಪ್ತಪದ ಖಚಿತಪಡಿಸಿ",
+        "help" : "ಸಂಪಾದಿತ ಬಳಕೆದಾರಿಗಾಗಿ ಗುಪ್ತಪದ ಖಚಿತಪಡಿಸಿ"
+      },
+      "password" : {
+        "label" : "ಹೊಸ ಬಳಕೆದಾರರ ಗುಪ್ತಪದ",
+        "help" : "ಸಂಪಾದಿತ ಬಳಕೆದಾರರಿಗೆ ಹೊಸ ಗುಪ್ತಪದ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "ಹೊಸ ಎಂಬೆಡಿಯಿಂಗ್ ಮಾದರಿ",
         "help" : "ವಿಷಯಗಳ ಅರ್ಥಪೂರ್ಣ ಸೂಚ್ಯಂಕ ಮಾಡುವ ಸಾಮರ್ಥ್ಯವಿರುವ ಹೊಸ ಎಂಬೆಡಿಯಿಂಗ್ ಮಾದರಿಯನ್ನು ಸೇರಿಸಲು ಪೂರೈಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
         "placeholder" : "ವಿಷಯಗಳ ಅರ್ಥಪೂರ್ಣ ಸೂಚ್ಯಂಕ ಮಾಡುವ ಸಾಮರ್ಥ್ಯವಿರುವ ಹೊಸ ಎಂಬೆಡಿಯಿಂಗ್ ಮಾದರಿಯನ್ನು ಸೇರಿಸಲು ಪೂರೈಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ranker" : {
+        "label" : "ಹೊಸ ಮರುಶ್ರೇಣಿ ಮಾದರಿ",
+        "help" : "ಹೊಸ ಮರುಶ್ರೇಣಿಕರಣ ಮಾದರಿಯನ್ನು ಸೇರಿಸಲು ಪೂರೈಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+        "placeholder" : "ಹೊಸ ಮರುಶ್ರೇಣಿಕರಣ ಮಾದರಿಯನ್ನು ಸೇರಿಸಲು ಪೂರೈಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "ಹೊಸ ಮರುಶ್ರೇಣಿ ಮಾದರಿ ರೂಪ ಸಂರಚನೆ"
+      },
+      "CodeHeader3" : {
+        "label" : "ಕೋಡ್"
+      },
+      "DescriptionHeader3" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ಮಾದರಿ ಪುರವೈಕೆದಾರ"
+      },
+      "ModelHeader3" : {
+        "label" : "ಮಾದರಿ "
+      },
+      "RerankerModelsZone" : {
+        "label" : "ರೂಪಗೊಳಿಸಲಾದ ಮರುಶ್ರೇಣಿ ಮಾದರಿಗಳು"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ API ಟೋಕನ್",
         "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ API ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಸರಿಯಾಗಿದೆ!",
+        "detail" : "ಕಾರ್ಯ ಚಿಕಿತ್ಸೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "TitleFragment" : {
+        "label" : "ಶ್ರೇಣಿ ಮಾದರಿ ಪೂರೈಕೆದಾರ ಸಂಪಾದನೆ:"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನೀಡಿರಿ"
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "baseUrl" : {
+        "label" : "ಶ್ರೇಣಿ ಮಾದರಿ API ಮೂಲ ಸರ್ವರ್ ವಿಳಾಸ",
+        "help" : "ಶ್ರೇಣಿ ಮಾದರಿಯ ಮೂಲ ವಿಳಾಸ."
+      },
+      "apiSecretCode" : {
+        "label" : "ಶ್ರೇಣಿ ಮಾದರಿ API ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಲು ಇರಬೇಕಾದ ಶ್ರೇಣಿ ಮಾದರಿ API ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ (ಐಚ್ಛಿಕವಾದುದು)"
+      },
+      "choosedModel" : {
+        "label" : "ಶ್ರೇಣಿ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಕೆಲಸದಿಗಾಗಿ ಶ್ರೇಣಿ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಪೂರ್ವನಿಶ್ಚಿತ ಶ್ರೇಣಿ ಮಾದರಿ ಆಗಿ ಸೆಟ್ ಮಾಡಿ",
+        "help" : "ಸರಿಯಾದರೆ, ಇದು ಶ್ರೇಣಿ ಮಾದರಿ ಸೂಚಿಸಲಾಗದ ಸ್ಥಳಗಳಲ್ಲಿ ಪೂರ್ವನಿಶ್ಚಿತವಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಸರಿಯಾಗಿದೆ!",
+        "detail" : "ಕಾರ್ಯ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿತು"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ಆಯ್ಕೆಮಾಡಿದ ಸಿಸ್ಟಮ್ ಗಳು"
+      },
+      "wordExport" : {
+        "help" : "ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು Word‌ಗೆ ರಫ್ತು ಮಾಡಿ"
+      },
+      "pdfExport" : {
+        "help" : "ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು PDFಗೆ ರಫ್ತು ಮಾಡಿ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "ನೀವು ಆಯ್ಕೆಮಾಡಿದ ಏಜೆಂಟ್ ಕಾರ್ಯಗತವಾಗುತ್ತಿದೆ"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ದಾಖಲೆ ಪ್ರಕ್ರಿಯೆಗೊಳ್ಳುತ್ತಿದೆ:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ಡೀಪ್ ಸರ್ಚ್/Jira ಹುಡುಕಾಟ"
+      },
+      "PURE_SEARCH" : {
+        "label" : " ನೆರವು ಹುಡುಕು"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "ಪ್ರಾಂಪ್ಟ್",
         "help" : "ಪಡೆಯುವ ವೃದ್ಧಿಪಡಿಸಿದ ಜನರೇಶನ್ ಸೆಷನ್‌ಗಳಿಗೆ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "ಮಾನ್ಯುವಲ್ ಅಥವಾ ಸ್ವಯಂಚಾಲಿತ ಥ್ರೆಶೋಲ್ಡ್ ರೂಪಗೊಳಿಸುವಿಕೆ",
+        "help" : "ಸ್ವಯಂ ಟ್ಯೂನ್ ಮಾಡಲು ಬದಲಾಗಿ ಮಾನ್ಯುವಲ್ ದೂರವುಳ್ಳ ಥ್ರೆಶೋಲ್ಡ್ ಬಳಸಿ"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "ಅನುಕೂಲವಿದ್ದಾಗ ಕೀವರ್ಡ್ ಹುಡುಕಾಟ ಬಳಸಿ",
+        "help" : "ಈ ಡಿಪ್ಲಾಯ್‌ಮೆಂಟ್‌ನಲ್ಲಿ ರೂಪಗೊಳಿಸಿದ್ದುರೆಂದರೆ ಅರ್ಥಬಂದಿ ಹುಡುಕಾಟಗಳಿಗೆ ಹೆಚ್ಚಾಗಿ ಕೀವರ್ಡ್ ಹುಡುಕಾಟವನ್ನು ಚಲಾಯಿಸಿ"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "ಮೌಲ್ಯಮಾಪನಿಸಲು ಅಥವಾ ಅರಲು ದಾಖಲೆಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ ಅಥವಾ ಹುಡುಕಿ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ಆಯ್ದ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ಚಾಟ್"
       },
       "setupMenuItem" : {
-        "label" : "ಸೆಟಪ್"
+        "label" : "ಸೆಟಪ್",
+        "help" : "ಸೆಟಪ್ ಪೂರ್ಣಗೊಂಡಿಲ್ಲ, ದಯವಿಟ್ಟು ಇಲ್ಲಿ ಒತ್ತಿ ಮತ್ತು ನಿರ್ವಹಿಸಿ"
       },
       "adminMenuItem" : {
         "label" : "ನಿರ್ವಹಣೆ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ಚಟುವಟಿಕೆಯಲ್ಲಿ ಅಪವಾದ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು",
         "detail" : "ಸರ್ವರ್ ದೋಷ: Anthropic api ಅಗತ್ಯವಿರುವ api ಕೀ ಸಂರಚನೆಯಿಲ್ಲದೆ ಕಾರ್ಯನಿರ್ವಹಿಸಲಾರದು"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ಫೈಲ್ ರಫ್ತುಗೊಂಡಿದೆ",
+        "detail" : "ಬ್ರೌಸರ್ ಡೌನ್‌ಲೋಡ್ಸ್ ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ಆಂತರಿಕ ಸೇವೆಗಳಿಗೆ ಬಳಸುವ ಮಾದರಿ"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ಏಜೆಂಟ್ ಬಳಸಿ ಚಾಟ್ ಮಾದರಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "defaultChatModel-help" : {
+        "label" : "ಏಜೆಂಟ್ ಕಾರ್ಯವನ್ನು ನಿರ್ವಹಿಸಲು ವ್ಯವಸ್ಥೆಯ ಪೂರ್ವನಿಶ್ಚಿತ ಚಾಟ್ ಮಾದರಿಯನ್ನು ಬಳಸಿ ಅಥವಾ ವಿಶೇಷವಾಗಿ ಒಂದು ಸೂಚಿಸಿ."
+      },
+      "LanguageModelTab" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಮತ್ತು ಉಪಯೋಗಿಸಬಹುದಾದ ಉಪಕರಣಗಳ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "ಭದ್ರತಾ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "ಏಜೆಂಟ್ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಚಾಟ್ ಏಜೆಂಟ್ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ಏಜೆಂಟ್‌ನ ಸ್ವಯಂಚಾಲಿತ ಅನನ್ಯ ಕೋಡ್."
+      },
+      "agentServiceId" : {
+        "label" : "ಏಜೆಂಟ್ ಸೇವೆ ಪ್ರಕಾರ",
+        "help" : "ಏನು ರೀತಿಯ ಏಜೆಂಟ್ ಸೇವೆ ಕಾರ್ಯಗತಗೊಳ್ಳುತ್ತದೆ ಎಂದು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "defaultConfiguration" : {
+        "label" : "ಪೂರ್ವನಿಶ್ಚಿತ ಏಜೆಂಟ್ ಸಂರಚನೆ",
+        "help" : "ಈ ಏಜೆಂಟ್ ಸೇವೆಗಾಗಿ ಇದನ್ನೇ ಪೂರ್ವನಿಶ್ಚಿತ ಸಂರಚನೆಯಾಗಿ ಸೆಟ್ ಮಾಡಿ"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ಮುಖ್ಯ ಲೂಪ್ ಪ್ರಾಂಪ್ಟ್ ಟೆಂಪ್ಲೇಟನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ಏಜೆಂಟ್‌ನ ಮುಖ್ಯ ಲೂಪ್ ಪ್ರಾಂಪ್ಟ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "maxLoopIterations" : {
+        "label" : "ಏಜೆಂಟ್ ಲೂಪ್‌ಗಳ ಗರಿಷ್ಠ ಸಂಖ್ಯೆ",
+        "help" : "ಏಜೆಂಟ್ ಲೂಪ್‌ಗಳ ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯನ್ನು ನಿರ್ಧರಿಸಿ (ಇದು ಹೆಚ್ಚಿನ ಸ್ಪಷ್ಟವಾದ ಫಲಿತಾಂಶವನ್ನು ನೀಡುತ್ತದೆ)."
+      },
+      "subscribeAllTools" : {
+        "label" : "ಎಲ್ಲ ಲಭ್ಯವಿರುವ ಉಪಕರಣಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ",
+        "help" : "ಈ ಐಕಾನ್ ಸಕ್ರಿಯವಿದ್ದರೆ ಈ ಏಜೆಂಟ್‌ಗಳೊಂದಿಗೆ ಎಲ್ಲ ಉಪಕರಣಗಳನ್ನು ನಿಯೋಜಿಸಲಾಗುತ್ತದೆ"
+      },
+      "enabledFunctions" : {
+        "label" : "ಈ ಏಜೆಂಟ್‌ಗೆ ಸಕ್ರಿಯಗೊಳಿಸಲಾದ ಕಾರ್ಯಗಳು",
+        "help" : "ಏಜೆಂಟ್ ಕೆಲಸ ಮಾಡುವಾಗ ಬಳಸಬಹುದಾದ ಕಾರ್ಯಸಾಧನೆಗಳು"
+      },
+      "temperature" : {
+        "label" : "ಟೆಂಪರೇಚರ್",
+        "help" : "ಮಾದರಿ ಪ್ರತಿಕ್ರಿಯಿಸುವ ಗುನುಪು 0 ರಿಂದ 1 (ಸ್ಪಷ್ಟವಿಲ್ಲದಿದ್ದರೆ ಖಾಲಿ ಬಿಡಿ)"
+      },
+      "thinking" : {
+        "label" : "ಆಲೋಚನೆ ಪ್ರಯತ್ನಗಳು",
+        "help" : "ಮಾದರಿ ಮಾಡುವ ಆಲೋಚನೆ ಪ್ರಯತ್ನಗಳನ್ನು ರೂಪಗೊಳಿಸಿ (ಎಲ್ಲ ಮಾದರಿಗಳು ಇದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP ಪ್ಯಾರಾಮೀಟರ್, 0 ರಿಂದ 1 (ಸ್ಪಷ್ಟವಿಲ್ಲದಿದ್ದರೆ ಖಾಲಿ ಬಿಡಿ)"
       }
     }
   }

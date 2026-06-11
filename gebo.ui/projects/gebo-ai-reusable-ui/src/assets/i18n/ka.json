@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ვეთანხმები პირობებს",
         "help" : "აქ დაჭერით ადასტურებთ პირობებსა და ლიცენზიის მოთხოვნებს"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "ადმინი მომხმარებელი შექმნილია!",
+        "detail" : "ადმინი მომხმარებელი PAOLO.ZAVALLONI@GMAIL.COM წარმატებით შეიქმნა"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai-ის პარამეტრი მიუთითებს, რომ სავალდებულო ნაბიჯი აკლია",
         "detail" : "დაუბრუნდით პარამეტრების პროცესის წითელ ნაფერებს"
+      },
+      "agentSetupSection" : {
+        "label" : "აგენტის სერვისების კონფიგურაცია",
+        "description" : "დააკონფიგურირე აგენტის სერვისები და მათი ხელმისაწვდომი ხელსაწყოები"
+      },
+      "AgentAddBtn" : {
+        "label" : "აგენტის დამატება"
+      },
+      "MainPanel" : {
+        "label" : "აგენტების დაყენება"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგის კოდი"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "EditAgentBtn" : {
+        "label" : "აგენტის რედაქტირება"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "გააწყეთ დიდი ენის მოდელები"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "გამონაკლისი ოპერაციისას: ძUnable to create vector store ან embedding მოდელის ინიციალიზაციის შეცდომა: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "სერვერის შეცდომა: ვერ ხერხდება vector store ან embedding მოდელის ინიციალიზაცია: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "მომხმარებლები"
+      },
+      "searchNameInput" : {
+        "placeholder" : "სახელის ძიება"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "მომხმარებლის სახელის ძიება"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ძიება"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "როლის არჩევა"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "გვარის ძიება"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "მომხმარებელთა სია",
         "help" : "აირჩიეთ ჯგუფში მონაწილე მომხმარებლები"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "მომხმარებლის პაროლის შეცვლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "შეცვლა"
+      },
+      "username" : {
+        "label" : "მომხმარებლის სახელი",
+        "help" : "საბუთებისთვის შეიყვანეთ თქვენი პაროლი"
+      },
+      "currentUserPassword" : {
+        "label" : "თქვენი პაროლი",
+        "help" : "საბუთებისთვის შეიყვანეთ თქვენი პაროლი"
+      },
+      "confirmpassword" : {
+        "label" : "მომხმარებლის პაროლის დადასტურება",
+        "help" : "შეცვლილი მომხმარებლის პაროლის დადასტურება"
+      },
+      "password" : {
+        "label" : "მომხმარებლის ახალი პაროლი",
+        "help" : "შეცვლილი მომხმარებლის ახალი პაროლი"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "ახალი ემბედინგის მოდელი",
         "help" : "აირჩიეთ მიმწოდებელი ახალი ემბედინგის მოდელის დასამატებლად, რომელსაც შეუძლია შინაარსის სემანტიკური ინდექსირება",
         "placeholder" : "აირჩიეთ მიმწოდებელი ახალი ემბედინგის მოდელის დასამატებლად, რომელსაც შეუძლია შინაარსის სემანტიკური ინდექსირება"
+      },
+      "ranker" : {
+        "label" : "ახალი გადაკითხვის მოდელი",
+        "help" : "მცოდნის არჩევა ახალი reranker მოდელის დასამატებლად",
+        "placeholder" : "მომწოდებლის არჩევა ახალი reranker მოდელის დასამატებლად"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "ახალი reranker მოდელის კონფიგურაცია"
+      },
+      "CodeHeader3" : {
+        "label" : "კოდი"
+      },
+      "DescriptionHeader3" : {
+        "label" : "აღწერა"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "მოდელის მომწოდებელი"
+      },
+      "ModelHeader3" : {
+        "label" : "მოდელი"
+      },
+      "RerankerModelsZone" : {
+        "label" : "დაკონფიგურირებული rerank მოდელები"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding მოდელის API token",
         "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Embedding მოდელის API token"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "ოპერაცია წარმატებით შესრულდა"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "TitleFragment" : {
+        "label" : "რეიტინგის მოდელის მომწოდებლის რედაქტირება:"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ მოდელის აღწერა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის უნიკალური კოდი ავტომატურად შეიქმნება"
+      },
+      "baseUrl" : {
+        "label" : "რეიტინგის მოდელის  API ბაზა სერვერის მისამართი",
+        "help" : "რეიტინგის მოდელის ძირითადი მისამართი."
+      },
+      "apiSecretCode" : {
+        "label" : "რეიტინგის მოდელის  API ტოკენი",
+        "help" : "აირჩიეთ რეიტინგის მოდელის  API ტოკენი ამ მოდელისთვის (არასავალდებულო)"
+      },
+      "choosedModel" : {
+        "label" : "რეიტინგის მოდელის არჩევანი",
+        "help" : "აირჩიეთ რეიტინგის მოდელი, რომ გამოიყენოთ."
+      },
+      "defaultModel" : {
+        "label" : "დააყენეთ ეს, როგორც ნაგულისხმები რეიტინგის მოდელი",
+        "help" : "თუ არჩევანი არ არის მითითებული, ეს იქნება ძირითადი რეიტინგის მოდელი"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "ოპერაცია წარმატებით შესრულდა"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "არჩეული სისტემები"
+      },
+      "wordExport" : {
+        "help" : "რპასუხის ექსპორტირება Word-ში"
+      },
+      "pdfExport" : {
+        "help" : "რპასუხის ექსპორტირება PDF-ში"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "ასრულებს თქვენს არჩეულ აგენტს"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "დოკუმენტის დამუშავება:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ღრმა ძებნა/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "დახმარებული ძიება"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "პრონტ",
         "help" : "რედაქტირეთ prompt retrieve augmented generation სესიებისთვის."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "თვითმართული ან ავტომატურად გასწორებული ზღვრების კონტროლი",
+        "help" : "გამოიყენე ხელით მითითებული ზღვრები AutoTune-ის ნაცვლად"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "გამოიყენე საკვანძო სიტყვების ძიება როცა ხელმისაწვდომია",
+        "help" : "გაიმართოს საკვანძო სიტყვების ძიება სემანტიკურ ძიებებთან ერთად, თუ ეს დაყენებულია"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "დაათვალიერეთ ან მოძებნეთ და აირჩიეთ დოკუმენტები ჩატისთვის"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "არჩევანი დოკუმენტები"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ჩატი"
       },
       "setupMenuItem" : {
-        "label" : "მორგება"
+        "label" : "მორგება",
+        "help" : "დაყენება დასრულებული არ არის, მოგვმართეთ აქ დასამთავრებლად"
       },
       "adminMenuItem" : {
         "label" : "ადმინი"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ოპერაციის გამონაკლისი: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე",
         "detail" : "სერვერის შეცდომა: Anthropic api ვეღარ მუშაობს საჭირო api key კონფიგურაციის გარეშე"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ფაილი ექსპორტირებულია",
+        "detail" : "გადადით ბრაუზერის ჩამოტვირთვების სექციაში"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "მოდელი გამოიყენება შიდა სერვისებისთვის"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "UseChatModelLabel" : {
+        "label" : "აგენტი იყენებს ჩატის მოდელს"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "აირჩიეთ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "აირჩიეთ ჩატის მოდელის კონფიგურაცია"
+      },
+      "defaultChatModel-help" : {
+        "label" : " გამოიყენეთ სისტემის ჩატის ნაგულისხმები მოდელი ან მიუთითეთ კონკრეტული. "
+      },
+      "LanguageModelTab" : {
+        "label" : "დიდი ენობრივი მოდელის და ხელსაწყოების პარამეტრები"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "უსაფრთხოების წვდომის პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "აგენტის კონფიგურაციის რედაქტირება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "ჩატის აგენტის აღწერის შეყვანა."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "აგენტის უნიკალური კოდი ავტომატურად იქმნება."
+      },
+      "agentServiceId" : {
+        "label" : "აგენტის სერვისის ტიპი",
+        "help" : "აირჩიეთ აგენტის სერვისის ტიპი რომელიც გაეშვება."
+      },
+      "defaultConfiguration" : {
+        "label" : "აგენტის ნაგულისხმები კონფიგურაცია",
+        "help" : "დააყენეთ ეს ნაგულისხმებად ამ სერვისის ტიპისთვის"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "მთავარი ციკლის პრომპტის შაბლონის არჩევა",
+        "help" : "აირჩიეთ აგენტის მთავარი ციკლის პრომპტი."
+      },
+      "maxLoopIterations" : {
+        "label" : "აგენტის ციკლების მაქსიმალური რაოდენობა",
+        "help" : "გადაწყვიტეთ აგენტის ციკლების მაქსიმალური რაოდენობა (ეს მისცემს მეტად დახვეწილ შედეგს)."
+      },
+      "subscribeAllTools" : {
+        "label" : "ყველა ხელმისაწვდომი ხელსაწყოს ჩართვა",
+        "help" : "თუ ეს მონიშნულია, აგენტს მიენიჭება ყველა ხელმისაწვდომი ხელსაწყო გაშვებისას"
+      },
+      "enabledFunctions" : {
+        "label" : "ამ აგენტისთვის ჩართული ფუნქციები",
+        "help" : "ფუნქციონალები, რომლებიც აგენტმა შეიძლება გამოიყენოს მუშაობისას"
+      },
+      "temperature" : {
+        "label" : "ტემპერატურა",
+        "help" : "მოდელის პასუხის ტემპერატურა 0-დან 1-მდე (თუ არ ხართ დარწმუნებული, დატოვეთ ცარიელი)"
+      },
+      "thinking" : {
+        "label" : "აზროვნების ძალისხმევა",
+        "help" : "დააკონფიგურირე აზროვნების ძალისხმევა მოდელისთვის (ყველა მოდელი არ უჭერს მხარს)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP პარამეტრი, 0-დან 1-მდე (თუ არ ხართ დარწმუნებული, დატოვეთ ცარიელი)"
       }
     }
   }

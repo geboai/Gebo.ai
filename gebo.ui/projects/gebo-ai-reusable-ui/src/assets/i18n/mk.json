@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Ги прифаќам условите",
         "help" : "Со кликнување тука ги прифаќате условите и правилата во лиценцата"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Администратор е креиран!",
+        "detail" : "Администратор PAOLO.ZAVALLONI@GMAIL.COM успешно креиран"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Недостасуваат задолжителни чекори за Gebo.ai конфигурација",
         "detail" : "Ве молиме прегледајте ги црвените чекори од процесот на конфигурација"
+      },
+      "agentSetupSection" : {
+        "label" : "Конфигурирај услуги на агентот",
+        "description" : "Конфигурирајте ги услугите на агентот и достапните алатки"
+      },
+      "AgentAddBtn" : {
+        "label" : "Додај агент"
+      },
+      "MainPanel" : {
+        "label" : "Подесување на агенти"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Конфигурирачки код"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
+      },
+      "EditAgentBtn" : {
+        "label" : "Измени агент"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Конфигурирајте Large language модели"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Исклучок при операција: Не може да се креира vector store или да се иницијализира embedding модел: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Грешка на сервер: Не може да се креира vector store или да се иницијализира embedding модел: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "корисници"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Пребарај име"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Пребарај корисничко име"
+      },
+      "SearchUsersBtn" : {
+        "label" : "пребарај"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Избери улога"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Пребарај презиме"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Листа на корисници",
         "help" : "Изберете корисници кои учествуваат во групата"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Промени лозинка на корисник"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Промени"
+      },
+      "username" : {
+        "label" : "Корисничко име",
+        "help" : "Внесете ја вашата лозинка за да ја потврдите оваа акција"
+      },
+      "currentUserPassword" : {
+        "label" : "Вашата лозинка",
+        "help" : "Внесете ја вашата лозинка за да ја потврдите оваа акција"
+      },
+      "confirmpassword" : {
+        "label" : "Потврда на лозинка за корисник",
+        "help" : "Потврда на лозинката за изменетиот корисник"
+      },
+      "password" : {
+        "label" : "Нова лозинка за корисник",
+        "help" : "Нова лозинка за изменетиот корисник"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Нов модел за вметнување",
         "help" : "Изберете добавувач за да додадете нов модел за вметнување што може да прави семантичко индексирање на содржини",
         "placeholder" : "Изберете добавувач за да додадете нов модел за вметнување што може да прави семантичко индексирање на содржини"
+      },
+      "ranker" : {
+        "label" : "Нов модел за повторно рангирање",
+        "help" : "Изберете добавувач за да додадете нов model за повторно рангирање",
+        "placeholder" : "Изберете добавувач за да додадете нов model за повторно рангирање"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Конфигурација на нов модел за повторно рангирање"
+      },
+      "CodeHeader3" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Опис"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Добавувач на модел"
+      },
+      "ModelHeader3" : {
+        "label" : "Модел "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Конфигурирани модели за повторно рангирање"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API token",
         "help" : "Изберете Embedding model API token кој ќе се користи за овој модел"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Во ред!",
+        "detail" : "Операцијата е успешно завршена"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Зачувај"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "DeleteBtn" : {
+        "label" : "Избриши"
+      },
+      "TitleFragment" : {
+        "label" : "Уредување на добавувач на model за рангирање:"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Внесете опис за конфигурацијата на моделот"
+      },
+      "code" : {
+        "label" : "Уникатен код",
+        "help" : "Автоматски генериран уникатен код на конфигурацијата на моделот"
+      },
+      "baseUrl" : {
+        "label" : "Основна адреса на API за model за рангирање",
+        "help" : "Основна адреса на model за рангирање."
+      },
+      "apiSecretCode" : {
+        "label" : "API токен за model за рангирање",
+        "help" : "Изберете API токен за model за рангирање што ќе се користи за овој модел (опционално)"
+      },
+      "choosedModel" : {
+        "label" : "Избор на model за рангирање",
+        "help" : "Изберете model за рангирање со кој ќе работите."
+      },
+      "defaultModel" : {
+        "label" : "Поставете го овој како стандардeн model за рангирање",
+        "help" : "Ако е означено, ќе се користи како стандардeн model за рангирање кога не е назначен"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Во ред!",
+        "detail" : "Операцијата е успешно завршена"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Избрани системи"
+      },
+      "wordExport" : {
+        "help" : "Извези одговор во Word"
+      },
+      "pdfExport" : {
+        "help" : "Извези одговор во PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Се извршува избраниот агент"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Се обработува документот:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Асистирано пребарување"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Поттик",
         "help" : "Изменете го поттикот за retrieve augmented generation сесиите."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Мануелна или авто-прилагодена конфигурација на праг",
+        "help" : "Користи мануелен праг на растојание наместо автоматско прилагодување"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Користи пребарување по клучни зборови кога е достапно",
+        "help" : "Спрoведи пребарување по клучни зборови дополнително на семантичкото пребарување ако е конфигурирано во оваа инсталација"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Прелистајте или пребарајте и изберете документи за разговор"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Избрани документи"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Разговор"
       },
       "setupMenuItem" : {
-        "label" : "Поставки"
+        "label" : "Поставки",
+        "help" : "Подесувањето не е целосно, кликнете овде за да го управувате"
       },
       "adminMenuItem" : {
         "label" : "Админ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Исклучок при операција: Anthropic api не може да работи без соодветна конфигурација на api клуч",
         "detail" : "Грешка на серверот: Anthropic api не може да работи без соодветна конфигурација на api клуч"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Фајлот е извезен",
+        "detail" : "Погледнете во делот за преземања во прелистувачот"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Модел за внатрешни сервиси"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Зачувај"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Агентот користи chat модел"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "DeleteBtn" : {
+        "label" : "Избриши"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Општи информации"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "избери"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Изберете конфигурација на chat модел"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Користи системски стандарден chat модел за задачата на агентот или наведете друг. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Голем јазичен модел и поставки за алатки"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Поставки за безбедносен пристап"
+      },
+      "MainPanel" : {
+        "label" : "Уредување на конфигурација на агент"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Внесете опис за агентот."
+      },
+      "code" : {
+        "label" : "Уникатен код",
+        "help" : "Автоматски генериран уникатен код на агентот."
+      },
+      "agentServiceId" : {
+        "label" : "Тип на услуга на агентот",
+        "help" : "Изберете тип на услуга на агентот што ќе се користи."
+      },
+      "defaultConfiguration" : {
+        "label" : "Стандардна конфигурација на агент",
+        "help" : "Поставете ја оваа како стандардна конфигурација за овој тип на услуга на агентот"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Избери шаблон за главна петља",
+        "help" : "Изберете го главниот prompt за петљата на агентот."
+      },
+      "maxLoopIterations" : {
+        "label" : "Максимален број повторувања на агентот",
+        "help" : "Поставете го максималниот број повторувања на агентот (за попрецизни резултати)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Овозможи ги сите достапни алатки",
+        "help" : "Кога ова е штиклирано, сите достапни алатки ќе бидат доделени кога ќе се стартува овој агент"
+      },
+      "enabledFunctions" : {
+        "label" : "Овозможени функции за овој агент",
+        "help" : "Функции што може да ги користи агентот при извршување на неговата работа"
+      },
+      "temperature" : {
+        "label" : "Температура",
+        "help" : "Температура со која моделот ќе одговара, од 0 до 1 (ако не сте сигурни, оставете празно)"
+      },
+      "thinking" : {
+        "label" : "Ментални напори",
+        "help" : "Конфигурирај ги менталните напори што моделот ќе ги прави (не е поддржано од сите модели)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Параметар TopP, од 0 до 1 (ако не сте сигурни, оставете празно)"
       }
     }
   }

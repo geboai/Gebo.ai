@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Jag accepterar villkoren",
         "help" : "Genom att klicka här accepterar du villkoren i licensen"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Adminanvändare skapad!",
+        "detail" : "Adminanvändare PAOLO.ZAVALLONI@GMAIL.COM skapades utan problem"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai saknar några obligatoriska steg",
         "detail" : "Gå igenom de röda stegen i installationsprocessen"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigurera agenttjänster",
+        "description" : "Konfigurera agenttjänster och deras tillgängliga verktyg"
+      },
+      "AgentAddBtn" : {
+        "label" : "Lägg till agent"
+      },
+      "MainPanel" : {
+        "label" : "Ställ in agenter"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigkod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivning"
+      },
+      "EditAgentBtn" : {
+        "label" : "Redigera agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Konfigurera stora språkmodeller"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Undantag under operation: Kan inte skapa vektorlagring eller initiera inbäddningsmodell: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Serverfel: Kan inte skapa vektorlagring eller initiera inbäddningsmodell: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "användare"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Sök namn"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Sök användarnamn"
+      },
+      "SearchUsersBtn" : {
+        "label" : "sök"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Välj roll"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Sök efternamn"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Användarlista",
         "help" : "Välj användare som deltar i gruppen"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Ändra användarens lösenord"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Byt"
+      },
+      "username" : {
+        "label" : "Användarnamn",
+        "help" : "Ange ditt lösenord för att verifiera denna åtgärd"
+      },
+      "currentUserPassword" : {
+        "label" : "Ditt lösenord",
+        "help" : "Ange ditt lösenord för att verifiera denna åtgärd"
+      },
+      "confirmpassword" : {
+        "label" : "bekräfta användarens lösenord",
+        "help" : "bekräfta lösenordet för den ändrade användaren"
+      },
+      "password" : {
+        "label" : "Användarens nya lösenord",
+        "help" : "Nytt lösenord för den ändrade användaren"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Ny inbäddningsmodell",
         "help" : "Välj leverantör för att lägga till en ny inbäddningsmodell som kan göra semantisk indexering av innehåll",
         "placeholder" : "Välj leverantör för att lägga till en ny inbäddningsmodell som kan göra semantisk indexering av innehåll"
+      },
+      "ranker" : {
+        "label" : "Ny omrankningsmodell",
+        "help" : "Välj leverantör för att lägga till en ny omrankningsmodell",
+        "placeholder" : "Välj leverantör för att lägga till en ny omrankningsmodell"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Ny omrankningsmodellkonfiguration"
+      },
+      "CodeHeader3" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Beskrivning"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modellleverantör"
+      },
+      "ModelHeader3" : {
+        "label" : "Modell "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurerade omrankningsmodeller"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "API-token för embeddingmodell",
         "help" : "Välj den API-token som ska användas för denna modell"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden lyckades"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Spara"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Ta bort"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerar rankingmodellens leverantör:"
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "help" : "Ange beskrivning för modellkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kod",
+        "help" : "Automatiskt genererad unik kod för modellkonfigurationen"
+      },
+      "baseUrl" : {
+        "label" : "rankingmodellens API basadress till server",
+        "help" : "Basadress för rankingmodell."
+      },
+      "apiSecretCode" : {
+        "label" : "rankingmodellens API-token",
+        "help" : "Välj den API-token som ska användas för denna modell (frivilligt)"
+      },
+      "choosedModel" : {
+        "label" : "rankingmodellens valda modell",
+        "help" : "Välj den rankingmodell som ska användas."
+      },
+      "defaultModel" : {
+        "label" : "använd denna som standard rankingmodell",
+        "help" : "Om valt används denna som standard rankingmodell där ingen anges"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden lyckades"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valda system"
+      },
+      "wordExport" : {
+        "help" : "Exportera svar till Word"
+      },
+      "pdfExport" : {
+        "help" : "Exportera svar till PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Kör din valda agent"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Bearbetar dokument:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Assisterad sökning"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Redigera prompten för retrieve augmented generation-sessioner."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuell eller autotunad tröskelkonfiguration",
+        "help" : "Använd manuell distanströskel istället för att autotuna"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Använd sök med nyckelord när det finns",
+        "help" : "Utför sök med nyckelord utöver semantiska sökningar om dessa är inställda i denna installation"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Bläddra eller sök och välj dokument att chatta med"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valda dokument"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chatt"
       },
       "setupMenuItem" : {
-        "label" : "Inställning"
+        "label" : "Inställning",
+        "help" : "Konfigureringen är ofullständig, klicka gärna här för att slutföra"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Undantag vid operation:Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration",
         "detail" : "Serverfel: Anthropic api kan inte fungera utan nödvändig api-nyckelkonfiguration"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fil exporterad",
+        "detail" : "Gå till nedladdningssektionen i webbläsaren"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modell används för interna tjänster"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Spara"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent använder chatmodell"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Ta bort"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Allmän info"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "välj"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Välj en chatmodellskonfiguration"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Använd systemets standard chatmodell för att utföra agentens uppgift eller ange en. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Stora språkmodell & verktygsinställningar"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Säkerhetsinställningar"
+      },
+      "MainPanel" : {
+        "label" : "Redigerar agentkonfiguration"
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "help" : "Skriv in chatagentens beskrivning."
+      },
+      "code" : {
+        "label" : "Unik kod",
+        "help" : "Automatiskt genererad unik kod för agenten."
+      },
+      "agentServiceId" : {
+        "label" : "Agenttjänsttyp",
+        "help" : "Välj agenttjänsttyp som ska köras."
+      },
+      "defaultConfiguration" : {
+        "label" : "Standardagentkonfiguration",
+        "help" : "Ställ in denna som standardkonfiguration för denna agenttjänsttyp"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Välj promtmall för huvudloopen",
+        "help" : "Välj agentens huvudloop-prompt."
+      },
+      "maxLoopIterations" : {
+        "label" : "Max antal agentloopar",
+        "help" : "Ange max antal loopar för agenten (detta ger ett mer detaljerat resultat)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktivera alla tillgängliga verktyg",
+        "help" : "När detta är valt kommer alla tillgängliga verktyg att tilldelas när agenten körs"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiverade funktionsanrop för denna agent",
+        "help" : "Funktioner som agenten kan använda när den arbetar"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperatur modellen svarar med, från 0 till 1 (lämna tomt om du är osäker)"
+      },
+      "thinking" : {
+        "label" : "Tänkarbete",
+        "help" : "Ställ in extra tänkarbete modellen gör (stöds inte av alla modeller)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, från 0 till 1 (lämna tomt om du är osäker)"
       }
     }
   }

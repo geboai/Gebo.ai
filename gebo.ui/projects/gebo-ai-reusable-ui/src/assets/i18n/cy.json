@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Rwy'n derbyn y telerau",
         "help" : "Trwy glicio yma rydych yn derbyn y telerau ac amodau yn y drwydded"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Defnyddiwr gweinyddwr wedi'i greu !",
+        "detail" : "Defnyddiwr gweinyddwr PAOLO.ZAVALLONI@GMAIL.COM wedi'i greu'n llwyddiannus"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Mae cam hanfodol ar goll o setup Gebo.ai",
         "detail" : "Adolygwch y camau coch o'r broses setup os gwelwch yn dda"
+      },
+      "agentSetupSection" : {
+        "label" : "Ffurfweddu gwasanaethau asiant",
+        "description" : "Ffurfweddu gwasanaethau asiant a'u hofferynnau sydd ar gael"
+      },
+      "AgentAddBtn" : {
+        "label" : "Ychwanegu asiant"
+      },
+      "MainPanel" : {
+        "label" : "Ffurfweddu asiantau"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "EditAgentBtn" : {
+        "label" : "Golygu asiant"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Setup modelau iaith mawr"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Eithriad yn ystod y gweithrediad: Methu creu storfa fector neu eithriad ymgychwyn model ymgorffori: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Gwall gweinydd: Methu creu storfa fector neu eithriad ymgychwyn model ymgorffori: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "defnyddwyr"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Chwilio enw"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Chwilio enw defnyddiwr"
+      },
+      "SearchUsersBtn" : {
+        "label" : "chwilio"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Dewis rôl"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Chwilio cyfenw"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Rhestr defnyddwyr",
         "help" : "Dewiswch ddefnyddwyr sy’n cymryd rhan yn y grŵp"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Newid cyfrinair y defnyddiwr"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Newid"
+      },
+      "username" : {
+        "label" : "Enw defnyddiwr",
+        "help" : "Rhowch eich cyfrinair i ddilysu'r weithred hon"
+      },
+      "currentUserPassword" : {
+        "label" : "Eich cyfrinair",
+        "help" : "Rhowch eich cyfrinair i ddilysu'r weithred hon"
+      },
+      "confirmpassword" : {
+        "label" : "cadarnhau cyfrinair y defnyddiwr",
+        "help" : "cadarnhau cyfrinair ar gyfer y defnyddiwr golygedig"
+      },
+      "password" : {
+        "label" : "Cyfrinair newydd y defnyddiwr",
+        "help" : "Cyfrinair newydd ar gyfer y defnyddiwr golygedig"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Model mewnblannu newydd",
         "help" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig",
         "placeholder" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig"
+      },
+      "ranker" : {
+        "label" : "Model ailraddio newydd",
+        "help" : "Dewiswch y cyflenwr i ychwanegu model ailraddio newydd",
+        "placeholder" : "Dewiswch y cyflenwr i ychwanegu model ailraddio newydd"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Ffurfweddu model ailraddio newydd"
+      },
+      "CodeHeader3" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Disgrifiad"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Darparwr model"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Modiwlau ailraddio wedi'u ffurfweddu"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API model mewnblannu",
         "help" : "Dewiswch y token API model mewnblannu i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i chwblhau'n llwyddiannus"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "TitleFragment" : {
+        "label" : "Golygu darparwr model graddio:"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o ffurfweddiad y model"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw wedi'i gynhyrchu'n awtomatig o ffurfweddiad y model"
+      },
+      "baseUrl" : {
+        "label" : "Cyfeiriad gweinydd API model graddio",
+        "help" : "Cyfeiriad sylfaenol y model graddio."
+      },
+      "apiSecretCode" : {
+        "label" : "Tocyn API model graddio",
+        "help" : "Dewiswch y tocyn API model graddio i'w ddefnyddio ar gyfer y model hwn (dewisol)"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model graddio model graddio",
+        "help" : "Dewiswch y model graddio model graddio i weithio gydag ef."
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel model graddio rhagosodedig",
+        "help" : "Os yw'n wir, bydd hwn yn cael ei ddefnyddio fel model graddio rhagosodedig lle nad yw model graddio wedi'i nodi"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i chwblhau'n llwyddiannus"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Systemau a ddewiswyd"
+      },
+      "wordExport" : {
+        "help" : "Allforio ymateb i Word"
+      },
+      "pdfExport" : {
+        "help" : "Allforio ymateb i PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Yn gweithredu eich asiant a ddewiswyd"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Prosesu dogfen:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Chwilio dwfn/Chwilio Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Chwiliad cynorthwyol"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Golygu'r prompt ar gyfer y sesiynau cynhyrchu adalw estynedig."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ffurfweddiad trothwy â llaw neu wedi'i awtotiwnio",
+        "help" : "Defnyddiwch drothwy pellter â llaw yn lle ei awtotiwnio"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Defnyddio chwiliad allweddair pan fo ar gael",
+        "help" : "Rhedeg chwiliadau allweddair yn ychwanegol at chwiliadau semantig os ydynt wedi'u ffurfweddu yn y gosodiad hwn"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Pori neu chwilio a dewis dogfennau i sgwrsio â hwy"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Dogfennau wedi'u dewis"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Sgwrs"
       },
       "setupMenuItem" : {
-        "label" : "Gosod"
+        "label" : "Gosod",
+        "help" : "Nid yw'r gosodiad wedi'i gwblhau, ystyriwch bwyso yma a'i reoli"
       },
       "adminMenuItem" : {
         "label" : "Gweinyddwr"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Eithriad yn ystod y gweithrediad: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol",
         "detail" : "Gwall gweinydd: Ni all api Anthropic weithio heb ffurfweddiad allwedd api angenrheidiol"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Ffeil wedi'i allforio",
+        "detail" : "Ewch i adran llwytho i lawr eich porwr"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model a ddefnyddir ar gyfer gwasanaethau mewnol"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Defnyddiwyd model sgwrsio gan yr asiant"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "dewis"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Dewiswch ffurfweddiad model sgwrsio"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Defnyddio model sgwrsio rhagosodedig y system i gyflawni tasg yr asiant neu nodi un. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Model iaith fawr a gosodiadau offer y gellir eu defnyddio"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad diogelwch"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad asiant"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad asiant sgwrsio."
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw wedi'i gynhyrchu'n awtomatig o'r asiant."
+      },
+      "agentServiceId" : {
+        "label" : "Math o wasanaeth asiant",
+        "help" : "Dewiswch y math o wasanaeth asiant fydd yn cael ei redeg."
+      },
+      "defaultConfiguration" : {
+        "label" : "Ffurfweddiad rhagosodedig asiant",
+        "help" : "Gosod hwn fel ffurfweddiad rhagosodedig ar gyfer y math hwn o wasanaeth asiant"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Dewis templed prif ddolen prompt",
+        "help" : "Dewis prif ddolen prompt yr asiant."
+      },
+      "maxLoopIterations" : {
+        "label" : "Uchafswm nifer o ddolenni asiant",
+        "help" : "Gosod yr uchafswm o ddolenni asiant (bydd hyn yn arwain at ganlyniad mwy manwl)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Galluogi pob offeryn sydd ar gael",
+        "help" : "Pan fydd y dewis hwn wedi'i wirio, bydd yr holl offerynnau sydd ar gael yn cael eu neilltuo pan fydd yr asiantau hyn yn rhedeg"
+      },
+      "enabledFunctions" : {
+        "label" : "Ffrydiau galluog ar gyfer yr asiant hwn",
+        "help" : "Swyddogaethau y gall yr asiant eu defnyddio wrth berfformio ei waith"
+      },
+      "temperature" : {
+        "label" : "Tymheredd",
+        "help" : "Tymheredd y bydd y model yn ymateb, o 0 i 1 (peidiwch â llenwi os nad ydych yn siŵr)"
+      },
+      "thinking" : {
+        "label" : "Ymdrechion meddwl",
+        "help" : "Ffurfweddu ymdrechion meddwl bydd y model yn eu gwneud (nid yw pob model yn cefnogi hwn)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paramedr TopP, o 0 i 1 (peidiwch â llenwi os nad ydych yn siŵr)"
       }
     }
   }

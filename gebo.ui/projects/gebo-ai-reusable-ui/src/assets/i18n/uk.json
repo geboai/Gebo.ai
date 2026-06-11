@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Я приймаю умови",
         "help" : "Натискаючи тут, ви приймаєте умови ліцензії"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Адміністратора створено!",
+        "detail" : "Адміністратора PAOLO.ZAVALLONI@GMAIL.COM успішно створено"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "У налаштуванні Gebo.ai відсутній обов'язковий крок",
         "detail" : "Будь ласка, перевірте червоні кроки у процесі налаштування"
+      },
+      "agentSetupSection" : {
+        "label" : "Налаштуйте служби агентів",
+        "description" : "Налаштуйте служби агентів та їх доступні інструменти"
+      },
+      "AgentAddBtn" : {
+        "label" : "Додати агента"
+      },
+      "MainPanel" : {
+        "label" : "Налаштування агентів"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфігурації"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
+      },
+      "EditAgentBtn" : {
+        "label" : "Редагувати агента"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Налаштування потужних мовних моделей"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Виняток під час операції: Неможливо створити vector store або сталася помилка ініціалізації embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Помилка сервера: Неможливо створити vector store або сталася помилка ініціалізації embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "користувачі"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Пошук імені"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Пошук імені користувача"
+      },
+      "SearchUsersBtn" : {
+        "label" : "пошук"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Виберіть роль"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Пошук прізвища"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Список користувачів",
         "help" : "Виберіть користувачів, які беруть участь у групі"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Змінити пароль користувача"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Змінити"
+      },
+      "username" : {
+        "label" : "Ім'я користувача",
+        "help" : "Введіть свій пароль для підтвердження цієї дії"
+      },
+      "currentUserPassword" : {
+        "label" : "Ваш пароль",
+        "help" : "Введіть свій пароль для підтвердження цієї дії"
+      },
+      "confirmpassword" : {
+        "label" : "Підтвердження паролю користувача",
+        "help" : "Підтвердження паролю для редагованого користувача"
+      },
+      "password" : {
+        "label" : "Новий пароль користувача",
+        "help" : "Новий пароль для редагованого користувача"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Нова модель вбудовування",
         "help" : "Виберіть постачальника, щоб додати нову модель вбудовування, яка може виконувати семантичну індексацію вмісту",
         "placeholder" : "Виберіть постачальника, щоб додати нову модель вбудовування, яка може виконувати семантичну індексацію вмісту"
+      },
+      "ranker" : {
+        "label" : "Створити нову модель повторного ранжування",
+        "help" : "Виберіть постачальника для додавання нової моделі повторного ранжування",
+        "placeholder" : "Виберіть постачальника для додавання нової моделі повторного ранжування"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Нова конфігурація моделі повторного ранжування"
+      },
+      "CodeHeader3" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Опис"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Постачальник моделі"
+      },
+      "ModelHeader3" : {
+        "label" : "Модель "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Налаштовані моделі повторного ранжування"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "API токен Embedding model",
         "help" : "Виберіть API токен Embedding model для цієї моделі"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Гаразд!",
+        "detail" : "Операція успішно виконана"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Зберегти"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "DeleteBtn" : {
+        "label" : "Видалити"
+      },
+      "TitleFragment" : {
+        "label" : "Редагування постачальника моделі ранжування:"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Введіть опис конфігурації моделі"
+      },
+      "code" : {
+        "label" : "Унікальний код",
+        "help" : "Автоматично згенерований унікальний код конфігурації моделі"
+      },
+      "baseUrl" : {
+        "label" : "Базова адреса API моделі ранжування",
+        "help" : "Базова адреса моделі ранжування."
+      },
+      "apiSecretCode" : {
+        "label" : "API токен моделі ранжування",
+        "help" : "Оберіть API токен моделі ранжування для цієї моделі (необовʼязково)"
+      },
+      "choosedModel" : {
+        "label" : "Вибір моделі ранжування",
+        "help" : "Виберіть модель ранжування для роботи."
+      },
+      "defaultModel" : {
+        "label" : "Встановити цю модель як основну модель ранжування",
+        "help" : "Якщо обрано, ця модель буде використовуватись як основна там, де модель ранжування не вказана"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Гаразд!",
+        "detail" : "Операція успішно виконана"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Обрані системи"
+      },
+      "wordExport" : {
+        "help" : "Експортувати відповідь у Word"
+      },
+      "pdfExport" : {
+        "help" : "Експортувати відповідь у PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Виконання обраного вами агента"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Обробка документа:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Глибокий пошук/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Пошук з підтримкою"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Підказка",
         "help" : "Редагуйте підказку для сесій RAG."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ручне або автоналаштування порогів",
+        "help" : "Використовуйте ручний поріг відстані замість автоналаштування"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Використовувати пошук за ключовими словами, якщо доступно",
+        "help" : "Додайте пошук за ключовими словами до семантичного пошуку, якщо це налаштовано в цій інсталяції"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Перегляньте або знайдіть і виберіть документи для спілкування"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Обрані документи"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Чат"
       },
       "setupMenuItem" : {
-        "label" : "Налаштування"
+        "label" : "Налаштування",
+        "help" : "Налаштування не завершено, натисніть тут для налаштування"
       },
       "adminMenuItem" : {
         "label" : "Адмін"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Виняток під час операції: Anthropic api не може працювати без потрібного налаштування api-ключа",
         "detail" : "Помилка сервера: Anthropic api не може працювати без потрібного налаштування api-ключа"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Файл експортовано",
+        "detail" : "Відкрийте вкладку завантажень у браузері"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Модель для внутрішніх сервісів"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Зберегти"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Агент використовує модель чату"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "DeleteBtn" : {
+        "label" : "Видалити"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Загальна інформація"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "обрати"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Виберіть конфігурацію моделі чату"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Використовуйте модель чату за замовчуванням системи для виконання завдання агента або вкажіть свою. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Налаштування великої мовної моделі та доступних інструментів"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Налаштування доступу та безпеки"
+      },
+      "MainPanel" : {
+        "label" : "Редагування налаштувань агента"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Введіть опис агента чату."
+      },
+      "code" : {
+        "label" : "Унікальний код",
+        "help" : "Автоматично згенерований унікальний код агента."
+      },
+      "agentServiceId" : {
+        "label" : "Тип служби агента",
+        "help" : "Виберіть тип служби агента, який буде запускатись."
+      },
+      "defaultConfiguration" : {
+        "label" : "Конфігурація агента за замовчуванням",
+        "help" : "Встановіть цю конфігурацію як типову для цього типу служби агента"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Виберіть шаблон підказки головного циклу",
+        "help" : "Виберіть головну підказку агента."
+      },
+      "maxLoopIterations" : {
+        "label" : "Максимальна кількість ітерацій агента",
+        "help" : "Вкажіть максимальну кількість ітерацій агента (результат стане точнішим)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Увімкнути всі доступні інструменти",
+        "help" : "Якщо ця опція вибрана, всі доступні інструменти будуть призначені під час запуску цього агента"
+      },
+      "enabledFunctions" : {
+        "label" : "Дозволені функції для цього агента",
+        "help" : "Функції, які агент може використовувати під час виконання завдання"
+      },
+      "temperature" : {
+        "label" : "Температура",
+        "help" : "Температура відповіді моделі від 0 до 1 (якщо не впевнені, залиште порожнім)"
+      },
+      "thinking" : {
+        "label" : "Зусилля мислення",
+        "help" : "Налаштуйте зусилля мислення, які робитиме модель (підтримується не всіма моделями)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Параметр TopP, від 0 до 1 (якщо не впевнені, залиште порожнім)"
       }
     }
   }

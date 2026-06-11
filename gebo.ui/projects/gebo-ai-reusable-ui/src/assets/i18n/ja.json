@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "利用規約に同意します",
         "help" : "ここをクリックするとライセンスの利用規約に同意したことになります"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "管理者ユーザーが作成されました！",
+        "detail" : "管理者ユーザー PAOLO.ZAVALLONI@GMAIL.COM の作成が完了しました"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai の必須セットアップステップが一部未完了です",
         "detail" : "セットアッププロセスの赤いステップを確認してください"
+      },
+      "agentSetupSection" : {
+        "label" : "エージェントサービスの設定",
+        "description" : "エージェントサービスと利用可能なツールを設定します"
+      },
+      "AgentAddBtn" : {
+        "label" : "エージェントを追加"
+      },
+      "MainPanel" : {
+        "label" : "エージェントのセットアップ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "EditAgentBtn" : {
+        "label" : "エージェントを編集"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "大規模言語モデルの設定"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "処理中に例外発生: ベクトルストアまたは埋め込みモデルの初期化時に例外が発生しました: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "サーバーエラー: ベクトルストアまたは埋め込みモデルの初期化時に例外が発生しました: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "ユーザー"
+      },
+      "searchNameInput" : {
+        "placeholder" : "名前で検索"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ユーザー名で検索"
+      },
+      "SearchUsersBtn" : {
+        "label" : "検索"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ロールを選択"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "姓で検索"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "ユーザー一覧",
         "help" : "グループに参加するユーザーを選択してください"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ユーザーのパスワードを変更"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "変更"
+      },
+      "username" : {
+        "label" : "ユーザー名",
+        "help" : "この操作を確認するためパスワードを入力してください"
+      },
+      "currentUserPassword" : {
+        "label" : "あなたのパスワード",
+        "help" : "この操作を確認するためパスワードを入力してください"
+      },
+      "confirmpassword" : {
+        "label" : "ユーザーのパスワード確認",
+        "help" : "編集したユーザーのパスワード確認"
+      },
+      "password" : {
+        "label" : "ユーザーの新しいパスワード",
+        "help" : "編集したユーザーの新しいパスワード"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "新しい埋め込みモデル",
         "help" : "コンテンツのセマンティックインデックス作成が可能な新しい埋め込みモデルを追加するためにサプライヤーを選択してください",
         "placeholder" : "コンテンツのセマンティックインデックス作成が可能な新しい埋め込みモデルを追加するためにサプライヤーを選択してください"
+      },
+      "ranker" : {
+        "label" : "新規リランクモデル",
+        "help" : "新しいリランカーのサプライヤーを選択してください",
+        "placeholder" : "新しいリランカーのサプライヤーを選択してください"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "新規リランクモデル設定"
+      },
+      "CodeHeader3" : {
+        "label" : "コード"
+      },
+      "DescriptionHeader3" : {
+        "label" : "説明"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "モデルプロバイダー"
+      },
+      "ModelHeader3" : {
+        "label" : "モデル"
+      },
+      "RerankerModelsZone" : {
+        "label" : "設定されたリランクモデル"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "埋め込みモデルAPIトークン",
         "help" : "このモデルで使用する埋め込みモデルAPIトークンを選択してください"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "TitleFragment" : {
+        "label" : "ランクモデルプロバイダーの編集:"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "自動生成されたモデル設定のユニークコード"
+      },
+      "baseUrl" : {
+        "label" : "ランキングモデルAPIのベースサーバーアドレス",
+        "help" : "ランキングモデルのベースアドレス。"
+      },
+      "apiSecretCode" : {
+        "label" : "ランキングモデルAPIトークン",
+        "help" : "このモデルで使用するランキングモデルAPIトークンを選択（任意）"
+      },
+      "choosedModel" : {
+        "label" : "ランキングモデル選択",
+        "help" : "使用するランキングモデルを選択してください。"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトランキングモデルに設定",
+        "help" : "有効にすると、ランキングモデルが指定されていない場合にこれがデフォルトで使用されます"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "選択したシステム"
+      },
+      "wordExport" : {
+        "help" : "Wordに回答をエクスポート"
+      },
+      "pdfExport" : {
+        "help" : "PDFに回答をエクスポート"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "選択したエージェントを実行中"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ドキュメントを処理中："
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ディープサーチ／Jira検索"
+      },
+      "PURE_SEARCH" : {
+        "label" : "アシスト検索"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "プロンプト",
         "help" : "リトリーブ強化生成セッション用のプロンプトを編集します。"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "手動/自動チューニングしきい値設定",
+        "help" : "自動チューニングの代わりに手動しきい値を使用します"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "利用可能な場合はキーワード検索を使用",
+        "help" : "このインストールに設定されている場合、セマンティック検索に加えてキーワード検索も実行します"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "チャットするドキュメントをブラウズまたは検索して選択"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "選択されたドキュメント"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "チャット"
       },
       "setupMenuItem" : {
-        "label" : "設定"
+        "label" : "設定",
+        "help" : "セットアップが未完了です。ここを押して管理してください"
       },
       "adminMenuItem" : {
         "label" : "管理"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "操作中に例外発生:Anthropic api cannot work without needed api key configuration",
         "detail" : "サーバーエラー: Anthropic api cannot work without needed api key configuration"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ファイルがエクスポートされました",
+        "detail" : "ブラウザのダウンロードセクションに移動してください"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "内部サービス用モデル"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "UseChatModelLabel" : {
+        "label" : "エージェント使用チャットモデル"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "選択"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "チャットモデル構成を選択"
+      },
+      "defaultChatModel-help" : {
+        "label" : " エージェントのタスクを実行する際にシステムのデフォルトチャットモデルを使用するか、指定してください。 "
+      },
+      "LanguageModelTab" : {
+        "label" : "大規模言語モデル＆使用可能ツール設定"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "セキュリティアクセス設定"
+      },
+      "MainPanel" : {
+        "label" : "エージェント設定の編集"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "チャットエージェントの説明を入力してください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "自動生成されたエージェントのユニークコード。"
+      },
+      "agentServiceId" : {
+        "label" : "エージェントサービス種別",
+        "help" : "実行するエージェントサービス種別を選択してください。"
+      },
+      "defaultConfiguration" : {
+        "label" : "デフォルトエージェント設定",
+        "help" : "このエージェントサービス種別のデフォルト設定として保存します"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "メインループプロンプトテンプレートを選択",
+        "help" : "エージェントのメインループプロンプトを選択してください。"
+      },
+      "maxLoopIterations" : {
+        "label" : "エージェントループの最大回数",
+        "help" : "エージェントループの最大回数を設定します（より精度の高い結果になります）。"
+      },
+      "subscribeAllTools" : {
+        "label" : "すべての利用可能なツールを有効化",
+        "help" : "このフラグが有効な場合、実行時にすべての利用可能なツールが割り当てられます"
+      },
+      "enabledFunctions" : {
+        "label" : "このエージェントで有効な関数呼び出し",
+        "help" : "エージェントが業務中に利用できる機能"
+      },
+      "temperature" : {
+        "label" : "温度",
+        "help" : "モデルの応答温度を0から1で設定（不明な場合は空白のまま）"
+      },
+      "thinking" : {
+        "label" : "思考負荷",
+        "help" : "モデルの思考量を設定（対応していないモデルもあります）"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopPパラメータ（0～1、不明な場合は空白のまま）"
       }
     }
   }

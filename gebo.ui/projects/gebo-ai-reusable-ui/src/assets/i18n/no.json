@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Jeg godtar vilkårene",
         "help" : "Ved å klikke her godtar du vilkårene i lisensen"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin-bruker opprettet!",
+        "detail" : "Admin-bruker PAOLO.ZAVALLONI@GMAIL.COM ble opprettet"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai - mangler noen obligatoriske steg",
         "detail" : "Vennligst gjennomgå de røde stegene i oppsettprosessen"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigurer Agent-tjenester",
+        "description" : "Konfigurer Agent-tjenester og deres tilgjengelige verktøy"
+      },
+      "AgentAddBtn" : {
+        "label" : "Legg til agent"
+      },
+      "MainPanel" : {
+        "label" : "Sett opp agenter"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasjonskode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "EditAgentBtn" : {
+        "label" : "Rediger agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Konfigurer store språkmodeller"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Unntak under operasjon: Kan ikke opprette vektorlagring eller feilmelding for oppstart av embeddingsmodell: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Serverfeil: Kan ikke opprette vektorlagring eller feilmelding for oppstart av embeddingsmodell: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "brukere"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Søk etter navn"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Søk etter brukernavn"
+      },
+      "SearchUsersBtn" : {
+        "label" : "søk"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Velg rolle"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Søk etter etternavn"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Brukerliste",
         "help" : "Velg brukere som deltar i gruppen"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Endre brukerens passord"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Endre"
+      },
+      "username" : {
+        "label" : "Brukernavn",
+        "help" : "Skriv inn passordet ditt for å bekrefte denne handlingen"
+      },
+      "currentUserPassword" : {
+        "label" : "Ditt passord",
+        "help" : "Skriv inn passordet ditt for å bekrefte denne handlingen"
+      },
+      "confirmpassword" : {
+        "label" : "Bekreft brukerens passord",
+        "help" : "Bekreft passord for brukeren som redigeres"
+      },
+      "password" : {
+        "label" : "Brukerens nye passord",
+        "help" : "Nytt passord for brukeren som redigeres"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Ny embedding-modell",
         "help" : "Velg leverandør for å legge til en ny embedding-modell som kan utføre semantisk indeksering av innhold",
         "placeholder" : "Velg leverandør for å legge til en ny embedding-modell som kan utføre semantisk indeksering av innhold"
+      },
+      "ranker" : {
+        "label" : "Nytt reranker-modell",
+        "help" : "Velg leverandør for å legge til en ny reranker-modell",
+        "placeholder" : "Velg leverandør for å legge til en ny reranker-modell"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Ny reranker-modellkonfigurasjon"
+      },
+      "CodeHeader3" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Beskrivelse"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modelltilbyder"
+      },
+      "ModelHeader3" : {
+        "label" : "Modell "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurerte rerank-modeller"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding-modell API token",
         "help" : "Velg Embedding-modell API-token som skal brukes for denne modellen"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble fullført"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerer ranking-modelltilbyder:"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse for modellkonfigurasjonen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modellkonfigurasjonen"
+      },
+      "baseUrl" : {
+        "label" : "Ranking-modellens API-baseadresse",
+        "help" : "Baseadresse for ranking-modellen."
+      },
+      "apiSecretCode" : {
+        "label" : "Ranking-modellens API-token",
+        "help" : "Velg API-token som skal benyttes for denne modellen (valgfritt)"
+      },
+      "choosedModel" : {
+        "label" : "Ranking-modellvalg",
+        "help" : "Velg hvilken ranking-modell du vil bruke."
+      },
+      "defaultModel" : {
+        "label" : "Sett dette som standard ranking-modell",
+        "help" : "Hvis valgt, brukes denne som standard der ranking-modell ikke er spesifisert"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble fullført"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valgte systemer"
+      },
+      "wordExport" : {
+        "help" : "Eksporter svar til Word"
+      },
+      "pdfExport" : {
+        "help" : "Eksporter svar til PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Utfører din valgte agent"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Behandler dokument:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Dypsøk/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Assistert søk"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Rediger prompten for øktene med utvidet generering."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuell eller automatisk terskelkonfigurasjon",
+        "help" : "Bruk manuell avstandsterskel i stedet for Autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Bruk nøkkelordsøk når tilgjengelig",
+        "help" : "Kjør nøkkelordsøk i tillegg til semantiske søk dersom det er konfigurert"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Bla gjennom eller søk og velg dokumenter å chatte med"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valgte dokumenter"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Oppsett"
+        "label" : "Oppsett",
+        "help" : "Oppsett ikke fullført, trykk her og administrer det"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Unntak under operasjon: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon",
         "detail" : "Serverfeil: Anthropic api kan ikke fungere uten nødvendig api-nøkkel-konfigurasjon"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fil eksportert",
+        "detail" : "Gå til nedlastinger i nettleseren"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modell brukt til interne tjenester"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agenten bruker chat-modellen"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "velg"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Velg en chat-modellkonfigurasjon"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Bruk systemets standard chat-modell for agentens oppgaver eller spesifiser en annen. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Innstillinger for large language model og brukbare verktøy"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Sikkerhetsinnstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer agentkonfigurasjon"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse for chatteagent."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for agenten."
+      },
+      "agentServiceId" : {
+        "label" : "Agentens tjenestetype",
+        "help" : "Velg tjenestetypen agenten skal kjøre."
+      },
+      "defaultConfiguration" : {
+        "label" : "Standard agentkonfigurasjon",
+        "help" : "Sett dette som standard for denne agenttypen"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Velg promptmal for hovedløkken",
+        "help" : "Velg prompt for agentens hovedløkke."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maks antall agentrunder",
+        "help" : "Angi maksimalt antall agentrunder (gir mer nøyaktige resultater)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktiver alle tilgjengelige verktøy",
+        "help" : "Når denne er avhuket, får agenten tilgang til alle tilgjengelige verktøy"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiverte funksjonskall for agenten",
+        "help" : "Funksjonalitet agenten kan bruke under utførelsen"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperatur for modellens svar, fra 0 til 1 (la stå tom om du er usikker)"
+      },
+      "thinking" : {
+        "label" : "Tenkeinnsats",
+        "help" : "Konfigurer modellens tenkeinnsats (ikke alle støtter dette)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, fra 0 til 1 (la stå tom om du er usikker)"
       }
     }
   }

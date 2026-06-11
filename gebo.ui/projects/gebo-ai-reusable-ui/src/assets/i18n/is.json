@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Ég samþykki skilmálana",
         "help" : "Með því að smella hér samþykkir þú skilmála leyfisins"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Stjórnandi búinn til !",
+        "detail" : "Stjórnandi notandi PAOLO.ZAVALLONI@GMAIL.COM stofnaður með góðum árangri"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Vantar nauðsynlegt skref í uppsetningu fyrir Gebo.ai",
         "detail" : "Vinsamlegast skoðaðu rauðu skrefin í uppsetningarferlinu"
+      },
+      "agentSetupSection" : {
+        "label" : "Stilla umboðsaðila þjónustur",
+        "description" : "Stilla umboðsaðila þjónustur og þau verkfæri sem eru í boði"
+      },
+      "AgentAddBtn" : {
+        "label" : "Bæta við umboðsaðila"
+      },
+      "MainPanel" : {
+        "label" : "Uppsetning umboðsaðila"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Uppsetningarkóði"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "EditAgentBtn" : {
+        "label" : "Breyta umboðsaðila"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Stilla stór tungumálalíkön"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Undantekning kom upp: Gat ekki búið til vector store eða initialisering klasmódels: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Þjónustuvilla: Gat ekki búið til vector store eða initialisering klasmódels: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "notendur"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Leita að nafni"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Leita að notendanafni"
+      },
+      "SearchUsersBtn" : {
+        "label" : "leita"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Veldu hlutverk"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Leita að eftirnafni"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Notendalisti",
         "help" : "Veldu notendur sem taka þátt í hópnum"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Breyta lykilorði notanda"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Breyta"
+      },
+      "username" : {
+        "label" : "Notendanafn",
+        "help" : "Sláðu inn lykilorð þitt til að staðfesta aðgerðina"
+      },
+      "currentUserPassword" : {
+        "label" : "Þitt lykilorð",
+        "help" : "Sláðu inn lykilorð þitt til að staðfesta aðgerðina"
+      },
+      "confirmpassword" : {
+        "label" : "Staðfesta lykilorð notanda",
+        "help" : "Staðfesting lykilorðs fyrir þann notanda sem verið er að breyta"
+      },
+      "password" : {
+        "label" : "Nýtt lykilorð notanda",
+        "help" : "Nýtt lykilorð fyrir þann notanda sem verið er að breyta"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Nýtt innfelld líkön",
         "help" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis",
         "placeholder" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis"
+      },
+      "ranker" : {
+        "label" : "Nýtt endurraðara líkan",
+        "help" : "Veldu þjónustuveitanda til að bæta við nýju endurraðara líkani",
+        "placeholder" : "Veldu þjónustuveitanda til að bæta við nýju endurraðara líkani"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Ný stilling fyrir endurraðara líkan"
+      },
+      "CodeHeader3" : {
+        "label" : "Kóði"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Lýsing"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Líkanaveitandi"
+      },
+      "ModelHeader3" : {
+        "label" : "Líkan "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Uppsett endurraðaralíkön"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "API lykill innbyggðs líkans",
         "help" : "Veldu API lykil innbyggðs líkans sem á að nota fyrir þetta líkan"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð kláruð með góðum árangri"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "TitleFragment" : {
+        "label" : "Breyti líkanaveitanda fyrir röðun:"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkanastillingu"
+      },
+      "code" : {
+        "label" : "Einstæður kóði",
+        "help" : "Sjálfvirkt búinn einstæður kóði á líkanastillingu"
+      },
+      "baseUrl" : {
+        "label" : "API grunnslóð fyrir röðunar módel",
+        "help" : "Grunnslóð röðunar módel."
+      },
+      "apiSecretCode" : {
+        "label" : "API lykill fyrir röðunar módel",
+        "help" : "Veldu API lykil fyrir þetta röðunar módel (valkvætt)"
+      },
+      "choosedModel" : {
+        "label" : "Val á röðunar módel",
+        "help" : "Veldu það röðunar módel sem á að nota."
+      },
+      "defaultModel" : {
+        "label" : "Setja þetta sem sjálfgefið röðunar módel",
+        "help" : "Ef hakað er við verður þetta sjálfgefið röðunar módel þar sem röðunar módel er ekki tilgreint"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð kláruð með góðum árangri"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valin kerfi"
+      },
+      "wordExport" : {
+        "help" : "Flytja svörun út í Word"
+      },
+      "pdfExport" : {
+        "help" : "Flytja svörun út í PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Keyri valda þjón"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Skrá er í vinnslu:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Djúpleit/Jira leit"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Aðstoð með leit"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Stikkorð",
         "help" : "Breyttu stikkorðinu fyrir retrieve augmented generation loturnar."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Handvirk eða sjálfstillt þolmörk",
+        "help" : "Notaðu handvirk fjarlægðarþolmörk í stað þess að láta stilla þau sjálfvirkt"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Nota leitarorðaleit þegar það er í boði",
+        "help" : "Framkvæma leitarorðaleit viðbótar við merkingarleit ef það er tiltækt í þessari uppsetningu"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Fletta eða leita og velja skjöl til að spjalla við"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valin skjöl"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Spjall"
       },
       "setupMenuItem" : {
-        "label" : "Uppsetning"
+        "label" : "Uppsetning",
+        "help" : "Uppsetningu er ólokið, vinsamlegast smelltu hér og kláraðu hana"
       },
       "adminMenuItem" : {
         "label" : "Stjórnandi"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Undantekning kom upp:Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar",
         "detail" : "Þjónustuvilla: Anthropic api virkar ekki án nauðsynlegrar API-lyklastillingar"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Skrá flutt út",
+        "detail" : "Farðu í niðurhalsmöppu vafrans"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Líkan notað fyrir innri þjónustu"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Notað samtalslíkanið fyrir umboðsaðila"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "velja"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Veldu uppsetningu á samtalslíkan"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Nota sjálfgefið samtalslíkan kerfisins fyrir verkefni umboðsaðilans eða skilgreindu annað. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Stórt mállíkan & stillingar verkfæra"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Öryggis- og aðgangsstillingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyta stillingum umboðsaðila"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu fyrir samtals umboðsaðila."
+      },
+      "code" : {
+        "label" : "Einstæður kóði",
+        "help" : "Sjálfvirkt búinn einstæður kóði fyrir umboðsaðila."
+      },
+      "agentServiceId" : {
+        "label" : "Tegund umboðsaðila þjónustu",
+        "help" : "Veldu þá tegund umboðsaðila þjónustu sem á að keyra."
+      },
+      "defaultConfiguration" : {
+        "label" : "Sjálfgefin stilling umboðsaðila",
+        "help" : "Settu þetta sem sjálfgefna stillingu fyrir þessa tegund umboðsaðila þjónustu"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Veldu forsnið fyrir aðal lykkju",
+        "help" : "Veldu forsnið fyrir aðal lykkju umboðsaðila."
+      },
+      "maxLoopIterations" : {
+        "label" : "Hámarks fjöldi umboðsaðila lykkja",
+        "help" : "Stilltu hámark f jölda lykkja (því fleiri, því ítarlegri niðurstaða)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Virkja öll tiltæk verkfæri",
+        "help" : "Ef hakað er við verður öllum tiltækum verkfærum úthlutað þegar þessi umboðsaðili keyrir"
+      },
+      "enabledFunctions" : {
+        "label" : "Virkar aðgerðir fyrir þennan umboðsaðila",
+        "help" : "Þær aðgerðir sem umboðsaðilinn getur notað við vinnslu"
+      },
+      "temperature" : {
+        "label" : "Temperature",
+        "help" : "Temperature gildið sem líkanið svarar við, frá 0 til 1 (hægt að skilja auðan við ef þú ert óviss)"
+      },
+      "thinking" : {
+        "label" : "Hugsunarátak",
+        "help" : "Stilltu hugsunarátak sem líkanið á að framkvæma (ekki öll líkön styðja þetta)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP gildi, frá 0 til 1 (hægt að skilja auðan við ef þú ert óviss)"
       }
     }
   }

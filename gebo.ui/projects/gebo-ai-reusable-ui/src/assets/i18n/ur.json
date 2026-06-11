@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "میں شرائط قبول کرتا ہوں",
         "help" : "یہاں کلک کرنے سے آپ لائسنس کی شرائط و ضوابط کو قبول کرتے ہیں"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "ایڈمن صارف بنایا گیا !",
+        "detail" : "ایڈمن صارف PAOLO.ZAVALLONI@GMAIL.COM کامیابی سے بنایا گیا"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai سیٹ اپ میں کچھ لازمی مرحلہ رہ گیا ہے",
         "detail" : "براہ کرم سیٹ اپ عمل کے سرخ مراحل کا جائزہ لیں"
+      },
+      "agentSetupSection" : {
+        "label" : "ایجنٹ سروسز ترتیب دیں",
+        "description" : "ایجنٹ سروسز اور ان کے دستیاب ٹولز کو ترتیب دیں"
+      },
+      "AgentAddBtn" : {
+        "label" : "ایجنٹ شامل کریں"
+      },
+      "MainPanel" : {
+        "label" : "ایجنٹ سیٹ اپ کریں"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کنفیگ کوڈ"
+      },
+      "DescriptionHeader" : {
+        "label" : "تفصیل"
+      },
+      "EditAgentBtn" : {
+        "label" : "ایجنٹ میں ترمیم کریں"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "بڑے لینگویج ماڈلز کی سیٹ اپ"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "آپریشن کے دوران استثنا: ویکٹر اسٹور یا ایمبیڈنگ ماڈل کی ابتدا میں ناکامی: 401 - {\"error\":{\"message\":\"تصدیقی خرابی، غلط پراکسی سرور ٹوکن دیا گیا۔ حاصل کردہ API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. ٹوکن کیش میں نہیں مل سکا\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "سرور کی خرابی: ویکٹر اسٹور یا ایمبیڈنگ ماڈل کی ابتدا میں ناکامی: 401 - {\"error\":{\"message\":\"تصدیقی خرابی، غلط پراکسی سرور ٹوکن دیا گیا۔ حاصل کردہ API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. ٹوکن کیش میں نہیں مل سکا\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "صارفین"
+      },
+      "searchNameInput" : {
+        "placeholder" : "نام تلاش کریں"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "یوزر نیم تلاش کریں"
+      },
+      "SearchUsersBtn" : {
+        "label" : "تلاش کریں"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "رول منتخب کریں"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "سر نیم تلاش کریں"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "صارفین کی فہرست",
         "help" : "گروپ میں شامل صارفین کا انتخاب کریں"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "صارف کا پاس ورڈ تبدیل کریں"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "تبدیل کریں"
+      },
+      "username" : {
+        "label" : "صارف نام",
+        "help" : "اس عمل کی تصدیق کے لیے اپنا پاس ورڈ درج کریں"
+      },
+      "currentUserPassword" : {
+        "label" : "آپ کا پاس ورڈ",
+        "help" : "اس عمل کی تصدیق کے لیے اپنا پاس ورڈ درج کریں"
+      },
+      "confirmpassword" : {
+        "label" : "صارف کا پاس ورڈ تصدیق کریں",
+        "help" : "محفوظ شدہ صارف کا پاس ورڈ تصدیق کریں"
+      },
+      "password" : {
+        "label" : "صارف نیا پاس ورڈ",
+        "help" : "محفوظ شدہ صارف کے لیے نیا پاس ورڈ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "نیا ایمبیڈنگ ماڈل",
         "help" : "سپلائر منتخب کریں تاکہ ایک نیا ایمبیڈنگ ماڈل شامل کیا جا سکے جو مواد کی معنوی انڈیکسنگ کرنے کے قابل ہو",
         "placeholder" : "سپلائر منتخب کریں تاکہ ایک نیا ایمبیڈنگ ماڈل شامل کیا جا سکے جو مواد کی معنوی انڈیکسنگ کرنے کے قابل ہو"
+      },
+      "ranker" : {
+        "label" : "نیا ری رینک ماڈل",
+        "help" : "نیا ری رینکر ماڈل شامل کرنے کے لیے فراہم کنندہ منتخب کریں",
+        "placeholder" : "نیا ری رینکر ماڈل شامل کرنے کے لیے فراہم کنندہ منتخب کریں"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "نئی ری رینکر ماڈل کنفیگریشن"
+      },
+      "CodeHeader3" : {
+        "label" : "کوڈ"
+      },
+      "DescriptionHeader3" : {
+        "label" : "تفصیل"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ماڈل فراہم کنندہ"
+      },
+      "ModelHeader3" : {
+        "label" : "ماڈل"
+      },
+      "RerankerModelsZone" : {
+        "label" : "کنفیگرڈ ری رینک ماڈلز"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "ایمبیڈنگ ماڈل API ٹوکن",
         "help" : "اس ماڈل کے لیے استعمال ہونے والا ایمبیڈنگ ماڈل API ٹوکن منتخب کریں"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ٹھیک ہے!",
+        "detail" : "عمل کامیابی کے ساتھ مکمل ہوا"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "محفوظ کریں"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف کریں"
+      },
+      "TitleFragment" : {
+        "label" : "رینکنگ ماڈل فراہم کنندہ میں ترمیم:"
+      },
+      "description" : {
+        "label" : "تفصیل",
+        "help" : "ماڈل کنفیگریشن کی تفصیل درج کریں"
+      },
+      "code" : {
+        "label" : "منفرد کوڈ",
+        "help" : "ماڈل کنفیگریشن کا خودکار واحد کوڈ"
+      },
+      "baseUrl" : {
+        "label" : "رینکنگ ماڈل API بیس سرور ایڈریس",
+        "help" : "رینکنگ ماڈل کا بیس ایڈریس."
+      },
+      "apiSecretCode" : {
+        "label" : "رینکنگ ماڈل API ٹوکن",
+        "help" : "اس ماڈل کے لیے استعمال ہونے والا رینکنگ ماڈل API ٹوکن منتخب کریں (اختیاری)"
+      },
+      "choosedModel" : {
+        "label" : "رینکنگ ماڈل کا انتخاب",
+        "help" : "استعمال کے لیے رینکنگ ماڈل منتخب کریں۔"
+      },
+      "defaultModel" : {
+        "label" : "اسے بطور ڈیفالٹ رینکنگ ماڈل سیٹ کریں",
+        "help" : "اگر درست ہو تو یہ ڈیفالٹ رینکنگ ماڈل کے طور پر استعمال ہوگا جہاں رینکنگ ماڈل ظاہر نہ ہو"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ٹھیک ہے!",
+        "detail" : "عمل کامیابی کے ساتھ مکمل ہوا"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "منتخب شدہ سسٹمز"
+      },
+      "wordExport" : {
+        "help" : "جواب کو ورڈ میں ایکسپورٹ کریں"
+      },
+      "pdfExport" : {
+        "help" : "جواب کو PDF میں ایکسپورٹ کریں"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "آپ کے منتخب کردہ ایجنٹ کو چلایا جا رہا ہے"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "دستاویز پر پروسیسنگ:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "گہری تلاش/Jira تلاش"
+      },
+      "PURE_SEARCH" : {
+        "label" : "مدد یافتہ تلاش"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "پرومپٹ",
         "help" : "ریٹریو آگمینٹڈ جنریشن سیشنز کے لیے پرومپٹ میں ترمیم کریں۔"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "دستی یا آٹو ٹیون تھریشولڈ کنفیگریشن",
+        "help" : "دستی ڈسٹنس تھریشولڈ استعمال کریں بجائے آٹو ٹون کے"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "جب دستیاب ہو تو کی ورڈ تلاش بھی استعمال کریں",
+        "help" : "اگر سیٹ اپ میں کنفیگر ہو تو سیمینٹک تلاش کے ساتھ ساتھ کی ورڈ تلاش بھی چلائیں"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "دستاویزات کو براؤز کریں یا تلاش کریں اور چیٹ کے لیے منتخب کریں"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "منتخب شدہ دستاویزات"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "چیٹ"
       },
       "setupMenuItem" : {
-        "label" : "سیٹ اپ"
+        "label" : "سیٹ اپ",
+        "help" : "سیٹ اپ مکمل نہیں ہے، براہ کرم یہاں کلک کریں اور اس کا انتظام کریں"
       },
       "adminMenuItem" : {
         "label" : "ایڈمن"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "عمل کے دوران استثنا: Anthropic api ضروری api key کنفیگریشن کے بغیر کام نہیں کر سکتا",
         "detail" : "سرور کی خرابی: Anthropic api ضروری api key کنفیگریشن کے بغیر کام نہیں کر سکتا"
+      },
+      "fileExportLoaded" : {
+        "summary" : "فائل ایکسپورٹ ہوگئی",
+        "detail" : "براؤزر ڈاؤن لوڈز سیکشن میں جائیں"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "اندرونی خدمات کے لیے استعمال شدہ ماڈل"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "محفوظ کریں"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ایجنٹ نے چیٹ ماڈل استعمال کیا"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف کریں"
+      },
+      "GeneralInfosTab" : {
+        "label" : "عمومی معلومات"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "منتخب کریں"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "چیٹ ماڈل کی کنفیگریشن منتخب کریں"
+      },
+      "defaultChatModel-help" : {
+        "label" : " ایجنٹ کا کام انجام دینے کے لیے سسٹم ڈیفالٹ چیٹ ماڈل استعمال کریں یا کوئی مخصوص کریں۔ "
+      },
+      "LanguageModelTab" : {
+        "label" : "بڑا لینگویج ماڈل اور استعمال کے قابل ٹول سیٹنگز"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "سیکیورٹی ایکسیس سیٹنگز"
+      },
+      "MainPanel" : {
+        "label" : "ایجنٹ کنفیگریشن میں ترمیم"
+      },
+      "description" : {
+        "label" : "تفصیل",
+        "help" : "چیٹ ایجنٹ کی تفصیل درج کریں۔"
+      },
+      "code" : {
+        "label" : "منفرد کوڈ",
+        "help" : "ایجنٹ کا خود بخود تیار کردہ منفرد کوڈ۔"
+      },
+      "agentServiceId" : {
+        "label" : "ایجنٹ سروس کی قسم",
+        "help" : "جس ایجنٹ سروس کی قسم کو چلانا ہے وہ منتخب کریں۔"
+      },
+      "defaultConfiguration" : {
+        "label" : "ڈیفالٹ ایجنٹ کنفیگریشن",
+        "help" : "اسے اس ایجنٹ سروس کی قسم کے لیے ڈیفالٹ کنفیگریشن کے طور پر سیٹ کریں"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "مین لوپ پرامپٹ ٹیمپلیٹ منتخب کریں",
+        "help" : "ایجنٹ کا مین لوپ پرامپٹ منتخب کریں۔"
+      },
+      "maxLoopIterations" : {
+        "label" : "ایجنٹ لوپس کی زیادہ سے زیادہ تعداد",
+        "help" : "ایجنٹ لوپس کی زیادہ سے زیادہ تعداد سیٹ کریں (نتیجہ زیادہ بہتر ہوگا)"
+      },
+      "subscribeAllTools" : {
+        "label" : "تمام دستیاب ٹولز فعال کریں",
+        "help" : "اگر یہ پرچم منتخب کیا گیا ہو تو ایجنٹس چلنے پر تمام دستیاب ٹولز تفویض ہوں گے"
+      },
+      "enabledFunctions" : {
+        "label" : "اس ایجنٹ کے لیے فعال فنکشن کال",
+        "help" : "وہ فنکشنز جو ایجنٹ اپنے کام کے دوران استعمال کر سکتا ہے"
+      },
+      "temperature" : {
+        "label" : "ٹمپریچر",
+        "help" : "وہ ٹمپریچر جس پر ماڈل جواب دے گا، 0 سے 1 تک (یقینی نہ ہو تو خالی چھوڑ دیں)"
+      },
+      "thinking" : {
+        "label" : "سوچنے کی محنت",
+        "help" : "سوچنے کی محنت کو کنفیگر کریں جو ماڈل کرے گا (ہر ماڈل یہ سپورٹ نہیں کرتا)"
+      },
+      "topP" : {
+        "label" : "ٹاپ پی",
+        "help" : "ٹاپ پی پیرامیٹر، 0 سے 1 تک (یقینی نہ ہو تو خالی چھوڑ دیں)"
       }
     }
   }

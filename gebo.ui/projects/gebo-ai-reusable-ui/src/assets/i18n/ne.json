@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "म सर्तहरू स्वीकार गर्छु",
         "help" : "यहाँ क्लिक गरेर तपाईंले लाईसेन्समा रहेका सर्तहरू स्वीकार गर्नुहुन्छ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "प्रशासनिक प्रयोगकर्ता सिर्जना गरियो !",
+        "detail" : "प्रशासनिक प्रयोगकर्ता PAOLO.ZAVALLONI@GMAIL.COM सफलतापूर्वक सिर्जना गरियो"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai सेटअपमा केही अनिवार्य चरण हराइरहेको छ",
         "detail" : "कृपया सेटअप प्रक्रियाका रातो चरणहरू जाँच गर्नुहोस्"
+      },
+      "agentSetupSection" : {
+        "label" : "एजेन्ट सेवाहरू कन्फिगर गर्नुहोस्",
+        "description" : "एजेन्ट सेवाहरू र तिनीहरूको उपलब्ध उपकरणहरू कन्फिगर गर्नुहोस्"
+      },
+      "AgentAddBtn" : {
+        "label" : "एजेन्ट थप्नुहोस्"
+      },
+      "MainPanel" : {
+        "label" : "एजेन्टहरू सेटअप गर्नुहोस्"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "कन्फिग कोड"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
+      },
+      "EditAgentBtn" : {
+        "label" : "एजेन्ट सम्पादन गर्नुहोस्"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ठूलो भाषा मोडेल सेटअप गर्नुहोस्"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "सञ्चालनको क्रममा अपवाद: भेक्टर स्टोर बनाउन सकिएन वा एम्बेडिङ मोडेल सुरुवात अपवाद: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "सर्भर त्रुटि: भेक्टर स्टोर बनाउन सकिएन वा एम्बेडिङ मोडेल सुरुवात अपवाद: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "प्रयोगकर्ताहरू"
+      },
+      "searchNameInput" : {
+        "placeholder" : "नाम खोज्नुहोस्"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "प्रयोगकर्तानाम खोज्नुहोस्"
+      },
+      "SearchUsersBtn" : {
+        "label" : "खोज्नुहोस्"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "भूमिका चयन गर्नुहोस्"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "थर खोज्नुहोस्"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "प्रयोगकर्ताहरूको सूची",
         "help" : "समूहमा सहभागी प्रयोगकर्ताहरू चयन गर्नुहोस्"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "प्रयोगकर्ताको पासवर्ड परिवर्तन गर्नुहोस्"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "परिवर्तन गर्नुहोस्"
+      },
+      "username" : {
+        "label" : "प्रयोगकर्ताको नाम",
+        "help" : "यो कार्य प्रमाणित गर्न आफ्नो पासवर्ड प्रविष्ट गर्नुहोस्"
+      },
+      "currentUserPassword" : {
+        "label" : "तपाईंको पासवर्ड",
+        "help" : "यो कार्य प्रमाणित गर्न आफ्नो पासवर्ड प्रविष्ट गर्नुहोस्"
+      },
+      "confirmpassword" : {
+        "label" : "प्रयोगकर्ताको पासवर्ड प्रमाणित गर्नुहोस्",
+        "help" : "सम्पादित प्रयोगकर्ताको पासवर्ड प्रमाणित गर्नुहोस्"
+      },
+      "password" : {
+        "label" : "प्रयोगकर्ताको नयाँ पासवर्ड",
+        "help" : "सम्पादित प्रयोगकर्ताको लागि नयाँ पासवर्ड"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "नयाँ एम्बेडिङ मोडेल",
         "help" : "सामग्रीको अर्थपूर्ण सूचीकरण गर्न सक्ने नयाँ एम्बेडिङ मोडेल थप्न आपूर्तिकर्ता चयन गर्नुहोस्",
         "placeholder" : "सामग्रीको अर्थपूर्ण सूचीकरण गर्न सक्ने नयाँ एम्बेडिङ मोडेल थप्न आपूर्तिकर्ता चयन गर्नुहोस्"
+      },
+      "ranker" : {
+        "label" : "नयाँ रिर्याङ्क मोडेल",
+        "help" : "नयाँ रिर्याङ्कर मोडेल थप्न आपूर्तिकर्ता चयन गर्नुहोस्",
+        "placeholder" : "नयाँ रिर्याङ्कर मोडेल थप्न आपूर्तिकर्ता चयन गर्नुहोस्"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "नयाँ रिर्याङ्कर मोडेल कन्फिगरेसन"
+      },
+      "CodeHeader3" : {
+        "label" : "कोड"
+      },
+      "DescriptionHeader3" : {
+        "label" : "विवरण"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "मोडेल प्रदायक"
+      },
+      "ModelHeader3" : {
+        "label" : "मोडेल "
+      },
+      "RerankerModelsZone" : {
+        "label" : "कन्फिगर गरिएका रिर्याङ्क मोडेलहरू"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding मोडेल एपीआई टोकन",
         "help" : "यो मोडेलको लागि प्रयोग हुने Embedding मोडेल एपीआई टोकन चयन गर्नुहोस्"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ठीक छ!",
+        "detail" : "सञ्चालन सफलतापूर्वक सम्पन्न भयो"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "सेभ गर्नुहोस्"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "DeleteBtn" : {
+        "label" : "हटाउनुहोस्"
+      },
+      "TitleFragment" : {
+        "label" : "र्याङ्किङ मोडेल प्रदायक सम्पादन गर्दै:"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "मोडेल कन्फिगरेसनको विवरण प्रविष्ट गर्नुहोस्"
+      },
+      "code" : {
+        "label" : "विशिष्ट कोड",
+        "help" : "मोडेल कन्फिगरेसनको लागि स्वत: उत्पन्न गरिएको विशिष्ट कोड"
+      },
+      "baseUrl" : {
+        "label" : "र्याङ्किङ मोडेल  API आधार सर्भर ठेगाना",
+        "help" : "र्याङ्किङ मोडेलको आधार ठेगाना।"
+      },
+      "apiSecretCode" : {
+        "label" : "र्याङ्किङ मोडेल  API टोकन",
+        "help" : "यो मोडेलमा प्रयोग हुने र्याङ्किङ मोडेल  API टोकन चयन गर्नुहोस् (वैकल्पिक)"
+      },
+      "choosedModel" : {
+        "label" : "र्याङ्किङ मोडेल  मोडेल चयन",
+        "help" : "काम गर्नको लागि र्याङ्किङ मोडेल  मोडेल चयन गर्नुहोस्।"
+      },
+      "defaultModel" : {
+        "label" : "योलाई डिफल्ट र्याङ्किङ मोडेल बनाउनुहोस्",
+        "help" : "यदि सत्य छ भने, र्याङ्किङ मोडेल संकेत नभएमा यो डिफल्टको रूपमा प्रयोग हुनेछ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ठीक छ!",
+        "detail" : "सञ्चालन सफलतापूर्वक सम्पन्न भयो"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "चयन गरिएका प्रणालीहरू"
+      },
+      "wordExport" : {
+        "help" : "उत्तर Word मा निर्यात गर्नुहोस्"
+      },
+      "pdfExport" : {
+        "help" : "उत्तर PDF मा निर्यात गर्नुहोस्"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "तपाईंले चयन गर्नुभएको एजेण्ट कार्यान्वयन गर्दैछु"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "डोक्युमेन्ट प्रशोधन गर्दै:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "डीप सर्च/Jira सर्च"
+      },
+      "PURE_SEARCH" : {
+        "label" : "सहायक खोज"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "प्रॉम्प्ट",
         "help" : "Retrieve augmented generation सत्रहरूको लागि प्रॉम्प्ट सम्पादन गर्नुहोस्।"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "म्यानुअल वा अटो ट्युन थ्रेसहोल्ड कन्फिगरेसन",
+        "help" : "अटो ट्युनको सट्टा म्यानुअल दूरी थ्रेसहोल्ड प्रयोग गर्नुहोस्"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "उपलब्ध भएमा कीवर्ड खोज प्रयोग गर्नुहोस्",
+        "help" : "यदि यस इन्स्टलेसनमा कन्फिगर गरिएको छ भने, अर्थपूर्ण खोजमा अतिरिक्त कीवर्ड खोजहरू चलाउनुहोस्"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "कागजातहरू ब्राउज गर्नुहोस् वा खोज्नुहोस् र च्याट गर्न चयन गर्नुहोस्"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "चयन गरिएका डोक्युमेन्टहरू"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "च्याट"
       },
       "setupMenuItem" : {
-        "label" : "सेटअप"
+        "label" : "सेटअप",
+        "help" : "सेटअप अधुरोछ, कृपया यहाँ थिचेर व्यवस्थापन गर्नुहोस्"
       },
       "adminMenuItem" : {
         "label" : "प्रशासन"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "प्रक्रिया क्रममा अपवाद: Anthropic api आवश्यक api key कन्फिगरेसन बिना काम गर्न सक्दैन",
         "detail" : "सर्भर त्रुटि: Anthropic api आवश्यक api key कन्फिगरेसन बिना काम गर्न सक्दैन"
+      },
+      "fileExportLoaded" : {
+        "summary" : "फाइल निर्यात गरियो",
+        "detail" : "ब्राउजर डाउनलोड सेक्सनमा जानुहोस्"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "आन्तरिक सेवाहरूका लागि प्रयोग गरिएको मोडेल"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "सेभ गर्नुहोस्"
+      },
+      "UseChatModelLabel" : {
+        "label" : "एजेन्टले प्रयोग गरेको च्याट मोडेल"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "DeleteBtn" : {
+        "label" : "हटाउनुहोस्"
+      },
+      "GeneralInfosTab" : {
+        "label" : "सामान्य जानकारी"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "चयन गर्नुहोस्"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "च्याट मोडेल कन्फिगरेसन चयन गर्नुहोस्"
+      },
+      "defaultChatModel-help" : {
+        "label" : " एजेन्टको कार्य गर्न सिस्टम डिफल्ट च्याट मोडेल प्रयोग गर्नुहोस् वा एक तोक्नुहोस्। "
+      },
+      "LanguageModelTab" : {
+        "label" : "ठूला भाषा मोडेल र प्रयोग गर्न मिल्ने उपकरण सेटिङहरू"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "सुरक्षा पहुँच सेटिङहरू"
+      },
+      "MainPanel" : {
+        "label" : "एजेन्ट कन्फिगरेसन सम्पादन गर्दै"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "च्याट एजेन्टको विवरण प्रविष्ट गर्नुहोस्।"
+      },
+      "code" : {
+        "label" : "विशिष्ट कोड",
+        "help" : "एजेन्टको लागि स्वत: उत्पन्न गरिने विशिष्ट कोड।"
+      },
+      "agentServiceId" : {
+        "label" : "एजेन्ट सेवा प्रकार",
+        "help" : "चलाउनको लागि एजेन्ट सेवा प्रकार चयन गर्नुहोस्।"
+      },
+      "defaultConfiguration" : {
+        "label" : "डिफल्ट एजेन्ट कन्फिगरेसन",
+        "help" : "यस एजेन्ट सेवा प्रकारको लागि यो डिफल्ट कन्फिगरेसनको रूपमा सेट गर्नुहोस्"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "मुख्य लूप प्रॉम्प्ट टेम्प्लेट चयन गर्नुहोस्",
+        "help" : "एजेन्टको मुख्य लूप प्रॉम्प्ट चयन गर्नुहोस्।"
+      },
+      "maxLoopIterations" : {
+        "label" : "एजेन्ट लूपको अधिकतम संख्या",
+        "help" : "एजेन्ट लूपहरूको अधिकतम संख्या सेट गर्नुहोस् (यसले अझ परिष्कृत परिणाम ल्याउँछ)।"
+      },
+      "subscribeAllTools" : {
+        "label" : "सबै उपलब्ध उपकरणहरू सक्षम गर्नुहोस्",
+        "help" : "यो विकल्प चेक गर्दा, एजेन्ट चल्दा सबै उपलब्ध उपकरणहरू असाइन गरिन्छन्"
+      },
+      "enabledFunctions" : {
+        "label" : "यस एजेन्टको लागि सक्षम गरिएका फङ्सन कलहरू",
+        "help" : "एजेन्टले आफ्नो काम गर्दा प्रयोग गर्न सक्ने सुविधा"
+      },
+      "temperature" : {
+        "label" : "तापक्रम",
+        "help" : "मोडेलले उत्तर दिने तापक्रम, ० देखि १ सम्म (निश्चिन्त नभए खाली राख्नुहोस्)"
+      },
+      "thinking" : {
+        "label" : "सोचाई प्रयासहरू",
+        "help" : "मोडेलले गर्ने सोचाई प्रयासहरू कन्फिगर गर्नुहोस् (सबै मोडेलमा यो उपलब्ध नहुन सक्छ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP प्यारामिटर, ० देखि १ सम्म (निश्चिन्त नभए खाली राख्नुहोस्)"
       }
     }
   }

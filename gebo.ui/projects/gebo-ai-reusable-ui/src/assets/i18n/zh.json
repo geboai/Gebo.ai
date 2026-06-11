@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "我接受条款",
         "help" : "点击此处即表示您接受许可中的条款和条件"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "管理员用户已创建！",
+        "detail" : "管理员用户 PAOLO.ZAVALLONI@GMAIL.COM 创建成功"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai 设置缺少部分必要步骤",
         "detail" : "请检查设置流程中标红的步骤"
+      },
+      "agentSetupSection" : {
+        "label" : "配置代理服务",
+        "description" : "配置代理服务及其可用工具"
+      },
+      "AgentAddBtn" : {
+        "label" : "添加代理"
+      },
+      "MainPanel" : {
+        "label" : "设置代理"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "EditAgentBtn" : {
+        "label" : "编辑代理"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "配置大语言模型"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "操作异常：无法创建向量存储或嵌入模型初始化异常：401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "服务器错误：无法创建向量存储或嵌入模型初始化异常：401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "用户"
+      },
+      "searchNameInput" : {
+        "placeholder" : "搜索姓名"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "搜索用户名"
+      },
+      "SearchUsersBtn" : {
+        "label" : "搜索"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "选择角色"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "搜索姓氏"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "用户列表",
         "help" : "选择参与该组的用户"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "更改用户密码"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "更改"
+      },
+      "username" : {
+        "label" : "用户名",
+        "help" : "请输入您的密码以验证本操作"
+      },
+      "currentUserPassword" : {
+        "label" : "您的密码",
+        "help" : "请输入您的密码以验证本操作"
+      },
+      "confirmpassword" : {
+        "label" : "用户密码确认",
+        "help" : "为修改的用户确认密码"
+      },
+      "password" : {
+        "label" : "用户新密码",
+        "help" : "为被编辑用户输入新密码"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "新建嵌入模型",
         "help" : "选择供应商以添加能进行内容语义索引的嵌入模型",
         "placeholder" : "选择供应商以添加能进行内容语义索引的嵌入模型"
+      },
+      "ranker" : {
+        "label" : "新重排序模型",
+        "help" : "选择供应商添加新重排序模型",
+        "placeholder" : "选择供应商添加新重排序模型"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "新建重排序模型配置"
+      },
+      "CodeHeader3" : {
+        "label" : "代码"
+      },
+      "DescriptionHeader3" : {
+        "label" : "描述"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "模型供应商"
+      },
+      "ModelHeader3" : {
+        "label" : "模型"
+      },
+      "RerankerModelsZone" : {
+        "label" : "已配置重排序模型"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "向量模型 API 令牌",
         "help" : "选择要用于此模型的向量模型 API 令牌"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "成功！",
+        "detail" : "操作已成功完成"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "TitleFragment" : {
+        "label" : "编辑排序模型供应商："
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "模型配置自动生成的唯一代码"
+      },
+      "baseUrl" : {
+        "label" : "排序模型API基础服务器地址",
+        "help" : "排序模型的基础地址。"
+      },
+      "apiSecretCode" : {
+        "label" : "排序模型API令牌",
+        "help" : "选择用于本模型的排序模型API令牌（可选）"
+      },
+      "choosedModel" : {
+        "label" : "排序模型选择",
+        "help" : "选择需要使用的排序模型。"
+      },
+      "defaultModel" : {
+        "label" : "设置为默认排序模型",
+        "help" : "如果为真，则当未指定排序模型时使用此默认排序模型"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "成功！",
+        "detail" : "操作已成功完成"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "已选择系统"
+      },
+      "wordExport" : {
+        "help" : "导出到 Word"
+      },
+      "pdfExport" : {
+        "help" : "导出到 PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "正在执行您选择的代理"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "正在处理文档："
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "深度检索/Jira搜索"
+      },
+      "PURE_SEARCH" : {
+        "label" : "辅助搜索"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "提示词",
         "help" : "编辑增强检索生成会话的提示词。"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "手动或自动调阈值配置",
+        "help" : "使用手动距离阈值而不是自动调优"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "有可用时使用关键词搜索",
+        "help" : "如果本次安装有配置关键词搜索，则同时运行语义搜索和关键词搜索"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "浏览或搜索并选择要聊天的文档"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "已选文档"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "聊天"
       },
       "setupMenuItem" : {
-        "label" : "设置"
+        "label" : "设置",
+        "help" : "尚未完成设置，请点击此处进行管理"
       },
       "adminMenuItem" : {
         "label" : "管理员"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "操作异常：Anthropic api 需配置 api key 才可用",
         "detail" : "服务器错误：Anthropic api 需配置 api key 才可用"
+      },
+      "fileExportLoaded" : {
+        "summary" : "文件已导出",
+        "detail" : "请前往浏览器下载区域"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "模型用于内部服务"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "UseChatModelLabel" : {
+        "label" : "代理已用聊天模型"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "选择"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "选择聊天模型配置"
+      },
+      "defaultChatModel-help" : {
+        "label" : " 使用系统默认聊天模型完成代理任务，或自定义指定。 "
+      },
+      "LanguageModelTab" : {
+        "label" : "大语言模型和可用工具设置"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "安全访问设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑代理配置"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入聊天代理描述。"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的代理唯一代码。"
+      },
+      "agentServiceId" : {
+        "label" : "代理服务类型",
+        "help" : "选择将要运行的代理服务类型。"
+      },
+      "defaultConfiguration" : {
+        "label" : "默认代理配置",
+        "help" : "将此设置为该代理服务类型的默认配置"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "选择主循环提示模板",
+        "help" : "选择代理的主循环提示。"
+      },
+      "maxLoopIterations" : {
+        "label" : "代理最大循环次数",
+        "help" : "设置代理最大循环次数（结果将更细致）。"
+      },
+      "subscribeAllTools" : {
+        "label" : "启用所有可用工具",
+        "help" : "选中后，本代理运行时将分配所有可用工具"
+      },
+      "enabledFunctions" : {
+        "label" : "为此代理启用函数调用",
+        "help" : "代理执行任务时可使用的功能"
+      },
+      "temperature" : {
+        "label" : "温度",
+        "help" : "模型响应的温度，范围0到1（不确定可留空）"
+      },
+      "thinking" : {
+        "label" : "思考努力",
+        "help" : "配置模型执行的思考努力（并非所有模型支持）"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP参数，范围0到1（不确定可留空）"
       }
     }
   }

@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "நான் விதிமுறைகளை ஒப்புக்கொள்கிறேன்",
         "help" : "இங்கே கிளிக் செய்வதன் மூலம் நீங்கள் உரிமையில் உள்ள விதிமுறைகள் மற்றும் நிபந்தனைகளை ஒப்புக்கொள்கிறீர்கள்"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "நிர்வாக பயனர் உருவாக்கப்பட்டது !",
+        "detail" : "நிர்வாக பயனர் PAOLO.ZAVALLONI@GMAIL.COM வெற்றிகரமாக உருவாக்கப்பட்டது"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai கட்டமைப்பில் சில கட்டாய படி தவறப்பட்டுள்ளது",
         "detail" : "தயவு செய்து கட்டமைப்பு செயல்முறையின் சிவப்பு படிகளை சிலிர்க்கவும்"
+      },
+      "agentSetupSection" : {
+        "label" : "Agent சேவைகளை அமைக்கவும்",
+        "description" : "Agent சேவைகள் மற்றும் அவற்றின் கிடைக்கும் கருவிகளை அமைக்கவும்"
+      },
+      "AgentAddBtn" : {
+        "label" : "Agent ஐ சேர்"
+      },
+      "MainPanel" : {
+        "label" : "Agent களை அமைக்கவும்"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "காட்சிக் குறியீடு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரம்"
+      },
+      "EditAgentBtn" : {
+        "label" : "Agent ஐ திருத்தவும்"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "பெரிய மொழி மாதிரிகள் அமைக்கவும்"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "செயல்பாட்டு தவறு: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "சேவையகப் பிழை: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "பயனர்கள்"
+      },
+      "searchNameInput" : {
+        "placeholder" : "பெயரை தேடு"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "பயனர் பெயரை தேடு"
+      },
+      "SearchUsersBtn" : {
+        "label" : "தேடு"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "படுக்கையைத் தேர்ந்தெடுக்கவும்"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Sourname தேடு"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "பயனர்கள் பட்டியல்",
         "help" : "குழுவில் பங்கேற்கும் பயனர்களை தேர்வு செய்க"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "பயனரின் கடவுச்சொல்லை மாற்றவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "மாற்றவும்"
+      },
+      "username" : {
+        "label" : "பயனர் பெயர்",
+        "help" : "இந்த செயலுக்கு உங்கள் கடவுச்சொல்லை உள்ளிடவும்"
+      },
+      "currentUserPassword" : {
+        "label" : "உங்கள் கடவுச்சொல்",
+        "help" : "இந்த செயலுக்கு உங்கள் கடவுச்சொல்லை உள்ளிடவும்"
+      },
+      "confirmpassword" : {
+        "label" : "பயனரின் கடவுச்சொல் உறுதிப்பாடு",
+        "help" : "திருத்தப்பட்ட பயனருக்கான கடவுச்சொல் உறுதிப்பாடு"
+      },
+      "password" : {
+        "label" : "புதிய பயனர் கடவுச்சொல்",
+        "help" : "திருத்தப்பட்ட பயனருக்கான புதிய கடவுச்சொல்"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "புதிய_embedding மாதிரி",
         "help" : "உள்ளடக்கங்களை அர்த்தமுள்ள இன்டெக்சிங் செய்யக்கூடிய புதிய_embedding மாதிரியைச் சேர்க்க வழங்குநரைத் தேர்வு செய்யவும்",
         "placeholder" : "உள்ளடக்கங்களை அர்த்தமுள்ள இன்டெக்சிங் செய்யக்கூடிய புதிய_embedding மாதிரியைச் சேர்க்க வழங்குநரைத் தேர்வு செய்யவும்"
+      },
+      "ranker" : {
+        "label" : "புதிய மறுவரிசைப்படுத்தும் மாதிரி",
+        "help" : "புதிய மறுவரிசைப்படுத்தும் மாதிரியைச் சேர்க்க வழங்குநரைத் தேர்ந்தெடுக்கவும்",
+        "placeholder" : "புதிய மறுவரிசைப்படுத்தும் மாதிரியைச் சேர்க்க வழங்குநரைத் தேர்ந்தெடுக்கவும்"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "புதிய மறுவரிசைப்படுத்தும் மாதிரி அமைப்பு"
+      },
+      "CodeHeader3" : {
+        "label" : "குறியீடு"
+      },
+      "DescriptionHeader3" : {
+        "label" : "விவரம்"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "மாதிரி வழங்குநர்"
+      },
+      "ModelHeader3" : {
+        "label" : "மாதிரி "
+      },
+      "RerankerModelsZone" : {
+        "label" : "அமைக்கப்பட்ட மறுவரிசைப்படுத்தும் மாதிரிகள்"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding மாதிரி API டோக்கன்",
         "help" : "இந்த மாதிரிக்கான Embedding மாதிரி API டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "சரி!",
+        "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "TitleFragment" : {
+        "label" : "மறுவரிசைப்படுத்தும் மாதிரி வழங்குநரைத் திருத்துகிறது:"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "மாதிரி அமைப்பின் விளக்கத்தைக் உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "தானாக உருவாக்கப்படும் மாதிரி அமைப்பின் தனிப்பட்ட குறியீடு"
+      },
+      "baseUrl" : {
+        "label" : "மறுவரிசைப்படுத்தும் மாதிரி API அடிப்படை சர்வர் முகவரி",
+        "help" : "மறுவரிசைப்படுத்தும் மாதிரி அடிப்படை முகவரி."
+      },
+      "apiSecretCode" : {
+        "label" : "மறுவரிசைப்படுத்தும் மாதிரி API டோக்கன்",
+        "help" : "இந்த மாதிரிக்கு பயன்படுத்த வேண்டிய மறுவரிசைப்படுத்தும் மாதிரி API டோக்கனை தேர்ந்தெடுக்கவும் (விருப்பத்தில்)"
+      },
+      "choosedModel" : {
+        "label" : "மறுவரிசைப்படுத்தும் மாதிரி தேர்வு",
+        "help" : "பணிக்காக பயன்படுத்தும் மறுவரிசைப்படுத்தும் மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை மறுவரிசைப்படுத்தும் மாதிரியாக அமைக்கவும்",
+        "help" : "இது true என்றால், தெரிவிக்கப்படாத இடங்களில் இயல்புநிலை மறுவரிசைப்படுத்தும் மாதிரியாக இது பயன்படுத்தப்படும்"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "சரி!",
+        "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "தேர்ந்தெடுக்கப்பட்ட கணினிகள்"
+      },
+      "wordExport" : {
+        "help" : "Word-இல் பதிலையை ஏற்றுமதி செய்யவும்"
+      },
+      "pdfExport" : {
+        "help" : "PDF-இல் பதிலையை ஏற்றுமதி செய்யவும்"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "உங்கள் தேர்ந்த முகவரை இயக்கு"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ஆவணத்தை செயலாக்குகிறது:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ஆழமான தேடல்/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "உதவியுடன் தேடல்"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "உந்துதல்",
         "help" : "பெறுதல் மேம்படுத்தப்பட்ட உருவாக்கம் அமர்வுகளுக்கான உந்துதலை திருத்தவும்."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "கைமுறையோ அல்லது தானாக சரிசெய்யப்படும் வரம்பு அமைப்பு",
+        "help" : "Threashold தானாக அமைப்பதைவிட கைமுறை தூரம் வரம்பைப் பயன்படுத்து"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "கீப்பொருள் தேடலை வரும்போது பயன்படுத்தவும்",
+        "help" : "இந்த நிறுவலில் வடிவமைக்கப்பட்டிருந்தால் அர்த்தவாய்ந்த தேடலுடன் கூடுதலாக கீப்பொருள் தேடல்கள் இயக்கப்படும்"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "ஆவணங்களை உலாவிக் காணோ அல்லது தேடிக் தேர்ந்தெடுத்து உரையாடவும்"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட ஆவணங்கள்"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "உரையாடல்"
       },
       "setupMenuItem" : {
-        "label" : "அமைப்புகள்"
+        "label" : "அமைப்புகள்",
+        "help" : "அமைப்பு நிரம்பவில்லை, தயவுசெய்து இங்கே அழுத்தி நிர்வகிக்கவும்"
       },
       "adminMenuItem" : {
         "label" : "நிர்வாகி"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "செயல்பாடின்போது தவறு: Anthropic api தேவையான api key அமைப்பு இல்லாமல் இயங்க முடியாது",
         "detail" : "சேவையகப்பிழை: Anthropic api தேவையான api key அமைப்பு இல்லாமல் இயங்க முடியாது"
+      },
+      "fileExportLoaded" : {
+        "summary" : "கோப்பு ஏற்றுமதி செய்யப்பட்டது",
+        "detail" : "உலாவியின் பதிவிறக்கம் பகுதியில் செல்லுங்கள்"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "உள் சேவைகளுக்கான மாதிரி"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent பயன்படுத்திய உரையாடல் மாதிரி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொது தகவல்கள்"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "தேர்வு செய்யவும்"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "உரையாடல் மாதிரி அமைப்பைத் தேர்ந்தெடுக்கவும்"
+      },
+      "defaultChatModel-help" : {
+        "label" : "System இயல்புநிலை உரையாடல் மாதிரியை பயன்படுத்தி Agent பணியைச் செய்ய அல்லது ஒரு மாதிரியை குறிப்பிடவும். "
+      },
+      "LanguageModelTab" : {
+        "label" : "பெரிய மொழி மாதிரி & பயன்படுத்தக்கூடிய கருவி அமைப்புகள்"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "பாதுகாப்பு அணுகல் அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "Agent அமைப்பைத் திருத்துகிறது"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "உரையாடல் Agent-ன் விளக்கத்தைக் உள்ளிடவும்."
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "உரையாடல் Agent-க்கான தானாக உருவாக்கும் தனிப்பட்ட குறியீடு."
+      },
+      "agentServiceId" : {
+        "label" : "Agent சேவை வகை",
+        "help" : "இயங்கக்கூடிய Agent சேவை வகையைத் தேர்ந்தெடுக்கவும்."
+      },
+      "defaultConfiguration" : {
+        "label" : "இயல்புநிலை Agent அமைப்பு",
+        "help" : "இந்த Agent சேவை வகைக்கு இதை இயல்புநிலை அமைப்பாக அமைக்கவும்"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "முக்கிய கட்ட ப்ராம்ப்ட் டெம்ப்ளேட்டைத் தேர்ந்தெடுக்கவும்",
+        "help" : "Agent-ன் முக்கிய கட்ட ப்ராம்ப்ட்டைத் தேர்ந்தெடுக்கவும்."
+      },
+      "maxLoopIterations" : {
+        "label" : "Agent-ன் அதிகபட்ச சுற்றுச்சுழற்சி எண்",
+        "help" : "Agent-ன் அதிகபட்ச சுற்று எண்ணிக்கையைக் குறிப்பிடவும் (இதனால் அதிகம் பதில் மேம்படுகிறது)."
+      },
+      "subscribeAllTools" : {
+        "label" : "எல்லா கிடைக்கும் கருவிகளையும் இயக்கவும்",
+        "help" : "இந்த தேர்வை தேர்ந்தெடுத்தால், இந்த agent-ன் இயக்கத்தின் போது எல்லா கிடைக்கும் கருவிகளும் வழங்கப்படும்"
+      },
+      "enabledFunctions" : {
+        "label" : "இந்த Agent க்கு இயக்கப்பட்ட செயலாக்கங்கள்",
+        "help" : "Agent தனது பணியை செய்யும் போது பயன்படுத்தக்கூடிய செயல்பாடுகள்"
+      },
+      "temperature" : {
+        "label" : "வெப்பநிலை",
+        "help" : "மாதிரி பதிலளிக்கும் வெப்பநிலை, 0 முதல் 1 வரை (தெரியவில்லை என்றால் காலியாக விடவும்)"
+      },
+      "thinking" : {
+        "label" : "சிந்தனை முயற்சிகள்",
+        "help" : "மாதிரி செய்யும் சிந்தனை முயற்சிகளை அமைக்கவும் (அனைத்து மாதிரியும் இதை ஆதரிக்காது)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP அளவு, 0 முதல் 1 வரை (தெரியவில்லை என்றால் காலியாக விடவும்)"
       }
     }
   }

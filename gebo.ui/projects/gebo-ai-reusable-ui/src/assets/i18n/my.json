@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "အခြေအနေများကို သဘောတူပါသည်",
         "help" : "ဒီအချက်အချာကိုနှိပ်ခြင်းအားဖြင့် လိုင်စင်အတွင်းပါသော စည်းမျဉ်းများနှင့် အခြေအနေများကို သဘောတူသည်"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "အက်ဒမင်အသုံးပြုသူတစ်ဦး ဖန်တီးပြီးပါပြီ !",
+        "detail" : "အက်ဒမင်အသုံးပြုသူ PAOLO.ZAVALLONI@GMAIL.COM ကိုအောင်မြင်စွာဖန်တီးခဲ့သည်"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai ဆက်တင်အဆင့်များ အနည်းငယ် လိုအပ်နေသည်",
         "detail" : "Setup လုပ်ငန်းစဉ်၏ အနီရောင်အဆင့်များ ပြန်စစ်ပါ"
+      },
+      "agentSetupSection" : {
+        "label" : "Agent ဝန်ဆောင်မှုများကို ပြင်ဆင်ပါ",
+        "description" : "Agent ဝန်ဆောင်မှုများနှင့် အသုံးပြုနိုင်သော ကိရိယာများကို ပြင်ဆင်ပါ"
+      },
+      "AgentAddBtn" : {
+        "label" : "အေးဂျင့်ထည့်ရန်"
+      },
+      "MainPanel" : {
+        "label" : "အေးဂျင့်များ ပြင်ဆင်မှု"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "EditAgentBtn" : {
+        "label" : "အေးဂျင့်တည်းဖြတ်"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ဧရာမဘာသာစကား မော်ဒယ်များ ဆက်တင်"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "လုပ်ဆောင်မှုအတွင်းသို့ ခြွင်းချက်: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Server error: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "အသုံးပြုသူများ"
+      },
+      "searchNameInput" : {
+        "placeholder" : "အမည်ရှာရန်"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "အသုံးပြုသူအမည်ရှာရန်"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ရှာဖွေရန်"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "အခန်းကဏ္ဍရွေးချယ်ပါ"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "မိသားစုနာမည် ရှာရန်"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "အသုံးပြုသူစာရင်း",
         "help" : "အုပ်စုတွင် ပါဝင်မည့်အသုံးပြုသူများ ရွေးချယ်ပါ"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "အသုံးပြုသူ၏ စကားဝှက်ပြောင်းရန်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ပြောင်းရန်"
+      },
+      "username" : {
+        "label" : "အသုံးပြုသူအမည်",
+        "help" : "ဤအရေးယူမှုအတွက် သင်၏စကားဝှက်ထည့်ပါ"
+      },
+      "currentUserPassword" : {
+        "label" : "သင့်စကားဝှက်",
+        "help" : "ဤအရေးယူမှုအတွက် သင်၏စကားဝှက်ထည့်ပါ"
+      },
+      "confirmpassword" : {
+        "label" : "အသုံးပြုသူ စကားဝှက် အတည်ပြုမှု",
+        "help" : "ပြင်ဆင်ထားသော အသုံးပြုသူအတွက် စကားဝှက်အတည်ပြုရန်"
+      },
+      "password" : {
+        "label" : "အသုံးပြုသူ၏ စကားဝှက် အသစ်",
+        "help" : "ပြင်ဆင်ထားသောအသုံးပြုသူအတွက်စကားဝှက်အသစ်"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Embedding မော်ဒယ်အသစ်",
         "help" : "အကြောင်းအရာများကို အဓိပ္ပါယ်နှင့်ဆိုင်သော အညွှန်းတပ်ခြင်း ပြုလုပ်နိုင်သည့် embedding မော်ဒယ်အသစ် ထည့်သွင်းရန် ပေးသွင်းသူကို ရွေးပါ",
         "placeholder" : "အကြောင်းအရာများကို အဓိပ္ပါယ်နှင့်ဆိုင်သော အညွှန်းတပ်ခြင်း ပြုလုပ်နိုင်သည့် embedding မော်ဒယ်အသစ် ထည့်သွင်းရန် ပေးသွင်းသူကို ရွေးပါ"
+      },
+      "ranker" : {
+        "label" : "ရေစီးကြောင်းသစ် မော်ဒယ်",
+        "help" : "ရေစီးကြောင်းသစ်မော်ဒယ်ထည့်ရန် Supplier ရွေးချယ်ပါ",
+        "placeholder" : "ရေစီးကြောင်းသစ်မော်ဒယ်ထည့်ရန် Supplier ရွေးချယ်ပါ"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "ရေစီးကြောင်းသစ် မော်ဒယ်ပြင်ဆင်မှု"
+      },
+      "CodeHeader3" : {
+        "label" : "Code"
+      },
+      "DescriptionHeader3" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "မော်ဒယ်ပေးသွင်းသူ"
+      },
+      "ModelHeader3" : {
+        "label" : "မော်ဒယ် "
+      },
+      "RerankerModelsZone" : {
+        "label" : "ပြင်ဆင်ထားသော ရေစီးကြောင်းသစ် မော်ဒယ်များ"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding မော်ဒယ် API token",
         "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် embedding မော်ဒယ် API token ကို ရွေးချယ်ပါ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "အိုကေ!",
+        "detail" : "လုပ်ဆောင်မှု အောင်မြင်စွာ ပြီးစီးပါပြီ"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "TitleFragment" : {
+        "label" : "Ranking မော်ဒယ်ပေးသွင်းသူ တည်းဖြတ်ခြင်း:"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ပြင်ဆင်မှု ဖော်ပြချက်ထည့်ပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "မော်ဒယ်ပြင်ဆင်မှုအတွက် အလိုအလျောက်ဖန်တီးသော ထူးခြားသောကုဒ်"
+      },
+      "baseUrl" : {
+        "label" : "ranking model  API အခြေခံဆာဗာလိပ်စာ",
+        "help" : "ranking model အတွက် အခြေခံလိပ်စာ။"
+      },
+      "apiSecretCode" : {
+        "label" : "ranking model  API token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် ranking model  API token ကိုရွေးပါ (အလိုအလျောက်မဟုတ်)"
+      },
+      "choosedModel" : {
+        "label" : "ranking model  ရွေးချယ်မှု",
+        "help" : "ယခုအသုံးပြုမည့် ranking model ကိုရွေးချယ်ပါ။"
+      },
+      "defaultModel" : {
+        "label" : "ဒီကို မူလ ranking model ဟု သတ်မှတ်ပါ",
+        "help" : "True ဖြစ်ပါက မူလ ranking model အဖြစ်အသုံးပြုမည်"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "အိုကေ!",
+        "detail" : "လုပ်ဆောင်မှု အောင်မြင်စွာ ပြီးစီးပါပြီ"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ရွေးချယ်ထားသော စနစ်များ"
+      },
+      "wordExport" : {
+        "help" : "Word သို့ဖြေကြားမှုထုတ်မည်"
+      },
+      "pdfExport" : {
+        "help" : "PDF သို့ဖြေကြားမှုထုတ်မည်"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "သင့်ရွေးချယ်ထားသော agent ကို တစ်ဆင့်လုပ်ဆောင်နေသည်"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "စာရွက်စာတမ်းကို ဆောင်ရွက်နေသည်:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "အနက်ရှာဖွေ/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "အကူအညီဖြင့် ရှာဖွေမှု"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Retrieve augmented generation session များအတွက် prompt ကို တည်းဖြတ်ပါ။"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "လက်ဖြင့် သို့မဟုတ် အလိုအလျောက် threashold ပြင်ဆင်မှု",
+        "help" : "Autotune မသုံးဘဲ လက်ဖြင့်အကွာအဝေး threashold အသုံးပြုပါ"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "အရယူနိုင်စဉ်ကီးဝေါ့နဲ့ပဲ ရှာမှုသုံးပါ",
+        "help" : "ဤ installer တွင် ပြင်ဆင်ထားလျှင် အဓိပ္ပာယ်ပါဝင်သော ရှာဖွေမှုနဲ့အတူကီးဝေါ့ရှာဖွေမှုများလည်း လုပ်ပါမည်"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "စာရွက်စာတမ်းများရွေးချယ်ရန် သို့မဟုတ် ရှာဖွေပေးရန်နှင့် စကားပြောရန်"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ရွေးချယ်ထားသော စာရွက်စာတမ်းများ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "စကားပြောရန်"
       },
       "setupMenuItem" : {
-        "label" : "စုံစမ်းတပ်ဆင်ရာ"
+        "label" : "စုံစမ်းတပ်ဆင်ရာ",
+        "help" : "ပြင်ဆင်မှု မပြီးသေးပါ။ ဤနေရာကိုနှိပ်၍ စီမံခန့်ခွဲပါ"
       },
       "adminMenuItem" : {
         "label" : "အုပ်ချုပ်သူ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "လည်ပတ်စဉ်အတွင်း အမှား: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ",
         "detail" : "Server error: Anthropic api သည် လိုအပ်သော api key မပါလျှင် မပံ့ပိုးနိုင်ပါ"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ဖိုင်နိုင်ကြောင်း",
+        "detail" : "ဘရောက်ဇာ Downloads ဧရိယာသို့သွားပါ"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "အတွင်းပိုင်းဝန်ဆောင်မှုများအတွက် အသုံးပြုသော မော်ဒယ်"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent အသုံးပြုထားသော chat model"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ယေဘုယျအချက်အလက်များ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ရွေးချယ်ပါ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "chat model ပြင်ဆင်မှုတစ်ခုရွေးပါ"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Agent အလုပ်အတွက် စနစ် မူလ chat model ကိုသုံးရန် သို့မဟုတ် တစ်ခု ရွေးချယ်ပါ။ "
+      },
+      "LanguageModelTab" : {
+        "label" : "ကြီးမားသောဘာသာစကား မော်ဒယ်နှင့် အသုံးပြုနိုင်သော tool အပြင်ဆင်ခြင်းများ"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "လုံခြုံရေးဝင်ရောက်ခွင့် ပြင်ဆင်မှုများ"
+      },
+      "MainPanel" : {
+        "label" : "Agent ပြင်ဆင်မှု တည်းဖြတ်ခြင်း"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Chat Agent ဖော်ပြချက် ထည့်ပါ။"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "Agent အတွက် အလိုအလျောက်ဖန်တီးသော ထူးခြားသောကုဒ်"
+      },
+      "agentServiceId" : {
+        "label" : "Agent ဝန်ဆောင်မှု အမျိုးအစား",
+        "help" : "ကြောင့်စတင်မည့် Agent ဝန်ဆောင်မှုအမျိုးအစားရွေးပါ။"
+      },
+      "defaultConfiguration" : {
+        "label" : "မူလ Agent ပြင်ဆင်မှု",
+        "help" : "ဤဝန်ဆောင်မှုအမျိုးအစားအတွက် မူလ ပြင်ဆင်မှုအဖြစ် သတ်မှတ်ပါ"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "အဓိက loop prompt template ရွေးပါ",
+        "help" : "Agent အဓိက loop prompt ရွေးပါ။"
+      },
+      "maxLoopIterations" : {
+        "label" : "Agent loop အကြိမ်အများဆုံး",
+        "help" : "Agent loop အကြိမ်အမြင့်ဆုံး ချိန်ညှိပါ (ဤသို့လုပ်လျှင် ပိုမို ရှင်းလင်းသည့် ရလဒ်ရမည်)"
+      },
+      "subscribeAllTools" : {
+        "label" : "ရရှိနိုင်သော tools အားလုံးကိုဖွင့်ပါ",
+        "help" : "ဤ flag ကိုအမှန်ခြစ်ထားလျှင် Agent တည်သည့်အခါတွင် tools အားလုံး သတ်မှတ်မည်"
+      },
+      "enabledFunctions" : {
+        "label" : "ယခု Agent အတွက် ဖွင့်ထားသော လုပ်ဆောင်ချက်များ",
+        "help" : "Agent သည် အလုပ်လုပ်စဉ် အသုံးပြုနိုင်သော လုပ်ဆောင်ချက်များ"
+      },
+      "temperature" : {
+        "label" : "အပူချိန်",
+        "help" : "မော်ဒယ်၏ဖြေကြားမှုအပူချိန် 0 မှ 1 ထိ (မသိလျှင် အလွတ်ထားပါ)"
+      },
+      "thinking" : {
+        "label" : "စဉ်းစားမှုကြိုးစားအားထုတ်မှု",
+        "help" : "မော်ဒယ်၏စဉ်းစားမှုအားထုတ်မှုကို ပြင်ဆင်ပါ (မော်ဒယ်အားလုံးမပံ့ပိုးနိုင်)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parameter, 0 မှ 1 ထိ (မသိလျှင် အလွတ်ထားပါ)"
       }
     }
   }

@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Tôi đồng ý với các điều khoản",
         "help" : "Bằng cách nhấp vào đây, bạn đồng ý với các điều khoản & điều kiện trong giấy phép"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Người dùng quản trị đã được tạo!",
+        "detail" : "Người dùng quản trị PAOLO.ZAVALLONI@GMAIL.COM đã tạo thành công"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Thiếu một số bước bắt buộc khi thiết lập Gebo.ai",
         "detail" : "Vui lòng kiểm tra các bước màu đỏ trong quá trình thiết lập"
+      },
+      "agentSetupSection" : {
+        "label" : "Cấu hình dịch vụ Agent",
+        "description" : "Cấu hình dịch vụ Agent và các công cụ sẵn có"
+      },
+      "AgentAddBtn" : {
+        "label" : "Thêm agent"
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập Agents"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "EditAgentBtn" : {
+        "label" : "Chỉnh sửa agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Thiết lập mô hình ngôn ngữ lớn"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Lỗi trong quá trình thực hiện:Không thể tạo vector store hoặc lỗi khởi tạo mô hình embedding: 401 - {\"error\":{\"message\":\"Lỗi xác thực, token máy chủ proxy không hợp lệ. Đã nhận API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Không tìm thấy token trong bộ nhớ cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Lỗi máy chủ: Không thể tạo vector store hoặc lỗi khởi tạo mô hình embedding: 401 - {\"error\":{\"message\":\"Lỗi xác thực, token máy chủ proxy không hợp lệ. Đã nhận API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Không tìm thấy token trong bộ nhớ cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "người dùng"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Tìm kiếm tên"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Tìm kiếm tên đăng nhập"
+      },
+      "SearchUsersBtn" : {
+        "label" : "tìm kiếm"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Chọn vai trò"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Tìm kiếm họ"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Danh sách người dùng",
         "help" : "Chọn người dùng tham gia nhóm"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Đổi mật khẩu người dùng"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Thay đổi"
+      },
+      "username" : {
+        "label" : "Tên người dùng",
+        "help" : "Nhập mật khẩu của bạn để xác thực thao tác này"
+      },
+      "currentUserPassword" : {
+        "label" : "Mật khẩu của bạn",
+        "help" : "Nhập mật khẩu của bạn để xác thực thao tác này"
+      },
+      "confirmpassword" : {
+        "label" : "Xác nhận mật khẩu người dùng",
+        "help" : "Xác nhận mật khẩu cho người dùng được chỉnh sửa"
+      },
+      "password" : {
+        "label" : "Mật khẩu mới của người dùng",
+        "help" : "Mật khẩu mới cho người dùng được chỉnh sửa"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Mô hình nhúng mới",
         "help" : "Chọn nhà cung cấp để thêm mô hình nhúng mới có khả năng lập chỉ mục ngữ nghĩa cho nội dung",
         "placeholder" : "Chọn nhà cung cấp để thêm mô hình nhúng mới có khả năng lập chỉ mục ngữ nghĩa cho nội dung"
+      },
+      "ranker" : {
+        "label" : "Mô hình rerank mới",
+        "help" : "Chọn nhà cung cấp để thêm mô hình reranker mới",
+        "placeholder" : "Chọn nhà cung cấp để thêm mô hình reranker mới"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Cấu hình mô hình reranker mới"
+      },
+      "CodeHeader3" : {
+        "label" : "Mã"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Mô tả"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Nhà cung cấp mô hình"
+      },
+      "ModelHeader3" : {
+        "label" : "Mô hình "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Các mô hình rerank đã cấu hình"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API mô hình embedding",
         "help" : "Chọn token API mô hình embedding để sử dụng cho mô hình này"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Thao tác thực hiện thành công"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "TitleFragment" : {
+        "label" : "Đang chỉnh sửa nhà cung cấp mô hình xếp hạng:"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất được tự động tạo cho cấu hình mô hình"
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ máy chủ API mô hình xếp hạng",
+        "help" : "Địa chỉ cơ sở của mô hình xếp hạng."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API mô hình xếp hạng",
+        "help" : "Chọn token API mô hình xếp hạng sẽ sử dụng cho mô hình này (không bắt buộc)"
+      },
+      "choosedModel" : {
+        "label" : "Lựa chọn mô hình xếp hạng",
+        "help" : "Chọn mô hình xếp hạng để sử dụng."
+      },
+      "defaultModel" : {
+        "label" : "Đặt làm mô hình xếp hạng mặc định",
+        "help" : "Nếu bật, mô hình này sẽ được dùng mặc định khi không chỉ định mô hình xếp hạng"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Thao tác thực hiện thành công"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Các hệ thống đã chọn"
+      },
+      "wordExport" : {
+        "help" : "Xuất phản hồi sang Word"
+      },
+      "pdfExport" : {
+        "help" : "Xuất phản hồi sang PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Đang thực thi agent bạn đã chọn"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Đang xử lý tài liệu:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Tìm kiếm hỗ trợ"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Chỉnh sửa prompt cho các phiên retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Cấu hình ngưỡng thủ công hoặc tự động",
+        "help" : "Dùng ngưỡng khoảng cách thủ công thay vì tự động điều chỉnh"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Dùng tìm kiếm theo từ khóa khi có",
+        "help" : "Thực hiện tìm kiếm theo từ khóa bổ sung cho tìm kiếm ngữ nghĩa nếu được cấu hình trên hệ thống"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Duyệt hoặc tìm kiếm và chọn tài liệu để trò chuyện"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Tài liệu đã chọn"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Trò chuyện"
       },
       "setupMenuItem" : {
-        "label" : "Cài đặt"
+        "label" : "Cài đặt",
+        "help" : "Thiết lập chưa hoàn tất, nhấn vào đây để thực hiện"
       },
       "adminMenuItem" : {
         "label" : "Quản trị"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Lỗi ngoại lệ khi thao tác:Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết",
         "detail" : "Lỗi máy chủ: Anthropic api không thể hoạt động nếu chưa cấu hình api key cần thiết"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Tệp đã xuất",
+        "detail" : "Vào phần tải về của trình duyệt"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Mô hình dùng cho dịch vụ nội bộ"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent sử dụng mô hình chat"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "chọn"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chọn cấu hình mô hình chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Dùng mô hình chat mặc định của hệ thống cho tác vụ Agent hoặc chỉ định mô hình. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Cài đặt mô hình ngôn ngữ lớn & công cụ sử dụng"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập"
+      },
+      "MainPanel" : {
+        "label" : "Đang chỉnh sửa cấu hình Agent"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả về chat Agent."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất được tạo tự động cho Agent."
+      },
+      "agentServiceId" : {
+        "label" : "Loại dịch vụ Agent",
+        "help" : "Chọn loại dịch vụ Agent sẽ được chạy."
+      },
+      "defaultConfiguration" : {
+        "label" : "Cấu hình Agent mặc định",
+        "help" : "Đặt đây là cấu hình mặc định cho loại dịch vụ Agent này"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Chọn mẫu prompt vòng lặp chính",
+        "help" : "Chọn prompt vòng lặp chính cho Agent."
+      },
+      "maxLoopIterations" : {
+        "label" : "Số vòng lặp Agent tối đa",
+        "help" : "Đặt số lần lặp tối đa cho Agent (kết quả sẽ chi tiết hơn)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Bật tất cả công cụ có sẵn",
+        "help" : "Khi tùy chọn này bật, tất cả công cụ sẵn có sẽ được gán khi agent này chạy"
+      },
+      "enabledFunctions" : {
+        "label" : "Kích hoạt gọi chức năng cho Agent này",
+        "help" : "Các chức năng mà Agent có thể sử dụng khi thực hiện công việc"
+      },
+      "temperature" : {
+        "label" : "Nhiệt độ",
+        "help" : "Độ nhiệt mô hình sẽ trả lời, từ 0 đến 1 (nếu không chắc, để trống)"
+      },
+      "thinking" : {
+        "label" : "Số lượng suy nghĩ",
+        "help" : "Cấu hình mức độ suy nghĩ mô hình sẽ thực hiện (không phải mô hình nào cũng hỗ trợ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Tham số TopP, từ 0 đến 1 (nếu không chắc, để trống)"
       }
     }
   }

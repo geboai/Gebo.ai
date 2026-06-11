@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Sutinku su sąlygomis",
         "help" : "Spausdami čia, sutinkate su licencijos sąlygomis"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Administratoriaus vartotojas sukurtas !",
+        "detail" : "Administratoriaus vartotojas PAOLO.ZAVALLONI@GMAIL.COM sėkmingai sukurtas"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai sąrankoje trūksta kai kurių privalomų žingsnių",
         "detail" : "Peržiūrėkite raudonus sąrankos proceso žingsnius"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigūruokite agento paslaugas",
+        "description" : "Konfigūruokite agento paslaugas ir jų prieinamus įrankius"
+      },
+      "AgentAddBtn" : {
+        "label" : "Pridėti agentą"
+      },
+      "MainPanel" : {
+        "label" : "Agentų sąranka"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "EditAgentBtn" : {
+        "label" : "Redaguoti agentą"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Konfigūruoti didžiuosius kalbos modelius"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Išimtis vykdant operaciją: Nepavyko sukurti vektorių saugyklos arba inicijuoti įterpimo modelio: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Serverio klaida: Nepavyko sukurti vektorių saugyklos arba inicijuoti įterpimo modelio: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "naudotojai"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Ieškoti vardo"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Ieškoti naudotojo vardo"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ieškoti"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Pasirinkite vaidmenį"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Ieškoti pavardės"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Vartotojų sąrašas",
         "help" : "Pasirinkite naudotojus, dalyvaujančius grupėje"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Keisti vartotojo slaptažodį"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Keisti"
+      },
+      "username" : {
+        "label" : "Vartotojo vardas",
+        "help" : "Įveskite savo slaptažodį, kad patvirtintumėte šį veiksmą"
+      },
+      "currentUserPassword" : {
+        "label" : "Jūsų slaptažodis",
+        "help" : "Įveskite savo slaptažodį, kad patvirtintumėte šį veiksmą"
+      },
+      "confirmpassword" : {
+        "label" : "pakartokite vartotojo slaptažodį",
+        "help" : "pakartokite redaguojamo vartotojo slaptažodį"
+      },
+      "password" : {
+        "label" : "Naujas vartotojo slaptažodis",
+        "help" : "Naujas slaptažodis redaguojamam vartotojui"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Naujas įterpimo modelis",
         "help" : "Pasirinkite tiekėją, kad pridėtumėte naują įterpimo modelį, galintį semantiškai indeksuoti turinį",
         "placeholder" : "Pasirinkite tiekėją, kad pridėtumėte naują įterpimo modelį, galintį semantiškai indeksuoti turinį"
+      },
+      "ranker" : {
+        "label" : "Naujas perrikiavimo modelis",
+        "help" : "Pasirinkite tiekėją, kad pridėtumėte naują perrikiavimo modelį",
+        "placeholder" : "Pasirinkite tiekėją, kad pridėtumėte naują perrikiavimo modelį"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Naujo perrikiavimo modelio konfigūracija"
+      },
+      "CodeHeader3" : {
+        "label" : "Kodas"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Aprašymas"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modelio tiekėjas"
+      },
+      "ModelHeader3" : {
+        "label" : "Modelis "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Sukonfigūruoti perrikiavimo modeliai"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding modelio API žetonas",
         "help" : "Pasirinkite embedding modelio API žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Gerai!",
+        "detail" : "Veiksmas sėkmingai atliktas"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "TitleFragment" : {
+        "label" : "Redaguojamas reitingavimo modelio tiekėjas:"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "baseUrl" : {
+        "label" : "reitingavimo modelio API serverio bazinis adresas",
+        "help" : "Reitingavimo modelio bazinis adresas."
+      },
+      "apiSecretCode" : {
+        "label" : "reitingavimo modelio API raktas",
+        "help" : "Pasirinkite šio modelio naudojamą reitingavimo modelio API raktą (neprivaloma)"
+      },
+      "choosedModel" : {
+        "label" : "reitingavimo modelio pasirinkimas",
+        "help" : "Pasirinkite naudojamą reitingavimo modelį."
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį reitingavimo modelį",
+        "help" : "Jei pažymėta, bus naudojamas kaip numatytasis reitingavimo modelis, kai reitingavimo modelis nenurodytas"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Gerai!",
+        "detail" : "Veiksmas sėkmingai atliktas"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Pasirinktos sistemos"
+      },
+      "wordExport" : {
+        "help" : "Eksportuoti atsakymą į Word"
+      },
+      "pdfExport" : {
+        "help" : "Eksportuoti atsakymą į PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Vykdomas pasirinktas agentas"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Apdorojamas dokumentas:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Giluminė paieška/Jira paieška"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Padedamoji paieška"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Raginimas",
         "help" : "Redaguokite raginimą retrieve augmented generation sesijoms."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Rankinis arba automatinis slenksčio nustatymas",
+        "help" : "Naudokite rankinį atstumo slenkstį vietoje automatinio"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Naudoti raktažodžių paiešką, kai įmanoma",
+        "help" : "Atlikti raktažodžių paiešką papildomai prie semantinės, jei ši sistema ją palaiko"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Naršykite arba ieškokite ir pasirinkite dokumentus pokalbiui"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Pasirinkti dokumentai"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Pokalbis"
       },
       "setupMenuItem" : {
-        "label" : "Nustatymai"
+        "label" : "Nustatymai",
+        "help" : "Sąranka nebaigta, prašome paspauskite čia ir sukonfigūruokite"
       },
       "adminMenuItem" : {
         "label" : "Administravimas"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Klaida operacijos metu: Anthropic api negali veikti be būtinos api rakto konfigūracijos",
         "detail" : "Serverio klaida: Anthropic api negali veikti be būtinos api rakto konfigūracijos"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Failas eksportuotas",
+        "detail" : "Eikite į naršyklės atsisiuntimų skyrių"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modelis naudojamas vidinėms paslaugoms"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agentas naudoja pokalbio modelį"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Bendra informacija"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "pasirinkti"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Pasirinkite pokalbio modelio konfigūraciją"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Naudokite sistemos numatytąjį pokalbio modelį agento užduočiai arba nurodykite kitą. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Didelio kalbos modelio ir įrankių nustatymai"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Saugumo prieigos nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojama agento konfigūracija"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite pokalbio agento aprašymą."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas agento unikalus kodas."
+      },
+      "agentServiceId" : {
+        "label" : "Agentų paslaugos tipas",
+        "help" : "Pasirinkite agento paslaugos tipą, kurį vykdysite."
+      },
+      "defaultConfiguration" : {
+        "label" : "Numatytoji agento konfigūracija",
+        "help" : "Nustatyti kaip numatytąją šio agento paslaugos tipui"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Pasirinkti pagrindinį ciklo šabloną",
+        "help" : "Pasirinkite pagrindinį agento ciklo šabloną."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksimalus agento ciklų skaičius",
+        "help" : "Nustatykite maksimalų agento ciklų skaičių (rezultatas bus detalesnis)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Įjungti visus galimus įrankius",
+        "help" : "Pažymėjus šią parinktį agentui bus priskirti visi galimi įrankiai"
+      },
+      "enabledFunctions" : {
+        "label" : "Įjungtas funkcijų naudojimas šiam agentui",
+        "help" : "Funkcijos, kurias agentas gali naudoti vykdydamas savo veiklą"
+      },
+      "temperature" : {
+        "label" : "Temperatūra",
+        "help" : "Modelio atsakymo temperatūra nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
+      },
+      "thinking" : {
+        "label" : "Mąstymo pastangos",
+        "help" : "Konfigūruokite, kiek modelis mąstys (ne visi modeliai tai palaiko)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametras nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
       }
     }
   }

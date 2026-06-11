@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "약관에 동의합니다",
         "help" : "여기를 클릭하면 라이선스의 약관에 동의하게 됩니다"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "관리자 계정이 생성되었습니다!",
+        "detail" : "관리자 계정 PAOLO.ZAVALLONI@GMAIL.COM 이(가) 성공적으로 생성되었습니다"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai 설정에 필수 단계가 일부 누락됨",
         "detail" : "설정 과정의 빨간 단계를 확인해 주세요"
+      },
+      "agentSetupSection" : {
+        "label" : "에이전트 서비스 구성",
+        "description" : "에이전트 서비스 및 사용 가능한 도구를 구성하세요"
+      },
+      "AgentAddBtn" : {
+        "label" : "에이전트 추가"
+      },
+      "MainPanel" : {
+        "label" : "에이전트 설정"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "설정 코드"
+      },
+      "DescriptionHeader" : {
+        "label" : "설명"
+      },
+      "EditAgentBtn" : {
+        "label" : "에이전트 편집"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "대형 언어 모델 설정"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "작업 중 예외 발생:벡터 저장소 생성 실패 또는 임베딩 모델 초기화 예외: 401 - {\"error\":{\"message\":\"인증 오류, 잘못된 프록시 서버 토큰이 전달되었습니다. 받은 API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. 캐시에서 토큰을 찾을 수 없습니다\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "서버 오류: 벡터 저장소 생성 실패 또는 임베딩 모델 초기화 예외: 401 - {\"error\":{\"message\":\"인증 오류, 잘못된 프록시 서버 토큰이 전달되었습니다. 받은 API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. 캐시에서 토큰을 찾을 수 없습니다\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "사용자"
+      },
+      "searchNameInput" : {
+        "placeholder" : "이름 검색"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "사용자명 검색"
+      },
+      "SearchUsersBtn" : {
+        "label" : "검색"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "역할 선택"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "성 검색"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "사용자 목록",
         "help" : "그룹에 참여할 사용자를 선택하세요"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "사용자 비밀번호 변경"
+      },
+      "CancelBtn" : {
+        "label" : "취소"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "변경"
+      },
+      "username" : {
+        "label" : "사용자 이름",
+        "help" : "이 작업을 확인하려면 비밀번호를 입력하세요"
+      },
+      "currentUserPassword" : {
+        "label" : "현재 비밀번호",
+        "help" : "이 작업을 확인하려면 비밀번호를 입력하세요"
+      },
+      "confirmpassword" : {
+        "label" : "사용자 비밀번호 확인",
+        "help" : "편집한 사용자의 비밀번호 확인"
+      },
+      "password" : {
+        "label" : "새 비밀번호",
+        "help" : "편집한 사용자의 새 비밀번호"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "새 임베딩 모델",
         "help" : "콘텐츠의 의미론적 인덱싱을 수행할 수 있는 새로운 임베딩 모델을 추가할 공급자를 선택하세요",
         "placeholder" : "콘텐츠의 의미론적 인덱싱을 수행할 수 있는 새로운 임베딩 모델을 추가할 공급자를 선택하세요"
+      },
+      "ranker" : {
+        "label" : "새 리랭커 모델",
+        "help" : "추가할 리랭커 모델 공급업체를 선택하세요",
+        "placeholder" : "추가할 리랭커 모델 공급업체를 선택하세요"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "새 리랭커 모델 설정"
+      },
+      "CodeHeader3" : {
+        "label" : "코드"
+      },
+      "DescriptionHeader3" : {
+        "label" : "설명"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "모델 제공자"
+      },
+      "ModelHeader3" : {
+        "label" : "모델 "
+      },
+      "RerankerModelsZone" : {
+        "label" : "설정된 리랭크 모델"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "임베딩 모델 API 토큰",
         "help" : "이 모델에 사용할 임베딩 모델 API 토큰을 선택하세요"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "확인!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "저장"
+      },
+      "CancelBtn" : {
+        "label" : "취소"
+      },
+      "DeleteBtn" : {
+        "label" : "삭제"
+      },
+      "TitleFragment" : {
+        "label" : "랭킹 모델 제공자 편집:"
+      },
+      "description" : {
+        "label" : "설명",
+        "help" : "모델 설정에 대한 설명을 입력하세요"
+      },
+      "code" : {
+        "label" : "고유 코드",
+        "help" : "자동 생성된 모델 설정의 고유 코드"
+      },
+      "baseUrl" : {
+        "label" : "랭킹 모델 API 기본 서버 주소",
+        "help" : "랭킹 모델의 기본 주소입니다."
+      },
+      "apiSecretCode" : {
+        "label" : "랭킹 모델 API 토큰",
+        "help" : "이 모델에 사용할 랭킹 모델 API 토큰을 선택하세요 (선택사항)"
+      },
+      "choosedModel" : {
+        "label" : "랭킹 모델 선택",
+        "help" : "활용할 랭킹 모델을 선택하세요."
+      },
+      "defaultModel" : {
+        "label" : "기본 랭킹 모델로 설정",
+        "help" : "참이면 이 모델이 랭킹 모델이 지정되지 않은 경우 기본으로 사용됩니다"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "확인!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "선택된 시스템"
+      },
+      "wordExport" : {
+        "help" : "응답을 Word로 내보내기"
+      },
+      "pdfExport" : {
+        "help" : "응답을 PDF로 내보내기"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "선택한 에이전트 실행 중"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "문서 처리 중:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "심층 검색/Jira 검색"
+      },
+      "PURE_SEARCH" : {
+        "label" : "도움이 되는 검색"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "프롬프트",
         "help" : "Retrieve augmented generation 세션을 위한 프롬프트를 편집하세요."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "임계값 수동/자동 설정",
+        "help" : "자동 조정 대신 수동 거리 임계값을 사용하세요"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "가능하면 키워드 검색 사용",
+        "help" : "이 설치 환경에서 구성된 경우 의미 검색 외에 키워드 검색도 실행합니다"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "문서를 검색하거나 선택하여 채팅하세요"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "선택한 문서"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "채팅"
       },
       "setupMenuItem" : {
-        "label" : "설정"
+        "label" : "설정",
+        "help" : "설정이 완료되지 않았습니다. 여기를 눌러 관리하세요"
       },
       "adminMenuItem" : {
         "label" : "관리자"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "작업 중 예외 발생: Anthropic api는 필수 api 키 구성이 없어 작동 불가",
         "detail" : "서버 오류: Anthropic api는 필수 api 키 구성이 없어 작동 불가"
+      },
+      "fileExportLoaded" : {
+        "summary" : "파일 내보내기 완료",
+        "detail" : "브라우저 다운로드 섹션으로 이동하세요"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "내부 서비스용 모델"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "저장"
+      },
+      "UseChatModelLabel" : {
+        "label" : "에이전트가 사용하는 챗 모델"
+      },
+      "CancelBtn" : {
+        "label" : "취소"
+      },
+      "DeleteBtn" : {
+        "label" : "삭제"
+      },
+      "GeneralInfosTab" : {
+        "label" : "일반 정보"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "선택"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "챗 모델 설정을 선택하세요"
+      },
+      "defaultChatModel-help" : {
+        "label" : " 시스템 기본 챗 모델로 에이전트의 작업을 하거나 직접 지정할 수 있습니다. "
+      },
+      "LanguageModelTab" : {
+        "label" : "대형 언어 모델 & 사용 가능 도구 설정"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "보안 접근 설정"
+      },
+      "MainPanel" : {
+        "label" : "에이전트 설정 편집"
+      },
+      "description" : {
+        "label" : "설명",
+        "help" : "채팅 에이전트 설명을 입력하세요."
+      },
+      "code" : {
+        "label" : "고유 코드",
+        "help" : "에이전트의 자동 생성 고유 코드입니다."
+      },
+      "agentServiceId" : {
+        "label" : "에이전트 서비스 유형",
+        "help" : "실행할 에이전트 서비스 유형을 선택하세요."
+      },
+      "defaultConfiguration" : {
+        "label" : "기본 에이전트 설정",
+        "help" : "이 에이전트 서비스 유형에 대해 기본 설정으로 지정"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "메인 루프 프롬프트 템플릿 선택",
+        "help" : "에이전트 메인 루프 프롬프트를 선택하세요."
+      },
+      "maxLoopIterations" : {
+        "label" : "최대 에이전트 루프 횟수",
+        "help" : "에이전트 루프의 최대 횟수를 설정하세요 (더 정교한 결과를 얻을 수 있습니다)."
+      },
+      "subscribeAllTools" : {
+        "label" : "모든 사용 가능 도구 활성화",
+        "help" : "이 플래그를 체크하면 해당 에이전트가 실행될 때 모든 사용가능 도구가 할당됩니다"
+      },
+      "enabledFunctions" : {
+        "label" : "이 에이전트에서 사용 가능한 기능",
+        "help" : "에이전트가 작업 중 사용할 수 있는 기능"
+      },
+      "temperature" : {
+        "label" : "온도",
+        "help" : "모델 응답 온도, 0~1 (확실하지 않으면 비워두세요)"
+      },
+      "thinking" : {
+        "label" : "사고 노력",
+        "help" : "모델이 수행할 사고 노력을 설정하세요 (모든 모델이 지원하지는 않습니다)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP 매개변수, 0~1 (확실하지 않으면 비워두세요)"
       }
     }
   }

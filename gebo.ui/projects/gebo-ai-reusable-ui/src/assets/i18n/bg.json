@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Приемам условията",
         "help" : "С отбелязването тук приемате условията на лиценза"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Администраторският потребител е създаден!",
+        "detail" : "Администраторският потребител PAOLO.ZAVALLONI@GMAIL.COM беше създаден успешно"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Липсват задължителни стъпки при настройката на Gebo.ai",
         "detail" : "Моля, прегледайте червените стъпки в процеса на настройка"
+      },
+      "agentSetupSection" : {
+        "label" : "Конфигуриране на агент услуги",
+        "description" : "Конфигурирайте агент услугите и наличните им инструменти"
+      },
+      "AgentAddBtn" : {
+        "label" : "Добави агент"
+      },
+      "MainPanel" : {
+        "label" : "Настройка на агенти"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Конфиг. код"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "EditAgentBtn" : {
+        "label" : "Редактирай агент"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Настройване на големи езикови модели"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Изключение по време на операция: Не може да се създаде векторно хранилище или да се инициализира embedding модел: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Сървърен проблем: Не може да се създаде векторно хранилище или da се инициализира embedding модел: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "потребители"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Търсене по име"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Търсене по потребителско име"
+      },
+      "SearchUsersBtn" : {
+        "label" : "търси"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Избери роля"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Търсене по фамилия"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Списък с потребители",
         "help" : "Изберете потребители, участващи в групата"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Смяна на паролата на потребителя"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Промени"
+      },
+      "username" : {
+        "label" : "Потребителско име",
+        "help" : "Въведете вашата парола за да потвърдите действието"
+      },
+      "currentUserPassword" : {
+        "label" : "Вашата парола",
+        "help" : "Въведете вашата парола за да потвърдите действието"
+      },
+      "confirmpassword" : {
+        "label" : "Потвърди паролата на потребителя",
+        "help" : "Потвърждение на паролата за редактирания потребител"
+      },
+      "password" : {
+        "label" : "Нова парола за потребителя",
+        "help" : "Нова парола за редактирания потребител"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Нов модел за вграждане",
         "help" : "Изберете доставчик, за да добавите нов модел за вграждане, способен на семантично индексиране на съдържание",
         "placeholder" : "Изберете доставчик, за да добавите нов модел за вграждане, способен на семантично индексиране на съдържание"
+      },
+      "ranker" : {
+        "label" : "Нов модел за пренареждане",
+        "help" : "Изберете доставчик, за да добавите нов модел за пренареждане",
+        "placeholder" : "Изберете доставчик, за да добавите нов модел за пренареждане"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Конфигуриране на нов модел за пренареждане"
+      },
+      "CodeHeader3" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Описание"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Доставчик на модел"
+      },
+      "ModelHeader3" : {
+        "label" : "Модел "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Конфигурирани модели за пренареждане"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API токен",
         "help" : "Изберете Embedding model API токен за този модел"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Операцията е извършена успешно"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Запази"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "TitleFragment" : {
+        "label" : "Редактиране на доставчик на модел за класиране:"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на конфигурацията на модела"
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код на конфигурацията на модела"
+      },
+      "baseUrl" : {
+        "label" : "основен адрес на сървъра за API на модела за класиране",
+        "help" : "Основен адрес на модела за класиране."
+      },
+      "apiSecretCode" : {
+        "label" : "API токен за модела за класиране",
+        "help" : "Изберете токен за API на модела за класиране, който да се използва за този модел (по избор)"
+      },
+      "choosedModel" : {
+        "label" : "избор на модел за класиране",
+        "help" : "Изберете модел за класиране, с който да работите."
+      },
+      "defaultModel" : {
+        "label" : "задай го като основен модел за класиране",
+        "help" : "Ако е избрано, това ще е основният модел за класиране, където не е посочен друг"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Операцията е извършена успешно"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Избрани системи"
+      },
+      "wordExport" : {
+        "help" : "Експортирай отговора в Word"
+      },
+      "pdfExport" : {
+        "help" : "Експортирай отговора в PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Изпълнява се избраният от вас агент"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Обработка на документ:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Асистирано търсене"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Подсказка",
         "help" : "Редактирайте подсказката за сесиите за извличане с разширено генериране."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ръчна или автоматична настройка на праг",
+        "help" : "Използвай ръчен праг на разстояние вместо автоматично нагласяне"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Използвай търсене по ключови думи, ако е възможно",
+        "help" : "Извършвай търсене по ключови думи в допълнение към семантичното, ако това е конфигурирано"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Разгледайте или търсете и изберете документи, с които да чатите"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Избрани документи"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Чат"
       },
       "setupMenuItem" : {
-        "label" : "Настройки"
+        "label" : "Настройки",
+        "help" : "Настройката не е завършена, моля, натиснете тук и я завършете"
       },
       "adminMenuItem" : {
         "label" : "Администратор"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Изключение при операцията: Anthropic api не може да работи без необходимата api key конфигурация",
         "detail" : "Сървърна грешка: Anthropic api не може да работи без необходимата api key конфигурация"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Файлът беше експортиран",
+        "detail" : "Отидете в секцията за изтегления на браузъра"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Модел, използван за вътрешни услуги"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Запази"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Използван чат модел от агента"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Обща информация"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "избери"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Избери конфигурация на чат модел"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Използвай системния чат модел по подразбиране или посочи друг. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Настройки за голям езиков модел и инструменти"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Настройки за достъп и сигурност"
+      },
+      "MainPanel" : {
+        "label" : "Редактиране на конфигурация на агент"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на чат агента."
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код на агента."
+      },
+      "agentServiceId" : {
+        "label" : "Тип услуга на агента",
+        "help" : "Изберете какъв тип услуга ще използва агентът."
+      },
+      "defaultConfiguration" : {
+        "label" : "Конфигурация по подразбиране за този агент",
+        "help" : "Задайте тази конфигурация като основна за този тип услуга"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Избери шаблон на главния prompt",
+        "help" : "Изберете главния prompt на агента."
+      },
+      "maxLoopIterations" : {
+        "label" : "Максимален брой цикли за агента",
+        "help" : "Задайте максималния брой повторения на агента (това ще доведе до по-прецизен резултат)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Активирай всички налични инструменти",
+        "help" : "Ако това е избрано, всички налични инструменти ще бъдат зададени при стартиране на този агент"
+      },
+      "enabledFunctions" : {
+        "label" : "Активирани функции за този агент",
+        "help" : "Функции, които агентът може да използва по време на работата си"
+      },
+      "temperature" : {
+        "label" : "Температура",
+        "help" : "Температура на отговор на модела - от 0 до 1 (ако не сте сигурни, оставете празно)"
+      },
+      "thinking" : {
+        "label" : "Мисловни усилия",
+        "help" : "Конфигурирай усилията за мислене, които моделът ще прави (не се поддържа от всички модели)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Параметър TopP, от 0 до 1 (ако не сте сигурни, оставете празно)"
       }
     }
   }

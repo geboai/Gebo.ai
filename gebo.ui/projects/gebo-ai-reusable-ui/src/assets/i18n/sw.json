@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Nakubali masharti",
         "help" : "Kwa kubofya hapa unakubali masharti ya leseni"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Mtumiaji msimamizi ameundwa!",
+        "detail" : "Mtumiaji msimamizi PAOLO.ZAVALLONI@GMAIL.COM ameundwa kwa mafanikio"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Kuna hatua muhimu iliyokosekana kwenye usanidi wa Gebo.ai",
         "detail" : "Tafadhali kagua hatua nyekundu za mchakato wa usanidi"
+      },
+      "agentSetupSection" : {
+        "label" : "Sanidi huduma za wakala",
+        "description" : "Sanidi huduma za wakala na zana zao zinazopatikana"
+      },
+      "AgentAddBtn" : {
+        "label" : "Ongeza wakala"
+      },
+      "MainPanel" : {
+        "label" : "Sanidi mawakala"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Msimbo wa mipangilio"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "EditAgentBtn" : {
+        "label" : "Hariri wakala"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Sanidi mifano mikubwa ya lugha"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Hitilafu wakati wa operesheni:Imeshindwa kuunda vector store au hitilafu katika kuanzisha mfano wa embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Hitilafu ya seva: Imeshindwa kuunda vector store au hitilafu katika kuanzisha mfano wa embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "watumiaji"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Tafuta jina"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Tafuta jina la mtumiaji"
+      },
+      "SearchUsersBtn" : {
+        "label" : "tafuta"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Chagua jukumu"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Tafuta jina la ukoo"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Orodha ya watumiaji",
         "help" : "Chagua watumiaji wanaoshiriki kwenye kundi"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Badilisha nenosiri la mtumiaji"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Badilisha"
+      },
+      "username" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Weka nenosiri lako kuthibitisha kitendo hiki"
+      },
+      "currentUserPassword" : {
+        "label" : "Nenosiri lako",
+        "help" : "Weka nenosiri lako kuthibitisha kitendo hiki"
+      },
+      "confirmpassword" : {
+        "label" : "Thibitisha nenosiri la mtumiaji",
+        "help" : "Thibitisha nenosiri kwa mtumiaji aliyehaririwa"
+      },
+      "password" : {
+        "label" : "Nenosiri jipya la mtumiaji",
+        "help" : "Nenosiri jipya kwa mtumiaji aliyehaririwa"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Mfano mpya wa kuweka viungo",
         "help" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki",
         "placeholder" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki"
+      },
+      "ranker" : {
+        "label" : "Mfumo mpya wa kupanga upya",
+        "help" : "Chagua msambazaji ili kuongeza mfumo mpya wa kupanga upya",
+        "placeholder" : "Chagua msambazaji ili kuongeza mfumo mpya wa kupanga upya"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Sanidi mfumo mpya wa kupanga upya"
+      },
+      "CodeHeader3" : {
+        "label" : "Msimbo"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Maelezo"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Msambazaji wa mfano"
+      },
+      "ModelHeader3" : {
+        "label" : "Mfano "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Mifumo ya kupanga upya iliyosanidiwa"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Tokeni ya API ya Embedding model",
         "help" : "Chagua tokeni ya API ya Embedding model itakayotumiwa kwa modeli hii"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imefanywa kwa mafanikio"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "TitleFragment" : {
+        "label" : "Inahariri msambazaji wa mfano wa upangaji:"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mipangilio ya mfano"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa mipangilio ya mfano uliotengenezwa kiotomatiki"
+      },
+      "baseUrl" : {
+        "label" : "Anwani kuu ya seva ya API ya mfano wa upangaji",
+        "help" : "Anwani kuu ya mfano wa upangaji."
+      },
+      "apiSecretCode" : {
+        "label" : "Token ya API ya mfano wa upangaji",
+        "help" : "Chagua token ya API ya mfano wa upangaji itakayotumika kwa mfano huu (hiari)"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la mfano wa upangaji wa mfano wa upangaji",
+        "help" : "Chagua mfano wa upangaji wa mfano wa upangaji utakaotumika."
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama mfano wa upangaji wa chaguo-msingi",
+        "help" : "Kama ni kweli hii itatumika kama mfano wa upangaji wa chaguo-msingi ikiwa mfano wa upangaji haujaonyeshwa"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imefanywa kwa mafanikio"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Mifumo iliyochaguliwa"
+      },
+      "wordExport" : {
+        "help" : "Hamisha majibu hadi Word"
+      },
+      "pdfExport" : {
+        "help" : "Hamisha majibu hadi PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Inaendesha agent uliyechagua"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Inashughulikia hati:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Utafutaji unaosaidiwa"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompti",
         "help" : "Hariri prompti kwa vikao vya retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Mipangilio ya kikomo kwa mkono au inayojirekebisha",
+        "help" : "Tumia kikomo cha umbali kwa mkono badala ya kujirekebisha kiotomatiki"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Tumia utafutaji wa maneno muhimu unapatikana",
+        "help" : "Endesha utafutaji wa maneno muhimu pamoja na wa kisemantiki ikiwa vimepangwa kwenye mfumo huu"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Vinza au tafuta na uchague nyaraka za kuzungumza nazo"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Nyaraka zilizochaguliwa"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Gumzo"
       },
       "setupMenuItem" : {
-        "label" : "Mipangilio"
+        "label" : "Mipangilio",
+        "help" : "Mipangilio haijakamilika, tafadhali bofya hapa na uisimamie"
       },
       "adminMenuItem" : {
         "label" : "Msimamizi"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Hitilafu wakati wa operesheni:Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika",
         "detail" : "Hitilafu ya seva: Anthropic api haiwezi kufanya kazi bila usanidi wa api key unaohitajika"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Faili imesafirishwa",
+        "detail" : "Nenda kwenye sehemu ya upakuaji ya kivinjari"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Mfano unaotumika kwa huduma za ndani"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Mfano wa gumzo uliotumika na wakala"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "chagua"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chagua mipangilio ya mfano wa gumzo"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Tumia mfano wa gumzo wa mfumo kama chaguo-msingi kutekeleza kazi ya Wakala au taja mwingine. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Mipangilio ya Large language model na zana zinazoruhusiwa"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikiaji wa usalama"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri mpangilio wa Wakala"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya wakala wa gumzo."
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa Wakala uliotengenezwa kiotomatiki."
+      },
+      "agentServiceId" : {
+        "label" : "Aina ya huduma ya wakala",
+        "help" : "Chagua aina ya huduma ya Wakala itakayotekelezwa."
+      },
+      "defaultConfiguration" : {
+        "label" : "Mipangilio ya chaguo-msingi ya Wakala",
+        "help" : "Weka hii kama mipangilio ya msingi kwa aina hii ya huduma ya Wakala"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Chagua kiolezo cha onyo la mzunguko mkuu",
+        "help" : "Chagua onyo kuu la mzunguko wa Wakala."
+      },
+      "maxLoopIterations" : {
+        "label" : "Idadi ya juu ya mizunguko ya Wakala",
+        "help" : "Weka idadi ya juu ya mizunguko ya Wakala (itazalisha matokeo yaliyoboreshwa)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Washirikishe zana zote zinazopatikana",
+        "help" : "Ukipiga bendera hii, zana zote zitapangiwa wakati wakala huyu akifanya kazi"
+      },
+      "enabledFunctions" : {
+        "label" : "Kazi zilizoruhusiwa kwa Wakala huyu",
+        "help" : "Kazi zinazoweza kutumiwa na Wakala wakati wa utekelezaji wake"
+      },
+      "temperature" : {
+        "label" : "Joto",
+        "help" : "Joto ambalo mfano utajibu, kutoka 0 hadi 1 (ukishindwa, acha wazi)"
+      },
+      "thinking" : {
+        "label" : "Juhudi za kufikiri",
+        "help" : "Sanidi juhudi za mfano za kufikiri (si mifano yote inasaidia hii)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Kigezo cha TopP, kutoka 0 hadi 1 (ikishindwa acha wazi)"
       }
     }
   }
