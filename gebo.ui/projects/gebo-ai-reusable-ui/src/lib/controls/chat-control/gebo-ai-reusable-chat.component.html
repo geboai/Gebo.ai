@@ -94,10 +94,10 @@
 
         @if (interaction?.response?.id) {
         <div class="gebo-ai-reusable-chat__interaction-export-buttons">
-          <p-button icon="pi pi-file-word" [rounded]="true" [text]="true"
+          <p-button id="wordExport" gebo-ai-label icon="pi pi-file-word" [rounded]="true" [text]="true" 
             (onClick)="exportResponse(userChatContextCode, interaction.response?.id, 'WORD')"
             title="Export response to Word" gebo-ai-label class="custom-word-btn"></p-button>
-          <p-button icon="pi pi-file-pdf" [rounded]="true" [text]="true"
+          <p-button id="pdfExport" gebo-ai-label icon="pi pi-file-pdf" [rounded]="true" [text]="true"
             (onClick)="exportResponse(userChatContextCode, interaction.response?.id, 'PDF')"
             title="Export response to PDF" gebo-ai-label class="custom-pdf-btn"></p-button>
         </div>

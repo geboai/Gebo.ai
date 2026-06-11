@@ -40,6 +40,7 @@ const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
 const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 const clean_chat_loaded: ToastMessageOptions = { id: "NEW_CHAT_LOADED", summary: "New chat loaded", detail: "New chat loaded successfully", severity: "success" };
+const fileExportLoaded:ToastMessageOptions= {id:"fileExportLoaded",summary:"File exported",detail:"Go to browser downloads section",severity:"succcess"};
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -398,6 +399,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             withCredentials: true
         }).subscribe({
             next: (blob: Blob) => {
+                const subscription=this.geboAiTranslationService.translateBackendMessage(fileExportLoaded as GUserMessage).subscribe({
+                    next:(msg)=>{
+                        this.lastInteractionMessages=[msg as ToastMessageOptions];
+                    },
+                    complete:()=>{
+                        try {
+                            subscription.unsubscribe();
+                        }catch(e) {}
+                    }
+                });
                 const filename = format === 'PDF' ? 'export.pdf' : 'export.docx';
                 const fileURL = URL.createObjectURL(blob);
                 const a = document.createElement('a');
