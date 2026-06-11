@@ -1,143 +1,143 @@
 ai.gebo.agents.roles:
-    library:
-        - code: ROUTER_AGENT
-          description: Router Agent
-          longExplanation: >
-              Classifies the user request and routes it to the most appropriate
-              agent, workflow, knowledge base, or tool chain.
+  library:
+    - code: ROUTER_AGENT
+      description: Router Agent
+      longExplanation: >
+        Classifies the user request and routes it to the most appropriate
+        agent, workflow, knowledge base, or tool chain.
 
-        - code: SUPERVISOR_AGENT
-          description: Supervisor Agent
-          longExplanation: >
-              Coordinates complex tasks by planning the work, assigning subtasks
-              to specialized agents, collecting their outputs, and preparing the
-              final response strategy.
+    - code: SUPERVISOR_AGENT
+      description: Supervisor Agent
+      longExplanation: >
+        Coordinates complex tasks by planning the work, assigning subtasks
+        to specialized agents, collecting their outputs, and preparing the
+        final response strategy.
 
-        - code: PLANNER_AGENT
-          description: Planner Agent
-          longExplanation: >
-              Breaks down a complex request into ordered steps, dependencies,
-              milestones, and executable subtasks.
+    - code: PLANNER_AGENT
+      description: Planner Agent
+      longExplanation: >
+        Breaks down a complex request into ordered steps, dependencies,
+        milestones, and executable subtasks.
 
-        - code: RESEARCH_AGENT
-          description: Research Agent
-          longExplanation: >
-              Searches, compares, and synthesizes information from available
-              knowledge sources, documents, databases, and external tools.
+    - code: RESEARCH_AGENT
+      description: Research Agent
+      longExplanation: >
+        Searches, compares, and synthesizes information from available
+        knowledge sources, documents, databases, and external tools.
 
-        - code: ENTERPRISE_SEARCH_AGENT
-          description: Enterprise Search Agent
-          longExplanation: >
-              Performs semantic, hybrid, and metadata-based search across
-              enterprise repositories such as documents, wikis, code repositories,
-              file shares, and collaboration platforms.
+    - code: ENTERPRISE_SEARCH_AGENT
+      description: Enterprise Search Agent
+      longExplanation: >
+        Performs semantic, hybrid, and metadata-based search across
+        enterprise repositories such as documents, wikis, code repositories,
+        file shares, and collaboration platforms.
 
-        - code: RAG_AGENT
-          description: RAG Agent
-          longExplanation: >
-              Retrieves relevant evidence from knowledge bases and generates
-              grounded answers using the retrieved context.
+    - code: RAG_AGENT
+      description: RAG Agent
+      longExplanation: >
+        Retrieves relevant evidence from knowledge bases and generates
+        grounded answers using the retrieved context.
 
-        - code: GRAPH_RAG_AGENT
-          description: Graph RAG Agent
-          longExplanation: >
-              Uses graph-based knowledge structures, entities, relationships,
-              and multi-hop reasoning to enrich retrieval and improve answers.
+    - code: GRAPH_RAG_AGENT
+      description: Graph RAG Agent
+      longExplanation: >
+        Uses graph-based knowledge structures, entities, relationships,
+        and multi-hop reasoning to enrich retrieval and improve answers.
 
-        - code: DOCUMENT_ANALYST_AGENT
-          description: Document Analyst Agent
-          longExplanation: >
-              Reads, analyzes, summarizes, extracts, and compares information
-              from documents such as PDF, Word, Excel, PowerPoint, HTML, and text files.
+    - code: DOCUMENT_ANALYST_AGENT
+      description: Document Analyst Agent
+      longExplanation: >
+        Reads, analyzes, summarizes, extracts, and compares information
+        from documents such as PDF, Word, Excel, PowerPoint, HTML, and text files.
 
-        - code: EVIDENCE_COLLECTOR_AGENT
-          description: Evidence Collector Agent
-          longExplanation: >
-              Collects supporting passages, citations, metadata, and source
-              references needed to produce verifiable answers.
+    - code: EVIDENCE_COLLECTOR_AGENT
+      description: Evidence Collector Agent
+      longExplanation: >
+        Collects supporting passages, citations, metadata, and source
+        references needed to produce verifiable answers.
 
-        - code: EVIDENCES_SEARCHER_AGENT
-          description: Evidence search agent performing searches in a data source
-          longExplanation: Executes searches on a specific 3rd party or internal data source to collect evidences.
-		  
-        - code: CITATION_AGENT
-          description: Citation Agent
-          longExplanation: >
-              Formats evidence references, citations, document metadata, titles,
-              authors, publishers, publication titles, dates, and URLs according
-              to the required answer style.
+    - code: EVIDENCES_SEARCHER_AGENT
+      description: Evidence search agent performing searches in a data source
+      longExplanation: Executes searches on a specific 3rd party or internal data source to collect evidences.
 
-        - code: CRITIC_AGENT
-          description: Critic Agent
-          longExplanation: >
-              Reviews draft answers for correctness, missing evidence,
-              contradictions, hallucinations, weak reasoning, and policy violations.
+    - code: CITATION_AGENT
+      description: Citation Agent
+      longExplanation: >
+        Formats evidence references, citations, document metadata, titles,
+        authors, publishers, publication titles, dates, and URLs according
+        to the required answer style.
 
-        - code: VALIDATOR_AGENT
-          description: Validator Agent
-          longExplanation: >
-              Checks whether an output satisfies the task requirements,
-              expected schema, constraints, quality rules, and completeness criteria.
+    - code: CRITIC_AGENT
+      description: Critic Agent
+      longExplanation: >
+        Reviews draft answers for correctness, missing evidence,
+        contradictions, hallucinations, weak reasoning, and policy violations.
 
-        - code: TOOL_AGENT
-          description: Tool Agent
-          longExplanation: >
-              Selects and invokes external tools, APIs, connectors, databases,
-              and application services needed to complete a task.
+    - code: VALIDATOR_AGENT
+      description: Validator Agent
+      longExplanation: >
+        Checks whether an output satisfies the task requirements,
+        expected schema, constraints, quality rules, and completeness criteria.
 
-        - code: WORKFLOW_AGENT
-          description: Workflow Agent
-          longExplanation: >
-              Executes structured business workflows involving multiple steps,
-              approvals, document operations, notifications, and system actions.
+    - code: TOOL_AGENT
+      description: Tool Agent
+      longExplanation: >
+        Selects and invokes external tools, APIs, connectors, databases,
+        and application services needed to complete a task.
 
-        - code: INTEGRATION_AGENT
-          description: Integration Agent
-          longExplanation: >
-              Works with enterprise systems and connectors such as SharePoint,
-              OneDrive, Google Drive, Confluence, Jira, Git, databases, email,
-              and file shares.
+    - code: WORKFLOW_AGENT
+      description: Workflow Agent
+      longExplanation: >
+        Executes structured business workflows involving multiple steps,
+        approvals, document operations, notifications, and system actions.
 
-        - code: DATABASE_AGENT
-          description: Database Agent
-          longExplanation: >
-              Understands database schemas, generates safe queries, retrieves
-              structured data, and explains database results.
+    - code: INTEGRATION_AGENT
+      description: Integration Agent
+      longExplanation: >
+        Works with enterprise systems and connectors such as SharePoint,
+        OneDrive, Google Drive, Confluence, Jira, Git, databases, email,
+        and file shares.
 
-        - code: CODE_ASSISTANT_AGENT
-          description: Code Assistant Agent
-          longExplanation: >
-              Helps with software development tasks including code explanation,
-              refactoring, debugging, migration, test generation, and architecture review.
+    - code: DATABASE_AGENT
+      description: Database Agent
+      longExplanation: >
+        Understands database schemas, generates safe queries, retrieves
+        structured data, and explains database results.
 
-        - code: SECURITY_AGENT
-          description: Security Agent
-          longExplanation: >
-              Reviews requests and outputs from a security perspective, checking
-              access permissions, data exposure risks, secrets, authentication,
-              authorization, and compliance constraints.
+    - code: CODE_ASSISTANT_AGENT
+      description: Code Assistant Agent
+      longExplanation: >
+        Helps with software development tasks including code explanation,
+        refactoring, debugging, migration, test generation, and architecture review.
 
-        - code: COMPLIANCE_AGENT
-          description: Compliance Agent
-          longExplanation: >
-              Evaluates content and actions against legal, regulatory, corporate,
-              privacy, audit, and governance requirements.
+    - code: SECURITY_AGENT
+      description: Security Agent
+      longExplanation: >
+        Reviews requests and outputs from a security perspective, checking
+        access permissions, data exposure risks, secrets, authentication,
+        authorization, and compliance constraints.
 
-        - code: DOMAIN_EXPERT_AGENT
-          description: Domain Expert Agent
-          longExplanation: >
-              Applies specialized domain knowledge such as legal, finance,
-              procurement, manufacturing, HR, healthcare, engineering, or customer support.
+    - code: COMPLIANCE_AGENT
+      description: Compliance Agent
+      longExplanation: >
+        Evaluates content and actions against legal, regulatory, corporate,
+        privacy, audit, and governance requirements.
 
-        - code: REPORT_WRITER_AGENT
-          description: Report Writer Agent
-          longExplanation: >
-              Produces structured reports, executive summaries, analysis documents,
-              meeting notes, business briefings, and decision-support material or simply user question answer.
+    - code: DOMAIN_EXPERT_AGENT
+      description: Domain Expert Agent
+      longExplanation: >
+        Applies specialized domain knowledge such as legal, finance,
+        procurement, manufacturing, HR, healthcare, engineering, or customer support.
 
-        - code: CONVERSATIONAL_AGENT
-          description: Conversational Agent
-          longExplanation: >
-              Handles general dialogue with the user, clarifies intent, maintains
-              conversational continuity, and provides direct answers when no
-              specialized workflow is required.
+    - code: REPORT_WRITER_AGENT
+      description: Report Writer Agent
+      longExplanation: >
+        Produces structured reports, executive summaries, analysis documents,
+        meeting notes, business briefings, and decision-support material or simply user question answer.
+
+    - code: CONVERSATIONAL_AGENT
+      description: Conversational Agent
+      longExplanation: >
+        Handles general dialogue with the user, clarifies intent, maintains
+        conversational continuity, and provides direct answers when no
+        specialized workflow is required.

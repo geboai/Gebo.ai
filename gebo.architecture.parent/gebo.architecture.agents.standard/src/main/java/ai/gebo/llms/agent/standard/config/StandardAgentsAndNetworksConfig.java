@@ -42,6 +42,10 @@ import lombok.Data;
 
 @AllArgsConstructor
 public class StandardAgentsAndNetworksConfig {
+	private static final String REPORTER_AGENT_DESCRIPTION = "Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer";
+	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Agent's network controller and coordinator";
+	private static final String EVIDENCES_SEARCHER_AGENT = "EVIDENCES_SEARCHER_AGENT";
+	private static final String REPORT_WRITER_AGENT = "REPORT_WRITER_AGENT";
 	private static final String SUPERVISOR_AGENT = "SUPERVISOR_AGENT";
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
 	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Default agents network for chat purposes";
@@ -131,7 +135,7 @@ public class StandardAgentsAndNetworksConfig {
 						agentConfig
 								.setCustomLoopPrompt(processSearchPrompt(search.getQueriesGenerationPromptUseCode()));
 						agentConfig.setAccessibleToAll(true);
-						agentConfig.setAgentRoleCode("EVIDENCES_SEARCHER_AGENT");
+						agentConfig.setAgentRoleCode(EVIDENCES_SEARCHER_AGENT);
 						agentConfig.setAgentServiceId(serviceId);
 						agentConfig.setSubscribeAllTools(false);
 						agentConfig.setEnabledFunctions(List.of());
@@ -155,7 +159,7 @@ public class StandardAgentsAndNetworksConfig {
 			controllerConfig = new GAgentConfig();
 			controllerConfig.setCode(DefaultControllerNetworkAgentService.CONTROLLER_AGENT);
 			controllerConfig.setAgentServiceId(DefaultControllerNetworkAgentService.CONTROLLER_AGENT);
-			controllerConfig.setDescription("Agent's network controller and coordinator");
+			controllerConfig.setDescription(CONTROLLER_AND_COORDINATOR_DESCRIPTION);
 			controllerConfig.setUseDefaultChatModel(true);
 			controllerConfig.setAgentRoleCode(SUPERVISOR_AGENT);
 		}
@@ -169,8 +173,8 @@ public class StandardAgentsAndNetworksConfig {
 			reporterConfig.setCode(TextProcessingTaskPerformerAgentService.TEXT_PROCESSING_AGENT_SERVICE);
 			reporterConfig.setAgentServiceId(TextProcessingTaskPerformerAgentService.TEXT_PROCESSING_AGENT_SERVICE);
 			reporterConfig.setDescription(
-					"Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer");
-			reporterConfig.setAgentRoleCode("REPORT_WRITER_AGENT");
+					REPORTER_AGENT_DESCRIPTION);
+			reporterConfig.setAgentRoleCode(REPORT_WRITER_AGENT);
 		}
 		return IGDynamicAgentConfigDataSource.of(reporterConfig);
 	}
