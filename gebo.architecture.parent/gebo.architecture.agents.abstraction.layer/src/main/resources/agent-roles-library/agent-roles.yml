@@ -56,6 +56,10 @@ ai.gebo.agents.roles:
               Collects supporting passages, citations, metadata, and source
               references needed to produce verifiable answers.
 
+        - code: EVIDENCES_SEARCHER_AGENT
+          description: Evidence search agent performing searches in a data source
+          longExplanation: Executes searches on a specific 3rd party or internal data source to collect evidences.
+		  
         - code: CITATION_AGENT
           description: Citation Agent
           longExplanation: >
@@ -129,7 +133,7 @@ ai.gebo.agents.roles:
           description: Report Writer Agent
           longExplanation: >
               Produces structured reports, executive summaries, analysis documents,
-              meeting notes, business briefings, and decision-support material.
+              meeting notes, business briefings, and decision-support material or simply user question answer.
 
         - code: CONVERSATIONAL_AGENT
           description: Conversational Agent

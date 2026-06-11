@@ -13,11 +13,14 @@ import ai.gebo.security.services.IGSecurityService;
 @Service
 public class TextProcessingTaskPerformerAgentService extends GBaseTaskPerformerNetworkAgentService<String, String> {
 
+	private static final String GENERICAL_AGENT_THAT_RECEIVE_TEXT_MESSAGES_AND_RESPONDES_BACK_WITH_TEXT_MESSAGES = "Generical agent that receive text messages and respondes back with text messages";
+	public static final String TEXT_PROCESSING_AGENT_SERVICE = "textProcessingAgentService";
+
 	public TextProcessingTaskPerformerAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao,
-				String.class, String.class, "textProcessingAgentService",
-				"Generical agent that receive text messages and respondes back with text messages");
+				String.class, String.class, TEXT_PROCESSING_AGENT_SERVICE,
+				GENERICAL_AGENT_THAT_RECEIVE_TEXT_MESSAGES_AND_RESPONDES_BACK_WITH_TEXT_MESSAGES);
 	}
 }

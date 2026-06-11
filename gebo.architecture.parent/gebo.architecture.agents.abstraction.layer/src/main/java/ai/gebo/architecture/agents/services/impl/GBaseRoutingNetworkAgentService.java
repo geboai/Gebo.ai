@@ -50,7 +50,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	public GBaseRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
-			String id, String description, Class<OutputType> outputType, Class<InputType> inputType) {
+			String id, String description, Class<InputType> inputType, Class<OutputType> outputType) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 		this.id = id;
 		this.description = description;

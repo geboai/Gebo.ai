@@ -13,12 +13,15 @@ import ai.gebo.security.services.IGSecurityService;
 @Service
 public class TextProcessingRoutingNetworkAgentService extends GBaseRoutingNetworkAgentService<String, Void> {
 
+	private static final String ROUTING_AGENT_THAT_PROCESSES_TEXT_AS_AN_INPUT = "Routing agent that processes text as an input";
+	public static final String TEXT_PROCESSING_ROUTING_NETWORK_AGENT_SERVICE = "textProcessingRoutingNetworkAgentService";
+
 	public TextProcessingRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao,
-				"textProcessingRoutingNetworkAgentService", "Routing agent that processes text as an input", Void.class,
-				String.class);
+				TEXT_PROCESSING_ROUTING_NETWORK_AGENT_SERVICE, ROUTING_AGENT_THAT_PROCESSES_TEXT_AS_AN_INPUT, String.class,
+				Void.class);
 
 	}
 

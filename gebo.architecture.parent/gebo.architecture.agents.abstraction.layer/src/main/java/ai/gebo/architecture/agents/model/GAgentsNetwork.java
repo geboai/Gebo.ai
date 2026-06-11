@@ -18,19 +18,20 @@ public class GAgentsNetwork extends GBaseObject implements IJsonClonable<GAgents
 		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
 	}
 
+	public static enum AgentActivationType {
+		ON_RECEIVED_MESSAGE, EVERY_CYCLE
+	}
+
 	int maxLoopIteration = 5;
 
 	@Data
 	public static class AgentNetworkParticipant {
 		@NotNull
 		private String agentConfigCode;
-
 		private String agentContextualName;
-
 		private boolean inputNode;
-
 		private boolean outputNode;
-
+		
 		@NotNull
 		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
 
