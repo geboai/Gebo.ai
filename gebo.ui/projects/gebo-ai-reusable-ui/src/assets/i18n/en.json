@@ -41,6 +41,10 @@
             "AcceptMark": {
                 "label": "I accept the terms",
                 "help": "By clicking here you accept the term & conditions in the licence"
+            },
+            "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838": {
+                "summary": "Admin user created !",
+                "detail": "Admin user PAOLO.ZAVALLONI@GMAIL.COM created successfully"
             }
         }
     },
@@ -212,6 +216,25 @@
             "SETUP-MISSING_SOME": {
                 "summary": "Gebo.ai setup is missing some mandatory step",
                 "detail": "Please review the red steps of the setup process"
+            },
+            "agentSetupSection": {
+                "label": "Configure Agent Services",
+                "description": "Configure Agent Services and their available tools"
+            },
+            "AgentAddBtn": {
+                "label": "Add agent"
+            },
+            "MainPanel": {
+                "label": "Setup Agents"
+            },
+            "ConfigCodeHeader": {
+                "label": "Config code"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "EditAgentBtn": {
+                "label": "Edit agent"
             }
         },
         "ConfluenceWizardComponent": {
@@ -319,6 +342,10 @@
             },
             "MainLLMSPanelTitle": {
                 "label": "Setup Large language models"
+            },
+            "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a": {
+                "summary": "Exception during operation:Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+                "detail": "Server error: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
             }
         },
         "GraphRagWizardComponent": {
@@ -787,6 +814,21 @@
             },
             "UsersHeader": {
                 "label": "users"
+            },
+            "searchNameInput": {
+                "placeholder": "Search name"
+            },
+            "searchUsernameInput": {
+                "placeholder": "Search username"
+            },
+            "SearchUsersBtn": {
+                "label": "search"
+            },
+            "searchRoleDropdown": {
+                "placeholder": "Select role"
+            },
+            "searchSournameInput": {
+                "placeholder": "Search sourname"
             }
         }
     },
@@ -818,6 +860,33 @@
             "userIds": {
                 "label": "Users list",
                 "help": "Select users partecipating the group"
+            }
+        },
+        "GeboAIChangeUserPasswordComponent": {
+            "UserPasswordChangePanel": {
+                "label": "Change user's password"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "ChangePasswordBtn": {
+                "label": "Change"
+            },
+            "username": {
+                "label": "User name",
+                "help": "Enter your password to validate this action"
+            },
+            "currentUserPassword": {
+                "label": "Your password",
+                "help": "Enter your password to validate this action"
+            },
+            "confirmpassword": {
+                "label": "user's password confirm",
+                "help": "password confirm for the edited user"
+            },
+            "password": {
+                "label": "User's new password",
+                "help": "New password for the edited user"
             }
         }
     },
@@ -1358,6 +1427,29 @@
                 "label": "New embedding model",
                 "help": "Select the supplier to add a new embedding model capable of doing semantical indexing of contents",
                 "placeholder": "Select the supplier to add a new embedding model capable of doing semantical indexing of contents"
+            },
+            "ranker": {
+                "label": "New rerank model",
+                "help": "Select the supplier to add a new reranker model",
+                "placeholder": "Select the supplier to add a new reranker model"
+            },
+            "NewRerankerModelConfigurationBtn": {
+                "label": "New reranker model configuration"
+            },
+            "CodeHeader3": {
+                "label": "Code"
+            },
+            "DescriptionHeader3": {
+                "label": "Description"
+            },
+            "ModelProviderHeader3": {
+                "label": "Model provider"
+            },
+            "ModelHeader3": {
+                "label": "Model "
+            },
+            "RerankerModelsZone": {
+                "label": "Configured rerank models"
             }
         }
     },
@@ -1900,6 +1992,52 @@
             "apiSecretCode": {
                 "label": "Embedding model  API token",
                 "help": "Choose the Embedding model  API token to be used for this model"
+            },
+            "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
+                "summary": "OK!",
+                "detail": "Operation done successfully"
+            }
+        },
+        "GenericOpenAIRankerModelConfig": {
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "TitleFragment": {
+                "label": "Editing ranking model provider:"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the model configuration"
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the model configuration"
+            },
+            "baseUrl": {
+                "label": "ranking model  API base server address",
+                "help": "Base address of ranking model ."
+            },
+            "apiSecretCode": {
+                "label": "ranking model  API token",
+                "help": "Choose the ranking model  API token to be used for this model (optional)"
+            },
+            "choosedModel": {
+                "label": "ranking model  ranking model choice",
+                "help": "Choose the ranking model  ranking model to work with."
+            },
+            "defaultModel": {
+                "label": "set this as default ranking model",
+                "help": "If true this will be used as default ranking model where ranking model is not indicated"
+            },
+            "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
+                "summary": "OK!",
+                "detail": "Operation done successfully"
             }
         }
     },
@@ -1999,6 +2137,12 @@
             },
             "DataSourceChoicesArea": {
                 "label": "Choosed systems"
+            },
+            "wordExport": {
+                "help": "Export response to Word"
+            },
+            "pdfExport": {
+                "help": "Export response to PDF"
             }
         },
         "ChangeDescriptionComponent": {
@@ -2092,6 +2236,9 @@
             },
             "USER_CHOOSED_AGENT": {
                 "label": "Executing your choosed agent"
+            },
+            "PureSearchProcessingDocument": {
+                "label": "Processing document:"
             }
         },
         "ChatPipelinesMenu": {
@@ -2136,6 +2283,9 @@
             },
             "DEEP_SEARCH_RESPONSE.jira": {
                 "label": "Deep search/Jira Search"
+            },
+            "PURE_SEARCH": {
+                "label": "Assisted search"
             }
         }
     },
@@ -2284,7 +2434,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 128000 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 30000 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -2716,6 +2866,14 @@
             "prompt": {
                 "label": "Prompt",
                 "help": "Edit the prompt for the retrieve augmented generation sessions."
+            },
+            "manualThreasholdsConfiguration": {
+                "label": "Manual or Autotuned threashold configuration",
+                "help": "Use manual distance threashold instead of Autotune it"
+            },
+            "useAlsoKeywordSearch": {
+                "label": "Use keyword search when available",
+                "help": "Run keyword searches additional to semantic searches if they are configured in this installation"
             }
         }
     },
@@ -2883,6 +3041,9 @@
             },
             "ChatWithDocsBtnNew": {
                 "help": "Browse or search and select documents to chat with"
+            },
+            "FULL_DOCS_LIST_WINDOW": {
+                "label": "Selected Documents"
             }
         },
         "GeboAISearchDocumentsComponent": {
@@ -3015,7 +3176,8 @@
                 "label": "Chat"
             },
             "setupMenuItem": {
-                "label": "Setup"
+                "label": "Setup",
+                "help": "Setup is incomplete, please consider press here and manage it"
             },
             "adminMenuItem": {
                 "label": "Admin"
@@ -3335,22 +3497,6 @@
             "enableAllFunctions": {
                 "label": "enable all function calls",
                 "help": "Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel"
-            },
-            "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757": {
-                "summary": "Exception during operation:Anthropic api cannot work without needed api key configuration",
-                "detail": "Server error: Anthropic api cannot work without needed api key configuration"
-            },
-            "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
-                "summary": "AI remote provider OK",
-                "detail": "Provider is up and running and successfully configured"
-            },
-            "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd": {
-                "summary": "Exception during operation:401 UNAUTHORIZED",
-                "detail": "Server error: 401 UNAUTHORIZED"
-            },
-            "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269": {
-                "summary": "Exception during operation:Missing basePath",
-                "detail": "Server error: Missing basePath"
             }
         },
         "GeboAIEasyVendorConfigurationComponent": {
@@ -3430,6 +3576,26 @@
             "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757": {
                 "summary": "Exception during operation:Anthropic api cannot work without needed api key configuration",
                 "detail": "Server error: Anthropic api cannot work without needed api key configuration"
+            },
+            "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e": {
+                "summary": "Exception during operation:Error working with url:http://localhost:11434/v1/models",
+                "detail": "Server error: Error working with url:http://localhost:11434/v1/models"
+            },
+            "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2": {
+                "summary": "Error while streaming chat respose",
+                "detail": "Server error: 400 Bad Request from POST http://localhost:8000/v1/chat/completions"
+            },
+            "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532": {
+                "summary": "Exception during operation:Error working with url:http://localhost:8000/v1/models",
+                "detail": "Server error: Error working with url:http://localhost:8000/v1/models"
+            },
+            "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08": {
+                "summary": "Exception during operation:Error working with url:https://api.openai.com/v1/models",
+                "detail": "Server error: Error working with url:https://api.openai.com/v1/models"
+            },
+            "fileExportLoaded": {
+                "summary": "File exported",
+                "detail": "Go to browser downloads section"
             }
         }
     },
@@ -3767,10 +3933,6 @@
             "APIKEY_CREATED_OK": {
                 "summary": "Credentials created",
                 "detail": "Credentials successfully created"
-            },
-            "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6": {
-                "summary": "Error comunicating with  Ollama server ",
-                "detail": "Netork error comunicating to the remote system accessing content\n models list Error working with url:nullapi/tags"
             }
         }
     },
@@ -3781,6 +3943,87 @@
             },
             "INTERNAL_SERVICES": {
                 "description": "Model used for internal services"
+            }
+        }
+    },
+    "GeboAIAgentsAdminModule": {
+        "GAgentConfig": {
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "UseChatModelLabel": {
+                "label": "Agent used chat model"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "GeneralInfosTab": {
+                "label": "General infos"
+            },
+            "ChooseChatModelRadio": {
+                "label": "choose"
+            },
+            "ChatModelSelect": {
+                "placeholder": "Select a chat model configuration"
+            },
+            "defaultChatModel-help": {
+                "label": " Use system default chat model to perform the Agent's task or specify one. "
+            },
+            "LanguageModelTab": {
+                "label": "Large language model & usable tools settings"
+            },
+            "SecurityAccessSettingsTab": {
+                "label": "Security access settings"
+            },
+            "MainPanel": {
+                "label": "Editing Agent configuration"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter chat Agent description."
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the Agent."
+            },
+            "agentServiceId": {
+                "label": "Agent service type",
+                "help": "Choose the Agent service type will be run."
+            },
+            "defaultConfiguration": {
+                "label": "Default Agent configuration",
+                "help": "Set this as default configuration for this Agent service type"
+            },
+            "mainLoopPromptUseCode": {
+                "label": "Choose main loop prompt template",
+                "help": "Choose the Agent main loop prompt."
+            },
+            "maxLoopIterations": {
+                "label": "Max number of Agent loops",
+                "help": "Set the maximum number of Agent loops (this will result in a much refined result)."
+            },
+            "subscribeAllTools": {
+                "label": "Enable all available tools",
+                "help": "When this flag is checked all the available tools will be assigned when this agents run"
+            },
+            "enabledFunctions": {
+                "label": "Enabled functions call for this Agent",
+                "help": "Functionalities that could be used by the Agent while performing its work"
+            },
+            "temperature": {
+                "label": "Temperature",
+                "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
+            },
+            "thinking": {
+                "label": "Thinking efforts",
+                "help": "Configure thinking efforts the model will do (not all model supports this)"
+            },
+            "topP": {
+                "label": "TopP",
+                "help": "TopP parameter, from 0 to 1 (if unsure leave empty)"
             }
         }
     }
