@@ -57,6 +57,7 @@ interface GeboChatInteraction {
  * including the model information, response content, and any referenced documents.
  */
 interface GeboChatTemplatedResponse {
+    id?: string;
     userChatContextCode?: string;
     usedChatModelCode?: string;
     usedChatModelProvider?: string;
@@ -380,7 +381,39 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             this.chatInputShell.switchToChatWithDocuments();
         }
     }
-
+    public exportResponse(userContextCode: string | undefined, responseId: string | undefined, format: string) {
+        if (!userContextCode || !responseId) {
+            console.error("Cannot export response: userContextCode or responseId is missing", { userContextCode, responseId });
+            return;
+        }
+        const url = `${this.basePath}/api/users/GeboUserChatsController/exportResponse2file`;
+        const params = {
+            userContextCode: userContextCode,
+            responseId: responseId,
+            format: format
+        };
+        this.httpClient.get(url, {
+            params: params,
+            responseType: 'blob',
+            withCredentials: true
+        }).subscribe({
+            next: (blob: Blob) => {
+                const filename = format === 'PDF' ? 'export.pdf' : 'export.docx';
+                const fileURL = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = fileURL;
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(fileURL);
+            },
+            error: (err) => {
+                console.error("Error exporting response:", err);
+            }
+        });
+    }
     /**
      * Handles changes to input properties
      * Loads model info and chat history when chatInfo changes
