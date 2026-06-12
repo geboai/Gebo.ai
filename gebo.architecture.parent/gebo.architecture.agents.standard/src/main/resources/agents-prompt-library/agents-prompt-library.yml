@@ -1,0 +1,28 @@
+ai.gebo.agents.prompts.library:
+  - promptUse: controller-coordinator-agent-prompt
+    langCode: en
+    systemReference: /agents-prompt-library/en/controller-coordinator-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/controller-coordinator-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: controllerAgent
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: REQUIRED
+  - promptUse: report-answer-writer-agent-prompt
+    langCode: en
+    systemReference: /agents-prompt-library/en/report-answer-writer-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: writerAgent
+    chatHistory: NOT_REQUIRED
+    contextDocuments: NOT_REQUIRED
+    toolsCalling: NOT_REQUIRED
+  - promptUse: internal-knowledgebase-search-agent-prompt
+    langCode: en
+    systemReference: /agents-prompt-library/en/internal-knowledgebase-search-agent-system-prompt.txt
+    userReference: /agents-prompt-library/en/internal-knowledgebase-search-agent-user-prompt.txt
+    agentPrompt: true
+    agentId: internalKnowledgeBaseSearcher
+    chatHistory: REQUIRED
+    contextDocuments: REQUIRED
+    toolsCalling: NOT_REQUIRED
