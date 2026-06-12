@@ -115,7 +115,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					.getLoaded();
 			typesMap.put(coordAgent, dynamicType);
 		}
-		params.put(FORMAT, super.buildRootJsonSchema(typesMap));
+		params.put(FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> messagesInOrder = new TreeMap<>();

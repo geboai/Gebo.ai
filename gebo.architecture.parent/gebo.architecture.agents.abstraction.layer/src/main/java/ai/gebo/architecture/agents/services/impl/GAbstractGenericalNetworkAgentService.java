@@ -30,17 +30,18 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 
 	public static final String AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM = "AGENT_COMUNICATION_CAPABILITY";
 	public static final String AGENT_IDENTITY_TEMPLATE_PARAM = "AGENT_IDENTITY";
+	public static final String INPUT_TEMPLATE_PARAM = "INPUT";
+	public static final String NETWORK_SCENARY_TEMPLATE_PARAM = "NETWORK_SCENARY";
+	public static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
+	public static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
+	public static final String FORMAT_TEMPLATE_PARAM = "format";
+
 	private static final String DESCRIPTION_OF_YOUR_ROLE = "Description of your role: ";
 	private static final String NEWLINE = "\r\n";
 	private static final String YOU_ARE_AN_AGENT_WITH_ROLE = "Your agent role is: ";
 	private static final String THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS = "The description of the network scenario is: ";
-	public static final String INPUT_TEMPLATE_PARAM = "INPUT";
-	public static final String NETWORK_SCENARY_TEMPLATE_PARAM = "NETWORK_SCENARY";
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
-	public static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
-	public static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
-	public static final String FORMAT = "format";
-
+	
 	public GAbstractGenericalNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {

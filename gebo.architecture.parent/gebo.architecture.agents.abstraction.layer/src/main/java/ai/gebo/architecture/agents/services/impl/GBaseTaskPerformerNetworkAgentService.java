@@ -72,7 +72,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
 			BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
-			params.put(FORMAT, converter.getFormat());
+			params.put(FORMAT_TEMPLATE_PARAM, converter.getFormat());
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
