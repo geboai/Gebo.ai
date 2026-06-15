@@ -31,7 +31,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
-import ai.gebo.llms.chat.agent.IChatAgentService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -96,7 +95,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
-	private final IChatAgentService chatAgentService;
+	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID = "IKB_SYSTEM";
@@ -182,8 +181,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		final Map<String, Object> environmentMap = new HashMap<String, Object>();
 		Map<String, List<String>> decisionMap = new HashMap<>();
 		final boolean defaultPipelineIsChatAgent = this.chatPipelinesConfig.isDefaultPipelineStepIsChatAgent();
-		if (this.chatAgentService.getDefaultConfiguration().isEmpty() || !defaultPipelineIsChatAgent) {
-			//GO ON WITH INTELLIGENT ROUTER
+		if (!this.chatAgentService.isDefaultPipelineStreamingDefined()) {
+			// GO ON WITH INTELLIGENT ROUTER
 			GPromptTemplateConfig _prompt = this.promptsDao
 					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 
@@ -247,8 +246,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			environmentMap.putAll(params);
 			environmentMap.putAll(decisionMap);
 		} else {
-			//GO ON WITH INTELLIGENT ROUTER
-			decision = RespondingWith.CHAT_AGENT;
+			// GO ON WITH INTELLIGENT ROUTER
+			decision = RespondingWith.DELEGATED_AGENT;
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing decision object:" + decision + " decisionMap:" + decisionMap);
@@ -555,8 +554,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		case PURE_SEARCH: {
 			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
-		case CHAT_AGENT: {
-			return List.of(DefaultPipelineStreamingAgenticStepServiceImpl.AGENTIC_CHAT_STEP_SERVICE);
+		case DELEGATED_AGENT: {
+			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

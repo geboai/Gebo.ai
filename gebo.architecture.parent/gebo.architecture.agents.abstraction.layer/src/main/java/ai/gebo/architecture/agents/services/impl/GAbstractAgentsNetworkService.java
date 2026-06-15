@@ -130,12 +130,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 				}
 			}
-			/*
-			 * for (List<AgentsExchangeMessage<?>> parallelExecs : deliveryOrder.values()) {
-			 * OutputType loopOutput = executeNetworkLoopsGroup(chatRequestContext,
-			 * notificationSink, network, agentsDao, session, parallelExecs, outputType,
-			 * runAs); if (loopOutput != null) { output = compose(output, loopOutput); } }
-			 */
+			
 
 		}
 
