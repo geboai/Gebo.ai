@@ -1,9 +1,10 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.llms.agent.standard.services;
 
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.impl.GBaseRoutingNetworkAgentService;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;

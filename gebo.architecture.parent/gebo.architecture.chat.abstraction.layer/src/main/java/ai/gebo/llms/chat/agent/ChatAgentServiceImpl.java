@@ -12,11 +12,18 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
+import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
+import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.impl.GAbstractReactiveAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -76,20 +83,26 @@ public class ChatAgentServiceImpl extends
 	}
 
 	@Override
-	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(
-			ChatPipelineExecutionRuntimeData runtimeData, List<GeboChatResponse> pastResponses,
-			IGConfigurableChatModel agentModel, GAgentConfig agentConfig, GAgentRole agentRole, int i, int maxLoop,
-			GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs, ToolCallsListener callsListener)
-			throws LLMConfigException {
-		String loopHistory = createCycleHistoryVariable(pastResponses, runtimeData);
+	public Flux<IGPartialOperation<GeboChatMessageEnvelope>> execute(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, ChatPipelineExecutionRuntimeData runtimeData, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink<GeboChatMessageEnvelope> notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope> privateMemory,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws AgentException, LLMConfigException {
+		String loopHistory = createCycleHistoryVariable(privateMemory, runtimeData);
 		final GeboChatResponse response = runtimeData.getChatResponse();
+		final int maxLoop = network.getMaxLoopIteration();
+		final int i = privateMemory.getInteractions().size();
 		Map<String, Object> params = new HashMap<>();
 		params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopHistory);
 		params.put(CURRENT_ITERATION_PROMPT_PARAM, "" + i);
 		params.put(MAX_ITERATIONS_PROMPT_PARAM, "" + maxLoop);
 		params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 		params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-
+		final ToolCallsListener callsListener = new ToolCallsListener();
+		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, null, runAs);
+		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
+				agentConfig.getMainLoopPromptUseCode(), false);
 		final IChatRequestContext sampledContext = runtimeData.getRequestResources().createChatRequestContext();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			final StringBuffer cumulatedContent = new StringBuffer();
@@ -121,14 +134,14 @@ public class ChatAgentServiceImpl extends
 		});
 	}
 
-	protected List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
-
-		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
-				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
-	}
-
-	private String createCycleHistoryVariable(List<GeboChatResponse> pastResponses,
+	protected String createCycleHistoryVariable(
+			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope> privateMemory,
 			ChatPipelineExecutionRuntimeData runtimeData) {
+		List<GeboChatResponse> pastResponses = new ArrayList<GeboChatResponse>();
+		for (AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope>.AgentInteraction interaction : privateMemory
+				.getInteractions()) {
+			pastResponses.add((GeboChatResponse) interaction.getOutput().getContent());
+		}
 		StringBuffer buffer = new StringBuffer();
 		int index = 0;
 		for (GeboChatResponse geboChatResponse : pastResponses) {
@@ -153,8 +166,14 @@ public class ChatAgentServiceImpl extends
 		return buffer.toString();
 	}
 
+	protected List<CalledFunction> renderFunctions(List<ToolCallExecuted> calls) {
+
+		return calls != null ? calls.stream().map(x -> new CalledFunction(x.getName(), x.getToolDescription(),
+				List.of(), x.getToolInput() != null ? List.of(x.getToolInput()) : List.of())).toList() : List.of();
+	}
+
 	@Override
-	protected Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> createRAggregator(
+	protected Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> createAggregator(
 			AtomicReference<List<GeboChatResponse>> aggregatorList) {
 		Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>> aggregator = new Function<IGPartialOperation<GeboChatMessageEnvelope>, IGPartialOperation<GeboChatMessageEnvelope>>() {
 
@@ -167,6 +186,15 @@ public class ChatAgentServiceImpl extends
 			}
 		};
 		return aggregator;
+	}
+
+	@Override
+	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(ChatPipelineExecutionRuntimeData request,
+			List<GeboChatResponse> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
+			GAgentRole agentRole, Integer index, int maxLoop, GPromptTemplateConfig agentPrompt,
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

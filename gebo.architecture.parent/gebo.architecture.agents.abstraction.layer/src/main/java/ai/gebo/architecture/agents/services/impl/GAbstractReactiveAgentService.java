@@ -21,17 +21,23 @@ import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGReactiveAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModelConfigOptions;
@@ -44,8 +50,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
-		extends
-		GAbstractAgentService<RequestType, Flux<IGPartialOperation<ResponseType>>, NotificationObject, AggregatedResponses>
+		extends GAbstractGenericalAgentService
 		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
 	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
@@ -55,9 +60,13 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 	}
 
 	@Override
-	public Flux<IGPartialOperation<ResponseType>> execute(RequestType request, GAgentConfig agentConfig,
-			INotificationSink<NotificationObject> notificationSink) throws AgentException, LLMConfigException {
-		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
+			throws AgentException, LLMConfigException {
+		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...)");
 		}
@@ -87,7 +96,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
-				: 4;
+				: 4; 
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
@@ -105,9 +114,9 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 								}
 								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
 								Flux<IGPartialOperation<ResponseType>> iteration = createResponse(request,
-										pastResponses, agentModel, agentConfig, agentRole, index, maxLoop,
-										agentPrompt, runAs, callBacksListener);
-								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createRAggregator(
+										pastResponses, agentModel, agentConfig, agentRole, index, maxLoop, agentPrompt,
+										runAs, callBacksListener);
+								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
 										aggregatedResponses);
 
 								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
@@ -136,15 +145,12 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		return out;
 	}
 
-	@Override
-	protected final BiFunction<Flux<IGPartialOperation<ResponseType>>, List<AggregatedResponses>, AggregatedResponses> createAggregator(
-			List<AggregatedResponses> aggregatorList) {
+	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(RequestType request,
+			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
+			GAgentRole agentRole, Integer index, int maxLoop, GPromptTemplateConfig agentPrompt,
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener);
 
-		return null;
-	}
-
-	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createRAggregator(
+	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
 			AtomicReference<List<AggregatedResponses>> aggregatorList);
 
-	
 }

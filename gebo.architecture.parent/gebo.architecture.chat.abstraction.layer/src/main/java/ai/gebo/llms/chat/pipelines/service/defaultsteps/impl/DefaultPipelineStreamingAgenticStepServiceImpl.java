@@ -64,17 +64,18 @@ public class DefaultPipelineStreamingAgenticStepServiceImpl implements IStreamin
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException,
 			IOException {
 
-		try {
+		//try {
 			final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			Optional<GAgentConfig> configuration = chatAgentService.getDefaultConfiguration();
-			Flux<IGPartialOperation<GeboChatMessageEnvelope>> outFlux = chatAgentService.execute(runtimeData,
-					configuration.get(), new INotificationSink<GeboChatMessageEnvelope>() {
+			Flux<IGPartialOperation<GeboChatMessageEnvelope>> outFlux =null;
+			/*chatAgentService.execute(chatRequestContext,
+					configuration.get(), runtimeData, network, contextAgentPersona, new INotificationSink<GeboChatMessageEnvelope>() {
 						@Override
 						public void next(GeboChatMessageEnvelope state) {
 							sinkUIEmitter.next(state);
 						}
-					});
+					}, session, privateMemory, runAs); */
 			Vector<GeboChatResponse> finalResponse = new Vector<>();
 			return outFlux.map(x -> {
 				GeboChatMessageEnvelope envelope = x.getData();
@@ -97,9 +98,9 @@ public class DefaultPipelineStreamingAgenticStepServiceImpl implements IStreamin
 				});
 
 			});
-		} catch (AgentException e) {
-			throw new GeboChatException("Exception in agentic chat", e);
-		}
+		//} catch (AgentException e) {
+		//	throw new GeboChatException("Exception in agentic chat", e);
+		//}
 
 	}
 

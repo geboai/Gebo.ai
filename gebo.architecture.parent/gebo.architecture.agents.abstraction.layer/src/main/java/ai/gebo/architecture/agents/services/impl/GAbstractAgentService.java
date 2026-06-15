@@ -15,6 +15,10 @@ import org.springframework.ai.tool.definition.ToolDefinition;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
@@ -27,6 +31,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -49,9 +54,9 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Notificat
 	}
 
 	@Override
-	public ResponseType execute(RequestType request, GAgentConfig agentConfig,
-			INotificationSink<NotificationObject> notificationSink) throws AgentException, LLMConfigException {
-		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+	public ResponseType execute(IChatRequestContext chatRequestContext, GAgentConfig agentConfig,
+			RequestType request, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
+		
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...)");
 		}

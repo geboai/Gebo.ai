@@ -1,4 +1,4 @@
-package ai.gebo.llms.agent.standard;
+package ai.gebo.llms.agent.standard.services;
 
 import java.util.List;
 import java.util.Map;

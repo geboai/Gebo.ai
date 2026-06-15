@@ -1,4 +1,4 @@
-package ai.gebo.llms.agent.standard;
+package ai.gebo.llms.agent.standard.services;
 
 import java.util.List;
 import java.util.Map;
@@ -28,46 +28,40 @@ import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
 import ai.gebo.security.services.IGSecurityService;
 
 public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractDocumentsSearchNetworkAgentService {
+	private static final String SEARCH_AGENT_DESCRIPTION = " search agent";
 	public static final String SEARCH_AGENT = "SearchAgent";
 	private final ISearchService<?> wrappedSearchService;
+
 	public DocumentsSearchNetworkAgentServiceWrapper(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao, ISearchService<?> wrappedSearchService) {
+			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
+			ISearchService<?> wrappedSearchService) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
 		this.wrappedSearchService = wrappedSearchService;
 	}
 
-	
-
-	
-
 	@Override
 	public String getId() {
-		
-		return wrappedSearchService.getProductId()+SEARCH_AGENT;
+
+		return wrappedSearchService.getProductId() + SEARCH_AGENT;
 	}
 
 	@Override
 	public String getDescription() {
-		
-		return null;
+
+		return wrappedSearchService.getProductId() + SEARCH_AGENT_DESCRIPTION;
 	}
-
-
-
-
 
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network, GAgentRole agentRole,
-			AgentNetworkParticipant contextAgentPersona, AgentsCollaborationSessionContext session,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }
