@@ -10,20 +10,17 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
-
 public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputType>
 		extends GAbstractAgentsNetworkService<InputType, OutputType> {
 
-	
-
 	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRuntimeDao agentsServicesRepository,
-			IAgentRoleDao rolesDao, AgentConfigRepository agentConfigRepo, IGeboThreadManager threadManager,
-			GAgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) {
-		super(agentsServicesRepository, rolesDao, agentConfigRepo, threadManager, network, notificationSink, outputType, runAs,
+			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
+			INotificationSink notificationSink, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) {
+		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, outputType, runAs,
 				agentsDao);
-		// TODO Auto-generated constructor stub
-	    }
+
+	}
 
 	@Override
 	protected <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental) {
@@ -41,6 +38,12 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 	public String getDescription() {
 
 		return "Agent network executor returning last valid output value";
+	}
+
+	@Override
+	public void dispose() {
+		
+		
 	}
 
 }
