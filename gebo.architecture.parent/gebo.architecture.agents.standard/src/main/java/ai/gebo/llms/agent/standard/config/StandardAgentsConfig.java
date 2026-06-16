@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +16,12 @@ import org.springframework.context.annotation.Scope;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentActivationType;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
-import ai.gebo.architecture.agents.services.IGDocumentsSearchNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.architecture.agents.services.IGDynamicAgentServiceSupplier;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
@@ -32,6 +31,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
@@ -42,14 +42,17 @@ import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
+import ai.gebo.llms.agent.chat.service.impl.ChatAgentServiceImpl;
+import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.DocumentsSearchNetworkAgentServiceWrapper;
 import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
-import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.IGSecurityService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.agents.standard")
@@ -66,12 +69,13 @@ public class StandardAgentsConfig {
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
 	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Default agents network for chat purposes";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
+	private static final String DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER = "DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER";
 	private final static Logger LOGGER = LoggerFactory.getLogger(StandardAgentsConfig.class);
 	private final ISearchServiceRepositoryPattern searchServicesRepositoryPattern;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
 	private final IGPromptConfigDao promptsDao;
-	private final IAgentConfigDao configsRepository;
+	private final IGRuntimeBinder runtimeBinder;
 	private final IGSecurityService securityService;
 	private final IAgentRoleDao agentRoleDao;
 	private final IGRankerModelRuntimeConfigurationDao rankersDao;
@@ -80,13 +84,13 @@ public class StandardAgentsConfig {
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 
 			IGRankerModelRuntimeConfigurationDao rankersDao, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGChatModelRuntimeConfigurationDao chatModelsDao,
-			IAgentRoleDao agentRoleDao) {
+			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao,
+			IGRuntimeBinder runtimeBinder) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
 		this.promptsDao = promptsDao;
-		this.configsRepository = configsRepository;
+		this.runtimeBinder = runtimeBinder;
 		this.securityService = securityService;
 		this.agentRoleDao = agentRoleDao;
 		this.rankersDao = rankersDao;
@@ -94,6 +98,19 @@ public class StandardAgentsConfig {
 	}
 
 	@Bean
+	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_PIPELINE_SERVICE)
+	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
+			@Autowired @Qualifier(DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
+			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory) {
+		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+				.getFactory(IGReactiveChatAgentsNetworkService.class);
+
+		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory,
+				networkDataSource);
+	}
+
+	@Bean
+	@Qualifier(DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER)
 	public IDynamicAgentsNetworkDataSource defaultAgentsNetworkDataSource(
 			@Autowired(required = false) @Qualifier(INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER) IGDynamicAgentConfigDataSource internalKnowledgebaseAgentConfigDataSource) {
 		return new IDynamicAgentsNetworkDataSource() {
@@ -108,7 +125,6 @@ public class StandardAgentsConfig {
 
 	@ConditionalOnMissingBean(IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService.class)
 	@Bean
-	@Scope("singleton")
 	@Qualifier(INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER)
 	public IGDynamicAgentConfigDataSource defaultInternalKnowledgeBaseSearch() {
 		final GAgentConfig internalKnowledgeBaseAgentConfig = new GAgentConfig();
@@ -134,7 +150,6 @@ public class StandardAgentsConfig {
 
 	@ConditionalOnMissingBean(IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService.class)
 	@Bean
-	@Scope("singleton")
 	@Qualifier(INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER)
 	public IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService defaultInternalKnowledgeBaseSearchAgentService(
 			IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
@@ -143,8 +158,8 @@ public class StandardAgentsConfig {
 			@Autowired(required = false) IKnowledgeGraphSearchService knowledgeGraphSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
 		return new InternalKnowledgeBaseSearchNetworkAgentService(chatModelsDao, toolsRepositoryPattern, promptsDao,
-				configsRepository, securityService, agentRoleDao, semanticRagThreasholdAutotuneService,
-				semanticSearchDao, fullTextSearch, knowledgeGraphSearchService, knowledgeBaseVisibilityService);
+				securityService, agentRoleDao, runtimeBinder, semanticSearchDao, knowledgeGraphSearchService,
+				knowledgeBaseVisibilityService, fullTextSearch);
 
 	}
 
@@ -202,12 +217,13 @@ public class StandardAgentsConfig {
 	@Bean
 	public IGDynamicAgentConfigDataSource externalSourcesAgentConfigDataSource() {
 
-		final List<ISearchService> implementations = searchServicesRepositoryPattern.getImplementations();
+		
 
 		return new IGDynamicAgentConfigDataSource() {
 
 			@Override
 			public List<GAgentConfig> getConfigurations() {
+				final List<ISearchService> implementations = searchServicesRepositoryPattern.getImplementations();
 				final List<GAgentConfig> agentConfigs = new ArrayList<>();
 				for (ISearchService search : implementations) {
 					try {
@@ -258,9 +274,10 @@ public class StandardAgentsConfig {
 	public IGDynamicAgentConfigDataSource defaultReportWriterConfigDataSource() {
 		if (reporterConfig == null) {
 			reporterConfig = new GAgentConfig();
-			reporterConfig.setCode(TextProcessingTaskPerformerAgentService.TEXT_PROCESSING_AGENT_SERVICE);
-			reporterConfig.setAgentServiceId(TextProcessingTaskPerformerAgentService.TEXT_PROCESSING_AGENT_SERVICE);
-			reporterConfig.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.REPORT_AND_ANSWER_WRITER_AGENT_PROMPT);
+			reporterConfig.setCode(ChatAgentServiceImpl.CHAT_AGENT_SERVICE);
+			reporterConfig.setAgentServiceId(ChatAgentServiceImpl.CHAT_AGENT_SERVICE);
+			reporterConfig
+					.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.REPORT_AND_ANSWER_WRITER_AGENT_PROMPT);
 			reporterConfig.setDescription(REPORTER_AGENT_DESCRIPTION);
 			reporterConfig.setAgentRoleCode(REPORT_WRITER_AGENT);
 		}
@@ -287,13 +304,13 @@ public class StandardAgentsConfig {
 
 						if (search instanceof INativeSearchService nativeSearch) {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
-									chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository,
-									securityService, agentRoleDao, nativeSearch, rankersDao);
+									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
+									runtimeBinder, rankersDao, nativeSearch);
 							outServices.add(nativeWrapper);
 						} else {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
-									chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository,
-									securityService, agentRoleDao, search);
+									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
+									runtimeBinder, search);
 							outServices.add(wrapper);
 						}
 					} catch (SearchServiceException e) {

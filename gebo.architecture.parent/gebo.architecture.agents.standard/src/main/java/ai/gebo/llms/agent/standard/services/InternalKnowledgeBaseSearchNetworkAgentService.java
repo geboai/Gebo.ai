@@ -24,6 +24,7 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
@@ -41,21 +42,20 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractDoc
 	private final IGSemanticSearchDocumentsCachedDao semanticSearchDao;
 	private final IGFullTextSearchDocumentsCachedDao fullTextDao;
 	private final IKnowledgeGraphSearchService knowledgeGraphSearchDao;
-	private final  IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 
 	public InternalKnowledgeBaseSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
-			IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
-			IGSemanticSearchDocumentsCachedDao semanticSearchDao,
-			@Autowired(required = false) IGFullTextSearchDocumentsCachedDao fullTextSearch,
-			@Autowired(required = false) IKnowledgeGraphSearchService knowledgeGraphSearchService,
-			 IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
-		this.fullTextDao = fullTextSearch;
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
+			IGSemanticSearchDocumentsCachedDao semanticSearchDao, IKnowledgeGraphSearchService knowledgeGraphSearchDao,
+			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
+			IGFullTextSearchDocumentsCachedDao fullTextDao) {
+
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
 		this.semanticSearchDao = semanticSearchDao;
-		this.knowledgeGraphSearchDao = knowledgeGraphSearchService;
-		this.knowledgeBaseVisibilityService= knowledgeBaseVisibilityService;
+		this.fullTextDao = fullTextDao;
+		this.knowledgeGraphSearchDao = knowledgeGraphSearchDao;
+		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
 
 	}
 

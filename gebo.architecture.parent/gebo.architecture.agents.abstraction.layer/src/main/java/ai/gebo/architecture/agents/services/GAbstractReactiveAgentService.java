@@ -2,35 +2,23 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.slf4j.Logger;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
-import org.springframework.ai.chat.metadata.ChatResponseMetadata;
-import org.springframework.ai.chat.metadata.Usage;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.tool.ToolCallback;
 
-import ai.gebo.acl.AclGrantType;
-import ai.gebo.architecture.agents.model.GAgentRole;
-import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -46,10 +34,11 @@ import reactor.core.scheduler.Schedulers;
 public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, NotificationObject, AggregatedResponses>
 		extends GAbstractGenericalAgentService
 		implements IGReactiveAgentService<RequestType, ResponseType, NotificationObject> {
+
 	public GAbstractReactiveAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
+			IGRuntimeBinder runtimeBinder, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao);
 
 	}
 

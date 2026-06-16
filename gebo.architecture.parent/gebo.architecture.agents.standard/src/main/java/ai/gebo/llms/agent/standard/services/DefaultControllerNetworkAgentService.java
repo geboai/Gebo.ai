@@ -7,6 +7,7 @@ import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.impl.GBaseRoutingNetworkAgentService;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -18,9 +19,9 @@ public class DefaultControllerNetworkAgentService extends GBaseRoutingNetworkAge
 
 	public DefaultControllerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao, CONTROLLER_AGENT,
-				CONTROLLER_AND_COORDINATOR_AGENT, String.class, Void.class);
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
+				CONTROLLER_AGENT, CONTROLLER_AND_COORDINATOR_AGENT, String.class, Void.class);
 
 	}
 

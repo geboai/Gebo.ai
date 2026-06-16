@@ -11,13 +11,12 @@ import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
@@ -28,6 +27,7 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -43,6 +43,7 @@ import net.bytebuddy.description.type.TypeDescription;
 public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGRoutingNetworkAgentService<InputType, OutputType> {
+
 	private final String id;
 	private final String description;
 	private final Class<InputType> inputType;
@@ -50,9 +51,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	public GBaseRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
-			String id, String description, Class<InputType> inputType, Class<OutputType> outputType) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder, String id,
+			String description, Class<InputType> inputType, Class<OutputType> outputType) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
 		this.id = id;
 		this.description = description;
 		this.inputType = inputType;

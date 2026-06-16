@@ -25,8 +25,9 @@ public class GAgentsNetworkServiceFactoryRepositoryPatternImpl
 
 		return x.getId();
 	}
+
 	@Override
-	public <NetworkService extends IGAgentsNetworkService> IGAgentsNetworkServiceFactory<?, ?, NetworkService> getFactory(
+	public <InputType, OutputType, NetworkService extends IGAgentsNetworkService<InputType, OutputType>> IGAgentsNetworkServiceFactory<InputType, OutputType, NetworkService> getFactory(
 			Class<NetworkService> type) {
 		return findImplementation(x -> x.canHandle(type));
 	}

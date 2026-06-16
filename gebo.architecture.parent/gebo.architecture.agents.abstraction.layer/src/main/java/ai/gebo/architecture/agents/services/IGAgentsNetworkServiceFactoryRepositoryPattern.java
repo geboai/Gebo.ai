@@ -5,6 +5,6 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 public interface IGAgentsNetworkServiceFactoryRepositoryPattern
 		extends IGImplementationsRepositoryPattern<IGAgentsNetworkServiceFactory> {
 
-	<NetworkService extends IGAgentsNetworkService> IGAgentsNetworkServiceFactory<?, ?, NetworkService> getFactory(
+	<InputType,OutputType,NetworkService extends IGAgentsNetworkService<InputType,OutputType>> IGAgentsNetworkServiceFactory<InputType,OutputType, NetworkService> getFactory(
 			Class<NetworkService> type);
 }

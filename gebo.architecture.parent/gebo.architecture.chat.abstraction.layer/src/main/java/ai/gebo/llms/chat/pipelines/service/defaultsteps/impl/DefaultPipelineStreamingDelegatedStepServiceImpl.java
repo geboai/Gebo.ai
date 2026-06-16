@@ -30,7 +30,6 @@ import reactor.core.scheduler.Schedulers;
 @Service
 
 public class DefaultPipelineStreamingDelegatedStepServiceImpl implements IStreamingOutputChatPipelineService {
-	public static final String DEFAULT_PIPELINE_SERVICE = "DEFAULT_PIPELINE_SERVICE";
 	public static final String DEFAULT_CHAT_PIPELINE_STEP_SERVICE = "DEFAULT_CHAT_PIPELINE_SERVICE";
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPipelineStreamingDelegatedStepServiceImpl.class);
 	private final IStreamingOutputChatPipelineService delegatedService;

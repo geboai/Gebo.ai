@@ -1,7 +1,6 @@
 package ai.gebo.architecture.agents.services.impl;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.GAbstractAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;

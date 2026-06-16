@@ -3,11 +3,9 @@ package ai.gebo.architecture.agents.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 public final class AgentsCollaborationSessionContext {

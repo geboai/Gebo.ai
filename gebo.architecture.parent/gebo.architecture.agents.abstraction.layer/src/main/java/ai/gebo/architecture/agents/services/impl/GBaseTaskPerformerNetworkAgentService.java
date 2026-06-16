@@ -8,12 +8,11 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
-import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
@@ -24,6 +23,7 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -31,13 +31,13 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
 public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGNetworkAgentService<InputType, OutputType> {
+
 	protected final Class<InputType> inputType;
 	protected final Class<OutputType> outputType;
 	protected final String id;
@@ -45,28 +45,29 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 
 	public GBaseTaskPerformerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			Class<InputType> inputType, Class<OutputType> outputType, String id, String description) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
 		this.inputType = inputType;
 		this.outputType = outputType;
 		this.id = id;
 		this.description = description;
-
 	}
-
+	
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callBacksListener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener, null);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session, mySessionContext, msg, agentsDao);
+		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
+				mySessionContext, msg, agentsDao);
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {

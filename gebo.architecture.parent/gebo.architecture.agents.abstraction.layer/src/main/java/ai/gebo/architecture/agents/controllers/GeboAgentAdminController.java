@@ -18,7 +18,6 @@ import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

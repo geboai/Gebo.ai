@@ -6,14 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.repository.AgentsNetworkRepository;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
-import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.architecture.persistence.GDynamicConfigurationSourceAdapter;

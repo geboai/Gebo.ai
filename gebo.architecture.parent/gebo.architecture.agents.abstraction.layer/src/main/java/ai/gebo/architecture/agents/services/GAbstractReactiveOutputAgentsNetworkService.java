@@ -1,7 +1,6 @@
 package ai.gebo.architecture.agents.services;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;

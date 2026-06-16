@@ -1,8 +1,6 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
-import ai.gebo.architecture.agents.services.GAbstractAgentsNetworkService;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -14,7 +12,6 @@ import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import reactor.core.publisher.Flux;
 
 public class GReactiveChatAgentsNetworkService
 		extends GAbstractReactiveOutputAgentsNetworkService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope>

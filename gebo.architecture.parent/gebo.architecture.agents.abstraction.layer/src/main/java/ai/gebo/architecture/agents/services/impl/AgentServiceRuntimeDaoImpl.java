@@ -6,12 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.agents.services.IGReactiveAgentService;
-import ai.gebo.architecture.agents.services.IGAgentService;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGDynamicAgentServiceSupplier;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
-import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 

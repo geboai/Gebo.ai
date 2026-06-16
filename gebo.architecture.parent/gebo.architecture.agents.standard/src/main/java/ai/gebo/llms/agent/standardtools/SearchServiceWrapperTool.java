@@ -1,6 +1,5 @@
 package ai.gebo.llms.agent.standardtools;
 
-import java.util.List;
 import java.util.function.BiFunction;
 
 import org.springframework.ai.chat.model.ToolContext;
@@ -11,9 +10,7 @@ import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.agent.standardtools.model.SearchQueryParam;
-import ai.gebo.llms.agent.standardtools.model.SearchResultSample;
 import ai.gebo.llms.agent.standardtools.model.SearchResultSample.SearchResultSampleList;
-import lombok.AllArgsConstructor;
 
 
 public class SearchServiceWrapperTool extends AbstractSearchServiceWrapperTool {

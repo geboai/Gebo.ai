@@ -1,12 +1,8 @@
 package ai.gebo.architecture.agents.model;
 
-import java.util.List;
 import java.util.UUID;
 
-import ai.gebo.application.messaging.model.GBaseMessagePayload;
-import ai.gebo.security.services.ReactiveIdentityUtil;
 import jakarta.validation.constraints.NotNull;
-import jakarta.websocket.Session;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

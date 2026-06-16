@@ -3,8 +3,8 @@ package ai.gebo.architecture.agents.services.impl;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.DefaultToolCallingManager.Builder;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 

@@ -93,7 +93,16 @@
 			<artifactId>gebo.architecture.documents.cache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.standard</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.neo4j</artifactId>
@@ -126,7 +135,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- -->
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<!--
+		https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>

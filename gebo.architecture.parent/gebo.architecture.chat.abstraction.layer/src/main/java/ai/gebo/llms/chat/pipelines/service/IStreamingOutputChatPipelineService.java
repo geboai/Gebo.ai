@@ -13,6 +13,8 @@ import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import reactor.core.publisher.Flux;
 
 public interface IStreamingOutputChatPipelineService extends IChatPipelineStepService {
+	public static final String DEFAULT_PIPELINE_SERVICE = "DEFAULT_PIPELINE_SERVICE";
+
 	@Override
 	default StepType getStepType() {
 		return StepType.OUTPUT;

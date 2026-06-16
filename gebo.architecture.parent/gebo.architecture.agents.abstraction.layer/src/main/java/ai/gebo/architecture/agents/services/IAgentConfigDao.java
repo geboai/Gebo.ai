@@ -5,8 +5,6 @@ import java.util.List;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 public interface IAgentConfigDao extends IGRuntimeConfigurationDao<GAgentConfig> {
 

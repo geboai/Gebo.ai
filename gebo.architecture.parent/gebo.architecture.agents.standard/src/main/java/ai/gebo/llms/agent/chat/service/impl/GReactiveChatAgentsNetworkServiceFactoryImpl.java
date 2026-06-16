@@ -11,7 +11,6 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -26,14 +25,17 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 		GAbstractReactiveOutputAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService>
 		implements IGReactiveChatAgentsNetworkServiceFactory {
+	private static final String _REACTIVE_CHAT_AGENTS_NETWORK_DESCRIPTION = "Default reactive chat network of agents";
+	public static final String REACTIVE_CHAT_AGENTS_NETWORK = "REACTIVE_CHAT_AGENTS_NETWORK";
 	private final IGeboThreadManager threadManager;
 
-	public GReactiveChatAgentsNetworkServiceFactoryImpl(String id, String description, IAgentRoleDao agentRoleDao,
+	public GReactiveChatAgentsNetworkServiceFactoryImpl( IAgentRoleDao agentRoleDao,
 			IGAgentServiceRuntimeDao agentServiceRuntimeDao, IAgentConfigDao agentConfigDao,
 			IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo,
 			IGeboThreadManager threadManager) {
-		super(id, description, IGReactiveChatAgentsNetworkService.class, agentRoleDao, agentServiceRuntimeDao,
-				agentConfigDao, reactiveAgentAdapterFactoryRepo);
+		super(REACTIVE_CHAT_AGENTS_NETWORK, _REACTIVE_CHAT_AGENTS_NETWORK_DESCRIPTION,
+				IGReactiveChatAgentsNetworkService.class, agentRoleDao, agentServiceRuntimeDao, agentConfigDao,
+				reactiveAgentAdapterFactoryRepo);
 		this.threadManager = threadManager;
 
 	}

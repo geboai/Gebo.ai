@@ -11,24 +11,23 @@ import java.util.function.Function;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.agents.model.GAgentRole;
-import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
-import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.model.GAgentRole;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
+import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -36,7 +35,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.chat.service.IChatAgentService;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
@@ -66,9 +64,9 @@ public class ChatAgentServiceImpl extends
 
 	public ChatAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
-
+			IGRuntimeBinder runtimeBinder, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao);
+		
 	}
 
 	@Override

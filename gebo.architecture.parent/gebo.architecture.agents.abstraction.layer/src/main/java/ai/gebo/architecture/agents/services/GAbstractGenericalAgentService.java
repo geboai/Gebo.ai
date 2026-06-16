@@ -9,7 +9,6 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
@@ -20,11 +19,11 @@ import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.impl.AgentToolCallingManagerFactory;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -42,13 +41,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	protected final IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern;
 	protected final IGPromptConfigDao promptsDao;
-	protected final IAgentConfigDao configsDao;
+	protected final IGRuntimeBinder runtimeBinder;
 	protected final IGSecurityService securityService;
 	protected final IAgentRoleDao agentRoleDao;
 
 	@Override
 	public List<GAgentConfig> getAccessibleConfigurations() {
-		List<GAgentConfig> configs = this.configsDao.findByAgentServiceId(getId());
+		IAgentConfigDao configsDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
+		List<GAgentConfig> configs = configsDao.findByAgentServiceId(getId());
 		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
 	}
 
@@ -79,7 +79,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				createToolCallingManager(callBacksListener, allFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		return agentModel;
-	} 
+	}
 
 	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
 			List<String> allFunctions, ReactiveIdentityUtil runAs) {

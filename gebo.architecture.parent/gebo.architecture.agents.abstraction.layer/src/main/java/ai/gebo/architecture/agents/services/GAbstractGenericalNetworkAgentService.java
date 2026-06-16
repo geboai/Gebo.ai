@@ -13,12 +13,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
+import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
-import ai.gebo.architecture.agents.model.GAgentRole;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -38,11 +38,11 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	private static final String YOU_ARE_AN_AGENT_WITH_ROLE = "Your agent role is: ";
 	private static final String THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS = "The description of the network scenario is: ";
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	public GAbstractGenericalNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IAgentConfigDao configsRepository, IGSecurityService securityService, IAgentRoleDao agentRoleDao) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, configsRepository, securityService, agentRoleDao);
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, runtimeBinder, securityService, agentRoleDao);
 
 	}
 

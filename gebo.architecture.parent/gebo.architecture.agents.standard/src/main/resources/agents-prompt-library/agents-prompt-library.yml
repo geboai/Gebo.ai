@@ -13,7 +13,7 @@ ai.gebo.agents.prompts.library:
     systemReference: /agents-prompt-library/en/report-answer-writer-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
     agentPrompt: true
-    agentId: writerAgent
+    agentId: ChatAgentService
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED

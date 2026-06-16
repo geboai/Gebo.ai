@@ -1,11 +1,7 @@
 package ai.gebo.architecture.agents.services;
 
-import java.util.List;
-import java.util.Optional;
-
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
-import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;

@@ -26,13 +26,13 @@ public class StandardAgentsPromptsLibraryConfig {
 	private List<GPromptTemplateLibraryReference> library = null;
 
 	@Bean
-	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
+	public IGStaticPromptsProvider standardAgentsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
 
 		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 
 	@Bean
-	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider(
+	public IGStaticPromptUseInfoProvider standardAgentsPromptsUseInfoProvider(
 			GeboOverriddenPromptsLibrary overridenLibrary) {
 
 		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());

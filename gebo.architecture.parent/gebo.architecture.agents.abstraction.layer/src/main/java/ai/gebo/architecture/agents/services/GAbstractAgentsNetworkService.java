@@ -1,7 +1,6 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,11 +13,10 @@ import java.util.function.Supplier;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.GAgentsNetwork;
-import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
-import ai.gebo.architecture.agents.repository.AgentConfigRepository;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
