@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,12 +19,6 @@ import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
-import ai.gebo.architecture.agents.services.AgentException;
-import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkService;
-import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -33,16 +27,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkService {
+public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
+		implements IGAgentsNetworkService<InputType, OutputType> {
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
-	private final AgentConfigRepository agentConfigRepo;
 	private final IGeboThreadManager threadManager;
+	private final GAgentsNetwork network;
+	private final INotificationSink notificationSink;
+	private final Class<OutputType> outputType;
+	private final ReactiveIdentityUtil runAs;
+	private final IGAgentsNetworkRuntimeDao agentsDao;
 
 	@Override
-	public <InputType, OutputType> OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			GAgentsNetwork network, INotificationSink notificationSink, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
+	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input)
+			throws AgentException, LLMConfigException {
 		final Map<String, RuntimeAgentInfos> agents = allocateAgents(network);
 		if (network.getAgents() != null || network.getAgents().isEmpty())
 			throw new AgentException("No agents configured");
@@ -59,7 +57,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
 			throw new AgentException(
 					"Network input node does not support a matching type " + input.getClass().getName());
-		final IGAgentsNetworkRuntimeDao agentsDao = IGAgentsNetworkRuntimeDao.of(agents);
+
 		CallsResult<OutputType> iterationResult = null;
 		try {
 			int cycles = 0;
@@ -82,7 +80,7 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 		return iterationResult != null ? iterationResult.getOutput() : null;
 	}
 
-	private <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
+	protected <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
 			CallsResult<OutputType> rowResult) {
 		// TODO Auto-generated method stub
 		return null;
@@ -130,7 +128,6 @@ public abstract class GAbstractAgentsNetworkService implements IGAgentsNetworkSe
 
 				}
 			}
-			
 
 		}
 

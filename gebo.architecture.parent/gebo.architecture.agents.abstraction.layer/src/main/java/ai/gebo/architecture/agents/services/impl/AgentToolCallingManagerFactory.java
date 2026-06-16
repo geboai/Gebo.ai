@@ -18,7 +18,7 @@ public class AgentToolCallingManagerFactory implements ToolCallbackResolver {
 	private final List<ToolCallback> wrapped;
 	private final Map<String, ToolCallback> callMap;
 
-	ToolCallingManager create() {
+	public ToolCallingManager create() {
 		Builder builder = ToolCallingManager.builder();
 		builder.toolCallbackResolver(this);
 		return builder.build();

@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.architecture.agents.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +17,6 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
-import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;

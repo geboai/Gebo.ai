@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.architecture.agents.services;
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +14,6 @@ import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
-import ai.gebo.architecture.agents.services.AgentException;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
-import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
-import ai.gebo.architecture.agents.services.IGDocumentsSearchNetworkAgentService;
-import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;

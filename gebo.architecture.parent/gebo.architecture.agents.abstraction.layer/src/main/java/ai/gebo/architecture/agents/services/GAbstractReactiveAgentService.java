@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +28,6 @@ import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
-import ai.gebo.architecture.agents.services.AgentException;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
-import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
-import ai.gebo.architecture.agents.services.IGReactiveAgentService;
-import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -64,9 +58,9 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
+			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException {
-		
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...)");
 		}
@@ -96,7 +90,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
 				? agentConfig.getMaxLoopIterations()
-				: 4; 
+				: 4;
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());

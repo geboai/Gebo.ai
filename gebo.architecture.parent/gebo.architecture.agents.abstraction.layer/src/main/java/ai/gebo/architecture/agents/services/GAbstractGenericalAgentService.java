@@ -1,4 +1,4 @@
-package ai.gebo.architecture.agents.services.impl;
+package ai.gebo.architecture.agents.services;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +21,7 @@ import org.springframework.ai.tool.ToolCallback;
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
-import ai.gebo.architecture.agents.services.AgentException;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
-import ai.gebo.architecture.agents.services.IAgentRoleDao;
-import ai.gebo.architecture.agents.services.IGGenericAgentService;
+import ai.gebo.architecture.agents.services.impl.AgentToolCallingManagerFactory;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -82,7 +79,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				createToolCallingManager(callBacksListener, allFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		return agentModel;
-	}
+	} 
 
 	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
 			List<String> allFunctions, ReactiveIdentityUtil runAs) {

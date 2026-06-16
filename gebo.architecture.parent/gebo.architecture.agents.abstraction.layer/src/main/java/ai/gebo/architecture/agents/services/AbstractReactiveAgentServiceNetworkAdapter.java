@@ -15,7 +15,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Sinks;
 
 @AllArgsConstructor
 public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType, NotificationObject>
@@ -23,7 +23,8 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	private final IGReactiveAgentService<RequestType, ResponseType, NotificationObject> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
-	private final FluxSink<IGPartialOperation<ResponseType>> sink;
+
+	private final Sinks.Many<IGPartialOperation<ResponseType>> sink;
 
 	@Override
 	public String getId() {
@@ -59,12 +60,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
+			throws LLMConfigException, AgentException {
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
-				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs, agentsDao);
+				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
-			sink.next(x);
+			sink.emitNext(x, null);
 			return x;
 		});
 		List<IGPartialOperation<ResponseType>> buffered = duplicatedFlux.collectList().block();

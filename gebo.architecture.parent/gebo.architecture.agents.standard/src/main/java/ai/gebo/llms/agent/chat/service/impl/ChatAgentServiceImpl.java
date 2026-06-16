@@ -20,11 +20,11 @@ import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
-import ai.gebo.architecture.agents.services.impl.GAbstractReactiveAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -89,7 +89,7 @@ public class ChatAgentServiceImpl extends
 			AgentNetworkParticipant contextAgentPersona, INotificationSink<GeboChatMessageEnvelope> notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope> privateMemory,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws AgentException, LLMConfigException {
+			ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
 		String loopHistory = createCycleHistoryVariable(privateMemory, runtimeData);
 		final GeboChatResponse response = runtimeData.getChatResponse();
 		final int maxLoop = network.getMaxLoopIteration();

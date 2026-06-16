@@ -16,6 +16,6 @@ public interface IGReactiveAgentService<RequestType, ResponseType, NotificationO
 	Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext, GAgentConfig agentConfig,
 			RequestType request, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink<NotificationObject> notificationSink, AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
+			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException;
 }

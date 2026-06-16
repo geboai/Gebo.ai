@@ -1,4 +1,4 @@
-package ai.gebo.llms.agent.chat.service;
+package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.List;
 
@@ -8,15 +8,15 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Sinks;
 
 public class ChatAgentServiceNetworkAdapter extends
 		ai.gebo.architecture.agents.services.AbstractReactiveAgentServiceNetworkAdapter<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope> {
-
 	public ChatAgentServiceNetworkAdapter(
 			IGReactiveAgentService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope> service,
-			Class<ChatPipelineExecutionRuntimeData> inputType, Class<GeboChatMessageEnvelope> outputType,
-			FluxSink<IGPartialOperation<GeboChatMessageEnvelope>> sink) {
-		super(service, inputType, outputType, sink);
+
+			Sinks.Many<IGPartialOperation<GeboChatMessageEnvelope>> sink) {
+		super(service, ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, sink);
 
 	}
 
