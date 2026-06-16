@@ -1,31 +1,21 @@
 package ai.gebo.architecture.agents.services;
 
-import java.util.List;
-import java.util.Optional;
-
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
-import ai.gebo.architecture.agents.model.IGPartialOperation;
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import reactor.core.publisher.Flux;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 
-public interface IGAgentService<RequestType, ResponseType, NotificationObject> {
-	public String getId();
+public interface IGAgentService<RequestType, ResponseType, NotificationObject> extends IGGenericAgentService {
+	
 
-	public String getDescription();
+	public ResponseType execute(IChatRequestContext chatRequestContext, GAgentConfig agentConfig,
+			RequestType request, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException;
 
-	public String getDefaultLoopPromptUseCode();
+	
 
-	public String getDefaultCompleteEvaluationPromptUseCode();
-
-	public Flux<IGPartialOperation<ResponseType>> execute(RequestType request, GAgentConfig agentConfig,
-			INotificationSink<NotificationObject> notificationSink) throws AgentException, LLMConfigException;
-
-	public List<GAgentConfig> getAccessibleConfigurations();
-
-	public default Optional<GAgentConfig> getDefaultConfiguration() {
-		List<GAgentConfig> configs = getAccessibleConfigurations();
-		return configs.stream().filter(x -> x.getDefaultConfiguration() != null && x.getDefaultConfiguration())
-				.findFirst();
-	}
-
+	
 }

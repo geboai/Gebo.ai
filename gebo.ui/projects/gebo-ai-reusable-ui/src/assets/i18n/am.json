@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ውሎቹን እቀበላለሁ",
         "help" : "እዚህ በመጫን የፈቃዱን ውሎች እና መመሪያዎች ትቀበላላችሁ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "አድሚን ተጠቃሚ ተፈጥሯል !",
+        "detail" : "አድሚን ተጠቃሚ PAOLO.ZAVALLONI@GMAIL.COM በተሳካ ሁኔታ ተፈጥሯል"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "የGebo.ai መዋቅር አንዳንድ አስፈላጊ ደረጃዎች ተጎድቷል",
         "detail" : "ወደቀዩት ደረጃዎች እባክዎ ይመልከቱ"
+      },
+      "agentSetupSection" : {
+        "label" : "የወኪል አገልግሎቶች ያቀናብሩ",
+        "description" : "የወኪል አገልግሎቶችንና ያሉትን መሳሪያዎች ያቀናብሩ"
+      },
+      "AgentAddBtn" : {
+        "label" : "ወኪል ያክሉ"
+      },
+      "MainPanel" : {
+        "label" : "ወኪሎችን አቀናብር"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የ ቅኝት ኮድ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "EditAgentBtn" : {
+        "label" : "ወኪል አርትዕ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ትልቅ ቋንቋ ሞዴሎች መዋቅር"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "የአስተዳደር ስህተት በተግባር ላይ፡ የቬክተር ማከማቻ ወይም የሞዴል ቅንብር ማድረግ አልተቻለም፡ 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "የሰርቨር ስህተት፡ የቬክተር ማከማቻ ወይም የሞዴል ቅንብር ማድረግ አልተቻለም፡ 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "ተጠቃሚዎች"
+      },
+      "searchNameInput" : {
+        "placeholder" : "ስም ይፈልጉ"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "የተጠቃሚ ስም ይፈልጉ"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ፈልግ"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ሚና ይምረጡ"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "የቤተሰብ ስም ይፈልጉ"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "የተጠቃሚዎች ዝርዝር",
         "help" : "በቡድኑ ውስጥ ተሳትፎ የሚያደርጉ ተጠቃሚዎችን ይምረጡ"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "የተጠቃሚውን የፕስዎርድ ይቀይሩ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ቀይር"
+      },
+      "username" : {
+        "label" : "የተጠቃሚ ስም",
+        "help" : "ይህን ተግባር ለማረጋገጥ የራስዎን የፕስዎርድ ያስገቡ"
+      },
+      "currentUserPassword" : {
+        "label" : "የእርስዎ የፕስዎርድ",
+        "help" : "ይህን ተግባር ለማረጋገጥ የራስዎን የፕስዎርድ ያስገቡ"
+      },
+      "confirmpassword" : {
+        "label" : "የተጠቃሚውን የፕስዎርድ ማረጋገጫ",
+        "help" : "እንደገና መረጋገጫ የሚል ቃል ለተሻሻለው ተጠቃሚ"
+      },
+      "password" : {
+        "label" : "የተጠቃሚው አዲስ ፕስዎርድ",
+        "help" : "ለተቀየረው ተጠቃሚ አዲስ ፕስዎርድ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "አዲስ የማስገባት ሞዴል",
         "help" : "የይዘቱን በስሜንታል መስርያ ማድረግ የሚችል አዲስ የማስገባት ሞዴል ለማከል አቅራቢውን ይምረጡ",
         "placeholder" : "የይዘቱን በስሜንታል መስርያ ማድረግ የሚችል አዲስ የማስገባት ሞዴል ለማከል አቅራቢውን ይምረጡ"
+      },
+      "ranker" : {
+        "label" : "አዲስ የማደራጀት ሞዴል",
+        "help" : "አዲስ የማደራጀት ሞዴል ለማክል አቅራቢ ይምረጡ",
+        "placeholder" : "አዲስ የማደራጀት ሞዴል ለማክል አቅራቢ ይምረጡ"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "አዲስ የማደራጀት ሞዴል ቅንብር"
+      },
+      "CodeHeader3" : {
+        "label" : "ኮድ"
+      },
+      "DescriptionHeader3" : {
+        "label" : "መግለጫ"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "የሞዴል አቅራቢ"
+      },
+      "ModelHeader3" : {
+        "label" : "ሞዴል "
+      },
+      "RerankerModelsZone" : {
+        "label" : "የተቀናበሩ የማደራጀት ሞዴሎች"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "እተጋጠሚ ሞዴል  API ቶክን",
         "help" : "ለዚህ ሞዴል የሚጠቀምበት እተጋጠሚ ሞዴል  API ቶክን ይምረጡ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ!",
+        "detail" : "ተግባሩ በተሳካ ሁኔታ ተፈጥሯል"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "TitleFragment" : {
+        "label" : "የማደራጀት ሞዴል አቅራቢን በቀይር፦"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴል ቅንብር መግለጫ ያስገቡ"
+      },
+      "code" : {
+        "label" : "በብቸኝነት ኮድ",
+        "help" : "በራስ ሰርኦ የተፈጠረ የሞዴሉ ቅንብር በብቸኝነት ኮድ"
+      },
+      "baseUrl" : {
+        "label" : "የማደራጀት ሞዴል  API የመሠረት ተገናኝ አድራሻ",
+        "help" : "የማደራጀት ሞዴል መሠረት አድራሻ።"
+      },
+      "apiSecretCode" : {
+        "label" : "የማደራጀት ሞዴል  API ማስታወቂያ",
+        "help" : "ለዚህ ሞዴል የማደራጀት ሞዴል API ማስታወቂያ ይምረጡ (አማራጭ)"
+      },
+      "choosedModel" : {
+        "label" : "የማደራጀት ሞዴል ሞዴል ምርጫ",
+        "help" : "ለማስራት የሚፈልጉትን የማደራጀት ሞዴል ምረጡ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ የመደበኛ የማደራጀት ሞዴል ያድርጉ",
+        "help" : "ካልተገለጸ የማደራጀት ሞዴል በሌላ ቦታ ሲያገለግል፣ ይህ እንደ መደበኛ ይገባል"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ!",
+        "detail" : "ተግባሩ በተሳካ ሁኔታ ተፈጥሯል"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "የተመረጡ ስርዓቶች"
+      },
+      "wordExport" : {
+        "help" : "ውጤቱን ወደ Word ላክ"
+      },
+      "pdfExport" : {
+        "help" : "ውጤቱን ወደ PDF ላክ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "የተመረጠውን agent በስራ ላይ እያከናወነዋል"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ሰነዱን በሂደት ላይ፦"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ጥልቅ ፍለጋ/Jira ፍለጋ"
+      },
+      "PURE_SEARCH" : {
+        "label" : "የተረዳ ፍለጋ"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "ፕሮምፕት",
         "help" : "ለመረጃ ተበላሽ ትዕዛዝ ክፍለ-ጊዜዎች፣ ፕሮምፕቱን ያስተካክሉ።"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "በእጅ ወይም በራስ ተስተካክል የመለያየት ክልል ቅንብር",
+        "help" : "በእጅ የርቀት ክልል ይጠቀሙ ምንም እንኳ Autotune አይደለም"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "የቁልፍ ቃላት ፍለጋ ከተገናኙ ጊዜ ይጠቀሙ",
+        "help" : "ስለሚገኙት የቁልፍ ቃላት ፍለጋዎች በሰማካዊ ፍለጋዎች ተጨማሪ ይሰሩ ከተተካቹት በዚህ ተጭነት"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "ዶክዩመንቶችን ተመልከት ወይም ፈልገህ ምረጥ ከእነሱ ጋር ይወያዩ"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "የተመረጡ ሰነዶች"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ውይይት"
       },
       "setupMenuItem" : {
-        "label" : "ቅንብር"
+        "label" : "ቅንብር",
+        "help" : "ቅንብሩ አልተጨረሰም፣ እባክዎን እዚህ ይጫኑና ያድርጉት"
       },
       "adminMenuItem" : {
         "label" : "አስተዳዳሪ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "በእንቅስቃሴ ውስጥ ልዩነት : Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ",
         "detail" : "የአገልጋይ ስህተት፦ Anthropic api አስፈላጊውን የ api ቁልፍ ማቅናት ያጣ"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ፋይል ተላከ",
+        "detail" : "ወደ አሳሽ ቅድሚያ ማውረድ ክፍል ይሂዱ"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ለውስጣዊ አገልግሎቶች የተጠቀሰ ሞዴል"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "የወኪል ተጠቃሚ የቻት ሞዴል"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ይምረጡ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "የቻት ሞዴል ቅንብር ይምረጡ"
+      },
+      "defaultChatModel-help" : {
+        "label" : " የወኪል ተግባር ለማከናወን የስርአቱን መደበኛ የቻት ሞዴል ይጠቀሙ ወይም የትውልድ ይምረጡ፡ "
+      },
+      "LanguageModelTab" : {
+        "label" : "የትልቁ ቋንቋ ሞዴልና የሚጠቀሙበት መሳሪያዎች ቅንብር"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "የደህንነት መዳረሻ ቅንብር"
+      },
+      "MainPanel" : {
+        "label" : "የወኪል ቅንብር አርትዕ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የቻት ወኪል መግለጫ ያስገቡ።"
+      },
+      "code" : {
+        "label" : "በብቸኝነት ኮድ",
+        "help" : "በራስ ሰርኦ የተፈጠረ የወኪሉ ቅንብር በብቸኝነት ኮድ"
+      },
+      "agentServiceId" : {
+        "label" : "የወኪል አገልግሎት አይነት",
+        "help" : "የሚሰራውን የወኪል አገልግሎት አይነት ይምረጡ።"
+      },
+      "defaultConfiguration" : {
+        "label" : "የመደበኛ የወኪል ቅንብር",
+        "help" : "ለዚህ የወኪል አገልግሎት አይነት እንደ መደበኛ ቅንብር ይዘው ያድርጉ"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ዋና ሎፕ አትካሄድ ቅጥር ይምረጡ",
+        "help" : "የወኪል ዋና ሎፕ አትካሄድ ይምረጡ።"
+      },
+      "maxLoopIterations" : {
+        "label" : "የወኪል ሎፕ ከፍተኛ ቁጥር",
+        "help" : "የወኪል ሎፕ ብዛት ከፍተኛ ደረጃ ያውሉ (ይህ በዝቅተኛ ውጤት ይቻላል)"
+      },
+      "subscribeAllTools" : {
+        "label" : "ሁሉንም የሚገኙትን መሳሪያዎች አንቀሳቅስ",
+        "help" : "ይህ አሰናክል ሲታይ፣ ሁሉንም የሚገኙ መሳሪያዎች ለዚህ ወኪሎች ተመድበው ይሰጣሉ"
+      },
+      "enabledFunctions" : {
+        "label" : "ለዚህ ወኪል የተፈቀዱት ተግባራት",
+        "help" : "ወኪሉ ሲሰራ የሚጠቀምበት ተግባራት"
+      },
+      "temperature" : {
+        "label" : "እስትንፋስ",
+        "help" : "ሞዴሉ የሚሰጠው እስትንፋስ፣ ከ 0 እስከ 1 (አያስታውቁ ከሆነ ባዶ ይተዉ)"
+      },
+      "thinking" : {
+        "label" : "የተመኘ ሀሳብ",
+        "help" : "ሞዴሉ የሚያደርገውን አስተምህሮ ያስተካክሉ (ሁሉም ሞዴል ይህ አይደግፉትም)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP መተግበሪያ፣ ከ 0 እስከ 1 (አያስታውቁ ከሆነ ባዶ ይተዉ)"
       }
     }
   }

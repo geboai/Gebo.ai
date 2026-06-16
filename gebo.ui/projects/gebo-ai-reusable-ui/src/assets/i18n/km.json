@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ខ្ញុំយល់ព្រមលើលក្ខខណ្ឌ",
         "help" : "ដោយចុចទីនេះ អ្នកយល់ព្រមលើលក្ខខណ្ឌក្នុងអាជ្ញាបណ្ណ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "បានបង្កើតអ្នកគ្រប់គ្រងរួចរាល់! ",
+        "detail" : "បានបង្កើតអ្នកគ្រប់គ្រង PAOLO.ZAVALLONI@GMAIL.COM ដោយជោគជ័យ"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "ការកំណត់ Gebo.ai យោងតាមជំហានចាំបាច់មួយចំនួនត្រូវបានខ្វះ",
         "detail" : "សូមពិនិត្យមើលជំហានពណ៌ក្រហមក្នុងដំណើរការកំណត់"
+      },
+      "agentSetupSection" : {
+        "label" : "កំណត់សេវាកម្ម Agent",
+        "description" : "កំណត់សេវាកម្ម Agent និងឧបករណ៍ដែលអាចប្រើបានរបស់ពួកវា"
+      },
+      "AgentAddBtn" : {
+        "label" : "បន្ថែម agent"
+      },
+      "MainPanel" : {
+        "label" : "រៀបចំ Agents"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "កូដកំណត់"
+      },
+      "DescriptionHeader" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "EditAgentBtn" : {
+        "label" : "កែសម្រួល agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "កំណត់ម៉ូដែលភាសាធំៗ"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "កំហុសពេលប្រតិបត្តិ៖ មិនអាចបង្កើត vector store ឬកើតបញ្ហាកំពុងចាប់ផ្តើម embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "កំហុសម៉ាស៊ីនមេ៖ មិនអាចបង្កើត vector store ឬកើតបញ្ហាកំពុងចាប់ផ្តើម embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "អ្នកប្រើ"
+      },
+      "searchNameInput" : {
+        "placeholder" : "ស្វែងរកនាមខ្លួន"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ស្វែងរកឈ្មោះអ្នកប្រើ"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ស្វែងរក"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ជ្រើសតួនាទី"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "ស្វែងរកនាមត្រកូល"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "បញ្ជីអ្នកប្រើ",
         "help" : "ជ្រើសរើសអ្នកប្រើដែលចូលរួមក្នុងក្រុម"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ប្ដូរ​ពាក្យសម្ងាត់​អ្នកប្រើ"
+      },
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ប្ដូរ"
+      },
+      "username" : {
+        "label" : "ឈ្មោះអ្នកប្រើ",
+        "help" : "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកដើម្បីបញ្ជាក់សកម្មភាពនេះ"
+      },
+      "currentUserPassword" : {
+        "label" : "ពាក្យសម្ងាត់របស់អ្នក",
+        "help" : "បញ្ចូលពាក្យសម្ងាត់របស់អ្នកដើម្បីបញ្ជាក់សកម្មភាពនេះ"
+      },
+      "confirmpassword" : {
+        "label" : "បញ្ជាក់ពាក្យសម្ងាត់អ្នកប្រើ",
+        "help" : "បញ្ជាក់​ពាក្យសម្ងាត់​សម្រាប់​អ្នកប្រើ​ដែលបានកែប្រែ"
+      },
+      "password" : {
+        "label" : "ពាក្យសម្ងាត់​ថ្មី​របស់អ្នកប្រើ",
+        "help" : "ពាក្យសម្ងាត់ថ្មី​សម្រាប់​អ្នកប្រើ​ដែល​បាន​កែប្រែ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "ម៉ូឌែលបញ្ចូលថ្មី",
         "help" : "ជ្រើសរើសអ្នកផ្គត់ផ្គង់ ដើម្បីបន្ថែមម៉ូឌែលបញ្ចូលថ្មីដែលអាចសន្ទស្សន៍ន័យខ្លឹមសារ",
         "placeholder" : "ជ្រើសរើសអ្នកផ្គត់ផ្គង់ដើម្បីបន្ថែមម៉ូឌែលបញ្ចូលថ្មីដែលអាចសន្ទស្សន៍ន័យខ្លឹមសារ"
+      },
+      "ranker" : {
+        "label" : "ម៉ូឌែល rerank ថ្មី",
+        "help" : "ជ្រើសក្រុមហ៊ុនផ្គត់ផ្គង់ដើម្បីបន្ថែមម៉ូឌែល reranker ថ្មី",
+        "placeholder" : "ជ្រើសក្រុមហ៊ុនផ្គត់ផ្គង់ដើម្បីបន្ថែមម៉ូឌែល reranker ថ្មី"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "កំណត់ម៉ូឌែល reranker ថ្មី"
+      },
+      "CodeHeader3" : {
+        "label" : "កូដ"
+      },
+      "DescriptionHeader3" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ក្រុមហ៊ុនផ្គត់ផ្គង់ម៉ូឌែល"
+      },
+      "ModelHeader3" : {
+        "label" : "ម៉ូឌែល "
+      },
+      "RerankerModelsZone" : {
+        "label" : "ម៉ូឌែល rerank ដែលបានកំណត់"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "API token embedding model",
         "help" : "ជ្រើសរើស API token embedding ដើម្បីប្រើសម្រាប់ម៉ូដែលនេះ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "រួចរាល់!",
+        "detail" : "បញ្ចប់សកម្មភាពដោយជោគជ័យ"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "រក្សាទុក"
+      },
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "DeleteBtn" : {
+        "label" : "លុប"
+      },
+      "TitleFragment" : {
+        "label" : "កែសម្រួល​ក្រុមហ៊ុនផ្គត់ផ្គង់ម៉ូឌែលលំដាប់:"
+      },
+      "description" : {
+        "label" : "សេចក្ដីពិពណ៌នា",
+        "help" : "បញ្ចូលសេចក្ដីពិពណ៌នាអំពីកំណត់ម៉ូឌែល"
+      },
+      "code" : {
+        "label" : "កូដតែមួយ",
+        "help" : "កូដតែមួយ​ដែលបង្កើតស្វ័យប្រវត្តិនៃកំណត់ម៉ូឌែល"
+      },
+      "baseUrl" : {
+        "label" : "អាសយដ្ឋានម៉ាស៊ីនមេ API ម៉ូឌែលលំដាប់",
+        "help" : "អាសយដ្ឋានមូលដ្ឋាននៃម៉ូឌែលលំដាប់។"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API ម៉ូឌែលលំដាប់",
+        "help" : "ជ្រើស token API ម៉ូឌែលលំដាប់ ដើម្បីប្រើសម្រាប់ម៉ូឌែលនេះ (ស្រេចចិត្ត)"
+      },
+      "choosedModel" : {
+        "label" : "ជ្រើសម៉ូឌែលលំដាប់",
+        "help" : "ជ្រើសម៉ូឌែលលំដាប់ដើម្បីប្រើជាមួយ។"
+      },
+      "defaultModel" : {
+        "label" : "កំណត់នេះជាម៉ូឌែលលំដាប់លំនាំដើម",
+        "help" : "បើទិន្នន័យនេះ true នេះនឹងត្រូវបានប្រើជាម៉ូឌែលលំនាំដើម ប្រសិនបើ​ម៉ូឌែលលំដាប់មិនបានបញ្ជាក់"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "រួចរាល់!",
+        "detail" : "បញ្ចប់សកម្មភាពដោយជោគជ័យ"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ប្រព័ន្ធដែលបានជ្រើស"
+      },
+      "wordExport" : {
+        "help" : "នាំចេញចម្លើយទៅ Word"
+      },
+      "pdfExport" : {
+        "help" : "នាំចេញចម្លើយទៅ PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "កំពុងដំណើរការ agent ដែលអ្នកបានជ្រើស"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "កំពុងដំណើរការឯកសារ៖"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ស្វែងរកជ្រៅ/ស្វែងរក Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "ស្វែងរកជំនួយ"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "សំណួរស្ដីអំពីបរិបទ",
         "help" : "កែសម្រួលសំណួរប្រើប្រាស់សម្រាប់សម័យ retrieve augmented generation។"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "កំណត់ threashold ដោយដៃ ឬទំនើង",
+        "help" : "ប្រើ threashold ជាទំរង់ចម្ងាយដោយដៃជំនួសការបំលែងដោយស្វ័យប្រវត្តិ"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "ប្រើស្វែងរកតាមពាក្យគន្លឹះនៅពេលដែលអាចប្រើបាន",
+        "help" : "បើមានការកំណត់ស្វែងរកម៉ាស៊ីនស្វែងរកពាក្យគន្លឹះ នឹងដំណើរការជាមួយស្វែងរក sematic ដែរ"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "រកមើល ឬស្វែងរក និងជ្រើសឯកសារដើម្បីជជែកជាមួយ"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ឯកសារដែលបានជ្រើស"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ជជែក"
       },
       "setupMenuItem" : {
-        "label" : "កំណត់"
+        "label" : "កំណត់",
+        "help" : "ការរៀបចំមិនទាន់បញ្ចប់ទេ សូមចុចទីនេះដើម្បីគ្រប់គ្រង"
       },
       "adminMenuItem" : {
         "label" : "រដ្ឋបាល"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "មានករណីកើតឡើងក្នុងប្រតិបត្តិការឃៈAnthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោគ្រាប់ api",
         "detail" : "បញ្ហាម៉ាស៊ីនបម្រើ: Anthropic api មិនអាចអនុវត្តបានបើគ្មានការកំណត់សោ គ្រាប់ api"
+      },
+      "fileExportLoaded" : {
+        "summary" : "បាននាំចេញឯកសារ",
+        "detail" : "ចូលទៅកាន់ផ្នែកទាញយករបស់ browser"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ម៉ូដែលដែលប្រើសម្រាប់សេវាផ្ទៃក្នុង"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "រក្សាទុក"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent ប្រើម៉ូឌែល chat"
+      },
+      "CancelBtn" : {
+        "label" : "បោះបង់"
+      },
+      "DeleteBtn" : {
+        "label" : "លុប"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ព័ត៌មានទូទៅ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ជ្រើស"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ជ្រើសកំណត់ម៉ូឌែល chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " ប្រើម៉ូឌែល chat លំនាំដើមក្នុងប្រព័ន្ធ ឬកំណត់មួយថ្មី។ "
+      },
+      "LanguageModelTab" : {
+        "label" : "កំណត់ម៉ូឌែលភាសធំ និងឧបករណ៍ដែលអាចប្រើបាន"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "កំណត់សិទ្ធិចូលប្រើ"
+      },
+      "MainPanel" : {
+        "label" : "កំពុងកែសម្រួលកំណត់ Agent"
+      },
+      "description" : {
+        "label" : "សេចក្ដីពិពណ៌នា",
+        "help" : "បញ្ចូលពិពណ៌នាពី chat Agent។"
+      },
+      "code" : {
+        "label" : "កូដតែមួយ",
+        "help" : "កូដតែមួយនៃ Agent បង្កើតស្វ័យប្រវត្តិ។"
+      },
+      "agentServiceId" : {
+        "label" : "ប្រភេទសេវាកម្ម Agent",
+        "help" : "ជ្រើសប្រភេទសេវាកម្ម Agent ដែលនឹងដំណើរការ។"
+      },
+      "defaultConfiguration" : {
+        "label" : "កំណត់ Agent លំនាំដើម",
+        "help" : "កំណត់កំណត់នេះជាលំនាំដើមសម្រាប់សេវាកម្ម Agent នេះ"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ជ្រើស prompt template សម្រាប់ main loop",
+        "help" : "ជ្រើស prompt សំរាប់ main loop របស់ Agent។"
+      },
+      "maxLoopIterations" : {
+        "label" : "ចំនួន loop អតិបរមារបស់ Agent",
+        "help" : "កំណត់ចំនួនអតិបរមាដែល Agent អាច loop (នឹងឲ្យលទ្ធផលល្អជាងเดิม។)"
+      },
+      "subscribeAllTools" : {
+        "label" : "បើកការប្រើឧបករណ៍ទាំងអស់",
+        "help" : "បើផ្ដល់សិទ្ធិនេះគ្រប់ឧបករណ៍ដែលអាចប្រើនឹងត្រូវបានផ្ដល់ពេល agent នេះដំណើរការ"
+      },
+      "enabledFunctions" : {
+        "label" : "មុខងារដែលបានអនុញ្ញាតសម្រាប់ Agent នេះ",
+        "help" : "មុខងារដែលអាចប្រើដោយ Agent នៅពេលបំពេញកិច្ចការរបស់ខ្លួន"
+      },
+      "temperature" : {
+        "label" : "កម្តៅ",
+        "help" : "កម្តៅដែលម៉ូឌែលនឹងឆ្លើយតប ពី 0 ដល់ 1 (បើមិនប្រាកដទុកខ្ពស់)"
+      },
+      "thinking" : {
+        "label" : "កិច្ចការគិត",
+        "help" : "កំណត់ការឆ្លើយដែលម៉ូឌែលនឹងធ្វើ (មិនគ្រប់ម៉ូឌែលគាំទ្រនេះទេ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "ប៉ារ៉ាម៉ែត្រ TopP ពី 0 ដល់ 1 (បើមិនប្រាកដទុកចោល)"
       }
     }
   }

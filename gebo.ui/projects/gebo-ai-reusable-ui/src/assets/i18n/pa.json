@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ਮੈਂ ਸ਼ਰਤਾਂ ਨੂੰ ਮਨਜ਼ੂਰ ਕਰਦਾ ਹਾਂ",
         "help" : "ਇੱਥੇ ਕਲਿੱਕ ਕਰਕੇ ਤੁਸੀਂ ਲਾਈਸੈਂਸ ਵਿੱਚ ਦਿੱਤੀਆਂ ਸ਼ਰਤਾਂ ਨੂੰ ਮਨਜ਼ੂਰ ਕਰਦੇ ਹੋ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "ਐਡਮਿਨ ਯੂਜ਼ਰ ਬਣਾਇਆ ਗਿਆ! ",
+        "detail" : "ਐਡਮਿਨ ਯੂਜ਼ਰ PAOLO.ZAVALLONI@GMAIL.COM ਸਫਲਤਾਪੂਰਵਕ ਬਣਾਇਆ ਗਿਆ"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai ਸੈਟਅੱਪ ਦੇ ਕੁਝ ਲਾਜ਼ਮੀ ਕਦਮ ਬਾਕੀ ਹਨ",
         "detail" : "ਕਿਰਪਾ ਕਰਕੇ ਸੈਟਅੱਪ ਪ੍ਰਕਿਰਿਆ ਦੇ ਲਾਲ ਕਦਮਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ"
+      },
+      "agentSetupSection" : {
+        "label" : "ਏਜੰਟ ਸੇਵਾਵਾਂ ਸੰਰਚਿਤ ਕਰੋ",
+        "description" : "ਏਜੰਟ ਸੇਵਾਵਾਂ ਅਤੇ ਉਨ੍ਹਾਂ ਦੇ ਉਪਲਬਧ ਟੂਲ ਸੰਰਚਿਤ ਕਰੋ"
+      },
+      "AgentAddBtn" : {
+        "label" : "ਏਜੰਟ ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "MainPanel" : {
+        "label" : "ਏਜੰਟ ਸੈਟਅਪ ਕਰੋ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ਕੰਫਿਗ ਕੋਡ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "EditAgentBtn" : {
+        "label" : "ਏਜੰਟ ਸੋਧੋ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ਵੱਡੇ ਲੈਂਗੂਇਜ ਮੌਡਲ ਸੈਟਅੱਪ ਕਰੋ"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "ਕਾਰਵਾਈ ਦੌਰਾਨ ਐਕਸੈਪਸ਼ਨ: vector store ਜਾਂ embedding ਮਾਡਲ ਸ਼ੁਰੂ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: vector store ਜਾਂ embedding ਮਾਡਲ ਸ਼ੁਰੂ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "ਉਪਭੋਗਤਾ"
+      },
+      "searchNameInput" : {
+        "placeholder" : "ਨਾਂ ਖੋਜੋ"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ਯੂਜ਼ਰਨੇਮ ਖੋਜੋ"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ਖੋਜੋ"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ਭੂਮਿਕਾ ਚੁਣੋ"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "ਸਰਨੇਮ ਖੋਜੋ"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "ਉਪਭੋਗਤਾਵਾਂ ਦੀ ਲਿਸਟ",
         "help" : "ਸਮੂਹ ਵਿੱਚ ਸ਼ਾਮਿਲ ਉਪਭੋਗਤਾ ਚੁਣੋ"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ਯੂਜ਼ਰ ਦਾ ਪਾਸਵਰਡ ਬਦਲੋ"
+      },
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ਬਦਲੋ"
+      },
+      "username" : {
+        "label" : "ਯੂਜ਼ਰ ਨਾਂ",
+        "help" : "ਇਹ ਕਾਰਵਾਈ ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕਰਨ ਲਈ ਆਪਣਾ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ"
+      },
+      "currentUserPassword" : {
+        "label" : "ਤੁਹਾਡਾ ਪਾਸਵਰਡ",
+        "help" : "ਇਹ ਕਾਰਵਾਈ ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕਰਨ ਲਈ ਆਪਣਾ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ"
+      },
+      "confirmpassword" : {
+        "label" : "ਯੂਜ਼ਰ ਦਾ ਪਾਸਵਰਡ ਪੁਸ਼ਟੀ",
+        "help" : "ਸੋਧੇ ਗਏ ਯੂਜ਼ਰ ਲਈ ਪਾਸਵਰਡ ਪੁਸ਼ਟੀ"
+      },
+      "password" : {
+        "label" : "ਯੂਜ਼ਰ ਦਾ ਨਵਾਂ ਪਾਸਵਰਡ",
+        "help" : "ਸੋਧੇ ਗਏ ਯੂਜ਼ਰ ਲਈ ਨਵਾਂ ਪਾਸਵਰਡ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "ਨਵਾਂ ਐਮਬੈੱਡਿੰਗ ਮਾਡਲ",
         "help" : "ਇੱਕ ਨਵਾਂ ਐਮਬੈੱਡਿੰਗ ਮਾਡਲ ਜੋ ਸਮੇਂਤਕ ਇੰਡੈਕਸਿੰਗ ਕਰ ਸਕਦਾ ਹੈ, ਜੋੜਣ ਲਈ ਸਪਲਾਇਰ ਚੁਣੋ",
         "placeholder" : "ਇੱਕ ਨਵਾਂ ਐਮਬੈੱਡਿੰਗ ਮਾਡਲ ਜੋ ਸਮੇਂਤਕ ਇੰਡੈਕਸਿੰਗ ਕਰ ਸਕਦਾ ਹੈ, ਜੋੜਣ ਲਈ ਸਪਲਾਇਰ ਚੁਣੋ"
+      },
+      "ranker" : {
+        "label" : "ਨਵਾਂ ਰੀ-ਰੈਂਕ ਮਾਡਲ",
+        "help" : "ਨਵਾਂ ਰੀ-ਰੈਂਕਰ ਮਾਡਲ ਸ਼ਾਮਲ ਕਰਨ ਲਈ ਸਪਲਾਇਰ ਚੁਣੋ",
+        "placeholder" : "ਨਵਾਂ ਰੀ-ਰੈਂਕਰ ਮਾਡਲ ਸ਼ਾਮਲ ਕਰਨ ਲਈ ਸਪਲਾਇਰ ਚੁਣੋ"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "ਨਵਾਂ ਰੀ-ਰੈਂਕਰ ਮਾਡਲ ਸੰਰਚਨਾ"
+      },
+      "CodeHeader3" : {
+        "label" : "ਕੋਡ"
+      },
+      "DescriptionHeader3" : {
+        "label" : "ਵੇਰਵਾ"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ਮਾਡਲ ਪ੍ਰਦਾਤਾ"
+      },
+      "ModelHeader3" : {
+        "label" : "ਮਾਡਲ"
+      },
+      "RerankerModelsZone" : {
+        "label" : "ਸੰਰਚਿਤ ਰੀ-ਰੈਂਕ ਮਾਡਲ"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API ਟੋਕਨ",
         "help" : "ਇਸ ਮਾਡਲ ਲਈ ਵਰਤਣਾ Embedding model API ਟੋਕਨ ਚੁਣੋ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋਈ"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ਸੰਭਾਲੋ"
+      },
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "DeleteBtn" : {
+        "label" : "ਹਟਾਓ"
+      },
+      "TitleFragment" : {
+        "label" : "ਰੈਂਕਿੰਗ ਮਾਡਲ ਪ੍ਰਦਾਤਾ ਸੋਧ ਰਹੇ ਹੋ:"
+      },
+      "description" : {
+        "label" : "ਵੇਰਵਾ",
+        "help" : "ਮਾਡਲ ਸੰਰਚਨਾ ਦੀ ਵੇਰਵਾ ਦਿਉ"
+      },
+      "code" : {
+        "label" : "ਵਿਲੱਖਣ ਕੋਡ",
+        "help" : "ਮਾਡਲ ਸੰਰਚਨਾ ਲਈ ਆਪਣੇ-ਆਪ ਬਣਿਆ ਕੋਡ"
+      },
+      "baseUrl" : {
+        "label" : "ਰੈਂਕਿੰਗ ਮਾਡਲ API ਮੂਲ ਸਰਵਰ ਪਤਾ",
+        "help" : "ਰੈਂਕਿੰਗ ਮਾਡਲ ਦਾ ਮੂਲ ਪਤਾ"
+      },
+      "apiSecretCode" : {
+        "label" : "ਰੈਂਕਿੰਗ ਮਾਡਲ API ਟੋਕਨ",
+        "help" : "ਇਸ ਮਾਡਲ ਲਈ ਵਰਤਣ ਲਾਇਕ ਰੈਂਕਿੰਗ ਮਾਡਲ API ਟੋਕਨ ਚੁਣੋ (ਆਪਸ਼ਨਲ)"
+      },
+      "choosedModel" : {
+        "label" : "ਰੈਂਕਿੰਗ ਮਾਡਲ ਚੋਣ",
+        "help" : "ਕਿਹੜਾ ਰੈਂਕਿੰਗ ਮਾਡਲ ਵਰਤਣਾ ਹੈ ਚੁਣੋ।"
+      },
+      "defaultModel" : {
+        "label" : "ਇਹ ਰੈਂਕਿੰਗ ਮਾਡਲ ਵੇਚ ਡਿਫਾਲਟ ਰੱਖੋ",
+        "help" : "ਜੇ ਇਹ ਸੱਚ ਹੈ, ਤਾਂ ਜਿੱਥੇ ਰੈਂਕਿੰਗ ਮਾਡਲ ਨਹੀਂ ਦਿੱਤਾ ਜਾਂਦਾ, ਇਹ ਹੀ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋਈ"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ਚੁਣੀਆਂ ਸਿਸਟਮ"
+      },
+      "wordExport" : {
+        "help" : "ਜਵਾਬ Word ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ"
+      },
+      "pdfExport" : {
+        "help" : "ਜਵਾਬ PDF ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "ਤੁਹਾਡਾ ਚੁਣਿਆ ਏਜੈਂਟ ਚਲਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ਡਾਕੂਮੈਂਟ ਪ੍ਰੋਸੈੱਸ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ਡੀਪ ਖੋਜ/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "ਸਹਾਇਤਾ ਨਾਲ ਖੋਜ"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "ਪਰੰਪਟ",
         "help" : "ਰੀਟਰੀਵ ਆਗਮੈਂਟਡ ਜਨਰੇਸ਼ਨ ਸੈਸ਼ਨਾਂ ਲਈ ਪਰੰਪਟ ਸੋਧੋ।"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "ਹੱਥੋਂ ਜਾਂ ਆਟੋਟਿਊਨਡ ਥ੍ਰੈਸ਼ੋਲਡ ਸੰਰਚਨਾ",
+        "help" : "ਆਟੋਟਿਊਨ ਦੀ ਬਜਾਏ ਹੱਥੋਂ ਦੂਰੀ ਦਾ ਥ੍ਰੈਸ਼ੋਲਡ ਵਰਤੋ"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "ਮੌਜੂਦ ਹੋਣ 'ਤੇ ਕਿਵਰਡ ਖੋਜ ਵਰਤੋ",
+        "help" : "ਜੇ ਇਸ ਇੰਸਟਾਲੇਸ਼ਨ ਵਿੱਚ ਸੰਰਚਿਤ ਹੋਣ, ਤਾਂ ਸੈਮਾਂਟਿਕ ਖੋਜ ਦੇ ਨਾਲ-ਨਾਲ ਕਿਵਰਡ ਖੋਜ ਵੀ ਚਲਾਓ"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "ਦਸਤਾਵੇਜ਼ਾਂ ਨੂੰ ਚੁਣੋ ਜਾਂ ਖੋਜੋ ਅਤੇ ਉਨ੍ਹਾਂ ਨਾਲ ਗੱਲਵਾਰਤਾ ਕਰੋ"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ਚੁਣੇ ਗਏ ਡਾਕੂਮੈਂਟ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ਚੈਟ"
       },
       "setupMenuItem" : {
-        "label" : "ਸੈੱਟਅੱਪ"
+        "label" : "ਸੈੱਟਅੱਪ",
+        "help" : "ਸੈਟਅਪ ਅਧੂਰਾ ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਇੱਥੇ ਦਬਾਓ ਤੇ ਬਣਾਓ"
       },
       "adminMenuItem" : {
         "label" : "ਐਡਮਿਨ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ",
         "detail" : "ਸਰਵਰ ਗਲਤੀ: Anthropic api ਦੀ ਲੋੜੀਂਦੀ api ਕੁੰਜੀ ਕਾਨਫ਼ਿਗਰੇਸ਼ਨ ਤੋਂ ਬਿਨਾ ਕੰਮ ਨਹੀਂ ਕਰ ਸਕਦੀ"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ਫ਼ਾਈਲ ਐਕਸਪੋਰਟ ਹੋਈ",
+        "detail" : "ਬਰਾਊਜ਼ਰ ਡਾਊਨਲੋਡਸ ਸੈਕਸ਼ਨ 'ਤੇ ਜਾਓ"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ਅੰਦਰੂਨੀ ਸੇਵਾਵਾਂ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਮੌਡਲ"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "ਸੰਭਾਲੋ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ਏਜੰਟ ਵਲੋਂ ਵਰਤਿਆ ਚੈਟ ਮਾਡਲ"
+      },
+      "CancelBtn" : {
+        "label" : "ਰੱਦ ਕਰੋ"
+      },
+      "DeleteBtn" : {
+        "label" : "ਹਟਾਓ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ਆਮ ਜਾਣਕਾਰੀ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ਚੁਣੋ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ਇੱਕ ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਚੁਣੋ"
+      },
+      "defaultChatModel-help" : {
+        "label" : " ਏਜੰਟ ਦੇ ਕੰਮ ਲਈ ਸਿਸਟਮ ਡਿਫਾਲਟ ਚੈਟ ਮਾਡਲ ਵਰਤੋ ਜਾਂ ਖਾਸ ਮਾਡਲ ਦਿਉ। "
+      },
+      "LanguageModelTab" : {
+        "label" : "ਵੱਡਾ ਭਾਸ਼ਾ ਮਾਡਲ ਅਤੇ ਵਰਤਣਯੋਗ ਟੂਲਾਂ ਦੀ ਸੈਟਿੰਗ"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "ਸੁਰੱਖਿਆ ਪਹੁੰਚ ਸੈਟਿੰਗਾਂ"
+      },
+      "MainPanel" : {
+        "label" : "ਏਜੰਟ ਸੰਰਚਨਾ ਸੋਧਣ"
+      },
+      "description" : {
+        "label" : "ਵੇਰਵਾ",
+        "help" : "ਚੈਟ ਏਜੰਟ ਦੀ ਵੇਰਵਾ ਦਿਓ।"
+      },
+      "code" : {
+        "label" : "ਵਿਲੱਖਣ ਕੋਡ",
+        "help" : "ਏਜੰਟ ਲਈ ਆਪਣੇ-ਆਪ ਬਣਿਆ ਵਿਲੱਖਣ ਕੋਡ।"
+      },
+      "agentServiceId" : {
+        "label" : "ਏਜੰਟ ਸੇਵਾ ਕਿਸਮ",
+        "help" : "ਵਰਤਣ ਲਈ ਏਜੰਟ ਸੇਵਾ ਕਿਸਮ ਚੁਣੋ।"
+      },
+      "defaultConfiguration" : {
+        "label" : "ਡਿਫਾਲਟ ਏਜੰਟ ਸੰਰਚਨਾ",
+        "help" : "ਇਹ ਇਸ ਏਜੰਟ ਸੇਵਾ ਕਿਸਮ ਲਈ ਡਿਫਾਲਟ ਵਾਂਗ ਸੈਟ ਕਰੋ"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ਮੁੱਖ ਲੂਪ ਪ੍ਰਾਂਪਟ ਟੈਮਪਲੇਟ ਚੁਣੋ",
+        "help" : "ਏਜੰਟ ਮੁੱਖ ਲੂਪ ਪ੍ਰਾਂਪਟ ਚੁਣੋ।"
+      },
+      "maxLoopIterations" : {
+        "label" : "ਏਜੰਟ ਲੂਪਸ ਦੀ ਵੱਧ ਤੋਂ ਵੱਧ ਗਿਣਤੀ",
+        "help" : "ਏਜੰਟ ਲੂਪਸ ਦੀ ਵੱਧ ਤੋਂ ਵੱਧ ਗਿਣਤੀ ਸੈਟ ਕਰੋ (ਇਸ ਨਾਲ ਹੋਰ ਵੀ ਵਧੀਆ ਨਤੀਜਾ ਮਿਲੇਗਾ)।"
+      },
+      "subscribeAllTools" : {
+        "label" : "ਸਾਰੇ ਉਪਲਬਧ ਟੂਲ ਚਾਲੂ ਕਰੋ",
+        "help" : "ਜੇ ਇਹ ਚੈੱਕ ਹੈ, ਤਾਂ ਜਦੋਂ ਇਹ ਏਜੰਟ ਚੱਲਦਾ ਹੈ ਸਾਰੇ ਉਪਲਬਧ ਟੂਲ ਜੁੜ ਜਾਣਗੇ"
+      },
+      "enabledFunctions" : {
+        "label" : "ਇਸ ਏਜੰਟ ਲਈ ਚਾਲੂ ਫੰਕਸ਼ਨ ਕਾਲ",
+        "help" : "ਉਹ ਫੰਕਸ਼ਨ ਜੋ ਏਜੰਟ ਆਪਣੇ ਕੰਮ ਦੌਰਾਨ ਵਰਤ ਸਕਦਾ ਹੈ"
+      },
+      "temperature" : {
+        "label" : "ਤਾਪਮਾਨ",
+        "help" : "ਮਾਡਲ ਜਵਾਬ ਦੇਵੇਗਾ, 0 ਤੋਂ 1 ਤੱਕ (ਪੱਕਾ ਨਾ ਹੋਵੇ ਤਾਂ ਖਾਲੀ ਛੱਡੋ)"
+      },
+      "thinking" : {
+        "label" : "ਸੋਚਣ ਵਾਲੀ ਕੋਸ਼ਿਸ਼",
+        "help" : "ਮਾਡਲ ਲਈ ਸੋਚਣ ਵਾਲੀ ਕੋਸ਼ਿਸ਼ ਸੰਰਚਿਤ ਕਰੋ (ਸਾਰੇ ਮਾਡਲ ਸਮਰਥਿਤ ਨਹੀਂ ਕਰਦੇ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP ਪੈਰਾਮੀਟਰ, 0 ਤੋਂ 1 ਤੱਕ (ਪੱਕਾ ਨਾ ਹੋਵੇ ਤਾਂ ਖਾਲੀ ਛੱਡੋ)"
       }
     }
   }

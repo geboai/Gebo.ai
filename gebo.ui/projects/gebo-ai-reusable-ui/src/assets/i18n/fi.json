@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Hyväksyn ehdot",
         "help" : "Hyväksyt napsauttamalla käyttöehdot ja lisenssin"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Ylläpitäjä luotu!",
+        "detail" : "Ylläpitäjä PAOLO.ZAVALLONI@GMAIL.COM luotiin onnistuneesti"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai -asennuksesta puuttuu pakollinen vaihe",
         "detail" : "Tarkista asetusten punaiset vaiheet"
+      },
+      "agentSetupSection" : {
+        "label" : "Määritä agenttipalvelut",
+        "description" : "Määritä agenttipalvelut ja niiden käytettävät työkalut"
+      },
+      "AgentAddBtn" : {
+        "label" : "Lisää agentti"
+      },
+      "MainPanel" : {
+        "label" : "Agenttien määritys"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Määrityskoodi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "EditAgentBtn" : {
+        "label" : "Muokkaa agenttia"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Määritä suuret kielimallit"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Poikkeus toiminnon aikana: Ei voida luoda vektorivarastoa tai upotusmallin alustaminen epäonnistui: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Palvelinvirhe: Ei voida luoda vektorivarastoa tai upotusmallin alustaminen epäonnistui: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "käyttäjät"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Hae nimellä"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Hae käyttäjätunnuksella"
+      },
+      "SearchUsersBtn" : {
+        "label" : "hae"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Valitse rooli"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Hae sukunimellä"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Käyttäjälista",
         "help" : "Valitse ryhmään osallistuvat käyttäjät"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Vaihda käyttäjän salasana"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Vaihda"
+      },
+      "username" : {
+        "label" : "Käyttäjätunnus",
+        "help" : "Syötä salasana tämän toiminnon vahvistamiseksi"
+      },
+      "currentUserPassword" : {
+        "label" : "Oma salasanasi",
+        "help" : "Syötä salasana tämän toiminnon vahvistamiseksi"
+      },
+      "confirmpassword" : {
+        "label" : "Vahvista käyttäjän salasana",
+        "help" : "Syötä käyttäjän salasana uudelleen vahvistusta varten"
+      },
+      "password" : {
+        "label" : "Uusi käyttäjän salasana",
+        "help" : "Syötä uusi salasana muokattavalle käyttäjälle"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Uusi upotusmalli",
         "help" : "Valitse toimittaja lisätäksesi uuden upotusmallin, joka osaa tehdä sisällön semanttista indeksointia",
         "placeholder" : "Valitse toimittaja lisätäksesi uuden upotusmallin, joka osaa tehdä sisällön semanttista indeksointia"
+      },
+      "ranker" : {
+        "label" : "Uusi uudelleenarviointimalli",
+        "help" : "Valitse toimittaja lisätäksesi uuden uudelleenarviointimallin",
+        "placeholder" : "Valitse toimittaja lisätäksesi uuden uudelleenarviointimallin"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Uusi uudelleenarviointimallin asetukset"
+      },
+      "CodeHeader3" : {
+        "label" : "Koodi"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Kuvaus"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Mallin tarjoaja"
+      },
+      "ModelHeader3" : {
+        "label" : "Malli "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Asetetut uudelleenarviointimallit"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Upotusmallin API-token",
         "help" : "Valitse tämän mallin käyttämä upotusmallin API-token"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "TitleFragment" : {
+        "label" : "Muokataan ranking-mallin tarjoajaa:"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna malliasetuksen kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetuksen automaattisesti luotu yksilöllinen koodi"
+      },
+      "baseUrl" : {
+        "label" : "ranking mallin API palvelinosoite",
+        "help" : "Ranking mallin perusosoite."
+      },
+      "apiSecretCode" : {
+        "label" : "ranking mallin API tunniste",
+        "help" : "Valitse käytettävä ranking mallin API tunniste (valinnainen)"
+      },
+      "choosedModel" : {
+        "label" : "ranking mallin mallivalinta",
+        "help" : "Valitse käytettävä ranking mallin malli."
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusranking malliksi",
+        "help" : "Jos tosi, tätä käytetään oletusranking mallina, jossa mallia ei ole ilmoitettu"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valitut järjestelmät"
+      },
+      "wordExport" : {
+        "help" : "Vie vastaus Wordiin"
+      },
+      "pdfExport" : {
+        "help" : "Vie vastaus PDF-muotoon"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Suoritetaan valitsemasi agentti"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Käsitellään dokumenttia:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Syvähaku/Jira-haku"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Avustettu haku"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Ohje",
         "help" : "Muokkaa hakuavusteisen generoinnin keskusteluiden ohjetekstiä."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuaalinen tai automaattiviritysrajan asetukset",
+        "help" : "Käytä manuaalista etäisyysrajaa automaattivirityksen sijaan"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Käytä avainsanahakua, jos saatavilla",
+        "help" : "Suorita avainsanahakuja semanttisten hakujen lisäksi, jos tällaiset on määritetty tähän asennukseen"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Selaa tai etsi ja valitse asiakirjoja keskusteluun"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valitut dokumentit"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Keskustelu"
       },
       "setupMenuItem" : {
-        "label" : "Asetukset"
+        "label" : "Asetukset",
+        "help" : "Asennus on kesken, viimeistele napsauttamalla tätä"
       },
       "adminMenuItem" : {
         "label" : "Ylläpito"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Poikkeus toiminnon aikana:Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä",
         "detail" : "Palvelinvirhe: Anthropic api ei voi toimia ilman tarvittavan api-avaimen määritystä"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Tiedosto viety",
+        "detail" : "Siirry selaimen lataukset-osioon"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Mallia käytetään sisäisiin palveluihin"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agentilla käytetty chat-malli"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleistiedot"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "valitse"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Valitse chat-mallin asetus"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Käytä järjestelmän oletus chat-mallia Agentin tehtävään tai määritä jokin toinen. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Suurten kielimallien & työkalujen asetukset"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Turvallisuus- ja käyttöoikeusasetukset"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan agentin asetuksia"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna chat-agentin kuvaus."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Ainutlaatuisesti luotu tunniste agentille."
+      },
+      "agentServiceId" : {
+        "label" : "Agenttipalvelun tyyppi",
+        "help" : "Valitse käynnistettävä agenttipalvelun tyyppi."
+      },
+      "defaultConfiguration" : {
+        "label" : "Oletus agentin asetukset",
+        "help" : "Aseta nämä oletusasetuksiksi tälle agenttipalvelun tyypille"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Valitse pääsilmukan kehotepohja",
+        "help" : "Valitse agentin pääsilmukan kehote."
+      },
+      "maxLoopIterations" : {
+        "label" : "Agentin silmukoiden enimmäismäärä",
+        "help" : "Aseta agentin silmukoiden enimmäismäärä (tämä parantaa tarkkuutta)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Ota kaikki työkalut käyttöön",
+        "help" : "Kun tämä on valittu, kaikki työkalut liitetään agentille ajon aikana"
+      },
+      "enabledFunctions" : {
+        "label" : "Käytössä olevat toiminnot tällä agentilla",
+        "help" : "Toiminnot, joita agentti voi käyttää tehtäväänsä suorittaessaan"
+      },
+      "temperature" : {
+        "label" : "Lämpötila",
+        "help" : "Mallin lämpötila välillä 0–1 (jos epävarma, jätä tyhjäksi)"
+      },
+      "thinking" : {
+        "label" : "Ajatteluprosessit",
+        "help" : "Määritä mallin ajatteluprosessien määrä (kaikki mallit eivät tue tätä)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parametri, arvo 0–1 (jos epävarma, jätä tyhjäksi)"
       }
     }
   }

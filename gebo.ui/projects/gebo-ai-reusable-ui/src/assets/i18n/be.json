@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Я прымаю ўмовы",
         "help" : "Націскаючы тут, вы прымаеце ўмовы і правілы ліцэнзіі"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Адмін-карыстальнік створаны!",
+        "detail" : "Адмін-карыстальнік PAOLO.ZAVALLONI@GMAIL.COM паспяхова створаны"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Адсутнічае абавязковы крок усталёўкі Gebo.ai",
         "detail" : "Праверце чырвоныя крокі працэсу ўстаноўкі"
+      },
+      "agentSetupSection" : {
+        "label" : "Наладжванне сэрвісаў агента",
+        "description" : "Наладзіце сэрвісы агента і іх даступныя інструменты"
+      },
+      "AgentAddBtn" : {
+        "label" : "Дадаць агента"
+      },
+      "MainPanel" : {
+        "label" : "Наладжванне агентаў"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Канфігурацыйны код"
+      },
+      "DescriptionHeader" : {
+        "label" : "Апісанне"
+      },
+      "EditAgentBtn" : {
+        "label" : "Рэдагаваць агента"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Устаноўка вялікіх моўных мадэляў"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Выключэнне падчас аперацыі: Немагчыма стварыць краму вектараў альбо ініцыялізаваць мадэль embeddings: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Памылка сервера: Немагчыма стварыць краму вектараў альбо ініцыялізаваць мадэль embeddings: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "карыстальнікі"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Пошук па імені"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Пошук па карыстальніцкім імені"
+      },
+      "SearchUsersBtn" : {
+        "label" : "пошук"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Абярыце ролю"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Пошук па прозвішчы"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Спіс карыстальнікаў",
         "help" : "Абраць карыстальнікаў, якія ўдзельнічаюць у групе"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Змяніць пароль карыстальніка"
+      },
+      "CancelBtn" : {
+        "label" : "Адмяніць"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Змяніць"
+      },
+      "username" : {
+        "label" : "Імя карыстальніка",
+        "help" : "Увядзіце свой пароль для пацвярджэння гэтай дзеяння"
+      },
+      "currentUserPassword" : {
+        "label" : "Ваш пароль",
+        "help" : "Увядзіце свой пароль для пацвярджэння гэтай дзеяння"
+      },
+      "confirmpassword" : {
+        "label" : "пацвярджэнне пароля карыстальніка",
+        "help" : "пацвярджэнне пароля для рэдагаванага карыстальніка"
+      },
+      "password" : {
+        "label" : "Новы пароль карыстальніка",
+        "help" : "Новы пароль для рэдагаванага карыстальніка"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Новая мадэль ўбудаванняў",
         "help" : "Выберыце пастаўшчыка, каб дадаць новую мадэль для семантычнай індэксацыі кантэнту",
         "placeholder" : "Выберыце пастаўшчыка, каб дадаць новую мадэль для семантычнай індэксацыі кантэнту"
+      },
+      "ranker" : {
+        "label" : "Новая мадэль пераранжыроўкі",
+        "help" : "Абярыце пастаўшчыка, каб дадаць новую мадэль пераранжыроўкі",
+        "placeholder" : "Абярыце пастаўшчыка, каб дадаць новую мадэль пераранжыроўкі"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Канфігурацыя новай мадэлі пераранжыроўкі"
+      },
+      "CodeHeader3" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Апісанне"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Пастаўшчык мадэлі"
+      },
+      "ModelHeader3" : {
+        "label" : "Мадэль "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Наладжаныя мадэлі пераранжыроўкі"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Токен API embedding-мадэлі",
         "help" : "Абярыце токен API embedding-мадэлі для гэтай мадэлі"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Аперацыя паспяхова завершана"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Захаваць"
+      },
+      "CancelBtn" : {
+        "label" : "Адмяніць"
+      },
+      "DeleteBtn" : {
+        "label" : "Выдаліць"
+      },
+      "TitleFragment" : {
+        "label" : "Рэдагаванне пастаўшчыка мадэлі пераранжыроўкі:"
+      },
+      "description" : {
+        "label" : "Апісанне",
+        "help" : "Увядзіце апісанне канфігурацыі мадэлі"
+      },
+      "code" : {
+        "label" : "Унікальны код",
+        "help" : "Аўтаматычна згенераваны ўнікальны код канфігурацыі мадэлі"
+      },
+      "baseUrl" : {
+        "label" : "адрас API базавага сервера мадэлі пераранжыроўкі",
+        "help" : "Базавы адрас мадэлі пераранжыроўкі."
+      },
+      "apiSecretCode" : {
+        "label" : "токен API мадэлі пераранжыроўкі",
+        "help" : "Абярыце токен API мадэлі пераранжыроўкі для гэтай мадэлі (неабавязкова)"
+      },
+      "choosedModel" : {
+        "label" : "выбар мадэлі пераранжыроўкі",
+        "help" : "Абярыце мадэль пераранжыроўкі для працы."
+      },
+      "defaultModel" : {
+        "label" : "выкарыстоўваць як мадэль пераранжыроўкі па змоўчанні",
+        "help" : "Калі гэта пазначана, будзе выкарыстана як мадэль пераранжыроўкі па змоўчанні, калі не ўказана іншая"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Аперацыя паспяхова завершана"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Абраныя сістэмы"
+      },
+      "wordExport" : {
+        "help" : "Экспартаваць адказ у Word"
+      },
+      "pdfExport" : {
+        "help" : "Экспартаваць адказ у PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Выконваецца ваш абраны агент"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Апрацоўка дакумента:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Глыбокі пошук/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Падтрыманы пошук"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Прампт",
         "help" : "Рэдагуйце прампт для сесій retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ручное або аўтаматычнае налады парога",
+        "help" : "Выкарыстоўваць ручны парог адлегласці замест аўтаналаду"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Выкарыстоўваць ключавы пошук, калі даступна",
+        "help" : "Выконваць ключавыя пошукі дадаткова да семантычных, калі яны наладжаны ў гэтай устаноўцы"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Прагледзьце або знайдзіце і абярыце дакументы для размовы"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Абраныя дакументы"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Чат"
       },
       "setupMenuItem" : {
-        "label" : "Налады"
+        "label" : "Налады",
+        "help" : "Наладка не завершана, націсніце тут для яе наладжвання"
       },
       "adminMenuItem" : {
         "label" : "Адміністраванне"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Памылка падчас аперацыі: Anthropic api не можа працаваць без неабходнай наладкі ключа",
         "detail" : "Памылка сервера: Anthropic api не можа працаваць без неабходнай наладкі ключа"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Файл экспартаваны",
+        "detail" : "Перайдзіце ў раздзел загрузак у вашым браўзеры"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Мадэль для ўнутраных сэрвісаў"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Захаваць"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Агент выкарыстоўвае мадэль чата"
+      },
+      "CancelBtn" : {
+        "label" : "Адмяніць"
+      },
+      "DeleteBtn" : {
+        "label" : "Выдаліць"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Агульная інфармацыя"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "выбраць"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Абярыце наладу мадэлі чата"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Выкарыстоўвайце сістэмную мадэль чата па змоўчанні для выканання задач агента або пазначце іншае. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Налады вялікіх мовах мадэляў і інструментаў"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Налады бяспекі доступу"
+      },
+      "MainPanel" : {
+        "label" : "Рэдагаванне налад агента"
+      },
+      "description" : {
+        "label" : "Апісанне",
+        "help" : "Увядзіце апісанне агента чата."
+      },
+      "code" : {
+        "label" : "Унікальны код",
+        "help" : "Аўтаматычна згенераваны ўнікальны код агента."
+      },
+      "agentServiceId" : {
+        "label" : "Тып сэрвісу агента",
+        "help" : "Абярыце тып сэрвісу агента, які будзе працаваць."
+      },
+      "defaultConfiguration" : {
+        "label" : "Канфігурацыя агента па змоўчанні",
+        "help" : "Усталяваць як наладу па змоўчанні для гэтага тыпу сэрвісу агента"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Абярыце шаблон галоўнага цыкла агента",
+        "help" : "Абярыце галоўны шаблон цыкла агента."
+      },
+      "maxLoopIterations" : {
+        "label" : "Максімальная колькасць цыклаў агента",
+        "help" : "Увядзіце максімальную колькасць цыклаў агента (гэта дапаможа атрымаць больш дакладны вынік)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Уключыць усе даступныя інструменты",
+        "help" : "Калі гэта выбрана, усе даступныя інструменты будуць прызначаны пры запуску агента"
+      },
+      "enabledFunctions" : {
+        "label" : "Уключаныя функцыі для гэтага агента",
+        "help" : "Функцыянальнасці, якія агент можа выкарыстоўваць падчас працы"
+      },
+      "temperature" : {
+        "label" : "Температура",
+        "help" : "Температура адказаў мадэлі ад 0 да 1 (калі не ўпэўнены — пакіньце пустым)"
+      },
+      "thinking" : {
+        "label" : "Мыслявыя дзеянні",
+        "help" : "Наладзьце мыслявыя дзеянні, якія будзе выконваць мадэль (не ўсе мадэлі гэта падтрымліваюць)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Параметр TopP, ад 0 да 1 (калі не ўпэўнены — пакіньце пустым)"
       }
     }
   }

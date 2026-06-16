@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "J'accepte les conditions",
         "help" : "En cliquant ici vous acceptez les termes et conditions de la licence"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Utilisateur administrateur créé !",
+        "detail" : "Utilisateur administrateur PAOLO.ZAVALLONI@GMAIL.COM créé avec succès"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Il manque une étape obligatoire à la configuration Gebo.ai",
         "detail" : "Veuillez vérifier les étapes en rouge dans le processus de configuration"
+      },
+      "agentSetupSection" : {
+        "label" : "Configurer les services d’agent",
+        "description" : "Configurez les services d’agent et leurs outils disponibles"
+      },
+      "AgentAddBtn" : {
+        "label" : "Ajouter un agent"
+      },
+      "MainPanel" : {
+        "label" : "Configurer les agents"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Code de configuration"
+      },
+      "DescriptionHeader" : {
+        "label" : "Description"
+      },
+      "EditAgentBtn" : {
+        "label" : "Modifier l’agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Configurer les grands modèles de langage"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Exception pendant l’opération : Impossible de créer le magasin vectoriel ou exception d’initialisation du modèle d’embedding : 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Erreur du serveur : impossible de créer le magasin vectoriel ou exception d’initialisation du modèle d’embedding : 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "utilisateurs"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Rechercher un nom"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Rechercher un nom d’utilisateur"
+      },
+      "SearchUsersBtn" : {
+        "label" : "rechercher"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Sélectionner un rôle"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Rechercher un nom de famille"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Liste des utilisateurs",
         "help" : "Sélectionnez les utilisateurs participant au groupe"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Changer le mot de passe de l’utilisateur"
+      },
+      "CancelBtn" : {
+        "label" : "Annuler"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Changer"
+      },
+      "username" : {
+        "label" : "Nom d’utilisateur",
+        "help" : "Saisissez votre mot de passe pour valider cette action"
+      },
+      "currentUserPassword" : {
+        "label" : "Votre mot de passe",
+        "help" : "Saisissez votre mot de passe pour valider cette action"
+      },
+      "confirmpassword" : {
+        "label" : "Confirmation du mot de passe de l’utilisateur",
+        "help" : "Confirmation du mot de passe pour l’utilisateur modifié"
+      },
+      "password" : {
+        "label" : "Nouveau mot de passe de l’utilisateur",
+        "help" : "Nouveau mot de passe pour l’utilisateur modifié"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Nouveau modèle d'intégration",
         "help" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle d'intégration capable d'effectuer l'indexation sémantique de contenus",
         "placeholder" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle d'intégration capable d'effectuer l'indexation sémantique de contenus"
+      },
+      "ranker" : {
+        "label" : "Nouveau modèle de rerank",
+        "help" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle de rerank",
+        "placeholder" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle de rerank"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Nouvelle configuration de modèle de rerank"
+      },
+      "CodeHeader3" : {
+        "label" : "Code"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Description"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Fournisseur du modèle"
+      },
+      "ModelHeader3" : {
+        "label" : "Modèle "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Modèles de rerank configurés"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Jeton API du modèle d'embedding",
         "help" : "Choisissez le jeton API du modèle d'embedding à utiliser pour ce modèle"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Enregistrer"
+      },
+      "CancelBtn" : {
+        "label" : "Annuler"
+      },
+      "DeleteBtn" : {
+        "label" : "Supprimer"
+      },
+      "TitleFragment" : {
+        "label" : "Édition du fournisseur de modèle de ranking :"
+      },
+      "description" : {
+        "label" : "Description",
+        "help" : "Saisissez la description de la configuration du modèle"
+      },
+      "code" : {
+        "label" : "Code unique",
+        "help" : "Code unique généré automatiquement de la configuration du modèle"
+      },
+      "baseUrl" : {
+        "label" : "Adresse de base du serveur API du modèle de ranking",
+        "help" : "Adresse de base du modèle de ranking."
+      },
+      "apiSecretCode" : {
+        "label" : "Jeton API du modèle de ranking",
+        "help" : "Choisissez le jeton API du modèle de ranking à utiliser pour ce modèle (optionnel)"
+      },
+      "choosedModel" : {
+        "label" : "Choix du modèle de ranking",
+        "help" : "Choisissez le modèle de ranking avec lequel travailler."
+      },
+      "defaultModel" : {
+        "label" : "Définir comme modèle de ranking par défaut",
+        "help" : "Si vrai, il sera utilisé comme modèle par défaut là où le modèle de ranking n’est pas indiqué"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK !",
+        "detail" : "Opération réalisée avec succès"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Systèmes choisis"
+      },
+      "wordExport" : {
+        "help" : "Exporter la réponse en Word"
+      },
+      "pdfExport" : {
+        "help" : "Exporter la réponse en PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Exécution de l'agent choisi"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Traitement du document :"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Recherche Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Recherche assistée"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Invite",
         "help" : "Modifiez l'invite pour les sessions de retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Configuration manuelle ou auto-ajustée du seuil",
+        "help" : "Utilisez un seuil de distance manuel au lieu de l’auto-ajuster"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Utiliser la recherche par mot-clé si disponible",
+        "help" : "Lancer des recherches par mot-clé en plus des recherches sémantiques si elles sont configurées dans cette installation"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Parcourir ou rechercher et sélectionner des documents pour discuter"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Documents sélectionnés"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Discussion"
       },
       "setupMenuItem" : {
-        "label" : "Configuration"
+        "label" : "Configuration",
+        "help" : "La configuration est incomplète, cliquez ici pour la gérer"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Exception pendant l’opération : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise",
         "detail" : "Erreur serveur : L’API Anthropic ne peut pas fonctionner sans la configuration de la clé d’API requise"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fichier exporté",
+        "detail" : "Accédez à la section des téléchargements du navigateur"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modèle utilisé pour les services internes"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Enregistrer"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Modèle de chat utilisé par l’agent"
+      },
+      "CancelBtn" : {
+        "label" : "Annuler"
+      },
+      "DeleteBtn" : {
+        "label" : "Supprimer"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Infos générales"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "choisir"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Sélectionnez une configuration de modèle de chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Utilisez le modèle de chat par défaut du système pour effectuer la tâche de l’agent ou spécifiez-en un. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Modèle de langage étendu et paramètres des outils utilisables"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Paramètres d’accès et de sécurité"
+      },
+      "MainPanel" : {
+        "label" : "Édition de la configuration de l’agent"
+      },
+      "description" : {
+        "label" : "Description",
+        "help" : "Saisissez la description de l’agent de chat."
+      },
+      "code" : {
+        "label" : "Code unique",
+        "help" : "Code unique généré automatiquement pour l’agent."
+      },
+      "agentServiceId" : {
+        "label" : "Type de service agent",
+        "help" : "Choisissez le type de service agent qui sera exécuté."
+      },
+      "defaultConfiguration" : {
+        "label" : "Configuration par défaut de l’agent",
+        "help" : "Définir comme configuration par défaut pour ce type de service agent"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Choisir le modèle de prompt pour la boucle principale",
+        "help" : "Choisissez le prompt de boucle principale de l’agent."
+      },
+      "maxLoopIterations" : {
+        "label" : "Nombre max de boucles de l’agent",
+        "help" : "Définir le nombre maximum de boucles de l’agent (cela produira un résultat plus affiné)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Activer tous les outils disponibles",
+        "help" : "Quand ce paramètre est coché, tous les outils disponibles seront assignés lors de l’exécution de cet agent"
+      },
+      "enabledFunctions" : {
+        "label" : "Fonctions activées pour cet agent",
+        "help" : "Fonctionnalités que l’agent pourra utiliser pendant son exécution"
+      },
+      "temperature" : {
+        "label" : "Température",
+        "help" : "Température de réponse du modèle, de 0 à 1 (laissez vide si vous n’êtes pas sûr)"
+      },
+      "thinking" : {
+        "label" : "Efforts de réflexion",
+        "help" : "Configurer les efforts de réflexion du modèle (tous les modèles ne le prennent pas en charge)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paramètre TopP, de 0 à 1 (laissez vide si vous n’êtes pas sûr)"
       }
     }
   }

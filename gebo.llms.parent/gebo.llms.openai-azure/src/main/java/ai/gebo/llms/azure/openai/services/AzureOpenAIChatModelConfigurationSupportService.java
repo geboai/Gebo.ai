@@ -131,6 +131,8 @@ public class AzureOpenAIChatModelConfigurationSupportService
 				builder = builder.toolNames(new HashSet<String>(names));
 
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
 			AzureOpenAiChatOptions options = builder.build();
 			if (config.getThinking() != null) {
 				switch (config.getThinking()) {

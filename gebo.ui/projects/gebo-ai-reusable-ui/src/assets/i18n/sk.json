@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Súhlasím s podmienkami",
         "help" : "Kliknutím súhlasíte so zmluvnými podmienkami v licencii"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin používateľ vytvorený!",
+        "detail" : "Admin používateľ PAOLO.ZAVALLONI@GMAIL.COM bol úspešne vytvorený"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "V nastavení Gebo.ai chýba niektorý povinný krok",
         "detail" : "Skontrolujte červené kroky v procese nastavenia"
+      },
+      "agentSetupSection" : {
+        "label" : "Nastavenie služieb agenta",
+        "description" : "Nastavte služby agenta a ich dostupné nástroje"
+      },
+      "AgentAddBtn" : {
+        "label" : "Pridať agenta"
+      },
+      "MainPanel" : {
+        "label" : "Nastaviť agentov"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "EditAgentBtn" : {
+        "label" : "Upraviť agenta"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Nastavenie veľkých jazykových modelov"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Výnimka počas operácie: Nie je možné vytvoriť vektorový úložisko alebo inicializovať embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Chyba servera: Nie je možné vytvoriť vektorový úložisko alebo inicializovať embedding model: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "používatelia"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Hľadať meno"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Hľadať používateľské meno"
+      },
+      "SearchUsersBtn" : {
+        "label" : "hľadať"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Vybrať rolu"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Hľadať priezvisko"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Zoznam používateľov",
         "help" : "Vyberte používateľov, ktorí sa zúčastňujú skupiny"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Zmeniť používateľovo heslo"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Zmeniť"
+      },
+      "username" : {
+        "label" : "Meno používateľa",
+        "help" : "Pre potvrdenie tejto akcie zadajte svoje heslo"
+      },
+      "currentUserPassword" : {
+        "label" : "Vaše heslo",
+        "help" : "Pre potvrdenie tejto akcie zadajte svoje heslo"
+      },
+      "confirmpassword" : {
+        "label" : "Potvrdenie hesla používateľa",
+        "help" : "Potvrdenie hesla pre upravovaného používateľa"
+      },
+      "password" : {
+        "label" : "Nové heslo používateľa",
+        "help" : "Nové heslo pre upravovaného používateľa"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Nový model pre vkladanie",
         "help" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu",
         "placeholder" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu"
+      },
+      "ranker" : {
+        "label" : "Nový model pre zoradenie",
+        "help" : "Vyberte dodávateľa pre pridanie nového modelu na zoradenie",
+        "placeholder" : "Vyberte dodávateľa pre pridanie nového modelu na zoradenie"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Nová konfigurácia modelu pre zoradenie"
+      },
+      "CodeHeader3" : {
+        "label" : "Kód"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Popis"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Poskytovateľ modelu"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurované modely pre zoradenie"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API Embedding modelu",
         "help" : "Vyberte API token Embedding modelu, ktorý sa použije pre tento model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "TitleFragment" : {
+        "label" : "Upravujete poskytovateľa modelu na zoradenie:"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "baseUrl" : {
+        "label" : "API adresa hlavného servera modelu na zoradenie",
+        "help" : "Základná adresa modelu na zoradenie."
+      },
+      "apiSecretCode" : {
+        "label" : "API token modelu na zoradenie",
+        "help" : "Vyberte API token modelu na zoradenie, ktorý sa má použiť pre tento model (voliteľné)"
+      },
+      "choosedModel" : {
+        "label" : "Voľba modelu na zoradenie",
+        "help" : "Vyberte model na zoradenie, s ktorým chcete pracovať."
+      },
+      "defaultModel" : {
+        "label" : "Nastaviť tento model ako predvolený model na zoradenie",
+        "help" : "Ak je nastavené, tento model bude použitý ako predvolený model na zoradenie, ak nie je uvedený iný"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Vybrané systémy"
+      },
+      "wordExport" : {
+        "help" : "Exportovať odpoveď do Wordu"
+      },
+      "pdfExport" : {
+        "help" : "Exportovať odpoveď do PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Spúšťam zvoleného agenta"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Spracovanie dokumentu:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Hĺbkové vyhľadávanie/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Asistované vyhľadávanie"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Upravte prompt pre relácie s rozšíreným generovaním odpovedí."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuálna alebo automaticky nastavená konfigurácia prahu",
+        "help" : "Použiť manuálny prah vzdialenosti namiesto automatického ladenia"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Použiť vyhľadávanie podľa kľúčových slov, ak je to možné",
+        "help" : "Spustiť aj vyhľadávanie podľa kľúčových slov navyše k sémantickému, ak je v tejto inštalácii nastavené"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Prehliadajte alebo vyhľadajte a vyberte dokumenty, s ktorými chcete chatovať"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Vybrané dokumenty"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Nastavenia"
+        "label" : "Nastavenia",
+        "help" : "Nastavenie nie je dokončené, kliknite sem a upravte ho"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Výnimka počas operácie: Anthropic api nemôže fungovať bez potrebného nastavenia api key",
         "detail" : "Chyba servera: Anthropic api nemôže fungovať bez potrebného nastavenia api key"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Súbor exportovaný",
+        "detail" : "Prejdite do sekcie stiahnutí v prehliadači"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model používaný pre interné služby"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent využíva chatovací model"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vybrať"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vyberte konfiguráciu chat modelu"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Použiť systémový predvolený chatovací model pre úlohu agenta alebo zadať iný. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Nastavenia veľkého jazykového modelu a dostupné nástroje"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Nastavenia prístupového zabezpečenia"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie agenta"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis agenta pre chat."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód agenta."
+      },
+      "agentServiceId" : {
+        "label" : "Typ služby agenta",
+        "help" : "Vyberte typ služby agenta, ktorá bude spustená."
+      },
+      "defaultConfiguration" : {
+        "label" : "Predvolená konfigurácia agenta",
+        "help" : "Nastaviť ako predvolenú konfiguráciu pre tento typ služby agenta"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Vybrať hlavný prompt šablóny slučky",
+        "help" : "Vyberte hlavný prompt slučky agenta."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maximálny počet slučiek agenta",
+        "help" : "Nastavte maximálny počet slučiek agenta (výsledkom bude detailnejší výsledok)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Povoliť všetky dostupné nástroje",
+        "help" : "Keď je toto pole zaškrtnuté, budú agentovi priradené všetky dostupné nástroje pri jeho spustení"
+      },
+      "enabledFunctions" : {
+        "label" : "Povolené funkcie pre tohto agenta",
+        "help" : "Funkcie, ktoré môže agent použiť počas svojej práce"
+      },
+      "temperature" : {
+        "label" : "Teplota",
+        "help" : "Teplota, pri ktorej bude model odpovedať, od 0 do 1 (ak si nie ste istý, nechajte prázdne)"
+      },
+      "thinking" : {
+        "label" : "Miera premýšľania",
+        "help" : "Nastavte úroveň premýšľania, ktorú model vynaloží (nie všetky modely to podporujú)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parameter TopP, od 0 do 1 (ak si nie ste istý, nechajte prázdne)"
       }
     }
   }

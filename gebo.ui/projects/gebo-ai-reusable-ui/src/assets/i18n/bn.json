@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "আমি শর্তাবলী গ্রহণ করছি",
         "help" : "এখানে ক্লিক করলে আপনি লাইসেন্সের শর্তাবলী স্বীকার করছেন"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "অ্যাডমিন ব্যবহারকারী তৈরি হয়েছে!",
+        "detail" : "অ্যাডমিন ব্যবহারকারী PAOLO.ZAVALLONI@GMAIL.COM সফলভাবে তৈরি হয়েছে"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai সেটআপের কিছু বাধ্যতামূলক ধাপ অনুপস্থিত",
         "detail" : "অনুগ্রহ করে সেটআপ প্রসেসের লাল চিহ্নিত ধাপগুলো পর্যালোচনা করুন"
+      },
+      "agentSetupSection" : {
+        "label" : "এজেন্ট সার্ভিস কনফিগার করুন",
+        "description" : "এজেন্ট সার্ভিস ও টুলস কনফিগার করুন"
+      },
+      "AgentAddBtn" : {
+        "label" : "এজেন্ট যোগ করুন"
+      },
+      "MainPanel" : {
+        "label" : "এজেন্ট সেটআপ করুন"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "কনফিগ কোড"
+      },
+      "DescriptionHeader" : {
+        "label" : "বর্ণনা"
+      },
+      "EditAgentBtn" : {
+        "label" : "এজেন্ট সম্পাদনা করুন"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "বড় ভাষা মডেল সেটআপ করুন"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "অপারেশনের সময় একটি ব্যতিক্রম: ভেক্টর স্টোর তৈরি করা যাচ্ছে না অথবা এম্বেডিং মডেল ইনিশিয়ালাইজেশন ব্যর্থ: ৪০১ - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "সার্ভার ত্রুটি: ভেক্টর স্টোর তৈরি করা যাচ্ছে না অথবা এম্বেডিং মডেল ইনিশিয়ালাইজেশন ব্যর্থ: ৪০১ - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "ব্যবহারকারী"
+      },
+      "searchNameInput" : {
+        "placeholder" : "নাম অনুসন্ধান করুন"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ইউজারনেম অনুসন্ধান করুন"
+      },
+      "SearchUsersBtn" : {
+        "label" : "অনুসন্ধান"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "রোল নির্বাচন করুন"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "সোর্সনেম অনুসন্ধান করুন"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "ব্যবহারকারীদের তালিকা",
         "help" : "গ্রুপে অংশগ্রহণকারী ব্যবহারকারীদের নির্বাচন করুন"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ব্যবহারকারীর পাসওয়ার্ড পরিবর্তন করুন"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "পরিবর্তন করুন"
+      },
+      "username" : {
+        "label" : "ব্যবহারকারীর নাম",
+        "help" : "এই অ্যাকশনটি যাচাইয়ের জন্য আপনার পাসওয়ার্ড লিখুন"
+      },
+      "currentUserPassword" : {
+        "label" : "আপনার পাসওয়ার্ড",
+        "help" : "এই অ্যাকশনটি যাচাইয়ের জন্য আপনার পাসওয়ার্ড লিখুন"
+      },
+      "confirmpassword" : {
+        "label" : "ব্যবহারকারীর পাসওয়ার্ড নিশ্চিত করুন",
+        "help" : "সম্পাদিত ব্যবহারকারীর জন্য পাসওয়ার্ড নিশ্চিত করুন"
+      },
+      "password" : {
+        "label" : "ব্যবহারকারীর নতুন পাসওয়ার্ড",
+        "help" : "সম্পাদিত ব্যবহারকারীর জন্য নতুন পাসওয়ার্ড"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "নতুন এমবেডিং মডেল",
         "help" : "কন্টেন্টগুলোর অর্থবোধক সূচীকরণ করতে সক্ষম নতুন এমবেডিং মডেল যোগ করতে সরবরাহকারী নির্বাচন করুন",
         "placeholder" : "কন্টেন্টগুলোর অর্থবোধক সূচীকরণ করতে সক্ষম নতুন এমবেডিং মডেল যোগ করতে সরবরাহকারী নির্বাচন করুন"
+      },
+      "ranker" : {
+        "label" : "নতুন রির্যাঙ্ক মডেল",
+        "help" : "নতুন রির্যাঙ্কার মডেল যোগ করতে সরবরাহকারী নির্বাচন করুন",
+        "placeholder" : "নতুন রির্যাঙ্কার মডেল যোগ করতে সরবরাহকারী নির্বাচন করুন"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "নতুন রির্যাঙ্কার মডেল কনফিগারেশন"
+      },
+      "CodeHeader3" : {
+        "label" : "কোড"
+      },
+      "DescriptionHeader3" : {
+        "label" : "বর্ণনা"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "মডেল প্রদানকারী"
+      },
+      "ModelHeader3" : {
+        "label" : "মডেল"
+      },
+      "RerankerModelsZone" : {
+        "label" : "কনফিগার করা রির্যাঙ্ক মডেলসমূহ"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "এম্বেডিং মডেল API টোকেন",
         "help" : "এই মডেলের জন্য ব্যবহৃত এম্বেডিং মডেল API টোকেন নির্বাচন করুন"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "সংরক্ষণ করুন"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল"
+      },
+      "DeleteBtn" : {
+        "label" : "মুছে ফেলুন"
+      },
+      "TitleFragment" : {
+        "label" : "র‍্যাঙ্কিং মডেল প্রদানকারী সম্পাদনা:"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "মডেল কনফিগারেশনের বর্ণনা লিখুন"
+      },
+      "code" : {
+        "label" : "ইউনিক কোড",
+        "help" : "মডেল কনফিগারেশনের স্বয়ংক্রিয়ভাবে জেনারেটেড ইউনিক কোড"
+      },
+      "baseUrl" : {
+        "label" : "র‍্যাঙ্কিং মডেল API বেস সার্ভার ঠিকানা",
+        "help" : "র‍্যাঙ্কিং মডেল এর বেস ঠিকানা।"
+      },
+      "apiSecretCode" : {
+        "label" : "র‍্যাঙ্কিং মডেল API টোকেন",
+        "help" : "এই মডেলের জন্য ব্যবহৃত হতে API টোকেন নির্বাচন করুন (ঐচ্ছিক)"
+      },
+      "choosedModel" : {
+        "label" : "র‍্যাঙ্কিং মডেল বিকল্প",
+        "help" : "একসাথে কাজ করার জন্য র‍্যাঙ্কিং মডেল নির্বাচন করুন।"
+      },
+      "defaultModel" : {
+        "label" : "এটিকে ডিফল্ট র‍্যাঙ্কিং মডেল হিসেবে সেট করুন",
+        "help" : "ঠিক থাকলে, যেখানে র‍্যাঙ্কিং মডেল নির্ধারিত নয়, সেখানে এটি ডিফল্ট হিসেবে ব্যবহৃত হবে"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "নির্বাচিত সিস্টেমসমূহ"
+      },
+      "wordExport" : {
+        "help" : "উত্তর Word-এ রপ্তানি করুন"
+      },
+      "pdfExport" : {
+        "help" : "উত্তর PDF-এ রপ্তানি করুন"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "আপনার নির্বাচিত এজেন্ট চালু হচ্ছে"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ডকুমেন্ট প্রসেস করা হচ্ছে:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ডিপ সার্চ/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "সহায়তাযুক্ত অনুসন্ধান"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "প্রম্পট",
         "help" : "রিট্রিভ অক্সমেন্টেড জেনারেশন সেশনের প্রম্পট সম্পাদনা করুন।"
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "ম্যানুয়াল অথবা অটো-টিউনড থ্রেশোল্ড কনফিগারেশন",
+        "help" : "অটো-টিউন এর পরিবর্তে ম্যানুয়াল দূরত্ব থ্রেশোল্ড ব্যবহার করুন"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "যখন সম্ভব কিওয়ার্ড অনুসন্ধান ব্যবহার করুন",
+        "help" : "এই ইনস্টলেশনে কনফিগার করা থাকলে সিমান্টিক অনুসন্ধানের পাশাপাশি কিওয়ার্ড অনুসন্ধান চালান"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "দস্তাবেজ ব্রাউজ করুন বা অনুসন্ধান করুন এবং চ্যাট করার জন্য নির্বাচন করুন"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "নির্বাচিত ডকুমেন্ট"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "চ্যাট"
       },
       "setupMenuItem" : {
-        "label" : "সেটআপ"
+        "label" : "সেটআপ",
+        "help" : "সেটআপ অসম্পূর্ণ, দয়া করে এখানে ক্লিক করুন এবং পরিচালনা করুন"
       },
       "adminMenuItem" : {
         "label" : "অ্যাডমিন"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "অপারেশনের সময় ব্যতিক্রম: Anthropic api প্রয়োজনীয় api key কনফিগারেশন ছাড়া কাজ করতে পারে না",
         "detail" : "সার্ভার ত্রুটি: Anthropic api প্রয়োজনীয় api key কনফিগারেশন ছাড়া কাজ করতে পারে না"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ফাইল রপ্তানি হয়েছে",
+        "detail" : "ব্রাউজার ডাউনলোডস সেকশনে যান"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ইন্টারনাল সার্ভিসের জন্য ব্যবহৃত মডেল"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "সংরক্ষণ করুন"
+      },
+      "UseChatModelLabel" : {
+        "label" : "এজেন্ট ব্যবহৃত চ্যাট মডেল"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল"
+      },
+      "DeleteBtn" : {
+        "label" : "মুছে ফেলুন"
+      },
+      "GeneralInfosTab" : {
+        "label" : "সাধারণ তথ্য"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "নির্বাচন করুন"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "একটি চ্যাট মডেল কনফিগারেশন নির্বাচন করুন"
+      },
+      "defaultChatModel-help" : {
+        "label" : " এজেন্টের টাস্ক পারফর্ম করতে সিস্টেম ডিফল্ট চ্যাট মডেল ব্যবহার করুন অথবা নির্দিষ্ট করুন। "
+      },
+      "LanguageModelTab" : {
+        "label" : "লার্জ ল্যাংগুয়েজ মডেল ও প্রযোজ্য টুলস সেটিংস"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "সিকিউরিটি অ্যাক্সেস সেটিংস"
+      },
+      "MainPanel" : {
+        "label" : "এজেন্ট কনফিগারেশন সম্পাদনা"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "চ্যাট এজেন্টের বর্ণনা লিখুন।"
+      },
+      "code" : {
+        "label" : "ইউনিক কোড",
+        "help" : "এজেন্টের স্বয়ংক্রিয়ভাবে জেনারেটেড ইউনিক কোড।"
+      },
+      "agentServiceId" : {
+        "label" : "এজেন্ট সার্ভিস টাইপ",
+        "help" : "যে এজেন্ট সার্ভিসটি চালানো হবে সেটি নির্বাচন করুন।"
+      },
+      "defaultConfiguration" : {
+        "label" : "ডিফল্ট এজেন্ট কনফিগারেশন",
+        "help" : "এই এজেন্ট সার্ভিস টাইপের জন্য এটিকে ডিফল্ট কনফিগারেশন হিসেবে সেট করুন"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "প্রধান লুপ প্রম্পট টেমপ্লেট নির্বাচন করুন",
+        "help" : "এজেন্টের প্রধান লুপ প্রম্পট নির্বাচন করুন।"
+      },
+      "maxLoopIterations" : {
+        "label" : "এজেন্ট লুপের সর্বোচ্চ সংখ্যা",
+        "help" : "এজেন্ট লুপের সর্বোচ্চ সংখ্যা সেট করুন (এটি আরও সূক্ষ্ম ফলাফল দেবে)।"
+      },
+      "subscribeAllTools" : {
+        "label" : "সব টুল সক্রিয় করুন",
+        "help" : "এই ফ্ল্যাগ চেক করা থাকলে এজেন্ট রান করার সময় সবাই টুল যুক্ত হবে"
+      },
+      "enabledFunctions" : {
+        "label" : "এই এজেন্টের জন্য ফাংশনগুলো সক্রিয়",
+        "help" : "এজেন্ট কাজ করার সময় যেসব ফাংশনালিটি ব্যবহার করতে পারবে"
+      },
+      "temperature" : {
+        "label" : "টেম্পারেচার",
+        "help" : "মডেল যেভাবে রেসপন্স করবে তার টেম্পারেচার, ০ থেকে ১ (নিশ্চিত না হলে খালি রাখুন)"
+      },
+      "thinking" : {
+        "label" : "চিন্তার প্রচেষ্টা",
+        "help" : "মডেল যে চিন্তার প্রচেষ্টা করবে তা কনফিগার করুন (সব মডেলে এটি সমর্থিত নয়)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP প্যারামিটার, ০ থেকে ১ (নিশ্চিত না হলে খালি রাখুন)"
       }
     }
   }

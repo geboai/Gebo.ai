@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Glacaim leis na téarmaí",
         "help" : "Trí chliceáil anseo glacann tú leis na téarmaí & coinníollacha sa cheadúnas"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Cruthaíodh úsáideoir riarthóra!",
+        "detail" : "Cruthaíodh úsáideoir riarthóra PAOLO.ZAVALLONI@GMAIL.COM go rathúil"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Tá céimeanna éigeantacha áirithe ar iarraidh i socrú Gebo.ai",
         "detail" : "Athbhreithnigh na céimeanna dearga sa phróiseas socraithe le do thoil"
+      },
+      "agentSetupSection" : {
+        "label" : "Cumraigh seirbhísí gníomhaire",
+        "description" : "Cumraigh seirbhísí gníomhaire agus a n-uirlisí ar fáil"
+      },
+      "AgentAddBtn" : {
+        "label" : "Cuir gníomhaire leis"
+      },
+      "MainPanel" : {
+        "label" : "Socraigh gníomhairí"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cód cumraíochta"
+      },
+      "DescriptionHeader" : {
+        "label" : "Cur síos"
+      },
+      "EditAgentBtn" : {
+        "label" : "Cuir gníomhaire in eagar"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Socrú samhlacha móra teanga"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Eisceacht le linn na hoibríochta: Ní féidir stór veicteora nó eisceacht tionscanta samhlacha ionchlúite a chruthú: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Earráid freastalaí: Ní féidir stór veicteora nó eisceacht tionscanta samhlacha ionchlúite a chruthú: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "úsáideoirí"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Cuardaigh ainm"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Cuardaigh ainm úsáideora"
+      },
+      "SearchUsersBtn" : {
+        "label" : "cuardaigh"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Roghnaigh ról"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Cuardaigh sloinne"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Liosta úsáideoirí",
         "help" : "Roghnaigh úsáideoirí a ghlacann páirt sa ghrúpa"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Athraigh focal faire an úsáideora"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Athraigh"
+      },
+      "username" : {
+        "label" : "Ainm úsáideora",
+        "help" : "Iontráil do phasfhocal chun an gníomh seo a dhearbhú"
+      },
+      "currentUserPassword" : {
+        "label" : "Do phasfhocal",
+        "help" : "Iontráil do phasfhocal chun an gníomh seo a dhearbhú"
+      },
+      "confirmpassword" : {
+        "label" : "deimhniú pasfhocail an úsáideora",
+        "help" : "deimhniú pasfhocail don úsáideoir a cuireadh in eagar"
+      },
+      "password" : {
+        "label" : "Focal faire nua an úsáideora",
+        "help" : "Focal faire nua don úsáideoir a cuireadh in eagar"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Samhail chódaithe nua",
         "help" : "Roghnaigh an soláthraí chun samhail chódaithe nua a chur leis atá in ann inneachair a innéacsú go seamantach",
         "placeholder" : "Roghnaigh an soláthraí chun samhail chódaithe nua a chur leis atá in ann inneachair a innéacsú go seamantach"
+      },
+      "ranker" : {
+        "label" : "Samhail nua atharangaigh",
+        "help" : "Roghnaigh an soláthraí chun samhail nua atharangaigh a chur leis",
+        "placeholder" : "Roghnaigh an soláthraí chun samhail nua atharangaigh a chur leis"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Cumraíocht samhail nua atharangaigh"
+      },
+      "CodeHeader3" : {
+        "label" : "Cód"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Cur síos"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Soláthraí na samhla"
+      },
+      "ModelHeader3" : {
+        "label" : "Samhail "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Samhailí atharangaigh cumraithe"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model  API token",
         "help" : "Roghnaigh an Embedding model  API token le húsáid do'n mhúnla seo"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "D'éirigh leis an oibríocht"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Sábháil"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "DeleteBtn" : {
+        "label" : "Scrios"
+      },
+      "TitleFragment" : {
+        "label" : "Ag cur soláthraí na samhla athranga in eagar:"
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Iontráil cur síos ar chumraíocht na samhla"
+      },
+      "code" : {
+        "label" : "Cód uathúil",
+        "help" : "Cód uathúil a ghintear go huathoibríoch do chumraíocht na samhla"
+      },
+      "baseUrl" : {
+        "label" : "seoladh bunúsach do API na samhla athranga",
+        "help" : "Seoladh bunúsach na samhla athranga."
+      },
+      "apiSecretCode" : {
+        "label" : "API token na samhla athranga",
+        "help" : "Roghnaigh API token na samhla athranga le húsáid leis an samhail seo (roghnach)"
+      },
+      "choosedModel" : {
+        "label" : "rogha samhla athranga na samhla athranga",
+        "help" : "Roghnaigh samhail athranga atá le húsáid."
+      },
+      "defaultModel" : {
+        "label" : "socraigh seo mar shamhail athranga réamhshocraithe",
+        "help" : "Más fíor, úsáidfear é seo mar shamhail athranga réamhshocraithe má tá samhail athranga gan sonrú"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "D'éirigh leis an oibríocht"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Córais roghnaithe"
+      },
+      "wordExport" : {
+        "help" : "Easpórtáil freagra go Word"
+      },
+      "pdfExport" : {
+        "help" : "Easpórtáil freagra go PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Do ghníomhaire roghnaithe á fhorghníomhú"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Doiciméad á phróiseáil:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Cuardach domhain/Cuardach Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Cuardach treoraithe"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Molta",
         "help" : "Cuir an moladh in eagar do sheisiúin retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Cumraíocht tairseach de láimh nó uathoiriúnaithe",
+        "help" : "Úsáid tairseach fad de láimh in ionad é a uathoiriúnú"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Úsáid cuardach eochairfhocal nuair atá fáil",
+        "help" : "Rith cuardaigh eochairfhocal breise le cuardaigh séimeantacha má tá siad cumraithe sa suiteáil seo"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Brabhsáil nó cuardaigh agus roghnaigh cáipéisí le comhrá leo"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Doiciméid roghnaithe"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Comhrá"
       },
       "setupMenuItem" : {
-        "label" : "Socrú"
+        "label" : "Socrú",
+        "help" : "Níl an socrú críochnaithe, brúigh anseo le do thoil chun é a bhainistiú"
       },
       "adminMenuItem" : {
         "label" : "Riarachán"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Eisceacht le linn oibríochta: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach",
         "detail" : "Earráid freastalaí: ní féidir le Anthropic api oibriú gan cumraíocht an eochair api riachtanach"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Comhad easpórtáilte",
+        "detail" : "Téigh go rannóg íoslódálacha an bhrabhsálaí"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Samhail a úsáidtear le haghaidh seirbhísí inmheánacha"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Sábháil"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Samhail chomhrá a úsáideann an gníomhaire"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "DeleteBtn" : {
+        "label" : "Scrios"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Eolas ginearálta"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "roghnaigh"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Roghnaigh cumraíocht samhail chomhrá"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Úsáid samhail chomhrá réamhshocraithe an chórais chun tasc an gníomhaire a dhéanamh nó sonraigh ceann. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Réamhshocruithe samhail teanga mhóir & na huirlisí ar fáil"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Socruithe rochtana slándála"
+      },
+      "MainPanel" : {
+        "label" : "Cumraíocht gníomhaire á chur in eagar"
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Iontráil cur síos ar an ngníomhaire comhrá."
+      },
+      "code" : {
+        "label" : "Cód uathúil",
+        "help" : "Cód uathúil a ghintear go huathoibríoch don ngníomhaire."
+      },
+      "agentServiceId" : {
+        "label" : "Cineál seirbhíse gníomhaire",
+        "help" : "Roghnaigh an cineál seirbhíse gníomhaire a rithfear."
+      },
+      "defaultConfiguration" : {
+        "label" : "Cumraíocht réamhshocraithe gníomhaire",
+        "help" : "Socraigh seo mar chumraíocht réamhshocraithe don chineál seirbhíse gníomhaire seo"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Roghnaigh teimpléad príomhleide an lúb",
+        "help" : "Roghnaigh príomhleide an lúb do ghníomhaire."
+      },
+      "maxLoopIterations" : {
+        "label" : "Uasmhéid lúb gníomhaire",
+        "help" : "Socraigh an líon uasta lúb gníomhaire (tabharfaidh sé seo toradh níos beaichte)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Gníomhachtaigh gach uirlis ar fáil",
+        "help" : "Nuair atá an tic seo, sannfar gach uirlis ar fáil nuair a ritheann na gníomhairí seo"
+      },
+      "enabledFunctions" : {
+        "label" : "Feidhmeanna cumasaithe don ghníomhaire seo",
+        "help" : "Feidhmeanna is féidir leis an ngníomhaire a úsáid agus é ag obair"
+      },
+      "temperature" : {
+        "label" : "Teocht",
+        "help" : "Teocht ar freagróidh an tsamhail, ó 0 go 1 (má tá amhras ort fág folamh é)"
+      },
+      "thinking" : {
+        "label" : "Sáruithe smaointeoireachta",
+        "help" : "Cumraigh sáruithe smaointeoireachta a dhéanfaidh an tsamhail (ní tacaíonn gach samhail leis seo)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paraiméadar TopP, ó 0 go 1 (má tá amhras ort fág folamh é)"
       }
     }
   }

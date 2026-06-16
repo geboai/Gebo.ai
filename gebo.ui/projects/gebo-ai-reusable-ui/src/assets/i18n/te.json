@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "నేను షరతులను అంగీకరిస్తున్నాను",
         "help" : "ఇక్కడ క్లిక్ చేయడం ద్వారా మీరు లైసెన్స్ లోని షరతులను అంగీకరిస్తారు"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "అడ్మిన్ యూజర్ సృష్టించబడింది!",
+        "detail" : "అడ్మిన్ యూజర్ PAOLO.ZAVALLONI@GMAIL.COM ను విజయవంతంగా సృష్టించాము"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai సెటప్ లో కొన్ని తప్పనిసరి దశలు మిగిలిపోయాయి",
         "detail" : "దయచేసి సెటప్ ప్రక్రియలో ఎర్రగా ఉన్న దశలను సమీక్షించండి"
+      },
+      "agentSetupSection" : {
+        "label" : "ఏజెంట్ సేవలను కాన్ఫిగర్ చేయండి",
+        "description" : "ఏజెంట్ సేవలను మరియు వాటి అందుబాటులో ఉన్న సాధనాలను కాన్ఫిగర్ చేయండి"
+      },
+      "AgentAddBtn" : {
+        "label" : "ఏజెంట్ ను జోడించండి"
+      },
+      "MainPanel" : {
+        "label" : "ఏజెంట్లను సెటప్ చేయండి"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "EditAgentBtn" : {
+        "label" : "ఏజెంట్ ని ఎడిట్ చేయండి"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "పెద్ద భాషా మోడల్‌లను సెటప్ చేయండి"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "ఆపరేషన్ సమయంలో తప్పు:Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "సర్వర్ లోపం: Cannot create vector store or embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "వాడుకదారులు"
+      },
+      "searchNameInput" : {
+        "placeholder" : "పేరు కోసం శోధించండి"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "యూజర్ పేరుకై శోధించండి"
+      },
+      "SearchUsersBtn" : {
+        "label" : "శోధించండి"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "పాత్రను ఎంచుకోండి"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "సొర్నేమ్ కోసం శోధించండి"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "వాడుల జాబితా",
         "help" : "గుంపులో పాల్గొనేవారి వాడులను ఎంచుకోండి"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "యూజర్ పాస్‌వర్డ్ మార్చండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "మార్చండి"
+      },
+      "username" : {
+        "label" : "యూజర్ పేరు",
+        "help" : "ఈ చర్యను ధృవీకరించడానికి మీ పాస్‌వర్డ్‌ని నమోదు చేయండి"
+      },
+      "currentUserPassword" : {
+        "label" : "మీ పాస్‌వర్డ్",
+        "help" : "ఈ చర్యను ధృవీకరించడానికి మీ పాస్‌వర్డ్‌ని నమోదు చేయండి"
+      },
+      "confirmpassword" : {
+        "label" : "యూజర్ పాస్‌వర్డ్ నిర్ధారణ",
+        "help" : "ఎడిట్ చేసిన యూజర్‌కు పాస్‌వర్డ్ నిర్ధారణ"
+      },
+      "password" : {
+        "label" : "యూజర్ కొత్త పాస్‌వర్డ్",
+        "help" : "ఎడిట్ చేసిన యూజర్‌కి కొత్త పాస్‌వర్డ్"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "కొత్త ఎంబెడింగ్ మోడల్",
         "help" : "విషయాల semantical సూచికలను చేయగలిగే కొత్త ఎంబెడింగ్ మోడల్‌ను జోడించడానికి సరఫరాదారుని ఎంచుకోండి",
         "placeholder" : "విషయాల semantical సూచికలను చేయగలిగే కొత్త ఎంబెడింగ్ మోడల్‌ను జోడించడానికి సరఫరాదారుని ఎంచుకోండి"
+      },
+      "ranker" : {
+        "label" : "కొత్త రీర్యాంక్ మోడల్",
+        "help" : "కొత్త రీర్యాంకర్ మోడల్ ను జోడించడానికి సరఫరాదారుడిని ఎంచుకోండి",
+        "placeholder" : "కొత్త రీర్యాంకర్ మోడల్ ను జోడించడానికి సరఫరాదారుడిని ఎంచుకోండి"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "కొత్త రీర్యాంకర్ మోడల్ కాన్ఫిగరేషన్"
+      },
+      "CodeHeader3" : {
+        "label" : "కోడ్"
+      },
+      "DescriptionHeader3" : {
+        "label" : "వివరణ"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "మోడల్ ప్రొవైడర్"
+      },
+      "ModelHeader3" : {
+        "label" : "మోడల్"
+      },
+      "RerankerModelsZone" : {
+        "label" : "కాన్ఫిగర్ చేసిన రీర్యాంక్ మోడల్స్"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "ఎంబెడింగ్ మోడల్ API టోకెన్",
         "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు ఎంబెడింగ్ మోడల్ API టోకెన్‌ను ఎంచుకోండి"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "సరే!",
+        "detail" : "ఆపరేషన్ విజయవంతంగా పూర్తయింది"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "TitleFragment" : {
+        "label" : "ర్యాంకింగ్ మోడల్ ప్రొవైడర్ ను ఎడిట్ చేస్తోంది:"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్ యొక్క వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "ఆటోమేటిగ్గా జనరేట్ అయిన యునిక్ కోడ్"
+      },
+      "baseUrl" : {
+        "label" : "ర్యాంకింగ్ మోడల్ API బేస్ సర్వర్ అడ్రస్",
+        "help" : "ర్యాంకింగ్ మోడల్ యొక్క బేస్ అడ్రస్."
+      },
+      "apiSecretCode" : {
+        "label" : "ర్యాంకింగ్ మోడల్ API టోకెన్",
+        "help" : "ఈ మోడల్ కోసం ఉపయోగించాల్సిన ర్యాంకింగ్ మోడల్ API టోకెన్ ను ఎంచుకోండి (ఐచ్ఛికం)"
+      },
+      "choosedModel" : {
+        "label" : "ర్యాంకింగ్ మోడల్ ఎంపిక",
+        "help" : "పని చేయడానికి అవసరమైన ర్యాంకింగ్ మోడల్ ఎంచుకోండి."
+      },
+      "defaultModel" : {
+        "label" : "డిఫాల్ట్ ర్యాంకింగ్ మోడల్ గా సెట్ చేయండి",
+        "help" : "సరికదా అన్నపుడు ఇది డిఫాల్ట్ ర్యాంకింగ్ మోడల్ గా వాడుతుంది"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "సరే!",
+        "detail" : "ఆపరేషన్ విజయవంతంగా పూర్తయింది"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ఎంచుకున్న సిస్టమ్‌లు"
+      },
+      "wordExport" : {
+        "help" : "వర్డ్ కి స్పందనను ఎగ్మరి చేయండి"
+      },
+      "pdfExport" : {
+        "help" : "PDFకి స్పందనను ఎగ్మరి చేయండి"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "మీరు ఎంచుకున్న ఏజెంట్‌ను అమలు చేస్తోంది"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "డాక్యుమెంట్ ప్రాసెస్ అవుతోంది:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "డీప్ సెర్చ్/Jira సెర్చ్"
+      },
+      "PURE_SEARCH" : {
+        "label" : "సహాయంతో శోధన"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "ప్రాంప్ట్",
         "help" : "రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ సెషన్‌ల కోసం ప్రాంప్ట్‌ను ఎడిట్ చేయండి."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "మాన్యువల్ లేదా ఆటోట్లున్ త్రెషోల్డ్ కాన్ఫిగరేషన్",
+        "help" : "Autotune చేయడానికి బదులు manual distance threshold ఉపయోగించండి"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "లభ్యంగా ఉంటే కీలకపద శోధన ఉపయోగించండి",
+        "help" : "ఈ ఇన్‌స్టాలేషన్‌లో కాన్ఫిగర్ చేసినట్లయితే సెమాంటిక్ శోధనలకు అదనంగా కీలకపద శోధనలు చేయండి"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "చాట్ చేయడానికి డాక్యుమెంట్లను బ్రౌజ్ చేయండి లేదా శోధించండి మరియు ఎంచుకోండి"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ఎంచుకున్న డాక్యుమెంట్స్"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "చాట్"
       },
       "setupMenuItem" : {
-        "label" : "సెట్టప్"
+        "label" : "సెట్టప్",
+        "help" : "సెట్టప్ పూర్తి కాలేదు, దయచేసి ఇక్కడ నొక్కి నిర్వాహకించండి"
       },
       "adminMenuItem" : {
         "label" : "అడ్మిన్"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ప్రక్రియలో దోషం: Anthropic api అవసరమైన api key కాన్ఫిగరేషన్ లేకుండా పనిచేయదు",
         "detail" : "సర్వర్ లోపం: Anthropic api అవసరమైన api key కాన్ఫిగరేషన్ లేకుండా పనిచేయదు"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ఫైల్ ఎగుమతి చేయబడింది",
+        "detail" : "బ్రౌజర్ డౌన్‌లోడ్స్ సెక్షన్‌కి వెళ్లండి"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "అంతర్గత సేవల కోసం మోడల్ వాడబడుతుంది"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ఏజంట్ వాడిన చాట్ మోడల్"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ప్రాధమిక సమాచారం"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ఎంచుకోండి"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "చాట్ మోడల్ కాన్ఫిగరేషన్ ఎంచుకోండి"
+      },
+      "defaultChatModel-help" : {
+        "label" : " ఏజెంట్ పనిని చేయించడానికి సిస్టమ్ డిఫాల్ట్ చాట్ మోడల్ వాడండి లేదా వివరSpecify చేయండి. "
+      },
+      "LanguageModelTab" : {
+        "label" : "లార్జ్ లాంగ్వేజ్ మోడల్ & వాడగల సాధనాల సెట్టింగ్స్"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "భద్రతా యాక్సెస్ సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "ఏజెంట్ కాన్ఫిగరేషన్ ను ఎడిట్ చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "చాట్ ఏజెంట్ వివరణను నమోదు చేయండి."
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "ఏజెంట్ కోసం ఆటోమేటిగ్గా జనరేట్ అయిన యునిక్ కోడ్."
+      },
+      "agentServiceId" : {
+        "label" : "ఏజెంట్ సేవ రకం",
+        "help" : "చేయాల్సిన ఏజెంట్ సేవ రకం ఎంచుకోండి."
+      },
+      "defaultConfiguration" : {
+        "label" : "డిఫాల్ట్ ఏజెంట్ కాన్ఫిగరేషన్",
+        "help" : "ఈ ఏజెంట్ సేవ రకానికి డిఫాల్ట్ కాన్ఫిగరేషన్ గా సెట్ చేయండి"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ప్రధాన లూప్ ప్రాంప్ట్ టెంప్లేట్ ఎంచుకోండి",
+        "help" : "ఏజెంట్ ప్రధాన లూప్ ప్రాంప్ట్ ని ఎంచుకోండి."
+      },
+      "maxLoopIterations" : {
+        "label" : "ఏజెంట్ లూప్స్ గరిష్ట సంఖ్య",
+        "help" : "ఏజెంట్ లూప్స్ కి గరిష్ట సంఖ్యను సెట్ చేయండి (ఇది మంచి ఫలితాన్నిస్తుంది)."
+      },
+      "subscribeAllTools" : {
+        "label" : "అందుబాటులో ఉన్న అన్ని సాధనాల్ని యాక్టివేట్ చేయండి",
+        "help" : "ఈ ఫ్లాగ్ ఎంచుకుంటే అన్ని అందుబాటులో ఉన్న సాధనాలు ఈ ఏజెంట్ రన్ చేసినప్పుడు అమలుకావస్తాయి"
+      },
+      "enabledFunctions" : {
+        "label" : "ఈ ఏజెంట్ కోసం అందుబాటులో ఉన్న ఫంక్షన్ కాల్",
+        "help" : "ఏజెంట్ పని చేస్తుండగా వాడగలిగే ఫంక్షనాలిటీలు"
+      },
+      "temperature" : {
+        "label" : "టెంపరేచర్",
+        "help" : "మోడల్ స్పందించే టెంపరేచర్, 0 నుండి 1 వరకు (తెలియకపోతే ఖాళీగానే ఉంచండి)"
+      },
+      "thinking" : {
+        "label" : "ఆలోచన ప్రయత్నాలు",
+        "help" : "మోడల్ చేసే ఆలోచనా ప్రయత్నాలు కాన్ఫిగర్ చేయండి (ప్రతి మోడల్ ఇది సపోర్ట్ చేయదు)"
+      },
+      "topP" : {
+        "label" : "టాప్P",
+        "help" : "టాప్P పరామితి, 0 నుండి 1 వరకు (తెలియకపోతే ఖాళీ ఉంచండి)"
       }
     }
   }

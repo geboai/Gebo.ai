@@ -55,5 +55,11 @@
 			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.twwch</groupId>
+			<artifactId>markdown2office</artifactId>
+			<version>1.0.16</version>
+		</dependency>
+
 	</dependencies>
 </project>

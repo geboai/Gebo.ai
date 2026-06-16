@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGResponseToFileService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.client.rest.config.GeboChatUIConfig;
@@ -39,6 +42,7 @@ import ai.gebo.llms.chat.client.rest.model.ChatUIOptions;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.security.services.IGSecurityService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 /**
@@ -52,11 +56,15 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "api/users/GeboUserChatsController")
 @AllArgsConstructor
 public class GeboUserChatsController {
+	private static final String PDF_MIME = "application/pdf";
+	private static final String DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	private static final String EXCEL_MIME = "application/vnd.ms-excel";
 	final GUserChatSessionRepository repository;
 	final IGSecurityService securityService;
 	final IGChatStorageAreaService chatStorageAreaService;
 	final IGChatSessionLifeCycleService sessionLifeCycleService;
 	final GeboChatUIConfig uiConfig;
+	final IGResponseToFileService response2fileService;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -220,5 +228,36 @@ public class GeboUserChatsController {
 	@GetMapping(value = "getUIConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChatUIOptions getUIConfig() {
 		return new ChatUIOptions(uiConfig);
+	}
+
+	@GetMapping(value = "exportResponse2file")
+	public void exportResponse2file(@RequestParam("userContextCode") String userContextCode,
+			@RequestParam("responseId") String responseId,
+			@RequestParam("format") IGResponseToFileService.ResponseFormat format, HttpServletResponse response)
+			throws IOException {
+		String fileName = null;
+		OutputStream os = response.getOutputStream();
+		switch (format) {
+		case EXCEL: {
+			response.setContentType(EXCEL_MIME);
+			fileName = "export.xlxs";
+		}
+			break;
+		case WORD: {
+			response.setContentType(DOCX_MIME);
+			fileName = "export.docx";
+		}
+			break;
+		case PDF: {
+			response.setContentType(PDF_MIME);
+			fileName = "export.pdf";
+		}
+			break;
+		}
+
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+		response2fileService.convert(userContextCode, responseId, format, os);
 	}
 }

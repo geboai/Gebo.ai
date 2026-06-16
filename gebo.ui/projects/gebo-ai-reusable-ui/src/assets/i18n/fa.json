@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "شرایط را می‌پذیرم",
         "help" : "با کلیک اینجا، شرایط و ضوابط مجوز را می‌پذیرید"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "کاربر ادمین ساخته شد!",
+        "detail" : "کاربر ادمین PAOLO.ZAVALLONI@GMAIL.COM با موفقیت ساخته شد"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "راه‌اندازی Gebo.ai یک مرحله ضروری را کم دارد",
         "detail" : "لطفاً مراحل قرمز رنگ فرآیند راه‌اندازی را بررسی کنید"
+      },
+      "agentSetupSection" : {
+        "label" : "پیکربندی سرویس‌های عامل",
+        "description" : "سرویس‌های عامل و ابزارهای در دسترس آن‌ها را پیکربندی کنید"
+      },
+      "AgentAddBtn" : {
+        "label" : "افزودن عامل"
+      },
+      "MainPanel" : {
+        "label" : "پیکربندی عامل‌ها"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "EditAgentBtn" : {
+        "label" : "ویرایش عامل"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "راه‌اندازی مدل‌های زبان بزرگ"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "استثناء در عملیات: امکان ساخت vector store یا خطا در راه‌اندازی مدل embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "خطای سرور: امکان ساخت vector store یا خطا در راه‌اندازی مدل embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "کاربران"
+      },
+      "searchNameInput" : {
+        "placeholder" : "جستجو بر اساس نام"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "جستجو بر اساس نام کاربری"
+      },
+      "SearchUsersBtn" : {
+        "label" : "جستجو"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "انتخاب نقش"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "جستجو بر اساس نام خانوادگی"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "لیست کاربران",
         "help" : "کاربرانی که در گروه هستند را انتخاب کنید"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "تغییر رمز عبور کاربر"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "تغییر"
+      },
+      "username" : {
+        "label" : "نام کاربری",
+        "help" : "رمز عبور خود را برای تایید این اقدام وارد کنید"
+      },
+      "currentUserPassword" : {
+        "label" : "رمز عبور شما",
+        "help" : "رمز عبور خود را برای تایید این اقدام وارد کنید"
+      },
+      "confirmpassword" : {
+        "label" : "تایید رمز عبور کاربر",
+        "help" : "تایید رمز عبور برای کاربر ویرایش شده"
+      },
+      "password" : {
+        "label" : "رمز عبور جدید کاربر",
+        "help" : "رمز عبور جدید برای کاربر ویرایش شده"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "مدل جاسازی جدید",
         "help" : "برای افزودن مدل جاسازی جدید که قابلیت شاخص‌گذاری معنایی محتوا را دارد، عرضه‌کننده را انتخاب کنید",
         "placeholder" : "برای افزودن مدل جاسازی جدید که قابلیت شاخص‌گذاری معنایی محتوا را دارد، عرضه‌کننده را انتخاب کنید"
+      },
+      "ranker" : {
+        "label" : "مدل rerank جدید",
+        "help" : "تأمین‌کننده را برای افزودن مدل reranker جدید انتخاب کنید",
+        "placeholder" : "تأمین‌کننده را برای افزودن مدل reranker جدید انتخاب کنید"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "پیکربندی مدل reranker جدید"
+      },
+      "CodeHeader3" : {
+        "label" : "کد"
+      },
+      "DescriptionHeader3" : {
+        "label" : "توضیحات"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "تأمین‌کننده مدل"
+      },
+      "ModelHeader3" : {
+        "label" : "مدل"
+      },
+      "RerankerModelsZone" : {
+        "label" : "مدل‌های rerank پیکربندی‌شده"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "توکن API مدل تعبیه",
         "help" : "توکن API مدل تعبیه مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تأیید شد!",
+        "detail" : "عملیات با موفقیت انجام شد"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "TitleFragment" : {
+        "label" : "ویرایش تأمین‌کننده مدل رتبه‌بندی:"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای پیکربندی مدل وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای ایجادشده به صورت خودکار برای پیکربندی مدل"
+      },
+      "baseUrl" : {
+        "label" : "آدرس سرور پایه API مدل رتبه‌بندی",
+        "help" : "آدرس پایه مدل رتبه‌بندی."
+      },
+      "apiSecretCode" : {
+        "label" : "توکن API مدل رتبه‌بندی",
+        "help" : "توکن API مدل رتبه‌بندی مورد استفاده برای این مدل را انتخاب کنید (اختیاری)"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل رتبه‌بندی",
+        "help" : "مدل رتبه‌بندی مورد نظر خود برای کار با آن را انتخاب کنید."
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل رتبه‌بندی پیش‌فرض",
+        "help" : "اگر بله، این به عنوان مدل رتبه‌بندی پیش‌فرض استفاده می‌شود، زمانی که مدل رتبه‌بندی مشخص نشده است"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تأیید شد!",
+        "detail" : "عملیات با موفقیت انجام شد"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "سیستم‌های انتخاب‌شده"
+      },
+      "wordExport" : {
+        "help" : "خروجی پاسخ به Word"
+      },
+      "pdfExport" : {
+        "help" : "خروجی پاسخ به PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "در حال اجرای عامل انتخابی شما"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "در حال پردازش سند:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "جستجوی عمیق/جستجوی Jira"
+      },
+      "PURE_SEARCH" : {
+        "label" : "جستجوی کمکی"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "پرامپت",
         "help" : "پرامپت را برای جلسات بازیابی تقویت‌شده ویرایش کنید."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "پیکربندی آستانه دستی یا خودکار",
+        "help" : "به جای تنظیم خودکار، از مقدار آستانه فاصله دستی استفاده کنید"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "استفاده از جستجوی کلیدواژه در صورت وجود",
+        "help" : "جستجوی کلیدواژه را علاوه بر جستجوهای معنایی اجرا کن، اگر در این نصب پیکربندی شده باشد"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "مرور یا جستجو و انتخاب اسناد برای گفتگو"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "اسناد انتخاب‌شده"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "گفتگو"
       },
       "setupMenuItem" : {
-        "label" : "راه‌اندازی"
+        "label" : "راه‌اندازی",
+        "help" : "پیکربندی کامل نیست، لطفاً برای مدیریت این بخش اینجا را انتخاب کنید"
       },
       "adminMenuItem" : {
         "label" : "مدیریت"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "استثنا در عملیات: Anthropic api بدون پیکربندی کلید api مورد نیاز کار نمی‌کند",
         "detail" : "خطای سرور: Anthropic api بدون پیکربندی کلید api مورد نیاز کار نمی‌کند"
+      },
+      "fileExportLoaded" : {
+        "summary" : "فایل صادر شد",
+        "detail" : "به بخش دانلودهای مرورگر بروید"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "مدل مورد استفاده برای خدمات داخلی"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "UseChatModelLabel" : {
+        "label" : "مدل چت استفاده‌شده عامل"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات کلی"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "انتخاب"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "پیکربندی مدل چت را انتخاب کنید"
+      },
+      "defaultChatModel-help" : {
+        "label" : " از مدل چت پیش‌فرض سیستم برای انجام کار عامل استفاده کنید یا یکی را مشخص نمایید. "
+      },
+      "LanguageModelTab" : {
+        "label" : "تنظیمات مدل زبان بزرگ و ابزارهای قابل استفاده"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی امنیتی"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی عامل"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای عامل چت وارد کنید."
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتا که به صورت خودکار برای عامل ایجاد می‌شود."
+      },
+      "agentServiceId" : {
+        "label" : "نوع سرویس عامل",
+        "help" : "نوع سرویس عامل اجرایی را انتخاب کنید."
+      },
+      "defaultConfiguration" : {
+        "label" : "پیکربندی پیش‌فرض عامل",
+        "help" : "این گزینه را به عنوان پیکربندی پیش‌فرض برای نوع سرویس عامل قرار دهید"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "انتخاب قالب prompt حلقه اصلی",
+        "help" : "قالب prompt حلقه اصلی عامل را انتخاب کنید."
+      },
+      "maxLoopIterations" : {
+        "label" : "حداکثر تعداد تکرار عامل",
+        "help" : "حداکثر تعداد تکرار عامل را تعیین کنید (این باعث نتیجه دقیق‌تر می‌شود)."
+      },
+      "subscribeAllTools" : {
+        "label" : "فعال‌سازی همه ابزارهای موجود",
+        "help" : "در صورت فعال بودن این گزینه، همه ابزارهای موجود هنگام اجرای این عامل اختصاص داده می‌شوند"
+      },
+      "enabledFunctions" : {
+        "label" : "فعال‌سازی فراخوانی توابع برای این عامل",
+        "help" : "قابلیت‌هایی که عامل هنگام انجام کار خود می‌تواند از آن‌ها استفاده کند"
+      },
+      "temperature" : {
+        "label" : "دما",
+        "help" : "میزان دمای مدل برای پاسخگویی، از ۰ تا ۱ (در صورت عدم اطمینان، خالی بگذارید)"
+      },
+      "thinking" : {
+        "label" : "تلاش‌های فکری",
+        "help" : "تلاش‌های فکری که مدل انجام می‌دهد را پیکربندی کنید (همه مدل‌ها از این ویژگی پشتیبانی نمی‌کنند)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "پارامتر TopP، از ۰ تا ۱ (در صورت عدم اطمینان، خالی بگذارید)"
       }
     }
   }

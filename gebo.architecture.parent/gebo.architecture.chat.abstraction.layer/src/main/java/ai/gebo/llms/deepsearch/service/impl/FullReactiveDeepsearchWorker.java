@@ -24,6 +24,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -71,6 +72,9 @@ import reactor.core.scheduler.Schedulers;
 
 @Service
 public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingService {
+	private static final String PI_PI_FILE = "pi pi-file";
+	private static final String GENERATING_ANALISYS = "Generating analisys..";
+	private static final String STREAMING_RESULTS = "StreamingResults";
 	private static final String UTF_8 = "UTF-8";
 	private static final String COMMA_CHARACTER = ",";
 	private static final String CALLING_LLM_PROBLEM_ON_FINAL_ANALISYS = "CALLING LLM PROBLEM ON FINAL ANALISYS";
@@ -143,7 +147,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				return runAs.doRunAsWithReturn(() -> {
 					try {
 						emitter.notifyUser("search-" + handler.getHandlerId(),
-								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
+								"Running search on " + handler.getDescription(sampledConfig), PI_PI_FILE, 3000l,
 								NotificationType.INFO);
 						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
 								perDataSourceK, sampleTextTokensSize, chunkSessionId);
@@ -160,8 +164,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Supplier<Flux<AbstractPureSearchDocumentResultEntry>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
-						emitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", "pi pi-file",
-								3000l, NotificationType.INFO);
+						emitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", PI_PI_FILE, 3000l,
+								NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamPureSearch(minimalChatContext, emitter,
 								serviceModel, serviceModel, chunkSessionId, perDataSourceK, sampleTextTokensSize);
 					} catch (Throwable e) {
@@ -228,12 +232,13 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final Map<String, DocumentWithSearchResult> resultsByFragmentId = new Hashtable<>();
 		final Map<String, Document> docrefsByFragmentId = new Hashtable<>();
 		List<Supplier<Flux<Document>>> suppliers = new ArrayList<>();
+		boolean containsIKB = false;
 		for (IGReactiveDeepSearchDataSourceService handler : filtered) {
 			Supplier<Flux<Document>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
 						sinkUIEmitter.notifyUser("search-" + handler.getHandlerId(),
-								"Running search on " + handler.getDescription(sampledConfig), "pi pi-file", 3000l,
+								"Running search on " + handler.getDescription(sampledConfig), PI_PI_FILE, 3000l,
 								NotificationType.INFO);
 						Flux<DocumentWithSearchResult> fl = handler.streamSearchResults(runtimeData, sinkUIEmitter,
 								chatModel, serviceModel, chunkSessionId, globalK)
@@ -258,11 +263,12 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		}
 
 		if (sampledDataSources.contains(DefaultRoutingChatPipelineStepServiceImpl.INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID)) {
+			containsIKB = true;
 			Supplier<Flux<Document>> supplier = () -> {
 				return runAs.doRunAsWithReturn(() -> {
 					try {
-						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base",
-								"pi pi-file", 3000l, NotificationType.INFO);
+						sinkUIEmitter.notifyUser("search-ikb", "Running search on internal Knowledge Base", PI_PI_FILE,
+								3000l, NotificationType.INFO);
 						return this.internalKnowledgeBaseDeepSearchService.streamSearchResults(runtimeData,
 								sinkUIEmitter, chatModel, serviceModel, chunkSessionId, globalK).map(doc -> {
 
@@ -311,7 +317,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			Flux<String> outFlux = null;
 			try {
 				try {
-					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", "pi pi-file", 3000l,
+					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", PI_PI_FILE, 3000l,
 							NotificationType.INFO);
 				} catch (Throwable th) {
 				}
@@ -337,17 +343,57 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			resultFlux = backupNotFoundDocuments;
 		} else if (suppliers.size() == 1) {
 			Flux<Document> documentFlux = suppliers.get(0).get().map(countingMapper);
-			resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
-					cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
-					commonParams, irrelevantFragments);
-			resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
-				if (docsCounter.get() == 0l) {
-					return backupNotFoundDocuments;
+			if (containsIKB) {
+				List<Document> documents = documentFlux.buffer().blockFirst();
+				if (documents == null || documents.isEmpty()) {
+					resultFlux = backupNotFoundDocuments;
 				} else {
-					return Flux.fromIterable(List.of());
+					int totalTokens = 0;
+					for (Document document : documents) {
+						if (document.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH) && document
+								.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number t) {
+							totalTokens += t.intValue();
+						} else {
+							totalTokens += ITokensCountable.stringsTokensSize(document.getText());
+						}
+					}
+					if (totalTokens <= (chatModel.getContextLength() * 3 / 4)) {
+						try {
+							try {
+								sinkUIEmitter.notifyUser(STREAMING_RESULTS, GENERATING_ANALISYS, PI_PI_FILE, 3000l,
+										NotificationType.INFO);
+							} catch (Throwable th) {
+							}
+							Map<String, Object> params = new HashMap<>(commonParams);
+							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
+							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
+							resultFlux = callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
+						} catch (Throwable th) {
+							LOGGER.error("Exception on last summary", th);
+							resultFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
+						}
+					} else {
+						documentFlux = Flux.fromIterable(documents);
+					}
 				}
-			}));
-		} else {
+
+			}
+			if (resultFlux == null) {
+
+				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
+						cumulativeAnalisysPrompt, emptyResponsePrompt, finalAnalisysPrompt, chatModel, serviceModel,
+						commonParams, irrelevantFragments);
+				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
+					if (docsCounter.get() == 0l) {
+						return backupNotFoundDocuments;
+					} else {
+						return Flux.fromIterable(List.of());
+					}
+				}));
+			}
+		} else
+
+		{
 			Flux<List<List<String>>> resultsBuffer = Flux.fromIterable(suppliers).concatMap(x -> {
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request,
@@ -374,7 +420,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					try {
 						try {
 							sinkUIEmitter.notifyUser("aggregate-multple-src", "Finalizing multiple sources analisys",
-									"pi pi-file", 3000l, NotificationType.INFO);
+									PI_PI_FILE, 3000l, NotificationType.INFO);
 						} catch (Throwable th) {
 						}
 						Map<String, Object> params = new HashMap<>(commonParams);
@@ -469,7 +515,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		Flux<Document> docsFlux = Flux.defer(() -> {
 			return runAs.doRunAsWithReturn(() -> {
 				try {
-					sinkUIEmitter.notifyUser("search-ikb", "Doing analisys on selected documents", "pi pi-file", 3000l,
+					sinkUIEmitter.notifyUser("search-ikb", "Doing analisys on selected documents", PI_PI_FILE, 3000l,
 							NotificationType.INFO);
 					AIDocumentsSet aiDoc = runtimeData.getRequestResources().allDocuments();
 					return Flux.fromIterable(aiDoc.aiDocumentsList());
@@ -568,7 +614,13 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
+		final long tokensBudget = serviceModel.getContextLength() * 3 / 4;
+		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
+		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
+				request.getUserIntent() != null
+						? request.getUserIntent().name() + " "
+								+ request.getUserIntent().getAgentDeliverableCompleteness()
+						: "");
 		final Flux<String> backupNotFoundDocuments = Flux.defer(() -> {
 			Flux<String> outFlux = null;
 			try {
@@ -583,11 +635,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			}
 			return outFlux;
 		});
+
 		GenerativeFunction<Document, String> intermediateProcess = (initialValue, _emitter, documentsList) -> {
 
 			return runAs.doRunAsWithReturnAndException(() -> {
+				Map<String, Object> params = new HashMap<>(sharedParams);
+				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 				final String intermediateAnalisys = callLLMWithDocumentsAndConsolidation(serviceModel,
-						cumulativeAnalisysPrompt, context, documentsList, initialValue, commonParams);
+						cumulativeAnalisysPrompt, context, documentsList, initialValue, params);
 
 				return cumulateDiscardedFragmentsAndCleanOutput(intermediateAnalisys, discardedFragmentIds);
 			});
@@ -597,10 +652,10 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			return runAs.doRunAsWithReturnAndException(() -> {
 				if (list != null && !list.isEmpty()) {
 
-					Map<String, Object> params = new HashMap<>(commonParams);
+					Map<String, Object> params = new HashMap<>(sharedParams);
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					params.put(AGENT_DELIVERABLE_COMPLETENESS, request.getUserIntent().name());
+
 					return callLLMReactive(chatModel, finalAnalisysPrompt, context, params);
 
 				} else {

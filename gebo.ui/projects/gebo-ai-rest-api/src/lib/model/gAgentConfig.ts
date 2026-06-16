@@ -22,14 +22,29 @@ export interface GAgentConfig {
     agentServiceId: string;
     mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
-    completeEvaluationPromptUseCode?: string;
-    completeEvaluationPrompt?: GPromptTemplateConfig;
     subscribeAllTools?: boolean;
-    choosedModel: GObjectRefGBaseChatModelConfig;
-    maxLoopIterations?: number;
+    agentRoleCode: string;
+    useDefaultChatModel?: boolean;
+    chatModelReference?: GObjectRefGBaseChatModelConfig;
+    maxLoopIterations: number;
+    aclAliases?: Array<number>;
+    defaultConfiguration?: boolean;
     topP?: number;
+    temperature?: number;
+    thinking?: GAgentConfig.ThinkingEnum;
+    readOnly?: boolean;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
+}
+export namespace GAgentConfig {
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
+    };
 }

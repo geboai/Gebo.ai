@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Jeg accepterer betingelserne",
         "help" : "Ved at klikke her accepterer du vilkårene og betingelserne i licensen"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Adminbruger oprettet!",
+        "detail" : "Adminbruger PAOLO.ZAVALLONI@GMAIL.COM blev oprettet"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai opsætning mangler nogle påkrævede trin",
         "detail" : "Gennemgå venligst de røde trin i opsætningsprocessen"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigurer agents tjenester",
+        "description" : "Konfigurer agents tjenester og deres tilgængelige værktøjer"
+      },
+      "AgentAddBtn" : {
+        "label" : "Tilføj agent"
+      },
+      "MainPanel" : {
+        "label" : "Opsæt agenter"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "EditAgentBtn" : {
+        "label" : "Rediger agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Opsæt store sprogmodeller"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Undtagelse under handling: Kan ikke oprette vektorstore eller undtagelse ved start af embeddingsmodel: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Serverfejl: Kan ikke oprette vektorstore eller undtagelse ved start af embeddingsmodel: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "brugere"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Søg navn"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Søg brugernavn"
+      },
+      "SearchUsersBtn" : {
+        "label" : "søg"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Vælg rolle"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Søg efternavn"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Brugerliste",
         "help" : "Vælg brugere, der deltager i gruppen"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Skift brugerens adgangskode"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Skift"
+      },
+      "username" : {
+        "label" : "Brugernavn",
+        "help" : "Indtast din adgangskode for at bekræfte denne handling"
+      },
+      "currentUserPassword" : {
+        "label" : "Din adgangskode",
+        "help" : "Indtast din adgangskode for at bekræfte denne handling"
+      },
+      "confirmpassword" : {
+        "label" : "Bekræft brugerens adgangskode",
+        "help" : "Bekræft adgangskode for den redigerede bruger"
+      },
+      "password" : {
+        "label" : "Brugerens nye adgangskode",
+        "help" : "Ny adgangskode for den redigerede bruger"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Ny embedding-model",
         "help" : "Vælg leverandøren for at tilføje en ny embedding-model, der kan udføre semantisk indeksering af indhold",
         "placeholder" : "Vælg leverandøren for at tilføje en ny embedding-model, der kan udføre semantisk indeksering af indhold"
+      },
+      "ranker" : {
+        "label" : "Ny rerank-model",
+        "help" : "Vælg udbyder for at tilføje en ny reranker-model",
+        "placeholder" : "Vælg udbyder for at tilføje en ny reranker-model"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Ny konfiguration af reranker-model"
+      },
+      "CodeHeader3" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Beskrivelse"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modeludbyder"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurerede rerank-modeller"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API-token",
         "help" : "Vælg det Embedding model API-token, der skal bruges til denne model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Handlingen blev gennemført"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "TitleFragment" : {
+        "label" : "Rediger modeludbyder til rangering:"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Autogenereret unik kode for modelkonfigurationen"
+      },
+      "baseUrl" : {
+        "label" : "Rangeringsmodel API-baseserveradresse",
+        "help" : "Baseadresse på rangeringsmodel."
+      },
+      "apiSecretCode" : {
+        "label" : "Rangeringsmodel API-token",
+        "help" : "Vælg API-token til rangeringsmodel, der skal bruges for denne model (valgfrit)"
+      },
+      "choosedModel" : {
+        "label" : "Rangeringsmodel valg af rangeringsmodel",
+        "help" : "Vælg rangeringsmodellen, som skal bruges."
+      },
+      "defaultModel" : {
+        "label" : "Sæt denne som standard rangeringsmodel",
+        "help" : "Hvis valgt, bruges denne som standardmodel, hvor rangeringsmodel ikke er angivet"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Handlingen blev gennemført"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Valgte systemer"
+      },
+      "wordExport" : {
+        "help" : "Eksporter svar til Word"
+      },
+      "pdfExport" : {
+        "help" : "Eksporter svar til PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Udfører din valgte agent"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Behandler dokument:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Assisteret søgning"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Rediger prompten til retrieval augmented generation-sessioner."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuel eller autotunet tærskelkonfiguration",
+        "help" : "Brug manuel afstandstærskel i stedet for at autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Brug nøgleordssøgning, når det er muligt",
+        "help" : "Kør nøgleordssøgning ud over semantiske søgninger, hvis de er konfigureret på denne installation"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Gennemse eller søg og vælg dokumenter at chatte med"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Valgte dokumenter"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Opsætning"
+        "label" : "Opsætning",
+        "help" : "Opsætning er ufuldstændig, tryk her for at håndtere den"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Undtagelse under operation:Anthropic api kan ikke fungere uden nødvendig api key konfiguration",
         "detail" : "Serverfejl: Anthropic api kan ikke fungere uden nødvendig api key konfiguration"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fil eksporteret",
+        "detail" : "Gå til browserens downloadsektion"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model brugt til interne services"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent brugt chatmodel"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vælg"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vælg en chatmodel-konfiguration"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Brug systemets standard chatmodel til at udføre agentens opgave eller angiv en. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Indstillinger for stort sprogsmodel & tilgængelige værktøjer"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Indstillinger for sikkerhedsadgang"
+      },
+      "MainPanel" : {
+        "label" : "Rediger agentkonfiguration"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af agenten."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Autogenereret unik kode på agenten."
+      },
+      "agentServiceId" : {
+        "label" : "Agent tjenestetype",
+        "help" : "Vælg den agenttjenestetype, der skal køres."
+      },
+      "defaultConfiguration" : {
+        "label" : "Standard agentkonfiguration",
+        "help" : "Sæt dette som standardkonfiguration for denne agenttjenestetype"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Vælg prompt-skabelon for hovedloop",
+        "help" : "Vælg hovedloop prompt for agenten."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksimalt antal iterations for agenten",
+        "help" : "Angiv det maksimale antal agentloops (giver mere detaljerede resultater)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktiver alle tilgængelige værktøjer",
+        "help" : "Når dette er valgt, tildeles alle tilgængelige værktøjer, når denne agent kører"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiver funktionkald for denne agent",
+        "help" : "Funktioner, der kan anvendes af agenten under arbejdet"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperatur, modellen vil svare med, fra 0 til 1 (lad den evt. stå tom)"
+      },
+      "thinking" : {
+        "label" : "Tænkeindsats",
+        "help" : "Konfigurer tænkeindsats for modellen (understøttes ikke af alle modeller)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, fra 0 til 1 (lad den evt. stå tom)"
       }
     }
   }

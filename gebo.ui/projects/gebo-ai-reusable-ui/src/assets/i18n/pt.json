@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Eu aceito os termos",
         "help" : "Clicando aqui você aceita os termos e condições da licença"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Usuário administrador criado!",
+        "detail" : "Usuário administrador PAOLO.ZAVALLONI@GMAIL.COM criado com sucesso"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Faltam etapas obrigatórias na configuração do Gebo.ai",
         "detail" : "Por favor, revise as etapas em vermelho do processo de configuração"
+      },
+      "agentSetupSection" : {
+        "label" : "Configurar serviços do agente",
+        "description" : "Configure os serviços do agente e suas ferramentas disponíveis"
+      },
+      "AgentAddBtn" : {
+        "label" : "Adicionar agente"
+      },
+      "MainPanel" : {
+        "label" : "Configurar agentes"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código de configuração"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "EditAgentBtn" : {
+        "label" : "Editar agente"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Configurar modelos de linguagem grande"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Exceção durante a operação: Não é possível criar armazenamento vetorial ou exceção de inicialização do modelo de embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Erro no servidor: Não é possível criar armazenamento vetorial ou exceção de inicialização do modelo de embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "usuários"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Buscar nome"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Buscar nome de usuário"
+      },
+      "SearchUsersBtn" : {
+        "label" : "buscar"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Selecionar função"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Buscar sobrenome"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Lista de usuários",
         "help" : "Selecione os usuários que participam do grupo"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Alterar senha do usuário"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Alterar"
+      },
+      "username" : {
+        "label" : "Nome do usuário",
+        "help" : "Digite sua senha para validar esta ação"
+      },
+      "currentUserPassword" : {
+        "label" : "Sua senha",
+        "help" : "Digite sua senha para validar esta ação"
+      },
+      "confirmpassword" : {
+        "label" : "confirmação da senha do usuário",
+        "help" : "confirme a senha para o usuário editado"
+      },
+      "password" : {
+        "label" : "Nova senha do usuário",
+        "help" : "Nova senha para o usuário editado"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Novo modelo de embedding",
         "help" : "Selecione o fornecedor para adicionar um novo modelo de embedding capaz de fazer indexação semântica de conteúdos",
         "placeholder" : "Selecione o fornecedor para adicionar um novo modelo de embedding capaz de fazer indexação semântica de conteúdos"
+      },
+      "ranker" : {
+        "label" : "Novo modelo de rerank",
+        "help" : "Selecione o fornecedor para adicionar um novo modelo reranker",
+        "placeholder" : "Selecione o fornecedor para adicionar um novo modelo reranker"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Nova configuração de modelo reranker"
+      },
+      "CodeHeader3" : {
+        "label" : "Código"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Descrição"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Fornecedor do modelo"
+      },
+      "ModelHeader3" : {
+        "label" : "Modelo "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Modelos de rerank configurados"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token de API do modelo de embedding",
         "help" : "Escolha o token de API do modelo de embedding a ser usado para este modelo"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operação concluída com sucesso"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "TitleFragment" : {
+        "label" : "Editando provedor do modelo de ranking:"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente da configuração do modelo"
+      },
+      "baseUrl" : {
+        "label" : "Endereço base do servidor API do modelo de ranking",
+        "help" : "Endereço base do modelo de ranking."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API do modelo de ranking",
+        "help" : "Escolha o token API do modelo de ranking a ser utilizado para este modelo (opcional)"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de ranking",
+        "help" : "Escolha o modelo de ranking para utilizar."
+      },
+      "defaultModel" : {
+        "label" : "definir este como modelo de ranking padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de ranking padrão onde não for indicado"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operação concluída com sucesso"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Sistemas escolhidos"
+      },
+      "wordExport" : {
+        "help" : "Exportar resposta para Word"
+      },
+      "pdfExport" : {
+        "help" : "Exportar resposta para PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Executando o agente escolhido"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Processando documento:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Busca profunda/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Busca assistida"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Edite o prompt para as sessões de retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Configuração manual ou autotunada de limiar",
+        "help" : "Use limiar de distância manual em vez de autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Utilizar busca por palavra-chave quando disponível",
+        "help" : "Realize buscas por palavra-chave além das buscas semânticas se estiverem configuradas nesta instalação"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Navegue ou pesquise e selecione documentos para conversar"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Documentos selecionados"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Conversa"
       },
       "setupMenuItem" : {
-        "label" : "Configuração"
+        "label" : "Configuração",
+        "help" : "A configuração não está completa, por favor clique aqui para gerenciar"
       },
       "adminMenuItem" : {
         "label" : "Administração"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Exceção durante operação:Anthropic api não pode funcionar sem a configuração necessária da chave de API",
         "detail" : "Erro de servidor: Anthropic api não pode funcionar sem a configuração necessária da chave de API"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Arquivo exportado",
+        "detail" : "Vá para a seção de downloads do navegador"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modelo utilizado para serviços internos"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agente utilizou modelo de chat"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "escolher"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selecione uma configuração de modelo de chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Use o modelo de chat padrão do sistema para executar a tarefa do agente ou especifique um."
+      },
+      "LanguageModelTab" : {
+        "label" : "Configurações de modelo de linguagem e ferramentas utilizáveis"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Configurações de acesso de segurança"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do agente"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do chat do agente."
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente do agente."
+      },
+      "agentServiceId" : {
+        "label" : "Tipo de serviço do agente",
+        "help" : "Escolha o tipo de serviço que o agente irá executar."
+      },
+      "defaultConfiguration" : {
+        "label" : "Configuração padrão do agente",
+        "help" : "Defina como configuração padrão para este tipo de serviço do agente"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Escolha o template principal de prompt do loop",
+        "help" : "Escolha o prompt principal do loop do agente."
+      },
+      "maxLoopIterations" : {
+        "label" : "Máximo de iterações do loop do agente",
+        "help" : "Defina o número máximo de loops do agente (isso resultará em um resultado mais refinado)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Habilitar todas as ferramentas disponíveis",
+        "help" : "Quando esta opção estiver marcada, todas as ferramentas disponíveis serão atribuídas quando este agente for executado"
+      },
+      "enabledFunctions" : {
+        "label" : "Funções habilitadas para este agente",
+        "help" : "Funcionalidades que podem ser usadas pelo agente enquanto trabalha"
+      },
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura pela qual o modelo irá responder, de 0 a 1 (se não tiver certeza deixe vazio)"
+      },
+      "thinking" : {
+        "label" : "Esforços de raciocínio",
+        "help" : "Configure os esforços de raciocínio que o modelo fará (nem todos os modelos suportam isso)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parâmetro TopP, de 0 a 1 (se não tiver certeza deixe vazio)"
       }
     }
   }

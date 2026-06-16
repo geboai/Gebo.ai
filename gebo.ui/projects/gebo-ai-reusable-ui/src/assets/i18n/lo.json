@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "ຂ້ອຍຍອມຮັບເງື່ອນໄຂ",
         "help" : "ໂດຍກົດທີ່ນີ້ທ່ານຍອມຮັບເງື່ອນໄຂໃນໃບອະນຸຍາດ"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "ສ້າງຜູ້ດູແລ Admin ແລ້ວ!",
+        "detail" : "ສ້າງຜູ້ດູແລ Admin PAOLO.ZAVALLONI@GMAIL.COM ສຳເລັດ"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai ການຕັ້ງຄ່າຂາດຂັ້ນຕອນທີ່ຈໍາເປັນ",
         "detail" : "ກະລຸນາກວດສອບຂັ້ນຕອນສີແດງໃນຂະບວນການຕັ້ງຄ່າ"
+      },
+      "agentSetupSection" : {
+        "label" : "ກຳນົດຄ່າບໍລິການ Agent",
+        "description" : "ກຳນົດຄ່າບໍລິການ Agent ແລະເຄື່ອງມືທີ່ມີ"
+      },
+      "AgentAddBtn" : {
+        "label" : "ເພີ່ມ agent"
+      },
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າ Agents"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດການຕັ້ງຄ່າ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "EditAgentBtn" : {
+        "label" : "ແກ້ໄຂ agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "ຕັ້ງຄ່າຮູບແບບພາສາໃຫຍ່"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "ມີຂໍ້ຜິດພາດໃນການດຳເນີນການ: ບໍ່ສາມາດສ້າງ vector store ຫຼື embedding model, error: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "ຜິດພາດຈາກ server: ບໍ່ສາມາດສ້າງ vector store ຫຼື embedding model, error: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "users"
+      },
+      "searchNameInput" : {
+        "placeholder" : "ຄົ້ນຫາຊື່"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "ຄົ້ນຫາຊື່ຜູ້ໃຊ້"
+      },
+      "SearchUsersBtn" : {
+        "label" : "ຄົ້ນຫາ"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "ເລືອກບົດບາດ"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "ຄົ້ນຫານາມສະກຸນ"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "ລາຍຊື່ຜູ້ໃຊ້",
         "help" : "ເລືອກຜູ້ໃຊ້ທີ່ເຂົ້າຮ່ວມກຸ່ມ"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "ປ່ຽນລະຫັດຜ່ານຜູ້ໃຊ້"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ປ່ຽນ"
+      },
+      "username" : {
+        "label" : "ຊື່ຜູ້ໃຊ້",
+        "help" : "ໃສ່ລະຫັດຜ່ານຂອງທ່ານເພື່ອຢືນຢັນການດຳເນີນການນີ້"
+      },
+      "currentUserPassword" : {
+        "label" : "ລະຫັດຜ່ານຂອງທ່ານ",
+        "help" : "ໃສ່ລະຫັດຜ່ານຂອງທ່ານເພື່ອຢືນຢັນການນີ້"
+      },
+      "confirmpassword" : {
+        "label" : "ຢືນຢັນລະຫັດຜ່ານຜູ້ໃຊ້",
+        "help" : "ຢືນຢັນລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ທີ່ຖືກແກ້ໄຂ"
+      },
+      "password" : {
+        "label" : "ລະຫັດຜ່ານໃໝ່ຂອງຜູ້ໃຊ້",
+        "help" : "ລະຫັດຜ່ານໃໝ່ສຳລັບຜູ້ໃຊ້ທີ່ຖືກແກ້ໄຂ"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "ແບບຈຳລອງ embedding ໃໝ່",
         "help" : "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງ embedding ໃໝ່ທີ່ສາມາດດຳເນີນການຈັດດັບຄວາມໝາຍຂອງເນື້ອຫາໄດ້",
         "placeholder" : "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງ embedding ໃໝ່ທີ່ສາມາດດຳເນີນການຈັດດັບຄວາມໝາຍຂອງເນື້ອຫາໄດ້"
+      },
+      "ranker" : {
+        "label" : "ໂມເດວ rerank ໃໝ່",
+        "help" : "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມ reranker ໃໝ່",
+        "placeholder" : "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມ reranker ໃໝ່"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "ຕັ້ງຄ່າໂມເດວ reranker ໃໝ່"
+      },
+      "CodeHeader3" : {
+        "label" : "ລະຫັດ"
+      },
+      "DescriptionHeader3" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ຜູ້ສະໜອງໂມເດວ"
+      },
+      "ModelHeader3" : {
+        "label" : "ໂມເດວ "
+      },
+      "RerankerModelsZone" : {
+        "label" : "ໂມເດວ rerank ທີ່ເຄື່ອນໄຫວ"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API token",
         "help" : "ເລືອກ Embedding model API token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ສຳເລັດ!",
+        "detail" : "ດຳເນີນງານສຳເລັດ"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "TitleFragment" : {
+        "label" : "ແກ້ໄຂຜູ້ສະໜອງໂມເດລຈັດອັນດັບ:"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າໂມເດວ"
+      },
+      "code" : {
+        "label" : "ລະຫັດຈຳເພາະ",
+        "help" : "ລະຫັດຈຳເພາະທີ່ຖືກສ້າງໂດຍອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າໂມເດວ"
+      },
+      "baseUrl" : {
+        "label" : "ທີ່ຢູ່ server ຫຼັກຂອງຂອງ ranking model API",
+        "help" : "ທີ່ຢູ່ຫຼັກຂອງ ranking model."
+      },
+      "apiSecretCode" : {
+        "label" : "ລະຫັດ token API ສຳລັບ ranking model",
+        "help" : "ເລືອກລະຫັດ token API ສຳລັບ ranking model (ທາງເລືອກ)"
+      },
+      "choosedModel" : {
+        "label" : "ເລືອກ ranking model",
+        "help" : "ເລືອກ ranking model ທີ່ຕ້ອງການໃຊ້."
+      },
+      "defaultModel" : {
+        "label" : "ຕັ້ງນີ້ເປັນ ranking model ເລິ່ມຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ນີ້ຈະໃຊ້ເປັນ ranking model ເລິ່ມຕົ້ນ ເມື່ອບໍ່ຖືກກຳນົດ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ສຳເລັດ!",
+        "detail" : "ດຳເນີນງານສຳເລັດ"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "ລະບົບທີ່ເລືອກ"
+      },
+      "wordExport" : {
+        "help" : "ສົ່ງອອກຄຳຕອບເປັນ Word"
+      },
+      "pdfExport" : {
+        "help" : "ສົ່ງອອກຄຳຕອບເປັນ PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "ກຳລັງດຳເນີນ agent ທີ່ທ່ານເລືອກ"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "ກຳລັງປະມວນຜົນເອກະສານ:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "ຄົ້ນຫາລຶກ/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "ຄົ້ນຫາດ້ວຍຜູ້ຊ່ວຍ"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "ແກ້ໄຂ prompt ສຳລັບການຄົ້ນຫາ retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "ກຳນົດຄ່າ threashold ແບບທີ່ຕັ້ງເອງ ຫຼືອັດຕະໂນມັດ",
+        "help" : "ໃຊ້ threashold ລະຫະຫ່າງໂຕເອງ ແທນທີ່ຈະ Autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "ໃຊ້ການຄົ້ນຫາຄຳສຳຄັນເມື່ອມີ",
+        "help" : "ເຮັດການຄົ້ນຫາຄຳສຳຄັນຄູ່ກັບການຄົ້ນຫາແບບ semantic ຖ້າຕິດຕັ້ງໄວ້ໃນລະບົບນີ້"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "ເລືອກຫລືຄົ້ນຫາເອກະສານເພື່ອສົນທະນາ"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "ເອກະສານທີ່ເລືອກ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "ສົນທະນາ"
       },
       "setupMenuItem" : {
-        "label" : "ຕັ້ງຄ່າ"
+        "label" : "ຕັ້ງຄ່າ",
+        "help" : "ການຕັ້ງຄ່າຍັງບໍ່ສົມບູນ, ກະລຸນາກົດທີ່ນີ້ແລະຈັດການ"
       },
       "adminMenuItem" : {
         "label" : "ຜູ້ດູແລ"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "ຂໍ້ຜິດພາດໃນລະຫວ່າງການທໍາງານ: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key",
         "detail" : "Error ຈາກ server: Anthropic api ບໍ່ສາມາດເຮັດວຽກໄດ້ຖ້າບໍ່ມີການຕັ້ງຄ່າ api key"
+      },
+      "fileExportLoaded" : {
+        "summary" : "ສົ່ງອອກໄຟລ໌ສຳເລັດ",
+        "detail" : "ໄປທີ່ສ່ວນໂຫຼດດາວເລີດຂອງ browser"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "ໂມເດວໃຊ້ສຳລັບບໍລິການພາຍໃນ"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent ໃຊ້ຕົວແບບ chat"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ເລືອກ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ເລືອກການຕັ້ງຄ່າ chat model"
+      },
+      "defaultChatModel-help" : {
+        "label" : " ໃຊ້ຕົວແບບ chat ເລີ່ມຕົ້ນຂອງລະບົບເພື່ອດຳເນີນງານ Agent ຫຼືກຳນົດເອງ. "
+      },
+      "LanguageModelTab" : {
+        "label" : "ຕັ້ງຄ່າ large language model & ເຄື່ອງມືທີ່ໃຊ້ໄດ້"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຄວາມປອດໄພ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Agent"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍ Agent chat."
+      },
+      "code" : {
+        "label" : "ລະຫັດຈຳເພາະ",
+        "help" : "ລະຫັດຈຳເພາະທີ່ສ້າງແລ້ວອັດຕະໂນມັດສຳລັບ Agent."
+      },
+      "agentServiceId" : {
+        "label" : "ປະເພດບໍລິການ Agent",
+        "help" : "ເລືອກປະເພດບໍລິການ Agent ທີ່ຈະໃຊ້"
+      },
+      "defaultConfiguration" : {
+        "label" : "ຕັ້ງຄ່າ Agent ເລິ່ມຕົ້ນ",
+        "help" : "ຕັ້ງນີ້ເປັນຄ່າເລິ່ມຕົ້ນສຳລັບບໍລິການ Agent ປະເພດນີ້"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "ເລືອກແມ່ແບບ prompt ສຳລັບ main loop",
+        "help" : "ເລືອກ prompt main loop ຂອງ Agent."
+      },
+      "maxLoopIterations" : {
+        "label" : "ຈຳນວນຮອບ Agent ສູງສຸດ",
+        "help" : "ຕັ້ງຄ່າຈຳນວນຮອບ Agent ສູງສຸດ (ຜົນທີ່ໄດ້ຈະລະອຽດຂຶ້ນ)"
+      },
+      "subscribeAllTools" : {
+        "label" : "ເປີດໃຊ້ເຄື່ອງມືທັງໝົດ",
+        "help" : "ເມື່ອເຊັກເທື່ອນີ້ ຈະສະເໜີເຄື່ອງມືທີ່ມີທັງໝົດໃຫ້ກັບ agent ໃນຂະນະປະຕິບັດງານ"
+      },
+      "enabledFunctions" : {
+        "label" : "ຟັງຊັນທີ່ເປີດໃຫ້ Agent ນີ້",
+        "help" : "ຟັງຊັນທີ່ Agent ສາມາດໃຊ້ເວລາປະຕິບັດວຽກ"
+      },
+      "temperature" : {
+        "label" : "Temperature",
+        "help" : "ຄ່າ temperature ໃຫ້ຕົວແບບຕອບ ຈາກ 0 ເຖິງ 1 (ຖ້າບໍ່ແນ່ໃຈປ່ອຍໄວ້ວ່າງ)"
+      },
+      "thinking" : {
+        "label" : "ຄວາມພະຍາຍາມຄິດ",
+        "help" : "ຕັ້ງຄ່າຄວາມພະຍາຍາມຄິດໃຫ້ຕົວແບບ (ບາງ model ອາດບໍ່ຮອງຮັບ)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "ຄ່າ TopP ຈາກ 0 ຫາ 1 (ຖ້າບໍ່ແນ່ໃຈປ່ອຍໄວ້ວ່າງ)"
       }
     }
   }

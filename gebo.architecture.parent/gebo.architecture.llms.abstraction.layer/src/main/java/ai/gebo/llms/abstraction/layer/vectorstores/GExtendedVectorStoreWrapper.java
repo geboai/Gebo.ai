@@ -6,23 +6,24 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.vectorstores;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.filter.Filter.Expression;
 
+import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorizedFragmentMetadata;
+import jakarta.el.MethodNotFoundException;
+
 /**
- * Gebo.ai comment agent
- * Generic wrapper class for VectorStore implementations, providing additional 
- * functionalities while maintaining existing vector store operations.
+ * Gebo.ai comment agent Generic wrapper class for VectorStore implementations,
+ * providing additional functionalities while maintaining existing vector store
+ * operations.
  *
  * @param <VSType> The type of VectorStore being wrapped.
  */
@@ -61,10 +62,13 @@ public class GExtendedVectorStoreWrapper<VSType extends VectorStore> implements 
 	}
 
 	/**
-	 * Performs a similarity search in the vector store based on the specified request.
+	 * Performs a similarity search in the vector store based on the specified
+	 * request.
 	 *
-	 * @param request The search request containing parameters for similarity search.
-	 * @return A list of documents that are similar according to the search criteria.
+	 * @param request The search request containing parameters for similarity
+	 *                search.
+	 * @return A list of documents that are similar according to the search
+	 *         criteria.
 	 */
 	@Override
 	public List<Document> similaritySearch(SearchRequest request) {
@@ -75,8 +79,9 @@ public class GExtendedVectorStoreWrapper<VSType extends VectorStore> implements 
 	 * Factory method to create a new instance of GExtendedVectorStoreWrapper.
 	 *
 	 * @param <VSType> The type of VectorStore.
-	 * @param vs The vector store instance to wrap.
-	 * @return A new instance of GExtendedVectorStoreWrapper wrapping the specified vector store.
+	 * @param vs       The vector store instance to wrap.
+	 * @return A new instance of GExtendedVectorStoreWrapper wrapping the specified
+	 *         vector store.
 	 */
 	public static <VSType extends VectorStore> GExtendedVectorStoreWrapper<VSType> of(VSType vs) {
 		return new GExtendedVectorStoreWrapper<VSType>(vs);
@@ -85,10 +90,30 @@ public class GExtendedVectorStoreWrapper<VSType extends VectorStore> implements 
 	/**
 	 * Deletes documents from the vector store using a filter expression.
 	 *
-	 * @param filterExpression The expression that specifies which documents to delete.
+	 * @param filterExpression The expression that specifies which documents to
+	 *                         delete.
 	 */
 	@Override
 	public void delete(Expression filterExpression) {
 		vs.delete(filterExpression);
 	}
+
+	@Override
+	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException {
+		if (vs instanceof IGExtendedVectorStore evs) {
+			return evs.readMetadataByIds(ids);
+		}
+		throw new MethodNotFoundException("The wrapped vector store does not implement this");
+	}
+
+	@Override
+	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
+		if (vs instanceof IGExtendedVectorStore evs) {
+			evs.patchMetadataByIds(entries);
+			return;
+		}
+		throw new MethodNotFoundException("The wrapped vector store does not implement this");
+	}
+
+	
 }

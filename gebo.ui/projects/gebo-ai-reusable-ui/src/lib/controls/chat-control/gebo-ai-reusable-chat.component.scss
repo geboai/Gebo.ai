@@ -79,6 +79,20 @@
       margin-top: 1rem;
       transform: translateX(-50%);
     }
+
+    &-export-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      justify-content: flex-start;
+
+      .custom-word-btn ::ng-deep .p-button {
+        color: #2b579a;
+      }
+      .custom-pdf-btn ::ng-deep .p-button {
+        color: #e06666;
+      }
+    }
   }
 
   &__footer {

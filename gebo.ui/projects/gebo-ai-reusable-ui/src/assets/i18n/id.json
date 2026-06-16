@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Saya setuju dengan syarat",
         "help" : "Dengan mengklik di sini Anda setuju dengan syarat & ketentuan dalam lisensi"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Pengguna admin berhasil dibuat!",
+        "detail" : "Pengguna admin PAOLO.ZAVALLONI@GMAIL.COM berhasil dibuat"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Setup Gebo.ai belum menyelesaikan beberapa langkah wajib",
         "detail" : "Silakan cek langkah berwarna merah dalam proses setup"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigurasi layanan Agen",
+        "description" : "Konfigurasikan layanan Agen dan alat yang tersedia"
+      },
+      "AgentAddBtn" : {
+        "label" : "Tambah agen"
+      },
+      "MainPanel" : {
+        "label" : "Atur Agen"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kode konfigurasi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
+      },
+      "EditAgentBtn" : {
+        "label" : "Edit agen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Setup model bahasa besar"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Terjadi pengecualian saat operasi:Tidak dapat membuat vector store atau inisialisasi model embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Kesalahan server: Tidak dapat membuat vector store atau inisialisasi model embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "pengguna"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Cari nama"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Cari username"
+      },
+      "SearchUsersBtn" : {
+        "label" : "cari"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Pilih peran"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Cari sourname"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Daftar pengguna",
         "help" : "Pilih pengguna yang berpartisipasi di grup"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Ubah kata sandi pengguna"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Ubah"
+      },
+      "username" : {
+        "label" : "Nama pengguna",
+        "help" : "Masukkan kata sandi Anda untuk validasi tindakan ini"
+      },
+      "currentUserPassword" : {
+        "label" : "Kata sandi Anda",
+        "help" : "Masukkan kata sandi Anda untuk validasi tindakan ini"
+      },
+      "confirmpassword" : {
+        "label" : "Konfirmasi kata sandi pengguna",
+        "help" : "Konfirmasi kata sandi untuk pengguna yang diedit"
+      },
+      "password" : {
+        "label" : "Kata sandi baru pengguna",
+        "help" : "Kata sandi baru untuk pengguna yang diedit"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Model embedding baru",
         "help" : "Pilih penyedia untuk menambah model embedding baru yang dapat melakukan pengindeksan semantik pada konten",
         "placeholder" : "Pilih penyedia untuk menambah model embedding baru yang dapat melakukan pengindeksan semantik pada konten"
+      },
+      "ranker" : {
+        "label" : "Model rerank baru",
+        "help" : "Pilih penyedia untuk menambah model reranker baru",
+        "placeholder" : "Pilih penyedia untuk menambah model reranker baru"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Konfigurasi model reranker baru"
+      },
+      "CodeHeader3" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Deskripsi"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Penyedia model"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Model rerank yang dikonfigurasi"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Token API Embedding model",
         "help" : "Pilih token API Embedding model yang akan digunakan untuk model ini"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "TitleFragment" : {
+        "label" : "Mengedit penyedia model ranking:"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi konfigurasi model"
+      },
+      "code" : {
+        "label" : "Kode Unik",
+        "help" : "Kode unik konfigurasi model yang dihasilkan otomatis"
+      },
+      "baseUrl" : {
+        "label" : "Alamat server API model ranking",
+        "help" : "Alamat dasar dari model ranking."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model ranking",
+        "help" : "Pilih token API model ranking yang akan digunakan untuk model ini (opsional)"
+      },
+      "choosedModel" : {
+        "label" : "Pilihan model ranking model",
+        "help" : "Pilih model ranking model yang akan digunakan."
+      },
+      "defaultModel" : {
+        "label" : "Jadikan ini model ranking default",
+        "help" : "Jika ya, ini akan digunakan sebagai model ranking default jika tidak ditentukan"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Sistem yang dipilih"
+      },
+      "wordExport" : {
+        "help" : "Ekspor respons ke Word"
+      },
+      "pdfExport" : {
+        "help" : "Ekspor respons ke PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Menjalankan agen yang Anda pilih"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Memproses dokumen:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Pencarian terbantu"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Sunting prompt untuk sesi retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Konfigurasi threshold manual atau autotune",
+        "help" : "Gunakan threshold jarak manual daripada Autotune"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Gunakan pencarian kata kunci jika tersedia",
+        "help" : "Jalankan pencarian kata kunci selain pencarian semantik jika dikonfigurasi di instalasi ini"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Jelajahi atau cari dan pilih dokumen untuk diajak chat"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Dokumen terpilih"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Pengaturan"
+        "label" : "Pengaturan",
+        "help" : "Pengaturan belum lengkap, silakan tekan di sini untuk mengaturnya"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Terjadi pengecualian saat operasi: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan",
         "detail" : "Kesalahan server: Anthropic api tidak dapat berjalan tanpa konfigurasi api key yang diperlukan"
+      },
+      "fileExportLoaded" : {
+        "summary" : "File berhasil diekspor",
+        "detail" : "Buka bagian unduhan browser"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model yang digunakan untuk layanan internal"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Model chat yang digunakan agen"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Info umum"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "pilih"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Pilih konfigurasi model chat"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Gunakan model chat default sistem untuk menjalankan tugas Agen atau tentukan sendiri. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Pengaturan large language model & alat yang bisa digunakan"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Pengaturan akses keamanan"
+      },
+      "MainPanel" : {
+        "label" : "Mengedit konfigurasi Agen"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi Agen chat."
+      },
+      "code" : {
+        "label" : "Kode Unik",
+        "help" : "Kode unik Agen yang dihasilkan otomatis."
+      },
+      "agentServiceId" : {
+        "label" : "Tipe layanan Agen",
+        "help" : "Pilih tipe layanan Agen yang akan dijalankan."
+      },
+      "defaultConfiguration" : {
+        "label" : "Konfigurasi default Agen",
+        "help" : "Atur sebagai konfigurasi default untuk tipe layanan Agen ini"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Pilih template prompt main loop",
+        "help" : "Pilih prompt main loop Agen."
+      },
+      "maxLoopIterations" : {
+        "label" : "Jumlah maksimal loop Agen",
+        "help" : "Atur jumlah maksimal loop Agen (hasil jadi lebih detail)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktifkan semua alat yang tersedia",
+        "help" : "Jika dipilih, semua alat yang tersedia akan digunakan saat agen ini berjalan"
+      },
+      "enabledFunctions" : {
+        "label" : "Panggilan fungsi yang diaktifkan untuk Agen ini",
+        "help" : "Fungsi-fungsi yang dapat digunakan oleh Agen saat bekerja"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperatur model dalam rentang 0 hingga 1 (biarkan kosong jika ragu)"
+      },
+      "thinking" : {
+        "label" : "Upaya berpikir",
+        "help" : "Atur upaya berpikir yang dilakukan model (tidak semua model mendukung)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parameter TopP dalam rentang 0 hingga 1 (biarkan kosong jika ragu)"
       }
     }
   }

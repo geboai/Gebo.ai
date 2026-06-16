@@ -317,7 +317,7 @@ const agentSetupSection: SetupWizardsSection = {
     description: "Configure Agent Services and their available tools",
     wizardComponent: GeboAIAgentSetupWizardComponent,
     wizardSectionId: "agentSetupSection",
-    mandatory: true
+    mandatory: false
 
 };
 

@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Tinatanggap ko ang mga tuntunin",
         "help" : "Sa pag-click dito tinatanggap mo ang mga tuntunin at kundisyon sa lisensya"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin user nalikha!",
+        "detail" : "Admin user PAOLO.ZAVALLONI@GMAIL.COM matagumpay na nalikha"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Kulang ng ilang mahalagang hakbang ang Gebo.ai setup",
         "detail" : "Pakisuri ang mga pula sa proseso ng setup"
+      },
+      "agentSetupSection" : {
+        "label" : "I-configure ang Agent Services",
+        "description" : "I-configure ang Agent Services at mga magagamit nilang tool"
+      },
+      "AgentAddBtn" : {
+        "label" : "Magdagdag ng agent"
+      },
+      "MainPanel" : {
+        "label" : "I-setup ang mga Agent"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "EditAgentBtn" : {
+        "label" : "I-edit ang agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "I-setup ang Large language models"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "May nangyaring error: Hindi makagawa ng vector store o may embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Server error: Hindi makagawa ng vector store o may embedding model initialization exception: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "users"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Maghanap ng pangalan"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Maghanap ng username"
+      },
+      "SearchUsersBtn" : {
+        "label" : "maghanap"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Pumili ng role"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Maghanap ng apelyido"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Listahan ng mga user",
         "help" : "Pumili ng mga user na kasali sa grupo"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Palitan ang password ng user"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Palitan"
+      },
+      "username" : {
+        "label" : "Pangalan ng user",
+        "help" : "Ilagay ang iyong password upang mapatotohanan ang aksyong ito"
+      },
+      "currentUserPassword" : {
+        "label" : "Iyong password",
+        "help" : "Ilagay ang iyong password upang mapatotohanan ang aksyong ito"
+      },
+      "confirmpassword" : {
+        "label" : "Kumpirmahin ang password ng user",
+        "help" : "Kumpirmahin ang password ng nire-edit na user"
+      },
+      "password" : {
+        "label" : "Bagong password ng user",
+        "help" : "Bagong password para sa nire-edit na user"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Bagong embedding model",
         "help" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman",
         "placeholder" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman"
+      },
+      "ranker" : {
+        "label" : "Bagong rerank model",
+        "help" : "Piliin ang supplier para magdagdag ng bagong reranker model",
+        "placeholder" : "Piliin ang supplier para magdagdag ng bagong reranker model"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Bagong reranker model configuration"
+      },
+      "CodeHeader3" : {
+        "label" : "Code"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Deskripsyon"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Model provider"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Na-configure na mga rerank model"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API token",
         "help" : "Piliin ang Embedding model API token na gagamitin para sa modelong ito"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na natapos ang operasyon"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Burahin"
+      },
+      "TitleFragment" : {
+        "label" : "Ina-edit ang ranking model provider:"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng model configuration"
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng model configuration"
+      },
+      "baseUrl" : {
+        "label" : "ranking model  API base server address",
+        "help" : "Base address ng ranking model."
+      },
+      "apiSecretCode" : {
+        "label" : "ranking model  API token",
+        "help" : "Pumili ng ranking model  API token na gagamitin para sa modelong ito (opsyonal)"
+      },
+      "choosedModel" : {
+        "label" : "ranking model  pagpili ng ranking model",
+        "help" : "Pumili ng ranking model  na gagamitin."
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default ranking model",
+        "help" : "Kung totoo, ito ang gagamitin bilang default ranking model kung hindi nakasaad ang ranking model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na natapos ang operasyon"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Napiling mga system"
+      },
+      "wordExport" : {
+        "help" : "I-export ang sagot sa Word"
+      },
+      "pdfExport" : {
+        "help" : "I-export ang sagot sa PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Isinasagawa ang napiling agent mo"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Pinoproseso ang dokumento:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Assisted search"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "I-edit ang prompt para sa retrieve augmented generation sessions."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manwal o Autotuned threashold configuration",
+        "help" : "Gamitin ang manwal na distance threashold sa halip na Autotune ito"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Gamitin ang keyword search kung available",
+        "help" : "Gawin ang keyword searches bilang dagdag sa semantic searches kapag naka-configure ito sa installation na ito"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Mag-browse o maghanap at pumili ng mga dokumentong pwedeng kausapin"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Mga napiling Dokumento"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Chat"
       },
       "setupMenuItem" : {
-        "label" : "Setup"
+        "label" : "Setup",
+        "help" : "Hindi pa tapos ang setup, pindutin dito para ayusin"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Exception habang gumagana:Hindi makakapagtrabaho ang Anthropic api nang walang api key configuration",
         "detail" : "Server error: Hindi makakapagtrabaho ang Anthropic api nang walang kinakailangang api key configuration"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Na-export ang file",
+        "detail" : "Pumunta sa downloads section ng browser"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modelong ginagamit para sa internal services"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent na ginamit ang chat model"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Burahin"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "pumili"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Pumili ng chat model configuration"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Gamitin ang system default chat model para gawin ang gawain ng Agent o magtakda ng isa. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Mga setting para sa large language model at magagamit na tools"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Mga setting ng security access"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Agent configuration"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng chat Agent."
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng Agent."
+      },
+      "agentServiceId" : {
+        "label" : "Uri ng Agent service",
+        "help" : "Pumili ng uri ng Agent service na patatakbuhin."
+      },
+      "defaultConfiguration" : {
+        "label" : "Default na configuration ng Agent",
+        "help" : "Itakda ito bilang default configuration para sa Agent service type na ito"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Pumili ng main loop prompt template",
+        "help" : "Pumili ng Agent main loop prompt."
+      },
+      "maxLoopIterations" : {
+        "label" : "Pinakamataas na bilang ng Agent loops",
+        "help" : "Itakda ang maximum na bilang ng Agent loops (ito ay magbubunga ng mas pinong resulta)."
+      },
+      "subscribeAllTools" : {
+        "label" : "I-enable lahat ng magagamit na tools",
+        "help" : "Kapag naka-check ito, lahat ng available na tools ay ia-assign kapag pinatakbo ang agent"
+      },
+      "enabledFunctions" : {
+        "label" : "Mga enabled functions call para sa Agent na ito",
+        "help" : "Mga functionality na pwedeng gamitin ng Agent habang ginagawa ang trabaho nito"
+      },
+      "temperature" : {
+        "label" : "Temperature",
+        "help" : "Temperature na magreresponde ang model, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
+      },
+      "thinking" : {
+        "label" : "Thinking efforts",
+        "help" : "I-configure ang effort ng pag-iisip na gagawin ng model (hindi lahat ng model ay may suporta dito)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parameter, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
       }
     }
   }

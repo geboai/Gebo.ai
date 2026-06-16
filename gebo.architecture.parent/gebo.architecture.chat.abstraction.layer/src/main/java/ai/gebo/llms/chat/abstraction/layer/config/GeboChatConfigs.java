@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.config;
 
@@ -23,34 +20,32 @@ import lombok.Data;
 /**
  * Gebo.ai comment agent
  * 
- * Configuration class for GeboRag settings. This class is used to
- * configure ranges, top K elements, and similarity threshold for
- * the AI chat system. It uses Spring's @Configuration and
- * ConfigurationProperties annotations to map the properties.
+ * Configuration class for GeboRag settings. This class is used to configure
+ * ranges, top K elements, and similarity threshold for the AI chat system. It
+ * uses Spring's @Configuration and ConfigurationProperties annotations to map
+ * the properties.
  */
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.chat")
 @Data
 public class GeboChatConfigs {
-    
-    // List of context window length range settings for different strategies
-    private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
-    
-   
-    private int leaveLastInteractionsOnHistoryConsolidation = 4;
-    private float historicDocumentRelevancyThreashold=0.4f;
 
-    /**
-     * Constructor initializes the context window length ranges with
-     * predefined settings.
-     */
-    public GeboChatConfigs() {
-        this.ranges.add(new ContextWindowLengthRangeSettings(0, 30.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
-        this.ranges.add(new ContextWindowLengthRangeSettings(8192, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
-        this.ranges.add(new ContextWindowLengthRangeSettings(16000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
-        this.ranges.add(new ContextWindowLengthRangeSettings(128000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
-    }
+	// List of context window length range settings for different strategies
+	private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
 
-   
+	private int leaveLastInteractionsOnHistoryConsolidation = 4;
+	private float historicDocumentRelevancyThreashold = 0.4f;
+	
+
+	/**
+	 * Constructor initializes the context window length ranges with predefined
+	 * settings.
+	 */
+	public GeboChatConfigs() {
+		this.ranges.add(new ContextWindowLengthRangeSettings(0, 30.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
+		this.ranges.add(new ContextWindowLengthRangeSettings(8192, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
+		this.ranges.add(new ContextWindowLengthRangeSettings(16000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
+		this.ranges.add(new ContextWindowLengthRangeSettings(128000, 60.0, 30.0, 10.0, HistoryStrategy.SHORTENQUEUE));
+	}
 
 }

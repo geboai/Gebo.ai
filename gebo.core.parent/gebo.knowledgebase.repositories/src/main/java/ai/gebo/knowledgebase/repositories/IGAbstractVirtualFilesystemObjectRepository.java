@@ -12,6 +12,8 @@ package ai.gebo.knowledgebase.repositories;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -173,6 +175,9 @@ public interface IGAbstractVirtualFilesystemObjectRepository<Type extends GAbstr
 	public List<Type> findByExtIntegrationCode(String extIntegrationCode);
 
 	public Stream<Type> findByExtIntegrationCodeIn(List<String> extIntegrationCodeList);
+
+	@Query("{ '_id': { '$type': 'string', '$regex': ' +$' } }")
+	List<Type> findAllWithRightTrimProblem(Pageable pageable);
 
 	/**
 	 * Deletes all objects by the parent project's code.

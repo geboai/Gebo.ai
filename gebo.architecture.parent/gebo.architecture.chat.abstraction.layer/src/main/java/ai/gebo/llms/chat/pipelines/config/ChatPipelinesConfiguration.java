@@ -20,6 +20,7 @@ public class ChatPipelinesConfiguration {
 	private Integer fixedDocumentsRequestRoutesDeepSearchTokenThreashold = null;
 	private Integer warnUploadedFileSizeTokenBudget = 150000;
 	private Integer maximumUploadedFileSizeTokenBudget = 500000;
+	private boolean defaultPipelineStepIsChatAgent = true;
 
 	public ChatPipelinesConfiguration() {
 		ChatPipelineConfiguration defaultPipeline = new ChatPipelineConfiguration();

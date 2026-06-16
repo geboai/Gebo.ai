@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Ek aanvaar die bepalings",
         "help" : "Deur hier te klik aanvaar jy die bepalings & voorwaardes in die lisensie"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin-gebruiker geskep!",
+        "detail" : "Admin-gebruiker PAOLO.ZAVALLONI@GMAIL.COM is suksesvol geskep"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai-installasie kort 'n verpligte stap",
         "detail" : "Hersien asseblief die rooi stappe van die installasieproses"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigureer agentdienste",
+        "description" : "Konfigureer agentdienste en hul beskikbare gereedskap"
+      },
+      "AgentAddBtn" : {
+        "label" : "Voeg agent by"
+      },
+      "MainPanel" : {
+        "label" : "Stel agente op"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "EditAgentBtn" : {
+        "label" : "Wysig agent"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Stel groot taalmodelle op"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Uitsondering tydens operasie: Kan nie vektorwinkel of inbeddingsmodel inisialiseer nie: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Bedienerfout: Kan nie vektorwinkel of inbeddingsmodel inisialiseer nie: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "gebruikers"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Soek naam"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Soek gebruikersnaam"
+      },
+      "SearchUsersBtn" : {
+        "label" : "soek"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Kies rol"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Soek van"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Gebruikerslys",
         "help" : "Kies gebruikers wat aan die groep deelneem"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Verander gebruiker se wagwoord"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Verander"
+      },
+      "username" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Voer jou wagwoord in om hierdie aksie te bekragtig"
+      },
+      "currentUserPassword" : {
+        "label" : "Jou wagwoord",
+        "help" : "Voer jou wagwoord in om hierdie aksie te bekragtig"
+      },
+      "confirmpassword" : {
+        "label" : "bevestig gebruiker se wagwoord",
+        "help" : "wagwoord bevestiging vir die gewysigde gebruiker"
+      },
+      "password" : {
+        "label" : "Nuwe wagwoord van gebruiker",
+        "help" : "Nuwe wagwoord vir die gewysigde gebruiker"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Nuwe inbedmodel",
         "help" : "Kies die verskaffer om 'n nuwe inbedmodel by te voeg wat semantiese indeksering van inhoud kan doen",
         "placeholder" : "Kies die verskaffer om 'n nuwe inbedmodel by te voeg wat semantiese indeksering van inhoud kan doen"
+      },
+      "ranker" : {
+        "label" : "Nuwe herrangskikkingsmodel",
+        "help" : "Kies die verskaffer om 'n nuwe herrangskikker-model by te voeg",
+        "placeholder" : "Kies die verskaffer om 'n nuwe herrangskikker-model by te voeg"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Nuwe herrangskikkingsmodel-konfigurasie"
+      },
+      "CodeHeader3" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Beskrywing"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modelverskaffer"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Geaktiveerde herrangskikkingsmodelle"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding model API-token",
         "help" : "Kies die Embedding model API-token om vir hierdie model te gebruik"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "TitleFragment" : {
+        "label" : "Redigeer rangorde-modelverskaffer:"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Automaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "baseUrl" : {
+        "label" : "API-basisbedieneradres vir rangorde-model",
+        "help" : "Basisadres van die rangorde-model."
+      },
+      "apiSecretCode" : {
+        "label" : "API-token vir rangorde-model",
+        "help" : "Kies die API-token vir die rangorde-model wat vir hierdie model gebruik moet word (opsioneel)"
+      },
+      "choosedModel" : {
+        "label" : "keuse vir rangorde-model",
+        "help" : "Kies die rangorde-model om mee te werk."
+      },
+      "defaultModel" : {
+        "label" : "stel hierdie as verstek rangorde-model",
+        "help" : "As dit waar is, sal hierdie as verstek rangorde-model gebruik word waar geen rangorde-model aangedui is nie"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Gekose stelsels"
+      },
+      "wordExport" : {
+        "help" : "Voer antwoord uit na Word"
+      },
+      "pdfExport" : {
+        "help" : "Voer antwoord uit na PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Jou gekose agent word uitgevoer"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Verwerk dokument:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Diep soek/Jira-soektog"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Geassisteerde soektog"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Redigeer die prompt vir die retrieve augmented generation sessies."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Handmatige of outomatiese drempelkonfigurasie",
+        "help" : "Gebruik handmatige afstanddrempel in plaas daarvan om dit te outomaties aan te pas"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Gebruik sleutelwoord-soek waar beskikbaar",
+        "help" : "Doen sleutelwoord-soektogte bykomend tot semantiese soektogte indien hulle in hierdie installasie gekonfigureer is"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Blaai of soek en kies dokumente om mee te gesels"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Gekose dokumente"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Gesels"
       },
       "setupMenuItem" : {
-        "label" : "Instellings"
+        "label" : "Instellings",
+        "help" : "Opstelling is onvolledig, druk asseblief hier en handel dit af"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Uitsondering tydens werking:Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie",
         "detail" : "Bedienerfout: Anthropic api kan nie sonder nodige api-sleutelkonfigurasie werk nie"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Lêer uitgevoer",
+        "detail" : "Gaan na jou blaaier se aflaai-afdeling"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model gebruik vir interne dienste"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent se gekose geselskapmodel"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "kies"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Kies 'n geselskapmodelkonfigurasie"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Gebruik die stelsel se verstek geselskapmodel om die agent se taak uit te voer of spesifiseer een. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Groot-taalmodel & bruikbare hulpmiddelinstellings"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Sekuriteitstoegangsinstellings"
+      },
+      "MainPanel" : {
+        "label" : "Wysig agentkonfigurasie"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die chat-agent se beskrywing in."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Automaties gegenereerde unieke kode van die agent."
+      },
+      "agentServiceId" : {
+        "label" : "Agent-dienssoort",
+        "help" : "Kies die agent-dienssoort wat gaan hardloop."
+      },
+      "defaultConfiguration" : {
+        "label" : "Verstek agent-konfigurasie",
+        "help" : "Stel dit as die verstek-konfigurasie vir hierdie agent-dienssoort"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Kies hooflus-aanlynsjabloon",
+        "help" : "Kies die agent se hooflus-aanlyn."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksimum aantal agent-lusse",
+        "help" : "Stel die maksimum aantal agent-lusse in (dit sal lei tot 'n baie verfynde resultaat)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktiveer alle beskikbare gereedskap",
+        "help" : "Wanneer hierdie opsie gemerk is word al die beskikbare gereedskap toegeken wanneer hierdie agent hardloop"
+      },
+      "enabledFunctions" : {
+        "label" : "Geaktiveerde funksiekontak vir hierdie agent",
+        "help" : "Funksies wat deur die agent gebruik kan word tydens uitvoering"
+      },
+      "temperature" : {
+        "label" : "Temperatuur",
+        "help" : "Temperatuur waarmee die model sal reageer, van 0 tot 1 (los leeg indien onseker)"
+      },
+      "thinking" : {
+        "label" : "Denkpogings",
+        "help" : "Konfigureer denkpogings wat die model sal doen (nie alle modelle ondersteun dit nie)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, van 0 tot 1 (los leeg indien onseker)"
       }
     }
   }

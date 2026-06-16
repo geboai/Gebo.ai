@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "אני מקבל את התנאים",
         "help" : "בלחיצה כאן אתה מאשר את התנאים ברישיון"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "נוצר משתמש Admin!",
+        "detail" : "משתמש Admin PAOLO.ZAVALLONI@GMAIL.COM נוצר בהצלחה"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "חסרים שלבים חיוניים בהגדרת Gebo.ai",
         "detail" : "אנא בדוק את השלבים באדום בתהליך ההגדרה"
+      },
+      "agentSetupSection" : {
+        "label" : "הגדרת שירותי סוכן",
+        "description" : "הגדרת שירותי הסוכן והכלים הזמינים שלהם"
+      },
+      "AgentAddBtn" : {
+        "label" : "הוסף סוכן"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת סוכנים"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "EditAgentBtn" : {
+        "label" : "ערוך סוכן"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "הגדר מודלים שפתיים גדולים"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "חריגה במהלך פעולה: לא ניתן ליצור מאגר וקטורים או חריגה באתחול מודל embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "שגיאת שרת: לא ניתן ליצור מאגר וקטורים או חריגה באתחול מודל embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "משתמשים"
+      },
+      "searchNameInput" : {
+        "placeholder" : "חפש שם"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "חפש שם משתמש"
+      },
+      "SearchUsersBtn" : {
+        "label" : "חפש"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "בחר תפקיד"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "חפש שם משפחה"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "רשימת משתמשים",
         "help" : "בחר משתמשים המשתתפים בקבוצה"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "שנה סיסמת משתמש"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "שנה"
+      },
+      "username" : {
+        "label" : "שם משתמש",
+        "help" : "הזן את הסיסמה שלך כדי לאמת פעולה זו"
+      },
+      "currentUserPassword" : {
+        "label" : "הסיסמה שלך",
+        "help" : "הזן את הסיסמה שלך כדי לאמת פעולה זו"
+      },
+      "confirmpassword" : {
+        "label" : "אישור סיסמת המשתמש",
+        "help" : "אישור סיסמה למשתמש בעריכה"
+      },
+      "password" : {
+        "label" : "סיסמה חדשה למשתמש",
+        "help" : "סיסמה חדשה למשתמש שנערך"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "מודל הטמעה חדש",
         "help" : "בחר ספק כדי להוסיף מודל הטמעה חדש שמסוגל לבצע אינדוקס סמנטי של תכנים",
         "placeholder" : "בחר ספק כדי להוסיף מודל הטמעה חדש שמסוגל לבצע אינדוקס סמנטי של תכנים"
+      },
+      "ranker" : {
+        "label" : "מודל rerank חדש",
+        "help" : "בחר ספק כדי להוסיף מודל reranker חדש",
+        "placeholder" : "בחר ספק להוספת מודל reranker חדש"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "הגדרת מודל reranker חדש"
+      },
+      "CodeHeader3" : {
+        "label" : "קוד"
+      },
+      "DescriptionHeader3" : {
+        "label" : "תיאור"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "ספק מודל"
+      },
+      "ModelHeader3" : {
+        "label" : "מודל "
+      },
+      "RerankerModelsZone" : {
+        "label" : "מודלי rerank שהוגדרו"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "אסימון API של מודל הטמעה",
         "help" : "בחר את אסימון ה-API של מודל ההטמעה בו יש להשתמש עבור מודל זה"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "אישור!",
+        "detail" : "הפעולה בוצעה בהצלחה"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "TitleFragment" : {
+        "label" : "עריכת ספק מודל דירוג:"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור להגדרת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית להגדרת המודל"
+      },
+      "baseUrl" : {
+        "label" : "כתובת הבסיס של שרת API מודל דירוג",
+        "help" : "כתובת הבסיס של מודל הדירוג."
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון API של מודל דירוג",
+        "help" : "בחר את אסימון ה-API של מודל דירוג שישמש עבור מודל זה (רשות)"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל דירוג",
+        "help" : "בחר את מודל הדירוג איתו לעבוד."
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל דירוג ברירת מחדל",
+        "help" : "אם אמת, מודל זה ישמש כברירת מחדל כאשר לא צוין מודל דירוג"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "אישור!",
+        "detail" : "הפעולה בוצעה בהצלחה"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "מערכות שנבחרו"
+      },
+      "wordExport" : {
+        "help" : "ייצוא תגובה ל-Word"
+      },
+      "pdfExport" : {
+        "help" : "ייצוא תגובה ל-PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "מפעיל את הסוכן שנבחר"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "מפעיל מסמך:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "חיפוש עמוק/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "חיפוש מונחה"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "הנחיה",
         "help" : "ערוך את ההנחיה לסשנים של הפקת ידע מורחבת."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "הגדרת סף ידנית או כיול אוטומטי",
+        "help" : "השתמש בסף מרחק ידני במקום לכייל אוטומטית"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "השתמש בחיפוש לפי מילות מפתח כשהוא זמין",
+        "help" : "הרץ חיפושים לפי מילות מפתח בנוסף לחיפושים סמנטיים אם הם מוגדרים בהתקנה זו"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "דפדף או חפש ובחר מסמכים לשיחה"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "מסמכים שנבחרו"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "צ'אט"
       },
       "setupMenuItem" : {
-        "label" : "הגדרות"
+        "label" : "הגדרות",
+        "help" : "ההגדרה אינה מלאה, לחץ כאן לטפל בזה"
       },
       "adminMenuItem" : {
         "label" : "ניהול"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "חריגה במהלך פעולה: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת",
         "detail" : "שגיאת שרת: Anthropic api לא יכול לפעול ללא הגדרת api key נדרשת"
+      },
+      "fileExportLoaded" : {
+        "summary" : "קובץ יוצא",
+        "detail" : "גש לאזור ההורדות בדפדפן"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "מודל לשירותים פנימיים"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "UseChatModelLabel" : {
+        "label" : "המודל בו השתמש הסוכן"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "בחר"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "בחר הגדרת מודל צ'אט"
+      },
+      "defaultChatModel-help" : {
+        "label" : " השתמש במודל צ'אט ברירת מחדל לביצוע משימת הסוכן או ציין אחד אחר. "
+      },
+      "LanguageModelTab" : {
+        "label" : "הגדרות מודל שפה גדול וכלים לשימוש"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "הגדרות הרשאות גישה"
+      },
+      "MainPanel" : {
+        "label" : "עריכת הגדרות סוכן"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור לסוכן הצ'אט."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית לסוכן."
+      },
+      "agentServiceId" : {
+        "label" : "סוג שירות הסוכן",
+        "help" : "בחר את סוג שירות הסוכן שירוץ"
+      },
+      "defaultConfiguration" : {
+        "label" : "הגדרת סוכן ברירת מחדל",
+        "help" : "הגדר זאת כברירת מחדל עבור סוג שירות הסוכן הזה"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "בחר תבנית prompt ללולאה ראשית",
+        "help" : "בחר את ה-prompt הראשי של הסוכן."
+      },
+      "maxLoopIterations" : {
+        "label" : "מספר לולאות מקסימלי לסוכן",
+        "help" : "קבע את מספר הלולאות המרבי של הסוכן (יביא לתוצאה מדויקת יותר)."
+      },
+      "subscribeAllTools" : {
+        "label" : "הפעל את כל הכלים הזמינים",
+        "help" : "כאשר הסימון מסומן, כל הכלים הזמינים יוקצו כשסוכן זה ירוץ"
+      },
+      "enabledFunctions" : {
+        "label" : "פונקציות זמינות עבור סוכן זה",
+        "help" : "פונקציות שהסוכן יוכל להשתמש בהן במהלך העבודה"
+      },
+      "temperature" : {
+        "label" : "טמפרטורה",
+        "help" : "הטמפרטורה בה המודל יגיב, בין 0 ל-1 (אם לא בטוח השאר ריק)"
+      },
+      "thinking" : {
+        "label" : "מאמצי חשיבה",
+        "help" : "הגדר מאמצי חשיבה שהמודל יבצע (לא כל המודלים תומכים בזה)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "פרמטר TopP, בין 0 ל-1 (אם לא בטוח השאר ריק)"
       }
     }
   }

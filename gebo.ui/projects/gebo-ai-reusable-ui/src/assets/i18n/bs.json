@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Prihvatam uslove",
         "help" : "Klikom ovdje prihvatate uslove i odredbe licence"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin korisnik kreiran!",
+        "detail" : "Admin korisnik PAOLO.ZAVALLONI@GMAIL.COM uspješno kreiran"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai podešavanje nema neki od obaveznih koraka",
         "detail" : "Molimo pregledajte crvene korake procesa podešavanja"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfiguriši usluge agenta",
+        "description" : "Konfiguriši usluge agenta i dostupne alate"
+      },
+      "AgentAddBtn" : {
+        "label" : "Dodaj agenta"
+      },
+      "MainPanel" : {
+        "label" : "Postavke agenata"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguracijski kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditAgentBtn" : {
+        "label" : "Uredi agenta"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Podešavanje velikih jezičkih modela"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Izuzetak tokom operacije: Ne može se kreirati vektorska prodavnica ili izuzetak pri inicijalizaciji modela ugrađivanja: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Greška servera: Ne može se kreirati vektorska prodavnica ili izuzetak pri inicijalizaciji modela ugrađivanja: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "korisnici"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Pretraži ime"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Pretraži korisničko ime"
+      },
+      "SearchUsersBtn" : {
+        "label" : "pretraži"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Odaberi ulogu"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Pretraži prezime"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Lista korisnika",
         "help" : "Odaberite korisnike koji učestvuju u grupi"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Promijeni korisničku lozinku"
+      },
+      "CancelBtn" : {
+        "label" : "Otkaži"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Promijeni"
+      },
+      "username" : {
+        "label" : "Korisničko ime",
+        "help" : "Unesite svoju lozinku da potvrdite ovu radnju"
+      },
+      "currentUserPassword" : {
+        "label" : "Vaša lozinka",
+        "help" : "Unesite svoju lozinku da potvrdite ovu radnju"
+      },
+      "confirmpassword" : {
+        "label" : "potvrdi lozinku korisnika",
+        "help" : "potvrda lozinke za korisnika koji se uređuje"
+      },
+      "password" : {
+        "label" : "Nova lozinka korisnika",
+        "help" : "Nova lozinka za korisnika koji se uređuje"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Novi model za ugradnju",
         "help" : "Odaberite dobavljača za dodavanje novog modela za ugradnju koji može vršiti semantičko indeksiranje sadržaja",
         "placeholder" : "Odaberite dobavljača za dodavanje novog modela za ugradnju koji može vršiti semantičko indeksiranje sadržaja"
+      },
+      "ranker" : {
+        "label" : "Novi model rerankiranja",
+        "help" : "Izaberite dobavljača za dodavanje novog reranker modela",
+        "placeholder" : "Izaberite dobavljača za dodavanje novog reranker modela"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Konfiguracija novog reranker modela"
+      },
+      "CodeHeader3" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Opis"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Dobavljač modela"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurisani rerank modeli"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "API token embedding modela",
         "help" : "Odaberite API token embedding modela koji će se koristiti za ovaj model"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacija uspješno završena"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Sačuvaj"
+      },
+      "CancelBtn" : {
+        "label" : "Otkaži"
+      },
+      "DeleteBtn" : {
+        "label" : "Obriši"
+      },
+      "TitleFragment" : {
+        "label" : "Uređivanje provajdera modela rangiranja:"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Jedinstveni kod",
+        "help" : "Automatski generisan jedinstveni kod za konfiguraciju modela"
+      },
+      "baseUrl" : {
+        "label" : "osnovna adresa servera ranking model API-ja",
+        "help" : "Osnovna adresa za ranking model."
+      },
+      "apiSecretCode" : {
+        "label" : "API token ranking modela",
+        "help" : "Izaberite API token ranking modela koji ćete koristiti za ovaj model (opcionalno)"
+      },
+      "choosedModel" : {
+        "label" : "izbor ranking modela",
+        "help" : "Izaberite ranking model za rad."
+      },
+      "defaultModel" : {
+        "label" : "postavi kao podrazumijevani ranking model",
+        "help" : "Ako je izabrano, koristi se kao podrazumijevani ranking model kada nije naveden drugi"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacija uspješno završena"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Izabrani sistemi"
+      },
+      "wordExport" : {
+        "help" : "Izvezi odgovor u Word"
+      },
+      "pdfExport" : {
+        "help" : "Izvezi odgovor u PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Izvršavam izabranog agenta"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Obrada dokumenta:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Duboko pretraživanje/Jira pretraga"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Asistirana pretraga"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Uredite prompt za sesije generisanja s proširenim dohvatanjem."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ručno ili automatski podešena konfiguracija praga",
+        "help" : "Koristi ručni prag udaljenosti umjesto automatskog podešavanja"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Koristi pretragu po ključnim riječima ako je dostupna",
+        "help" : "Pokreni pretrage po ključnim riječima uz semantičke pretrage ako su podešene u ovoj instalaciji"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Pregledajte ili pretražite i odaberite dokumente za razgovor"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Odabrani dokumenti"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Razgovor"
       },
       "setupMenuItem" : {
-        "label" : "Podešavanje"
+        "label" : "Podešavanje",
+        "help" : "Postavke nisu kompletirane, kliknite ovdje da ih postavite"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Izuzetak tokom operacije:Anthropic api ne može raditi bez potrebne api key konfiguracije",
         "detail" : "Greška servera: Anthropic api ne može raditi bez potrebne api key konfiguracije"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fajl izvezen",
+        "detail" : "Idite u odjeljak preuzetih datoteka u pretraživaču"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Model korišten za interne servise"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Sačuvaj"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent koristi chat model"
+      },
+      "CancelBtn" : {
+        "label" : "Otkaži"
+      },
+      "DeleteBtn" : {
+        "label" : "Obriši"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Opće informacije"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "odaberi"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Odaberi konfiguraciju chat modela"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Koristite podrazumijevani chat model sistema za rad agenta ili navedite određeni. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Postavke velikog jezičkog modela i dostupnih alata"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Postavke sigurnosnog pristupa"
+      },
+      "MainPanel" : {
+        "label" : "Uređivanje konfiguracije agenta"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis chat agenta."
+      },
+      "code" : {
+        "label" : "Jedinstveni kod",
+        "help" : "Automatski generisan jedinstveni kod agenta."
+      },
+      "agentServiceId" : {
+        "label" : "Tip usluge agenta",
+        "help" : "Izaberite tip usluge agenta koji će se pokrenuti."
+      },
+      "defaultConfiguration" : {
+        "label" : "Podrazumijevana konfiguracija agenta",
+        "help" : "Postavite ovu postavku kao podrazumijevanu za ovaj tip usluge agenta"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Izaberite šablon osnovnog upita petlje",
+        "help" : "Izaberite osnovni upit petlje agenta."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksimalan broj iteracija petlje agenta",
+        "help" : "Postavite maksimalan broj ponavljanja petlje agenta (rezultat će biti detaljniji)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Omogući sve dostupne alate",
+        "help" : "Kada je ova opcija odabrana, svi dostupni alati biće dodijeljeni kada se agent pokrene"
+      },
+      "enabledFunctions" : {
+        "label" : "Omogućene funkcije za ovog agenta",
+        "help" : "Funkcionalnosti koje agent može koristiti tokom rada"
+      },
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura na koju će model odgovarati, od 0 do 1 (ostavite prazno ako niste sigurni)"
+      },
+      "thinking" : {
+        "label" : "Promišljanje",
+        "help" : "Podesite nivo promišljanja modela (nije podržano kod svih modela)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametar, od 0 do 1 (ostavite prazno ako niste sigurni)"
       }
     }
   }

@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Es piekrītu noteikumiem",
         "help" : "Noklikšķinot šeit, jūs piekrītat licences noteikumiem"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Administrators lietotājs izveidots!",
+        "detail" : "Administrators lietotājs PAOLO.ZAVALLONI@GMAIL.COM veiksmīgi izveidots"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
         "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfigurēt aģenta pakalpojumus",
+        "description" : "Konfigurēt aģenta pakalpojumus un to pieejamos rīkus"
+      },
+      "AgentAddBtn" : {
+        "label" : "Pievienot aģentu"
+      },
+      "MainPanel" : {
+        "label" : "Aģentu uzstādīšana"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "EditAgentBtn" : {
+        "label" : "Rediģēt aģentu"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Iestatīt lielos valodas modeļus"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Izņēmums darbības laikā: Nevar izveidot vektoru krātuvi vai inicializēt iegulšanas modeli: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Servera kļūda: Nevar izveidot vektoru krātuvi vai inicializēt iegulšanas modeli: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "lietotāji"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Meklēt vārdu"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Meklēt lietotājvārdu"
+      },
+      "SearchUsersBtn" : {
+        "label" : "meklēt"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Izvēlieties lomu"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Meklēt uzvārdu"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "Lietotāju saraksts",
         "help" : "Izvēlieties lietotājus, kas piedalās grupā"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Mainīt lietotāja paroli"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Mainīt"
+      },
+      "username" : {
+        "label" : "Lietotāja vārds",
+        "help" : "Ievadiet savu paroli, lai apstiprinātu šo darbību"
+      },
+      "currentUserPassword" : {
+        "label" : "Jūsu parole",
+        "help" : "Ievadiet savu paroli, lai apstiprinātu šo darbību"
+      },
+      "confirmpassword" : {
+        "label" : "lietoāja paroles apstiprinājums",
+        "help" : "apstipriniet rediģētā lietotāja paroli"
+      },
+      "password" : {
+        "label" : "Lietotāja jaunā parole",
+        "help" : "Jaunā parole rediģētajam lietotājam"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Jauns iegulšanas modelis",
         "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu",
         "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu"
+      },
+      "ranker" : {
+        "label" : "Jauns pārvērtēšanas modelis",
+        "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu pārvērtētāju modeli",
+        "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu pārvērtētāju modeli"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Jauna pārvērtētāja modeļa konfigurācija"
+      },
+      "CodeHeader3" : {
+        "label" : "Kods"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Apraksts"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Modeļa piegādātājs"
+      },
+      "ModelHeader3" : {
+        "label" : "Modelis "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfigurētie pārvērtēšanas modeļi"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Iegulējuma modeļa API tokens",
         "help" : "Izvēlieties iegulējuma modeļa API tokenu, ko izmantot šim modelim"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Darbība veiksmīgi pabeigta"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "TitleFragment" : {
+        "label" : "Rediģēt vērtēšanas modeļa piegādātāju:"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts unikāls modeļa konfigurācijas kods"
+      },
+      "baseUrl" : {
+        "label" : "vērtēšanas modeļa API pamata servera adrese",
+        "help" : "Vērtēšanas modeļa pamatadrese."
+      },
+      "apiSecretCode" : {
+        "label" : "vērtēšanas modeļa API tokens",
+        "help" : "Izvēlieties šim modelim izmantojamo vērtēšanas modeļa API tokenu (pēc izvēles)"
+      },
+      "choosedModel" : {
+        "label" : "vērtēšanas modeļa izvēle",
+        "help" : "Izvēlieties vērtēšanas modeli, ar kuru strādāt."
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusēto vērtēšanas modeli",
+        "help" : "Ja iestatīts, šo izmantos kā noklusēto vērtēšanas modeli, ja nav norādīts cits"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Darbība veiksmīgi pabeigta"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Izvēlētās sistēmas"
+      },
+      "wordExport" : {
+        "help" : "Eksportēt atbildi uz Word"
+      },
+      "pdfExport" : {
+        "help" : "Eksportēt atbildi uz PDF"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Tiek izpildīts jūsu izvēlētais aģents"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Apstrādā dokumentu:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Padziļinātā meklēšana/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Palīdzētā meklēšana"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Uzvedne",
         "help" : "Rediģējiet uzvedni retrieve augmented generation sesijām."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Manuāla vai automātiska sliekšņa konfigurācija",
+        "help" : "Izmantot manuālu attāluma slieksni tā vietā, lai to automātiski pielāgotu"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Izmantot atslēgvārdu meklēšanu, ja pieejams",
+        "help" : "Veiciet atslēgvārdu meklēšanu papildus semantiskajai meklēšanai, ja tās ir konfigurētas šajā instalācijā"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Pārlūkot vai meklēt un izvēlēties dokumentus, ar kuriem tērzēt"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Izvēlētie dokumenti"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Tērzēšana"
       },
       "setupMenuItem" : {
-        "label" : "Iestatīšana"
+        "label" : "Iestatīšana",
+        "help" : "Iestatīšana nav pabeigta, lūdzu, nospiediet šeit un pārvaldiet to"
       },
       "adminMenuItem" : {
         "label" : "Administrēšana"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Izņēmums darbības laikā:Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas",
         "detail" : "Servera kļūda: Anthropic api nevar strādāt bez nepieciešamās api atslēgas konfigurācijas"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fails eksportēts",
+        "detail" : "Dodieties uz pārlūkprogrammas lejupielāžu sadaļu"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Modelis izmantošanai iekšējiem pakalpojumiem"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Aģenta izmantotais tērzēšanas modelis"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "izvēlieties"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Izvēlieties tērzēšanas modeļa konfigurāciju"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Lietot sistēmas noklusēto tērzēšanas modeli aģenta uzdevuma veikšanai vai norādiet citu. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Liela valodas modeļa un pieejamo rīku iestatījumi"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Piekļuves drošības iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "Aģenta konfigurācijas rediģēšana"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet tērzēšanas aģenta aprakstu."
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts aģenta unikāls kods."
+      },
+      "agentServiceId" : {
+        "label" : "Aģenta pakalpojuma veids",
+        "help" : "Izvēlieties aģenta pakalpojuma veidu, kas tiks darbināts."
+      },
+      "defaultConfiguration" : {
+        "label" : "Noklusētā aģenta konfigurācija",
+        "help" : "Iestatīt šo kā noklusēto šī aģenta pakalpojuma tipam"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Izvēlieties galvenās cilpas prompt veidni",
+        "help" : "Izvēlieties aģenta galvenās cilpas promptu."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksimālais aģenta cilpu skaits",
+        "help" : "Iestatiet maksimālo aģenta cilpu skaitu (rezultāts būs detalizētāks)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Aktivizēt visus pieejamos rīkus",
+        "help" : "Kad atzīmēts, šim aģentam tiks piešķirti visi pieejamie rīki"
+      },
+      "enabledFunctions" : {
+        "label" : "Šim aģentam iespējotās funkcijas",
+        "help" : "Funkcionalitātes, ko aģents var izmantot veicot savu darbu"
+      },
+      "temperature" : {
+        "label" : "Temperatūra",
+        "help" : "Modeļa atbildes temperatūra, no 0 līdz 1 (atstājiet tukšu, ja neesat pārliecināts)"
+      },
+      "thinking" : {
+        "label" : "Domāšanas piepūle",
+        "help" : "Konfigurējiet domāšanas piepūli, ko modelis veiks (ne visi modeļi atbalsta to)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametrs, no 0 līdz 1 (atstājiet tukšu, ja neesat pārliecināts)"
       }
     }
   }

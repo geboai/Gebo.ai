@@ -168,8 +168,30 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(
 				List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID), grantType);
 		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
+
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(x -> this.fromGroup(x, grantType)).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();
+		final IAclGrantedAccess everyOneAccess = new IAclGrantedAccess() {
+
+			@Override
+			public List<Integer> getOwnedAclAliases() {
+
+				return List.of(aliasForEveryone(grantType));
+			}
+
+			@Override
+			public String getObjectType() {
+
+				return "everyone";
+			}
+
+			@Override
+			public String getAclUniqueId() {
+
+				return EVERYONE_ACL_UNIQUE_ID;
+			}
+		};
+		accesses.add(everyOneAccess);
 		final IAclGrantedAccess thisAccess = new IAclGrantedAccess() {
 			@Override
 			public String getAclUniqueId() {

@@ -4,3 +4,77 @@ produce a single text containing ONLY a faithful, compact summary of the documen
 without any comments or thinking tag or feedback.
 OUTPUT RULES (STRICT)
 Output ONLY the summary in plain text or markdown format in the same language of the INPUT DOCUMENTS.
+REQUIRED OUTCOME RULE: 
+
+
+EVIDENCE DOCUMENTS FORMATTING RULES
+
+When listing or citing evidence documents, format each document using the richest bibliographic information available.
+
+If the document provides any of the following fields:
+
+* document title
+* document subtitle
+* author
+* publisher
+* publication title
+* publication date
+* source URL
+* document type
+* page number, section, paragraph, or chunk reference
+
+then include those fields in the evidence document entry.
+
+Definitions:
+
+* Document title: the title of the specific document, article, report, web page, paper, post, or file.
+* Document subtitle: the subtitle of the specific document, if available.
+* Author: the person, organization, or entity credited as creator of the content.
+* Publisher: the organization responsible for publishing or distributing the content.
+* Publication title: the name of the newspaper, magazine, journal, website, portal, blog, platform, or source container where the document appeared.
+  Examples: `The New York Times`, `La Repubblica`, `BBC News`, `Nature`, `arXiv`, `European Commission website`, `company blog`.
+* Publication date: the date when the document, article, post, report, or page was published or last officially updated.
+* Source URL: the original URL, if available.
+* Document type: article, report, paper, press release, blog post, web page, uploaded file, PDF, etc.
+
+Use this preferred format:
+
+`Document Title: Document Subtitle`, Author, Publication Title, Publisher, Publication Date, Document Type, page/section/chunk reference, URL.
+
+If some fields are missing, omit only the missing fields and keep the remaining information in the same order.
+
+Never invent missing metadata. If title, author, publisher, publication title, or date are not explicitly available, do not guess them.
+
+If both publisher and publication title are available, include both.
+
+If publisher and publication title are effectively the same, include the value only once unless the source explicitly distinguishes them.
+
+When the evidence document comes from an uploaded file, preserve the original file name if no formal document title is available.
+
+When multiple evidence documents are cited, present them as a numbered list.
+
+Examples:
+
+1. Article from a newspaper:
+
+`Reale Mutua cresce nel ramo salute`, Mario Rossi, La Repubblica, GEDI Gruppo Editoriale, 25 March 2026, article.
+
+2. Web page from an institutional website:
+
+`Cloud Security Guidelines`, European Commission website, European Commission, 2025, web page, https://example.com.
+
+3. Scientific article:
+
+`Attention Is All You Need`, Vaswani et al., NeurIPS Proceedings, Curran Associates, 2017, conference paper.
+
+4. Blog post:
+
+`Introducing the New API`, OpenAI Blog, OpenAI, 2026, blog post.
+
+5. Uploaded file without formal title:
+
+`uploaded-file-name.pdf`, uploaded file, p. 12.
+
+6. Document with title and subtitle:
+
+`Enterprise AI Adoption: Market Trends and Risks`, ACME Research Portal, ACME Publishing, 2026, report.

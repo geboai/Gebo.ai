@@ -31,7 +31,6 @@ import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptsParametersCacheService;
-import ai.gebo.llms.chat.agent.IChatAgentService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -55,7 +54,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingService
 		implements IRoutingChatPipelineStepService {
-	private final DefaultPipelineStreamingAgenticStepServiceImpl defaultPipelineStreamingAgenticStepServiceImpl;
+
 	public static final String PIPELINE_EXECUTOR_SUGGESTION = "pipelineExecutorSuggestion";
 	private static final String SCANNING_HUGE_FILE_WITH_LLMS = "Scanning huge file with llms";
 	private static final String RUNNING_HEAVY_CHAT_WITH_DOCUMENTS = "RUNNING_HEAVY_CHAT_WITH_DOCUMENTS";
@@ -96,7 +95,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final IGPromptsParametersCacheService promptsParamsCacheService;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
-	private final IChatAgentService chatAgentService;
+	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
 	public static final String DEFAULT_ROUTING_STEP = "default-routing-step";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SYSTEM_ID = "IKB_SYSTEM";
@@ -181,7 +180,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		RespondingWith decision = null;
 		final Map<String, Object> environmentMap = new HashMap<String, Object>();
 		Map<String, List<String>> decisionMap = new HashMap<>();
-		if (this.chatAgentService.getDefaultConfiguration().isEmpty()) {
+		final boolean defaultPipelineIsChatAgent = this.chatPipelinesConfig.isDefaultPipelineStepIsChatAgent();
+		if (!this.chatAgentService.isDefaultPipelineStreamingDefined()) {
+			// GO ON WITH INTELLIGENT ROUTER
 			GPromptTemplateConfig _prompt = this.promptsDao
 					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_ROUTING_DECISION_PROMPT);
 
@@ -245,7 +246,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			environmentMap.putAll(params);
 			environmentMap.putAll(decisionMap);
 		} else {
-			decision = RespondingWith.CHAT_AGENT;
+			// GO ON WITH INTELLIGENT ROUTER
+			decision = RespondingWith.DELEGATED_AGENT;
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing decision object:" + decision + " decisionMap:" + decisionMap);
@@ -307,8 +309,6 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	}
 
 	private final static List<DeliverableIntent> orderedIntents = new ArrayList<>();
-
-	
 
 	static {
 		TreeMap<Integer, DeliverableIntent> ordered = new TreeMap<>();
@@ -554,8 +554,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		case PURE_SEARCH: {
 			return List.of(DefaultPipelineStreamingPureSearchPipelineStepServiceImpl.PURE_SEARCH_STREAMING_SERVICE);
 		}
-		case CHAT_AGENT: {
-			return List.of(defaultPipelineStreamingAgenticStepServiceImpl.AGENTIC_CHAT_STEP_SERVICE);
+		case DELEGATED_AGENT: {
+			return List.of(DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE);
 		}
 		case PURE_LLM_RESPONSE:
 		default:

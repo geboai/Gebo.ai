@@ -41,6 +41,10 @@
       "AcceptMark" : {
         "label" : "Şərtləri qəbul edirəm",
         "help" : "Buraya klikləməklə lisenziyada olan şərtləri qəbul edirsiniz"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin istifadəçisi yaradıldı !",
+        "detail" : "Admin istifadəçisi PAOLO.ZAVALLONI@GMAIL.COM uğurla yaradıldı"
       }
     }
   },
@@ -212,6 +216,25 @@
       "SETUP-MISSING_SOME" : {
         "summary" : "Gebo.ai qurulmasında bəzi vacib addım çatışmır",
         "detail" : "Qurulum prosesində qırmızı rənglə işarələnmiş addımları gözdən keçirin"
+      },
+      "agentSetupSection" : {
+        "label" : "Agent xidmətlərini konfiqurasiya et",
+        "description" : "Agent xidmətlərini və onların əlçatan alətlərini konfiqurasiya et"
+      },
+      "AgentAddBtn" : {
+        "label" : "Agent əlavə et"
+      },
+      "MainPanel" : {
+        "label" : "Agentləri qur"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "EditAgentBtn" : {
+        "label" : "Agentə düzəliş et"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -319,6 +342,10 @@
       },
       "MainLLMSPanelTitle" : {
         "label" : "Böyük dil modellərini qur"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Əməliyyat zamanı istisna: Vektor mağazasını yaratmaq və ya embedding modelin inicializasiya xətası: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Server xətası: Vektor mağazası yaradılmadı və ya embedding modelin inicializasiya xətası: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
       }
     },
     "GraphRagWizardComponent" : {
@@ -787,6 +814,21 @@
       },
       "UsersHeader" : {
         "label" : "istifadəçilər"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Ad axtar"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "İstifadəçi adını axtar"
+      },
+      "SearchUsersBtn" : {
+        "label" : "axtar"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Rolu seç"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Soyad axtar"
       }
     }
   },
@@ -818,6 +860,33 @@
       "userIds" : {
         "label" : "İstifadəçilərin siyahısı",
         "help" : "Qrupa daxil olan istifadəçiləri seçin"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "İstifadəçinin parolunu dəyiş"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Dəyiş"
+      },
+      "username" : {
+        "label" : "İstifadəçi adı",
+        "help" : "Bu əməliyyatı təsdiq etmək üçün şifrənizi daxil edin"
+      },
+      "currentUserPassword" : {
+        "label" : "Sizin şifrəniz",
+        "help" : "Bu əməliyyatı təsdiq etmək üçün şifrənizi daxil edin"
+      },
+      "confirmpassword" : {
+        "label" : "İstifadəçinin şifrəsini təsdiqlə",
+        "help" : "Düzəliş edilən istifadəçinin təsdiqləmə şifrəsi"
+      },
+      "password" : {
+        "label" : "İstifadəçinin yeni şifrəsi",
+        "help" : "Düzəliş olunan istifadəçi üçün yeni şifrə"
       }
     }
   },
@@ -1358,6 +1427,29 @@
         "label" : "Yeni embedding modeli",
         "help" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin",
         "placeholder" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "ranker" : {
+        "label" : "Yeni rerank modeli",
+        "help" : "Yeni reranker modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "Yeni reranker modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Yeni reranker modelinin konfiqurasiyası"
+      },
+      "CodeHeader3" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Təsvir"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Model təchizatçısı"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfiqurasiya edilmiş rerank modelləri"
       }
     }
   },
@@ -1900,6 +1992,52 @@
       "apiSecretCode" : {
         "label" : "Embedding modeli API tokeni",
         "help" : "Bu model üçün istifadə olunacaq Embedding modeli API tokenini seçin"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "TitleFragment" : {
+        "label" : "Rankinq model təchizatçısı redaktəsi:"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılmış unikal kodu"
+      },
+      "baseUrl" : {
+        "label" : "rankinq modeli API əsas server ünvanı",
+        "help" : "Rankinq modelinin əsas ünvanı."
+      },
+      "apiSecretCode" : {
+        "label" : "rankinq modeli API tokeni",
+        "help" : "Bu model üçün istifadə olunacaq API tokenini seçin (opsional)"
+      },
+      "choosedModel" : {
+        "label" : "rankinq modeli seçim",
+        "help" : "İşləmək üçün rankinq modelini seçin."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas rankinq modeli kimi təyin et",
+        "help" : "Əgər true seçilərsə, göstərilməmiş yerdə əsas model kimi istifadə olunacaq"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
       }
     }
   },
@@ -1999,6 +2137,12 @@
       },
       "DataSourceChoicesArea" : {
         "label" : "Seçilmiş sistemlər"
+      },
+      "wordExport" : {
+        "help" : "Cavabı Word-ə ixrac et"
+      },
+      "pdfExport" : {
+        "help" : "Cavabı PDF-ə ixrac et"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -2092,6 +2236,9 @@
       },
       "USER_CHOOSED_AGENT" : {
         "label" : "Seçilmiş agent icra olunur"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Sənəd işlənir:"
       }
     },
     "ChatPipelinesMenu" : {
@@ -2136,6 +2283,9 @@
       },
       "DEEP_SEARCH_RESPONSE.jira" : {
         "label" : "Dərin axtarış/Jira Axtarış"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Köməkçi axtarış"
       }
     }
   },
@@ -2716,6 +2866,14 @@
       "prompt" : {
         "label" : "Prompt",
         "help" : "Retrieve augmented generation sessiyaları üçün prompt-u redaktə edin."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Əl ilə və ya Avtomatik hədlərin konfiqurasiyası",
+        "help" : "Avtotune əvəzinə əl ilə məsafə həddi istifadə et"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Mümkün olduqda açar söz axtarışı istifadə et",
+        "help" : "Əgər bu quraşdırmada konfiqurasiya olunubsa, semantik axtarışlara əlavə açar söz axtarışlarını da et"
       }
     }
   },
@@ -2883,6 +3041,9 @@
       },
       "ChatWithDocsBtnNew" : {
         "help" : "Sənədləri axtarın və seçərək söhbət edin"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Seçilmiş sənədlər"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -3015,7 +3176,8 @@
         "label" : "Söhbət"
       },
       "setupMenuItem" : {
-        "label" : "Quraşdırma"
+        "label" : "Quraşdırma",
+        "help" : "Quraşdırma tamamlanmayıb, zəhmət olmasa bura klikləyin və idarə edin"
       },
       "adminMenuItem" : {
         "label" : "Admin"
@@ -3454,6 +3616,10 @@
       "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
         "summary" : "Əməliyyat zamanı istisna:Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz",
         "detail" : "Server xətası: Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fayl ixrac olundu",
+        "detail" : "Baxmaq üçün brauzerin yükləmə bölməsinə keçin"
       }
     }
   },
@@ -3805,6 +3971,87 @@
       },
       "INTERNAL_SERVICES" : {
         "description" : "Daxili xidmətlər üçün istifadə olunan model"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent istifadə etdiyi chat modeli"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Ümumi məlumat"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "seç"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chat modeli konfiqurasiyasını seçin"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Agent vəzifəsini yerinə yetirmək üçün sistemin standart chat modelini istifadə edin və ya başqa birini seçin. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Böyük dil modeli və istifadə olunan alətlər ayarları"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Təhlükəsizliyi giriş ayarları"
+      },
+      "MainPanel" : {
+        "label" : "Agent konfiqurasiyasını redaktə et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Chat agent üçün təsvir daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Agent üçün avtomatik yaradılmış unikal kod."
+      },
+      "agentServiceId" : {
+        "label" : "Agent xidmət növü",
+        "help" : "İcra olunacaq Agent xidmət növünü seçin."
+      },
+      "defaultConfiguration" : {
+        "label" : "Agent üçün standart konfiqurasiya",
+        "help" : "Bu Agent xidmət növü üçün əsas konfiqurasiya kimi təyin et"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Əsas loop prompt şablonunu seçin",
+        "help" : "Agentin əsas loop promptunu seçin."
+      },
+      "maxLoopIterations" : {
+        "label" : "Agent üçün maksimum loop sayı",
+        "help" : "Agentin yerinə yetirəcəyi maksimum loop sayını göstərin (bu nəticəni daha da təkmilləşdirəcək)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Bütün əlçatan alətləri aktiv et",
+        "help" : "Bu seçim aktiv olduqda agent başladıqda bütün əlçatan alətlər təyin olunacaq"
+      },
+      "enabledFunctions" : {
+        "label" : "Bu agent üçün aktiv edilən funksiyalar",
+        "help" : "Agent iş zamanı istifadə edə biləcəyi funksionallıqlar"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Modelin cavab verəcəyi temperatur, 0-dan 1-ə qədər (əmin deyilsinizsə boş saxlayın)"
+      },
+      "thinking" : {
+        "label" : "Düşünmə səviyyəsi",
+        "help" : "Modelin edəcəyi düşünmə səviyyələrini konfiqurasiya et (bütün modellər dəstəkləmir)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametri, 0-dan 1-ə qədər (əmin deyilsinizsə boş saxlayın)"
       }
     }
   }

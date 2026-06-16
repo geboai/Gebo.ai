@@ -132,6 +132,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
     if (this.generatedContent) {
       const fileType = this.generatedContent.fileType;
       if (fileType) {
+        
         this.ingestionFileType = this.generatedContent.fileType;
         if (this.ingestionFileType?.uiViewable === true) {
           this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
@@ -142,7 +143,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
           this.contentServedByGebo = true;
         }
         this.downloadableContent = fileType?.uiViewable === false;
-        this.visible = fileType?.uiViewable === true;
+        this.visible = fileType?.uiViewable === true && this.activate===true;
         console.log("Content: " + this.externalContentUrl);
         console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
         console.log("content viewer url:" + this.externalContentUrl);
@@ -225,7 +226,10 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * @param changes SimpleChanges object containing the changed properties
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.code && this.code.length && changes["code"] && this.activate === true) {
+    if (changes["activate"]) {
+       this.visible = this.ingestionFileType?.uiViewable === true && this.activate===true;
+    }
+    if (this.code && this.code.length && changes["code"]) {
       this.loading = true;
       this.contentMetaControllerService.getContentMetaInfos(this.code).subscribe({
         next: (value) => {
