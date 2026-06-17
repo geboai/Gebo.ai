@@ -1,0 +1,73 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+
+<form [formGroup]="formGroup" (ngSubmit)="doChangePassword()" *ngIf="!disabledWorkFlows">
+
+    <p-panel id="UserWorkflowsLandPanel" gebo-ai-label #workflowsLandUI header="Change password with ticket">
+        <p-blockUI [target]="workflowsLandUI" [blocked]="loading">
+            <i class="pi pi-lock" style="font-size: 3rem"></i>
+        </p-blockUI>
+        <div class="grid">
+            <div class="col-12">
+                <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+            </div>
+
+            <div class="col-12">
+                <gebo-ai-field id="email" label="E-mail" help="Insert your email address" [required]="true">
+                    <input pInputText id="email" formControlName="email" class="col-12" [required]="true"
+                        gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-6">
+                <gebo-ai-field id="password" label="New password"
+                    help="Password must be at least 10 characters with uppercase, lowercase, numbers, and special characters"
+                    [required]="true">
+                    <p-password id="password" formControlName="password" class="col-12" [required]="true"
+                        [toggleMask]="true" gebo-ai-field-element></p-password>
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-6">
+                <gebo-ai-field id="confirmPassword" label="Confirm password" help="Confirm your new password"
+                    [required]="true">
+                    <p-password id="confirmPassword" formControlName="confirmPassword" class="col-12" [required]="true"
+                        [toggleMask]="true" [feedback]="false" gebo-ai-field-element></p-password>
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-4" *ngIf="!success">
+                <p-button id="ChangePasswordBtn" gebo-ai-label [outlined]="true" icon="pi pi-save"
+                    label="Change Password" [disabled]="formGroup.invalid" type="submit"></p-button>
+            </div>
+            <div class="col-4" *ngIf="success">
+                <p-button id="GoToLoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in"
+                    label="Go to login page" (onClick)="goToLogin()" severity="success"></p-button>
+            </div>
+        </div>
+    </p-panel>
+
+</form>
+
+<div class="grid" *ngIf="disabledWorkFlows">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <p-panel id="DisabledWorkflowsPanel" gebo-ai-label header="Workflows disabled">
+            <div class="grid">
+                <div class="col-12">
+                    <span id="NoWorkflowMessage" gebo-ai-text>No user registration or recovery workflows are currently
+                        enabled on the system.</span>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+    <div class="col-3"></div>
+</div>

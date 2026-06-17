@@ -9,6 +9,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
 import { SelectModule } from "primeng/select";
+import { PasswordModule } from "primeng/password";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 
@@ -24,6 +25,7 @@ const routes: Routes = [{ path: "land", component: GeboAIUserWorkflowsLandCompon
         ButtonModule,
         BlockUIModule,
         SelectModule,
+        PasswordModule,
         GeboAIFieldTranslationContainerModule,
         GeboAINotificationsModule
     ],
