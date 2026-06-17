@@ -279,7 +279,7 @@ public class GUserWorkflowMailServiceImpl implements IGUserWorkflowMailService {
 		}
 
 		String encodedTicket = urlEncode(ticket.getTicket());
-		baseAddress="http://localhost:4200/";
+		//baseAddress="http://localhost:4200/";
 		return baseAddress + "ui/user-workflows/land?ticket=" + encodedTicket;
 	}
 

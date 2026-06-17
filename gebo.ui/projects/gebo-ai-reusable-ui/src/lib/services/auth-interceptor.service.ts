@@ -43,8 +43,9 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
             resetAuth();
-            const currentUrl = this.router.url || window.location.pathname;
-            if (!currentUrl.includes('/ui/user-workflows/')) {
+            const currentUrl = this.router.url;
+            const path = window.location.pathname;
+            if (!currentUrl.includes('/ui/user-workflows/') && !path.includes('/ui/user-workflows/')) {
               this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute });
             }
 
