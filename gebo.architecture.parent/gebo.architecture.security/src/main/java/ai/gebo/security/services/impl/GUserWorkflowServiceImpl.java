@@ -3,6 +3,7 @@ package ai.gebo.security.services.impl;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -17,6 +18,7 @@ import ai.gebo.security.model.UserWorkflowSecret;
 import ai.gebo.security.model.UserWorkflowTicket;
 import ai.gebo.security.model.UserWorkflowType;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.IGCustomUserWorkflowDiscriminationService;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGUserWorkflowMailService;
 import ai.gebo.security.services.IGUserWorkflowService;
@@ -27,8 +29,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
+
 public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
+	private static final String CANNOT_RUN_THIS_WORKFLOW = "Cannot run this workflow";
 	private static final String WRONG_STATE = "Wrong state";
 	private static final String WRONG_EMAIL = "Wrong email";
 	private static final String WRONG_TICKET = "Wrong ticket";
@@ -47,10 +50,29 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	private final GeboUserWorkflowsConfig workflowsConfig;
 	private final IGUserWorkflowMailService workflowMailService;
 	private final IGUsersAdminService userAdminService;
+	private final IGCustomUserWorkflowDiscriminationService userDiscriminationService;
+
+	public GUserWorkflowServiceImpl(GeboUserWorkflowsConfig workflowsConfig,
+			IGUserWorkflowMailService workflowMailService, UserRepository userRepository,
+			IGUsersAdminService userAdminService, IGSecurityService securityService,
+			IGeboSecretsAccessService secretAccessService, IGeboCryptingService cryptService,@Autowired(required = false)
+			IGCustomUserWorkflowDiscriminationService userDiscriminationService) {
+		this.userRepository = userRepository;
+		this.securityService = securityService;
+		this.secretAccessService = secretAccessService;
+		this.cryptService = cryptService;
+		this.workflowsConfig = workflowsConfig;
+		this.workflowMailService = workflowMailService;
+		this.userAdminService = userAdminService;
+		this.userDiscriminationService = userDiscriminationService;
+	}
 
 	@Override
 	public void startUserWorkflow(String userName, UserWorkflowType type)
 			throws UserWorkflowException, GeboCryptSecretException {
+		if (userDiscriminationService!=null && !userDiscriminationService.canRunWorkflow(userName, type)) {
+			throw new UserWorkflowException(CANNOT_RUN_THIS_WORKFLOW);
+		}
 		User user = userRepository.findByUsername(userName).orElseThrow(() -> new UserWorkflowException(UNKNOWN_USER));
 		if (user.getProvider() == null || user.getProvider() == AuthProvider.local) {
 			switch (type) {
