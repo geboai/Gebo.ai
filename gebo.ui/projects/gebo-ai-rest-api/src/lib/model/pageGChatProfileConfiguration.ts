@@ -14,13 +14,13 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGChatProfileConfiguration { 
-    totalElements?: number;
     totalPages?: number;
-    first?: boolean;
-    last?: boolean;
+    totalElements?: number;
     size?: number;
     content?: Array<GChatProfileConfiguration>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     sort?: SortObject;
     pageable?: PageableObject;

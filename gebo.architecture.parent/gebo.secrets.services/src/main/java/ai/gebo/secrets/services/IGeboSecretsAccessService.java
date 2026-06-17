@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.secrets.services;
 
@@ -16,59 +13,68 @@ import java.util.List;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
+import ai.gebo.secrets.model.GeboCustomSecretContent;
 import ai.gebo.secrets.model.SecretInfo;
 
 /**
- * AI generated comments
- * Interface to define access services for managing Gebo secrets.
+ * AI generated comments Interface to define access services for managing Gebo
+ * secrets.
  */
 public interface IGeboSecretsAccessService {
-	
+
 	/**
 	 * Retrieves the content of a secret by its unique identifier.
 	 * 
 	 * @param id the unique identifier of the secret.
 	 * @return the content of the secret as an AbstractGeboSecretContent object.
-	 * @throws GeboCryptSecretException if there is an error during the secret retrieval process.
+	 * @throws GeboCryptSecretException if there is an error during the secret
+	 *                                  retrieval process.
 	 */
 	public AbstractGeboSecretContent getSecretContentById(String id) throws GeboCryptSecretException;
+
+	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
+			throws GeboCryptSecretException;
 
 	/**
 	 * Stores a new secret along with its description and context code.
 	 * 
 	 * @param <SecretType> the type of the secret content.
-	 * @param secret the secret content to be stored.
-	 * @param description a brief description of the secret.
-	 * @param contextCode the context code under which the secret is stored.
+	 * @param secret       the secret content to be stored.
+	 * @param description  a brief description of the secret.
+	 * @param contextCode  the context code under which the secret is stored.
 	 * @return a unique identifier for the stored secret.
-	 * @throws GeboCryptSecretException if there is an error during the secret storage process.
+	 * @throws GeboCryptSecretException if there is an error during the secret
+	 *                                  storage process.
 	 */
 	public <SecretType extends AbstractGeboSecretContent> String storeSecret(SecretType secret, String description,
 			String contextCode) throws GeboCryptSecretException;
 
 	/**
-	 * Stores a secret using an existing secret identifier along with its description and context code.
+	 * Stores a secret using an existing secret identifier along with its
+	 * description and context code.
 	 * 
 	 * @param <SecretType> the type of the secret content.
-	 * @param secret the secret content to be stored.
-	 * @param description a brief description of the secret.
-	 * @param contextCode the context code under which the secret is stored.
-	 * @param secretId a unique identifier for the secret.
-	 * @throws GeboCryptSecretException if there is an error during the secret storage process.
+	 * @param secret       the secret content to be stored.
+	 * @param description  a brief description of the secret.
+	 * @param contextCode  the context code under which the secret is stored.
+	 * @param secretId     a unique identifier for the secret.
+	 * @throws GeboCryptSecretException if there is an error during the secret
+	 *                                  storage process.
 	 */
 	public <SecretType extends AbstractGeboSecretContent> void storeSecret(SecretType secret, String description,
 			String contextCode, String secretId) throws GeboCryptSecretException;
 
 	/**
-	 * Updates an existing secret's content using its unique code identifier along with 
-	 * its description and context code.
+	 * Updates an existing secret's content using its unique code identifier along
+	 * with its description and context code.
 	 * 
 	 * @param <SecretType> the type of the secret content.
-	 * @param secret the new secret content to be updated.
-	 * @param description a brief description of the secret.
-	 * @param contextCode the context code under which the secret is stored.
-	 * @param code the unique code of the secret to be updated.
-	 * @throws GeboCryptSecretException if there is an error during the secret update process.
+	 * @param secret       the new secret content to be updated.
+	 * @param description  a brief description of the secret.
+	 * @param contextCode  the context code under which the secret is stored.
+	 * @param code         the unique code of the secret to be updated.
+	 * @throws GeboCryptSecretException if there is an error during the secret
+	 *                                  update process.
 	 */
 	public <SecretType extends AbstractGeboSecretContent> void updateSecret(SecretType secret, String description,
 			String contextCode, String code) throws GeboCryptSecretException;
@@ -77,7 +83,8 @@ public interface IGeboSecretsAccessService {
 	 * Deletes a secret based on its unique code identifier.
 	 * 
 	 * @param code the unique code of the secret to be deleted.
-	 * @throws GeboCryptSecretException if there is an error during the secret deletion process.
+	 * @throws GeboCryptSecretException if there is an error during the secret
+	 *                                  deletion process.
 	 */
 	public void deleteSecret(String code) throws GeboCryptSecretException;
 
@@ -86,7 +93,8 @@ public interface IGeboSecretsAccessService {
 	 * 
 	 * @param contextCode the context code used to filter the secrets.
 	 * @return a list of SecretInfo objects associated with the context code.
-	 * @throws GeboCryptSecretException if there is an error during the retrieval process.
+	 * @throws GeboCryptSecretException if there is an error during the retrieval
+	 *                                  process.
 	 */
 	public List<SecretInfo> getSecretInfoByContextCode(String contextCode) throws GeboCryptSecretException;
 
@@ -95,7 +103,8 @@ public interface IGeboSecretsAccessService {
 	 * 
 	 * @param code the unique identifier of the secret.
 	 * @return a SecretInfo object containing details about the secret.
-	 * @throws GeboCryptSecretException if there is an error during the retrieval process.
+	 * @throws GeboCryptSecretException if there is an error during the retrieval
+	 *                                  process.
 	 */
 	public SecretInfo getSecretInfoById(String code) throws GeboCryptSecretException;
 }

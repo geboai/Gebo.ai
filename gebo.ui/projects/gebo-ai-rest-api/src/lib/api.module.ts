@@ -92,6 +92,7 @@ import { TokenRenewControllerService } from './api/tokenRenewController.service'
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
+import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
@@ -190,6 +191,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     UiTextResourcesControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
+    UserWorkflowsControllerService,
     UsersAdminControllerService,
     UserspaceControllerService,
     UserspaceUploadControllerService ]
