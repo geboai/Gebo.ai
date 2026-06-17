@@ -42,6 +42,9 @@
                         <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
                             (onClick)="login()" [disabled]="formGroup.invalid" type="submit"></p-button>
                     </div>
+                    <div class="col-8 align-content-center" *ngIf="showForgotPasswordLink" style="display: flex; align-items: center;">
+                        <a id="ForgotPasswordLink" routerLink="/ui/workflows/start" [queryParams]="{ type: 'FORGOT_PASSWORD' }" gebo-ai-text>Forgot password?</a>
+                    </div>
                     <div class="col-12" *ngIf="providers.length">
                         <p-fieldset id="OauthProviders" gebo-ai-label legend="Login using provider">
                             <div class="grid">

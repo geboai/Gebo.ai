@@ -23,7 +23,7 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 import { Subscription } from "rxjs";
@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit {
    */
   public constructor(public loginService: LoginService,
     private geboFastSetupControllerService: GeboFastInstallationSetupControllerService,
+    private userWorkflowsService: UserWorkflowsControllerService,
     private geboTranslationService: GeboAITranslationService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
@@ -112,6 +113,8 @@ export class LoginComponent implements OnInit {
    * Lifecycle hook that runs when the component initializes
    * Checks if the system is properly set up before allowing login
    */
+  protected showForgotPasswordLink: boolean = false;
+
   async ngOnInit() {
     this.checkSystemSetup();
     await this.geboTranslationService.tryInit();
@@ -121,6 +124,15 @@ export class LoginComponent implements OnInit {
     }
     //this.userMessages = [welcomeMessage];
     this.loginService.loginActivated.next(true);
+
+    this.userWorkflowsService.getUserWorkflowsConfig().subscribe({
+      next: (config) => {
+        this.showForgotPasswordLink = config?.forgotPasswordWorkflowEnabled === true;
+      },
+      error: () => {
+        this.showForgotPasswordLink = false;
+      }
+    });
   }
 
   /**

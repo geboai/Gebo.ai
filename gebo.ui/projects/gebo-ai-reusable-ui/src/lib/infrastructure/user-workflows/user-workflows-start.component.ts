@@ -41,7 +41,11 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
         this.service.getUserWorkflowsConfig().subscribe((value) => {
             this.disabledWorkFlows = !(value?.activationWorkflowEnabled === true || value?.forgotPasswordWorkflowEnabled === true);
             this.chooseWorkflow = value?.activationWorkflowEnabled === true && value?.forgotPasswordWorkflowEnabled === true;
-            if (!this.chooseWorkflow) {
+            
+            const typeParam = this.activatedRoute.snapshot.queryParamMap.get('type');
+            if (typeParam) {
+                this.formGroup.controls['type'].setValue(typeParam);
+            } else if (!this.chooseWorkflow) {
                 if (value?.activationWorkflowEnabled === true) {
                     this.formGroup.controls['type'].setValue(StartWorkflowData.TypeEnum.ACTIVATION);
                 }
