@@ -166,12 +166,11 @@ public class GUserWorkflowMailServiceImpl implements IGUserWorkflowMailService {
 		boolean authEnabled = StringUtils.hasText(workflowsConfig.getMailUserName());
 
 		props.put("mail.smtp.auth", String.valueOf(authEnabled));
-		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.starttls.enable", String.valueOf(workflowsConfig.isMailStartTlsEnabled()));
 		props.put("mail.smtp.starttls.required", "false");
-
-		props.put("mail.smtp.connectiontimeout", "10000");
-		props.put("mail.smtp.timeout", "10000");
-		props.put("mail.smtp.writetimeout", "10000");
+		props.put("mail.smtp.connectiontimeout", String.valueOf(workflowsConfig.getConnectiontimeout()));
+		props.put("mail.smtp.timeout", String.valueOf(workflowsConfig.getTimeout()));
+		props.put("mail.smtp.writetimeout",String.valueOf(workflowsConfig.getWriteTimeout()));
 
 		if (!authEnabled) {
 			return Session.getInstance(props);
@@ -280,8 +279,8 @@ public class GUserWorkflowMailServiceImpl implements IGUserWorkflowMailService {
 		}
 
 		String encodedTicket = urlEncode(ticket.getTicket());
-
-		return baseAddress + "/ui/user-workflow?ticket=" + encodedTicket;
+		baseAddress="http://localhost:4200/";
+		return baseAddress + "ui/user-workflows/land?ticket=" + encodedTicket;
 	}
 
 	private String urlEncode(String value) {

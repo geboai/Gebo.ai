@@ -8,6 +8,7 @@
  */
 
 import { Component, Input, OnInit, Optional } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../infrastructure/login/login.service';
@@ -50,8 +51,8 @@ export class GeboAIDesktopComponent implements OnInit {
 
   private loadUserAndMenu(): void {
     this.loginService.loadUserProfile().subscribe(x => {
-      this.userLogged = x ? true : false;
-      this.userInfo = x;
+      this.userLogged = (x && !(x instanceof HttpErrorResponse) && x.username) ? true : false;
+      this.userInfo = this.userLogged ? x : undefined;
 
       if (this.userLogged) {
         if (this.subscription) {

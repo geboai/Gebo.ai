@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router, private actualRoute: ActivatedRoute, private confirmService: ConfirmationService, private geboBackendUrlsService: GeboBackendListService, @Optional() @Inject(BASE_PATH) private basePath: string) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.geboBackendUrlsService.isGeboBackend(request)) {
+    if (this.geboBackendUrlsService.isGeboBackend(request) && !this.geboBackendUrlsService.isGeboPublicUrl(request)) {
       const currentHeader = getAuthHeader();
       if (currentHeader) {
 
@@ -43,7 +43,10 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
             resetAuth();
-            this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute });
+            const currentUrl = this.router.url || window.location.pathname;
+            if (!currentUrl.includes('/ui/user-workflows/')) {
+              this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute });
+            }
 
           } else if (error.status === 500) {
             const any = error?.message;

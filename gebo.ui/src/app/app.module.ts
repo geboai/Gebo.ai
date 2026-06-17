@@ -141,7 +141,7 @@ const GeboAIPreset = definePreset(Aura, {
     { provide: BASE_PATH, useFactory: getBaseUrl },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: ApplicationMenuProviderService, useClass: AppMenuProviderService },
-    { provide: GeboUIEntityFormsLauncherService, useClass: GeboUIEntityFormsLauncherByInjectionService},
+    { provide: GeboUIEntityFormsLauncherService, useClass: GeboUIEntityFormsLauncherByInjectionService },
 
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,

@@ -20,15 +20,15 @@
                 <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
             </div>
 
-            <div class="col-12" *ngIf="chooseWorkflow">
+            <div class="col-6" *ngIf="chooseWorkflow">
                 <gebo-ai-field id="workflowType" label="Workflow type" help="Choose the type of workflow to start"
                     [required]="true">
-                    <p-select styleClass="w-full" [options]="typeOptions" optionLabel="label" optionValue="value"
+                    <p-select styleClass="w-full" [options]="typeOptions" optionLabel="description" optionValue="code"
                         formControlName="type" class="col-12" [required]="true" gebo-ai-field-element></p-select>
                 </gebo-ai-field>
             </div>
 
-            <div class="col-12">
+            <div class="col-6">
                 <gebo-ai-field id="email" label="E-mail" help="Insert your email to start the workflow"
                     [required]="true">
                     <input pInputText id="email" formControlName="email" class="col-12" [required]="true"
