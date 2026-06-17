@@ -1,0 +1,61 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+
+<form [formGroup]="formGroup" (ngSubmit)="doStartWorkflow()" *ngIf="!disabledWorkFlows">
+
+    <p-panel id="UserWorkflowsStartPanel" gebo-ai-label #workflowsStartUI header="Start user workflow">
+        <p-blockUI [target]="workflowsStartUI" [blocked]="loading">
+            <i class="pi pi-lock" style="font-size: 3rem"></i>
+        </p-blockUI>
+        <div class="grid">
+            <div class="col-12">
+                <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+            </div>
+
+            <div class="col-12" *ngIf="chooseWorkflow">
+                <gebo-ai-field id="workflowType" label="Workflow type" help="Choose the type of workflow to start"
+                    [required]="true">
+                    <p-select styleClass="w-full" [options]="typeOptions" optionLabel="label" optionValue="value"
+                        formControlName="type" class="col-12" [required]="true" gebo-ai-field-element></p-select>
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-12">
+                <gebo-ai-field id="email" label="E-mail" help="Insert your email to start the workflow"
+                    [required]="true">
+                    <input pInputText id="email" formControlName="email" class="col-12" [required]="true"
+                        gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+
+            <div class="col-4">
+                <p-button id="StartWorkflowBtn" gebo-ai-label [outlined]="true" icon="pi pi-play" label="Start Workflow"
+                    [disabled]="formGroup.invalid" type="submit"></p-button>
+            </div>
+        </div>
+    </p-panel>
+
+</form>
+
+<div class="grid" *ngIf="disabledWorkFlows">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <p-panel id="DisabledWorkflowsPanel" gebo-ai-label header="Workflows disabled">
+            <div class="grid">
+                <div class="col-12">
+                    <span id="NoWorkflowMessage" gebo-ai-text>No user registration or recovery workflows are currently
+                        enabled on the system.</span>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+    <div class="col-3"></div>
+</div>
