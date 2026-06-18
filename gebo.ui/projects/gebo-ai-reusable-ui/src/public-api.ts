@@ -150,3 +150,4 @@ export * from "./lib/infrastructure/user-profile/user-profile.module";
 export * from "./lib/architecture/desktop/gebo-ai-desktop.component";
 export * from "./lib/architecture/desktop/application-menu-provider.service";
 export * from "./lib/architecture/gebo-ui-entity-forms-launcher.service";
+export * from "./lib/infrastructure/user-workflows/user-workflows.module";
