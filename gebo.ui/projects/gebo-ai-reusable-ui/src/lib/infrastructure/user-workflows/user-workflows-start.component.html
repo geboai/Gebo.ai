@@ -11,7 +11,7 @@
 
 <form [formGroup]="formGroup" (ngSubmit)="doStartWorkflow()" *ngIf="!disabledWorkFlows">
 
-    <p-panel id="UserWorkflowsStartPanel" gebo-ai-label #workflowsStartUI header="Start user workflow">
+    <p-panel id="UserWorkflowsStartPanel" gebo-ai-label #workflowsStartUI header="Start account recovery">
         <p-blockUI [target]="workflowsStartUI" [blocked]="loading">
             <i class="pi pi-lock" style="font-size: 3rem"></i>
         </p-blockUI>
@@ -35,10 +35,10 @@
                         gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
-
-            <div class="col-4">
+            <div *ngIf="!chooseWorkflow" class="col-6"></div>
+            <div class="col-4" style="vertical-align: middle;">
                 <p-button id="StartWorkflowBtn" gebo-ai-label [outlined]="true" icon="pi pi-play"
-                    label="Change or Assign password" [disabled]="formGroup.invalid" type="submit"></p-button>
+                    label="Start account recovery" [disabled]="formGroup.invalid" type="submit"></p-button>
             </div>
         </div>
     </p-panel>

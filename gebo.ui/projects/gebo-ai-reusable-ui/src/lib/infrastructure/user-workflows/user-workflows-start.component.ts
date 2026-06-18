@@ -45,6 +45,7 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
             const typeParam = this.activatedRoute.snapshot.queryParamMap.get('type');
             if (typeParam) {
                 this.formGroup.controls['type'].setValue(typeParam);
+                this.chooseWorkflow=false;
             } else if (!this.chooseWorkflow) {
                 if (value?.activationWorkflowEnabled === true) {
                     this.formGroup.controls['type'].setValue(StartWorkflowData.TypeEnum.ACTIVATION);

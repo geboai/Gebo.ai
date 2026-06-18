@@ -11,7 +11,7 @@
 
 <form [formGroup]="formGroup" (ngSubmit)="doChangePassword()" *ngIf="!disabledWorkFlows">
 
-    <p-panel id="UserWorkflowsLandPanel" gebo-ai-label #workflowsLandUI header="Change password with ticket">
+    <p-panel id="UserWorkflowsLandPanel" gebo-ai-label #workflowsLandUI header="Assign new password">
         <p-blockUI [target]="workflowsLandUI" [blocked]="loading">
             <i class="pi pi-lock" style="font-size: 3rem"></i>
         </p-blockUI>

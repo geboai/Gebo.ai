@@ -30,6 +30,7 @@ import jakarta.validation.constraints.NotNull;
 @Service
 
 public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
+	private static final String SECRET_ID_SEPARATOR = "|=|";
 	private static final String CANNOT_RUN_THIS_WORKFLOW = "Cannot run this workflow";
 	private static final String WRONG_STATE = "Wrong state";
 	private static final String WRONG_EMAIL = "Wrong email";
@@ -54,8 +55,8 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	public GUserWorkflowServiceImpl(GeboUserWorkflowsConfig workflowsConfig,
 			IGUserWorkflowMailService workflowMailService, UserRepository userRepository,
 			IGUsersAdminService userAdminService, IGSecurityService securityService,
-			IGeboSecretsAccessService secretAccessService, IGeboCryptingService cryptService,@Autowired(required = false)
-			IGCustomUserWorkflowDiscriminationService userDiscriminationService) {
+			IGeboSecretsAccessService secretAccessService, IGeboCryptingService cryptService,
+			@Autowired(required = false) IGCustomUserWorkflowDiscriminationService userDiscriminationService) {
 		this.userRepository = userRepository;
 		this.securityService = securityService;
 		this.secretAccessService = secretAccessService;
@@ -69,7 +70,7 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	@Override
 	public void startUserWorkflow(String userName, UserWorkflowType type)
 			throws UserWorkflowException, GeboCryptSecretException {
-		if (userDiscriminationService!=null && !userDiscriminationService.canRunWorkflow(userName, type)) {
+		if (userDiscriminationService != null && !userDiscriminationService.canRunWorkflow(userName, type)) {
 			throw new UserWorkflowException(CANNOT_RUN_THIS_WORKFLOW);
 		}
 		User user = userRepository.findByUsername(userName).orElseThrow(() -> new UserWorkflowException(UNKNOWN_USER));
@@ -125,7 +126,7 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 				end);
 		String storedId = secretAccessService.storeSecret(secret, USER_WORKFLOW_DESCRIPTION,
 				UserWorkflowSecret.USER_WORKFLOW_CONTEXT);
-		buffer.append(SEPARATOR);
+		buffer.append(SECRET_ID_SEPARATOR);
 		buffer.append(storedId);
 		UserWorkflowTicket ticket = new UserWorkflowTicket(type, cryptService.crypt(buffer.toString()),
 				userName.toLowerCase().trim());
@@ -165,12 +166,11 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 		if (data == null || data.getTicket() == null || data.getTicket().trim().isEmpty())
 			throw new UserWorkflowException(TICKET_IS_MANDATORY);
 		String originalTicket = cryptService.decrypt(data.getTicket().trim());
-		int storeIdOffset = originalTicket.lastIndexOf(SEPARATOR);
+		int storeIdOffset = originalTicket.lastIndexOf(SECRET_ID_SEPARATOR);
 
 		if (storeIdOffset >= 0) {
 			String matchingSavedTicket = originalTicket.substring(0, storeIdOffset);
-			storeIdOffset++;
-			String storeId = originalTicket.substring(storeIdOffset);
+			String storeId = originalTicket.substring(storeIdOffset+SECRET_ID_SEPARATOR.length());
 			UserWorkflowSecret secret = secretAccessService.getCustomSecretContentById(storeId,
 					UserWorkflowSecret.class);
 			if (!secret.getTicket().equals(matchingSavedTicket))
