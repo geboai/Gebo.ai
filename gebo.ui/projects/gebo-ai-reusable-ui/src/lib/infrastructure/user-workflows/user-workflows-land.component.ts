@@ -4,6 +4,7 @@ import { StartWorkflowData, UserWorkflowsControllerService } from "@Gebo.ai/gebo
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";
+import { getAuth, resetAuth } from "../gebo-credentials";
 
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()[\]{}_.+=~\-#:;,\/\\<>|?^*])[A-Za-z\d@$!%*?&()[\]{}_.+=~\-#:;,\/\\<>|?^*]{10,}$/;
 
@@ -43,6 +44,11 @@ export class GeboAIUserWorkflowsLandComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const auth = getAuth();
+        if (auth) {
+            resetAuth();
+            window.location.reload();
+        }
         this.service.getUserWorkflowsConfig().subscribe((value) => {
             this.disabledWorkFlows = !(value?.activationWorkflowEnabled === true || value?.forgotPasswordWorkflowEnabled === true);
         });

@@ -4,6 +4,7 @@ import { StartWorkflowData, UserWorkflowsControllerService } from "@Gebo.ai/gebo
 import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";
+import { getAuth, resetAuth } from "../gebo-credentials";
 
 
 @Component({
@@ -38,6 +39,11 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const auth=getAuth();
+        if (auth) {
+            resetAuth();
+            window.location.reload();
+        }
         this.service.getUserWorkflowsConfig().subscribe((value) => {
             this.disabledWorkFlows = !(value?.activationWorkflowEnabled === true || value?.forgotPasswordWorkflowEnabled === true);
             this.chooseWorkflow = value?.activationWorkflowEnabled === true && value?.forgotPasswordWorkflowEnabled === true;
