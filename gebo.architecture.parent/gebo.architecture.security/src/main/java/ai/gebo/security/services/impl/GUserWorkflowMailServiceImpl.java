@@ -31,6 +31,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GUserWorkflowMailServiceImpl implements IGUserWorkflowMailService {
 
+	private static final String USER_WORKFLOW_LANDING_RELATIVE_URL = "/ui/user-workflows/land?ticket=";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GUserWorkflowMailServiceImpl.class);
 
 	private final GeboUserWorkflowsConfig workflowsConfig;
@@ -280,7 +282,7 @@ public class GUserWorkflowMailServiceImpl implements IGUserWorkflowMailService {
 
 		String encodedTicket = urlEncode(ticket.getTicket());
 		//baseAddress="http://localhost:4200/";
-		return baseAddress + "ui/user-workflows/land?ticket=" + encodedTicket;
+		return baseAddress + USER_WORKFLOW_LANDING_RELATIVE_URL + encodedTicket;
 	}
 
 	private String urlEncode(String value) {

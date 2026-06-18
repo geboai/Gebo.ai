@@ -27,7 +27,7 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
     });
     protected chooseWorkflow: boolean = false;
     protected userMessages: ToastMessageOptions[] = [];
-
+    protected processStarted:boolean=false;
     protected typeOptions = [
         { description: 'User activation', code: StartWorkflowData.TypeEnum.ACTIVATION },
         { description: 'Forgot password', code: StartWorkflowData.TypeEnum.FORGOTPASSWORD }
@@ -74,6 +74,7 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
                     detail: 'Workflow started successfully. Please check your email.',
                     life: 20000
                 }];
+                this.processStarted=true;
             },
             error: (error) => {
                 this.workflowError = true;

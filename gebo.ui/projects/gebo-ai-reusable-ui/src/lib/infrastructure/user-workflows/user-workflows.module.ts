@@ -12,8 +12,9 @@ import { SelectModule } from "primeng/select";
 import { PasswordModule } from "primeng/password";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
+import { GeboAICheckDeviceActivationComponent } from "./check-device-activation.component";
 
-const routes: Routes = [{ path: "land", component: GeboAIUserWorkflowsLandComponent }, { path: "start", component: GeboAIUserWorkflowsStartComponent }];
+const routes: Routes = [{ path: "land", component: GeboAIUserWorkflowsLandComponent }, { path: "start", component: GeboAIUserWorkflowsStartComponent },{path:'check-device-activation',component:GeboAICheckDeviceActivationComponent}];
 @NgModule({
     imports: [
         CommonModule,
@@ -29,6 +30,6 @@ const routes: Routes = [{ path: "land", component: GeboAIUserWorkflowsLandCompon
         GeboAIFieldTranslationContainerModule,
         GeboAINotificationsModule
     ],
-    declarations: [GeboAIUserWorkflowsLandComponent, GeboAIUserWorkflowsStartComponent]
+    declarations: [GeboAIUserWorkflowsLandComponent, GeboAIUserWorkflowsStartComponent,GeboAICheckDeviceActivationComponent]
 })
 export class GeboAIUserWorkflowsModule { }

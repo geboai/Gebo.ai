@@ -9,7 +9,7 @@
  */
  -->
 
-<form [formGroup]="formGroup" (ngSubmit)="doStartWorkflow()" *ngIf="!disabledWorkFlows">
+<form [formGroup]="formGroup" (ngSubmit)="doStartWorkflow()" *ngIf="!disabledWorkFlows && !processStarted">
 
     <p-panel id="UserWorkflowsStartPanel" gebo-ai-label #workflowsStartUI header="Start account recovery">
         <p-blockUI [target]="workflowsStartUI" [blocked]="loading">
@@ -19,7 +19,7 @@
             <div class="col-12">
                 <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
             </div>
-
+            
             <div class="col-6" *ngIf="chooseWorkflow">
                 <gebo-ai-field id="workflowType" label="Workflow type" help="Choose the type of workflow to start"
                     [required]="true">
@@ -40,11 +40,27 @@
                 <p-button id="StartWorkflowBtn" gebo-ai-label [outlined]="true" icon="pi pi-play"
                     label="Start account recovery" [disabled]="formGroup.invalid" type="submit"></p-button>
             </div>
+            <div class="col-4" style="vertical-align: middle;">
+                <p-button id="GoToLogin" gebo-ai-label [outlined]="true" icon="pi pi-sign-in"
+                    label="Login page"  routerLink="/ui/chat" ></p-button>
+            </div>
         </div>
     </p-panel>
 
 </form>
-
+<div class="grid" *ngIf="processStarted">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <p-panel id="StartedWorkflowsPanel" gebo-ai-label header="Account recovery started">
+            <div class="grid">
+                <div class="col-12">
+                    <span id="LookEMail" gebo-ai-text>We've sent you an email with a link to continue your account recovery.</span>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+    <div class="col-3"></div>
+</div>
 <div class="grid" *ngIf="disabledWorkFlows">
     <div class="col-3"></div>
     <div class="col-6">
