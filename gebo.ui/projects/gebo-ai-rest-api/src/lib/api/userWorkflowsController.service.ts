@@ -19,6 +19,8 @@ import { Observable }                                        from 'rxjs';
 
 import { StartWorkflowData } from '../model/startWorkflowData';
 import { UserChangePasswordWithTicket } from '../model/userChangePasswordWithTicket';
+import { UserWorkFlowChangePasswordResponse } from '../model/userWorkFlowChangePasswordResponse';
+import { UserWorkFlowStartResponse } from '../model/userWorkFlowStartResponse';
 import { UserWorkflows } from '../model/userWorkflows';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -100,9 +102,9 @@ export class UserWorkflowsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public startUserWorkflow(body: StartWorkflowData, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public startUserWorkflow(body: StartWorkflowData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public startUserWorkflow(body: StartWorkflowData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public startUserWorkflow(body: StartWorkflowData, observe?: 'body', reportProgress?: boolean): Observable<UserWorkFlowStartResponse>;
+    public startUserWorkflow(body: StartWorkflowData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserWorkFlowStartResponse>>;
+    public startUserWorkflow(body: StartWorkflowData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserWorkFlowStartResponse>>;
     public startUserWorkflow(body: StartWorkflowData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -113,6 +115,7 @@ export class UserWorkflowsControllerService {
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -128,7 +131,7 @@ export class UserWorkflowsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/public/UserWorkflowsController/startUserWorkflow`,
+        return this.httpClient.request<UserWorkFlowStartResponse>('post',`${this.basePath}/public/UserWorkflowsController/startUserWorkflow`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -146,9 +149,9 @@ export class UserWorkflowsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'body', reportProgress?: boolean): Observable<UserWorkFlowChangePasswordResponse>;
+    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserWorkFlowChangePasswordResponse>>;
+    public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserWorkFlowChangePasswordResponse>>;
     public userChangePasswordWithTicket(body: UserChangePasswordWithTicket, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
@@ -159,6 +162,7 @@ export class UserWorkflowsControllerService {
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -174,7 +178,7 @@ export class UserWorkflowsControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/public/UserWorkflowsController/userChangePasswordWithTicket`,
+        return this.httpClient.request<UserWorkFlowChangePasswordResponse>('post',`${this.basePath}/public/UserWorkflowsController/userChangePasswordWithTicket`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

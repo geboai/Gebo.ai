@@ -340,6 +340,8 @@ export * from './userInfo';
 export * from './userInfos';
 export * from './userUploadToUserSpaceParam';
 export * from './userUploadedContent';
+export * from './userWorkFlowChangePasswordResponse';
+export * from './userWorkFlowStartResponse';
 export * from './userWorkflows';
 export * from './usersGroup';
 export * from './userspaceFileDto';

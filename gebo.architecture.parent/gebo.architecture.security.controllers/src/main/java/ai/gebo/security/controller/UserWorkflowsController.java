@@ -12,6 +12,8 @@ import ai.gebo.security.config.GeboUserWorkflowsConfig;
 import ai.gebo.security.model.UserChangePasswordWithTicket;
 import ai.gebo.security.model.UserWorkflowType;
 import ai.gebo.security.services.IGUserWorkflowService;
+import ai.gebo.security.services.IGUserWorkflowService.UserWorkFlowChangePasswordResponse;
+import ai.gebo.security.services.IGUserWorkflowService.UserWorkFlowStartResponse;
 import ai.gebo.security.services.UserWorkflowException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +26,7 @@ import lombok.Data;
 public class UserWorkflowsController {
 	private final GeboUserWorkflowsConfig config;
 	private final IGUserWorkflowService userWorkflowService;
-	private final static String WORKFLOW_NOT_CONFIGURED="User workflows are not configured";
+	private final static String WORKFLOW_NOT_CONFIGURED = "User workflows are not configured";
 
 	@Data
 	@AllArgsConstructor
@@ -39,10 +41,11 @@ public class UserWorkflowsController {
 	}
 
 	@PostMapping(value = "userChangePasswordWithTicket", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void userChangePasswordWithTicket(@RequestBody @NotNull @Valid UserChangePasswordWithTicket ticket)
+	public UserWorkFlowChangePasswordResponse userChangePasswordWithTicket(
+			@RequestBody @NotNull @Valid UserChangePasswordWithTicket ticket)
 			throws UserWorkflowException, GeboCryptSecretException {
 		if (config.isActivationWorkflowEnabled() || config.isForgotPasswordWorkflowEnabled()) {
-			userWorkflowService.userChangePasswordWithTicket(ticket);
+			return userWorkflowService.userChangePasswordWithTicket(ticket);
 		} else
 			throw new IllegalStateException(WORKFLOW_NOT_CONFIGURED);
 	}
@@ -56,10 +59,11 @@ public class UserWorkflowsController {
 	}
 
 	@PostMapping(value = "startUserWorkflow", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void startUserWorkflow(@RequestBody @Valid @NotNull StartWorkflowData data) throws UserWorkflowException, GeboCryptSecretException {
+	public UserWorkFlowStartResponse startUserWorkflow(@RequestBody @Valid @NotNull StartWorkflowData data)
+			throws UserWorkflowException, GeboCryptSecretException {
 		if ((data.getType() == UserWorkflowType.ACTIVATION && config.isActivationWorkflowEnabled())
 				|| (data.getType() == UserWorkflowType.FORGOT_PASSWORD && config.isForgotPasswordWorkflowEnabled())) {
-			userWorkflowService.startUserWorkflow(data.getEmail(), data.getType());
+			return userWorkflowService.startUserWorkflow(data.getEmail(), data.getType());
 		} else
 			throw new IllegalStateException(WORKFLOW_NOT_CONFIGURED);
 	}

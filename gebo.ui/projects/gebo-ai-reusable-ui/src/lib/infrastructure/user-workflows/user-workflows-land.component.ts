@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
-import { StartWorkflowData, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { StartWorkflowData, UserWorkFlowChangePasswordResponse, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";
@@ -32,6 +32,7 @@ export class GeboAIUserWorkflowsLandComponent implements OnInit {
         password: new FormControl('', [Validators.required, Validators.pattern(PASSWORD_PATTERN)]),
         confirmPassword: new FormControl('', [Validators.required])
     });
+    protected stepResult?: UserWorkFlowChangePasswordResponse;
 
     constructor(private service: UserWorkflowsControllerService, private activatedRoute: ActivatedRoute, private router: Router) {
         const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -74,16 +75,19 @@ export class GeboAIUserWorkflowsLandComponent implements OnInit {
         this.userMessages = [];
         this.service.userChangePasswordWithTicket(data).subscribe({
             next: (value) => {
-                this.success = true;
-                this.userMessages = [{
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Password changed successfully. You can now login.',
-                    life: 20000
-                }];
-                setTimeout(() => {
-                    this.goToLogin();
-                }, 4000);
+                this.success = value?.ok === true;
+                this.stepResult=value;
+                if (this.success) {
+                    this.userMessages = [{
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Password changed successfully. You can now login.',
+                        life: 20000
+                    }];
+                    setTimeout(() => {
+                        this.goToLogin();
+                    }, 4000);
+                }
             },
             error: (err) => {
                 this.error = true;

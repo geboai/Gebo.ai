@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
-import { StartWorkflowData, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { StartWorkflowData, UserWorkflowsControllerService, UserWorkFlowStartResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";
@@ -28,18 +28,19 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
     });
     protected chooseWorkflow: boolean = false;
     protected userMessages: ToastMessageOptions[] = [];
-    protected processStarted:boolean=false;
+    protected processStarted: boolean = false;
     protected typeOptions = [
         { description: 'User activation', code: StartWorkflowData.TypeEnum.ACTIVATION },
         { description: 'Forgot password', code: StartWorkflowData.TypeEnum.FORGOTPASSWORD }
     ];
+    protected stepResponse?: UserWorkFlowStartResponse;
 
     constructor(private service: UserWorkflowsControllerService, private activatedRoute: ActivatedRoute) {
 
     }
 
     ngOnInit(): void {
-        const auth=getAuth();
+        const auth = getAuth();
         if (auth) {
             resetAuth();
             window.location.reload();
@@ -47,11 +48,11 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
         this.service.getUserWorkflowsConfig().subscribe((value) => {
             this.disabledWorkFlows = !(value?.activationWorkflowEnabled === true || value?.forgotPasswordWorkflowEnabled === true);
             this.chooseWorkflow = value?.activationWorkflowEnabled === true && value?.forgotPasswordWorkflowEnabled === true;
-            
+
             const typeParam = this.activatedRoute.snapshot.queryParamMap.get('type');
             if (typeParam) {
                 this.formGroup.controls['type'].setValue(typeParam);
-                this.chooseWorkflow=false;
+                this.chooseWorkflow = false;
             } else if (!this.chooseWorkflow) {
                 if (value?.activationWorkflowEnabled === true) {
                     this.formGroup.controls['type'].setValue(StartWorkflowData.TypeEnum.ACTIVATION);
@@ -74,13 +75,14 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
         this.service.startUserWorkflow(data).subscribe({
             next: (value) => {
                 this.workflowActivated = true;
+                this.stepResponse = value;
                 this.userMessages = [{
                     severity: 'success',
                     summary: 'Success',
                     detail: 'Workflow started successfully. Please check your email.',
                     life: 20000
                 }];
-                this.processStarted=true;
+                this.processStarted = true;
             },
             error: (error) => {
                 this.workflowError = true;

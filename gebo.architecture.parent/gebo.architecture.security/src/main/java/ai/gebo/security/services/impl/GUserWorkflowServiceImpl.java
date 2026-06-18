@@ -68,10 +68,12 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	}
 
 	@Override
-	public void startUserWorkflow(String userName, UserWorkflowType type)
+	public UserWorkFlowStartResponse startUserWorkflow(String userName, UserWorkflowType type)
 			throws UserWorkflowException, GeboCryptSecretException {
+		UserWorkFlowStartResponse response = null;
 		if (userDiscriminationService != null && !userDiscriminationService.canRunWorkflow(userName, type)) {
-			throw new UserWorkflowException(CANNOT_RUN_THIS_WORKFLOW);
+			response = new UserWorkFlowStartResponse(false, false, true);
+			return response;
 		}
 		User user = userRepository.findByUsername(userName).orElseThrow(() -> new UserWorkflowException(UNKNOWN_USER));
 		if (user.getProvider() == null || user.getProvider() == AuthProvider.local) {
@@ -82,8 +84,9 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 				if (user.getDisabled() != null && user.getDisabled()) {
 					UserWorkflowTicket ticket = generateAndSaveTicket(userName, type);
 					workflowMailService.sendTicket(ticket);
+					response = new UserWorkFlowStartResponse(true, true, false);
 				} else {
-					throw new UserWorkflowException(USER_IS_ENABLED);
+					response = new UserWorkFlowStartResponse(false, false, true);
 				}
 			}
 				break;
@@ -91,16 +94,19 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 				if (!workflowsConfig.isForgotPasswordWorkflowEnabled())
 					throw new UserWorkflowException(WORKFLOW_DISABLED);
 				if (user.getDisabled() != null && user.getDisabled()) {
-					throw new UserWorkflowException(USER_IS_DISABLED);
+					response = new UserWorkFlowStartResponse(false, false, true);
 				} else {
 					UserWorkflowTicket ticket = generateAndSaveTicket(userName, type);
 					workflowMailService.sendTicket(ticket);
+					response = new UserWorkFlowStartResponse(true, true, false);
 				}
 			}
 				break;
 			}
-		} else
-			throw new UserWorkflowException(ONLY_JWT_MANAGED_USER_CAN_USE_WORKFLOWS);
+		} else {
+			response = new UserWorkFlowStartResponse(false, false, true);
+		}
+		return response;
 
 	}
 
@@ -134,31 +140,42 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	}
 
 	@Override
-	public void userChangePasswordWithTicket(@Valid @NotNull UserChangePasswordWithTicket data)
-			throws UserWorkflowException, GeboCryptSecretException {
-		UserWorkflowSecret originalSecret = loadAndVerifyTicket(data);
+	public UserWorkFlowChangePasswordResponse userChangePasswordWithTicket(
+			@Valid @NotNull UserChangePasswordWithTicket data) throws UserWorkflowException, GeboCryptSecretException {
+		UserWorkFlowChangePasswordResponse outState = null;
+		UserWorkflowSecret originalSecret = null;
+		try {
+			originalSecret = loadAndVerifyTicket(data);
+		} catch (UserWorkflowException exc) {
+			outState = new UserWorkFlowChangePasswordResponse(false, false, true, false);
+			return outState;
+		}
 		EditableUser user = userAdminService.findUserByUsername(data.getEmail().trim().toLowerCase());
 		if (user == null)
 			throw new UserWorkflowException(WRONG_EMAIL);
+		if (originalSecret.getEndValidity().before(new Date())) {
+			outState = new UserWorkFlowChangePasswordResponse(false, false, false, true);
+			return outState;
+		}
 		switch (originalSecret.getType()) {
 		case ACTIVATION: {
 			if (user.getDisabled() != null && user.getDisabled()) {
 				user.setDisabled(false);
 				userAdminService.updateUser(user);
 				userAdminService.changePassword(user.getUsername(), data.getPassword());
-				return;
+				outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
 			}
 		}
 			break;
 		case FORGOT_PASSWORD: {
 			if (user.getDisabled() == null || !user.getDisabled()) {
 				userAdminService.changePassword(user.getUsername(), data.getPassword());
-				return;
+				outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
 			}
 		}
 			break;
 		}
-		throw new UserWorkflowException(WRONG_STATE);
+		return outState;
 	}
 
 	private UserWorkflowSecret loadAndVerifyTicket(@Valid @NotNull UserChangePasswordWithTicket data)
@@ -170,7 +187,7 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 
 		if (storeIdOffset >= 0) {
 			String matchingSavedTicket = originalTicket.substring(0, storeIdOffset);
-			String storeId = originalTicket.substring(storeIdOffset+SECRET_ID_SEPARATOR.length());
+			String storeId = originalTicket.substring(storeIdOffset + SECRET_ID_SEPARATOR.length());
 			UserWorkflowSecret secret = secretAccessService.getCustomSecretContentById(storeId,
 					UserWorkflowSecret.class);
 			if (!secret.getTicket().equals(matchingSavedTicket))
