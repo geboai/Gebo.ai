@@ -3,6 +3,8 @@ package ai.gebo.security.services.impl;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +28,14 @@ import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.UserWorkflowException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Service
 
 public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
+	private static final String ERROR_SENDING_EMAIL = "Error sending email";
+	private static final Logger LOGGER = LoggerFactory.getLogger(GUserWorkflowServiceImpl.class);
 	private static final String SECRET_ID_SEPARATOR = "|=|";
 	private static final String CANNOT_RUN_THIS_WORKFLOW = "Cannot run this workflow";
 	private static final String WRONG_STATE = "Wrong state";
@@ -75,7 +81,11 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 			response = new UserWorkFlowStartResponse(false, false, true);
 			return response;
 		}
-		User user = userRepository.findByUsername(userName).orElseThrow(() -> new UserWorkflowException(UNKNOWN_USER));
+		User user = userRepository.findByUsername(userName).orElse(null);
+		if (user == null) {
+			response = new UserWorkFlowStartResponse(false, false, true);
+			return response;
+		}
 		if (user.getProvider() == null || user.getProvider() == AuthProvider.local) {
 			switch (type) {
 			case ACTIVATION: {
@@ -83,8 +93,13 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 					throw new UserWorkflowException(WORKFLOW_DISABLED);
 				if (user.getDisabled() != null && user.getDisabled()) {
 					UserWorkflowTicket ticket = generateAndSaveTicket(userName, type);
-					workflowMailService.sendTicket(ticket);
-					response = new UserWorkFlowStartResponse(true, true, false);
+					try {
+						workflowMailService.sendTicket(ticket);
+						response = new UserWorkFlowStartResponse(true, true, false);
+					} catch (Throwable th) {
+						LOGGER.error(ERROR_SENDING_EMAIL, th);
+						response = new UserWorkFlowStartResponse(true, false, false);
+					}
 				} else {
 					response = new UserWorkFlowStartResponse(false, false, true);
 				}
@@ -97,8 +112,13 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 					response = new UserWorkFlowStartResponse(false, false, true);
 				} else {
 					UserWorkflowTicket ticket = generateAndSaveTicket(userName, type);
-					workflowMailService.sendTicket(ticket);
-					response = new UserWorkFlowStartResponse(true, true, false);
+					try {
+						workflowMailService.sendTicket(ticket);
+						response = new UserWorkFlowStartResponse(true, true, false);
+					} catch (Throwable th) {
+						LOGGER.error(ERROR_SENDING_EMAIL, th);
+						response = new UserWorkFlowStartResponse(true, false, false);
+					}
 				}
 			}
 				break;
@@ -143,42 +163,46 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 	public UserWorkFlowChangePasswordResponse userChangePasswordWithTicket(
 			@Valid @NotNull UserChangePasswordWithTicket data) throws UserWorkflowException, GeboCryptSecretException {
 		UserWorkFlowChangePasswordResponse outState = null;
-		UserWorkflowSecret originalSecret = null;
-		try {
-			originalSecret = loadAndVerifyTicket(data);
-		} catch (UserWorkflowException exc) {
-			outState = new UserWorkFlowChangePasswordResponse(false, false, true, false);
-			return outState;
+		LoadAndVerifyOutput loaded = loadAndVerifyTicket(data);
+		if (loaded.getOutState() != null) {
+			return loaded.getOutState();
 		}
+		UserWorkflowSecret originalSecret = loaded.getSecret();
 		EditableUser user = userAdminService.findUserByUsername(data.getEmail().trim().toLowerCase());
-		if (user == null)
-			throw new UserWorkflowException(WRONG_EMAIL);
-		if (originalSecret.getEndValidity().before(new Date())) {
-			outState = new UserWorkFlowChangePasswordResponse(false, false, false, true);
-			return outState;
-		}
-		switch (originalSecret.getType()) {
-		case ACTIVATION: {
-			if (user.getDisabled() != null && user.getDisabled()) {
-				user.setDisabled(false);
-				userAdminService.updateUser(user);
-				userAdminService.changePassword(user.getUsername(), data.getPassword());
-				outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+		if (user != null) {
+			switch (originalSecret.getType()) {
+			case ACTIVATION: {
+				if (user.getDisabled() != null && user.getDisabled()) {
+					user.setDisabled(false);
+					userAdminService.updateUser(user);
+					userAdminService.changePassword(user.getUsername(), data.getPassword());
+					outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+				}
 			}
-		}
-			break;
-		case FORGOT_PASSWORD: {
-			if (user.getDisabled() == null || !user.getDisabled()) {
-				userAdminService.changePassword(user.getUsername(), data.getPassword());
-				outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+				break;
+			case FORGOT_PASSWORD: {
+				if (user.getDisabled() == null || !user.getDisabled()) {
+					userAdminService.changePassword(user.getUsername(), data.getPassword());
+					outState = new UserWorkFlowChangePasswordResponse(true, false, false, false);
+				}
 			}
-		}
-			break;
+				break;
+			}
+
+		} else {
+			outState = new UserWorkFlowChangePasswordResponse(false, true, false, false);
 		}
 		return outState;
 	}
 
-	private UserWorkflowSecret loadAndVerifyTicket(@Valid @NotNull UserChangePasswordWithTicket data)
+	@AllArgsConstructor
+	@Getter
+	static class LoadAndVerifyOutput {
+		private final UserWorkflowSecret secret;
+		private final UserWorkFlowChangePasswordResponse outState;
+	}
+
+	private LoadAndVerifyOutput loadAndVerifyTicket(@Valid @NotNull UserChangePasswordWithTicket data)
 			throws UserWorkflowException, GeboCryptSecretException {
 		if (data == null || data.getTicket() == null || data.getTicket().trim().isEmpty())
 			throw new UserWorkflowException(TICKET_IS_MANDATORY);
@@ -190,17 +214,27 @@ public class GUserWorkflowServiceImpl implements IGUserWorkflowService {
 			String storeId = originalTicket.substring(storeIdOffset + SECRET_ID_SEPARATOR.length());
 			UserWorkflowSecret secret = secretAccessService.getCustomSecretContentById(storeId,
 					UserWorkflowSecret.class);
-			if (!secret.getTicket().equals(matchingSavedTicket))
-				throw new UserWorkflowException(WRONG_TICKET);
+			if (!secret.getTicket().equals(matchingSavedTicket)) {
+				return new LoadAndVerifyOutput(null, new UserWorkFlowChangePasswordResponse(false, false, true, false));
+			}
+
 			if (data.getEmail() != null && data.getEmail().trim().length() > 0 && data.getEmail().contains("@")) {
 				if (!data.getEmail().trim().toLowerCase().equals(secret.getEmail().trim().toLowerCase())) {
-					throw new UserWorkflowException(WRONG_EMAIL);
+					return new LoadAndVerifyOutput(null,
+							new UserWorkFlowChangePasswordResponse(false, true, false, false));
 				}
-				return secret;
-			} else
-				throw new UserWorkflowException(WRONG_EMAIL);
-		} else
-			throw new UserWorkflowException(WRONG_TICKET);
+				if (secret.getEndValidity() == null || secret.getEndValidity().before(new Date())) {
+					return new LoadAndVerifyOutput(null,
+							new UserWorkFlowChangePasswordResponse(false, false, false, true));
+				}
+				return new LoadAndVerifyOutput(secret, null);
+			} else {
+				return new LoadAndVerifyOutput(null, new UserWorkFlowChangePasswordResponse(false, true, false, false));
+			}
+
+		} else {
+			return new LoadAndVerifyOutput(null, new UserWorkFlowChangePasswordResponse(false, false, true, false));
+		}
 
 	}
 

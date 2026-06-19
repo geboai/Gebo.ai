@@ -76,9 +76,10 @@ export class GeboAIUserWorkflowsLandComponent implements OnInit {
         this.service.userChangePasswordWithTicket(data).subscribe({
             next: (value) => {
                 this.success = value?.ok === true;
-                this.stepResult=value;
+                this.stepResult = value;
                 if (this.success) {
                     this.userMessages = [{
+                        id: "wkfSuccess",
                         severity: 'success',
                         summary: 'Success',
                         detail: 'Password changed successfully. You can now login.',
@@ -87,6 +88,33 @@ export class GeboAIUserWorkflowsLandComponent implements OnInit {
                     setTimeout(() => {
                         this.goToLogin();
                     }, 4000);
+                }
+                if (value?.invalidAccountState === true) {
+                    this.userMessages = [{
+                        id: "invalidAccountState",
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to change password. Please check the e-mail or that your account exists.',
+                        life: 20000
+                    }];
+                }
+                if (value?.timeoutReached === true) {
+                    this.userMessages = [{
+                        id: "timeoutReached",
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Repeat the procedure from the initial step, your ticket validity is expired.',
+                        life: 20000
+                    }];
+                }
+                if (value?.invalidToken === true) {
+                    this.userMessages = [{
+                        id: "invalidToken",
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Try to repeat from the received e-mail to this point, it seems that the ticket is corrupt.',
+                        life: 20000
+                    }];
                 }
             },
             error: (err) => {

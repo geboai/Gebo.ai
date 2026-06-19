@@ -74,15 +74,36 @@ export class GeboAIUserWorkflowsStartComponent implements OnInit {
         this.userMessages = [];
         this.service.startUserWorkflow(data).subscribe({
             next: (value) => {
-                this.workflowActivated = true;
+                this.workflowActivated = value?.ok === true && value?.mailSent === true;
                 this.stepResponse = value;
-                this.userMessages = [{
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Workflow started successfully. Please check your email.',
-                    life: 20000
-                }];
-                this.processStarted = true;
+                if (this.workflowActivated) {
+                    this.userMessages = [{
+                        id: "workflowActivated",
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Workflow started successfully. Please check your email.',
+                        life: 20000
+                    }];
+                    this.processStarted = true;
+                } else
+                    if (value?.invalidAccountState === true) {
+                        this.userMessages = [{
+                            id: "invalidAccountState",
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Check the inserted data and its validity.',
+                            life: 20000
+                        }];
+                    } else
+                        if (value?.mailSent === false) {
+                            this.userMessages = [{
+                                id: "mailNotSent",
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Contact the system administrator, it seems that the e-mail cannot be sent.',
+                                life: 20000
+                            }];
+                        }
             },
             error: (error) => {
                 this.workflowError = true;
