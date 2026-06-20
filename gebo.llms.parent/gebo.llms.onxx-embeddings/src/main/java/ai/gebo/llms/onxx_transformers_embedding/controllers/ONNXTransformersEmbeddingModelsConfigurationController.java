@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.onxx_transformers_embedding.controllers;
 
@@ -24,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelChoice;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig;
 import ai.gebo.llms.onxx_transformers_embedding.services.ONNXTransformersEmbeddingModelConfigurationSupportService;
@@ -33,9 +32,9 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * REST controller for managing ONNX Transformers embedding model configurations.
- * Provides endpoints for CRUD operations on embedding model configurations.
- * Access is restricted to users with ADMIN role.
+ * REST controller for managing ONNX Transformers embedding model
+ * configurations. Provides endpoints for CRUD operations on embedding model
+ * configurations. Access is restricted to users with ADMIN role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -43,11 +42,12 @@ import ai.gebo.model.OperationStatus;
 public class ONNXTransformersEmbeddingModelsConfigurationController extends
 		BaseEmbeddingModelsConfigurationController<ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig, GONNXTransformersEmbeddingModelChoice, ONNXTransformersEmbeddingModelConfigurationSupportService> {
 
-	/**
-	 * Constructor that initializes the controller with the ONNX Transformers embedding model config class.
-	 */
-	public ONNXTransformersEmbeddingModelsConfigurationController() {
-		super(GONNXTransformersEmbeddingModelConfig.class);
+	public ONNXTransformersEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			ONNXTransformersEmbeddingModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GONNXTransformersEmbeddingModelConfig.class,
+				ifaceType);
+		
 	}
 
 	/**
@@ -94,7 +94,8 @@ public class ONNXTransformersEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param code The unique code identifying the configuration
 	 * @return The matching configuration
-	 * @throws GeboPersistenceException If an error occurs during retrieval from persistence layer
+	 * @throws GeboPersistenceException If an error occurs during retrieval from
+	 *                                  persistence layer
 	 */
 	@GetMapping(value = "findONNXTransformersEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GONNXTransformersEmbeddingModelConfig findONNXTransformersEmbeddingModelConfigByCode(
@@ -103,7 +104,8 @@ public class ONNXTransformersEmbeddingModelsConfigurationController extends
 	}
 
 	/**
-	 * Retrieves a list of available ONNX Transformers embedding models based on the provided configuration.
+	 * Retrieves a list of available ONNX Transformers embedding models based on the
+	 * provided configuration.
 	 * 
 	 * @param config The configuration used to filter model choices
 	 * @return Operation status with the list of available model choices

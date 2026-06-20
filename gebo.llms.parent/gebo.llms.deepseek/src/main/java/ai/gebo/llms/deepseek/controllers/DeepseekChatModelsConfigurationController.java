@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.deepseek.controllers;
 
@@ -25,15 +22,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig;
+import ai.gebo.llms.deepseek.services.DeepseekChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * Controller for managing Deepseek chat model configurations.
- * This controller provides REST endpoints for CRUD operations on Deepseek model configurations.
- * Only enabled when the property ai.gebo.llms.config.deepseekEnabled is set to true.
- * Restricted to users with ADMIN role.
+ * Controller for managing Deepseek chat model configurations. This controller
+ * provides REST endpoints for CRUD operations on Deepseek model configurations.
+ * Only enabled when the property ai.gebo.llms.config.deepseekEnabled is set to
+ * true. Restricted to users with ADMIN role.
  * 
  * AI generated comments
  */
@@ -44,11 +44,12 @@ import ai.gebo.model.OperationStatus;
 public class DeepseekChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig, ai.gebo.llms.deepseek.model.GDeepseekChatModelChoice, ai.gebo.llms.deepseek.services.DeepseekChatModelConfigurationSupportService> {
 
-	/**
-	 * Constructor that initializes the controller with the Deepseek chat model configuration class.
-	 */
-	public DeepseekChatModelsConfigurationController() {
-		super(ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig.class);
+	public DeepseekChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			DeepseekChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao,
+				ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig.class, ifaceType);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -94,7 +95,8 @@ public class DeepseekChatModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The found Deepseek chat model configuration
-	 * @throws GeboPersistenceException If there is an error during the database operation
+	 * @throws GeboPersistenceException If there is an error during the database
+	 *                                  operation
 	 */
 	@GetMapping(value = "findDeepseekChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GDeepseekChatModelConfig findDeepseekChatModelConfigByCode(@RequestParam("code") String code)
@@ -103,10 +105,12 @@ public class DeepseekChatModelsConfigurationController extends
 	}
 
 	/**
-	 * Retrieves all available Deepseek chat models based on the provided configuration.
+	 * Retrieves all available Deepseek chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration used to filter available models
-	 * @return An operation status containing a list of available Deepseek chat model choices
+	 * @return An operation status containing a list of available Deepseek chat
+	 *         model choices
 	 */
 	@PostMapping(value = "getDeepseekModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<ai.gebo.llms.deepseek.model.GDeepseekChatModelChoice>> getDeepseekChatModels(

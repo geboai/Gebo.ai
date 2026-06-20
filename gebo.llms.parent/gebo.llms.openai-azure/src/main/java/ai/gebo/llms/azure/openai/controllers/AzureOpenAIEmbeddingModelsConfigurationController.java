@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIEmbeddingModelChoice;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIEmbeddingModelConfig;
 import ai.gebo.llms.azure.openai.services.AzureOpenAIEmbeddingModelConfigurationSupportService;
@@ -47,13 +49,14 @@ import ai.gebo.model.OperationStatus;
 public class AzureOpenAIEmbeddingModelsConfigurationController extends
 		BaseEmbeddingModelsConfigurationController<GAzureOpenAIEmbeddingModelConfig, GAzureOpenAIEmbeddingModelChoice, AzureOpenAIEmbeddingModelConfigurationSupportService> {
 
-	/**
-	 * Constructor for the OpenAI embedding models configuration controller.
-	 * Initializes the controller with the OpenAI embedding model configuration class.
-	 */
-	public AzureOpenAIEmbeddingModelsConfigurationController() {
-		super(GAzureOpenAIEmbeddingModelConfig.class);
-	}
+	 
+
+	public AzureOpenAIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao, 
+			AzureOpenAIEmbeddingModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GAzureOpenAIEmbeddingModelConfig.class, ifaceType);
+		// TODO Auto-generated constructor stub
+	    }
 
 	/**
 	 * Inserts a new OpenAI embedding model configuration.

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai_compat.controllers;
 
@@ -26,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.AbstractBaseEmbeddingModelsConfigurationCRUDController;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.openai_compat.config.GenericOpenAICompatibleProvidersConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelChoice;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIEmbeddingModelConfig;
@@ -41,34 +40,35 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * Controller class responsible for managing configurations for OpenAI-compatible embedding models.
- * This controller provides endpoints for CRUD operations on embedding model configurations
- * and is accessible only to users with ADMIN role.
+ * Controller class responsible for managing configurations for
+ * OpenAI-compatible embedding models. This controller provides endpoints for
+ * CRUD operations on embedding model configurations and is accessible only to
+ * users with ADMIN role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/GenericOpenAIAPIEmbeddingModelsConfigurationController")
 public class GenericOpenAIAPIEmbeddingModelsConfigurationController extends
 		AbstractBaseEmbeddingModelsConfigurationCRUDController<GenericOpenAIAPIEmbeddingModelConfig, GenericOpenAIAPIEmbeddingModelChoice> {
-	
 	/**
 	 * Configuration for OpenAI-compatible providers
 	 */
-	@Autowired
-	GenericOpenAICompatibleProvidersConfig config;
-	
+	private final GenericOpenAICompatibleProvidersConfig config;
+
 	/**
 	 * Service for embedding model configuration support
 	 */
-	@Autowired
-	IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders;
-
-	/**
-	 * Constructor initializing the parent class with the embedding model configuration type
-	 */
-	public GenericOpenAIAPIEmbeddingModelsConfigurationController() {
-		super(GenericOpenAIAPIEmbeddingModelConfig.class);
+	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders;
+	public GenericOpenAIAPIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingProviders, GenericOpenAICompatibleProvidersConfig config) {
+		
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIEmbeddingModelConfig.class);
+		this.config = config;
+		this.embeddingProviders = embeddingProviders;
+	 
 	}
+
+	
 
 	/**
 	 * Retrieves all available OpenAI embedding model types
@@ -124,7 +124,8 @@ public class GenericOpenAIAPIEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param code The unique code of the embedding model configuration
 	 * @return The found embedding model configuration
-	 * @throws GeboPersistenceException If there is an error retrieving the configuration
+	 * @throws GeboPersistenceException If there is an error retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findGenericOpenAIAPIEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericOpenAIAPIEmbeddingModelConfig findGenericOpenAIAPIEmbeddingModelConfigByCode(
@@ -149,7 +150,8 @@ public class GenericOpenAIAPIEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param type The embedding model configuration to get choices for
 	 * @return Operation status with a list of model choices
-	 * @throws RuntimeException If the model type code is null or no provider is found for the model type
+	 * @throws RuntimeException If the model type code is null or no provider is
+	 *                          found for the model type
 	 */
 	@Override
 	protected OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> getModelChoices(

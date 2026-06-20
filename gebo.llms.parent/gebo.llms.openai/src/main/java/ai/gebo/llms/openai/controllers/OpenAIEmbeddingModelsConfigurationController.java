@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.controllers;
 
@@ -25,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
@@ -34,11 +33,12 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * REST controller for managing OpenAI embedding model configurations.
- * This controller provides endpoints for CRUD operations on OpenAI embedding model configurations
- * and retrieval of available embedding models. It is only enabled when the OpenAI integration is
- * configured to be active in the application properties.
- * Access to these endpoints is restricted to users with the ADMIN role.
+ * REST controller for managing OpenAI embedding model configurations. This
+ * controller provides endpoints for CRUD operations on OpenAI embedding model
+ * configurations and retrieval of available embedding models. It is only
+ * enabled when the OpenAI integration is configured to be active in the
+ * application properties. Access to these endpoints is restricted to users with
+ * the ADMIN role.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @RestController
@@ -47,19 +47,19 @@ import ai.gebo.model.OperationStatus;
 public class OpenAIEmbeddingModelsConfigurationController extends
 		BaseEmbeddingModelsConfigurationController<GOpenAIEmbeddingModelConfig, GOpenAIEmbeddingModelChoice, OpenAIEmbeddingModelConfigurationSupportService> {
 
-	/**
-	 * Constructor for the OpenAI embedding models configuration controller.
-	 * Initializes the controller with the OpenAI embedding model configuration class.
-	 */
-	public OpenAIEmbeddingModelsConfigurationController() {
-		super(GOpenAIEmbeddingModelConfig.class);
+	public OpenAIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			OpenAIEmbeddingModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIEmbeddingModelConfig.class, ifaceType);
+		
 	}
 
 	/**
 	 * Inserts a new OpenAI embedding model configuration.
 	 * 
 	 * @param config The OpenAI embedding model configuration to insert
-	 * @return Operation status containing the inserted configuration or error details
+	 * @return Operation status containing the inserted configuration or error
+	 *         details
 	 */
 	@PostMapping(value = "insertOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GOpenAIEmbeddingModelConfig> insertOpenAIEmbeddingModelConfig(
@@ -72,7 +72,8 @@ public class OpenAIEmbeddingModelsConfigurationController extends
 	 * Updates an existing OpenAI embedding model configuration.
 	 * 
 	 * @param config The OpenAI embedding model configuration to update
-	 * @return Operation status containing the updated configuration or error details
+	 * @return Operation status containing the updated configuration or error
+	 *         details
 	 */
 	@PostMapping(value = "updateOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GOpenAIEmbeddingModelConfig> updateOpenAIEmbeddingModelConfig(
@@ -98,7 +99,8 @@ public class OpenAIEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param code The unique code identifying the configuration
 	 * @return The matching OpenAI embedding model configuration
-	 * @throws GeboPersistenceException If the configuration cannot be found or retrieved
+	 * @throws GeboPersistenceException If the configuration cannot be found or
+	 *                                  retrieved
 	 */
 	@GetMapping(value = "findOpenAIEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GOpenAIEmbeddingModelConfig findOpenAIEmbeddingModelConfigByCode(@RequestParam("code") String code)
@@ -107,10 +109,13 @@ public class OpenAIEmbeddingModelsConfigurationController extends
 	}
 
 	/**
-	 * Retrieves available OpenAI embedding models based on the provided configuration.
+	 * Retrieves available OpenAI embedding models based on the provided
+	 * configuration.
 	 * 
-	 * @param config The configuration containing necessary information to retrieve models
-	 * @return Operation status containing the list of available embedding model choices
+	 * @param config The configuration containing necessary information to retrieve
+	 *               models
+	 * @return Operation status containing the list of available embedding model
+	 *         choices
 	 */
 	@PostMapping(value = "getOpenAIEmbeddingModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GOpenAIEmbeddingModelChoice>> getOpenAIEmbeddingModels(

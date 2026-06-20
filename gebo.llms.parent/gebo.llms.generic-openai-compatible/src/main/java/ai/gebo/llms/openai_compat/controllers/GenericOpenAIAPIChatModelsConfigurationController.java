@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai_compat.controllers;
 
@@ -26,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.AbstractBaseChatModelsConfigurationCRUDController;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.config.GenericOpenAICompatibleProvidersConfig;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
@@ -41,10 +40,10 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * Controller for managing OpenAI-compatible chat model configurations.
- * This REST controller provides endpoints for CRUD operations on
- * GenericOpenAIAPIChatModelConfig objects and related functionality.
- * Access restricted to users with ADMIN role.
+ * Controller for managing OpenAI-compatible chat model configurations. This
+ * REST controller provides endpoints for CRUD operations on
+ * GenericOpenAIAPIChatModelConfig objects and related functionality. Access
+ * restricted to users with ADMIN role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -54,32 +53,36 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 	/**
 	 * Configuration for generic OpenAI-compatible providers
 	 */
-	@Autowired
-	GenericOpenAICompatibleProvidersConfig config;
-	
+	private final GenericOpenAICompatibleProvidersConfig config;
+
 	/**
 	 * Repository pattern for accessing chat model configuration support services
 	 */
-	@Autowired IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern;
-	
-	/**
-	 * Constructor initializing the controller with appropriate model configuration class
-	 */
-	public GenericOpenAIAPIChatModelsConfigurationController() {
-		super(GenericOpenAIAPIChatModelConfig.class);
+	private final IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern;
+
+	public GenericOpenAIAPIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, IGChatModelConfigurationSupportServiceRepositoryPattern modelsRepoPattern, GenericOpenAICompatibleProvidersConfig config) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GenericOpenAIAPIChatModelConfig.class);
+		this.config = config;
+		this.modelsRepoPattern = modelsRepoPattern;
+		
+		
 	}
+
 	
 	/**
 	 * Retrieves the list of available OpenAI-compatible chat model types
+	 * 
 	 * @return List of chat model type configurations
 	 */
-	@GetMapping(value ="getGenericOpenAIChatModelTypes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "getGenericOpenAIChatModelTypes", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GenericOpenAIChatModelTypeConfig> getGenericOpenAIChatModelTypes() {
 		return config.getChatModelProviders();
 	}
 
 	/**
 	 * Creates a new OpenAI-compatible chat model configuration
+	 * 
 	 * @param config The configuration to insert
 	 * @return Operation status with the inserted configuration
 	 */
@@ -92,6 +95,7 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 
 	/**
 	 * Updates an existing OpenAI-compatible chat model configuration
+	 * 
 	 * @param config The configuration to update
 	 * @return Operation status with the updated configuration
 	 */
@@ -104,6 +108,7 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 
 	/**
 	 * Deletes an OpenAI-compatible chat model configuration
+	 * 
 	 * @param config The configuration to delete
 	 * @return Operation status indicating success or failure
 	 */
@@ -116,9 +121,11 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 
 	/**
 	 * Finds an OpenAI-compatible chat model configuration by its code
+	 * 
 	 * @param code The unique code identifier for the configuration
 	 * @return The matching configuration if found
-	 * @throws GeboPersistenceException If there's an issue retrieving the configuration
+	 * @throws GeboPersistenceException If there's an issue retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findGenericOpenAIAPIChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GenericOpenAIAPIChatModelConfig findGenericOpenAIAPIChatModelConfigByCode(@RequestParam("code") String code)
@@ -128,6 +135,7 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 
 	/**
 	 * Retrieves available chat models based on the provided configuration
+	 * 
 	 * @param config The configuration to use as filter
 	 * @return Operation status with list of available chat model choices
 	 */
@@ -139,9 +147,11 @@ public class GenericOpenAIAPIChatModelsConfigurationController extends
 
 	/**
 	 * Overrides the parent method to retrieve model choices based on model type
+	 * 
 	 * @param type The configuration containing the model type to look up
 	 * @return Operation status with list of matching model choices
-	 * @throws RuntimeException If modelTypeCode is null or no matching provider is found
+	 * @throws RuntimeException If modelTypeCode is null or no matching provider is
+	 *                          found
 	 */
 	@Override
 	protected OperationStatus<List<GenericOpenAIAPIChatModelChoice>> getModelChoices(
