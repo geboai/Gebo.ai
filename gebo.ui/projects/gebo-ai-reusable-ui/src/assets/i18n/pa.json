@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "ਓਪਰੇਸ਼ਨ ਫੇਲ ਹੋ ਗਿਆ",
         "detail" : "ਦਿੱਤੇ ਗਏ ਜਾਣਕਾਰੀ ਨਾਲ ਪਰਮਾਣਿਤ ਨਹੀਂ ਹੋ ਸਕਿਆ"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ ਹੋ?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "ਮੌਡਲ ਵਰਤੋ (Uses)",
         "help" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ.",
         "placeholder" : "ਉਹ ਵਰਤਾਰੇ, ਜਿਨ੍ਹਾਂ ਲਈ Gebo.ai ਪਲੇਟਫਾਰਮ ਇਸ ਮੌਡਲ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖੇਗਾ."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama ਸਰਵਰ ਨਾਲ ਸੰਚਾਰ ਵਿੱਚ ਗਲਤੀ",
+        "detail" : "ਰਿਮੋਟ ਸਿਸਟਮ ਨਾਲ ਸੰਚਾਰ ਉਤੇ ਨੈੱਟਵਰਕ ਗਲਤੀ, ਸਮੱਗਰੀ ਤੱਕ ਪਹੁੰਚ ਰਹੇ ਹੋਏ\n ਮਾਡਲ ਲਿਸਟ ਗਲਤੀ url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ: http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋ ਗਿਆ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ:401 ਅਣਅਧਿਕਾਰਤ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 401 ਅਣਅਧਿਕਾਰਤ"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:800/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ਰਿਮੋਟ ਪ੍ਰਦਾਤਾ ਠੀਕ ਹੈ",
+        "detail" : "ਪ੍ਰਦਾਤਾ ਚਲ ਰਹੀ ਹੈ ਅਤੇ ਸਫਲਤਾਪੂਰਕ ਸੰਰਚਿਤ ਹੈ"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8000/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:808/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8089/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8080/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:8089/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:800/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਐਕਸਪਸ਼ਨ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:808/v1/models",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: url ਨਾਲ ਕੰਮ ਕਰਦੇ ਹੋਏ ਗਲਤੀ: http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋਈ"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "ਮਾਡਲ ਦੀ ਸੂਚੀ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ",
+        "detail" : "ਇਹ ਸੇਵਾ ਸੰਭਾਲਦੀ ਨਹੀਂ=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "ਜਵਾਬ PDF ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 400 ਖਰਾਬ ਬੇਨਤੀ POST http://localhost:8000/v1/chat/completions ਤੋਂ"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "ਚੈਟ ਸਿਸਟਮ ਵਿੱਚ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" ਨੂੰ ਕਾਲ ਨਹੀਂ ਕਰ ਸਕਦੇ ਕਿਉਂਕਿ \"handler\" null ਹੈ"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 400 ਖਰਾਬ ਬੇਨਤੀ POST http://localhost:8089/v1/chat/completions ਤੋਂ"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਚਲਾਉਂਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਦਿੱਤੇ ਇਕਾਈਆਂ ਦੇ Ids null ਨਹੀਂ ਹੋ ਸਕਦੇ"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਚਲਾਉਂਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਚੈਟ ਜਵਾਬ ਵਿੱਚ id ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: mapper [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] ਨੇ null ਮੁੱਲ ਵਾਪਸ ਕੀਤਾ।"
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" ਨੂੰ ਕਾਲ ਨਹੀਂ ਕਰ ਸਕਦੇ ਕਿਉਂਕਿ \"this.threadManager\" null ਹੈ"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 503 ਸੇਵਾ ਉਪਲੱਬਧ ਨਹੀਂ POST https://api.regolo.ai/v1/chat/completions ਤੋਂ"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 429 ਬਹੁਤ ਜ਼ਿਆਦਾ ਬੇਨਤੀਆਂ POST https://api.openai.com/v1/chat/completions ਤੋਂ"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "ਚੈਟ ਸਿਸਟਮ ਵਿੱਚ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" ਨੂੰ ਕਾਲ ਨਹੀਂ ਕਰ ਸਕਦੇ ਕਿਉਂਕਿ \"userContext\" null ਹੈ"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: 400 ਖਰਾਬ ਬੇਨਤੀ POST https://api.regolo.ai/v1/chat/completions ਤੋਂ"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਟੂਲ ਨਾਂ: findInString ਲਈ ਕੋਈ ToolCallback ਨਹੀਂ ਲੱਭਿਆ"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਖੋਜਾਂ ਚਲਾਉਂਦੇ ਹੋਏ ਐਕਸੇਪਸ਼ਨ"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm ਕਾਲ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਟੈਂਪਲੇਟ ਵਿੱਚ ਸਾਰੇ ਵੇਰੀਏਬਲ ਸਥਾਨਾਪਨ ਨਹੀਂ ਹੋਏ। ਗੁੰਮ ਹੋਏ ਵੇਰੀਏਬਲ ਨਾਂ: [consolidatedChatHistory, latestInteractions]।"
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm ਕਾਲ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਟੈਂਪਲੇਟ ਵਿੱਚ ਸਾਰੇ ਵੇਰੀਏਬਲ ਸਥਾਨਾਪਨ ਨਹੀਂ ਹੋਏ। ਗੁੰਮ ਹੋਏ ਵੇਰੀਏਬਲ ਨਾਂ: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]।"
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਚਲਾਉਂਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਲਾਕ ਦੀ ਉਡੀਕ ਕਰਦਿਆਂ ਰੁਕਾਵਟ"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] ਨੇ null ਮੁੱਲ ਵਾਪਸ ਕੀਤਾ।"
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: parallelism > 0 ਦੀ ਲੋੜ ਹੈ ਪਰ ਇਹ 0 ਸੀ"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "ਅੰਦਰੂਨੀ ਨੋਲੀਜ ਬੇਸ ਡੀਪ ਖੋਜ ਨਹੀਂ ਚਲਾ ਸਕਦੇ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: parallelism > 0 ਦੀ ਲੋੜ ਹੈ ਪਰ ਇਹ 0 ਸੀ"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: parallelism > 0 ਦੀ ਲੋੜ ਹੈ ਪਰ ਇਹ 0 ਸੀ"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] ਨੇ null ਮੁੱਲ ਵਾਪਸ ਕੀਤਾ।"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟ੍ਰੀਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਕਨੈਕਸ਼ਨ ਰੀਸੈੱਟ"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] ਨੇ null ਮੁੱਲ ਵਾਪਸ ਕੀਤਾ।"
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "ਚੈਟ ਪਾਈਪਲਾਈਨ ਸਟ੍ਰੀਮ ਕਰਦੇ ਹੋਏ ਐਕਸਪਸ਼ਨ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਲੜੀ ਦੀ ਸੇਵਾ PURE_SEARCH_STREAMING_SERVICE ਮੌਜੂਦ ਨਹੀਂ"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ਡੀਪ ਖੋਜ ਵਿੱਚ ਕੁਝ ਸਮੱਸਿਆਵਾਂ...",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] ਨੇ null ਮੁੱਲ ਵਾਪਸ ਕੀਤਾ।"
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "ਚੈਟ ਪਾਈਪਲਾਈਨ ਸਟ੍ਰੀਮ ਕਰਦੇ ਹੋਏ ਐਕਸਪਸ਼ਨ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: ਏਜੰਟਸ ਦਾ ਨੈੱਟਵਰਕ ਬਣਾਉਣ ਸਮੇਂ ਐਕਸਪਸ਼ਨ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "ਓਪਰੇਸ਼ਨ ਦੌਰਾਨ ਅਪਵਾਦ:basePath ਗੁੰਮ",
         "detail" : "ਸਰਵਰ ਗਲਤੀ: basePath ਗੁੰਮ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋਈ"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "TopP ਪੈਰਾਮੀਟਰ, 0 ਤੋਂ 1 ਤੱਕ (ਪੱਕਾ ਨਾ ਹੋਵੇ ਤਾਂ ਖਾਲੀ ਛੱਡੋ)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "ਕੋਈ ਵੀ ਯੂਜ਼ਰ ਰਜਿਸਟਰੇਸ਼ਨ ਜਾਂ ਰੀਕਵਰੀ ਵਰਕਫ਼ਲੋ ਇਸ ਸਿਸਟਮ ਤੇ ਐਨਏਬਲ ਨਹੀਂ ਹਨ।"
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "ਅਕਾਊਂਟ ਰੀਕਵਰੀ ਸ਼ੁਰੂ ਕਰੋ"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "ਵਰਕਫ਼ਲੋ ਅਸਮਰਥਿਤ"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "ਅਕਾਊਂਟ ਰੀਕਵਰੀ ਸ਼ੁਰੂ ਕਰੋ"
+      },
+      "email" : {
+        "label" : "ਈ-ਮੇਲ",
+        "help" : "ਵਰਕਫ਼ਲੋ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਆਪਣੀ ਈ-ਮੇਲ ਦਰਜ ਕਰੋ"
+      },
+      "GoToLogin" : {
+        "label" : "ਲੌਗਇਨ ਪੇਜ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ਗਲਤੀ",
+        "detail" : "ਦਿੱਤਾ ਗਿਆ ਡਾਟਾ ਅਤੇ ਇਸ ਦੀ ਵੈਧਤਾ ਚੈੱਕ ਕਰੋ।"
+      },
+      "LookEMail" : {
+        "label" : "ਅਸੀਂ ਤੁਹਾਨੂੰ ਇੱਕ ਈ-ਮੇਲ ਭੇਜੀ ਹੈ ਜਿਸ ਵਿੱਚ ਲਿੰਕ ਹੈ, ਤਾਂ ਕਿ ਤੁਸੀਂ ਆਪਣੀ ਅਕਾਊਂਟ ਰੀਕਵਰੀ ਜਾਰੀ ਰੱਖ ਸਕੋ।"
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "ਅਕਾਊਂਟ ਰੀਕਵਰੀ ਸ਼ੁਰੂ ਹੋ ਚੁੱਕੀ ਹੈ"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "ਵਰਕਫ਼ਲੋ ਅਸਮਰਥਿਤ"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "ਕੋਈ ਵੀ ਯੂਜ਼ਰ ਰਜਿਸਟਰੇਸ਼ਨ ਜਾਂ ਰੀਕਵਰੀ ਵਰਕਫ਼ਲੋ ਇਸ ਸਿਸਟਮ ਤੇ ਐਨਏਬਲ ਨਹੀਂ ਹਨ।"
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "ਨਵਾਂ ਪਾਸਵਰਡ ਨਿਰਧਾਰਿਤ ਕਰੋ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ਪਾਸਵਰਡ ਬਦਲੋ"
+      },
+      "password" : {
+        "label" : "ਨਵਾਂ ਪਾਸਵਰਡ",
+        "help" : "ਪਾਸਵਰਡ ਘੱਟੋ-ਘੱਟ 10 ਅੱਖਰ ਦਾ ਹੋਵੇ ਜਿਸ ਵਿੱਚ ਵੱਡੇ, ਛੋਟੇ ਅੱਖਰ, ਨੰਬਰ ਤੇ ਵਿਸ਼ੇਸ਼ ਅੱਖਰ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ"
+      },
+      "email" : {
+        "label" : "ਈ-ਮੇਲ",
+        "help" : "ਆਪਣਾ ਈ-ਮੇਲ ਐਡਰੈੱਸ ਦਰਜ ਕਰੋ"
+      },
+      "confirmPassword" : {
+        "label" : "ਪਾਸਵਰਡ ਪੁਸ਼ਟੀ ਕਰੋ",
+        "help" : "ਆਪਣਾ ਨਵਾਂ ਪਾਸਵਰਡ ਪੁਸ਼ਟੀ ਕਰੋ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ਗਲਤੀ",
+        "detail" : "ਪਾਸਵਰਡ ਬਦਲਣ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਈ-ਮੇਲ ਜਾਂ ਅਕਾਊਂਟ ਦੀ ਮੌਜੂਦਗੀ ਜਾਂਚੋ।"
+      },
+      "GoToLoginBtn" : {
+        "label" : "ਲੌਗਇਨ ਪੇਜ 'ਤੇ ਜਾਓ"
+      },
+      "wkfSuccess" : {
+        "summary" : "ਸਫਲਤਾ",
+        "detail" : "ਪਾਸਵਰਡ ਸਫਲਤਾਪੂਰਵਕ ਬਦਲਿਆ ਗਿਆ। ਹੁਣ ਤੁਸੀਂ ਲੌਗਇਨ ਕਰ ਸਕਦੇ ਹੋ।"
       }
     }
   }

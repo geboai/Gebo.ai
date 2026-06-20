@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "عملیہ ناکام ہوگیا",
         "detail" : "درج کردہ اسناد سے تصدیق نہیں ہو سکی"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "پاس ورڈ بھول گئے؟"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "ماڈل کا استعمال",
         "help" : "وہ استعمالات جن کے لیے Gebo.ai پلیٹ فارم اس ماڈل پر غور کرے گا۔",
         "placeholder" : "وہ استعمالات جن کے لیے Gebo.ai پلیٹ فارم اس ماڈل پر غور کرے گا۔"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama سرور سے رابطے میں خرابی",
+        "detail" : "دور نظام سے مواد تک رسائی کرتے ہوئے نیٹ ورک خرابی\n ماڈلز کی فہرست یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ٹھیک ہے!",
         "detail" : "عمل کامیابی سے مکمل ہوا"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "عمل کے دوران استثنا: 401 غیر مجاز",
+        "detail" : "سرور خرابی: 401 غیر مجاز"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:800/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ریموٹ فراہم کنندہ ٹھیک ہے",
+        "detail" : "فراہم کنندہ فعال اور کامیابی سے تشکیل کیا گیا ہے"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8000/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:808/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8089/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8080/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:8089/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:800/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "عمل کے دوران استثنا: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:808/v1/models",
+        "detail" : "سرور خرابی: یو آر ایل کے ساتھ کام کرتے ہوئے خرابی: http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ٹھیک ہے!",
         "detail" : "عمل کامیابی کے ساتھ مکمل ہوا"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "ماڈلز کی فہرست حاصل کرنے میں مسئلہ",
+        "detail" : "یہ سروس اسے ہینڈل نہیں کرتی=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "جواب کو PDF میں ایکسپورٹ کریں"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: 400 غلط درخواست پوسٹ http://localhost:8000/v1/chat/completions سے"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "چیٹ سسٹم میں خرابی",
+        "detail" : "سرور کی خرابی: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" کو کال نہیں کیا جا سکا کیونکہ \"handler\" null ہے"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: 400 غلط درخواست پوسٹ http://localhost:8089/v1/chat/completions سے"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ڈیپ سرچ چلاتے وقت خرابی",
+        "detail" : "سرور کی خرابی: دی گئی ادارے کی Ids null نہیں ہو سکتیں"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ڈیپ سرچ چلاتے وقت خرابی",
+        "detail" : "سرور کی خرابی: چیٹ کے جواب میں id ہونا لازمی ہے"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: میپر [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] نے null ویلیو واپس کی۔"
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ڈیپ سرچ میں خرابی",
+        "detail" : "سرور کی خرابی: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" کو کال نہیں کیا جا سکا کیونکہ \"this.threadManager\" null ہے"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: 503 سروس دستیاب نہیں پوسٹ https://api.regolo.ai/v1/chat/completions سے"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: 429 بہت زیادہ درخواستیں پوسٹ https://api.openai.com/v1/chat/completions سے"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "چیٹ سسٹم میں خرابی",
+        "detail" : "سرور کی خرابی: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" کو کال نہیں کیا جا سکا کیونکہ \"userContext\" null ہے"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: 400 غلط درخواست پوسٹ https://api.regolo.ai/v1/chat/completions سے"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: ٹول نام: findInString کے لئے کوئی ToolCallback نہیں ملا"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: تلاشیں کرتے وقت استثنا"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm کو کال کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: سانچے میں سبھی متغیرات تبدیل نہیں ہوئیں۔ لاپتہ متغیر نام: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm کو کال کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: سانچے میں سبھی متغیرات تبدیل نہیں ہوئیں۔ لاپتہ متغیر نام: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ڈیپ سرچ چلاتے وقت خرابی",
+        "detail" : "سرور کی خرابی: لاک کے انتظار میں خلل پڑا"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: میپر [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] نے null ویلیو واپس کی۔"
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ڈیپ سرچ میں خرابی",
+        "detail" : "سرور کی خرابی: parallelism > 0 درکار ہے لیکن یہ 0 ہے"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "انٹرنل نالج بیس ڈیپ سرچ نہیں چلا سکتے",
+        "detail" : "سرور کی خرابی: parallelism > 0 درکار ہے لیکن یہ 0 ہے"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: parallelism > 0 درکار ہے لیکن یہ 0 ہے"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: میپر [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] نے null ویلیو واپس کی۔"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "چیٹ کے ردعمل کو اسٹریمنگ کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: کنکشن ری سیٹ ہو گیا"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: میپر [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] نے null ویلیو واپس کی۔"
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "چیٹ پائپ لائن کو اسٹریمنگ کرتے وقت استثنا",
+        "detail" : "سرور کی خرابی: قدم سروس PURE_SEARCH_STREAMING_SERVICE موجود نہیں ہے"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ڈیپ سرچ میں کچھ مسائل...",
+        "detail" : "سرور کی خرابی: میپر [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] نے null ویلیو واپس کی۔"
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "چیٹ پائپ لائن کو اسٹریمنگ کرتے وقت استثنا",
+        "detail" : "سرور کی خرابی: ایجنٹس کا نیٹ ورک بناتے وقت استثنا"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "عمل کے دوران استثنا: basePath غائب ہے",
         "detail" : "سرور کی خرابی: basePath غائب ہے"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ٹھیک ہے! ",
+        "detail" : "عمل کامیابی سے مکمل ہوا"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "ٹاپ پی",
         "help" : "ٹاپ پی پیرامیٹر، 0 سے 1 تک (یقینی نہ ہو تو خالی چھوڑ دیں)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "اس نظام پر فی الحال کوئی صارف رجسٹریشن یا بازیابی ورک فلو فعال نہیں ہیں۔"
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "اکاؤنٹ بازیابی شروع کریں"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "ورک فلو غیر فعال ہیں"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "اکاؤنٹ بازیابی شروع کریں"
+      },
+      "email" : {
+        "label" : "ای میل",
+        "help" : "ورک فلو شروع کرنے کے لیے اپنی ای میل درج کریں"
+      },
+      "GoToLogin" : {
+        "label" : "لاگ ان صفحہ"
+      },
+      "invalidAccountState" : {
+        "summary" : "خرابی",
+        "detail" : "درج شدہ معلومات اور اس کی درستگی چیک کریں۔"
+      },
+      "LookEMail" : {
+        "label" : "ہم نے آپ کو ایک ای میل بھیجی ہے جس میں آپ کے اکاؤنٹ کی بازیابی جاری رکھنے کا لنک موجود ہے۔"
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "اکاؤنٹ بازیابی شروع ہو گئی ہے"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "ورک فلو غیر فعال ہیں"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "اس نظام پر فی الحال کوئی صارف رجسٹریشن یا بازیابی ورک فلو فعال نہیں ہیں۔"
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "نیا پاس ورڈ تفویض کریں"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "پاس ورڈ تبدیل کریں"
+      },
+      "password" : {
+        "label" : "نیا پاس ورڈ",
+        "help" : "پاس ورڈ کم از کم 10 حروف کا ہو جس میں بڑے، چھوٹے حروف، نمبر اور خاص علامات ہوں"
+      },
+      "email" : {
+        "label" : "ای میل",
+        "help" : "اپنا ای میل ایڈریس درج کریں"
+      },
+      "confirmPassword" : {
+        "label" : "پاس ورڈ کی تصدیق کریں",
+        "help" : "اپنے نئے پاس ورڈ کی تصدیق کریں"
+      },
+      "invalidAccountState" : {
+        "summary" : "خرابی",
+        "detail" : "پاس ورڈ تبدیل کرنے میں ناکامی۔ براہ مہربانی ای میل یا اس بات کو چیک کریں کہ آپ کا اکاؤنٹ موجود ہے۔"
+      },
+      "GoToLoginBtn" : {
+        "label" : "لاگ ان صفحہ پر جائیں"
+      },
+      "wkfSuccess" : {
+        "summary" : "کامیاب",
+        "detail" : "پاس ورڈ کامیابی سے تبدیل ہو گیا ہے۔ آپ اب لاگ ان کر سکتے ہیں۔"
       }
     }
   }

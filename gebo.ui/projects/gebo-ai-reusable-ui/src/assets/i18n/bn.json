@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "অপারেশন ব্যর্থ হয়েছে",
         "detail" : "প্রদত্ত শংসাপত্র দিয়ে প্রমাণীকরণ করা যায়নি"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "পাসওয়ার্ড ভুলে গেছেন?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "মডেল ব্যবহারের ক্ষেত্র(গুলো)",
         "help" : "Gebo.ai প্ল্যাটফর্ম এই মডেলটি যেসব ব্যবহারের জন্য বিবেচনা করবে।",
         "placeholder" : "Gebo.ai প্ল্যাটফর্ম এই মডেলটি যেসব ব্যবহারের জন্য বিবেচনা করবে।"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama সার্ভারের সাথে যোগাযোগে ত্রুটি",
+        "detail" : "দূরবর্তী সিস্টেমে সংযুক্ত হতে নেটওয়ার্ক ত্রুটি\n মডেল তালিকা url:http://localhost:11434/api/tags ব্যবহার করতে সমস্যা"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:401 অনুমোদন নেই",
+        "detail" : "সার্ভার ত্রুটি: 401 অনুমোদন নেই"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:8/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:8/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:800/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:800/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI রিমোট প্রদানকারী ঠিক আছে",
+        "detail" : "প্রদানকারী সক্রিয় আছে এবং সফলভাবে কনফিগার হয়েছে"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:8000/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:8000/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:808/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:808/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:8089/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:8089/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://localhost:8080/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://localhost:8080/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://192.168.1.175:8089/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://192.168.1.175:8089/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://192.168.1.175:800/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://192.168.1.175:800/v1/models ব্যবহার করতে সমস্যা"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "অপারেশনের সময় ব্যতিক্রম:url:http://192.168.1.175:808/v1/models ব্যবহার করতে সমস্যা",
+        "detail" : "সার্ভার ত্রুটি: url:http://192.168.1.175:808/v1/models ব্যবহার করতে সমস্যা"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "মডেল তালিকা আনতে সমস্যা",
+        "detail" : "এই পরিষেবাটি পরিচালনা করে না=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "উত্তর PDF-এ রপ্তানি করুন"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: ৪০০ ব্যাড রিকোয়েস্ট POST http://localhost:8000/v1/chat/completions থেকে"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "চ্যাট সিস্টেমে ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" চালানো যাচ্ছে না কারণ \"handler\" null"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: ৪০০ ব্যাড রিকোয়েস্ট POST http://localhost:8089/v1/chat/completions থেকে"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ডীপ সার্চ চলাকালীন ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: প্রদত্ত entities এর Ids null হতে পারে না"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ডীপ সার্চ চলাকালীন ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: চ্যাট রেসপন্সে অবশ্যই একটি id থাকতে হবে"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: ম্যাপার [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] null মান ফিরিয়েছে।"
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ডীপ সার্চ করতে গিয়ে ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" চালানো যাচ্ছে না কারণ \"this.threadManager\" null"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: ৫০৩ সার্ভিস আনএভেইলেবল POST https://api.regolo.ai/v1/chat/completions থেকে"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: ৪২৯ বেশি অনুরোধ POST https://api.openai.com/v1/chat/completions থেকে"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "চ্যাট সিস্টেমে ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" চালানো যাচ্ছে না কারণ \"userContext\" null"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: ৪০০ ব্যাড রিকোয়েস্ট POST https://api.regolo.ai/v1/chat/completions থেকে"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: টুল নাম: findInString এর জন্য কোনো ToolCallback পাওয়া যায়নি"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: সার্চ চালাতে ব্যতিক্রম"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm ডাকতে ভুল",
+        "detail" : "সার্ভার ত্রুটি: টেম্পলেটের সব ভেরিয়েবল প্রতিস্থাপিত হয়নি। অনুপস্থিত ভেরিয়েবল: [consolidatedChatHistory, latestInteractions]।"
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm ডাকতে ভুল",
+        "detail" : "সার্ভার ত্রুটি: টেম্পলেটের সব ভেরিয়েবল প্রতিস্থাপিত হয়নি। অনুপস্থিত ভেরিয়েবল: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]।"
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ডীপ সার্চ চলাকালীন ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: লক এর জন্য অপেক্ষা করার সময় ব্যাঘাত ঘটেছে"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: ম্যাপার [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] null মান ফিরিয়েছে।"
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ডীপ সার্চ করতে গিয়ে ত্রুটি",
+        "detail" : "সার্ভার ত্রুটি: parallelism > 0 আবশ্যক কিন্তু এটি 0"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "ইন্টারনাল নলেজ বেস ডীপ সার্চ চালানো যায়নি",
+        "detail" : "সার্ভার ত্রুটি: parallelism > 0 আবশ্যক কিন্তু এটি 0"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: parallelism > 0 আবশ্যক কিন্তু এটি 0"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: ম্যাপার [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] null মান ফিরিয়েছে।"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "চ্যাট রেসপন্স স্ট্রিম করতে ভুল হয়েছে",
+        "detail" : "সার্ভার ত্রুটি: সংযোগ রিসেট হয়েছে"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: ম্যাপার [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] null মান ফিরিয়েছে।"
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "চ্যাট পাইপলাইনে স্ট্রিমিং করার সময় ব্যতিক্রম",
+        "detail" : "সার্ভার ত্রুটি: ধাপ পরিষেবা PURE_SEARCH_STREAMING_SERVICE নেই"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ডীপ সার্চে কিছু সমস্যা হয়েছে...",
+        "detail" : "সার্ভার ত্রুটি: ম্যাপার [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] null মান ফিরিয়েছে।"
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "চ্যাট পাইপলাইনে স্ট্রিমিং করার সময় ব্যতিক্রম",
+        "detail" : "সার্ভার ত্রুটি: এজেন্টের নেটওয়ার্ক তৈরি করতে ব্যতিক্রম"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "অপারেশনে ব্যতিক্রম: basePath অনুপস্থিত",
         "detail" : "সার্ভার ত্রুটি: basePath অনুপস্থিত"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "TopP প্যারামিটার, ০ থেকে ১ (নিশ্চিত না হলে খালি রাখুন)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "সিস্টেমে বর্তমানে কোনো ব্যবহারকারী নিবন্ধন বা পুনরুদ্ধার ওয়ার্কফোলো সক্রিয় নেই।"
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "একাউন্ট পুনরুদ্ধার শুরু করুন"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "ওয়ার্কফোলো নিষ্ক্রিয়"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "একাউন্ট পুনরুদ্ধার শুরু করুন"
+      },
+      "email" : {
+        "label" : "ই-মেইল",
+        "help" : "ওয়ার্কফোলো শুরু করতে আপনার ই-মেইল লিখুন"
+      },
+      "GoToLogin" : {
+        "label" : "লগইন পেজ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ত্রুটি",
+        "detail" : "প্রবেশ করা তথ্য এবং তার সঠিকতা যাচাই করুন।"
+      },
+      "LookEMail" : {
+        "label" : "আমরা আপনাকে একটি ই-মেইল পাঠিয়েছি, যেখানে একাউন্ট পুনরুদ্ধার চালিয়ে যেতে একটি লিঙ্ক আছে।"
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "একাউন্ট পুনরুদ্ধার শুরু হয়েছে"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "ওয়ার্কফোলো নিষ্ক্রিয়"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "সিস্টেমে বর্তমানে কোনো ব্যবহারকারী নিবন্ধন বা পুনরুদ্ধার ওয়ার্কফোলো সক্রিয় নেই।"
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "নতুন পাসওয়ার্ড নির্ধারণ করুন"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "পাসওয়ার্ড পরিবর্তন করুন"
+      },
+      "password" : {
+        "label" : "নতুন পাসওয়ার্ড",
+        "help" : "পাসওয়ার্ড অন্তত ১০ অক্ষরের হতে হবে, বড় হাতের, ছোট হাতের, সংখ্যা ও বিশেষ অক্ষর থাকতে হবে"
+      },
+      "email" : {
+        "label" : "ই-মেইল",
+        "help" : "আপনার ই-মেইল ঠিকানা লিখুন"
+      },
+      "confirmPassword" : {
+        "label" : "পাসওয়ার্ড নিশ্চিত করুন",
+        "help" : "আপনার নতুন পাসওয়ার্ড নিশ্চিত করুন"
+      },
+      "invalidAccountState" : {
+        "summary" : "ত্রুটি",
+        "detail" : "পাসওয়ার্ড পরিবর্তনে ব্যর্থ হয়েছে। অনুগ্রহ করে ই-মেইল অথবা আপনার একাউন্ট আছে কিনা যাচাই করুন।"
+      },
+      "GoToLoginBtn" : {
+        "label" : "লগইন পেজে যান"
+      },
+      "wkfSuccess" : {
+        "summary" : "সফল",
+        "detail" : "পাসওয়ার্ড সফলভাবে পরিবর্তিত হয়েছে। এখন আপনি লগইন করতে পারবেন।"
       }
     }
   }

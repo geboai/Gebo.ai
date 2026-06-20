@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "ઓપરેશન નિષ્ફળ થયું",
         "detail" : "આપેલી ઓળખીસાધનો વડે માન્યી કરી શકતા નથી"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "પાસવર્ડ ભૂલી ગયા છો?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "મોડેલ વપરાશ(ઓ)",
         "help" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે.",
         "placeholder" : "આ મોડેલ માટે Gebo.ai પ્લેટફોર્મ કયા ઉપયોગો કરશે."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama સર્વર સાથે જોડાણમાં ત્રુટિ",
+        "detail" : "કન્ટેન્ટ મેળવતી વખતે નેટવર્ક ત્રુટિ\n મોડલ સૂચિમાં ભૂલ url:http://localhost:11434/api/tags પર કામ કરતી વખતે"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "બરાબર!",
         "detail" : "ઓપરેશન સફળતાપૂર્વક પૂર્ણ થયું"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:401 અનુમતિ નહી",
+        "detail" : "સર્વર ખોટ: 401 અનુમતિ નહી"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:8/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:8/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:800/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:800/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI રિમોટ પ્રોવાઇડર ઠીક છે",
+        "detail" : "પ્રોવાઇડર ચાલુ છે અને સફળતાપૂર્વક કોન્ફિગર થયું છે"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:8000/v1/models સાથે કામ કરતાં વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:8000/v1/models સાથે કામ કરતાં વખતે ભૂલ"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:808/v1/models સાથે કામ કરતાં વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:808/v1/models સાથે કામ કરતાં વખતે ભૂલ"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:8089/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:8089/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://localhost:8080/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://localhost:8080/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://192.168.1.175:8089/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://192.168.1.175:8089/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://192.168.1.175:800/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://192.168.1.175:800/v1/models સાથે કામ કરતી વખતે ભૂલ"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "પરિચલન દરમિયાન અપવાદ:url:http://192.168.1.175:808/v1/models સાથે કામ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ખોટ: url:http://192.168.1.175:808/v1/models સાથે કામ કરતી વખતે ભૂલ"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "બરાબર!",
         "detail" : "ઑપરેશન સફળતાપૂર્વક પૂર્ણ થયું"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "મોડલ સૂચિ મેળવવામાં સમસ્યા",
+        "detail" : "આ સેવાએ આને હેન્ડલ કરતું નથી=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "પ્રતિસાદ PDFમાં એક્સપોર્ટ કરો"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 400 ખોટી વિનંતી POST http://localhost:8000/v1/chat/completions માંથી"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "ચેટ સિસ્ટમની ભૂલ",
+        "detail" : "સર્વર ભૂલ: \"handler\" null હોવાથી \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" આપેલ આંખ કરી શકાઈ નથી"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 400 ખોટી વિનંતી POST http://localhost:8089/v1/chat/completions માંથી"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ડીપ સર્ચ ચલાવતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: આપેલા એન્ટિટીઝના Ids null ન હોવા જોઈએ"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ડીપ સર્ચ ચલાવતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: ચેટ રિસ્પોન્સમાં id હોવું જ જોઈએ"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: mapper [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378]એ null મૂલ્ય આપ્યું."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ડીપ સર્ચ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: \"this.threadManager\" null હોવાથી \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" આપેલ આંખ કરી શકાઈ નથી"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 503 સેવા ઉપલબ્ધ નથી POST https://api.regolo.ai/v1/chat/completions માંથી"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 429 વધુ વિનંતીઓ POST https://api.openai.com/v1/chat/completions"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "ચેટ સિસ્ટમની ભૂલ",
+        "detail" : "સર્વર ભૂલ: \"userContext\" null હોવાથી \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" આપેલ આંખ કરી શકાઈ નથી"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: 400 ખોટી વિનંતી POST https://api.regolo.ai/v1/chat/completions માંથી"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: ટૂલ નામ માટે ToolCallback મળ્યું નથી: findInString"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: seraches ચલાવતી વખતે અપવાદ"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llmને કોલ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: ટેમ્પલેટમાં બધી વેરિએબલ્સ બદલવામાં આવી નથી. ગાયબ વેરિએબલ નામ: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llmને કોલ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: ટેમ્પલેટમાં બધી વેરિએબલ્સ બદલવામાં આવી નથી. ગાયબ વેરિએબલ નામ: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ડીપ સર્ચ ચલાવતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: લોક માટે રાહ જોતી વખતે અવરોધાયું"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698]એ null મૂલ્ય આપ્યું."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ડીપ સર્ચ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: parallelism > 0 આવશ્યક છે પણ તે 0 હતું"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "આંતરિક જ્ઞાન આધાર ડીપ સર્ચ ચલાવી શકતા નથી",
+        "detail" : "સર્વર ભૂલ: parallelism > 0 આવશ્યક છે પણ તે 0 હતું"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: parallelism > 0 આવશ્યક છે પણ તે 0 હતું"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8]એ null મૂલ્ય આપ્યું."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ચેટ રિસ્પોન્સ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: કનેક્શન રીસેટ"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70]એ null મૂલ્ય આપ્યું."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "ચેટ પાઇપલાઇન સ્ટ્રીમ કરતી વખતે અપવાદ",
+        "detail" : "સર્વર ભૂલ: સ્ટેપ સેવા PURE_SEARCH_STREAMING_SERVICE હાજર નથી"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ડીપ સર્ચમાં કેટલાક પ્રશ્નો...",
+        "detail" : "સર્વર ભૂલ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638]એ null મૂલ્ય આપ્યું."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "ચેટ પાઇપલાઇન સ્ટ્રીમ કરતી વખતે અપવાદ",
+        "detail" : "સર્વર ભૂલ: એજન્ટ્સનું નેટવર્ક બનતી વખતે અપવાદ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "ઓપરેશન દરમિયાન અપવાદ:Missing basePath",
         "detail" : "સર્વર ભૂલ: Missing basePath"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "બરાબર! ",
+        "detail" : "ઓપરેશન સફળતાપૂર્વક પૂર્ણ થયું છે"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "ટોપP",
         "help" : "ટોપP પેરામિટી, 0 થી 1 (ખાતરી નહીં હોય તો ખાલી રાખો)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "હાલમાં સિસ્ટમ પર કોઈ યુઝર નોંધણી અથવા પુનઃપ્રાપ્ત કરવાની વર્કફ્લોઝ સક્રિય નથી."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "એકાઉન્ટ પુનઃપ્રાપ્ત કરવું શરૂ કરો"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "વર્કફ્લોઝ નિષ્ક્રિય છે"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "એકાઉન્ટ પુનઃપ્રાપ્ત કરવું શરૂ કરો"
+      },
+      "email" : {
+        "label" : "ઇ-મેઇલ",
+        "help" : "વર્કફ્લો શરૂ કરવા માટે તમારો ઇ-મેઇલ નાખો"
+      },
+      "GoToLogin" : {
+        "label" : "લોગિન પેજ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ભૂલ",
+        "detail" : "દાખલ કરાયેલ માહિતી અને તેની માન્યતા તપાસો."
+      },
+      "LookEMail" : {
+        "label" : "અમે તમને એક ઇ-મેઇલ મોકલ્યો છે જેમાં એકાઉન્ટ પુનઃપ્રાપ્ત કરવા માટેની લિંક છે."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "એકાઉન્ટ પુનઃપ્રાપ્ત કરવાની પ્રક્રિયા શરૂ થઈ"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "વર્કફ્લોઝ નિષ્ક્રિય છે"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "હાલમાં સિસ્ટમ પર કોઈ યુઝર નોંધણી અથવા પુનઃપ્રાપ્ત કરવાની વર્કફ્લોઝ સક્રિય નથી."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "નવી પાસવર્ડ આપો"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "પાસવર્ડ બદલો"
+      },
+      "password" : {
+        "label" : "નવી પાસવર્ડ",
+        "help" : "પાસવર્ડ ઓછામાં ઓછો 10 અક્ષરનો હોવો જોઈએ જેમાં મૂલ્યાંક, કેપિટલ, સ્મોલ, અને ખાસ અક્ષરો હોય"
+      },
+      "email" : {
+        "label" : "ઇ-મેઇલ",
+        "help" : "તમારો ઇ-મેઇલ સરનામું નાખો"
+      },
+      "confirmPassword" : {
+        "label" : "પાસવર્ડ પુષ્ટિ કરો",
+        "help" : "તમારો નવા પાસવર્ડ પુષ્ટિ કરો"
+      },
+      "invalidAccountState" : {
+        "summary" : "ભૂલ",
+        "detail" : "પાસવર્ડ બદલવામાં નિષ્ફળતા. કૃપા કરીને ઇ-મેઇલ કે તમારું એકાઉન્ટ અસ્તિત્વમાં છે તેની ચકાસણી કરો."
+      },
+      "GoToLoginBtn" : {
+        "label" : "લોગિન પેજ પર જાઓ"
+      },
+      "wkfSuccess" : {
+        "summary" : "સફળતા",
+        "detail" : "પાસવર્ડ સફળતાપૂર્વક બદલાયું છે. તમે હવે લોગિન કરી શકો છો."
       }
     }
   }

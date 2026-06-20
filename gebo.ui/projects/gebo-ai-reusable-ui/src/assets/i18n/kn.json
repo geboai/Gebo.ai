@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "ಕ್ರಿಯೆ ವಿಫಲವಾಯಿತು",
         "detail" : "ನೀಡಲಾದ ಅನುಮತಿ ವಿವರಗಳೊಂದಿಗೆ ಪ್ರಮಾಣೀಕರಣ ಸಾಧ್ಯವಿಲ್ಲ"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್ ಮರೆತಿರಾ?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "ಮಾದರಿ ಬಳಕೆ(ಗಳು)",
         "help" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು.",
         "placeholder" : "Gebo.ai ವೇದಿಕೆ ಈ ಮಾದರಿಯನ್ನು ಪರಿಗಣಿಸುವ ಬಳಕೆಗಳು."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama ಸರ್ವರ್‌ನೊಂದಿಗೆ ಸಂವಹನದಲ್ಲಿ ದೋಷ",
+        "detail" : "ದೂರಸ್ಥ ವ್ಯವಸ್ಥೆಯೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸುವಾಗ ಜಾಲತಾಣ ದೋಷ\n ಮಾಡೆಲ್ ಪಟ್ಟಿ ಲಭ್ಯಪಡಿಸುವಲ್ಲಿ ದೋಷ url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ಒಪ್ಪಿದೆ!",
         "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:401 ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 401 ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:800/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ದೂರದ ಪ್ರೊವೈಡರ್ ಸರಿ ಇದೆ",
+        "detail" : "ಪ್ರೊವೈಡರ್ ಕಾರ್ಯ ನಿರ್ವಹಿಸುತ್ತಿದ್ದು ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿತವಾಗಿದೆ"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8000/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:808/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8089/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8080/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:8089/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:800/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "ಕಾರ್ಯಾಚರಣೆಯ ಸಮಯದಲ್ಲಿ ಹೊರತಾಗಿದ ದೋಷ:url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:808/v1/models",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: url ಜೊತೆ ಕೆಲಸ ಮಾಡುವಾಗ ದೋಷ:http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ಸರಿಯಾಗಿದೆ!",
         "detail" : "ಕಾರ್ಯ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿತು"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "ಮಾಡೆಲ್ ಪಟ್ಟಿ ಪಡೆಯುವಲ್ಲಿ ಸಮಸ್ಯೆ",
+        "detail" : "ಈ ಸೇವೆ ಇದನ್ನು ಹ್ಯಾಂಡಲ್ ಮಾಡದು=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು PDFಗೆ ರಫ್ತು ಮಾಡಿ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 400 ಕೆಟ್ಟ ವಿನಂತಿ POST http://localhost:8000/v1/chat/completions ರಿಂದ"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "ಚಾಟ್ ವ್ಯವಸ್ಥೆ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" ಅನ್ನು ಕರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ ಏಕೆಂದರೆ \"handler\" ಅನ್ನು null ಆಗಿದೆ"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 400 ಕೆಟ್ಟ ವಿನಂತಿ POST http://localhost:8089/v1/chat/completions ರಿಂದ"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆ ನಡೆಸುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ನೀಡಿದ ಘಟಕಗಳ ಐಡಿ ಗಳು null ಆಗಿದ अउದು"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆ ನಡೆಸುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆಗೆ ಐಡಿ ಇರಬೇಕು"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: mapper [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] null ಮೌಲ್ಯ ತಿರುಗಿಸಿದೆ."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" ಅನ್ನು ಕರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ ಏಕೆಂದರೆ \"this.threadManager\" ಅನ್ನು null ಆಗಿದೆ"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 503 ಸೇವೆ ಲಭ್ಯವಿಲ್ಲ POST https://api.regolo.ai/v1/chat/completions ರಿಂದ"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 429 ಬಹಳ ಹೆಚ್ಚಿನ ವಿನಂತಿಗಳು POST https://api.openai.com/v1/chat/completions ರಿಂದ"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "ಚಾಟ್ ವ್ಯವಸ್ಥೆ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" ಅನ್ನು ಕರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ ಏಕೆಂದರೆ \"userContext\" ಅನ್ನು null ಆಗಿದೆ"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: 400 ಕೆಟ್ಟ ವಿನಂತಿ POST https://api.regolo.ai/v1/chat/completions ರಿಂದ"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: findInString ಟೂಲ್ ಹೆಸರಿಗಾಗಿ ToolCallback ಸಿಗಲಿಲ್ಲ"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಹುಡುಕುವಿಕೆಯನ್ನು ನಿರ್ವಹಿಸುವಾಗ ಎಕ್ಸೆಪ್ಶನ್ಂಟು"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm ಅನ್ನು ಕರೆಯುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಎಲ್ಲಾ ವೇರಿಯಬಲ್‌ಗಳು ಟೆಂಪ್ಲೇಟ್‌ನಲ್ಲಿ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ. ಇಲ fehlen ಇದ್ದ ವೇರಿಯಬಲ್ ಹೆಸರುಗಳು: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm ಅನ್ನು ಕರೆಯುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಎಲ್ಲಾ ವೇರಿಯಬಲ್‌ಗಳು ಟೆಂಪ್ಲೇಟ್‌ನಲ್ಲಿ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ. ಇಲ fehlen ಇದ್ದ ವೇರಿಯಬಲ್ ಹೆಸರುಗಳು: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆ ನಡೆಸುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಲಾಕ್ ಕಾಯುತ್ತಿರುವಾಗ ವ್ಯಾಪ್ತಿಯಾಗದಿದ್ದು"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] null ಮೌಲ್ಯ ತಿರುಗಿಸಿದೆ."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: parallelism > 0 ಅಗತ್ಯ, ಆದರೆ 0 ಇದೆ"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "ಅಂತರಂಗ ಜ್ಞಾನ ಆಧಾರ ಡೀಪ್ ಹುಡುಕುವಿಕೆಯನ್ನು ನಡಿಸಲಾಗದು",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: parallelism > 0 ಅಗತ್ಯ, ಆದರೆ 0 ಇದೆ"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: parallelism > 0 ಅಗತ್ಯ, ಆದರೆ 0 ಇದೆ"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] null ಮೌಲ್ಯ ತಿರುಗಿಸಿದೆ."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ಚಾಟ್ ಪ್ರತಿಕ್ರಿಯೆ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಸಂಪರ್ಕ ಪುನಃ ಹೊಂದಿಸಲಾಗಿದೆ"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] null ಮೌಲ್ಯ ತಿರುಗಿಸಿದೆ."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "ಚಾಟ್ ಪೈಪ್‌ಲೈನ್ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ಎಕ್ಸೆಪ್ಶನ್",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಹಂತದ ಸೇವೆ PURE_SEARCH_STREAMING_SERVICE ಕಾಣುತ್ತಿಲ್ಲ"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ಡೀಪ್ ಹುಡುಕುವಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸಮಸ್ಯೆಗಳು...",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] null ಮೌಲ್ಯ ತಿರುಗಿಸಿದೆ."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "ಚಾಟ್ ಪೈಪ್‌ಲೈನ್ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಾಗ ಎಕ್ಸೆಪ್ಶನ್",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: ಏಜೆಂಟ್‌ಗಳ ನೆಟ್‌ವರ್ಕ್ ರಚಿಸುವಾಗ ಎಕ್ಸೆಪ್ಶನ್"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "ಕ್ರಿಯೆಯಲ್ಲಿ ಅಪವಾದ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ",
         "detail" : "ಸರ್ವರ್ ದೋಷ: ಅವಶ್ಯಕ basePath ಲಭ್ಯವಿಲ್ಲ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಸರಿ!",
+        "detail" : "ಕಾರ್ಯಾಚರಣೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "TopP ಪ್ಯಾರಾಮೀಟರ್, 0 ರಿಂದ 1 (ಸ್ಪಷ್ಟವಿಲ್ಲದಿದ್ದರೆ ಖಾಲಿ ಬಿಡಿ)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "ಬಳಕೆದಾರ ನೋಂದಣಿ ಅಥವಾ ಪುನರ್ಮಾಪನ ಕಾರ್ಯಪದ್ಧತಿಗಳು ಪ್ರಸ್ತುತ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸಕ್ರಿಯಗೊಂಡಿಲ್ಲ."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "ಖಾತೆ ಪುನಃ ಪಡೆಯಲು ಪ್ರಾರಂಭಿಸಿ"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "ಕಾರ್ಯಪದ್ಧತಿಗಳು ನಿಷ್ಕ್ರಿಯಗೊಂಡಿವೆ"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "ಖಾತೆ ಪುನಃ ಪಡೆಯಲು ಪ್ರಾರಂಭಿಸಿ"
+      },
+      "email" : {
+        "label" : "ಇ-ಮೇಲ್",
+        "help" : "ಕಾರ್ಯಪದ್ಧತಿ ಆರಂಭಿಸಲು ನಿಮ್ಮ ಇ-ಮೇಲ್ ನಮೂದಿಸಿ"
+      },
+      "GoToLogin" : {
+        "label" : "ಲಾಗಿನ್ ಪುಟ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ದೋಷ",
+        "detail" : "ನೀವು ನಮೂದಿಸಿದ ಮಾಹಿತಿಯನ್ನು ಮತ್ತು ಅದರ ಮಾನ್ಯತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ."
+      },
+      "LookEMail" : {
+        "label" : "ನಾವು ನಿಮ್ಮ ಖಾತೆ ಪುನಃ ಪಡೆಯಲು ಮುಂದುವರೆಸಲು ಲಿಂಕ್‌ ಜೊತೆಗೆ ಇ-ಮೇಲ್ ಕಳುಹಿಸಿದ್ದೇವೆ."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "ಖಾತೆ ಪುನಃಪಡೆಯುವಿಕೆ ಪ್ರಾರಂಭವಾಗಿದೆ"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "ಕಾರ್ಯಪದ್ಧತಿಗಳು ನಿಷ್ಕ್ರಿಯಗೊಂಡಿವೆ"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "ಬಳಕೆದಾರ ನೋಂದಣಿ ಅಥವಾ ಪುನರ್ಮಾಪನ ಕಾರ್ಯಪದ್ಧತಿಗಳು ಪ್ರಸ್ತುತ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸಕ್ರಿಯಗೊಂಡಿಲ್ಲ."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "ಹೊಸ ಗುಪ್ತಪದ ನಿಯೋಜಿಸಿ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "ಗುಪ್ತಪದವನ್ನು ಬದಲಾಯಿಸಿ"
+      },
+      "password" : {
+        "label" : "ಹೊಸ ಗುಪ್ತಪದ",
+        "help" : "ಗುಪ್ತಪದ ಕನಿಷ್ಠ 10 ಅಕ್ಷರಗಳಿರಬೇಕು—ಮುಖ್ಯಅಕ್ಷರಗಳು, ಸಣ್ಣ ಅಕ್ಷರಗಳು, ಸಂಖ್ಯೆಗಳು ಮತ್ತು ವಿಶೇಷ ಅಕ್ಷರಗಳಿರುವುದು ಅಗತ್ಯ"
+      },
+      "email" : {
+        "label" : "ಇ-ಮೇಲ್",
+        "help" : "ನಿಮ್ಮ ಇ-ಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "confirmPassword" : {
+        "label" : "ಗುಪ್ತಪದವನ್ನು ಖಚಿತಪಡಿಸಿ",
+        "help" : "ನಿಮ್ಮ ಹೊಸ ಗುಪ್ತಪದವನ್ನು ಖಚಿತಪಡಿಸಿ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ದೋಷ",
+        "detail" : "ಗುಪ್ತಪದ ಬದಲಾವಣೆಗೆ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಇ-ಮೇಲ್ ಅಥವಾ ನಿಮ್ಮ ಖಾತೆ ಇದೆ ಎಂದು ಪರಿಶೀಲಿಸಿ."
+      },
+      "GoToLoginBtn" : {
+        "label" : "ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗಿ"
+      },
+      "wkfSuccess" : {
+        "summary" : "ಯಶಸ್ವಿ",
+        "detail" : "ಗುಪ್ತಪದ ಯಶಸ್ವಿಯಾಗಿ ಬದಲಾಯಿಸಲಾಗಿದೆ. ಈಗ ನೀವು ಲಾಗಿನ್ ಮಾಡಬಹುದು."
       }
     }
   }

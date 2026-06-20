@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "Operácia zlyhala",
         "detail" : "Nie je možné overiť prihlásenie pomocou zadaných údajov"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "Zabudli ste heslo?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "Použitie modelu",
         "help" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený.",
         "placeholder" : "Použitia, na ktoré bude tento model na platforme Gebo.ai zohľadnený."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Chyba pri komunikácii so serverom Ollama",
+        "detail" : "Chyba siete pri komunikácii so vzdialeným systémom pri prístupe k obsahu\n chyby modelov pri práci s url:http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operácia prebehla úspešne"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Výnimka počas operácie: 401 NEAUTORIZOVANÉ",
+        "detail" : "Chyba servera: 401 NEAUTORIZOVANÉ"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:800/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI vzdialený poskytovateľ je v poriadku",
+        "detail" : "Poskytovateľ je spustený a úspešne nakonfigurovaný"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8000/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:808/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8089/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://localhost:8080/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://192.168.1.175:8089/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://192.168.1.175:800/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "Výnimka počas operácie: Chyba pri práci s url:http://192.168.1.175:808/v1/models",
+        "detail" : "Chyba servera: Chyba pri práci s url:http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operácia bola úspešne dokončená"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "Problém pri získavaní zoznamu modelov",
+        "detail" : "Táto služba nespracováva=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "Exportovať odpoveď do PDF"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: 400 Nesprávna požiadavka z POST http://localhost:8000/v1/chat/completions"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "Chyba systému chatu",
+        "detail" : "Chyba servera: Nie je možné zavolať \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" pretože \"handler\" je null"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: 400 Nesprávna požiadavka z POST http://localhost:8089/v1/chat/completions"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "Chyba pri vykonávaní hlbokého vyhľadávania",
+        "detail" : "Chyba servera: Zadané ID entít nesmie byť null"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "Chyba pri vykonávaní hlbokého vyhľadávania",
+        "detail" : "Chyba servera: Odpoveď chatu musí mať id"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Prepojenie [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] vrátilo hodnotu null."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "Chyba pri vykonávaní hlbokého vyhľadávania",
+        "detail" : "Chyba servera: Nie je možné zavolať \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" pretože \"this.threadManager\" je null"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: 503 Služba nedostupná z POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: 429 Príliš veľa požiadaviek z POST https://api.openai.com/v1/chat/completions"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "Chyba systému chatu",
+        "detail" : "Chyba servera: Nie je možné zavolať \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" pretože \"userContext\" je null"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: 400 Nesprávna požiadavka z POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: Nenašiel sa ToolCallback pre názov nástroja: findInString"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Výnimka pri vykonávaní vyhľadávania"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "Chyba pri volaní llm",
+        "detail" : "Chyba servera: Nie všetky premenné boli nahradené v šablóne. Chýbajúce názvy premenných: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "Chyba pri volaní llm",
+        "detail" : "Chyba servera: Nie všetky premenné boli nahradené v šablóne. Chýbajúce názvy premenných: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "Chyba pri vykonávaní hlbokého vyhľadávania",
+        "detail" : "Chyba servera: Prerušené čakanie na zámok"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Prepojenie [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] vrátilo hodnotu null."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "Chyba pri vykonávaní hlbokého vyhľadávania",
+        "detail" : "Chyba servera: paralelizmus > 0 je požadovaný, ale bol 0"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "Nie je možné vykonať hlboké vyhľadávanie v internej databáze znalostí",
+        "detail" : "Chyba servera: paralelizmus > 0 je požadovaný, ale bol 0"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: paralelizmus > 0 je požadovaný, ale bol 0"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Prepojenie [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] vrátilo hodnotu null."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Chyba pri streamovaní odpovede z chatu",
+        "detail" : "Chyba servera: Resetované pripojenie"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Prepojenie [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] vrátilo hodnotu null."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "Výnimka pri streamovaní chatovacieho pipeline",
+        "detail" : "Chyba servera: Kroková služba PURE_SEARCH_STREAMING_SERVICE neexistuje"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "Problémy pri hlbokom vyhľadávaní...",
+        "detail" : "Chyba servera: Prepojenie [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] vrátilo hodnotu null."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "Výnimka pri streamovaní chatovacieho pipeline",
+        "detail" : "Chyba servera: Výnimka pri vytváraní siete agentov"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "Výnimka počas operácie:Chýba basePath",
         "detail" : "Chyba servera: Chýba basePath"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "Parameter TopP, od 0 do 1 (ak si nie ste istý, nechajte prázdne)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "Na systéme momentálne nie sú povolené žiadne pracovné postupy na registráciu alebo obnovenie používateľa."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "Spustiť obnovenie účtu"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "Pracovné postupy sú vypnuté"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "Spustiť obnovenie účtu"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "Zadajte svoj e-mail na spustenie pracovného postupu"
+      },
+      "GoToLogin" : {
+        "label" : "Prihlasovacia stránka"
+      },
+      "invalidAccountState" : {
+        "summary" : "Chyba",
+        "detail" : "Skontrolujte zadané údaje a ich platnosť."
+      },
+      "LookEMail" : {
+        "label" : "Poslali sme vám e-mail s odkazom na pokračovanie v obnovení účtu."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "Obnovenie účtu bolo spustené"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "Pracovné postupy sú vypnuté"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "Na systéme momentálne nie sú povolené žiadne pracovné postupy na registráciu alebo obnovenie používateľa."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "Priradiť nové heslo"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Zmeniť heslo"
+      },
+      "password" : {
+        "label" : "Nové heslo",
+        "help" : "Heslo musí mať aspoň 10 znakov a obsahovať veľké, malé písmená, čísla a špeciálne znaky"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "Zadajte svoju e-mailovú adresu"
+      },
+      "confirmPassword" : {
+        "label" : "Potvrďte heslo",
+        "help" : "Potvrďte svoje nové heslo"
+      },
+      "invalidAccountState" : {
+        "summary" : "Chyba",
+        "detail" : "Nepodarilo sa zmeniť heslo. Skontrolujte e-mail alebo či váš účet existuje."
+      },
+      "GoToLoginBtn" : {
+        "label" : "Prejsť na prihlasovaciu stránku"
+      },
+      "wkfSuccess" : {
+        "summary" : "Úspech",
+        "detail" : "Heslo bolo úspešne zmenené. Teraz sa môžete prihlásiť."
       }
     }
   }

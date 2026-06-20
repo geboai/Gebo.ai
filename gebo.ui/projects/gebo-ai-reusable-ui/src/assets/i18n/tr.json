@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "İşlem başarısız",
         "detail" : "Sağlanan kimlik bilgileri ile kimlik doğrulama yapılamıyor"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "Şifrenizi mi unuttunuz?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "Model kullanımı",
         "help" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin.",
         "placeholder" : "Gebo.ai platformunun bu modeli hangi amaçlarla kullanacağını belirtin."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama sunucusuyla iletişimde hata",
+        "detail" : "Uzaktaki sisteme içerik erişirken ağ hatası\n modeller listesi url ile çalışırken hata:http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Tamam!",
         "detail" : "İşlem başarıyla tamamlandı"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "İşlem sırasında istisna:401 YETKİSİZ",
+        "detail" : "Sunucu hatası: 401 YETKİSİZ"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:8/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:800/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktaki sağlayıcı OK",
+        "detail" : "Sağlayıcı aktif ve başarılı şekilde yapılandırıldı"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:8000/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:808/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:8089/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://localhost:8080/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://192.168.1.175:8089/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://192.168.1.175:800/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "İşlem sırasında istisna:url ile çalışırken hata:http://192.168.1.175:808/v1/models",
+        "detail" : "Sunucu hatası: url ile çalışırken hata:http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "TAMAM!",
         "detail" : "İşlem başarıyla tamamlandı"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "Modeller listesi alınırken sorun oluştu",
+        "detail" : "Bu servis şunu desteklemiyor=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "Yanıtı PDF'ye aktar"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: 400 Hatalı İstek POST http://localhost:8000/v1/chat/completions"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "Sohbet sistemi hatası",
+        "detail" : "Sunucu hatası: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" çağrılamıyor çünkü \"handler\" null"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: 400 Hatalı İstek POST http://localhost:8089/v1/chat/completions"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "Derin arama çalıştırılırken hata oluştu",
+        "detail" : "Sunucu hatası: Varlıkların verilen kimlikleri null olamaz"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "Derin arama çalıştırılırken hata oluştu",
+        "detail" : "Sunucu hatası: Sohbet yanıtında bir kimlik olmalı"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] eşleyicisi null değer döndürdü."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "Derin arama yapılırken hata oluştu",
+        "detail" : "Sunucu hatası: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" çağrılamıyor çünkü \"this.threadManager\" null"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: 503 Hizmet Kullanılamıyor POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: 429 Çok Fazla İstek POST https://api.openai.com/v1/chat/completions"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "Sohbet sistemi hatası",
+        "detail" : "Sunucu hatası: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" çağrılamıyor çünkü \"userContext\" null"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: 400 Hatalı İstek POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: findInString araç adı için ToolCallback bulunamadı"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: Aramalar yürütülürken istisna"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm çağrılırken hata oluştu",
+        "detail" : "Sunucu hatası: Şablonda tüm değişkenler değiştirilmedi. Eksik değişken adları: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm çağrılırken hata oluştu",
+        "detail" : "Sunucu hatası: Şablonda tüm değişkenler değiştirilmedi. Eksik değişken adları: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "Derin arama çalıştırılırken hata oluştu",
+        "detail" : "Sunucu hatası: Kilit için beklerken işlem kesildi"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] eşleyicisi null değer döndürdü."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "Derin arama yapılırken hata oluştu",
+        "detail" : "Sunucu hatası: paralellik > 0 olmalı ancak 0"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "Dahili bilgi tabanı derin arama yapılamıyor",
+        "detail" : "Sunucu hatası: paralellik > 0 olmalı ancak 0"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: paralellik > 0 olmalı ancak 0"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] eşleyicisi null değer döndürdü."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Sohbet yanıtı akışında hata oluştu",
+        "detail" : "Sunucu hatası: Bağlantı sıfırlandı"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] eşleyicisi null değer döndürdü."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "Sohbet sohbet hattı akışında istisna",
+        "detail" : "Sunucu hatası: PURE_SEARCH_STREAMING_SERVICE adım servisi mevcut değil"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "Derin aramada bazı sorunlar var...",
+        "detail" : "Sunucu hatası: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] eşleyicisi null değer döndürdü."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "Sohbet sohbet hattı akışında istisna",
+        "detail" : "Sunucu hatası: Aracılar ağı oluşturulurken istisna"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "İşlem sırasında istisna: Eksik basePath",
         "detail" : "Sunucu hatası: Eksik basePath"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "TopP parametresi, 0'dan 1'e (emin değilseniz boş bırakın)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "Sistemde şu anda hiçbir kullanıcı kaydı veya kurtarma iş akışı etkin değil."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "Hesap kurtarmayı başlat"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "İş akışları devre dışı"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "Hesap kurtarmayı başlat"
+      },
+      "email" : {
+        "label" : "E-posta",
+        "help" : "İş akışını başlatmak için e-posta adresinizi girin"
+      },
+      "GoToLogin" : {
+        "label" : "Giriş sayfası"
+      },
+      "invalidAccountState" : {
+        "summary" : "Hata",
+        "detail" : "Girilen verileri ve geçerliliğini kontrol edin."
+      },
+      "LookEMail" : {
+        "label" : "Hesap kurtarmaya devam etmeniz için size bir e-posta gönderdik."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "Hesap kurtarma başlatıldı"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "İş akışları devre dışı"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "Sistemde şu anda hiçbir kullanıcı kaydı veya kurtarma iş akışı etkin değil."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "Yeni şifre oluştur"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Şifreyi değiştir"
+      },
+      "password" : {
+        "label" : "Yeni şifre",
+        "help" : "Şifre en az 10 karakter olmalı ve büyük harf, küçük harf, rakam ve özel karakter içermelidir"
+      },
+      "email" : {
+        "label" : "E-posta",
+        "help" : "E-posta adresinizi girin"
+      },
+      "confirmPassword" : {
+        "label" : "Şifreyi onaylayın",
+        "help" : "Yeni şifrenizi onaylayın"
+      },
+      "invalidAccountState" : {
+        "summary" : "Hata",
+        "detail" : "Şifre değiştirilemedi. Lütfen e-posta adresini veya hesabınızın mevcut olduğunu kontrol edin."
+      },
+      "GoToLoginBtn" : {
+        "label" : "Giriş sayfasına git"
+      },
+      "wkfSuccess" : {
+        "summary" : "Başarılı",
+        "detail" : "Şifre başarıyla değiştirildi. Artık giriş yapabilirsiniz."
       }
     }
   }

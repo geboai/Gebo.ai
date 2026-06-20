@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "പ്രവർത്തനം പരാജയപ്പെട്ടു",
         "detail" : "നൽകിയ ക്രെഡൻഷ്യലുകൾ ഉപയോഗിച്ച് തിരിച്ചറിയാൻ കഴിയില്ല"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "പാസ്വേഡ് മറന്നോ?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "മോഡൽ ഉപയോഗം(ങ്ങൾ)",
         "help" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ.",
         "placeholder" : "ഈ മോഡലിനായി Gebo.ai പ്ലാറ്റ്ഫോം പരിഗണിക്കുന്ന ഉപയോഗങ്ങൾ."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama സെർവറുമായി ആശയവിനിമയം നടത്തുമ്പോൾ പിശക്",
+        "detail" : "ദൂരവ്യാപക സംവിധാനത്തിൽ ഉള്ളടക്കം കാണുന്നതിന് ആശയവിനിമയത്തിൽ നെറ്റ്‌വർക്കിന് പിശക്\n മോഡൽ ലിസ്റ്റ് പിശക് url:http://localhost:11434/api/tags ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ശരി!",
         "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:401 അനധികൃതമാണ്",
+        "detail" : "സെർവർ പിശക്: 401 അനധികൃതമാണ്"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:8/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:8/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:800/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:800/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ദൂരദായക ദാതാവ് ശരിയാണ്",
+        "detail" : "ദാതാവ് പ്രവർത്തനസജ്ജമാണ് ഉപ്പരായി ക്രമീകരിച്ചു"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:8000/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:8000/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:808/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:808/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:8089/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:8089/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://localhost:8080/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://localhost:8080/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://192.168.1.175:8089/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://192.168.1.175:8089/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://192.168.1.175:800/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://192.168.1.175:800/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "പ്രവർത്തനത്തിനിടയിൽ അപവാദം:url:http://192.168.1.175:808/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: url:http://192.168.1.175:808/v1/models ഉപയോഗിച്ച് പ്രവർത്തിക്കുമ്പോൾ പിശക്"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ശരി!",
         "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "മോഡൽ ലിസ്റ്റ് ലഭ്യമാക്കുന്നതിൽ ഭാഗ്യക്കേട്",
+        "detail" : "ഈ സേവനം കൈകാര്യം ചെയ്യുന്നില്ല=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "ഉത്തരം PDF-യിലേക്ക് കയറ്റുമതി ചെയ്യുക"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 400 മോശം അഭ്യർത്ഥന POST http://localhost:8000/v1/chat/completions മുതൽ"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "ചാറ്റ് സിസ്റ്റം പിശക്",
+        "detail" : "സെർവർ പിശക്: \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" നെ വിളിക്കാൻ കഴിയില്ല കാരണം \"handler\" ശൂന്യമാണ്"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 400 മോശം അഭ്യർത്ഥന POST http://localhost:8089/v1/chat/completions മുതൽ"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "ഡിപ്പ് സെർച്ച് നടത്തുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: നൽകിയ entity Ids ശൂന്യമായിരിക്കരുത്"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "ഡിപ്പ് സെർച്ച് നടത്തുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: ചാറ്റ് പ്രതികരണത്തിന് ഒരു ഐഡി വേണ്ടിയാണ്"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] എന്ന മാപ്പർ ശൂന്യ മൂല്യം നൽകി."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "ഡിപ്പ് സെർച്ച് ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" നെ കുറിച്ച് വിളിക്കാൻ കഴിയില്ല കാരണം \"this.threadManager\" ശൂന്യമാണ്"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 503 സർവ്വീസ് ലഭ്യമല്ല POST https://api.regolo.ai/v1/chat/completions ൽ നിന്ന്"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 429 വളരെ കൂടുതലായ അഭ്യർത്ഥനകൾ POST https://api.openai.com/v1/chat/completions ൽ നിന്ന്"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "ചാറ്റ് സിസ്റ്റം പിശക്",
+        "detail" : "സെർവർ പിശക്: \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" നെ വിളിക്കാൻ കഴിയില്ല കാരണം \"userContext\" ശൂന്യമാണ്"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: 400 മോശം അഭ്യർത്ഥന POST https://api.regolo.ai/v1/chat/completions ൽ നിന്ന്"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: ടൂൾ നാമത്തിന് ഫോൾ ToolCallback കണ്ടെത്തിയില്ല: findInString"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: Exception സെർച്ചുകൾ നടത്തുമ്പോൾ ഉണ്ടായി"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "llm വിളിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: ടെംപ്ലേറ്റിൽ എല്ലാ variables ഉം മാറ്റിയില്ല. കിട്ടാത്ത variable നാമങ്ങൾ: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "llm വിളിക്കുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: ടെംപ്ലേറ്റിൽ എല്ലാ variables ഉം മാറ്റിയില്ല. കിട്ടാത്ത variable നാമങ്ങൾ: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "ഡിപ്പ് സെർച്ച് നടത്തുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: lock കായി കാത്തിരിക്കാൻ ഇടയിൽ തടസ്സം സംഭവിച്ചു"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] എന്ന മാപ്പർ ശൂന്യ മൂല്യം നൽകി."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "ഡിപ്പ് സെർച്ച് ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: parallelism > 0 ആവശ്യമുണ്ട് പക്ഷേ അത് 0 ആണ്"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "ഉൾപരിചയ ബാങ്ക് ഡിപ്പ് സെർച്ച് നടത്താൻ കഴിയില്ല",
+        "detail" : "സെർവർ പിശക്: parallelism > 0 ആവശ്യമുണ്ട് പക്ഷേ അത് 0 ആണ്"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: parallelism > 0 ആവശ്യമുണ്ട് പക്ഷേ അത് 0 ആണ്"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] എന്ന മാപ്പർ ശൂന്യ മൂല്യം നൽകി."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "ചാറ്റ് പ്രതികരണം സ്ട്രീം ചെയ്യുമ്പോൾ പിശക്",
+        "detail" : "സെർവർ പിശക്: കണക്ഷൻ പുനഃസാധ്യമായി"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] എന്ന മാപ്പർ ശൂന്യ മൂല്യം നൽകി."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "ചാറ്റ് പൈപ്പ്‌ലൈൻ സ്ട്രീം ചെയ്യുമ്പോൾ എക്സപ്ഷൻ",
+        "detail" : "സെർവർ പിശക്: PURE_SEARCH_STREAMING_SERVICE എന്ന ഘട്ട സേവനം നിലവിലില്ല"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "ഡിപ്പ് സെർച്ചിൽ കുറച്ചു പ്രശ്നങ്ങൾ...",
+        "detail" : "സെർവർ പിശക്: [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] എന്ന മാപ്പർ ശൂന്യ മൂല്യം നൽകി."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "ചാറ്റ് പൈപ്പ്‌ലൈൻ സ്ട്രീം ചെയ്യുമ്പോൾ എക്സപ്ഷൻ",
+        "detail" : "സെർവർ പിശക്: ഏജന്റുകളുടെ നെറ്റ്വർക്ക് സൃഷ്ടിക്കുമ്പോൾ എക്സപ്ഷൻ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "പ്രവർത്തനത്തിനിടെ അസാധാരണ സംഭവിച്ചു: basePath കാണുന്നില്ല",
         "detail" : "സെർവർ പിശക്: basePath കാണുന്നില്ല"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ശരി!",
+        "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയാക്കി"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "ടോപ്പ് പി",
         "help" : "ടോപ്പ് പി പാരാമീറ്റർ, 0 മുതൽ 1 വരെ (ഉറപ്പില്ലെങ്കിൽ ഒഴിക്കുക)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "ഉപയോക്തൃ രജിസ്ട്രേഷൻ അല്ലെങ്കിൽ പുനർപ്രാപ്തി പ്രവഹങ്ങൾ നിലവിൽ സിസ്റ്റത്തിൽ പ്രവർത്തനക്ഷമമല്ല."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "അക്കൗണ്ട് പുനരധ്യക്ഷൻ ആരംഭിക്കുക"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "പ്രവഹങ്ങൾ പ്രവർത്തനരഹിതമാക്കി"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "അക്കൗണ്ട് പുനരധ്യക്ഷൻ ആരംഭിക്കുക"
+      },
+      "email" : {
+        "label" : "ഇ-മെയിൽ",
+        "help" : "പ്രവഹം ആരംഭിക്കാൻ നിങ്ങളുടെ ഇമെയിൽ നൽകുക"
+      },
+      "GoToLogin" : {
+        "label" : "ലോഗിൻ പേജ്"
+      },
+      "invalidAccountState" : {
+        "summary" : "പരിധി",
+        "detail" : "നൽകിയ ഡാറ്റയും അതിന്റെ പ്രാബല്യവും പരിശോധിക്കുക."
+      },
+      "LookEMail" : {
+        "label" : "നമുക്ക് നിങ്ങളുടെ അക്കൗണ്ട് പുനരധ്യക്ഷനായി തുടരാനുള്ള ലിങ്ക് ഉൾപ്പെടുന്ന ഒരു ഇമെയിൽ അയച്ചിരിക്കുന്നു."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "അക്കൗണ്ട് പുനരധ്യക്ഷൻ ആരംഭിച്ചു"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "പ്രവഹങ്ങൾ പ്രവർത്തനരഹിതമാക്കി"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "ഉപയോക്തൃ രജിസ്ട്രേഷൻ അല്ലെങ്കിൽ പുനർപ്രാപ്തി പ്രവഹങ്ങൾ നിലവിൽ സിസ്റ്റത്തിൽ പ്രവർത്തനക്ഷമമല്ല."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "പുതിയ പാസ്‌വേഡ് നൽകുക"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "പാസ്‌വേഡ് മാറ്റുക"
+      },
+      "password" : {
+        "label" : "പുതിയ പാസ്‌വേഡ്",
+        "help" : "പാസ്‌വേഡ് കുറഞ്ഞത് 10 അക്ഷരങ്ങൾ, വലിയക്ഷരങ്ങൾ, ചെറിയക്ഷരങ്ങൾ, നമ്പറുകൾ, പ്രത്യേക പ്രതീകങ്ങൾ എന്നിവ ഉള്‍ക്കൊള്ളണം"
+      },
+      "email" : {
+        "label" : "ഇ-മെയിൽ",
+        "help" : "നിങ്ങളുടെ ഇമെയിൽ വിലാസം നൽകുക"
+      },
+      "confirmPassword" : {
+        "label" : "പാസ്‌വേഡ് ഉറപ്പാക്കുക",
+        "help" : "നിങ്ങളുടെ പുതിയ പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക"
+      },
+      "invalidAccountState" : {
+        "summary" : "പരിധി",
+        "detail" : "പാസ്‌വേഡ് മാറ്റുന്നതിൽ പരാജയപ്പെട്ടു. ദയവായി ഇ-മെയിൽ നോക്കുക അല്ലെങ്കിൽ നിങ്ങളുടെ അക്കൗണ്ട് നിലവിലുണ്ടോ എന്ന് പരിശോധിക്കുക."
+      },
+      "GoToLoginBtn" : {
+        "label" : "ലോഗിൻ പേജിലേക്ക് പോകുക"
+      },
+      "wkfSuccess" : {
+        "summary" : "വിജയം",
+        "detail" : "പാസ്‌വേഡ് വിജയകരമായി മാറ്റി. നിങ്ങൾക്ക് ഇപ്പോൾ ലോഗിൻ ചെയ്യാം."
       }
     }
   }

@@ -67,6 +67,9 @@
       "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
         "summary" : "እቅድ አልተሳካም",
         "detail" : "በቀረበው መለያ አይነት መለያየት አልተቻለም"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "የይለፍ ቃል ረሱ?"
       }
     },
     "message" : {
@@ -1598,6 +1601,10 @@
         "label" : "የሞዴሉ አጠቃቀም(ዎች)",
         "help" : "ይህን ሞዴል የGebo.ai መድረኩ ለምን ስራዎች እንደሚጠቀምበት።",
         "placeholder" : "የGebo.ai መድረኩ ይህን ሞዴል ለምን ስራዎች እንደሚጠቀምበት።"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "በ Ollama አገልግሎት ጋር ለመገናኘት ችግር አጋጠመ",
+        "detail" : "ከሩቅ ስርዓት ጋር ለመገናኘት የኔትዎርክ ችግር ተፈጥሯል\nከዚህ ዩአርኤል ጋር ለመስራት ስህተት ተፈጥሯል: http://localhost:11434/api/tags"
       }
     },
     "GAnthropicChatModelConfig" : {
@@ -1848,6 +1855,50 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "እሺ!",
         "detail" : "ተግባሩ በትክክል ተፈጸመ"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "ከውጤቱ ጋር ስህተት:401 ያልተፈቀደ",
+        "detail" : "የአሰሪው ስህተት: 401 ያልተፈቀደ"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:8/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:800/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "የ AI ሩቅ አቅራቢ በትክክል ሚስራች ነው",
+        "detail" : "አቅራቢው በትክክል ተጠናቅቋል እና በቀጥታ ይሰራል"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:8000/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:808/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:8089/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://localhost:8080/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://192.168.1.175:8089/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://192.168.1.175:800/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "ከውጤቱ ጋር ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት፡ http://192.168.1.175:808/v1/models",
+        "detail" : "የአሰሪው ስህተት: ከዚህ ዩአርኤል ጋር ለመስራት ስህተት: http://192.168.1.175:808/v1/models"
       }
     },
     "GOllamaEmbeddingModelConfig" : {
@@ -2038,6 +2089,10 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "እሺ!",
         "detail" : "ተግባሩ በተሳካ ሁኔታ ተፈጥሯል"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "የሞዴሎች ዝርዝር ማግኘት ችግር አጋጠመ",
+        "detail" : "ይህ አገልግሎት አይደግፉም=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
       }
     }
   },
@@ -2143,6 +2198,110 @@
       },
       "pdfExport" : {
         "help" : "ውጤቱን ወደ PDF ላክ"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ 400 አግባብ ልጥፍ ከ POST http://localhost:8000/v1/chat/completions"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "የቻት ስርዓት ስህተት",
+        "detail" : "የአሰሪ ስህተት፡ \"handler\" ባዶ ስለሆነ \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" መጠሪያ አይችሉም"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ 400 አግባብ ልጥፍ ከ POST http://localhost:8089/v1/chat/completions"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "የበርካታ ፍለጋ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ ቀረበው የእቃዎች መታወቂያ ባዶ መሆን አይችልም"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "የበርካታ ፍለጋ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ የቻት ምላሽ መታወቂያ አለበት"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ አዳራሽ [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] ተመለሰ ባዶ ነው።"
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ \"this.threadManager\" ባዶ ስለሆነ \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" መጠሪያ አይችሉም"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ 503 አገልግሎት አይገኝም ከ POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ 429 ብዙ ጥያቄዎች ከ POST https://api.openai.com/v1/chat/completions"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "የቻት ስርዓት ስህተት",
+        "detail" : "የአሰሪ ስህተት፡ \"userContext\" ባዶ ስለሆነ \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" መጠሪያ አይችሉም"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ 400 አግባብ ልጥፍ ከ POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ ለስም የተገኘ ToolCallback አልተገኘም፡ findInString"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "በበርካታ ፍለጋ ጥያቄዎች ላይ ጉዳዮች ተተነቀሉ...",
+        "detail" : "የአሰሪ ስህተት፡ መፈለግዎችን ማከናወን ሲታወቅ ተሰርቷል"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "ወደ llm ሲደውል ስህተት",
+        "detail" : "የአሰሪ ስህተት፡ በአቅራቢው ቅርጸት ሁሉም ተፈጻሚ ቀናት አልተተካም። የሚጎዱት ስምዎች፡ [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "ወደ llm ሲደውል ስህተት",
+        "detail" : "የአሰሪ ስህተት፡ በአቅራቢው ቅርጸት ሁሉም ተፈጻሚ ቀናት አልተተካም። የሚጎዱት ስምዎች፡ [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "የበርካታ ፍለጋ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ ጠባብ ማጠባበቂያ ቆይቷል"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ አዳራሽ [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] ተመለሰ ባዶ ነው።"
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "የበርካታ ፍለጋ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ parallelism > 0 መሆን ያስፈልጋል ነገር ግን 0 ነበር"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "የውስጥ እውቀት መሰብሰብ ፍለጋ ማካከል አልተቻለም",
+        "detail" : "የአሰሪ ስህተት፡ parallelism > 0 መሆን ያስፈልጋል ነገር ግን 0 ነበር"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ parallelism > 0 መሆን ያስፈልጋል ነገር ግን 0 ነበር"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ አዳራሽ [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] ተመለሰ ባዶ ነው።"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "የቻት ምላሽ ሲሰራ ስህተት ተፈጥሯል",
+        "detail" : "የአሰሪ ስህተት፡ ግንኙነት ተቋርጧል"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ አዳራሽ [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] ተመለሰ ባዶ ነው።"
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "በቻት ሂደት ላይ የተፈጠረ አስተማማኝነት",
+        "detail" : "የአሰሪ ስህተት፡ የእርስዎ ጉዞ PURE_SEARCH_STREAMING_SERVICE አልተከደነም"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "በበርካታ ፍለጋ ላይ ጉዳዮች ተገኝቷል...",
+        "detail" : "የአሰሪ ስህተት፡ አዳራሽ [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] ተመለሰ ባዶ ነው።"
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "በቻት ሂደት ላይ የተፈጠረ አስተማማኝነት",
+        "detail" : "የአሰሪ ስህተት፡ የማኅበሮችን ኔትወርክ ሲፈጥር ስህተት ተፈጥሯል"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -3513,6 +3672,10 @@
       "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
         "summary" : "በተግባር ወቅት ስህተት፡ basePath የለም",
         "detail" : "የአገልጋይ ስህተት፡ basePath የለም"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ! ",
+        "detail" : "እቅዱ በተሳካ ሁኔታ ተከናውኗል"
       }
     },
     "GeboAIEasyVendorConfigurationComponent" : {
@@ -4052,6 +4215,76 @@
       "topP" : {
         "label" : "TopP",
         "help" : "TopP መተግበሪያ፣ ከ 0 እስከ 1 (አያስታውቁ ከሆነ ባዶ ይተዉ)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "የተጠቃሚ ምዝገባ ወይም መልስ ማስጀመሪያ ሂደቶች በስርዓቱ ላይ በአሁኑ ሰአት አንቀሳቅሰውም።"
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "የመነሻ መለያ መልስን ይጀምሩ"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "ሂደቶች አንቀሳቅሰውም"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "የመለያ መልስን ይጀምሩ"
+      },
+      "email" : {
+        "label" : "ኢ-ሜይል",
+        "help" : "ሂደቱን ለመጀመር ኢ-ሜይልዎን ያስገቡ"
+      },
+      "GoToLogin" : {
+        "label" : "የመግቢያ ገፅ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ስህተት",
+        "detail" : "ያስገቡትን መረጃ እና ትክክለኛነቱን ያረጋግጡ።"
+      },
+      "LookEMail" : {
+        "label" : "መነሻ መለያ መልስዎን ለመቀጠል አገናኝ ያለበት ኢ-ሜይል ልከናል።"
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "የመለያ መልስ መጀመር ተጀምሯል"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "ሂደቶች አንቀሳቅሰውም"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "የተጠቃሚ ምዝገባ ወይም መልስ ማስጀመሪያ ሂደቶች በስርዓቱ ላይ በአሁኑ ሰአት አንቀሳቅሰውም።"
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "አዲስ የይለፍ ከባድ ይመድቡ"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "የይለፍ ቃል ይቀይሩ"
+      },
+      "password" : {
+        "label" : "አዲስ የይለፍ ቃል",
+        "help" : "የይለፍ ቃሉ ቢያንስ 10 ቁምፊዎች ይኖሩበት አለበት፣ በትክክል በወፍራም ፣ በታችኛ ፣ በቁጥር የተዋሠና የተለየ ባህሪ ያካትት"
+      },
+      "email" : {
+        "label" : "ኢ-ሜይል",
+        "help" : "ኢ-ሜይል አድራሻዎን ያስገቡ"
+      },
+      "confirmPassword" : {
+        "label" : "የይለፍ ቃልን ያረጋግጡ",
+        "help" : "አዲሱን የይለፍ ቃልዎን ያረጋግጡ"
+      },
+      "invalidAccountState" : {
+        "summary" : "ስህተት",
+        "detail" : "የይለፍ ቃል መቀየር አልተቻለም። እባክዎ ኢ-ሜይልዎን ወይም መለያዎ እንዳለ ያረጋግጡ።"
+      },
+      "GoToLoginBtn" : {
+        "label" : "ወደ የመግቢያ ገፅ ይሂዱ"
+      },
+      "wkfSuccess" : {
+        "summary" : "ተሳክቷል",
+        "detail" : "የይለፍ ቃሉ በተሳካ ሁኔታ ተቀይሯል። አሁን መግባት ይችላሉ።"
       }
     }
   }
