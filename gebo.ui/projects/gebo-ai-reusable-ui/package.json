@@ -1,6 +1,6 @@
 {
   "name": "@Gebo.ai/reusable-ui",
-  "version": "1.0.1.0-ALPHA",
+  "version": "1.0.1.0-BETA",
   "peerDependencies": {
     "@angular/common": "^19.2.5",
     "@angular/core": "^19.2.5",

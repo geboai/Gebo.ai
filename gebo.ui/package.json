@@ -1,6 +1,6 @@
 {
   "name": "gebo-ai-ui",
-  "version": "1.0.1.0-ALPHA",
+  "version": "1.0.1.0-BETA",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --no-hmr",
