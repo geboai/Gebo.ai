@@ -17,9 +17,7 @@ public enum DeliverableIntent {
 	PURE_SEARCH(
 			"User asked a search, a research, find documents, find files, or some sinonyms of this in all languages (excluding the rules for REPORT)",
 			"pure search outcome, files or document files search", 5),
-	ANALISYS("*User asked a structured report,a report, detailed report, an analisys or some sinonyms of these in all languages\r\n"
-			+ "* report / detailed report / in-depth / deep-search / deep analysis / detailed analysis\r\n"
-			+ "* citations/sources across documents\r\n" + "* compare/analyze a broad corpus", "detailed analisys report", 6), // (structured,
+	ANALISYS("User EXPLICITLY requested a structured/detailed report or a multi-source analysis (e.g. a report, detailed report, in-depth analysis, or comparison across many documents). Do NOT choose this for ordinary questions that can be answered directly.", "detailed analisys report", 6), // (structured,
 																														// detailed,
 																														// multi-section)
 	UNKNOWN("Fallback, cannot decide clearly the user intent", "synthetic outcome", 7);// (fallback → be

@@ -51,9 +51,13 @@ EXPLICIT SOURCE TARGETING:
 If the user explicitly names one or more sources/systems by their specific name/code matching entries in (C), choose DEEP_SEARCH_RESPONSE and include those matching (C) source codes in deepSearchedSystems.
 If the user explicitly asks to perform an in-depth or iterative search on the internal knowledge base (e.g., "do a deep search", "search all databases", "find everything about"), choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM in deepSearchedSystems. Simple queries asking to answer a question or find a specific procedure should NOT trigger this rule, even if they use search verbs; they must be evaluated by the intent rules below.
 
+CONTEXT SUFFICIENCY OVERRIDE:
+If (A)+(B) and the chat history already contain enough information to fully answer the user at the required service level (G), choose PURE_LLM_RESPONSE regardless of the deliverable.
+Exception: do NOT apply this override when the user explicitly requests an external or iterative search (those cases are already handled by GLOBAL TOOL OVERRIDE and EXPLICIT SOURCE TARGETING above).
+
 ANALISYS INTENT RULE:
-If deliverable=ANALISYS, choose DEEP_SEARCH_RESPONSE.
-Rationale: ANALISYS implies structured, detailed, multi-section output and/or citations/corpus comparison; it requires iterative search and aggregation.
+If deliverable=ANALISYS and the answer is NOT already fully present in (A)+(B)+chat history, choose DEEP_SEARCH_RESPONSE.
+Rationale: ANALISYS implies structured, detailed, multi-section output and/or citations/corpus comparison; when the material is not already available it requires iterative search and aggregation.
 
 PURE_SEARCH INTENT RULE:
 If deliverable=PURE_SEARCH:

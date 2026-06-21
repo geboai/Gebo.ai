@@ -3,8 +3,10 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
@@ -146,13 +148,21 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		DeliverableIntent userIntent = DeliverableIntent.QA;
 		if (deliverable != null && !deliverable.isEmpty()) {
 
-			String toSearchInto = deliverable.get(0);
-			if (toSearchInto != null) {
-				toSearchInto = toSearchInto.toLowerCase();
-			} else
-				toSearchInto = "";
+			String rawDeliverable = deliverable.get(0);
+			// Exact whole-token match (not substring) so synonyms/prose like "analysis"
+			// or stray letters inside other words cannot accidentally latch an intent.
+			Set<String> tokens = new HashSet<>();
+			if (rawDeliverable != null) {
+				for (String token : rawDeliverable.toLowerCase().split("[^a-z0-9_]+")) {
+					if (!token.isEmpty()) {
+						tokens.add(token);
+					}
+				}
+			}
+			// Iterate in enum declaration order to keep a deterministic tie-break
+			// (lighter intents first) when several intent names are present.
 			for (DeliverableIntent di : DeliverableIntent.values()) {
-				if (toSearchInto.indexOf(di.name().toLowerCase()) >= 0) {
+				if (tokens.contains(di.name().toLowerCase())) {
 					userIntent = di;
 					break;
 				}
