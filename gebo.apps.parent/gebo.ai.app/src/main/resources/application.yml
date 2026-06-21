@@ -276,7 +276,7 @@ ai.gebo.core.config:
     timeout: 10000
 
 ai.gebo.opensearch:
-  enabled: false
+  enabled: true
   protocol: https
   host: localhost
   port: 9200
