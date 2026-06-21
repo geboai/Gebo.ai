@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.huggingface.controllers;
 
@@ -25,16 +22,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.huggingface.model.GHuggingfaceChatModelChoice;
 import ai.gebo.llms.huggingface.model.GHuggingfaceChatModelConfig;
 import ai.gebo.llms.huggingface.services.HuggingfaceChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * REST controller for managing Huggingface chat model configurations.
- * This controller is only enabled when the huggingfaceEnabled property is set to true.
- * Access is restricted to users with the ADMIN role.
+ * REST controller for managing Huggingface chat model configurations. This
+ * controller is only enabled when the huggingfaceEnabled property is set to
+ * true. Access is restricted to users with the ADMIN role.
  * 
  * AI generated comments
  */
@@ -44,12 +43,12 @@ import ai.gebo.model.OperationStatus;
 @RequestMapping("api/admin/HuggingfaceChatModelsConfigurationController")
 public class HuggingfaceChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GHuggingfaceChatModelConfig, GHuggingfaceChatModelChoice, HuggingfaceChatModelConfigurationSupportService> {
-	
-	/**
-	 * Constructor that initializes the controller with the GHuggingfaceChatModelConfig class.
-	 */
-	public HuggingfaceChatModelsConfigurationController() {
-		super(GHuggingfaceChatModelConfig.class);
+
+	public HuggingfaceChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			HuggingfaceChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GHuggingfaceChatModelConfig.class, ifaceType);
+		
 	}
 
 	/**
@@ -95,7 +94,8 @@ public class HuggingfaceChatModelsConfigurationController extends
 	 * 
 	 * @param code The unique code of the configuration to find
 	 * @return The found Huggingface chat model configuration
-	 * @throws GeboPersistenceException If there's an error retrieving the configuration
+	 * @throws GeboPersistenceException If there's an error retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findHuggingfaceChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GHuggingfaceChatModelConfig findHuggingfaceChatModelConfigByCode(@RequestParam("code") String code)
@@ -104,14 +104,16 @@ public class HuggingfaceChatModelsConfigurationController extends
 	}
 
 	/**
-	 * Retrieves a list of available Huggingface chat models based on the provided configuration.
+	 * Retrieves a list of available Huggingface chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config Configuration parameters for retrieving model choices
 	 * @return Operation status with the list of available Huggingface chat models
 	 */
 	@PostMapping(value = "getHuggingfaceModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GHuggingfaceChatModelChoice>> getHuggingfaceChatModels(@RequestBody GHuggingfaceChatModelConfig config) {
+	public OperationStatus<List<GHuggingfaceChatModelChoice>> getHuggingfaceChatModels(
+			@RequestBody GHuggingfaceChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
-	
+
 }

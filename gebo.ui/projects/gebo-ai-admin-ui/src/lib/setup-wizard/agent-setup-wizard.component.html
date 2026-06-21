@@ -1,0 +1,35 @@
+<p-blockUI id="BlockUILock" gebo-ai-label [target]="agentsUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label  #agentsUI header="Setup Agents">
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid geboLargeButtonsBar">
+
+    <div class="col-6">
+      <p-button id="AgentAddBtn" gebo-ai-label icon="pi pi-plus" label="Add agent" styleClass="w-full" [outlined]="true" [disabled]="agentsConfig && agentsConfig.length===1"
+        (onClick)="addAgent()"></p-button>
+    </div>
+  </div>
+  <div class=" grid">
+
+    <div class="col-12"><p-table id="Table" gebo-ai-label [value]="agentsConfig" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header pTemplate="header">
+          <tr>
+            <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item pTemplate="body">
+          <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.description }}</td>
+            <td><p-button id="EditAgentBtn" gebo-ai-label label="Edit agent" icon="pi pi-pencil" [outlined]="true"
+                (onClick)="openAgent(item)"></p-button></td>
+          </tr>
+        </ng-template>
+      </p-table></div>
+
+  </div>
+  
+</p-panel>

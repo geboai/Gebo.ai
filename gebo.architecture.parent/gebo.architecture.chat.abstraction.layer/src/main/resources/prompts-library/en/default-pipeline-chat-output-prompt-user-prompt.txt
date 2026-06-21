@@ -1,0 +1,4 @@
+INPUT:
+- Last user question: {question}
+
+{documents}

@@ -23,7 +23,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 	
 	private int offTopicChunksSkipDocumentThreashold = 3;
 	private int perDataSourceMaxVisited = 25;
-	private int internalKnowledgeDeepSearchTopK = 80;
+	private int internalKnowledgeDeepSearchTopK = 40;
 	private int perDataSourceMaxInputTokens = 5000000;
 	private int perDataSourceMaxOutputTokens = 1000000;
 	private List<DeepSearchUserIntentThreashold> deepSearchUserIntentThreasholds = new ArrayList<DeepSearchUserIntentThreashold>();
@@ -52,7 +52,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		DeepSearchUserIntentThreashold midLevelsThreashold = new DeepSearchUserIntentThreashold(
 				List.of(DeliverableIntent.HOWTO, DeliverableIntent.SUMMARY), 8);
 		DeepSearchUserIntentThreashold highLevelsThreashold = new DeepSearchUserIntentThreashold(
-				List.of(DeliverableIntent.DECISION, DeliverableIntent.REPORT), 20);
+				List.of(DeliverableIntent.DECISION, DeliverableIntent.ANALISYS), 20);
 		this.deepSearchUserIntentThreasholds.add(lowerLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(midLevelsThreashold);
 		this.deepSearchUserIntentThreasholds.add(highLevelsThreashold);
@@ -60,7 +60,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.setPerDataSourceConfigured(false);
 	}
 
-	public int getInTopicSatisfactoryDocumentsThreashold(DeliverableIntent intent) {
+	public int getSatisfactorySubAnalisysThreashold(DeliverableIntent intent) {
 		if (intent == null)
 			intent = DeliverableIntent.QA;
 		final DeliverableIntent finalIntent = intent;

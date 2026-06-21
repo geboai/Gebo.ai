@@ -23,5 +23,6 @@ export interface GOllamaEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GOllamaEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

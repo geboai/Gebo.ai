@@ -1,0 +1,6 @@
+- INPUTS: 
+  - Last user question: {question}
+
+  - Documents (can be empty)
+    {documents}
+    

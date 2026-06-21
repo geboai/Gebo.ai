@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { DocInternalRef } from './docInternalRef';
+import { SearchResult } from './searchResult';
 
 export interface GResponseDocumentRef { 
     referenceType?: GResponseDocumentRef.ReferenceTypeEnum;
@@ -24,10 +25,12 @@ export interface GResponseDocumentRef {
     geboFileTypeDescription?: string;
     geboFileTypeId?: string;
     name?: string;
+    knowledgeBaseDocument?: boolean;
+    nestedSearchResult?: SearchResult;
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
-    ntokensRelevant?: number;
     nbytesRelevant?: number;
+    ntokensRelevant?: number;
     shortCode?: string;
     ntotalContentTokens?: number;
 }

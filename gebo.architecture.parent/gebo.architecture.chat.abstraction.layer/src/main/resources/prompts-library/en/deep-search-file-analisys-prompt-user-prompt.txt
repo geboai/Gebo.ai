@@ -1,0 +1,10 @@
+INPUTS:
+- Last User question: {question}
+
+- Document batch (each fragment has an id and text):
+{documents}
+
+- Consolidated document summary object (may be empty)
+
+{consolidated} 
+

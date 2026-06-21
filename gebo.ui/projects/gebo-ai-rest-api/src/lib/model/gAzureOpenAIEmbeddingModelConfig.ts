@@ -23,5 +23,6 @@ export interface GAzureOpenAIEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GAzureOpenAIEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

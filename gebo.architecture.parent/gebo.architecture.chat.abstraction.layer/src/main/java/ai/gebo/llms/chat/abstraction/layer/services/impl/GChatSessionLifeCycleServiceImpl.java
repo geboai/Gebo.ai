@@ -19,7 +19,7 @@ import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -32,6 +32,8 @@ import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -167,7 +169,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			this.chatAreaStorageSession.deleteSessionContents(code);
 		} catch (IOException e) {
-
+			LOGGER.error("Error deleting session contents for " + code, e);
 		}
 		this.sessionRepository.deleteById(code);
 	}
@@ -823,12 +825,12 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GUserChatSession context = get(id);
 
 		data = new GUserChatInfoData(context);
-		GPromptConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
-		IGConfigurableChatModel handler = chatModelsDao.defaultHandler();
+		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
+		IGConfigurableChatModel handler = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		try {
 			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
-				String content = handler.getChatClient().prompt(prompt.getPrompt())
-						.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
+				IChatRequestContext ccontext = context.createChatRequestContext();
+				String content = handler.textResponse(prompt, cache, ccontext);
 				String pureText = ClientChatCallUtil.removeThinking(content);
 				data.setDescription(pureText);
 				context.setDescription(pureText);
@@ -903,6 +905,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 				});
 		return embeddingModels;
 	}
+
 	@Override
 	public List<IGConfigurableEmbeddingModel> getSessionEmbeddingModels(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException {

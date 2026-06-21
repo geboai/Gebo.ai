@@ -12,8 +12,11 @@ package ai.gebo.llms.abstraction.layer.tests;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -23,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -33,6 +37,7 @@ import ai.gebo.model.OperationStatus;
  * abstraction layer.
  */
 @Service
+@AllArgsConstructor
 public class TestKnowledgeExtractionChatModelSupportServiceImpl extends AbstractTestingBusinessLogic implements
 		IGChatModelConfigurationSupportService<GBaseChatModelChoice, TestKnowledgeExtractionModelConfiguration> {
 	/** Constant identifier for the test model */
@@ -43,6 +48,8 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	static final GChatModelType type = new GChatModelType();
 	/** Base chat model choice instance used for testing */
 	static final GBaseChatModelChoice model = new GBaseChatModelChoice();
+	final IGDocumentContentRendererProvider documentsRenderProvider;
+	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 
 	/**
 	 * Inner class representing a test implementation of the configurable chat
@@ -50,6 +57,12 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	 */
 	static class TestConfigurableKnowledgeExtractionChatModel extends
 			GAbstractConfigurableChatModel<TestKnowledgeExtractionModelConfiguration, TestKnowledgeExtractionChatModel> {
+
+		public TestConfigurableKnowledgeExtractionChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures a test chat model with the provided configuration.
@@ -61,7 +74,7 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 		 */
 		@Override
 		protected TestKnowledgeExtractionChatModel configureModel(TestKnowledgeExtractionModelConfiguration config,
-				GChatModelType type) throws LLMConfigException {
+				GChatModelType type, ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			TestKnowledgeExtractionChatModel m = new TestKnowledgeExtractionChatModel();
 			m.setConfiguration(config);
 			return m;
@@ -81,6 +94,12 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 			return 8192;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new TestConfigurableKnowledgeExtractionChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	/**
@@ -89,13 +108,6 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	static {
 		type.setCode(TEST_CONFIGURABLE_KNOWLEDGE_EXTRACTION_CHAT_MODEL_SERVICE);
 		model.setCode(TEST_KNOWLEDGE_EXTRACTION_MODEL_001);
-
-	}
-
-	/**
-	 * Default constructor for the test chat model support service
-	 */
-	public TestKnowledgeExtractionChatModelSupportServiceImpl() {
 
 	}
 
@@ -148,7 +160,8 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 	@Override
 	public IGConfigurableChatModel<TestKnowledgeExtractionModelConfiguration> create(
 			TestKnowledgeExtractionModelConfiguration config) throws LLMConfigException {
-		TestConfigurableKnowledgeExtractionChatModel out = new TestConfigurableKnowledgeExtractionChatModel();
+		TestConfigurableKnowledgeExtractionChatModel out = new TestConfigurableKnowledgeExtractionChatModel(
+				documentsRenderProvider, toolCallbacksRepository);
 		out.initialize(config, type);
 		return out;
 	}

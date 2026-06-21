@@ -27,7 +27,8 @@
         </div>
         <div class="col-12">
             <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext"
-                [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials" [backendValidationOnChange]="true"></gebo-ai-api-key-component>
+                [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
+                [backendValidationOnChange]="true"></gebo-ai-api-key-component>
         </div>
         <div class="col-12"></div>
         <div class="col-4 col-xs-12 col-sm-6" *ngFor="let preset of presetsSummary">
@@ -46,6 +47,26 @@
             <gebo-ai-field *ngIf="preset.type==='EMBEDDING'" id="EmbeddingModel" label="Default embedding model"
                 help="This model will be responsable of doing semantic indexing (embedding) and retrieve of your data and documents">
                 <geboai-editable-listbox-component formControlName="embeddingModel" [data]="preset.presetChoices"
+                    gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+            <gebo-ai-field *ngIf="preset.type==='RANKING'" id="RankingModel" label="Default ranker model"
+                help="This model will be responsable of doing reranking on your documents and score most fitting for your questions">
+                <geboai-editable-listbox-component formControlName="rankerModel" [data]="preset.presetChoices"
+                    gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+            <gebo-ai-field *ngIf="preset.type==='TRANSCRIPT'" id="ImagesModel" label="Default transcript model"
+                help="This model will be responsable of transcript service">
+                <geboai-editable-listbox-component formControlName="transcriptModel" [data]="preset.presetChoices"
+                    gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+            <gebo-ai-field *ngIf="preset.type==='TTS'" id="ImagesModel" label="Default text to speech model"
+                help="This model will be responsable of doing text to speech conversion">
+                <geboai-editable-listbox-component formControlName="ttsModel" [data]="preset.presetChoices"
+                    gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+            <gebo-ai-field *ngIf="preset.type==='IMAGESGEN'" id="ImagesModel" label="Default image generation model"
+                help="This model will be responsable of doing image generation">
+                <geboai-editable-listbox-component formControlName="imagesModel" [data]="preset.presetChoices"
                     gebo-ai-field-element></geboai-editable-listbox-component>
             </gebo-ai-field>
         </div>

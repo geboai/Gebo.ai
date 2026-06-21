@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
-import ai.gebo.architecture.fulltext.model.MetaDataFilter;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.fulltext.service.IGFullTextIngestionService;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
@@ -27,14 +27,14 @@ public class FullTextSearchDocumentsCachedDaoImpl implements IGFullTextSearchDoc
 	private final IGFullTextSearchService searchService;
 
 	@Override
-	public AIDocumentsSet search(List<String> q, int topK, MetaDataFilter filter)
+	public AIDocumentsSet search(List<String> q, int topK, FullTextSearchMetaDataFilter filter)
 			throws FullTextException {
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
 	}
 
 	@Override
-	public AIDocumentsSet search(String q, int topK, MetaDataFilter filter) throws FullTextException {
+	public AIDocumentsSet search(String q, int topK, FullTextSearchMetaDataFilter filter) throws FullTextException {
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
 	}

@@ -1,0 +1,8 @@
+INPUTS
+- Last User question:
+ {question}
+
+CANDIDATES (JSON data):
+{documents}
+
+IMPORTANT: Use ONLY these candidate fields; do not invent any additional information.

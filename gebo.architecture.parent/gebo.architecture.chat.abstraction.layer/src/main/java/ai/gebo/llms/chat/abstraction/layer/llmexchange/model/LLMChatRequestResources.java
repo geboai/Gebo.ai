@@ -13,6 +13,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,17 @@ public class LLMChatRequestResources implements ITokensCountable {
 	}
 
 	final class NestedChatRequestContext implements IChatRequestContext {
+		@Override
+		public String getRequestID() {
+
+			return currentRequest != null ? currentRequest.getId() : "No current request";
+		}
+
+		@Override
+		public String getSessionID() {
+
+			return currentRequest != null ? currentRequest.getUserChatContextCode() : "No current context code";
+		}
 
 		@Override
 		public String getConsolidatedHistory() {
@@ -70,6 +82,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 			return chathistory != null && chathistory.getConsolidationText() != null
 					? chathistory.getConsolidationText()
 					: "";
+		}
+		@Override
+		public ToolCallsListener getToolCallListener() {
+			
+			return null;
 		}
 
 		@Override
@@ -99,6 +116,22 @@ public class LLMChatRequestResources implements ITokensCountable {
 		public Map<String, Object> getToolsContext() {
 
 			return new HashMap<String, Object>();
+		}
+
+		@Override
+		public Map<String, Object> getPipelineInfos() {
+			Map<String, Object> pipelineInfos = new HashMap<>();
+			if (currentRequest != null) {
+
+				if (currentRequest.getChatPipelineProcessId() != null) {
+					pipelineInfos.put("user-choosed-pipelineId", currentRequest.getChatPipelineProcessId());
+				}
+				if (currentRequest.getUserIntent() != null) {
+					pipelineInfos.put("user-intent", currentRequest.getUserIntent().name());
+				}
+
+			}
+			return pipelineInfos; 
 		}
 	}
 
@@ -139,5 +172,4 @@ public class LLMChatRequestResources implements ITokensCountable {
 				llmGeneratedDocuments);
 	}
 
-	
 }

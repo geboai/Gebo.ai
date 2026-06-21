@@ -1,6 +1,53 @@
 ai.gebo.llms.vendors.setup.config:
   vendors:
     - vendorInfo:
+        vendorId: regolo.ai
+        name: Regolo.ai
+        description: Regolo.ai AI provider (Italian)
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://regolo.ai
+        apiKeySecretContext: regolo.ai
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: qwen3.5-122b
+              uses: CHAT
+              defaultChoice: true
+            - code: deepseek-r1-70b
+              description: DeepSeek R1 70b
+              uses: CHAT
+            - code: gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              uses: CHAT
+            - code: Llama-3.3-70B-Instruct
+              description: Meta LLama 3.3 70b instruct
+              uses: CHAT
+            - code: gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: gte-Qwen2
+              description: Gte Qwen2 Embedding
+            - code: Qwen3-Embedding-8B
+              description: Qwen3 Embedding 8b
+              defaultChoice: true
+        - type: RANKING
+          serviceHandler: ranker-regolo.ai
+          doModelsLookup: true
+          choices:
+            - code: Qwen3-Reranker-4B
+              description: Qwen3 Reranker 4B
+              defaultChoice: true
+
+    - vendorInfo:
         vendorId: openai
         name: OpenAI
         description: OpenAI chatgpt
@@ -20,11 +67,11 @@ ai.gebo.llms.vendors.setup.config:
               description: Gpt 4o
               contextWindow: 128000
               uses: CHAT
-              defaultChoice: true
             - code: gpt-4.1
               description: Gpt 4.1
               contextWindow: 1000000
               uses: CHAT
+              defaultChoice: true
             - code: gpt-5
               description: Gpt 5
               contextWindow: 400000
@@ -215,43 +262,6 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
             - code: codestral-embed
               description: codestral-embed code extraction embedding model
-    - vendorInfo:
-        vendorId: regolo.ai
-        name: Regolo.ai
-        description: Regolo.ai AI provider (Italian)
-        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
-        requiresApiKeY: true
-        requiresCustomUrl: false
-        webSite: https://regolo.ai
-        apiKeySecretContext: regolo.ai
-        supportsAutoconfig: true
-      presets:
-        - type: CHAT
-          serviceHandler: chatmodel-regolo.ai
-          doModelsLookup: true
-          choices:
-            - code: deepseek-r1-70b
-              description: DeepSeek R1 70b
-              uses: CHAT
-            - code: gpt-oss-120b
-              description: OpenAI Gpt OSS 120b
-              uses: CHAT
-              defaultChoice: true
-            - code: Llama-3.3-70B-Instruct
-              description: Meta LLama 3.3 70b instruct
-              uses: CHAT
-            - code: gpt-oss-20b
-              description: OpenAI Gpt OSS 20b
-              uses: INTERNAL_SERVICES
-        - type: EMBEDDING
-          serviceHandler: embedding-regolo.ai
-          doModelsLookup: true
-          choices:
-            - code: gte-Qwen2
-              description: Gte Qwen2 Embedding
-            - code: Qwen3-Embedding-8B
-              description: Qwen3 Embedding 8b
-              defaultChoice: true
 
     - vendorInfo:
         vendorId: groq
@@ -269,6 +279,42 @@ ai.gebo.llms.vendors.setup.config:
         - type: EMBEDDING
           serviceHandler: embedding-groq
           doModelsLookup: true
+    - vendorInfo:
+        vendorId: openrouter.ai
+        name: OpenRouter.ai
+        description: OpenRouter.ai AI provider
+        acquireKeyUrl: https://openrouter.ai/workspaces/default/keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://openrouter.ai
+        apiKeySecretContext: openrouter.ai
+        supportsAutoconfig: true
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: openai/gpt-oss-120b
+              description: OpenAI Gpt OSS 120b
+              uses: CHAT
+              defaultChoice: true
+            - code: openai/gpt-oss-20b
+              description: OpenAI Gpt OSS 20b
+              uses: INTERNAL_SERVICES
+        - type: EMBEDDING
+          serviceHandler: embedding-openrouter.ai
+          choices:
+            - code: qwen/qwen3-embedding-8b
+              description: Qwen3 Embedding 8b
+              defaultChoice: true
+          doModelsLookup: true
+        - type: RANKING
+          serviceHandler: ranker-openrouter.ai
+          doModelsLookup: true
+          choices:
+            - code: cohere/rerank-4-pro
+              description: Chohere Rerank 4 pro
+              defaultChoice: true
 
     - vendorInfo:
         vendorId: ollama
@@ -305,6 +351,9 @@ ai.gebo.llms.vendors.setup.config:
         - type: EMBEDDING
           serviceHandler: embedding-vllm
           doModelsLookup: true
+        - type: RANKING
+          serviceHandler: ranker-vllm
+          doModelsLookup: true
 
     - vendorInfo:
         vendorId: generic-openai
@@ -319,7 +368,9 @@ ai.gebo.llms.vendors.setup.config:
         - type: CHAT
           serviceHandler: chatmodel-generic-openai
           doModelsLookup: true
-
         - type: EMBEDDING
           serviceHandler: embedding-generic-openai
+          doModelsLookup: true
+        - type: RANKING
+          serviceHandler: reranker-generic-openai
           doModelsLookup: true

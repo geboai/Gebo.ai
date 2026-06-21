@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.mistralai.controllers;
 
@@ -25,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.mistralai.model.GMistralChatModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
 import ai.gebo.llms.mistralai.services.MistralChatModelConfigurationSupportService;
@@ -34,9 +33,9 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * REST controller for managing MistralAI chat model configurations.
- * This controller is only enabled when the 'mistralAIEnabled' property is set to true.
- * It requires admin privileges to access its endpoints.
+ * REST controller for managing MistralAI chat model configurations. This
+ * controller is only enabled when the 'mistralAIEnabled' property is set to
+ * true. It requires admin privileges to access its endpoints.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @RestController
@@ -45,12 +44,11 @@ import ai.gebo.model.OperationStatus;
 public class MistralAIChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GMistralChatModelConfig, GMistralChatModelChoice, MistralChatModelConfigurationSupportService> {
 
-	/**
-	 * Constructor for the MistralAI chat models configuration controller.
-	 * Initializes the parent class with the GMistralChatModelConfig class.
-	 */
-	public MistralAIChatModelsConfigurationController() {
-		super(GMistralChatModelConfig.class);
+	public MistralAIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			MistralChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralChatModelConfig.class, ifaceType);
+		
 	}
 
 	/**
@@ -96,22 +94,26 @@ public class MistralAIChatModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The matching MistralAI chat model configuration
-	 * @throws GeboPersistenceException If an error occurs during the database operation
+	 * @throws GeboPersistenceException If an error occurs during the database
+	 *                                  operation
 	 */
 	@GetMapping(value = "findMistralAIChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GMistralChatModelConfig findMistralAIChatModelConfigByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
-	
+
 	/**
-	 * Endpoint to retrieve available MistralAI chat models based on the provided configuration.
+	 * Endpoint to retrieve available MistralAI chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration used to retrieve the model choices
-	 * @return The operation status containing the list of MistralAI chat model choices
+	 * @return The operation status containing the list of MistralAI chat model
+	 *         choices
 	 */
 	@PostMapping(value = "getMistralAIChatModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GMistralChatModelChoice>> getMistralAIChatModels(@RequestBody GMistralChatModelConfig config) {
+	public OperationStatus<List<GMistralChatModelChoice>> getMistralAIChatModels(
+			@RequestBody GMistralChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
 }

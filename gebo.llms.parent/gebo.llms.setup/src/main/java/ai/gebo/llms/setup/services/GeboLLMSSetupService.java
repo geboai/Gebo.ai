@@ -31,9 +31,25 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.setup.config.LLMSModelsPresets;
@@ -80,6 +96,14 @@ public class GeboLLMSSetupService {
 	private final IGeboSecretsAccessService secretService;
 	private final IGChatProfileManagementService chatProfileManagementService;
 	private final IGRuntimeChatProfileChatModelDao chatProfileChatModelDao;
+	private final IGImageModelRuntimeConfigurationDao imageModelRuntimeDao;
+	private final IGImageModelConfigurationSupportServiceRepositoryPattern imageModelsSupportRepo;
+	private final IGRankerModelRuntimeConfigurationDao rankerModelsRuntimeDao;
+	private final IGRankerModelConfigurationSupportServiceRepositoryPattern rankerModelsSupportRepo;
+	private final IGTextToSpeechModelRuntimeConfigurationDao ttsModelsRuntimeDao;
+	private final IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern ttsModelsSupportRepo;
+	private final IGTranscriptModelRuntimeConfigurationDao transcriptModelsRuntimeDao;
+	private final IGTranscriptModelConfigurationSupportServiceRepositoryPattern transcriptModelsSupportRepo;
 	private final LLMSVendorsSetupConfig vendorsSetupConfig;
 	private final IGToolCallbackSourceRepositoryPattern toolsRepo;
 	// Sample text for testing embedding model configurations.
@@ -114,6 +138,10 @@ public class GeboLLMSSetupService {
 		LLMSSetupConfigurationData configData = new LLMSSetupConfigurationData();
 		boolean canRunAutoconfigure = false;
 		boolean embeddingModelExists = false;
+		boolean rankerModelExists = false;
+		boolean imagesModelExists = false;
+		boolean ttsModelExists = false;
+		boolean transcriptModelExists = false;
 		boolean defaultChatModelExists = false;
 		boolean internalServicesChatModelExists = false;
 
@@ -195,6 +223,135 @@ public class GeboLLMSSetupService {
 					}
 				}
 					break;
+				case RANKING: {
+					IGRankerModelConfigurationSupportService handler = rankerModelsSupportRepo
+							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
+						continue;
+					}
+					GModelType modelProviderType = handler.getType();
+					List<IGConfigurableRankerModel> configurations = this.rankerModelsRuntimeDao.getConfigurations();
+					for (IGConfigurableRankerModel thisModel : configurations) {
+						if (thisModel.getConfig().getDefaultModel() != null
+								&& thisModel.getConfig().getDefaultModel()) {
+							rankerModelExists = true;
+						}
+						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
+							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
+							existingConfiguration.setModelType(ModelType.RANKING);
+							existingConfiguration.setExistingModelConfig(GObjectRef.of(thisModel.getConfig()));
+							String secretCode = thisModel.getConfig().getApiSecretCode();
+							if (secretCode != null) {
+								SecretInfo infos = secretService.getSecretInfoById(secretCode);
+								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(thisModel.getConfig().getBaseUrl());
+							}
+							vendorData.getRuntimeConfigs().add(existingConfiguration);
+						}
+					}
+				}
+					break;
+				case IMAGESGEN: {
+					IGImageModelConfigurationSupportService handler = imageModelsSupportRepo
+							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
+						continue;
+					}
+					GModelType modelProviderType = handler.getType();
+					List<IGConfigurableImageModel> configurations = this.imageModelRuntimeDao.getConfigurations();
+					for (IGConfigurableImageModel thisModel : configurations) {
+						if (thisModel.getConfig().getDefaultModel() != null
+								&& thisModel.getConfig().getDefaultModel()) {
+							imagesModelExists = true;
+						}
+						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
+							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
+							existingConfiguration.setModelType(ModelType.IMAGESGEN);
+							existingConfiguration.setExistingModelConfig(GObjectRef.of(thisModel.getConfig()));
+							String secretCode = thisModel.getConfig().getApiSecretCode();
+							if (secretCode != null) {
+								SecretInfo infos = secretService.getSecretInfoById(secretCode);
+								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(thisModel.getConfig().getBaseUrl());
+							}
+							vendorData.getRuntimeConfigs().add(existingConfiguration);
+						}
+					}
+				}
+					break;
+				case TRANSCRIPT: {
+					IGTranscriptModelConfigurationSupportService handler = transcriptModelsSupportRepo
+							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
+						continue;
+					}
+					GModelType modelProviderType = handler.getType();
+					List<IGConfigurableTranscriptModel> configurations = this.transcriptModelsRuntimeDao
+							.getConfigurations();
+					for (IGConfigurableTranscriptModel thisModel : configurations) {
+						if (thisModel.getConfig().getDefaultModel() != null
+								&& thisModel.getConfig().getDefaultModel()) {
+							transcriptModelExists = true;
+						}
+						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
+							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
+							existingConfiguration.setModelType(ModelType.TRANSCRIPT);
+							existingConfiguration.setExistingModelConfig(GObjectRef.of(thisModel.getConfig()));
+							String secretCode = thisModel.getConfig().getApiSecretCode();
+							if (secretCode != null) {
+								SecretInfo infos = secretService.getSecretInfoById(secretCode);
+								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(thisModel.getConfig().getBaseUrl());
+							}
+							vendorData.getRuntimeConfigs().add(existingConfiguration);
+						}
+					}
+				}
+					break;
+				case TTS: {
+					IGTextToSpeechModelConfigurationSupportService handler = ttsModelsSupportRepo
+							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.warn("The EMBEDDING Handler " + preset.getServiceHandler()
+								+ " is not present or started up");
+						continue;
+					}
+					GModelType modelProviderType = handler.getType();
+					List<IGConfigurableTextToSpeechModel> configurations = this.ttsModelsRuntimeDao.getConfigurations();
+					for (IGConfigurableTextToSpeechModel thisModel : configurations) {
+						if (thisModel.getConfig().getDefaultModel() != null
+								&& thisModel.getConfig().getDefaultModel()) {
+							ttsModelExists = true;
+						}
+						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
+							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
+							existingConfiguration.setModelType(ModelType.TTS);
+							existingConfiguration.setExistingModelConfig(GObjectRef.of(thisModel.getConfig()));
+							String secretCode = thisModel.getConfig().getApiSecretCode();
+							if (secretCode != null) {
+								SecretInfo infos = secretService.getSecretInfoById(secretCode);
+								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(thisModel.getConfig().getBaseUrl());
+							}
+							vendorData.getRuntimeConfigs().add(existingConfiguration);
+						}
+					}
+				}
+					break;
 				}
 			}
 			configData.getConfigurations().add(vendorData);
@@ -203,6 +360,10 @@ public class GeboLLMSSetupService {
 		configData.setDefaultChatModelExists(defaultChatModelExists);
 		configData.setEmbeddingModelExists(embeddingModelExists);
 		configData.setInternalServicesChatModelExists(internalServicesChatModelExists);
+		configData.setImagesModelExists(imagesModelExists);
+		configData.setRankerModelExists(rankerModelExists);
+		configData.setTranscriptModelExists(transcriptModelExists);
+		configData.setTtsModelExists(ttsModelExists);
 		canRunAutoconfigure = !(defaultChatModelExists && embeddingModelExists);
 		configData.setCanRunAutoconfigure(canRunAutoconfigure);
 		return configData;
@@ -269,7 +430,86 @@ public class GeboLLMSSetupService {
 			return OperationStatus.of(secretService.getSecretInfoById(secretId));
 
 		}
+		case RANKING: {
+			IGRankerModelConfigurationSupportService supportLogic = this.rankerModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
 
+			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
+				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+				if (modelsLookupStatus.isHasErrorMessages()) {
+					secretService.deleteSecret(secretId);
+					return OperationStatus.ofError("Invalid credentials",
+							"Cannot access provider service with entered credentials");
+				}
+			}
+			return OperationStatus.of(secretService.getSecretInfoById(secretId));
+
+		}
+		case IMAGESGEN: {
+			IGImageModelConfigurationSupportService supportLogic = this.imageModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+
+			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
+				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+				if (modelsLookupStatus.isHasErrorMessages()) {
+					secretService.deleteSecret(secretId);
+					return OperationStatus.ofError("Invalid credentials",
+							"Cannot access provider service with entered credentials");
+				}
+			}
+			return OperationStatus.of(secretService.getSecretInfoById(secretId));
+
+		}
+		case TRANSCRIPT: {
+			IGTranscriptModelConfigurationSupportService supportLogic = this.transcriptModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+
+			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
+				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+				if (modelsLookupStatus.isHasErrorMessages()) {
+					secretService.deleteSecret(secretId);
+					return OperationStatus.ofError("Invalid credentials",
+							"Cannot access provider service with entered credentials");
+				}
+			}
+			return OperationStatus.of(secretService.getSecretInfoById(secretId));
+
+		}
+		case TTS: {
+			IGTextToSpeechModelConfigurationSupportService supportLogic = this.ttsModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+
+			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
+				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+				if (modelsLookupStatus.isHasErrorMessages()) {
+					secretService.deleteSecret(secretId);
+					return OperationStatus.ofError("Invalid credentials",
+							"Cannot access provider service with entered credentials");
+				}
+			}
+			return OperationStatus.of(secretService.getSecretInfoById(secretId));
+
+		}
 		}
 		throw new RuntimeException("This code zone has not to be reached");
 
@@ -323,11 +563,59 @@ public class GeboLLMSSetupService {
 					}
 				}
 					break;
+				case IMAGESGEN: {
+					if (autoconfiguredata.getImagesModel() != null
+							&& autoconfiguredata.getImagesModel().trim().length() > 0) {
+						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
+								autoconfiguredata.getImagesModel(), preset.getType());
+						configs.add(modelData);
+					}
+				}
+					break;
+				case RANKING: {
+					if (autoconfiguredata.getRankerModel() != null
+							&& autoconfiguredata.getRankerModel().trim().length() > 0) {
+						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
+								autoconfiguredata.getRankerModel(), preset.getType());
+						configs.add(modelData);
+					}
+				}
+					break;
+				case TRANSCRIPT: {
+					if (autoconfiguredata.getTranscriptModel() != null
+							&& autoconfiguredata.getTranscriptModel().trim().length() > 0) {
+						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
+								autoconfiguredata.getTranscriptModel(), preset.getType());
+						configs.add(modelData);
+					}
+				}
+					break;
+				case TTS: {
+					if (autoconfiguredata.getTtsModel() != null
+							&& autoconfiguredata.getTtsModel().trim().length() > 0) {
+						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
+								autoconfiguredata.getTtsModel(), preset.getType());
+						configs.add(modelData);
+					}
+				}
+					break;
 				}
 			}
 			return createLLMS(configs);
 		} else
 			throw new RuntimeException("Vendor not found by data:" + autoconfiguredata);
+	}
+
+	private LLMCreateModelData createModel(String secretId, LLMSVendor vendorData, String model, ModelType type) {
+		LLMCreateModelData md = new LLMCreateModelData();
+		md.setEnableAllFunctions(false);
+		md.setModelCode(model);
+		md.setSecretId(secretId);
+		LLMSModelsPresets preset = vendorData.getPresets().stream().filter(x -> x.getType() == type).toList().get(0);
+		md.setServiceHandler(preset.getServiceHandler());
+		md.setSetAsDefaultModel(true);
+		md.setType(type);
+		return md;
 	}
 
 	private LLMCreateModelData createEmbeddingModel(String secretId, LLMSVendor vendorData, String embeddingModel) {
@@ -401,13 +689,44 @@ public class GeboLLMSSetupService {
 		case EMBEDDING: {
 			IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
 					.findByCode(credentials.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
+		case RANKING: {
+			IGRankerModelConfigurationSupportService supportLogic = this.rankerModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
 
 			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
 			configuration.setApiSecretCode(credentials.getSecretId());
 			configuration.setBaseUrl(credentials.getBaseUrl());
 			return supportLogic.getModelChoices(configuration);
 		}
-
+		case IMAGESGEN: {
+			IGImageModelConfigurationSupportService supportLogic = this.imageModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
+		case TRANSCRIPT: {
+			IGTranscriptModelConfigurationSupportService supportLogic = this.transcriptModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
+		case TTS: {
+			IGTextToSpeechModelConfigurationSupportService supportLogic = this.ttsModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
 		}
 		throw new RuntimeException("This code zone has not to be reached");
 	}
@@ -449,6 +768,62 @@ public class GeboLLMSSetupService {
 			case EMBEDDING: {
 				try {
 					IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
+							.findByCode(config.getServiceHandler());
+					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					configuration.setApiSecretCode(config.getSecretId());
+					configuration.setBaseUrl(config.getBaseUrl());
+					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+				} catch (Throwable th) {
+					operationsOutput.add(OperationStatus.of(th));
+				}
+			}
+				break;
+			case RANKING: {
+				try {
+					IGRankerModelConfigurationSupportService supportLogic = this.rankerModelsSupportRepo
+							.findByCode(config.getServiceHandler());
+					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					configuration.setApiSecretCode(config.getSecretId());
+					configuration.setBaseUrl(config.getBaseUrl());
+					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+				} catch (Throwable th) {
+					operationsOutput.add(OperationStatus.of(th));
+				}
+			}
+				break;
+			case TRANSCRIPT: {
+				try {
+					IGTranscriptModelConfigurationSupportService supportLogic = this.transcriptModelsSupportRepo
+							.findByCode(config.getServiceHandler());
+					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					configuration.setApiSecretCode(config.getSecretId());
+					configuration.setBaseUrl(config.getBaseUrl());
+					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+				} catch (Throwable th) {
+					operationsOutput.add(OperationStatus.of(th));
+				}
+			}
+				break;
+			case TTS: {
+				try {
+					IGTextToSpeechModelConfigurationSupportService supportLogic = this.ttsModelsSupportRepo
+							.findByCode(config.getServiceHandler());
+					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					configuration.setApiSecretCode(config.getSecretId());
+					configuration.setBaseUrl(config.getBaseUrl());
+					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
+				} catch (Throwable th) {
+					operationsOutput.add(OperationStatus.of(th));
+				}
+			}
+				break;
+			case IMAGESGEN: {
+				try {
+					IGImageModelConfigurationSupportService supportLogic = this.imageModelsSupportRepo
 							.findByCode(config.getServiceHandler());
 					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());

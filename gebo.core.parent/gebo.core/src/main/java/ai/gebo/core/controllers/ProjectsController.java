@@ -6,16 +6,15 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.controllers;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -45,8 +44,8 @@ import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * AI generated comments
- * Controller for managing project-related operations for an admin.
+ * AI generated comments Controller for managing project-related operations for
+ * an admin.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -65,7 +64,7 @@ public class ProjectsController {
 	@Autowired
 	VirtualFolderRepository vfolderRepository;
 
-	@Autowired 
+	@Autowired
 	GCoreMessagesEmitterImpl coreEmitter;
 
 	/**
@@ -164,7 +163,8 @@ public class ProjectsController {
 	}
 
 	/**
-	 * Finds child projects with the specified knowledge base code and parent project code.
+	 * Finds child projects with the specified knowledge base code and parent
+	 * project code.
 	 * 
 	 * @param knowledgeBaseCode the knowledge base code
 	 * @param parentProjectCode the parent project code
@@ -182,7 +182,7 @@ public class ProjectsController {
 	/**
 	 * Finds projects from other knowledge bases that can be included.
 	 * 
-	 * @param knowledgeBaseCode the current knowledge base code
+	 * @param knowledgeBaseCode      the current knowledge base code
 	 * @param actualSelectedProjects the list of already selected projects' codes
 	 * @return a list of includable projects
 	 */
@@ -236,7 +236,7 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "updateProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject updateProject(@RequestBody GProject entity) throws GeboPersistenceException {
-		if (entity.getObjectSpaceType()==null) {
+		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
 		return persistenceManager.update(entity);
@@ -251,7 +251,7 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "insertProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject insertProject(@RequestBody GProject entity) throws GeboPersistenceException {
-		if (entity.getObjectSpaceType()==null) {
+		if (entity.getObjectSpaceType() == null) {
 			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
 		}
 		return persistenceManager.insert(entity);
@@ -266,7 +266,7 @@ public class ProjectsController {
 	@PostMapping(value = "deleteProject", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteProject(@RequestBody GProject entity) throws GeboPersistenceException {
 		persistenceManager.delete(entity);
-		GDeletedProjectPayload payload=new GDeletedProjectPayload();
+		GDeletedProjectPayload payload = new GDeletedProjectPayload();
 		// Set the project for the deletion payload
 		payload.setProject(entity);
 		// Emit the deleting payload
@@ -351,6 +351,9 @@ public class ProjectsController {
 		public String contentType = null;
 	}
 
+	static Comparator<VFolderInfo> folderComparator = (x,
+			y) -> x != null && y != null && y.name != null && x.name != null ? x.name.compareTo(y.name) : 0;
+
 	/**
 	 * Retrieves root folders for the project endpoint.
 	 * 
@@ -359,12 +362,14 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getRootFolders", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VFolderInfo> getRootFolders(@NotNull @RequestBody GObjectRef<GProjectEndpoint> endpointRef) {
-		return this.vfolderRepository
+		List<VFolderInfo> sorted = new ArrayList<>(this.vfolderRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
 						endpointRef.getClassName(), endpointRef.getCode())
 				.map(x -> {
 					return new VFolderInfo(x);
-				}).toList();
+				}).toList());
+		sorted.sort(folderComparator);
+		return sorted;
 	}
 
 	/**
@@ -384,7 +389,8 @@ public class ProjectsController {
 	}
 
 	/**
-	 * Class representing parameters for fetching child virtual filesystem structures.
+	 * Class representing parameters for fetching child virtual filesystem
+	 * structures.
 	 */
 	public static class ChildVirtualFSParam {
 
@@ -404,12 +410,14 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getChildFolders", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VFolderInfo> getChildFolders(@NotNull @RequestBody ChildVirtualFSParam dir) {
-		return this.vfolderRepository
+		List<VFolderInfo> sorted = new ArrayList<>(this.vfolderRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCode(
 						dir.endpointRef.getClassName(), dir.endpointRef.getCode(), dir.folder.code)
 				.map(x -> {
 					return new VFolderInfo(x);
-				}).toList();
+				}).toList());
+		sorted.sort(folderComparator);
+		return sorted;
 	}
 
 	/**

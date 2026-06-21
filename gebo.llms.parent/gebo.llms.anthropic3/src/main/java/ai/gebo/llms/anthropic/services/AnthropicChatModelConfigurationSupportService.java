@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -92,12 +93,19 @@ public class AnthropicChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
 	 */
 	class AnthropicConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAnthropicChatModelConfig, AnthropicChatModel> {
+
+		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+			// TODO Auto-generated constructor stub
+		}
 
 		/**
 		 * Configures an Anthropic chat model based on the provided configuration
@@ -108,8 +116,8 @@ public class AnthropicChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -148,7 +156,9 @@ public class AnthropicChatModelConfigurationSupportService
 
 			// Configure Anthropic chat options
 			Builder builder = AnthropicChatOptions.builder();
-			builder.maxTokens(16000);
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());
+			}
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -165,13 +175,23 @@ public class AnthropicChatModelConfigurationSupportService
 				functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
 			AnthropicChatOptions anthropicChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 
 			// Create the final AnthropicChatModel
 			AnthropicChatModel model = new AnthropicChatModel(anthropicApi, anthropicChatOptions, toolCallingManager,
 					retryTemplate, ObservationRegistry.create());
 			return model;
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			AnthropicConfigurableChatModel anthropicChatModel = new AnthropicConfigurableChatModel(rendererFactory,
+					toolCallbacksRepository);
+			return anthropicChatModel;
 		}
 	}
 
@@ -195,7 +215,8 @@ public class AnthropicChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAnthropicChatModelConfig> create(GAnthropicChatModelConfig config)
 			throws LLMConfigException {
-		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel();
+		AnthropicConfigurableChatModel model = new AnthropicConfigurableChatModel(this.documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

@@ -17,6 +17,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
+import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
 
 /**
@@ -51,7 +52,7 @@ public interface IGConfigurableEmbeddingModel<ModelConfig extends GBaseEmbedding
 	 * 
 	 * @return An instance of VectorStore.
 	 */
-	public VectorStore getVectorStore();
+	public IGExtendedVectorStore getVectorStore();
 
 	/**
 	 * Obtains the sampled bytes of traffic information related to the embedding process.

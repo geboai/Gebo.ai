@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.1.0-ALPHA</version>
+		<version>1.0.1.0-BETA</version>
 	</parent>
 	<artifactId>gebo.ui</artifactId>
 	<properties>
@@ -64,6 +64,15 @@
 								<goals>
 									<goal>npm</goal>
 								</goals>
+							</execution>
+							<execution>
+								<id>npm run export-libs</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>run export-libs</arguments>
+								</configuration>
 							</execution>
 							<execution>
 								<id>npm run build-prod</id>

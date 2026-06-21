@@ -1,11 +1,14 @@
 package ai.gebo.security.services.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
@@ -78,7 +81,8 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 	@Override
 	public IAclGrantedAccessor fromUser(UserInfos user) {
 		final String uniqueId = getUniqueId(user);
-		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueId(uniqueId);
+		final List<Integer> aliases = aliasesDao
+				.findAliasesByAclGrantedUniqueIdIn(List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID));
 		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(this::fromGroup).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();
@@ -161,10 +165,33 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 	@Override
 	public IAclGrantedAccessor fromUser(UserInfos user, AclGrantType grantType) {
 		final String uniqueId = getUniqueId(user);
-		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdAndAclGrantType(uniqueId, grantType);
+		final List<Integer> aliases = aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(
+				List.of(uniqueId, IAclGrantedAccess.EVERYONE_ACL_UNIQUE_ID), grantType);
 		List<UsersGroup> groups = groupsRepo.findByUserIdsIn(user.getUsername());
+
 		List<IAclGrantedAccessor> groupsAccessors = groups.stream().map(x -> this.fromGroup(x, grantType)).toList();
 		final List<IAclGrantedAccess> accesses = new ArrayList<>();
+		final IAclGrantedAccess everyOneAccess = new IAclGrantedAccess() {
+
+			@Override
+			public List<Integer> getOwnedAclAliases() {
+
+				return List.of(aliasForEveryone(grantType));
+			}
+
+			@Override
+			public String getObjectType() {
+
+				return "everyone";
+			}
+
+			@Override
+			public String getAclUniqueId() {
+
+				return EVERYONE_ACL_UNIQUE_ID;
+			}
+		};
+		accesses.add(everyOneAccess);
 		final IAclGrantedAccess thisAccess = new IAclGrantedAccess() {
 			@Override
 			public String getAclUniqueId() {
@@ -213,6 +240,26 @@ public class AclGrantedAccessorServiceImpl implements IAclGrantedAccessorService
 		List<String> groupIds = group.stream().map(x -> getUniqueId(x)).toList();
 		List<Integer> data = this.aliasesDao.findAliasesByAclGrantedUniqueIdInAndAclGrantType(groupIds, grantType);
 		return data;
+	}
+
+	final Map<AclGrantType, Integer> everyoneAliases = new HashMap<>();
+
+	@Override
+	public Integer aliasForEveryone(AclGrantType grantType) {
+		if (everyoneAliases.isEmpty()) {
+			synchronized (everyoneAliases) {
+				List<GAclEntry> acls = List.of(GAclEntry.EVERYONE_READ_ACCESS, GAclEntry.EVERYONE_WRITE_ACCESS,
+						GAclEntry.EVERYONE_EXECUTE_ACCESS);
+				for (GAclEntry gAclEntry : acls) {
+					Integer alias = this.aliasesDao.findAlias(gAclEntry);
+					if (alias == null) {
+						alias = this.aliasesDao.addAcl(gAclEntry);
+					}
+					this.everyoneAliases.put(gAclEntry.getGrant(), alias);
+				}
+			}
+		}
+		return this.everyoneAliases.get(grantType);
 	}
 
 }

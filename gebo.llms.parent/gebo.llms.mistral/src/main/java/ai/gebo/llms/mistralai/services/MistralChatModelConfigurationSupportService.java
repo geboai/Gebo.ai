@@ -17,12 +17,14 @@ import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
 import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -80,6 +82,7 @@ public class MistralChatModelConfigurationSupportService
 	final MistralModelsLookupService mistralModelsLookupService;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
@@ -87,6 +90,12 @@ public class MistralChatModelConfigurationSupportService
 	 */
 	class MistralConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
+
+		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures a MistralAiChatModel instance based on the provided configuration.
@@ -98,8 +107,8 @@ public class MistralChatModelConfigurationSupportService
 		 *                            credentials
 		 */
 		@Override
-		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -138,7 +147,9 @@ public class MistralChatModelConfigurationSupportService
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
-
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());
+			}
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 
@@ -149,11 +160,16 @@ public class MistralChatModelConfigurationSupportService
 				builder = builder.toolNames(new HashSet<String>(names));
 				builder.internalToolExecutionEnabled(!functions.isEmpty());
 			}
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				
+				builder.internalToolExecutionEnabled(true);
+			}
+			
 			ToolExecutionEligibilityPredicate toolEligibilityPredicate = new DefaultToolExecutionEligibilityPredicate();
 			MistralAiChatOptions options = builder.build();
 			MistralAiChatModel model = new MistralAiChatModel(mistralApi, options,
-					functionsRepo.createToolCallingManager(), retryTemplate, ObservationRegistry.NOOP,
-					toolEligibilityPredicate);
+					toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager(),
+					retryTemplate, ObservationRegistry.NOOP, toolEligibilityPredicate);
 			return model;
 		}
 
@@ -177,6 +193,12 @@ public class MistralChatModelConfigurationSupportService
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+
+			return new MistralConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
 	};
 
 	/**
@@ -199,7 +221,8 @@ public class MistralChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GMistralChatModelConfig> create(GMistralChatModelConfig config)
 			throws LLMConfigException {
-		MistralConfigurableChatModel model = new MistralConfigurableChatModel();
+		MistralConfigurableChatModel model = new MistralConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

@@ -30,6 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -76,7 +77,6 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
 	}
 
-	
 	final IGeboSecretsAccessService secretService;
 	final IGOpenAIApiUtil openaiApiUtil;
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
@@ -86,12 +86,19 @@ public class OpenAIChatModelConfigurationSupportService
 	final IGTranscriptModelRuntimeConfigurationDao transcriptDao;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
+
+		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		IGConfigurableTranscriptModel transcriptModel = null;
 		IGConfigurableTextToSpeechModel ttsModel = null;
@@ -107,8 +114,8 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected OpenAiChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			this.transcriptModel = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -138,6 +145,7 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).build();
 
 			Builder builder = OpenAiChatOptions.builder();
+
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -155,14 +163,37 @@ public class OpenAIChatModelConfigurationSupportService
 					return x.getToolDefinition().name();
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
-
+			}
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				builder.parallelToolCalls(true);
+				builder.internalToolExecutionEnabled(true);
+			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());
+			}
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case LOW_THINKING: {
+					builder.reasoningEffort("low");
+				}
+					break;
+				case MEDIUM_THINKING: {
+					builder.reasoningEffort("medium");
+				}
+					break;
+				case HIGH_THINKING: {
+					builder.reasoningEffort("high");
+				}
+					break;
+				}
 			}
 			if (user != null) {
 				builder = builder.user(user);
 			}
 
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.NOOP);
 
@@ -251,9 +282,13 @@ public class OpenAIChatModelConfigurationSupportService
 			}
 			return transcriptModel;
 		}
-	};
 
-	
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+
+			return new OpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
+	};
 
 	/**
 	 * Gets the model type supported by this service.
@@ -275,7 +310,8 @@ public class OpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOpenAIChatModelConfig> create(GOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel();
+		OpenAIConfigurableChatModel model = new OpenAIConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}
@@ -316,8 +352,9 @@ public class OpenAIChatModelConfigurationSupportService
 	}
 
 	@Override
-	public OperationStatus<GOpenAIChatModelConfig> insertAndConfigure(GOpenAIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
-	 
+	public OperationStatus<GOpenAIChatModelConfig> insertAndConfigure(GOpenAIChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 }

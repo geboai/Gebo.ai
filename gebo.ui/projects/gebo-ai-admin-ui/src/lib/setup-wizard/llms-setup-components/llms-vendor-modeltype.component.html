@@ -78,6 +78,7 @@
                         </gebo-ai-field>
                     </div>
                     <div class="col-3" *ngIf="embeddingPresets.length>0"></div>
+                    
                     <div class="col-3">
                         <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"

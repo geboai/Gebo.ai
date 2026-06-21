@@ -18,7 +18,7 @@
  * and edit both chat profiles and prompts with pagination support.
  */
 import { Component, OnInit } from "@angular/core";
-import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig, PageGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, PageGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -60,10 +60,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
         pageSize: 20
     };
     
-    /**
-     * Container for prompts data retrieved from the server.
-     */
-    prompts: GPromptConfig[] =  [];
+   
     
     /**
      * Flag indicating whether prompts are currently being loaded.
@@ -109,7 +106,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
      * Sets the loading flag during the operation.
      */
     private loadPrompts() {
-        this.loadingPrompts = true;
+        //this.loadingPrompts = true;
         
     }
     
@@ -153,41 +150,7 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
         });
     }
     
-    /**
-     * Opens the edit interface for a specific prompt configuration.
-     * Refreshes prompts list after the edit operation completes.
-     * 
-     * @param v The prompt configuration to edit
-     */
-    editPrompt(v: GPromptConfig) {
-        this.geboUIActionEventService.routeEvent({
-            actionType: GeboActionType.OPEN,
-            context: {},
-            contextType: "chatList",
-            target: v,
-            targetType: "GPromptConfig",
-            onActionPerformed: (evt) => {
-                this.loadPrompts();
-            }
-        });
-    }
     
-    /**
-     * Creates a new prompt configuration and opens the edit interface.
-     * Refreshes prompts list after the creation operation completes.
-     */
-    newPrompt() {
-        this.geboUIActionEventService.routeEvent({
-            actionType: GeboActionType.NEW,
-            context: {},
-            contextType: "chatList",
-            target: {},
-            targetType: "GPromptConfig",
-            onActionPerformed: (evt) => {
-                this.loadPrompts();
-            }
-        });
-    }
     
     /**
      * Handles pagination changes for prompts list and reloads the data accordingly.

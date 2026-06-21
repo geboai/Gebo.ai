@@ -25,6 +25,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
 @Component({
     selector: "gebo-ai-chat-docref",
     templateUrl: "document-ref.component.html",
+    styleUrl:"document-ref.component.scss",
     standalone: false,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("DocumentRefComponent"), multi: false }]
 })

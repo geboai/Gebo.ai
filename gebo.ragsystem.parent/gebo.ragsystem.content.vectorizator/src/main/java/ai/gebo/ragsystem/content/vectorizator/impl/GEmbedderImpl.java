@@ -255,12 +255,12 @@ public class GEmbedderImpl implements IGEmbedder {
 							Number tokensCount = doc.getMetadata() != null
 									? (Number) doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
 									: null;
-							if (tokensCount!=null) {
-								totalTokens+=tokensCount.longValue();
+							if (tokensCount != null) {
+								totalTokens += tokensCount.longValue();
 							}
 						}
-						LOGGER.info("VECTORIZING: Vectorized " + tokenizeddocuments.size() + "  fragments, "+totalTokens+" tokens in "
-								+ (System.currentTimeMillis() - time) + " (msec)");
+						LOGGER.info("VECTORIZING: Vectorized " + tokenizeddocuments.size() + "  fragments, "
+								+ totalTokens + " tokens in " + (System.currentTimeMillis() - time) + " (msec)");
 					}
 
 					if (LOGGER.isDebugEnabled()) {
@@ -306,6 +306,7 @@ public class GEmbedderImpl implements IGEmbedder {
 								vectorsToBeDeleted.addAll(vect.getVectorsId());
 							}
 							vect.setVectorsId(newIds);
+							vect.setLastestJobId(x.getPayload().getJobId());
 							vect.setLastVectorizedDate(now);
 						} else {
 							// Create new vectorized content entry
@@ -315,6 +316,7 @@ public class GEmbedderImpl implements IGEmbedder {
 							vect.getId().setVectorStoreId(vectorStoreId);
 							vect.setDeleted(false);
 							vect.setHash(payload.getHash());
+							vect.setLastestJobId(x.getPayload().getJobId());
 							vect.setFileSize(payload.getDocumentReference().getFileSize());
 							vect.setModificationDate(payload.getDocumentReference().getModificationDate());
 							vect.setParentProjectCode(payload.getDocumentReference().getParentProjectCode());

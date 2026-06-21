@@ -29,6 +29,7 @@ import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUs
 import { GeboAdminPromptsControllerService } from './api/geboAdminPromptsController.service';
 import { GeboAdminRagAutotuneControllerService } from './api/geboAdminRagAutotuneController.service';
 import { GeboAdvancedSetupStatusControllerService } from './api/geboAdvancedSetupStatusController.service';
+import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
@@ -50,6 +51,7 @@ import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsC
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
+import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
@@ -81,7 +83,6 @@ import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from '.
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
-import { PromptTemplateWizardControllerService } from './api/promptTemplateWizardController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SecretsControllerService } from './api/secretsController.service';
@@ -91,6 +92,7 @@ import { TokenRenewControllerService } from './api/tokenRenewController.service'
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
+import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
@@ -126,6 +128,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboAdminPromptsControllerService,
     GeboAdminRagAutotuneControllerService,
     GeboAdvancedSetupStatusControllerService,
+    GeboAgentAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
     GeboChatPipelinesControllerService,
@@ -147,6 +150,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
     GeboVectorStoreConfigurationControllerService,
+    GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,
     GitSystemsControllerService,
@@ -178,7 +182,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     OpenAiChatModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
     ProjectsControllerService,
-    PromptTemplateWizardControllerService,
     PromptTemplatesControllerService,
     ReindexingFrequencyOptionsControllerService,
     SecretsControllerService,
@@ -188,6 +191,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     UiTextResourcesControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
+    UserWorkflowsControllerService,
     UsersAdminControllerService,
     UserspaceControllerService,
     UserspaceUploadControllerService ]

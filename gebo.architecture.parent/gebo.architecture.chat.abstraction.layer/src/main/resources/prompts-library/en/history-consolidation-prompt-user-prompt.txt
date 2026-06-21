@@ -1,0 +1,23 @@
+Input format:
+[EXISTING_SUMMARY]
+{consolidated}
+[/EXISTING_SUMMARY]
+
+[NEW_MESSAGES]
+{documents}
+{question}
+[/NEW_MESSAGES]
+
+Where:
+- EXISTING_SUMMARY is the current stored summary text (possibly empty).
+- NEW_MESSAGES is the new dialogue turns formatted as lines like:
+  user: ...
+  assistant: ...
+  user: ...
+  ...
+
+Your output:
+- Produce ONLY the new consolidated session summary as plain text.
+- Do NOT include headings, labels, JSON, bullet points, or any extra commentary.
+- Just return the updated summary text.
+- Generate a maximum of {historySizeTarget} tokens

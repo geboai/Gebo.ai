@@ -14,9 +14,7 @@
 <p-blockUI id="BlockUI1" gebo-ai-label [target]="ragProfilesUI" [blocked]="loadingChatProfiles">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-blockUI id="BlockUI2" gebo-ai-label [target]="promptUI" [blocked]="loadingPrompts">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
-</p-blockUI>
+
 
 <p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrivial augmented generation chat profiles">
     <p-button id="NewChatProfileBtn" gebo-ai-label (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
@@ -44,7 +42,10 @@
         [rowsPerPageOptions]="[10, 20, 30]" />
     
 </p-panel>
-
+<!-- 
+<p-blockUI id="BlockUI2" gebo-ai-label [target]="promptUI" [blocked]="loadingPrompts">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
 <p-panel id="PromptsPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
     <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
         [outlined]="true"></p-button>
@@ -71,6 +72,7 @@
     
 
 </p-panel>
+-->
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 

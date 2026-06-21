@@ -45,7 +45,11 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         secretId: new FormControl(),
         defaultChatModel: new FormControl(),
         internalServicesModel: new FormControl(),
-        embeddingModel: new FormControl()
+        embeddingModel: new FormControl(),
+        rankerModel: new FormControl(),
+        transcriptModel: new FormControl(),
+        ttsModel: new FormControl(),
+        imagesModel: new FormControl()
     });
     protected loading: boolean = false;
     protected vendorId?: string;
@@ -72,7 +76,7 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                     this.vendorSetupMetaInfos = this.autoSettingsConfigurations?.find(x => x.parentModel.vendorId === vendorId);
                     this.secretDescription = vendorId ? vendorId + " credentials" : "credentials";
                     this.secretContext = this.vendorSetupMetaInfos?.parentModel?.apiKeySecretContext;
-                    
+
                     if (this.vendorSetupMetaInfos) {
                         const presets: PresetSummary[] = [];
                         const chatModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "CHAT");
@@ -116,10 +120,34 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                                 this.formGroup.controls["embeddingModel"].setValue(defaultEmbeddingPreset?.code);
                             }
                         }
+                        const rankingModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "RANKING");
+                        if (rankingModels && rankingModels.length && this.actualProvidersConfiguration?.rankerModelExists !== true) {
+                            const defaultRankingPreset = rankingModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({ type: "RANKING", presetChoices: rankingModels[0].choices, choice: defaultRankingPreset?.code });
+                            this.formGroup.controls["rankerModel"].setValue(defaultRankingPreset?.code);
+                        }
+                        const ttsModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "TTS");
+                        if (ttsModels && ttsModels.length && this.actualProvidersConfiguration?.ttsModelExists !== true) {
+                            const defaultTtsPreset = ttsModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({ type: "TTS", presetChoices: ttsModels[0].choices, choice: defaultTtsPreset?.code });
+                            this.formGroup.controls["ttsModel"].setValue(defaultTtsPreset?.code);
+                        }
+                        const transcriptModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "TRANSCRIPT");
+                        if (transcriptModels && transcriptModels.length && this.actualProvidersConfiguration?.transcriptModelExists !== true) {
+                            const defaultTranscriptPreset = transcriptModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({ type: "TRANSCRIPT", presetChoices: transcriptModels[0].choices, choice: defaultTranscriptPreset?.code });
+                            this.formGroup.controls["transcriptModel"].setValue(defaultTranscriptPreset?.code);
+                        }
+                        const imagesModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "IMAGESGEN");
+                        if (imagesModels && imagesModels.length && this.actualProvidersConfiguration?.imagesModelExists !== true) {
+                            const defaultImagesPreset = imagesModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({ type: "IMAGESGEN", presetChoices: imagesModels[0].choices, choice: defaultImagesPreset?.code });
+                            this.formGroup.controls["imagesModel"].setValue(defaultImagesPreset?.code);
+                        }
                         this.presetsSummary = presets;
                     }
-                    
-                    
+
+
                 }
                 if (this.vendorId)
                     this.formGroup.controls["secretId"].enable();
@@ -147,10 +175,10 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                     });
                 }
                 if (!defaultVendorId) {
-                    defaultVendorId=this.autoSettingsConfigurations.length?this.autoSettingsConfigurations[0].parentModel.vendorId:undefined;
+                    defaultVendorId = this.autoSettingsConfigurations.length ? this.autoSettingsConfigurations[0].parentModel.vendorId : undefined;
+                }
             }
-            }
-            
+
             this.formGroup.controls["vendorId"].setValue(defaultVendorId);
         }
     }

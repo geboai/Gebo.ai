@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import lombok.AllArgsConstructor;
@@ -56,7 +56,7 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@GetMapping(value = "findPromptConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
+	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
 		return promptConfigDao.findByCode(code);
 	}
 
@@ -69,7 +69,7 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "insertPromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig insertPromptConfig(@RequestBody GPromptConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig insertPromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
 		return promptConfigDao.insert(Config);
 	}
 
@@ -82,7 +82,7 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "updatePromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig updatePromptConfig(@RequestBody GPromptConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig updatePromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
 		return promptConfigDao.update(Config);
 	}
 
@@ -94,7 +94,7 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "deletePromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deletePromptConfig(@RequestBody GPromptConfig Config) throws GeboPersistenceException {
+	public void deletePromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
 		promptConfigDao.delete(Config);
 	}
 
@@ -125,7 +125,7 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "getPromptConfigByFilter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptConfig getPromptConfigByFilter(@RequestBody PromptFilter param) throws GeboPersistenceException {
+	public GPromptTemplateConfig getPromptConfigByFilter(@RequestBody PromptFilter param) throws GeboPersistenceException {
 		return promptConfigDao.exactFindByPromptUse(param.modelUse, param.langCode, param.modelProvider,
 				param.modelCode);
 	}
@@ -139,7 +139,7 @@ public class GeboAdminPromptsController {
 	 */
 	@GetMapping(value = "getPromptCategories", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> getPromptCategories() throws GeboPersistenceException {
-		Stream<GPromptConfig> stream = promptConfigDao.getConfigurations().stream();
+		Stream<GPromptTemplateConfig> stream = promptConfigDao.getConfigurations().stream();
 		final TreeMap<String, Boolean> cats = new TreeMap<String, Boolean>();
 		stream.forEach(x -> {
 			if (x.getPromptCategory() != null) {

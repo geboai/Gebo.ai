@@ -62,6 +62,16 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Input() interactionDisabled: boolean = false;
 
     /**
+     * Maximum number of documents to display inline before showing the "..." button
+     */
+    @Input() maxDisplayedDocuments?: number;
+
+    /**
+     * Flag to control visibility of the full list of documents window
+     */
+    public openedFullListDocumentsWindow: boolean = false;
+
+    /**
      * Flag to track if documents are currently being loaded
      */
     private loadingDocuments: boolean = false;
@@ -84,6 +94,7 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     @Input("openedUploadDocumentsWindow") public openedUploadDocumentsWindow: boolean = false;
     @Output("openedUploadDocumentsWindowChange") openedUploadDocumentsWindowChange: EventEmitter<boolean> = new EventEmitter();
     @Output() successfullDocumentChosen:EventEmitter<boolean>=new EventEmitter();
+    @Output() choosenDocumentsListCleared:EventEmitter<boolean>=new EventEmitter();
     /**
      * Getter that returns the overall loading state by checking if documents or file types are loading
      */
@@ -95,6 +106,23 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
      * List of document references displayed in the component
      */
     listedDocuments: EnrichedDocumentReferenceView[] = [];
+
+    /**
+     * Getter for the documents to display inline
+     */
+    public get displayedDocuments(): EnrichedDocumentReferenceView[] {
+        if (this.maxDisplayedDocuments !== undefined && this.maxDisplayedDocuments >= 0 && this.listedDocuments.length > this.maxDisplayedDocuments) {
+            return this.listedDocuments.slice(0, this.maxDisplayedDocuments);
+        }
+        return this.listedDocuments;
+    }
+
+    /**
+     * Getter to check if there are more documents than maxDisplayedDocuments
+     */
+    public get hasMoreDocuments(): boolean {
+        return this.maxDisplayedDocuments !== undefined && this.maxDisplayedDocuments >= 0 && this.listedDocuments.length > this.maxDisplayedDocuments;
+    }
 
     /**
      * Form group for managing document selection edits
@@ -198,6 +226,19 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
         this.listedDocuments = this.listedDocuments.filter(x => x.code !== item.code);
         this.internalValue = this.internalValue.filter(x => x !== item.code);
         this.onChange(this.internalValue);
+        if (!this.internalValue || this.internalValue.length===0) {
+            this.choosenDocumentsListCleared.emit(true);
+        }
+    }
+
+    /**
+     * Clears all selected documents
+     */
+    doClearAllFiles() {
+        this.listedDocuments = [];
+        this.internalValue = [];
+        this.onChange(this.internalValue);
+        this.choosenDocumentsListCleared.emit(true);
     }
 
     /**

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.controllers;
 
@@ -16,41 +13,43 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
 
 /**
  * Gebo.ai comment agent
  * 
- * Controller class for managing the configuration of chat models. 
- * This class extends the base CRUD operations for chat model configurations 
- * and adds specific functionality to handle chat model choices.
+ * Controller class for managing the configuration of chat models. This class
+ * extends the base CRUD operations for chat model configurations and adds
+ * specific functionality to handle chat model choices.
  * 
  * @param <ChatModelConfigType> the type of chat model configuration
- * @param <ModelChoice> the type of model choice
- * @param <HandlerIfaceType> the type of handler interface for chat model configuration support
+ * @param <ModelChoice>         the type of model choice
+ * @param <HandlerIfaceType>    the type of handler interface for chat model
+ *                              configuration support
  */
 public class BaseChatModelsConfigurationController<ChatModelConfigType extends GBaseChatModelConfig, ModelChoice extends GBaseChatModelChoice, HandlerIfaceType extends IGChatModelConfigurationSupportService<ModelChoice, ChatModelConfigType>>
 		extends AbstractBaseChatModelsConfigurationCRUDController<ChatModelConfigType, ModelChoice> {
+	protected final HandlerIfaceType ifaceType;
+	public BaseChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao, Class<ChatModelConfigType> type, HandlerIfaceType ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, type);
+		this.ifaceType = ifaceType;
+
+	}
 
 	// Interface for handling chat model configuration support services.
-	@Autowired
-	protected HandlerIfaceType ifaceType;
+	
+	
 
 	/**
-	 * Constructor that initializes the controller with the specified chat model configuration type.
-	 *
-	 * @param type the class type of the chat model configuration
-	 */
-	public BaseChatModelsConfigurationController(Class<ChatModelConfigType> type) {
-		super(type);
-	}
-	
-	/**
-	 * Retrieves a list of model choices based on the specified chat model configuration type.
-	 * This method interfaces with the underlying service to obtain model choices.
+	 * Retrieves a list of model choices based on the specified chat model
+	 * configuration type. This method interfaces with the underlying service to
+	 * obtain model choices.
 	 *
 	 * @param type the chat model configuration type
 	 * @return the operation status containing a list of model choices

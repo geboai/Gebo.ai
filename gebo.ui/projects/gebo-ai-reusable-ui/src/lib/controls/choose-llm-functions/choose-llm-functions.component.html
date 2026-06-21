@@ -9,20 +9,14 @@
  */
 -->
 
-<p-blockUI id="BlockUI" gebo-ai-label [target]="functionsUI" [blocked]="loading">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
-</p-blockUI>
-<p-panel id="Panel" gebo-ai-label #functionsUI [showHeader]="false" [formGroup]="formGroup">
-    <!-- 
-    <p-tree [value]="root" class=" col-12" selectionMode="checkbox" formControlName="selected"></p-tree>
-    -->
+<span [formGroup]="formGroup">
     <p-treeSelect 
         id="TreeSelect" gebo-ai-label
         class=" col-12" 
         containerStyleClass="w-full" 
         formControlName="selected" 
         [options]="root"
-        display="chip" 
+        display="chip"  [loading]="loading"
         [metaKeySelection]="false"  
         selectionMode="checkbox" 
         placeholder="Select functions"
@@ -30,7 +24,7 @@
         [virtualScrollItemSize]="46" 
         [virtualScrollOptions]="{scrollHeight: '200px'}" 
     />
-</p-panel>
+</span>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
 <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -23,5 +23,6 @@ export interface GOpenAIEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GOpenAIEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

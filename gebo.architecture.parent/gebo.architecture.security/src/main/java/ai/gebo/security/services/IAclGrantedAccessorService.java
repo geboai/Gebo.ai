@@ -17,6 +17,8 @@ public interface IAclGrantedAccessorService {
 
 	public List<Integer> aliasesfromGroups(List<UsersGroup> group, AclGrantType grantType);
 
+	public Integer aliasForEveryone(AclGrantType grantType);
+
 	public IAclGrantedAccessor fromUser(User user);
 
 	public IAclGrantedAccessor fromUser(User user, AclGrantType grantType);

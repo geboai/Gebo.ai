@@ -30,13 +30,14 @@ export interface GeboChatRequest {
     tokensSize?: number;
 }
 export namespace GeboChatRequest {
-    export type UserIntentEnum = 'QA' | 'REPORT' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'UNKNOWN';
+    export type UserIntentEnum = 'QA' | 'HOWTO' | 'DECISION' | 'SUMMARY' | 'PURE_SEARCH' | 'ANALISYS' | 'UNKNOWN';
     export const UserIntentEnum = {
         QA: 'QA' as UserIntentEnum,
-        REPORT: 'REPORT' as UserIntentEnum,
         HOWTO: 'HOWTO' as UserIntentEnum,
         DECISION: 'DECISION' as UserIntentEnum,
         SUMMARY: 'SUMMARY' as UserIntentEnum,
+        PURESEARCH: 'PURE_SEARCH' as UserIntentEnum,
+        ANALISYS: 'ANALISYS' as UserIntentEnum,
         UNKNOWN: 'UNKNOWN' as UserIntentEnum
     };
 }

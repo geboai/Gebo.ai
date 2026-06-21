@@ -63,6 +63,7 @@ import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./g
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
+import { AgentStatusService, GeboAIAgentSetupWizardComponent } from "./agent-setup-wizard.component";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -307,6 +308,18 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const agentSetupSection: SetupWizardsSection = {
+    orderEntry: 18,
+    requredStepsIds: [adminLLMSSetupSection.wizardSectionId],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: AgentStatusService,
+    label: "Configure Agent Services",
+    description: "Configure Agent Services and their available tools",
+    wizardComponent: GeboAIAgentSetupWizardComponent,
+    wizardSectionId: "agentSetupSection",
+    mandatory: false
+
+};
 
 /**
  * @NgModule for Gebo.ai setup wizards
@@ -315,9 +328,9 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
  * multiple sequential wizard sections that guide users through the configuration process.
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
-@NgModule({ 
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule,GeboAINotificationsModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig,GeboAIGoogleSearchWizardComponent,GeboAIDeepSearchWizardComponent,GeboAIRagAutotuneWizardComponent,GeboAIEasyVendorConfigurationComponent],
+@NgModule({
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, GeboAIApiKeyModule, GeboAINotificationsModule],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent,GeboAIAgentSetupWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -343,6 +356,7 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
         Neo4jModuleEnabledService,
         GoogleSearcStatusService,
         RagAutotuneStatusService,
+        AgentStatusService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },
@@ -359,6 +373,7 @@ const deepSearchApiSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: agentSetupSection, multi: true },
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
 
 

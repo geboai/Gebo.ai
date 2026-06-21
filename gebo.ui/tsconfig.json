@@ -5,6 +5,8 @@
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "gebo-ai-admin-ui": [
         "./dist/gebo-ai-admin-ui"

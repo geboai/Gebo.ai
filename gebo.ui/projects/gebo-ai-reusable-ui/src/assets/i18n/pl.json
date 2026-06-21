@@ -1,0 +1,4291 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Domyślny język systemu",
+        "help" : "Domyślny język systemu dla tej instalacji Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail jako nazwa użytkownika do logowania"
+      },
+      "passwordC" : {
+        "label" : "Potwierdź hasło",
+        "help" : "Potwierdź hasło"
+      },
+      "password" : {
+        "label" : "Hasło",
+        "help" : "Hasło do logowania (co najmniej 8 znaków)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " hasła nie są zgodne "
+      },
+      "LocalAdmin" : {
+        "label" : "Utwórz lokalne konto administratora"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Z tego konta będziesz korzystać w przyszłości do konfiguracji i zarządzania oprogramowaniem, te dane pozostaną lokalnie i nie będą wysyłane przez sieć"
+      },
+      "EnterBtn" : {
+        "label" : "Przejdź do strony logowania"
+      },
+      "SetupPage" : {
+        "label" : "Skonfiguruj instalację gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Utwórz konfigurację systemu"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Przeczytaj i zaakceptuj licencję"
+      },
+      "AcceptMark" : {
+        "label" : "Akceptuję warunki",
+        "help" : "Klikając tutaj akceptujesz warunki licencji"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Użytkownik administratora utworzony!",
+        "detail" : "Użytkownik administratora PAOLO.ZAVALLONI@GMAIL.COM został pomyślnie utworzony"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail jako nazwa użytkownika do logowania"
+      },
+      "password" : {
+        "label" : "Hasło",
+        "help" : "Hasło do logowania"
+      },
+      "LoginPanel" : {
+        "label" : "Zaloguj się do Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Zaloguj się"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacja nie powiodła się",
+        "detail" : "Nie można uwierzytelnić przy użyciu podanych danych"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "Zapomniałeś hasła?"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona pomyślnie"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Witamy w gebo.ai",
+        "detail" : "Wprowadź swoją nazwę użytkownika i hasło, aby się zalogować"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operacja nieudana",
+        "detail" : "Nie można uwierzytelnić na podstawie podanych danych"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona pomyślnie"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Witamy w gebo.ai",
+        "detail" : "Wprowadź swoją nazwę użytkownika i hasło, aby się zalogować"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Konfiguracja Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Nazwa dostawcy"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "MainPanel" : {
+        "label" : "Ustawienia zabezpieczeń Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Identyfikator"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Powrót do strony głównej konfiguracji"
+      },
+      "WizardUi" : {
+        "label" : "Wybierz sekcję konfiguracji"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Konfiguracja konta administratora i innych",
+        "description" : "Co najmniej jedno konto administratora jest wymagane, aby mieć pewność, że ta instalacja Gebo.ai jest odpowiednio zarządzana. Dodaj innych użytkowników w razie potrzeby"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Katalog roboczy Gebo.ai",
+        "description" : "Skonfiguruj katalog roboczy. To będzie folder, w którym przechowywane będą konfiguracje i wszystkie pliki robocze tej instalacji. Zaleca się regularne tworzenie kopii zapasowych."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Konfiguracja bazy danych wektorowych",
+        "description" : "Musi być skonfigurowana baza danych wektorowych, aby Gebo.ai mógł świadczyć usługi retrieve augmented generation. Możesz wybrać lokalną bazę wektorową, Qdrant lub Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Logowanie jednokrotne, uwierzytelnianie oauth2",
+        "description" : "Logowanie jednokrotne OAuth2 i konfiguracja klientów oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Konfiguracja dużych modeli językowych",
+        "description" : "Skonfiguruj różne llms z usługami backendowymi w chmurze lub lokalnie/LAN. Konieczne jest skonfigurowanie co najmniej jednego modelu czatowego i jednego modelu embedding, aby oprogramowanie działało poprawnie."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Konfiguracja graph rag/ekstrakcji wiedzy",
+        "description" : "Skonfiguruj subsystem graph rag i ekstrakcji wiedzy"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Konfiguracja ścieżek udostępnionych systemów plików",
+        "description" : "Skonfiguruj ścieżki firmowych systemów plików, które będą używane jako miejsce przechowywania dokumentów dla różnych baz wiedzy"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integracja z Atlassian Confluence",
+        "description" : "Skonfiguruj Gebo.ai, aby uzyskać dostęp do instalacji Atlassian Confluence w chmurze lub lokalnie"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integracja z Atlassian Jira",
+        "description" : "Skonfiguruj Gebo.ai, aby uzyskać dostęp do instalacji Atlassian Jira w chmurze"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integracja z Microsoft Sharepoint",
+        "description" : "Skonfiguruj Gebo.ai, aby uzyskać dostęp do instalacji Microsoft Sharepoint w chmurze lub lokalnie"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Skonfiguruj przynajmniej jedną bazę wiedzy",
+        "description" : "Skonfiguruj przynajmniej jedną bazę wiedzy, aby użytkownicy mogli korzystać z usług retrieve augmented generations Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Skonfiguruj przynajmniej jeden profil czatu \"R.A.G.\"",
+        "description" : "Skonfiguruj przynajmniej jeden profil czatu retrieve augmented na bazie skonfigurowanej przez Ciebie bazy wiedzy"
+      },
+      "mandatory-done" : {
+        "summary" : "Wymagane kroki konfiguracji Gebo.ai zostały wykonane...",
+        "detail" : "Wymagane etapy konfiguracji zostały zakończone, ale brakujące kroki uniemożliwiają pełne wykorzystanie tego oprogramowania przez Twoją organizację"
+      },
+      "setup-ok" : {
+        "summary" : "Konfiguracja Gebo.ai zakończona pomyślnie!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Brakuje wymaganego etapu konfiguracji Gebo.ai",
+        "detail" : "Sprawdź czerwone kroki procesu konfiguracji"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integracja Google Drive/Workspaces",
+        "description" : "Skonfiguruj Gebo.ai, aby uzyskać dostęp do danych zespołu Google cloud Drive/Workspaces"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Skonfiguruj Google search api",
+        "description" : "Skonfiguruj poświadczenia Google search api do wyszukiwania AI w sieci"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Skonfiguruj Deep search",
+        "description" : "Skonfiguruj parametry Deep search"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. autotune",
+        "description" : "Automatyczne dostrajanie parametrów generowania z rozszerzonym wyszukiwaniem"
+      },
+      "Description" : {
+        "label" : "Opis"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Data ostatniej aktualizacji strojenia"
+      },
+      "Code" : {
+        "label" : "Kod modelu osadzania/VectorStore"
+      },
+      "ComputedThreashold" : {
+        "label" : "Obliczony próg"
+      },
+      "Autotuned" : {
+        "label" : "Automatycznie dostrojone"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Wymagane kroki konfiguracji Gebo.ai zostały wykonane...",
+        "detail" : "Wymagane kroki zostały zakończone, ale brakujące kroki uniemożliwiają pełne wykorzystanie tego oprogramowania przez Twoją organizację"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Brakuje wymaganych kroków konfiguracji Gebo.ai",
+        "detail" : "Proszę sprawdzić czerwone kroki procesu konfiguracji"
+      },
+      "agentSetupSection" : {
+        "label" : "Konfiguruj usługi agenta",
+        "description" : "Skonfiguruj usługi agenta oraz ich dostępne narzędzia"
+      },
+      "AgentAddBtn" : {
+        "label" : "Dodaj agenta"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja agentów"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditAgentBtn" : {
+        "label" : "Edytuj agenta"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfiguracja systemów firmowych Atlassian Confluence"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systemu"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "System Confluence"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edytuj system"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "System Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja systemów firmowych Atlassian Jira"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systemu"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja systemów firmowych Microsoft Sharepoint"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systemu"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "System Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Podaj klucz API z odpowiednim limitem środków. Jeśli wybrano OpenAI, należy dodać określone środki (10-30$ może wystarczyć) do swojego planu na korzystanie z API, w przeciwnym razie ruch llms nie będzie dostępny w tej aplikacji."
+      },
+      "MainPanel" : {
+        "label" : "Skonfiguruj dostęp do dostawców llms Gebo.ai za pomocą własnego klucza API"
+      },
+      "provider" : {
+        "label" : "Dostawca dużych modeli językowych",
+        "help" : "Wybierz jednego z dostawców: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Użytkownik",
+        "help" : "Podaj użytkownika przypisanego do klucza apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiguruj"
+      },
+      "apiKey" : {
+        "label" : "Klucz API",
+        "help" : "Twój klucz API dostawców LLMS do wykorzystania"
+      },
+      "ProviderHeader" : {
+        "label" : "Dostawca"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Typ modelu"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Model domyślny"
+      },
+      "MainPanelHeader" : {
+        "label" : "Skonfiguruj dostęp do dostawców llms Gebo.ai"
+      },
+      "ExtensiveStup" : {
+        "label" : "Rozszerzone opcje infrastruktury/dostawców"
+      },
+      "MainPanelTitle" : {
+        "label" : "Konfiguracja używanych dużych modeli językowych"
+      },
+      "EasySetup" : {
+        "label" : "Łatwa konfiguracja/początkowa naprawa"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Konfiguracja dużych modeli językowych"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Wyjątek podczas operacji: Nie można utworzyć magazynu wektorów lub inicjalizacji modelu embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Błąd serwera: Nie można utworzyć magazynu wektorów lub inicjalizacji modelu embedding: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Utwórz konfigurację graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja domyślna Graph Rag i ekstrakcji wiedzy"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "EditConfigBtn" : {
+        "label" : "Edytuj konfigurację"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Dodaj bazę wiedzy"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Baza wiedzy"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracje baz wiedzy i treści"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Źródło treści"
+      },
+      "PublishedHeader" : {
+        "label" : "Opublikowano"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Liczba dokumentów"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Dodaj projekt/element",
+        "help" : "utwórz nowy projekt"
+      },
+      "Button1" : {
+        "help" : "otwórz bazę wiedzy"
+      },
+      "Button2" : {
+        "help" : "otwórz formularz projektu"
+      },
+      "Button3" : {
+        "help" : "otwórz źródło danych"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfiguracja folderu roboczego Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiguruj"
+      },
+      "workDirectory" : {
+        "label" : "Wybierz folder jako katalog roboczy Gebo.ai",
+        "help" : "Wybierz folder serwera, który ta instalacja będzie używać jako katalog roboczy do przechowywania swoich konfiguracji i zawartości."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Dodaj folder"
+      },
+      "AddFolderBtn" : {
+        "label" : "Dodaj folder"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "MainPanel" : {
+        "label" : "Ścieżki udostępnionych systemów plików serwera"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Ścieżka bezwzględna"
+      },
+      "DeleteHeader" : {
+        "label" : "Usuń"
+      },
+      "path" : {
+        "label" : "Dodaj folder główny udostępnionego systemu plików",
+        "help" : "Wybierz folder na serwerze będący ścieżką główną udostępnionego systemu plików wykorzystywanego w Twojej organizacji jako repozytorium dokumentów"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis pozycji systemu plików"
+      },
+      "RemovePathBtn" : {
+        "label" : "Usuń ścieżkę"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfiguruj"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja bazy danych wektorowych"
+      },
+      "host" : {
+        "label" : "Host Qdrant",
+        "help" : "Nazwa hosta lub adres IP Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Ustawienia połączenia Qdrant"
+      },
+      "port" : {
+        "label" : "Port Qdrant",
+        "help" : "Port komunikacyjny Qdrant (domyślnie 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Klucz API do uwierzytelniania Qdrant"
+      },
+      "tls" : {
+        "label" : "Parametr TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Wykonano obowiązkowe kroki konfiguracji Gebo.ai...",
+        "detail" : "Obowiązkowe kroki konfiguracji zostały zakończone, ale brakujące kroki mogą uniemożliwić pełne korzystanie z oprogramowania przez Twoją organizację"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Brakuje niektórych obowiązkowych kroków konfiguracji Gebo.ai",
+        "detail" : "Proszę sprawdzić czerwone kroki w procesie konfiguracji"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Konfiguracja Gebo.ai zakończona!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Dodaj nowy profil czatu R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Dodaj profil czatu R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Pobierz ustawienia profili czatu augmented generation (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Istniejące profile czatu R.A.G."
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Edytuj profil czatu R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kody bazy wiedzy"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Skonfiguruj systemy firmowe Google Drive/Workspaces"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google search api key"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Utwórz poświadczenia google search"
+      },
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "customSearchEngineId" : {
+        "label" : "Identyfikator wyszukiwarki",
+        "help" : "Wprowadź identyfikator wyszukiwarki uzyskany podczas rejestrowania poświadczeń google search api."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "apiKey" : {
+        "label" : "Klucz api",
+        "help" : "Wprowadź klucz api uzyskany podczas rejestrowania poświadczeń google search api."
+      },
+      "MainPanel" : {
+        "label" : "Skonfiguruj google search api"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Usuń",
+        "help" : "Usuń poświadczenia Google search api"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Konfiguracja Deep search",
+        "help" : "Dodaj konfigurację deep search"
+      },
+      "EditSystemBtn" : {
+        "label" : "Edytuj konfigurację"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kod",
+        "help" : "Wprowadź opis kodu uwierzytelniania/integracji OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis informacji uwierzytelniania/integracji OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Cel konfiguracji",
+        "help" : "Wybierz, czy to ustawienie będzie używane do uwierzytelniania w Gebo.ai lub aby Gebo.ai miało łączność klienta z systemem zewnętrznym."
+      },
+      "authProvider" : {
+        "label" : "Dostawca",
+        "help" : "Wprowadź dostawcę uwierzytelniania OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "Adres URI wystawcy",
+        "help" : "Wprowadź adres URL wystawcy OAUTH2 danego dostawcy"
+      },
+      "authorizationUri" : {
+        "label" : "Adres URL autoryzacji",
+        "help" : "Wprowadź adres URL autoryzacji OAUTH2 danego dostawcy"
+      },
+      "jwkSetUri" : {
+        "label" : "Adres URI Jwk Set",
+        "help" : "Wprowadź adres url zestawu Jwk OAUTH2 danego dostawcy"
+      },
+      "userInfoUri" : {
+        "label" : "Adres URL informacji o użytkowniku",
+        "help" : "Wprowadź adres URL informacji o użytkowniku OAUTH2 danego dostawcy"
+      },
+      "introspectionUri" : {
+        "label" : "Adres URI introspekcji",
+        "help" : "Wprowadź adres URL introspekcji OAUTH2 danego dostawcy"
+      },
+      "tokenUri" : {
+        "label" : "Adres URL tokenu",
+        "help" : "Wprowadź adres URL tokenu OAUTH2 danego dostawcy"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "Adresy URL dostawcy OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Wprowadź nowe informacje uwierzytelniania/integracji OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID klienta",
+        "help" : "Identyfikator klienta dla protokołu oauth2 (do pobrania w panelu administracyjnym uwierzytelnionego oprogramowania zewnętrznego oauth2)"
+      },
+      "secret" : {
+        "label" : "Klucz tajny",
+        "help" : "Tajny klucz klienta dla protokołu oauth2 (do pobrania w panelu administracyjnym uwierzytelnionego oprogramowania zewnętrznego oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Utwórz konfigurację systemu Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "username" : {
+        "label" : "Nazwa użytkownika Confluence",
+        "help" : "Nazwa użytkownika Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Wersja Confluence",
+        "help" : "Wersja Confluence"
+      },
+      "baseUri" : {
+        "label" : "Bazowy adres internetowy",
+        "help" : "Adres URL bazowy systemu Confluence dla instalacji lokalnej lub główny adres URL organizacji dla chmury Confluence"
+      },
+      "password" : {
+        "label" : "Hasło Confluence",
+        "help" : "Hasło Confluence"
+      },
+      "token" : {
+        "label" : "Klucz API chmury Confluence",
+        "help" : "Klucz API chmury Confluence uzyskany w panelu Confluence, tutaj należy wprowadzić \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "MainPanel" : {
+        "label" : "Udostępnianie treści Confluence"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod zawartości."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis przesłanej zawartości wpisów Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "System Confluence",
+        "help" : "Odnośnik do wcześniej skonfigurowanego systemu Confluence."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencja do projektu nadrzędnego."
+      },
+      "openZips" : {
+        "label" : "Otwieraj pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie zawartości"
+      },
+      "tree" : {
+        "label" : "Wybrane przestrzenie lub strony/podstrony",
+        "help" : "Udostępnione przestrzenie i strony Confluence"
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram aktualizacji treści aby system pozostawał na bieżąco"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji przestrzeni, stron i podstron",
+        "help" : "Opisz tutaj, według jakich kryteriów zawartość przestrzeni, stron i podstron została uporządkowana w udostępnionych treściach Confluence dla Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ustawienia ogólne"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "MainPanel" : {
+        "label" : "Edycja systemu Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "baseUri" : {
+        "label" : "Bazowy adres internetowy",
+        "help" : "Adres URL bazowy systemu Confluence"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod systemu Confluence."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Wersja Confluence",
+        "help" : "Wersja Confluence"
+      },
+      "secretCode" : {
+        "label" : "Użyta tożsamość",
+        "help" : "Wybierz lub utwórz tożsamość do dostępu do systemu Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nowa grupa"
+      },
+      "NewUserBtn" : {
+        "label" : "nowy użytkownik"
+      },
+      "UsersListPanel" : {
+        "label" : "Lista użytkowników"
+      },
+      "GroupsListPanel" : {
+        "label" : "Lista grup"
+      },
+      "SournameHeader" : {
+        "label" : "nazwisko"
+      },
+      "UsernameHeader" : {
+        "label" : "nazwa użytkownika"
+      },
+      "RolesHeader" : {
+        "label" : "role"
+      },
+      "NameHeader" : {
+        "label" : "imię"
+      },
+      "EditBtn" : {
+        "label" : "Edytuj"
+      },
+      "DisabledHeader" : {
+        "label" : "wyłączony"
+      },
+      "EditGroupBtn" : {
+        "label" : "Edytuj"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "opis"
+      },
+      "UsersHeader" : {
+        "label" : "użytkownicy"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Szukaj imienia"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "Szukaj nazwy użytkownika"
+      },
+      "SearchUsersBtn" : {
+        "label" : "szukaj"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Wybierz rolę"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Szukaj nazwiska"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "UserIds" : {
+        "placeholder" : "Wybierz użytkowników"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "MainPanel" : {
+        "label" : "Edycja grupy użytkowników"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis grupy użytkowników"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Wprowadź kod grupy użytkowników"
+      },
+      "userIds" : {
+        "label" : "Lista użytkowników",
+        "help" : "Wybierz użytkowników uczestniczących w grupie"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "Zmień hasło użytkownika"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Zmień"
+      },
+      "username" : {
+        "label" : "Nazwa użytkownika",
+        "help" : "Wpisz swoje hasło, aby potwierdzić tę akcję"
+      },
+      "currentUserPassword" : {
+        "label" : "Twoje hasło",
+        "help" : "Wpisz swoje hasło, aby potwierdzić tę akcję"
+      },
+      "confirmpassword" : {
+        "label" : "potwierdzenie hasła użytkownika",
+        "help" : "potwierdz hasło edytowanego użytkownika"
+      },
+      "password" : {
+        "label" : "Nowe hasło użytkownika",
+        "help" : "Nowe hasło dla edytowanego użytkownika"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis systemu jira."
+      },
+      "MainPanel" : {
+        "label" : "Utwórz konfigurację systemu jira"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "username" : {
+        "label" : "nazwa użytkownika jira",
+        "help" : "nazwa użytkownika jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey uzyskany w jira backoffice, tutaj należy wpisać \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Bazowy adres internetowy",
+        "help" : "Url bazowego adresu systemu jira dla instalacji lokalnej lub bazowy adres twojej organizacji dla systemu jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "MainPanel" : {
+        "label" : "Udostępnianie treści jira"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod treści."
+      },
+      "jiraSystemCode" : {
+        "label" : "system jira",
+        "help" : "Referencja do skonfigurowanego już systemu jira."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencja do projektu nadrzędnego."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis przesłanych treści wpisów jira."
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram zmian w treściach, aby utrzymać system generowania odpowiedzi na bieżąco"
+      },
+      "openZips" : {
+        "label" : "Otwieraj pliki zip",
+        "help" : "Włącz otwieranie plików zip i wydobywanie treści"
+      },
+      "tree" : {
+        "label" : "Wybrane przestrzenie lub strony/podstrony",
+        "help" : "Udostępniona hierarchia projektów i zgłoszeń jira"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji przestrzeni, stron i podstron",
+        "help" : "Wyjaśnij tutaj, jak zostały określone kryteria organizacji przestrzeni, stron i podstron w udostępnionych treściach jira z Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis systemu jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "MainPanel" : {
+        "label" : "Edycja systemu jira"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "baseUri" : {
+        "label" : "Bazowy adres internetowy",
+        "help" : "Url bazowego adresu systemu jira"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod systemu jira."
+      },
+      "secretCode" : {
+        "label" : "Używana tożsamość",
+        "help" : "Wybierz lub utwórz tożsamość do dostępu do systemu jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis systemu SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Wersja Sharepoint",
+        "help" : "wersja sharepoint"
+      },
+      "secret" : {
+        "label" : "Tajny klucz",
+        "help" : "Oauth2 client secret dla tej aplikacji zarejestrowanej w produkcie microsoft \"entra\" (do pobrania w konsoli administracyjnej microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "ID klienta",
+        "help" : "Oauth2 client identifier dla tej aplikacji zarejestrowanej w produkcie microsoft \"entra\" (do pobrania w konsoli administracyjnej microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "ID dzierżawy",
+        "help" : "Oauth2 tenant identifier dla produktu microsoft \"entra\" w Twojej organizacji (do pobrania w konsoli administracyjnej microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informacje o rejestracji aplikacji Microsof oauth2 dla Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "MainPanel" : {
+        "label" : "Utwórz konfigurację systemu SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "MainPanel" : {
+        "label" : "Udostępnianie zawartości SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod dla treści."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Odniesienie do projektu nadrzędnego."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis źródeł danych wpisów SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "system sharepoint",
+        "help" : "Odniesienie do już skonfigurowanego systemu SharePoint/OneDrive."
+      },
+      "openZips" : {
+        "label" : "Otwieranie plików zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie zawartości"
+      },
+      "tree" : {
+        "label" : "Wybrane witryny/strony/podstrony Sharepoint lub dyski/foldery/pliki OneDrive",
+        "help" : "Udostępnione treści sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji zawartości",
+        "help" : "Skonfiguruj harmonogram zmian, by system retrieve augmented generation był na bieżąco"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji przestrzeni, stron i podstron",
+        "help" : "Wyjaśnij tutaj, jak zostały zorganizowane przestrzenie, strony i podstrony w treściach sharepoint udostępnionych Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Edycja systemu sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Ustawienia ogólne"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "secretCode" : {
+        "label" : "Używana tożsamość",
+        "help" : "Wybierz lub utwórz tożsamość do uzyskania dostępu do systemu sharepoint"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod systemu sharepoint."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis systemu sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Wersja Sharepoint",
+        "help" : "wersja sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Usuń"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Zapisz"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Anuluj"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Ustawienia ogólnych informacji/treści"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Ustawienia LLms"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod etapu ekstrakcji danych grafu wiedzy"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracja ekstrakcji graphrag/wiedzy"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis tej konfiguracji etapu ekstrakcji danych grafu wiedzy"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt do ekstrakcji informacji",
+        "help" : "Prompt dużego modelu językowego do ekstrakcji encji/zdarzeń/relacji i aliasów"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM używany do ekstrakcji danych",
+        "help" : "Określ duży model językowy używany do ekstrakcji wiedzy, zostanie użyty domyślny, jeśli żaden nie został wybrany."
+      },
+      "graphRagAllSources" : {
+        "label" : "Zastosuj graph rag do wszystkich źródeł danych",
+        "help" : "Jeśli zaznaczone, wszystkie bazy wiedzy/projekty/źródła danych będą przetwarzane w celu ekstrakcji wiedzy, w przeciwnym razie tylko te specjalnie skonfigurowane"
+      },
+      "defaultModel" : {
+        "label" : "Domyślny duży model językowy",
+        "help" : "Domyślny duży model językowy będzie używany do ekstrakcji wiedzy"
+      },
+      "processEveryDocument" : {
+        "label" : "Zastosuj graph rag do wszystkich plików",
+        "help" : "Algorytm graph rag zostanie zastosowany do wszystkich plików, co zwiększy szczegółowość analizy, na jaką stać system, ale także podniesie koszt i czas przetwarzania dokumentów"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Kryteria wyboru plików do przetwarzania graphrag",
+        "help" : "Edytuj kryteria plików przesyłanych do pipeline ekstrakcji informacji graphrag, wybierz co najmniej nazwę pliku i kryterium i/lub typ pliku i/lub maksymalny rozmiar pliku w bajtach i/lub wiek ostatniej modyfikacji w dniach"
+      },
+      "extractionFormat" : {
+        "label" : "Format ekstrakcji",
+        "help" : "Użyj formatu CSV dla llms poniżej 30b parametrów, JSON dla dużych modeli frontier",
+        "placeholder" : "Użyj formatu CSV dla llms poniżej 30b parametrów, JSON dla dużych modeli frontier"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Wybierz typy plików"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Kryteria filtrowania nazw plików"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Ostatnia modyfikacja pliku, dni temu"
+      },
+      "nameFilter" : {
+        "placeholder" : "Nazwa pliku"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksymalny rozmiar pliku w bajtach"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "MainPanel" : {
+        "label" : "Edycja bazy wiedzy"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do bazy wiedzy"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod bazy wiedzy."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis bazy wiedzy."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Używane modele embeddingów (pozostaw puste, aby użyć domyślnego)",
+        "help" : "Modele embeddingów dla bazy wiedzy; puste pole oznacza użycie domyślnego modelu."
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksuj",
+        "help" : "Zindeksuj zawartość"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Edycja projektu lub elementu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod projektu."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis projektu."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "baza wiedzy",
+        "help" : "baza wiedzy."
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksuj",
+        "help" : "Zindeksuj zawartość"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Dodaj element/projekt",
+        "help" : "dodaj nowy..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Dostępne dla wszystkich",
+        "help" : "Każdy może korzystać"
+      },
+      "accessibleGroups" : {
+        "label" : "Lista grup",
+        "help" : "Wybierz dozwolone grupy"
+      },
+      "accessibleUsers" : {
+        "label" : "Lista użytkowników",
+        "help" : "Wybierz dozwolonych użytkowników"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Pulpit"
+      },
+      "LLMSTab" : {
+        "label" : "LLM-y do czatu i osadzania"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Profile czatu Rag / prompty modeli"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Bazy wiedzy i projekty"
+      },
+      "UsersGroupTab" : {
+        "label" : "Użytkownicy i grupy"
+      },
+      "GeboModulesTab" : {
+        "label" : "Konfiguracja modułów Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfiguruj"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiguruj"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nowa konfiguracja prompta"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Nowy profil czatu"
+      },
+      "MainPanel" : {
+        "label" : "Profile czatu z rozszerzonym pozyskiwaniem informacji"
+      },
+      "PromptsPanel" : {
+        "label" : "Kolekcja promptów i domyślne prompta"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Bazy wiedzy"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfiguruj"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nowa baza wiedzy"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nowa konfiguracja modelu osadzania"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nowa konfiguracja modelu czatu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Dostawca modelu"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfiguruj"
+      },
+      "CodeHeader2" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Opis"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Dostawca modelu"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfiguruj"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Skonfigurowane modele czatu"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Skonfigurowane modele osadzania"
+      },
+      "chat" : {
+        "label" : "Nowy model czatu",
+        "help" : "Wybierz dostawcę, aby dodać nowy model czatu umożliwiający rozmowę z użytkownikiem lub wykonywanie automatyzacji",
+        "placeholder" : "Wybierz dostawcę, aby dodać nowy model czatu umożliwiający rozmowę z użytkownikiem lub wykonywanie automatyzacji"
+      },
+      "embed" : {
+        "label" : "Nowy model osadzania",
+        "help" : "Wybierz dostawcę, aby dodać nowy model osadzania umożliwiający indeksowanie semantyczne treści",
+        "placeholder" : "Wybierz dostawcę, aby dodać nowy model osadzania umożliwiający indeksowanie semantyczne treści"
+      },
+      "ranker" : {
+        "label" : "Nowy model rerank",
+        "help" : "Wybierz dostawcę, aby dodać nowy model rerankera",
+        "placeholder" : "Wybierz dostawcę, aby dodać nowy model rerankera"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Nowa konfiguracja modelu rerank"
+      },
+      "CodeHeader3" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Opis"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Dostawca modelu"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Skonfigurowane modele rerank"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testowanie modelu"
+      },
+      "TestChatBtn" : {
+        "label" : "Testuj czat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Wybierz token OpenAI do użycia w tym modelu"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu OpenAI",
+        "help" : "Wybierz model czatu OpenAI do pracy."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Zdalny dostawca AI działa poprawnie",
+        "detail" : "Dostawca działa i został poprawnie skonfigurowany"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy pracy z url:https://api.openai.com/v1/models",
+        "detail" : "Błąd serwera: Błąd przy pracy z url:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu embedding OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Wybierz token OpenAI do użycia w tym modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu embedding"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu embedding"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu embedding OpenAI",
+        "help" : "Wybierz model embedding OpenAI do pracy."
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model embedding, gdy nie wskazano innego"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Zdalny dostawca AI działa poprawnie",
+        "detail" : "Dostawca działa i został poprawnie skonfigurowany"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "baseUrl" : {
+        "label" : "Podstawowy adres serwera ollama",
+        "help" : "Podstawowy adres (np. http://servername:234/), na którym odpowiada lokalny lub sieciowy serwer ollama."
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu Ollama",
+        "help" : "Wybierz model czatu Ollama do pracy.",
+        "placeholder" : "Wybierz model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Wybierz token Ollama do użycia w tym modelu (opcjonalnie)"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu serwera lokalnego (lub sieciowego) Ollama"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Błąd podczas komunikacji z serwerem Ollama",
+        "detail" : "Błąd sieci podczas komunikacji z systemem zdalnym przy uzyskiwaniu dostępu do modeli\n lista modeli Błąd przy adresie url:http://localhost:11434/api/tags"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Wybierz token Anthropic do użycia w tym modelu"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu Anthropic",
+        "help" : "Wybierz model czatu Anthropic do pracy.",
+        "placeholder" : "Wybierz model"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu Anthropic"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Wybierz token MistralAI do użycia w tym modelu"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu MistralAI",
+        "help" : "Wybierz model czatu MistralAI do pracy."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu MistralAI"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu Google Vertex AI",
+        "help" : "Wybierz model czatu Google Vertex AI do pracy."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Wybierz token Google Vertex AI do użycia w tym modelu"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Informacje ogólne"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu Google Vertex AI"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Wybierz token Deepseek do użycia w tym modelu"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu Deepseek",
+        "help" : "Wybierz model czatu Deepseek do pracy.",
+        "placeholder" : "Wybierz model"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu czatu Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu"
+      },
+      "baseUrl" : {
+        "label" : "Podstawowy adres serwera API modelu czatu",
+        "help" : "Podstawowy adres modelu czatu."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API modelu czatu",
+        "help" : "Wybierz token API modelu czatu do użycia w tym modelu (opcjonalnie)"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model czatu, gdy nie wskazano innego"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu czatu Chat model ",
+        "help" : "Wybierz model czatu Chat model do pracy."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "TitleFragment" : {
+        "label" : "Edycja dostawcy modelu czatu:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ustawienia zaawansowane"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu do modelu"
+      },
+      "forUses" : {
+        "label" : "Zastosowania modelu",
+        "help" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model.",
+        "placeholder" : "Zastosowania, do których platforma Gebo.ai będzie rozważać ten model."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona pomyślnie"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Wyjątek podczas operacji:401 NIEAUTORYZOWANE",
+        "detail" : "Błąd serwera: 401 NIEAUTORYZOWANE"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:8/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:800/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Zdalny dostawca AI działa prawidłowo",
+        "detail" : "Dostawca jest aktywny i poprawnie skonfigurowany"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:8000/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:808/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:8089/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://localhost:8080/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://192.168.1.175:8089/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://192.168.1.175:800/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy adresie url:http://192.168.1.175:808/v1/models",
+        "detail" : "Błąd serwera: Błąd przy adresie url:http://192.168.1.175:808/v1/models"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu embedding"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu embedding serwera lokalnego (lub sieciowego) Ollama"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Wybierz token Ollama do użycia w tym modelu"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu embedding Ollama",
+        "help" : "Wybierz model embedding Ollama do pracy."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu embedding"
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model embedding, gdy nie wskazano innego"
+      },
+      "baseUrl" : {
+        "label" : "Podstawowy adres serwera ollama",
+        "help" : "Podstawowy adres (np. http://servername:234/), na którym odpowiada lokalny lub sieciowy serwer ollama."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu embedding"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu embedding MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu embedding"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu embedding MistralAI",
+        "help" : "Wybierz model embedding MistralAI do pracy."
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model embedding, gdy nie wskazano innego"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Wybierz token MistralAI do użycia w tym modelu"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji modelu embedding Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu embedding"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu embedding Google Vertex AI",
+        "help" : "Wybierz model embedding Google Vertex AI do pracy."
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model embedding, gdy nie wskazano innego"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu embedding"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Wybierz token Google Vertex AI do użycia w tym modelu"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "TitleFragment" : {
+        "label" : "Edycja dostawcy modelu embedding:"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji modelu Embedding"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod konfiguracji modelu Embedding"
+      },
+      "choosedModel" : {
+        "label" : "Wybór modelu embedding Embedding model ",
+        "help" : "Wybierz model embedding Embedding model do pracy."
+      },
+      "baseUrl" : {
+        "label" : "Adres serwera API modelu embedding",
+        "help" : "Podstawowy adres serwera modelu embedding."
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Jeśli zaznaczone, zostanie użyty jako domyślny model embedding, gdy nie wskazano innego"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API modelu embedding",
+        "help" : "Wybierz token API modelu embedding do użycia w tym modelu"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona sukcesem"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "TitleFragment" : {
+        "label" : "Edytowanie dostawcy modelu rankingowego:"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Podaj opis konfiguracji modelu"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod konfiguracji modelu"
+      },
+      "baseUrl" : {
+        "label" : "Adres bazowy serwera API modelu rankingowego",
+        "help" : "Adres bazowy modelu rankingowego."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API modelu rankingowego",
+        "help" : "Wybierz token API modelu rankingowego dla tego modelu (opcjonalnie)"
+      },
+      "choosedModel" : {
+        "label" : "wybór modelu rankingowego",
+        "help" : "Wybierz model rankingowy do pracy."
+      },
+      "defaultModel" : {
+        "label" : "ustaw jako domyślny model rankingowy",
+        "help" : "Jeśli prawda, ten model będzie używany domyślnie tam, gdzie nie jest wskazany"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona sukcesem"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "Problem z pobraniem listy modeli",
+        "detail" : "Ta usługa nie obsługuje=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informacje o konfiguracji czatu"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Usuń tę sesję czatu"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Zmień nazwę sesji czatu"
+      },
+      "QueryControl" : {
+        "placeholder" : "Napisz wiadomość do chatbota"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Przeglądaj lub wyszukuj i wybierz dokumenty do rozmowy"
+      },
+      "UploadFileBtn" : {
+        "help" : "Prześlij plik, aby rozmawiać lub pracować"
+      },
+      "SubmiQuestion" : {
+        "help" : "Wyślij swoje pytanie"
+      },
+      "WithParams" : {
+        "label" : "z parametrami:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Wywołane funkcje AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "Przesłane dokumenty"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historia czatu została załadowana",
+        "detail" : "Historia czatu została pomyślnie załadowana"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Twoja wypowiedź jest przesyłana"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Otrzymano odpowiedź głosową"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Przewiń do góry"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Przewiń w dół"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Znalezione dokumenty"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Czy na pewno chcesz usunąć tę rozmowę?",
+        "header" : "Usuwanie rozmowy"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Dodaj treść lub zmień sposób wyszukiwania"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Dodaj treść lub zmień sposób wyszukiwania"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Dodaj treść lub zmień sposób wyszukiwania"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Źródła",
+        "help" : "Otwórz listę analizowanych dokumentów"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Szczegóły odpowiedzi i źródeł deep search"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Wynik analizy Deep Search"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Błąd podczas wyszukiwania Confluence Search",
+        "detail" : "Błąd serwera: Problemy z dostępem do systemu confluence"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Nowy czat załadowany",
+        "detail" : "Nowy czat został pomyślnie załadowany"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Wybierz źródła"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Wybierz przynajmniej jedną z poniższych opcji"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Pomiń deep search"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Wybrane bazy wiedzy"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Wybrane systemy"
+      },
+      "wordExport" : {
+        "help" : "Eksportuj odpowiedź do Worda"
+      },
+      "pdfExport" : {
+        "help" : "Eksportuj odpowiedź do PDF"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 400 Nieprawidłowe żądanie z POST http://localhost:8000/v1/chat/completions"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "Błąd systemu czatu",
+        "detail" : "Błąd serwera: Nie można wywołać \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\", ponieważ \"handler\" jest równy null"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 400 Nieprawidłowe żądanie z POST http://localhost:8089/v1/chat/completions"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "Błąd podczas wykonywania głębokiego wyszukiwania",
+        "detail" : "Błąd serwera: Podane identyfikatory obiektów nie mogą być puste"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "Błąd podczas wykonywania głębokiego wyszukiwania",
+        "detail" : "Błąd serwera: Odpowiedź czatu musi posiadać identyfikator"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Mapper [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] zwrócił wartość null."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "Błąd podczas wykonywania głębokiego wyszukiwania",
+        "detail" : "Błąd serwera: Nie można wywołać \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\", ponieważ \"this.threadManager\" jest równy null"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 503 Usługa niedostępna z POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 429 Za dużo żądań z POST https://api.openai.com/v1/chat/completions"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "Błąd systemu czatu",
+        "detail" : "Błąd serwera: Nie można wywołać \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\", ponieważ \"userContext\" jest równy null"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 400 Nieprawidłowe żądanie z POST https://api.regolo.ai/v1/chat/completions"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: Nie znaleziono ToolCallback dla narzędzia: findInString"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Wyjątek podczas wykonywania wyszukiwania"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "Błąd podczas wywołania llm",
+        "detail" : "Błąd serwera: Nie wszystkie zmienne zostały zastąpione w szablonie. Brakujące nazwy zmiennych: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "Błąd podczas wywołania llm",
+        "detail" : "Błąd serwera: Nie wszystkie zmienne zostały zastąpione w szablonie. Brakujące nazwy zmiennych: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "Błąd podczas wykonywania głębokiego wyszukiwania",
+        "detail" : "Błąd serwera: Przerwano oczekiwanie na blokadę"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] zwrócił wartość null."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "Błąd podczas wykonywania głębokiego wyszukiwania",
+        "detail" : "Błąd serwera: równoległość > 0 jest wymagana, ale wynosiła 0"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "Nie można wykonać głębokiego wyszukiwania w wewnętrznej bazie wiedzy",
+        "detail" : "Błąd serwera: równoległość > 0 jest wymagana, ale wynosiła 0"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: równoległość > 0 jest wymagana, ale wynosiła 0"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] zwrócił wartość null."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: Zresetowano połączenie"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] zwrócił wartość null."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "Wyjątek podczas przesyłania potoku czatu",
+        "detail" : "Błąd serwera: Usługa PURE_SEARCH_STREAMING_SERVICE nie istnieje"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "Wystąpiły problemy podczas głębokiego wyszukiwania...",
+        "detail" : "Błąd serwera: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] zwrócił wartość null."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "Wyjątek podczas przesyłania potoku czatu",
+        "detail" : "Błąd serwera: Wyjątek podczas tworzenia sieci agentów"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "description" : {
+        "label" : "Opis czatu",
+        "help" : "Wprowadź opis sesji czatu."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Używany model",
+        "help" : "Kod modelu"
+      },
+      "providerId" : {
+        "label" : "Dostawca modelu czatu",
+        "help" : "Sterownik dostawcy LLms"
+      },
+      "functions" : {
+        "label" : "Wywoływane funkcje modelu czatu",
+        "help" : "Lista funkcji dostępnych dla modelu czatu"
+      },
+      "NameCol" : {
+        "label" : "Nazwa"
+      },
+      "DescriptionCol" : {
+        "label" : "Opis"
+      },
+      "kbases" : {
+        "label" : "Dostępne bazy wiedzy",
+        "help" : "Lista baz wiedzy używanych w tym czacie RAG"
+      },
+      "CloseBtn" : {
+        "help" : "Zamknij"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Dodaj dokument do listy 'rozmowa z'"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Uruchamianie deep search"
+      },
+      "RagLLMResponse" : {
+        "label" : "Uruchamianie retrieve augmented generation"
+      },
+      "PureLLMResponse" : {
+        "label" : "Pytam llm"
+      },
+      "Waiting" : {
+        "label" : "Analizuję najlepszy plan odpowiedzi..."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Uruchamianie narzędzi"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "Uruchamianie wyszukiwania wspomaganego przez AI"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizowany plik"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Przeanalizowany wynik wyszukiwania"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Przeanalizowany wynik wyszukiwania systemowego dla"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidacja raportu końcowego"
+      },
+      "RUNNING" : {
+        "label" : "Uruchamianie "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Analizuję Twoją prośbę"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Wybrano agentic flow, uruchamianie agenta"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Poziom usługi: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Wykonywanie wybranego agenta"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Przetwarzanie dokumentu:"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Prześlij plik(i)"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Przeglądaj/szukaj plików firmowych"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Czat z wybranym dokumentem"
+      },
+      "agenticChat" : {
+        "label" : "Czat agentic"
+      },
+      "rag" : {
+        "label" : "Czat r.a.g."
+      },
+      "deepSearch" : {
+        "label" : "Deep search/Wiele źródeł"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Deep search/Wyszukiwanie w bazie wiedzy"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Czat z plikami"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Deep search/Google Web Search"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Deep search/Confluence Search"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Deep search/Jira Search"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Wspomagane wyszukiwanie"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Nagrywaj",
+        "help" : "Rozpocznij nagrywanie ścieżki audio i wyślij ją"
+      },
+      "StopBtn" : {
+        "label" : "Nagrywanie",
+        "help" : "Nagrywanie"
+      },
+      "AbortBtn" : {
+        "label" : "Przerwij nagrywanie",
+        "help" : "Przerwij nagrywanie"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Przerwij nagrywanie"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "odśwież dane"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SelectHeader" : {
+        "label" : "Wybierz"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "data/godzina zakończenia"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "data/godzina rozpoczęcia"
+      },
+      "ProcessingHeader" : {
+        "label" : "przetwarzanie"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "FinishedHeader" : {
+        "label" : "zakończone"
+      },
+      "WithErrorHeader" : {
+        "label" : "z błędem"
+      },
+      "LogTableComponent" : {
+        "help" : "Ten log pobierania obszaru współdzielonego systemu plików"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Statystyki procesów"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CloseBtn" : {
+        "label" : "Zamknij"
+      },
+      "PublicationLogTab" : {
+        "label" : "Log publikacji"
+      },
+      "MainPanel" : {
+        "label" : "Log publikacji"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Status zadania: w trakcie, zakończone lub zakończone z błędami."
+      },
+      "publishingSystem" : {
+        "label" : "Konfiguracja publikowanej treści",
+        "help" : "Informacje o publikowanej treści"
+      },
+      "startDateTime" : {
+        "label" : "Data i godzina rozpoczęcia",
+        "help" : "Data i godzina rozpoczęcia zadania synchronizacji treści"
+      },
+      "endDateTime" : {
+        "label" : "Data i godzina zakończenia",
+        "help" : "Data i godzina zakończenia zadania synchronizacji treści"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Nieprzetworzone całkowicie"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Przetworzone całkowicie"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "osadzanie vs łączna liczba dokumentów"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Więcej szczegółów"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generuj podpowiedź"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Kreator podpowiedzi",
+        "help" : "Użyj tego, aby wykorzystać LLM do wygenerowania podpowiedzi dla swoich celów"
+      },
+      "acceptPrompt" : {
+        "label" : "Akceptuj podpowiedź"
+      },
+      "promptWizardUI" : {
+        "label" : "Kreator generowania szablonu podpowiedzi"
+      },
+      "cancel" : {
+        "label" : "Anuluj"
+      },
+      "response" : {
+        "label" : "Sugerowany szablon podpowiedzi",
+        "help" : "Wygenerowany tekst szablonu dla twojego celu (możesz go zmienić, poprawić lub zmodyfikować)"
+      },
+      "modelCode" : {
+        "label" : "Model czatu do użycia",
+        "help" : "Wybierz model czatu, który ma wygenerować szablon podpowiedzi"
+      },
+      "query" : {
+        "label" : "Zapytanie o szablon podpowiedzi",
+        "help" : "Określ w drugiej osobie, jaki jest cel, w którym AI ma wspierać użytkownika"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura, z jaką model będzie odpowiadać, od 0 do 1 (jeśli nie jesteś pewien, pozostaw puste)"
+      },
+      "contextLength" : {
+        "label" : "Długość kontekstu (tokeny)",
+        "help" : "Ilość tekstu, którą model AI może uwzględnić podczas przetwarzania (jeśli nie ustawione, użyta będzie wartość 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parametr TopP, od 0 do 1 (jeśli nie jesteś pewien, pozostaw puste)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Włączone funkcje dla tego modelu",
+        "help" : "Funkcje, które mogą być używane przez model podczas czatu"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Domyślna podpowiedź modelu",
+        "help" : "Edytuj domyślną podpowiedź dla modelu czatu."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis tożsamości."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod tożsamości."
+      },
+      "secretType" : {
+        "label" : "Typ tożsamości",
+        "help" : "Wybierz typ tożsamości do utworzenia dla systemu zdalnego"
+      },
+      "InsertBtn" : {
+        "label" : "Wstaw"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Wprowadź token."
+      },
+      "user" : {
+        "label" : "Użytkownik",
+        "help" : "Wprowadź użytkownika wskazanego przez token."
+      },
+      "MainPanel" : {
+        "label" : "Tworzenie tożsamości"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "username" : {
+        "label" : "Nazwa użytkownika",
+        "help" : "Wprowadź nazwę użytkownika."
+      },
+      "password" : {
+        "label" : "Hasło",
+        "help" : "Wprowadź hasło."
+      },
+      "email" : {
+        "label" : "E-mail/Nazwa użytkownika",
+        "help" : "Wprowadź e-mail lub nazwę użytkownika powiązaną z kluczem ssh."
+      },
+      "key" : {
+        "label" : "Tajny klucz",
+        "help" : "Otwórz plik z kluczem prywatnym i skopiuj zawartość do tego pola."
+      },
+      "passphrase" : {
+        "label" : "Hasło do klucza",
+        "help" : "Wprowadź hasło do klucza."
+      },
+      "pub" : {
+        "label" : "Klucz publiczny",
+        "help" : "Otwórz plik z kluczem publicznym i skopiuj zawartość do tego pola."
+      },
+      "jsonContent" : {
+        "label" : "Zawartość pliku z poświadczeniami Google",
+        "help" : "Skopiuj tutaj zawartość pliku poświadczeń Google API pobranego z konsoli Google Cloud API (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Użytkownik Google do podszycia się",
+        "help" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia",
+        "placeholder" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia"
+      },
+      "OK" : {
+        "summary" : "Zapisano pomyślnie",
+        "detail" : "Aktualizacja zakończona pomyślnie"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod zawartości."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis przesłanej zawartości wpisu systemu plików."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Odniesienie do projektu nadrzędnego."
+      },
+      "upload" : {
+        "label" : "Prześlij zawartość",
+        "help" : "Kliknij przycisk przeglądaj i wybierz pliki zip lub inne pliki"
+      },
+      "openZips" : {
+        "label" : "Otwórz pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie zawartości"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuj!",
+        "help" : "Zapisuje i udostępnia tę zawartość w bazie wiedzy dla LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "MainPanel" : {
+        "label" : "Edycja przesłanej zawartości"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfiguruj systemy budowania",
+        "help" : "Lista systemów budowania/pakowania do sprawdzenia pod kątem metadanych i dodatkowych informacji o artefaktach (pozostaw puste, jeśli nie zawiera kodu oprogramowania)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Wybrane elementy"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Anuluj"
+      },
+      "EditBtn" : {
+        "help" : "Modyfikuj wybrane"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Wybierz elementy"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Wybierz elementy"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Edytuj harmonogram"
+      },
+      "ConfirmBtn" : {
+        "label" : "Potwierdź"
+      },
+      "AddBtn" : {
+        "label" : "+Dodaj"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Obsługa kodu źródłowego"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "MainPanel" : {
+        "label" : "Edycja istniejącej zawartości systemu plików"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis przesłanej zawartości wpisu systemu plików."
+      },
+      "openZips" : {
+        "label" : "Otwieraj pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie zawartości"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod zawartości."
+      },
+      "tree" : {
+        "label" : "Wybrane pliki lub foldery",
+        "help" : "Udostępnione pliki lub katalogi systemu plików dostępne na serwerze"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Odniesienie do projektu nadrzędnego."
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram zmian treści, aby utrzymać aktualność systemu retrieve augmented generation"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji folderów",
+        "help" : "Opisz tutaj, według jakich kryteriów foldery zostały zorganizowane w obszarze systemu plików udostępnianych z Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfiguruj systemy budowania",
+        "help" : "Lista systemów budowania/pakowania do sprawdzenia w poszukiwaniu metadanych i dodatkowych informacji o artefaktach (pozostaw puste, jeśli nie zawiera kodu oprogramowania)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nowy obszar udostępniania plików"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Ścieżka bezwzględna"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db lub yml konfiguracja pliku"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ModifyHeader" : {
+        "label" : "Modyfikuj"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Wybrany udostępniony folder systemu plików",
+        "help" : "Wybierz folder na serwerze, który jest ścieżką główną udostępnionego systemu plików używanego w Twojej organizacji jako repozytorium dokumentów"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis współdzielonego obszaru systemu plików Twojej organizacji"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod zawartości."
+      },
+      "InsertBtn" : {
+        "label" : "Wstaw"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "MainPanel" : {
+        "label" : "Edycja serwerowego udostępnionego folderu plików"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisz i udostępnij te treści w bazie wiedzy dla LLm"
+      },
+      "MainPanel" : {
+        "label" : "Edycja źródła repozytorium/doкumentacji git"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis repozytorium git."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod repozytorium git."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencja projektu nadrzędnego."
+      },
+      "contentManagementSystem" : {
+        "label" : "System Git",
+        "help" : "Referencja już skonfigurowanego systemu git."
+      },
+      "branch" : {
+        "label" : "Gałąź",
+        "help" : "Nazwa gałęzi do pobrania (zazwyczaj master, main lub develop)"
+      },
+      "identityCode" : {
+        "label" : "Użyta tożsamość",
+        "help" : "Wybierz tożsamość do klonowania/pobierania w systemie"
+      },
+      "repositoryUri" : {
+        "label" : "Adres/nazwa repozytorium",
+        "help" : "Pełny adres zdalnego repozytorium git (zazwyczaj zaczyna się od http:, https: lub ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "publiczne",
+        "help" : "Jeśli zaznaczone, dostęp do repozytorium nie wymaga uwierzytelnienia"
+      },
+      "openZips" : {
+        "label" : "Otwórz pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie zawartości"
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram sprawdzania zmian, aby utrzymać aktualność systemu rozszerzonej generacji"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfiguruj systemy budowania",
+        "help" : "Lista systemów budowania/pakowania do sprawdzenia w celu uzyskania metadanych i dodatkowych informacji o artefaktach"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Użyj modelu czatu"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "wybierz"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Wybierz konfigurację modelu czatu"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Wybierz konfigurację modelu embedding"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "wybierz"
+      },
+      "RagSettingsTab" : {
+        "label" : "Ustawienia RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Ustawienia dużego modelu językowego i dostępnych narzędzi"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Użyj modelu embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu bezpieczeństwa"
+      },
+      "MainPanel" : {
+        "label" : "Edytowanie profilu czatu z retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie wygenerowany unikalny kod profilu czatu."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis profilu czatu."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Użytkownik wybiera bazy wiedzy",
+        "help" : "Użytkownik może wybrać dostępne bazy wiedzy i/lub przesłać własne pliki."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Bazy wiedzy",
+        "help" : "Bazy wiedzy używane do pobierania dokumentów."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Próg podobieństwa",
+        "help" : "Próg podobieństwa dla wyszukiwań semantycznych, 0,60–0,65 niskie filtrowanie, 0,70-0,75 średnie filtrowanie, 0,80–0,85 dokładne"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Próg podobieństwa 2. 'kroku'",
+        "help" : "Próg podobieństwa dla wyszukiwań semantycznych, 0,60–0,65 niskie filtrowanie, 0,70-0,75 średnie filtrowanie, 0,80–0,85 dokładne używane od 2. wyszukiwania w multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Wyłącz 'Multi Hop' rag",
+        "help" : "Wyłącz funkcję 'multi hop rag'. Wyszukiwanie Multi hop najpierw wykonuje wyszukiwanie semantyczne, a znalezione dokumenty wykorzystuje jako kontekst do kolejnego wyszukiwania, zapewniając większy kontekst."
+      },
+      "topK" : {
+        "label" : "Brane pod uwagę fragmenty dokumentów (TopK)",
+        "help" : "W retrieve augmented generation, Top N znalezionych fragmentów dokumentów branych pod uwagę w wyszukiwaniu semantycznym"
+      },
+      "enabledFunctions" : {
+        "label" : "Włączone wywołania funkcji dla tego czatu RAG",
+        "help" : "Funkcjonalności, które mogą być użyte przez model llm podczas czatu z użytkownikiem oraz pracując z wybraną bazą wiedzy"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edytuj prompt na potrzeby sesji retrieve augmented generation."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Ręczna lub automatyczna konfiguracja progu",
+        "help" : "Użyj ręcznego progu odległości zamiast automatycznego"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Użyj wyszukiwania po słowie kluczowym, jeśli jest dostępne",
+        "help" : "Uruchom dodatkowe wyszukiwanie po słowach kluczowych oprócz semantycznego, jeśli są skonfigurowane w tej instalacji"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Wprowadź lub wybierz kategorię promptu"
+      },
+      "MainPanel" : {
+        "label" : "Edycja promptu"
+      },
+      "promptCategory" : {
+        "label" : "Kategoria promptu",
+        "help" : "Wybierz lub wprowadź kategorię promptu."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edytuj prompt dla czatu. Użyj {query}, aby wskazać pytanie użytkownika, oraz {context}, aby wskazać kontekst dokumentów/historii przesyłanych do LLM."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod promptu."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis promptu."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Zmień hasło"
+      },
+      "YourUserName" : {
+        "label" : "Twoja nazwa użytkownika"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Stare hasło",
+        "help" : "Aktualne hasło do logowania"
+      },
+      "newPassword" : {
+        "label" : "Nowe hasło",
+        "help" : "nowe hasło"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail jako nazwa użytkownika do logowania"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Formularz zmiany hasła"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "ChangePwdBtn" : {
+        "label" : "zmień hasło"
+      },
+      "newPassword1" : {
+        "label" : "Potwierdź nowe hasło",
+        "help" : "Potwierdź nowe hasło"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "ForMoreInformations" : {
+        "label" : "Aby uzyskać więcej informacji o Google custom search API lub jak uzyskać swój klucz API (za darmo), odwiedź: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "unikalny kod konfiguracji google search api."
+      },
+      "MainPanel" : {
+        "label" : "Edycja poświadczeń google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Token google search api",
+        "help" : "Wybierz lub wprowadź token google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Identyfikator google search engine",
+        "help" : "Identyfikator google search engine"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Czat bez baz wiedzy",
+        "help" : "Wybierz LLM-y do sesji czatu",
+        "placeholder" : "Wybierz LLM-y do sesji czatu"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Otwórz sekcję opcji czatu"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nowy czat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nowa sesja czatu"
+      },
+      "chatProfileCode" : {
+        "label" : "Czat z bazami wiedzy",
+        "help" : "Wybierz firmowy profil czatu, aby pracować z dokumentami firmy (i Twoimi) oraz LLM-ami",
+        "placeholder" : "Wybierz firmowy profil czatu, aby pracować z dokumentami firmy (i Twoimi) oraz LLM-ami"
+      },
+      "NewChatBtn" : {
+        "label" : "Nowy czat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesje czatu"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Zamknij pasek boczny"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Utwórz nową rozmowę z dużymi modelami językowymi",
+        "label" : "Czat"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Utwórz nowy czat RAG z zawartością firmy",
+        "label" : "Czat z bazą wiedzy"
+      },
+      "ChatsTitle" : {
+        "label" : "Czaty"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Otwórz sekcję opcji czatu"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Rozmawiaj z dokumentami",
+        "help" : "Przeglądaj, wyszukuj i wybierz dokumenty do pracy"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Wybierz pliki do rozmowy"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Przeglądaj lub wyszukuj i wybierz dokumenty do rozmowy"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Wybrane dokumenty"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Potwierdź"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Prześlij lub wybierz swoje dokumenty",
+        "help" : "Wybierz lub prześlij dokumenty ze swojej przestrzeni użytkownika"
+      },
+      "fileSearchBtn" : {
+        "label" : "Szukaj"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Szukaj"
+      },
+      "query" : {
+        "label" : "Fraza do wyszukiwania semantycznego",
+        "help" : "Wprowadź znaczącą frazę związaną z wyszukiwaniem"
+      },
+      "choosenBrowsing" : {
+        "label" : "Wybierz pliki przeglądając bazy wiedzy",
+        "help" : "Wybierz pliki przeglądając firmowe współdzielone bazy wiedzy"
+      },
+      "filename" : {
+        "label" : "Wyszukiwana nazwa pliku",
+        "help" : "Wpisz fragment nazwy pliku, którego szukasz"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Wyszukiwanie po nazwie pliku"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Przeglądaj pliki firmowe"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Wyszukiwanie semantyczne"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Wybierz pliki do rozmowy"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Modyfikuj wybrane"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Wybierz pliki użytkowników"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Wybierz przesłane treści użytkownika"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Bazy wiedzy i pliki użytkownika"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+podprojekt lub element",
+        "help" : "dodaj podprojekt lub element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+dodaj pliki",
+        "help" : "dodaj źródło danych z przesłanych plików"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+SharePoint/OneDrive",
+        "help" : "dodaj źródło danych Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "dodaj źródło danych Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+system plików",
+        "help" : "dodaj źródło danych współdzielonego systemu plików"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "dodaj źródło danych Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+repozytorium git",
+        "help" : "dodaj źródło danych repozytorium git, np. bitbucket, github lub inne"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "dodaj źródło danych Google Drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Konfiguracja"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "mój profil"
+      },
+      "logout" : {
+        "label" : "wyloguj"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Zmień język"
+      },
+      "MyProfile" : {
+        "label" : "twój profil"
+      },
+      "MyProfileItem" : {
+        "label" : "twój profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Czat"
+      },
+      "setupMenuItem" : {
+        "label" : "Ustawienia",
+        "help" : "Konfiguracja jest nieukończona, kliknij tutaj aby nią zarządzać"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "edytuj profil"
+      },
+      "logoutMenuItem" : {
+        "label" : "wyloguj"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza listy dokumentów"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizacja dokumentów"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd przetwarzania tokenów"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Indeksowanie semantyczne (embedding dla semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd przetwarzania tokenów"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksowanie encji/relacji/zdarzeń (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd podczas przetwarzania tokenów"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza listy dokumentów"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd podczas przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizacja dokumentów"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Błędne dokumenty",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd podczas przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Indeksowanie semantyczne (embedding dla semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd podczas przetwarzania tokenów"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd podczas przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Błędne dokumenty",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksowanie jednostek/relacji/zdarzeń (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd podczas przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd podczas przetwarzania tokenów"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Błędne dokumenty",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Błędne dokumenty",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Indeksowanie pełnotekstowe"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd przetwarzania tokenów"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kup kredyt do klucza Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Modyfikuj",
+        "help" : "Wyświetl/modyfikuj konfigurację modelu"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Opis"
+      },
+      "ExistingModelType" : {
+        "label" : "Typ modelu"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Istniejące konfiguracje"
+      },
+      "ProviderWWW" : {
+        "label" : "Link do strony"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Dane uwierzytelniające dostawcy"
+      },
+      "ProviderInfos" : {
+        "label" : "Informacje o dostawcy"
+      },
+      "ExistingApiKey" : {
+        "label" : "Klucz API/dane logowania",
+        "help" : "Wybierz klucz API lub dane logowania dla tego dostawcy"
+      },
+      "NewApiKey" : {
+        "label" : "Nowy klucz API",
+        "help" : "Wprowadź nowy klucz API dla tego dostawcy"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Użyj istniejących lub nowych",
+        "help" : "Użyj istniejących lub utwórz nowe dane logowania dla tego dostawcy"
+      },
+      "NewUserName" : {
+        "label" : "Nazwa użytkownika",
+        "help" : "Nazwa użytkownika używana do dostępu do usług dostawcy"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nowy model embedding",
+        "help" : "Utwórz nową konfigurację modelu embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Nowy model czatu",
+        "help" : "Utwórz nową konfigurację modelu czatu"
+      },
+      "NewModelDialog" : {
+        "label" : "Dodaj nowy model"
+      },
+      "PiSave" : {
+        "label" : "Zapisz"
+      },
+      "NewModelsButton" : {
+        "label" : "Nowe modele",
+        "help" : "Utwórz nową konfigurację modeli"
+      },
+      "NewModelsDialog" : {
+        "label" : "Dodaj nowe modele"
+      },
+      "baseUrl" : {
+        "label" : "Bazowy adres api",
+        "help" : "Bazowy adres URL usług api tego dostawcy"
+      },
+      "ModelTypePanel" : {
+        "label" : "Dodaj nowe modele"
+      },
+      "ModelsChoices" : {
+        "label" : "Wybór modeli"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Wybór sugerowanych modeli"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model embedding",
+        "help" : "Wybierz jeden z predefiniowanych modeli embedding"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model czatu",
+        "help" : "Wybierz jeden z predefiniowanych modeli czatu"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Zaawansowany wybór modeli"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model embedding",
+        "help" : "Wybierz jeden z modeli embedding opublikowanych przez dostawcę"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model czatu",
+        "help" : "Wybierz jeden z modeli czatu opublikowanych przez dostawcę"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Używaj tego trybu wyboru tylko jeśli jesteś ekspertem lub sprawdzisz na stronie dostawcy, które modele odpowiadają Twoim potrzebom. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Ustaw ten model jako domyślny, będzie używany do każdego zadania, dla którego nie skonfigurowano innego modelu czatu"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Sugerujemy następującą listę modeli "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Ustaw ten model jako domyślny, będzie używany do każdego zadania, dla którego nie skonfigurowano innego modelu embedding"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ustaw jako domyślny model czatu",
+        "help" : "Ustaw ten model jako domyślny, będzie używany do każdego zadania, dla którego nie skonfigurowano innego modelu czatu"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ustaw jako domyślny model embedding",
+        "help" : "Ustaw ten model jako domyślny, będzie używany do każdego zadania, dla którego nie skonfigurowano innego modelu embedding"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Używaj tego trybu wyboru tylko jeśli jesteś ekspertem lub sprawdzisz na stronie dostawcy, które modele odpowiadają Twoim potrzebom. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Utwórz i aktywuj"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Utwórz i aktywuj"
+      },
+      "ProviderNameField" : {
+        "label" : "Dostawca"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Dostawca wymaga poświadczeń",
+        "help" : "Aplikacja dostawcy/serwera jest skonfigurowana do uwierzytelnionego dostępu za pomocą klucza API lub innych poświadczeń"
+      },
+      "baseUrl1" : {
+        "label" : "Podstawowy adres url API",
+        "help" : "Podstawowy adres url dostawcy do usług API"
+      },
+      "enableAllFunctions" : {
+        "label" : "włącz wszystkie wywołania funkcji",
+        "help" : "Włącz wszystkie dostępne narzędzia i wywołania funkcji; jeśli nie ustawione, będzie można je włączyć później w panelu administracyjnym llms"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Wyjątek podczas operacji:Anthropic api nie może działać bez odpowiedniej konfiguracji klucza api",
+        "detail" : "Błąd serwera: Anthropic api nie może działać bez odpowiedniej konfiguracji klucza api"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Zdalny dostawca AI OK",
+        "detail" : "Dostawca działa poprawnie i jest skonfigurowany"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Wyjątek podczas operacji:401 UNAUTHORIZED",
+        "detail" : "Błąd serwera: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Wyjątek podczas operacji: Brak basePath",
+        "detail" : "Błąd serwera: Brak basePath"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona sukcesem"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Utwórz i aktywuj"
+      },
+      "vendorId" : {
+        "label" : "Wybierz dostawcę dużego modelu językowego",
+        "help" : "Wybierz początkowego dostawcę dla domyślnych modeli czatu i osadzania"
+      },
+      "secretId" : {
+        "label" : "Wybierz dane uwierzytelniające dostawcy (klucz api)",
+        "help" : "Wybierz jedne z istniejących danych uwierzytelniających dla wybranego dostawcy llm"
+      },
+      "InternalServiceModel" : {
+        "label" : "Model czatu dla usług wewnętrznych",
+        "help" : "Model czatu skonfigurowany dla usług wewnętrznych odpowiada za wydobywanie informacji, podsumowania i realizację wewnętrznych procesów."
+      },
+      "ChatModel" : {
+        "label" : "Domyślny model czatu",
+        "help" : "Domyślny model czatu będzie odpowiadał na pytania użytkowników i wykonywał procesy, dla których nie ma specjalnej konfiguracji. Musi być wydajny, niezawodny, zapewniając dobrą równowagę pomiędzy kosztem, wydajnością a jakością wyników."
+      },
+      "ProviderBuy" : {
+        "label" : "Kup link kredytu Apy key"
+      },
+      "ProviderWWW" : {
+        "label" : "Link do strony internetowej"
+      },
+      "WebSiteLink" : {
+        "label" : "Strona internetowa dostawcy",
+        "help" : "Kliknij tutaj, aby zobaczyć ogólne informacje o dostawcy."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Zakup kredyt u dostawcy",
+        "help" : "Kliknij tutaj, aby kupić kredyt dla swojego (swoich) klucza api."
+      },
+      "EmbeddingModel" : {
+        "label" : "Domyślny model osadzania",
+        "help" : "Ten model będzie odpowiedzialny za semantyczne indeksowanie (osadzanie) oraz wyszukiwanie Twoich danych i dokumentów"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Zdalny dostawca AI OK",
+        "detail" : "Dostawca działa i został poprawnie skonfigurowany"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacja nie powiodła się",
+        "detail" : "Nie można uwierzytelnić podanych danych logowania"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona pomyślnie"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: klasa org.neo4j.driver.internal.value.StringValue nie może zostać rzutowana na klasę java.lang.String (org.neo4j.driver.internal.value.StringValue jest w nieznanym module loadera 'app'; java.lang.String jest w module java.base loadera 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Pomyślnie zapisano",
+        "detail" : "Aktualizacja zakończona pomyślnie"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Błąd komunikacji z serwerem Ollama",
+        "detail" : "Błąd sieci podczas komunikacji z systemem zdalnym\n lista modeli Błąd podczas pracy z url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Możesz to usunąć",
+        "detail" : "Aktualnie wyświetlane dane można bezpiecznie usunąć"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Nie możesz tego usunąć",
+        "detail" : "Ten obiekt jest używany w innej części aplikacji"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Wyjątek podczas operacji: Błąd przy pracy z url: http://localhost:11434/v1/models",
+        "detail" : "Błąd serwera: Błąd przy pracy z url: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Wyjątek podczas operacji: należy ustawić apiKey",
+        "detail" : "Błąd serwera: należy ustawić apiKey"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: 400 Bad Request z POST http://localhost:8000/v1/chat/completions"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy pracy z url:http://localhost:8000/v1/models",
+        "detail" : "Błąd serwera: Błąd przy pracy z url:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Błąd podczas przesyłania odpowiedzi czatu",
+        "detail" : "Błąd serwera: Zerwane połączenie"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Wyjątek podczas operacji:Błąd przy pracy z url:https://api.openai.com/v1/models",
+        "detail" : "Błąd serwera: Błąd przy pracy z url:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Wyjątek podczas operacji:Anthropic api nie może działać bez odpowiedniej konfiguracji klucza api",
+        "detail" : "Błąd serwera: Anthropic api nie może działać bez odpowiedniej konfiguracji klucza api"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Plik wyeksportowany",
+        "detail" : "Przejdź do sekcji pobranych w przeglądarce"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Prześlij pliki do rozmowy"
+      },
+      "ChooseFile" : {
+        "help" : "Wybierz pliki"
+      },
+      "UploadFile" : {
+        "help" : "Prześlij pliki"
+      },
+      "DragDropHere" : {
+        "label" : "Przeciągnij i upuść pliki tutaj, aby je przesłać"
+      },
+      "RemoveAll" : {
+        "help" : "Usuń wszystkie"
+      },
+      "UploadPending" : {
+        "label" : "Oczekuje na przesłanie"
+      },
+      "CompletedData" : {
+        "label" : "Zakończono"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacja zakończona pomyślnie"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Skonfiguruj graphrag w obszarze konfiguracji, aby korzystać z niego w tej sekcji"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Ustawienia graphrag"
+      },
+      "button-help" : {
+        "label" : "Kliknij tutaj, aby skonfigurować ekstrakcję informacji dla graphrag (aktualnie nie skonfigurowane)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Dodaj konfigurację"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Utwórz połączenie Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "delegatedUser" : {
+        "label" : "Użytkownik Google do podszycia się",
+        "help" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia",
+        "placeholder" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia"
+      },
+      "jsonContent" : {
+        "label" : "Poświadczenia Google – zawartość pliku json",
+        "help" : "Utwórz poświadczenia Google z dostępem do workspace/team drives w Google Console Cloud i wklej tutaj zawartość pobranego pliku json (https://console.cloud.google.com/).",
+        "placeholder" : "Utwórz poświadczenia Google z dostępem do workspace/team drives w Google Console Cloud i wklej tutaj zawartość pobranego pliku json (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "MainPanel" : {
+        "label" : "Udostępnianie treści google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis przesłanych treści z Google Drive."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod treści."
+      },
+      "tree" : {
+        "label" : "Wybrany plik lub folder",
+        "help" : "Udostępnione przestrzenie i strony Google Drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfiguracja Google Drive",
+        "help" : "Odniesienie do już skonfigurowanego systemu Google Drive."
+      },
+      "openZips" : {
+        "label" : "Otwieraj pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie ich zawartości"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Odniesienie do projektu nadrzędnego."
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram aktualizowania treści, aby generowanie uzupełniane o pozyskane dane było aktualne"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji folderów i podfolderów",
+        "help" : "Opisz tutaj, według jakich kryteriów posegregowano pliki i foldery udostępniane z Google Drive do Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ustawienia ogólne"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "MainPanel" : {
+        "label" : "Edycja integracji Google Drive"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod systemu google drive."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Użyta tożsamość",
+        "help" : "Wybierz lub utwórz tożsamość do uzyskania dostępu do systemu Google Drive"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Czatuj"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Wyszukiwanie istotnych informacji"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Konsolidacja końcowego raportu"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Przeanalizowany wynik wyszukiwania"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Przeanalizowany wynik wyszukiwania w systemie dla"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Wybierz co najmniej jedną z poniższych opcji"
+      },
+      "LaunchBtn" : {
+        "label" : "Uruchom wyszukiwanie"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Pomiń głębokie wyszukiwanie"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Wybrane bazy wiedzy"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Wybrane systemy"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Wybierz źródła"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analizowany plik"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Wstaw"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SearchSettingTab" : {
+        "label" : "Ustawienia wyszukiwania"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Wprowadź prompt do wyodrębniania istotnych informacji z dokumentów"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Wprowadź prompt do konsolidacji wyodrębnionych informacji"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji deep search"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Ustawienia large language model"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wprowadź opis konfiguracji deep search"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod konfiguracji deep search"
+      },
+      "searchType" : {
+        "label" : "Typ wyszukiwania",
+        "help" : "Wybierz wyszukiwanie semantyczne jednoetapowe lub wieloetapowe"
+      },
+      "topK" : {
+        "label" : "Liczba pobieranych segmentów tekstu (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "Używany llm",
+        "help" : "Określ large language model używany do Deep search, domyślny zostanie użyty, jeśli żaden nie będzie wybrany."
+      },
+      "analisysPrompt" : {
+        "label" : "Prompt do analizy dokumentów",
+        "help" : "Edytuj prompt używany do wydobywania istotnych informacji z fragmentów dokumentów."
+      },
+      "consolidationPrompt" : {
+        "label" : "Prompt do konsolidacji wyodrębnionych informacji",
+        "help" : "Edytuj prompt używany do konsolidacji w jednym raporcie istotnych informacji wydobytych z pobranych dokumentów."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Próg podobieństwa wyszukiwania",
+        "help" : "Próg semantycznego podobieństwa pierwszego etapu (od 0.5 do 1.0)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "Próg podobieństwa drugiego etapu",
+        "help" : "Próg semantycznego podobieństwa drugiego etapu (od 0.5 do 1.0)"
+      },
+      "defaultModel" : {
+        "label" : "Domyślny large language model",
+        "help" : "Domyślny large language model będzie używany do przetwarzania Deep search"
+      },
+      "similarityThreashold" : {
+        "label" : "Próg podobieństwa wyszukiwania",
+        "help" : "Próg semantycznego podobieństwa (od 0.5 do 1.0)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Ustawienia bezpieczeństwa"
+      },
+      "accessibleToAll" : {
+        "label" : "Dostępne dla wszystkich"
+      },
+      "datasource" : {
+        "label" : "Źródło danych"
+      },
+      "allowedGroups" : {
+        "label" : "Dozwolone grupy"
+      },
+      "allowedUsers" : {
+        "label" : "Dozwoleni użytkownicy"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Dostęp użytkownika/grupy do każdego źródła danych",
+        "help" : "Deep search zostanie włączony dla każdego zewnętrznego źródła danych oraz użytkownika lub grupy"
+      },
+      "SIMPLEMODE" : {
+        "label" : "Prosty dostęp per użytkownik/grupa"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Dostęp per źródło danych użytkownik/grupa"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Użyj lub utwórz dane uwierzytelniające klucz api"
+      },
+      "ExistingApiKey" : {
+        "label" : "Klucz api/dane uwierzytelniające",
+        "help" : "Wybierz klucz api lub dane uwierzytelniające dla tego dostawcy"
+      },
+      "NewApiKey" : {
+        "label" : "Nowy klucz api",
+        "help" : "Wprowadź nowy klucz api do użycia z tym dostawcą"
+      },
+      "PiSave" : {
+        "label" : "Zapisz"
+      },
+      "NewUserName" : {
+        "label" : "Nazwa użytkownika",
+        "help" : "Nazwa użytkownika do logowania do usług dostawcy"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Użyj istniejących lub nowych",
+        "help" : "Użyj istniejących lub utwórz nowe dane uwierzytelniające dla tego dostawcy"
+      },
+      "newSecretDescription" : {
+        "label" : "Opis danych uwierzytelniających",
+        "help" : "Opis danych uwierzytelniających klucza api"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Dane uwierzytelniające utworzone",
+        "detail" : "Dane uwierzytelniające zostały pomyślnie utworzone"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Błąd komunikacji z serwerem Ollama ",
+        "detail" : "Błąd sieci podczas komunikacji z systemem zdalnym przy pobieraniu listy modeli\n Błąd podczas pracy z url:nullapi/tags"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "Czat z użytkownikami"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Model używany do usług wewnętrznych"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent używa modelu czatu"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informacje ogólne"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "wybierz"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Wybierz konfigurację modelu czatu"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Użyj domyślnego modelu czatu systemu do realizacji zadania agenta lub wybierz inny. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Ustawienia dużego modelu językowego i dostępnych narzędzi"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Ustawienia dostępu i bezpieczeństwa"
+      },
+      "MainPanel" : {
+        "label" : "Edycja konfiguracji agenta"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Podaj opis czatu agenta."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod agenta."
+      },
+      "agentServiceId" : {
+        "label" : "Typ usługi agenta",
+        "help" : "Wybierz typ usługi agenta, która będzie uruchomiona."
+      },
+      "defaultConfiguration" : {
+        "label" : "Domyślna konfiguracja agenta",
+        "help" : "Ustaw jako domyślną konfigurację dla tego typu usługi agenta"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Wybierz szablon prompta głównej pętli",
+        "help" : "Wybierz główny prompt pętli agenta."
+      },
+      "maxLoopIterations" : {
+        "label" : "Maksymalna liczba pętli agenta",
+        "help" : "Ustaw maksymalną liczbę iteracji pętli agenta (da to bardziej dopracowany rezultat)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Włącz wszystkie dostępne narzędzia",
+        "help" : "Jeśli ta opcja jest zaznaczona, wszystkie dostępne narzędzia zostaną przypisane do agenta przy uruchomieniu"
+      },
+      "enabledFunctions" : {
+        "label" : "Włączone funkcje dla tego agenta",
+        "help" : "Funkcjonalności, które mogą zostać użyte przez agenta podczas pracy"
+      },
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura, w jakiej model będzie odpowiadał, od 0 do 1 (w razie wątpliwości zostaw puste)"
+      },
+      "thinking" : {
+        "label" : "Wysiłki obliczeniowe",
+        "help" : "Skonfiguruj wysiłki obliczeniowe, jakie wykona model (nie każdy model to obsługuje)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parametr TopP, od 0 do 1 (w razie wątpliwości zostaw puste)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "Obecnie żadne procesy rejestracji ani odzyskiwania konta nie są włączone w systemie."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "Rozpocznij odzyskiwanie konta"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "Procesy wyłączone"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "Rozpocznij odzyskiwanie konta"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "Podaj swój e-mail, aby rozpocząć proces"
+      },
+      "GoToLogin" : {
+        "label" : "Strona logowania"
+      },
+      "invalidAccountState" : {
+        "summary" : "Błąd",
+        "detail" : "Sprawdź wprowadzone dane i ich poprawność."
+      },
+      "LookEMail" : {
+        "label" : "Wysłaliśmy Ci e-mail z linkiem do kontynuowania odzyskiwania konta."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "Odzyskiwanie konta rozpoczęte"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "Procesy wyłączone"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "Obecnie żadne procesy rejestracji ani odzyskiwania konta nie są włączone w systemie."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "Ustaw nowe hasło"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Zmień hasło"
+      },
+      "password" : {
+        "label" : "Nowe hasło",
+        "help" : "Hasło musi mieć co najmniej 10 znaków, zawierać wielkie i małe litery, cyfry oraz znaki specjalne"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "Podaj swój adres e-mail"
+      },
+      "confirmPassword" : {
+        "label" : "Potwierdź hasło",
+        "help" : "Potwierdź swoje nowe hasło"
+      },
+      "invalidAccountState" : {
+        "summary" : "Błąd",
+        "detail" : "Nie udało się zmienić hasła. Sprawdź adres e-mail lub czy konto istnieje."
+      },
+      "GoToLoginBtn" : {
+        "label" : "Przejdź do strony logowania"
+      },
+      "wkfSuccess" : {
+        "summary" : "Sukces",
+        "detail" : "Hasło zostało pomyślnie zmienione. Możesz się teraz zalogować."
+      }
+    }
+  }
+}

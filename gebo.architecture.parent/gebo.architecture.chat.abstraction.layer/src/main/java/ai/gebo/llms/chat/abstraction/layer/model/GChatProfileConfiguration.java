@@ -36,11 +36,6 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	public static final String DEFAULT_CHAT_PROFILE_CODE = "default-rag-chat-profile";
 
 	/**
-	 * The prompt used in the chat profile.
-	 */
-	private String prompt = null;
-
-	/**
 	 * Reference to the embedding model configuration.
 	 */
 	@GObjectReference(referencedType = GBaseEmbeddingModelConfig.class, referencesExtensions = true)
@@ -113,5 +108,7 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	private Double otherSearchSimilarityThreshold = null;
 
 	private Boolean manualThreasholdsConfiguration = null;
+
+	private Boolean useAlsoKeywordSearch = null;
 
 }

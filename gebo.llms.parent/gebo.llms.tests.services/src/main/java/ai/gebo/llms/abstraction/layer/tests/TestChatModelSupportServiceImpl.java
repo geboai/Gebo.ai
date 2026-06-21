@@ -6,16 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.tests;
 
 import java.util.List;
 
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -25,15 +25,18 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * Service implementation for testing chat model configuration support. This class 
- * provides a test implementation of the IGChatModelConfigurationSupportService interface
- * used to test the chat model abstraction layer.
+ * Service implementation for testing chat model configuration support. This
+ * class provides a test implementation of the
+ * IGChatModelConfigurationSupportService interface used to test the chat model
+ * abstraction layer.
  */
 @Service
+@AllArgsConstructor
 public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogic
 		implements IGChatModelConfigurationSupportService<GBaseChatModelChoice, TestChatModelConfiguration> {
 	/** Constant identifier for the test model */
@@ -44,28 +47,42 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	static final GChatModelType type = new GChatModelType();
 	/** Base chat model choice instance used for testing */
 	static final GBaseChatModelChoice model = new GBaseChatModelChoice();
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 
 	/**
-	 * Inner class representing a test implementation of the configurable chat model.
-	 * Extends the abstract class to provide test-specific configuration.
+	 * Inner class representing a test implementation of the configurable chat
+	 * model. Extends the abstract class to provide test-specific configuration.
 	 */
 	static class TestConfigurableChatModel
 			extends GAbstractConfigurableChatModel<TestChatModelConfiguration, TestChatModel> {
+
+		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures a test chat model with the provided configuration.
 		 * 
 		 * @param config The test chat model configuration to apply
-		 * @param type The type of chat model
+		 * @param type   The type of chat model
 		 * @return A configured test chat model instance
 		 * @throws LLMConfigException If there's an error during configuration
 		 */
 		@Override
-		protected TestChatModel configureModel(TestChatModelConfiguration config, GChatModelType type)
+		protected TestChatModel configureModel(TestChatModelConfiguration config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			TestChatModel m = new TestChatModel();
 			m.setConfiguration(config);
 			return m;
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new TestConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 
 	};
@@ -76,13 +93,6 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	static {
 		type.setCode(TEST_CONFIGURABLE_CHAT_MODEL_SERVICE);
 		model.setCode(TEST_MODEL_001);
-
-	}
-
-	/**
-	 * Default constructor for the test chat model support service
-	 */
-	public TestChatModelSupportServiceImpl() {
 
 	}
 
@@ -128,12 +138,14 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	 * 
 	 * @param config The configuration to apply to the new model
 	 * @return A configured chat model implementation
-	 * @throws LLMConfigException If there's an error during model creation or configuration
+	 * @throws LLMConfigException If there's an error during model creation or
+	 *                            configuration
 	 */
 	@Override
 	public IGConfigurableChatModel<TestChatModelConfiguration> create(TestChatModelConfiguration config)
 			throws LLMConfigException {
-		TestConfigurableChatModel out = new TestConfigurableChatModel();
+		TestConfigurableChatModel out = new TestConfigurableChatModel(documentContentRenderProvider,
+				toolCallbacksRepository);
 		out.initialize(config, type);
 		return out;
 	}

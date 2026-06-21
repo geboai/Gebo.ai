@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ai.gebo.architecture.ai.model.GPromptLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
-import ai.gebo.architecture.ai.service.PromptProvidersImplementation;
+import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
 
@@ -19,7 +19,7 @@ import lombok.Data;
 @PropertySource(value = "classpath:/prompts-library/prompts-library.yml", factory = GeboYamlPropertySourceFactory.class)
 @Data
 public class GeboPromptsLibrary {
-	private List<GPromptLibraryReference> library = null;
+	private List<GPromptTemplateLibraryReference> library = null;
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
 	public static final String DEFAULT_PIPELINE_CHAT_OUTPUT_PROMPT = "default-pipeline-chat-output-prompt";
@@ -29,11 +29,14 @@ public class GeboPromptsLibrary {
 	public static final String DEFAULT_PIPELINE_TOOLS_CALL_OUTPUT_PROMPT = "default-pipeline-tools-call-output-prompt";
 	public static final String DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT = "default-pipeline-rag-search-planner";
 	public static final String DEFAULT_PIPELINE_CHAT_WITH_DOCUMENTS_PROMPT = "default-pipeline-chat-with-documents-prompt";
+	public static final String DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT = "default-pipeline-pure-search-datasources-selection-prompt";
+	public static final String DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT = "default-pipeline-pure-search-summary-prompt";
+	public static final String DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT = "default-pipeline-pure-search-fallback-prompt";
 	public static final String CHAT_HISTORY_DOCUMENTS_CONSOLIDATION = "chat-history-documents-consolidation";
 	public static final String HISTORY_CONSOLIDATION_PROMPT = "history-consolidation-prompt";
 	public static final String PROMPT_TEMPLATE_WIZARD_DEFAULT = "prompt-template-wizard-default";
 	public static final String SUMMARIZE_CHAT_DESCRIPTION = "summarize-chat-description";
-
+	public static final String DEFAULT_CHAT_AGENT_PROMPT = "default-chat-agent-prompt";
 	public static final String DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT = "deep-search-search-query-extraction-prompt";
 	public static final String DEEP_SEARCH_KEYWORD_GENERATION_PROMPT = "deep-search-keyword-generation-prompt";
 	public static final String DEEP_SEARCH_CONTENT_RATING_PROMPT = "deep-search-content-rating-prompt";
@@ -48,18 +51,21 @@ public class GeboPromptsLibrary {
 			DEEP_SEARCH_SEARCH_QUERY_EXTRACTION_PROMPT, DEEP_SEARCH_KEYWORD_GENERATION_PROMPT,
 			DEEP_SEARCH_CONTENT_RATING_PROMPT, DEEP_SEARCH_CONSOLIDATION_PROMPT, DEEP_SEARCH_FILE_ANALISYS_PROMPT,
 			DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT, PROMPT_USE_STANDARD_CHAT_PROMPT, PROMPT_USE_STANDARD_RAG_PROMPT,
-			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT);
+			DEEP_SEARCH_DATA_SOURCES_FILE_ANALISYS_PROMPT, DEEP_SEARCH_EMPTY_RESULTS_FALLBACK_PROMPT,
+			DEFAULT_PIPELINE_PURE_SEARCH_CHOSE_DATASOURCES_PROMPT, DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_PROMPT,
+			DEFAULT_PIPELINE_PURE_SEARCH_SUMMARY_FALLBACK_PROMPT, DEFAULT_CHAT_AGENT_PROMPT);
 
 	@Bean
-	public IGStaticPromptsProvider standardChatsPromptsProvider() {
+	public IGStaticPromptsProvider standardChatsPromptsProvider(GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 
 	@Bean
-	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider() {
+	public IGStaticPromptUseInfoProvider standardChatsPromptsUseInfoProvider(
+			GeboOverriddenPromptsLibrary overridenLibrary) {
 
-		return new PromptProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library, overridenLibrary.getLibrary());
 	}
 
 }

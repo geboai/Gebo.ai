@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.controller;
 
@@ -26,33 +23,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.utils.DataPage;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.model.GUserMessage;
+import ai.gebo.model.OperationStatus;
+import ai.gebo.security.model.CurrentUser;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
+import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.IGUsersAdminService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
- * AI generated comments
- * Rest controller for managing users and user groups. 
- * All operations require the user to have 'ADMIN' role.
+ * AI generated comments Rest controller for managing users and user groups. All
+ * operations require the user to have 'ADMIN' role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/UsersAdminController")
+@AllArgsConstructor
 public class UsersAdminController {
-	
-	@Autowired
-	IGUsersAdminService userAdminService;
 
-	/**
-	 * Default constructor for UsersAdminController.
-	 */
-	public UsersAdminController() {
-
-	}
+	private final IGUsersAdminService userAdminService;
+	private final IGSecurityService securityService;
 
 	/**
 	 * DTO for inserting a user with mandatory fields.
@@ -138,7 +136,7 @@ public class UsersAdminController {
 	 */
 	public static class FindUserByQbeParam {
 		@NotNull
-		public User qbe = null;
+		public EditableUser qbe = null;
 		@NotNull
 		public DataPage page = null;
 	}
@@ -216,5 +214,34 @@ public class UsersAdminController {
 	@GetMapping(value = "getAllUsers", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UserInfos> getAllUsers() {
 		return userAdminService.getAllUsers();
+	}
+
+	@Data
+	public static class ChangeUsernamePasswordData {
+		@NotNull
+		private String username = null;
+		@NotNull
+		private String password = null;
+		@NotNull
+		private String confirmpassword = null;
+		@NotNull
+		private String currentUserPassword = null;
+	}
+
+	@PostMapping(value = "changeUserPassword", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GUserMessage changeUserPassword(@Valid @RequestBody ChangeUsernamePasswordData changePwdData)
+			throws GeboCryptSecretException {
+		boolean pwdOk = this.securityService.checkActualUserPassword(changePwdData.getCurrentUserPassword());
+		if (pwdOk) {
+			if (changePwdData.getPassword().equals(changePwdData.getConfirmpassword())) {
+				userAdminService.changePassword(changePwdData.getUsername(), changePwdData.getPassword());
+				return GUserMessage.successMessage("Password changed with success", "New password set");
+			} else {
+				return GUserMessage.errorMessage("Password and confirm password problem",
+						"New password and confirm password for the user are not equal");
+			}
+		} else {
+			return GUserMessage.errorMessage("Your password is incorrect", "Let's try again digitating your password");
+		}
 	}
 }

@@ -54,4 +54,6 @@ public interface ContentsBatchProcessedRepository extends MongoRepository<Conten
 	 */
 	public Stream<ContentsBatchProcessed> findByJobId(String code);
 
+	public void deleteByJobIdIn(List<String> id);
+
 }

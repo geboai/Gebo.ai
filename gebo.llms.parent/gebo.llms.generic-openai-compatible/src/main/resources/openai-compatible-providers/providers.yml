@@ -16,6 +16,12 @@ ai.gebo.llms.generic.config:
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
 
+    - code: chatmodel-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai chat models
+      baseUrl: https://openrouter.ai/api/
+      #modelsListProvider: openrouter-ai-models-list
+
     - code: chatmodel-xai
       providerId: xai
       description: X.ai (Grok) chat model
@@ -44,6 +50,12 @@ ai.gebo.llms.generic.config:
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
 
+    - code: embedding-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai embedding models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
     - code: embedding-groq
       providerId: groq
       description: Groq embedding model
@@ -71,6 +83,13 @@ ai.gebo.llms.generic.config:
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
 
+    - code: images-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai image generation models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
   textToSpeechModelProviders:
     - code: tts-regolo.ai
       providerId: regolo.ai
@@ -78,9 +97,45 @@ ai.gebo.llms.generic.config:
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
 
+    - code: tts-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai text to speech models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
   transcriptModelProviders:
     - code: transcript-regolo.ai
       providerId: regolo.ai
       description: Regolo.ai transcript model
       baseUrl: https://api.regolo.ai/
       modelsListProvider: regolo-ai-models-list
+
+    - code: transcript-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai transcript models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+  rankerModelProviders:
+    - code: ranker-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai ranker model
+      baseUrl: https://api.regolo.ai/
+      modelsListProvider: regolo-ai-models-list
+
+    - code: ranker-openrouter.ai
+      providerId: openrouter.ai
+      description: OpenRouter.ai ranker models
+      baseUrl: https://openrouter.ai/api/
+    #modelsListProvider: openrouter-ai-models-list
+
+
+    - code: ranker-vllm
+      providerId: vllm
+      description: VLLM hosted ranker model
+      baseUrl:
+    - code: ranker-generic-openai
+      providerId: generic-openai
+      description: Standard ranking API ranking model
+      baseUrl:

@@ -1,0 +1,8 @@
+INPUTS:
+- Last User question:
+{question}
+
+- Confluence spaces catalog (may be empty):
+{confluenceSpaces}
+
+

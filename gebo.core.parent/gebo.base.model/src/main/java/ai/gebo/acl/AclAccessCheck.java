@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AclAccessCheck {
-
+	
 	public static boolean hasAccess(IAclAliasesDao dao, IAclGrantedAccessor accessor, IAclGrantedResource resource,
 			AclGrantType grantType, boolean emptyAclMeansCanAccess) {
 		Map<String, Boolean> selectedOwnedIds = new HashMap<>();

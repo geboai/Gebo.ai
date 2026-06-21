@@ -100,6 +100,7 @@ export interface GeboUIActionRequest {
  * and must implement the handleAction method to process action requests
  */
 export interface GeboUIActionRequestListener {
-    targetType?: string
+    targetType?: string;
+    targetTypeAliases?:string[];
     handleAction(action: GeboUIActionRequest): boolean;
 }

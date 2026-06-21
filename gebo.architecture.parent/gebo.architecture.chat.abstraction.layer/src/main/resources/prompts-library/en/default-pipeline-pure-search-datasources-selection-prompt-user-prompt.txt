@@ -1,0 +1,10 @@
+INPUTS:
+
+(A) CURRENT USER QUESTION: {question}
+
+(B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT HISTORY (may be empty):
+{documents}
+
+(C) EXTERNAL DATA SOURCES LIST TO PERFORM PURE SEARCH ON (may be empty). Each entry has a unique source code/id and description:
+{deepSearchDataSources}
+

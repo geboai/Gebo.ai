@@ -14,4 +14,5 @@ export interface ToolReference {
     name?: string;
     description?: string;
     userUIfunctionDescription?: string;
+    inputSchema?: string;
 }

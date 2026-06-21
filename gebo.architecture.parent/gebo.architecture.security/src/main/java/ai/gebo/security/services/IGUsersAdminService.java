@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.services;
 
@@ -18,6 +15,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
@@ -28,105 +26,109 @@ import ai.gebo.security.repository.UserRepository.UserInfos;
  * Gebo.ai comment agent
  * 
  * An interface for administering users and groups within the application.
- * Provides capabilities to manage user and group information including 
+ * Provides capabilities to manage user and group information including
  * creation, update, retrieval, and deletion.
  */
 public interface IGUsersAdminService {
-    
-    /**
-     * Inserts a new user into the system.
-     * 
-     * @param user The EditableUser object containing user details.
-     * @param password The password for the new user.
-     * @return The inserted EditableUser object.
-     */
-    public EditableUser insertUser(EditableUser user, String password);
 
-    /**
-     * Updates an existing user's information.
-     * 
-     * @param user The EditableUser object containing updated user details.
-     * @return The updated EditableUser object.
-     */
-    public EditableUser updateUser(EditableUser user);
+	/**
+	 * Inserts a new user into the system.
+	 * 
+	 * @param user     The EditableUser object containing user details.
+	 * @param password The password for the new user.
+	 * @return The inserted EditableUser object.
+	 */
+	public EditableUser insertUser(EditableUser user, String password);
 
-    /**
-     * Retrieves a user by their username.
-     * 
-     * @param email The username (email) of the user to find.
-     * @return The EditableUser object if the user is found.
-     */
-    public EditableUser findUserByUsername(String email);
+	/**
+	 * Updates an existing user's information.
+	 * 
+	 * @param user The EditableUser object containing updated user details.
+	 * @return The updated EditableUser object.
+	 */
+	public EditableUser updateUser(EditableUser user);
 
-    /**
-     * Deletes a user from the system.
-     * 
-     * @param user The EditableUser object representing the user to delete.
-     */
-    public void deleteUser(EditableUser user);
+	/**
+	 * Retrieves a user by their username.
+	 * 
+	 * @param email The username (email) of the user to find.
+	 * @return The EditableUser object if the user is found.
+	 */
+	public EditableUser findUserByUsername(String email);
 
-    /**
-     * Finds users based on a query-by-example (QBE).
-     * 
-     * @param qbe The User object serving as the QBE.
-     * @param pageable The Pageable object for pagination information.
-     * @return A Page of UserInfos that match the QBE.
-     */
-    public Page<UserInfos> findUserByQbe(User qbe, Pageable pageable);
+	/**
+	 * Deletes a user from the system.
+	 * 
+	 * @param user The EditableUser object representing the user to delete.
+	 */
+	public void deleteUser(EditableUser user);
 
-    /**
-     * Inserts a new user group into the system.
-     * 
-     * @param group The UsersGroup object containing group details.
-     * @return The inserted UsersGroup object.
-     */
-    public UsersGroup insertGroup(UsersGroup group);
+	/**
+	 * Finds users based on a query-by-example (QBE).
+	 * 
+	 * @param qbe      The User object serving as the QBE.
+	 * @param pageable The Pageable object for pagination information.
+	 * @return A Page of UserInfos that match the QBE.
+	 */
+	public Page<UserInfos> findUserByQbe(User qbe, Pageable pageable);
 
-    /**
-     * Finds a group by its code.
-     * 
-     * @param code The code of the group to find.
-     * @return The UsersGroup object if the group is found.
-     */
-    public UsersGroup findGroupByCode(String code);
+	public Page<UserInfos> findUserByQbe(EditableUser qbe, Pageable pageable);
 
-    /**
-     * Updates an existing group's information.
-     * 
-     * @param group The UsersGroup object containing updated group details.
-     * @return The updated UsersGroup object.
-     */
-    public UsersGroup updateGroup(UsersGroup group);
+	/**
+	 * Inserts a new user group into the system.
+	 * 
+	 * @param group The UsersGroup object containing group details.
+	 * @return The inserted UsersGroup object.
+	 */
+	public UsersGroup insertGroup(UsersGroup group);
 
-    /**
-     * Deletes a group from the system.
-     * 
-     * @param group The UsersGroup object representing the group to delete.
-     */
-    public void deleteGroup(UsersGroup group);
+	/**
+	 * Finds a group by its code.
+	 * 
+	 * @param code The code of the group to find.
+	 * @return The UsersGroup object if the group is found.
+	 */
+	public UsersGroup findGroupByCode(String code);
 
-    /**
-     * Finds user groups based on a query-by-example (QBE).
-     * 
-     * @param qbe The UsersGroup object serving as the QBE.
-     * @param pageable The Pageable object for pagination information.
-     * @return A Page of UsersGroups that match the QBE.
-     */
-    public Page<UsersGroup> findUsersGroupByQbe(UsersGroup qbe, Pageable pageable);
+	/**
+	 * Updates an existing group's information.
+	 * 
+	 * @param group The UsersGroup object containing updated group details.
+	 * @return The updated UsersGroup object.
+	 */
+	public UsersGroup updateGroup(UsersGroup group);
 
-    /**
-     * Retrieves a list of all user groups in the system.
-     * 
-     * @return A List of all UsersGroup objects.
-     */
-    public List<UsersGroup> getAllGroups();
+	/**
+	 * Deletes a group from the system.
+	 * 
+	 * @param group The UsersGroup object representing the group to delete.
+	 */
+	public void deleteGroup(UsersGroup group);
 
-    /**
-     * Retrieves a list of all users in the system.
-     * 
-     * @return A List of all UserInfos objects.
-     */
-    public List<UserInfos> getAllUsers();
+	/**
+	 * Finds user groups based on a query-by-example (QBE).
+	 * 
+	 * @param qbe      The UsersGroup object serving as the QBE.
+	 * @param pageable The Pageable object for pagination information.
+	 * @return A Page of UsersGroups that match the QBE.
+	 */
+	public Page<UsersGroup> findUsersGroupByQbe(UsersGroup qbe, Pageable pageable);
+
+	/**
+	 * Retrieves a list of all user groups in the system.
+	 * 
+	 * @return A List of all UsersGroup objects.
+	 */
+	public List<UsersGroup> getAllGroups();
+
+	/**
+	 * Retrieves a list of all users in the system.
+	 * 
+	 * @return A List of all UserInfos objects.
+	 */
+	public List<UserInfos> getAllUsers();
 
 	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider);
+
+	public void changePassword(String username, String password) throws GeboCryptSecretException;
 }

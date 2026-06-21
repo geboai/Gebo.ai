@@ -2,7 +2,13 @@ ai.gebo.confluence:
       library:
         - promptUse: confluence-standard-query-extraction-prompt
           langCode: en
-          reference: /confluence-prompts-library/en/confluence-standard-query-extraction-prompt.txt
+          systemReference: /confluence-prompts-library/en/confluence-standard-query-extraction-prompt-system-prompt.txt
+          userReference: /confluence-prompts-library/en/confluence-standard-query-extraction-prompt-user-prompt.txt
+          chatHistory: REQUIRED
+          contextDocuments: NOT_REQUIRED
         - promptUse: confluence-native-query-extraction-prompt
           langCode: en
-          reference: /confluence-prompts-library/en/confluence-native-query-extraction-prompt.txt
+          systemReference: /confluence-prompts-library/en/confluence-native-query-extraction-prompt-system-prompt.txt
+          userReference: /confluence-prompts-library/en/confluence-native-query-extraction-prompt-user-prompt.txt
+          chatHistory: REQUIRED
+          contextDocuments: NOT_REQUIRED

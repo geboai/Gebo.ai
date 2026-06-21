@@ -282,8 +282,24 @@ ai.gebo.opensearch:
   port: 9200
   username: admin
   password: dothesearch1973-Advanced
+
+ai.gebo.rag-threashold-autotune.config.enabled: false	
+ai.gebo.agents.standard.enabled: false
+ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true
 #                  apiKey: <put here your api key>
 #                  customSearchEngineId: <put here your search engine id>
+ai:
+  gebo:
+    userflows:
+      activation-workflow-enabled: true
+      forgot-password-workflow-enabled: true
+      ticket-validity-timeout-ms: 600000
+      mail-server: localhost
+      mail-port: 1025
+      mail-user-name:
+      mail-password:
+      mail-sender: no-reply@gebo.ai
+      gebo-reachable-base-address: http://localhost:12999

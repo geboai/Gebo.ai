@@ -25,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.model.OperationStatus;
+import lombok.AllArgsConstructor;
 
 /**
  * Abstract base class for CRUD operations on chat model configurations.
@@ -35,30 +36,21 @@ import ai.gebo.model.OperationStatus;
  * 
  * AI generated comments
  */
+@AllArgsConstructor
 public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatModelConfigType extends GBaseChatModelConfig, ModelChoice extends GBaseChatModelChoice> {
 
 	// Logger instance for logging operations and exceptions
-	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	// Persistent object manager for database operations
-	@Autowired
-	protected IGPersistentObjectManager persistentObjectManager;
+	protected final IGPersistentObjectManager persistentObjectManager;
 
 	// DAO for chat model runtime configuration operations
-	@Autowired
-	protected IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
+	
+	protected final IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
 
 	// Type of the chat model configuration
-	protected Class<ChatModelConfigType> type = null;
-
-	/**
-	 * Constructor to initialize the configuration type.
-	 *
-	 * @param type The class type of the chat model configuration.
-	 */
-	public AbstractBaseChatModelsConfigurationCRUDController(Class<ChatModelConfigType> type) {
-		this.type = type;
-	}
+	protected final Class<ChatModelConfigType> type;
 
 	/**
 	 * Inserts a new chat model configuration and handles runtime configuration.

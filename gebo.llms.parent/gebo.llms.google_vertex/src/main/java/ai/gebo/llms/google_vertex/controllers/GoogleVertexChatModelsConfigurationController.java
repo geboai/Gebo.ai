@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.google_vertex.controllers;
 
@@ -25,17 +22,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig;
 import ai.gebo.llms.google_vertex.services.GoogleVertexChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * AI generated comments
- * REST controller for managing Google Vertex AI chat model configurations.
- * This controller extends the base controller to provide specific endpoints for Google Vertex AI.
- * Only enabled when the 'googleVertexEnabled' property is set to true, and requires ADMIN role access.
+ * AI generated comments REST controller for managing Google Vertex AI chat
+ * model configurations. This controller extends the base controller to provide
+ * specific endpoints for Google Vertex AI. Only enabled when the
+ * 'googleVertexEnabled' property is set to true, and requires ADMIN role
+ * access.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @RestController
@@ -44,12 +44,11 @@ import ai.gebo.model.OperationStatus;
 public class GoogleVertexChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GGoogleVertexChatModelConfig, GGoogleVertexChatModelChoice, GoogleVertexChatModelConfigurationSupportService> {
 
-	/**
-	 * Constructor for the Google Vertex chat models configuration controller.
-	 * Initializes the parent class with the Google Vertex chat model configuration class.
-	 */
-	public GoogleVertexChatModelsConfigurationController() {
-		super(GGoogleVertexChatModelConfig.class);
+	public GoogleVertexChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			GoogleVertexChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GGoogleVertexChatModelConfig.class, ifaceType);
+
 	}
 
 	/**
@@ -85,7 +84,8 @@ public class GoogleVertexChatModelsConfigurationController extends
 	 * @return OperationStatus containing the result of the deletion operation
 	 */
 	@PostMapping(value = "deleteGoogleVertexChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> deleteGoogleVertexChatModelConfig(@RequestBody GGoogleVertexChatModelConfig config) {
+	public OperationStatus<Boolean> deleteGoogleVertexChatModelConfig(
+			@RequestBody GGoogleVertexChatModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -95,22 +95,25 @@ public class GoogleVertexChatModelsConfigurationController extends
 	 * 
 	 * @param code The code to search for
 	 * @return The matching configuration
-	 * @throws GeboPersistenceException If there's an error retrieving the configuration
+	 * @throws GeboPersistenceException If there's an error retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findGoogleVertexChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GGoogleVertexChatModelConfig findGoogleVertexChatModelConfigByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
-	
+
 	/**
-	 * Retrieves available Google Vertex chat models based on the provided configuration.
+	 * Retrieves available Google Vertex chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration to use for retrieving model choices
 	 * @return OperationStatus containing the list of available model choices
 	 */
 	@PostMapping(value = "getGoogleVertexChatModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GGoogleVertexChatModelChoice>> getGoogleVertexChatModels(@RequestBody GGoogleVertexChatModelConfig config) {
+	public OperationStatus<List<GGoogleVertexChatModelChoice>> getGoogleVertexChatModels(
+			@RequestBody GGoogleVertexChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
 }

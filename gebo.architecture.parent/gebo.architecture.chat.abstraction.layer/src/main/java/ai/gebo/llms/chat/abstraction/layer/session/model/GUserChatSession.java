@@ -11,12 +11,18 @@ package ai.gebo.llms.chat.abstraction.layer.session.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
+import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.ChatSessionEntryImpl.ChatSessionEntryImplBuilder;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
@@ -32,6 +38,7 @@ import lombok.Data;
 @Data
 public class GUserChatSession extends GBaseObject {
 
+	private static final String EMPTY_TEXT = "<<empty text>>";
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
 	@HashIndexed
 	private String username = null; // Username for the chat context
@@ -42,9 +49,51 @@ public class GUserChatSession extends GBaseObject {
 	private String chatMemoryId = null; // Identifier for chat memory
 	private List<ChatInteractions> interactions = new ArrayList<ChatInteractions>(); // List of chat interactions
 	private String chatModelCode = null; // Code for the chat model used
-	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat	
+	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
 
-	
-	
+	public IChatRequestContext createChatRequestContext() {
+		ChatRequestContextImplBuilder builder = IChatRequestContext.builder();
+		builder.sessionID(getCode());
+		List<IChatSessionEntry> _interactions = new ArrayList<>();
+		String lastQuestion = EMPTY_TEXT;
+		for (int i = 0; i < interactions.size(); i++) {
+			ChatInteractions interaction = interactions.get(i);
+			ChatSessionEntryImplBuilder sBuilder = IChatSessionEntry.builder();
+			String user = interaction.getRequest() != null && interaction.getRequest().getQuery() != null
+					? interaction.getRequest().getQuery()
+					: EMPTY_TEXT;
+			lastQuestion = user;
+			String assistant = interaction.getResponse() != null && interaction.getResponse().getQueryResponse() != null
+					? interaction.getResponse().getQueryResponse().toString()
+					: EMPTY_TEXT;
+			sBuilder.user(user);
+			sBuilder.assistant(assistant);
+			_interactions.add(sBuilder.build());
+			if (i == interactions.size() - 1) {
+				if (interaction.getRequest() != null) {
+					Map<String, Object> pipelineInfos = new HashMap<>();
+					if (interaction.getRequest().getChatPipelineProcessId() != null) {
+						pipelineInfos.put("user-choosed-pipelineId",
+								interaction.getRequest().getChatPipelineProcessId());
+					}
+					if (interaction.getRequest().getUserIntent() != null) {
+						pipelineInfos.put("user-intent", interaction.getRequest().getUserIntent().name());
+					}
+					if (interaction.getResponse() != null
+							&& interaction.getResponse().getPipelineRouterDecisionCode() != null) {
+						pipelineInfos.put("routed-pipelineId",
+								interaction.getResponse().getPipelineRouterDecisionCode());
+					}
+					if (interaction.getResponse() != null && interaction.getResponse().getPipelineParams() != null) {
+						pipelineInfos.put("routed-params", interaction.getResponse().getPipelineParams());
+					}
+					builder.pipelineInfos(pipelineInfos);
+				}
+			}
+		}
+		builder.interactions(_interactions);
+		builder.actualUserRequest(lastQuestion);
+		return builder.build();
+	}
 
 }

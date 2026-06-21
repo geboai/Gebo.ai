@@ -16,11 +16,15 @@ import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository.UserInfos;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Gebo.ai comment agent
@@ -111,5 +115,42 @@ public interface IGSecurityService {
 	public boolean isCanDoAction(IAclGrantedResource resource, boolean adminCanDoAll, AclGrantType... grantType)
 			throws SecurityException;
 
+	@Getter
+	@AllArgsConstructor
+	public static class AclInfo {
+		private final String uniqueId;
+		private final AclGrantType[] grants;
+	}
+
+	public <T extends GBaseObject & IAclGrantedResource> void setAclAliases(List<T> aclGrantedObject,
+			List<AclInfo> acls) throws GeboPersistenceException;
+
+	public default <T extends GBaseObject & IAclGrantedResource> void setAclAliases(T aclGrantedObject,
+			List<AclInfo> acls) throws GeboPersistenceException {
+		setAclAliases(List.of(aclGrantedObject), acls);
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public static class AclOwnerInfo {
+		public static enum OwnerType {
+			GROUP, USER
+		}
+
+		private final OwnerType ownerType;
+		private final String ownerCode;
+		private final AclGrantType[] grants;
+	}
+
+	public <T extends GBaseObject & IAclGrantedResource> void setAclAliasesForOwners(List<T> aclGrantedObject,
+			List<AclOwnerInfo> acls) throws GeboPersistenceException;
+
+	public default <T extends GBaseObject & IAclGrantedResource> void setAclAliasesForOwners(T aclGrantedObject,
+			List<AclOwnerInfo> acls) throws GeboPersistenceException {
+		setAclAliasesForOwners(List.of(aclGrantedObject), acls);
+	}
+
 	public ContentAccessPolicy getPlatformContentAccessPolicy();
+
+	public boolean checkActualUserPassword(String confirmpassword) throws GeboCryptSecretException;
 }

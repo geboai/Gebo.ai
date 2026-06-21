@@ -1,8 +1,16 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
@@ -19,6 +27,55 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 
 public final class RoutingPromptUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoutingPromptUtil.class);
+	private static final ObjectMapper MAPPER = new ObjectMapper();
+
+	private static String formatParameters(String inputSchema) {
+		if (inputSchema == null || inputSchema.trim().isEmpty()) {
+			return "";
+		}
+		try {
+			JsonNode root = MAPPER.readTree(inputSchema);
+			JsonNode properties = root.get("properties");
+			if (properties == null || !properties.isObject()) {
+				return "";
+			}
+			JsonNode requiredNode = root.get("required");
+			List<String> requiredFields = new ArrayList<>();
+			if (requiredNode != null && requiredNode.isArray()) {
+				for (JsonNode req : requiredNode) {
+					requiredFields.add(req.asText());
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("TOOL_PARAMETERS:\n");
+			Iterator<Map.Entry<String, JsonNode>> fields = properties.fields();
+			while (fields.hasNext()) {
+				Map.Entry<String, JsonNode> field = fields.next();
+				String name = field.getKey();
+				JsonNode prop = field.getValue();
+				String type = prop.has("type") ? prop.get("type").asText() : "unknown";
+				String description = prop.has("description") ? prop.get("description").asText() : "";
+				boolean isRequired = requiredFields.contains(name);
+				
+				sb.append("  - ").append(name).append(" (").append(type);
+				if (isRequired) {
+					sb.append(", required");
+				} else {
+					sb.append(", optional");
+				}
+				sb.append(")");
+				if (!description.trim().isEmpty()) {
+					sb.append(": ").append(description);
+				}
+				sb.append("\n");
+			}
+			return sb.toString();
+		} catch (Exception e) {
+			LOGGER.error("Error formatting tool parameters schema, falling back to raw schema", e);
+			return "TOOL_PARAMETERS: " + inputSchema + "\n";
+		}
+	}
 
 	private static final String INTERNAL_KNOWLEDGE_BASE = "internal knowledge base";
 	private static final String END_DEEP_SEARCH_DATA_SOURCE = "END_DEEP_SEARCH_DATA_SOURCE";
@@ -196,6 +253,10 @@ public final class RoutingPromptUtil {
 						buffer.append(category.getDescription());
 						buffer.append(NEWLINE);
 					}
+					String params = formatParameters(tool.getInputSchema());
+					if (!params.isEmpty()) {
+						buffer.append(params);
+					}
 					buffer.append(TOOL_END);
 					buffer.append(NEWLINE);
 				}
@@ -276,7 +337,7 @@ public final class RoutingPromptUtil {
 	public static String dataSourcesListPromptPart(List<DeepSearchDataSourceMetaInfos> dataSources,
 			List<GKnowledgeBase> knowledgeBases) {
 		StringBuffer buffer = new StringBuffer();
-		if (dataSources != null && !dataSources.isEmpty()) {
+		if (knowledgeBases != null && !knowledgeBases.isEmpty()) {
 			buffer.append(DEEP_SEARCH_DATA_SOURCES_CATALOG);
 			buffer.append(NEWLINE);
 			if (!knowledgeBases.isEmpty()) {
@@ -287,12 +348,14 @@ public final class RoutingPromptUtil {
 				buffer.append(NEWLINE);
 				buffer.append(DESCRIPTION);
 				buffer.append(INTERNAL_KNOWLEDGE_BASE);
+				buffer.append(NEWLINE);
 				buffer.append(MAIN_SECTIONS_SAMPLE);
 				buffer.append(NEWLINE);
 				for (GKnowledgeBase catalog : knowledgeBases) {
 					buffer.append(LIST_ITEM);
 					buffer.append(SPACE);
 					buffer.append(catalog.getDescription());
+					buffer.append(NEWLINE);
 					buffer.append(NEWLINE);
 				}
 				buffer.append(END_MAIN_SECTIONS_SAMPLE);

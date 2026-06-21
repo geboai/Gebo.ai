@@ -23,5 +23,6 @@ export interface GMistralEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GMistralEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

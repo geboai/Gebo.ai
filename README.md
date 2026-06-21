@@ -1,4 +1,4 @@
-![Gebo.ai image logo](./gebo.ui/src/assets/Gebo-1000.png) 
+![Gebo.ai image logo](./gebo.ui/projects/gebo-ai-reusable-ui/src/assets/Gebo-1000.png) 
 # Gebo.ai, The open source Enterprise AI vendor agnostic platform (visit https://gebo.ai)
 This software is an open source enterprise AI and retrieve augmented generation platform that can be installed in every company
 to take the most out from their documentation and informations using modern large language models.

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.controllers;
 
@@ -16,36 +13,38 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
 
 /**
  * Gebo.ai comment agent
  * 
- * Controller class for managing configurations of base embedding models.
- * This class extends the abstract CRUD controller for performing common operations.
+ * Controller class for managing configurations of base embedding models. This
+ * class extends the abstract CRUD controller for performing common operations.
  *
- * @param <EmbeddingModelConfigType> the type of the embedding model configuration
- * @param <ModelChoice> the type of model choice
- * @param <IfaceType> the type of interface providing configuration support
+ * @param <EmbeddingModelConfigType> the type of the embedding model
+ *                                   configuration
+ * @param <ModelChoice>              the type of model choice
+ * @param <IfaceType>                the type of interface providing
+ *                                   configuration support
  */
 public class BaseEmbeddingModelsConfigurationController<EmbeddingModelConfigType extends GBaseEmbeddingModelConfig, ModelChoice extends GBaseEmbeddingModelChoice, IfaceType extends IGEmbeddingModelConfigurationSupportService<ModelChoice, EmbeddingModelConfigType>>
 		extends AbstractBaseEmbeddingModelsConfigurationCRUDController<EmbeddingModelConfigType, ModelChoice> {
 
 	// Interface type providing configuration support for embedding models
-	@Autowired
-	IfaceType ifaceType;
-
-	/**
-	 * Constructor for the controller.
-	 *
-	 * @param type the class type of the embedding model configuration
-	 */
-	public BaseEmbeddingModelsConfigurationController(Class<EmbeddingModelConfigType> type) {
-		super(type);
+	protected final IfaceType ifaceType;
+	public BaseEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			Class<EmbeddingModelConfigType> type, IfaceType ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, type);
+		this.ifaceType = ifaceType;
 	}
+
+	
 
 	/**
 	 * Retrieves available model choices based on the provided type.

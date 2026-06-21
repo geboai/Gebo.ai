@@ -6,38 +6,39 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.vectorstores;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.filter.Filter.Expression;
 
 import ai.gebo.llms.abstraction.layer.vectorstores.model.EmbeddingTrafficInfo;
+import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorizedFragmentMetadata;
+import jakarta.el.MethodNotFoundException;
 
 /**
- * AI generated comments
- * This class acts as an adapter for the IGExtendedVectorStore to add accounting features
- * that track the byte size of documents and search queries processed by the vector store.
+ * AI generated comments This class acts as an adapter for the
+ * IGExtendedVectorStore to add accounting features that track the byte size of
+ * documents and search queries processed by the vector store.
  */
 public class GAccountingExtendedVectorStoreAdapter implements IGExtendedVectorStore {
-	
+
 	// The underlying vector store that is wrapped and extended by this adapter.
 	final IGExtendedVectorStore wrapped;
 
 	// Tracks the current traffic information regarding embeddings.
 	private EmbeddingTrafficInfo current = new EmbeddingTrafficInfo();
-	
+
 	// Monitor object used for synchronizing access to current traffic information.
 	private Object monitor = new Object();
 
 	/**
-	 * Constructs a GAccountingExtendedVectorStoreAdapter that wraps the given vector store.
+	 * Constructs a GAccountingExtendedVectorStoreAdapter that wraps the given
+	 * vector store.
 	 * 
 	 * @param wrapped the IGExtendedVectorStore instance to be wrapped and extended.
 	 */
@@ -46,7 +47,8 @@ public class GAccountingExtendedVectorStoreAdapter implements IGExtendedVectorSt
 	}
 
 	/**
-	 * Adds a list of documents to the wrapped vector store and tracks the byte size of the documents.
+	 * Adds a list of documents to the wrapped vector store and tracks the byte size
+	 * of the documents.
 	 * 
 	 * @param documents the list of documents to be added to the vector store.
 	 */
@@ -76,9 +78,11 @@ public class GAccountingExtendedVectorStoreAdapter implements IGExtendedVectorSt
 	}
 
 	/**
-	 * Performs a similarity search using the given search request and tracks the byte size of the query.
+	 * Performs a similarity search using the given search request and tracks the
+	 * byte size of the query.
 	 * 
-	 * @param request the search request containing the query and other search parameters.
+	 * @param request the search request containing the query and other search
+	 *                parameters.
 	 * @return a list of documents that are similar to the search query.
 	 */
 	@Override
@@ -97,7 +101,8 @@ public class GAccountingExtendedVectorStoreAdapter implements IGExtendedVectorSt
 	}
 
 	/**
-	 * Retrieves the sampled bytes of traffic information and resets the current tracking data.
+	 * Retrieves the sampled bytes of traffic information and resets the current
+	 * tracking data.
 	 * 
 	 * @return the EmbeddingTrafficInfo containing sampled bytes of traffic.
 	 */
@@ -120,12 +125,33 @@ public class GAccountingExtendedVectorStoreAdapter implements IGExtendedVectorSt
 	}
 
 	/**
-	 * Deletes documents that match the given filter expression from the wrapped vector store.
+	 * Deletes documents that match the given filter expression from the wrapped
+	 * vector store.
 	 * 
-	 * @param filterExpression the expression that specifies which documents to delete.
+	 * @param filterExpression the expression that specifies which documents to
+	 *                         delete.
 	 */
 	@Override
 	public void delete(Expression filterExpression) {
 		wrapped.delete(filterExpression);
 	}
+
+	@Override
+	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids) throws ExecutionException, InterruptedException {
+		if (wrapped instanceof IGExtendedVectorStore evs) {
+			return evs.readMetadataByIds(ids);
+		}
+		throw new MethodNotFoundException("The wrapped vector store does not implement this");
+	}
+
+	@Override
+	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries) throws ExecutionException, InterruptedException {
+		if (wrapped instanceof IGExtendedVectorStore evs) {
+			evs.patchMetadataByIds(entries);
+			return;
+		}
+		throw new MethodNotFoundException("The wrapped vector store does not implement this");
+	}
+
+	
 }

@@ -245,4 +245,22 @@ public class GeboSecretsAccessServiceImpl implements IGeboSecretsAccessService {
 		_secret = repository.insert(_secret); // Insert into repository
 	}
 
+	@Override
+	public <T extends GeboCustomSecretContent> T getCustomSecretContentById(String id, Class<T> type)
+			throws GeboCryptSecretException {
+		Optional<GeboSecret> content = repository.findById(id);
+		GeboSecret secret = content.isPresent() ? content.get() : null;
+		if (secret == null)
+			throw new GeboCryptSecretException("Unkown secret with code=>" + id);
+		switch (secret.getSecretType()) {
+
+		case CUSTOM_SECRET: {
+			return uncryptContent(secret, type);
+		}
+
+		default:
+			throw new GeboCryptSecretException("SecretType must be CUSTOM_SECRET");
+		}
+	}
+
 }

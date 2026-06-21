@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import ai.gebo.architecture.ai.model.GPromptLibraryReference;
+import ai.gebo.architecture.ai.model.GPromptTemplateLibraryReference;
 import ai.gebo.architecture.ai.service.IGStaticPromptUseInfoProvider;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
-import ai.gebo.architecture.ai.service.PromptProvidersImplementation;
+import ai.gebo.architecture.ai.service.PromptTemplateProvidersImplementation;
 import ai.gebo.architecture.utils.GeboYamlPropertySourceFactory;
 import lombok.Data;
 
@@ -19,17 +19,17 @@ import lombok.Data;
 @PropertySource(value = "classpath:/msgraph-templates/msgraph-templates.yml", factory = GeboYamlPropertySourceFactory.class)
 @Data
 public class MicrosoftSharepointHandlerConfig {
-	private List<GPromptLibraryReference> library = null;
+	private List<GPromptTemplateLibraryReference> library = null;
 	@Bean
 	protected IGStaticPromptsProvider msGraphPromptsProvider() {
 
-		return new PromptProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library);
 	}
 
 	@Bean
 	protected IGStaticPromptUseInfoProvider msGraphPromptsUseInfoProvider() {
 
-		return new PromptProvidersImplementation(this, library);
+		return new PromptTemplateProvidersImplementation(this, library);
 	}
 	 
 

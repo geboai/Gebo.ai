@@ -20,13 +20,13 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
+import { GeboAiAdminModule, GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { providePrimeNG } from "primeng/config";
 import Aura from '@primeng/themes/aura';
@@ -35,6 +35,7 @@ import { definePreset } from "@primeng/themes";
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
+import { AppMenuProviderService } from './app-menu-provider.service';
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PopoverModule } from 'primeng/popover';
@@ -59,8 +60,7 @@ export const routes: Routes = [
   { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule) },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
-
-
+  { path: 'ui/user-workflows', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIUserWorkflowsModule) }
 ];
 const GeboAIPreset = definePreset(Aura, {
   semantic: {
@@ -104,17 +104,22 @@ const GeboAIPreset = definePreset(Aura, {
     MegaMenuModule,
     LoginModule,
     FastSetupModule,
+    GeboUIArchitectureModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,
+    GeboAiAdminModule.forRoot(),
     MonacoEditorModule.forRoot(),
-    GeboAINotificationsModule.forRoot(),    
+    GeboAINotificationsModule.forRoot(),
     TranslateModule.forRoot({
-        lang: "en",
-        fallbackLang: "en",
-        loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
+      lang: "en",
+      fallbackLang: "en",
+      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
     }),
+
     GeboSetupWizardsModule,
+    GeboAICommonModulesInjectionsModule.forRoot(),
+    GeboAIModulesModule.forRoot(),
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes),
     GeboAIFieldTranslationContainerModule.forRoot(), PopoverModule],
@@ -132,8 +137,11 @@ const GeboAIPreset = definePreset(Aura, {
         }
       }
     }),
+    GeboUIActionRoutingService,
     { provide: BASE_PATH, useFactory: getBaseUrl },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: ApplicationMenuProviderService, useClass: AppMenuProviderService },
+    { provide: GeboUIEntityFormsLauncherService, useClass: GeboUIEntityFormsLauncherByInjectionService },
 
     {
       provide: TRANSLATE_HTTP_LOADER_CONFIG,

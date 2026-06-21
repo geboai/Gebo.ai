@@ -6,119 +6,125 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.systems.abstraction.layer.model;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import ai.gebo.model.virtualfs.PathInfo;
 
 /**
- * AI generated comments
- * Abstract class representing a native position object. This class provides the basic structure
- * and methods needed for any position object that is used to interface with native systems.
- * Implements Serializable interface for object serialization.
+ * AI generated comments Abstract class representing a native position object.
+ * This class provides the basic structure and methods needed for any position
+ * object that is used to interface with native systems. Implements Serializable
+ * interface for object serialization.
  */
 public abstract class AbstractNativePositionObject implements Serializable {
-    // Path information associated with the position object
-    PathInfo path = null;
+	// Path information associated with the position object
+	protected PathInfo path = null;
+	protected List<Integer> aclAliases=null;
+	/**
+	 * Gets the PathInfo object associated with this position object.
+	 *
+	 * @return the path object.
+	 */
+	public PathInfo getPath() {
+		return path;
+	}
 
-    /**
-     * Gets the PathInfo object associated with this position object.
-     *
-     * @return the path object.
-     */
-    public PathInfo getPath() {
-        return path;
-    }
+	/**
+	 * Sets the PathInfo object for this position object.
+	 *
+	 * @param path the path to set
+	 */
+	public void setPath(PathInfo path) {
+		this.path = path;
+	}
 
-    /**
-     * Sets the PathInfo object for this position object.
-     *
-     * @param path the path to set
-     */
-    public void setPath(PathInfo path) {
-        this.path = path;
-    }
+	/**
+	 * Returns the code of the position object.
+	 *
+	 * @return the code as a String.
+	 */
+	public abstract String getCode();
 
-    /**
-     * Returns the code of the position object.
-     *
-     * @return the code as a String.
-     */
-    public abstract String getCode();
+	/**
+	 * Returns the name of the position object.
+	 *
+	 * @return the name as a String.
+	 */
+	public abstract String getName();
 
-    /**
-     * Returns the name of the position object.
-     *
-     * @return the name as a String.
-     */
-    public abstract String getName();
+	/**
+	 * Returns the URL of the position object.
+	 *
+	 * @return the URL as a String.
+	 */
+	public abstract String getUrl();
 
-    /**
-     * Returns the URL of the position object.
-     *
-     * @return the URL as a String.
-     */
-    public abstract String getUrl();
+	/**
+	 * Determines if the position object is a resource.
+	 *
+	 * @return true if it is a resource, false otherwise.
+	 */
+	public abstract boolean isResource();
 
-    /**
-     * Determines if the position object is a resource.
-     *
-     * @return true if it is a resource, false otherwise.
-     */
-    public abstract boolean isResource();
+	/**
+	 * Determines if the position object is a folder.
+	 *
+	 * @return true if it is a folder, false otherwise.
+	 */
+	public abstract boolean isFolder();
 
-    /**
-     * Determines if the position object is a folder.
-     *
-     * @return true if it is a folder, false otherwise.
-     */
-    public abstract boolean isFolder();
+	/**
+	 * Provides meta-information associated with the resource reference.
+	 *
+	 * @return a map of meta-information key-value pairs.
+	 */
+	public abstract HashMap<String, Object> getResourceReferenceMetaInfos();
 
-    /**
-     * Provides meta-information associated with the resource reference.
-     *
-     * @return a map of meta-information key-value pairs.
-     */
-    public abstract HashMap<String, Object> getResourceReferenceMetaInfos();
+	/**
+	 * Provides the content type of the resource.
+	 *
+	 * @return the resource content type as a String.
+	 */
+	public abstract String getResourceContentType();
 
-    /**
-     * Provides the content type of the resource.
-     *
-     * @return the resource content type as a String.
-     */
-    public abstract String getResourceContentType();
+	/**
+	 * Provides the last modification time of the resource.
+	 *
+	 * @return the modification time as a Date object.
+	 */
+	public abstract Date getResourceModificationTime();
 
-    /**
-     * Provides the last modification time of the resource.
-     *
-     * @return the modification time as a Date object.
-     */
-    public abstract Date getResourceModificationTime();
+	/**
+	 * Provides the size of the resource file.
+	 *
+	 * @return the file size as a Long.
+	 */
+	public abstract Long getResourceFileSize();
 
-    /**
-     * Provides the size of the resource file.
-     *
-     * @return the file size as a Long.
-     */
-    public abstract Long getResourceFileSize();
+	public List<Integer> getAclAliases() {
+		return aclAliases;
+	}
 
-    /**
-     * @return A string representation of the position object, including
-     * its name, path, code, whether it is a resource, its content type,
-     * URL, file size, and meta-information.
-     */
-    @Override
-    public String toString() {
-        String _string = "{name=" + getName() + ", path=" + path + ",code=" + getCode() + ",resource=" + isResource()
-                + ",resourceContentType=" + getResourceContentType() + ",url=" + getUrl() + ",resourceFileSize="
-                + getResourceFileSize() + " metainfos=" + getResourceReferenceMetaInfos() + "}";
-        return _string;
-    }
+	/**
+	 * @return A string representation of the position object, including its name,
+	 *         path, code, whether it is a resource, its content type, URL, file
+	 *         size, and meta-information.
+	 */
+	@Override
+	public String toString() {
+		String _string = "{name=" + getName() + ", path=" + path + ",code=" + getCode() + ",resource=" + isResource()
+				+ ",resourceContentType=" + getResourceContentType() + ",url=" + getUrl() + ",resourceFileSize="
+				+ getResourceFileSize() + " metainfos=" + getResourceReferenceMetaInfos() + "}";
+		return _string;
+	}
+
+	public void setAclAliases(List<Integer> aclAliases) {
+		this.aclAliases = aclAliases;
+	}
 }

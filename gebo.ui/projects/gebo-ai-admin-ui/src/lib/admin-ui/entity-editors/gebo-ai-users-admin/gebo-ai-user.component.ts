@@ -58,7 +58,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
     pwdFormGroup: FormGroup = new FormGroup({
         password: new FormControl()
     });
-
+   
     /** Available roles for user assignment */
     protected rolesList: string[] = ["USER", "ADMIN", "APPLICATION"];
     protected actualAuthProvider?: AuthProviderDto.ProviderEnum;
@@ -252,5 +252,9 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
 
         })
 
+    }
+    protected openChangePasswordWindow:boolean=false;
+    protected doChangePassword(){
+        this.openChangePasswordWindow=true;
     }
 }

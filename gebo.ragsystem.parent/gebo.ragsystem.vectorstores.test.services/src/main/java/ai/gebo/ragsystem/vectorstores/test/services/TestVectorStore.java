@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -25,6 +26,7 @@ import org.springframework.ai.vectorstore.filter.Filter.Expression;
 
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
+import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorizedFragmentMetadata;
 import ai.gebo.model.DocumentMetaInfos;
 
 /**
@@ -218,5 +220,19 @@ public class TestVectorStore extends AbstractTestingBusinessLogic implements IGE
 	 */
 	public List<String> getDeletedDocumentIds() {
 		return deletedDocumentIds;
+	}
+
+	@Override
+	public List<VectorizedFragmentMetadata> readMetadataByIds(List<String> ids)
+			throws ExecutionException, InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void patchMetadataByIds(List<VectorizedFragmentMetadata> entries)
+			throws ExecutionException, InterruptedException {
+		// TODO Auto-generated method stub
+		
 	}
 }

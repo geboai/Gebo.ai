@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.1.0-ALPHA</version>
+		<version>1.0.1.0-BETA</version>
 	</parent>
 	<artifactId>gebo.architecture.security</artifactId>
 	<dependencies>
@@ -81,6 +81,15 @@
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.config</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	</dependencies>
 </project>

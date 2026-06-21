@@ -89,13 +89,20 @@ public class GenericOpenAIAPIImageModelConfigurationSupportService implements
 	}
 
 	@Override
+	public String getId() {
+
+		return this.type.getCode();
+	}
+
+	@Override
 	public GImageModelType getType() {
 
 		return type;
 	}
 
 	@Override
-	public OperationStatus<List<GenericOpenAIAPIImageModelChoice>> getModelChoices(GenericOpenAIAPIImageModelConfig config) {
+	public OperationStatus<List<GenericOpenAIAPIImageModelChoice>> getModelChoices(
+			GenericOpenAIAPIImageModelConfig config) {
 
 		return null;
 	}

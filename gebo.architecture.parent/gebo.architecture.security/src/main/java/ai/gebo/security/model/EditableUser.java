@@ -12,12 +12,18 @@ package ai.gebo.security.model;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents an editable version of a user with fields that can be modified.
  * 
  * Gebo.ai comment agent
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EditableUser {
 
 	/**
@@ -54,117 +60,5 @@ public class EditableUser {
 	private AuthProvider authProvider = null;
 	private String langCode = null;
 
-	/**
-	 * Default constructor for creating an empty EditableUser instance.
-	 */
-	public EditableUser() {
-
-	}
-
-	/**
-	 * Retrieves the name of the user.
-	 * 
-	 * @return the user's name.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the name of the user.
-	 * 
-	 * @param name the new name to be assigned to the user.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Retrieves the surname of the user.
-	 * 
-	 * @return the user's surname.
-	 */
-	public String getSourname() {
-		return sourname;
-	}
-
-	/**
-	 * Sets the surname of the user.
-	 * 
-	 * @param sourname the new surname to be assigned to the user.
-	 */
-	public void setSourname(String sourname) {
-		this.sourname = sourname;
-	}
-
-	/**
-	 * Retrieves the username of the user.
-	 * 
-	 * @return the user's username.
-	 */
-	public String getUsername() {
-		return username;
-	}
-
-	/**
-	 * Sets the username of the user.
-	 * 
-	 * @param username the new username to be assigned to the user.
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * Checks if the user account is disabled.
-	 * 
-	 * @return true if the user is disabled, otherwise false.
-	 */
-	public Boolean getDisabled() {
-		return disabled;
-	}
-
-	/**
-	 * Sets the disabled status of the user account.
-	 * 
-	 * @param disabled the new disabled status.
-	 */
-	public void setDisabled(Boolean disabled) {
-		this.disabled = disabled;
-	}
-
-	/**
-	 * Retrieves the list of roles assigned to the user.
-	 * 
-	 * @return a list of role names assigned to the user.
-	 */
-	public List<String> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * Sets the list of roles for the user.
-	 * 
-	 * @param roles the new list of roles to be assigned.
-	 */
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-
-	public AuthProvider getAuthProvider() {
-		return authProvider;
-	}
-
-	public void setAuthProvider(AuthProvider authProvider) {
-		this.authProvider = authProvider;
-	}
-
-	public String getLangCode() {
-		return langCode;
-	}
-
-	public void setLangCode(String langCode) {
-		this.langCode = langCode;
-	}
 
 }

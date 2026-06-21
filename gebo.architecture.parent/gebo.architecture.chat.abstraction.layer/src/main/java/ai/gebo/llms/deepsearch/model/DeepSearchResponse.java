@@ -10,7 +10,7 @@ import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
 @Data
-public class DeepSearchResponse extends GBaseObject implements IDeepSearchResult {
+public class DeepSearchResponse extends GBaseObject {
 	private static final String DEEP_SEARCH_AGGREGATOR = "Deep search aggregator";
 	@NotNull
 	@HashIndexed
@@ -25,9 +25,4 @@ public class DeepSearchResponse extends GBaseObject implements IDeepSearchResult
 		this.setCode(UUID.randomUUID().toString());
 	}
 
-	@Override
-	public String getDataSourceDescription() {
-
-		return DEEP_SEARCH_AGGREGATOR;
-	}
 }

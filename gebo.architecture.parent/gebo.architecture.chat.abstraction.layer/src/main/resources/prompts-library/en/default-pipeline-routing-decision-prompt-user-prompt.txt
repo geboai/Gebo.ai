@@ -1,0 +1,149 @@
+INPUTS:
+
+ 
+  
+(A) CURRENT USER QUESTION: {question}
+
+
+
+(B) DOCUMENTS AND DOCUMENT FRAGMENTS ALREADY PRESENT IN THE CHAT  (may be empty):
+
+{documents}
+
+(C) EXTERNAL DATA SOURCES LIST TO PERFORM SEARCH/DEEP SEARCH ON (may be empty). Each entry has a unique source code/id and description:
+
+{deepSearchDataSources}
+
+(D) INTERNAL RAG KNOWLEDGE BASES CATALOG (may be empty). Each entry has a unique KB code/id and description:
+
+{internalKnowledgeBaseCatalog}
+
+(F) TOOLS LIST (may be empty):
+
+{toolsList}
+
+(G) USER REQUIRED SERVICE TYPE (already decided by a previous pipeline step):
+
+deliverable={deliverable}
+
+SERVICE-TYPE-EXPLANATION={deliverableExplanation}
+
+ACTUAL DATE AND TIME: {actualTimestamp}
+
+DEFINITIONS:
+
+RAG_LLM_RESPONSE means ONE-PASS retrieval only on INTERNAL KNOWLEDGE BASE (D):
+single retrieval pass (semantic + full text), fixed topK, no iterative query refinement, no multi-pass corpus expansion.
+
+DEEP_SEARCH_RESPONSE means ITERATIVE search and analysis:
+multiple passes of query refinement/expansion, re-ranking/dedup, observing documents until the required service level (G) is satisfied.
+It can search one source or multiple sources, including internal KB.
+Internal KB deep-search is represented by the special source code: IKB_SYSTEM.
+
+
+
+DECISION RULES (apply in this exact priority order):
+
+GLOBAL TOOL OVERRIDE:
+If the user explicitly asks to use tools or perform an action that requires a tool in (F), choose TOOLS_USE_RESPONSE.
+
+EXPLICIT SOURCE TARGETING:
+If the user explicitly names one or more sources/systems by their specific name/code matching entries in (C), choose DEEP_SEARCH_RESPONSE and include those matching (C) source codes in deepSearchedSystems.
+If the user explicitly asks to perform an in-depth or iterative search on the internal knowledge base (e.g., "do a deep search", "search all databases", "find everything about"), choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM in deepSearchedSystems. Simple queries asking to answer a question or find a specific procedure should NOT trigger this rule, even if they use search verbs; they must be evaluated by the intent rules below.
+
+CONTEXT SUFFICIENCY OVERRIDE:
+If (A)+(B) and the chat history already contain enough information to fully answer the user at the required service level (G), choose PURE_LLM_RESPONSE regardless of the deliverable.
+Exception: do NOT apply this override when the user explicitly requests an external or iterative search (those cases are already handled by GLOBAL TOOL OVERRIDE and EXPLICIT SOURCE TARGETING above).
+
+ANALISYS INTENT RULE:
+If deliverable=ANALISYS and the answer is NOT already fully present in (A)+(B)+chat history, choose DEEP_SEARCH_RESPONSE.
+Rationale: ANALISYS implies structured, detailed, multi-section output and/or citations/corpus comparison; when the material is not already available it requires iterative search and aggregation.
+
+PURE_SEARCH INTENT RULE:
+If deliverable=PURE_SEARCH:
+If external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
+Else if internal KB (D) is available and relevant, choose DEEP_SEARCH_RESPONSE and include IKB_SYSTEM.
+Else choose PURE_LLM_RESPONSE.
+
+DECISION INTENT RULE:
+If deliverable=DECISION:
+If a recommendation/tradeoff can be made using ONLY training knowledge and (A)+(B) context with high confidence, choose PURE_LLM_RESPONSE.
+Otherwise, choose DEEP_SEARCH_RESPONSE to gather evidence from sources (citations/supporting facts), then evaluate tradeoffs.
+
+QA INTENT RULE:
+If deliverable=QA:
+If (A)+(B) and chat history context is sufficient, choose PURE_LLM_RESPONSE.
+Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE.
+Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
+Else choose PURE_LLM_RESPONSE.
+
+HOWTO INTENT RULE:
+If deliverable=HOWTO:
+If (A)+(B)  and chat history  context is sufficient, choose PURE_LLM_RESPONSE.
+Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE (single-pass is usually enough for procedures).
+Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
+Else choose PURE_LLM_RESPONSE.
+
+SUMMARY INTENT RULE:
+If deliverable=SUMMARY:
+If (A)+(B)  and chat history already contains the material to summarize, choose PURE_LLM_RESPONSE.
+Else if internal KB (D) is available and relevant, choose RAG_LLM_RESPONSE.
+Else if external sources (C) are available and relevant, choose DEEP_SEARCH_RESPONSE.
+Else choose PURE_LLM_RESPONSE.
+
+UNKNOWN INTENT RULE (fallback):
+If deliverable=UNKNOWN:
+If (A)+(B)  and chat history context is sufficient, choose PURE_LLM_RESPONSE.
+Else if internal KB (D) is available, choose RAG_LLM_RESPONSE.
+Else if external sources (C) are available, choose DEEP_SEARCH_RESPONSE.
+Else choose PURE_LLM_RESPONSE.
+
+SOURCE SELECTION RULES (for DEEP_SEARCH_RESPONSE only):
+
+deepSearchedSystems must include one or more source codes, each on its own line.
+Valid source codes are:
+any code present in (C)
+the special internal code IKB_SYSTEM
+Prefer explicit user-mentioned sources first.
+If deliverable=ANALISYS, select up to 3 best matching sources; include IKB_SYSTEM if internal KB is relevant or if no external source clearly matches.
+If deliverable is QA/HOWTO/SUMMARY/DECISION/PURE_SEARCH, select the single best matching source (unless the question explicitly requires multiple sources).
+If no external (C) source matches but internal KB exists and retrieval is required, include IKB_SYSTEM.
+
+OUTPUT RULES:
+You must output ONLY plain text in EXACTLY the <field>=<value> format (no markdown, no extra text).
+The line separator between fields MUST be newline.
+
+You MUST output:
+
+EXACTLY one mandatory line:
+routingDecision=<value>
+PLUS:
+If routingDecision=DEEP_SEARCH_RESPONSE, output one or more additional lines:
+deepSearchedSystems=<sourceCode taken from (C)>
+
+routingDecision must be exactly one of:
+
+PURE_LLM_RESPONSE
+RAG_LLM_RESPONSE
+DEEP_SEARCH_RESPONSE
+TOOLS_USE_RESPONSE
+
+
+deepSearchedSystems rules:
+
+Only output deepSearchedSystems lines when routingDecision=DEEP_SEARCH_RESPONSE and one row with: deepSearchedSystems=None for other routingDecisions.
+Each deepSearchedSystems line must contain exactly one source code taken from (C) 
+considering the matching between user intent/request (A) and the listed example contents in the (C) catalogs.
+
+pipelineExecutorSuggestion rules:
+
+if routingDecision is one of: DEEP_SEARCH_RESPONSE, RAG_LLM_RESPONSE  suggest the most adequate searches to find documents grounding the response.
+if routingDecision is TOOLS_USE_RESPONSE output the list of usefull tools to call and some suggestions on parameters.
+if routingDecision is PURE_LLM_RESPONSE suggest some key points to answer the user. 
+
+
+CONSTRAINTS:
+
+Do not output any fields other than routingDecision , deepSearchedSystems and pipelineExecutorSuggestion.
+Do not output deepSearchedSystems lines for routingDecision other than DEEP_SEARCH_RESPONSE.
+No markdown, no extra text.

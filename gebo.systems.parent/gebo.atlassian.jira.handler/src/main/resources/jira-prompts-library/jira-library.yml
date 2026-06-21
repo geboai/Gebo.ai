@@ -1,7 +1,13 @@
 ai.gebo.jira.library:
   - promptUse: jira-standard-query-extraction-prompt
     langCode: en
-    reference: /jira-prompts-library/en/jira-standard-query-extraction-prompt.txt
+    systemReference: /jira-prompts-library/en/jira-standard-query-extraction-prompt-system-prompt.txt
+    userReference: /jira-prompts-library/en/jira-standard-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
   - promptUse: jira-native-query-extraction-prompt
     langCode: en
-    reference: /jira-prompts-library/en/jira-native-query-extraction-prompt.txt
+    systemReference: /jira-prompts-library/en/jira-native-query-extraction-prompt-system-prompt.txt
+    userReference: /jira-prompts-library/en/jira-native-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED

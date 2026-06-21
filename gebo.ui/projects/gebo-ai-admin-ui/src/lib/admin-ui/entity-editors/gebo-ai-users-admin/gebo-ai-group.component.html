@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <div class="grid geboButtonsBar" *ngIf="!isWizardMode">
+    <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
         <div class="col-3">
             <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
                 [disabled]="this.formGroup.invalid || canSave===false"></p-button>

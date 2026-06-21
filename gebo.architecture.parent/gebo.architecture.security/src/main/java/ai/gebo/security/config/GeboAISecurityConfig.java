@@ -62,7 +62,7 @@ public class GeboAISecurityConfig {
 	private static Logger LOGGER = LoggerFactory.getLogger(GeboAISecurityConfig.class);
 	// URLs that are allowed to be accessed without authentication
 	private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
-			"/v3/**", "/media/**", "**.js", "**.ico", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
+			"/v3/**", "/media/**", "**.js", "**.ico", "*.map", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
 			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" };
 
 	// URLs that forward to index.html

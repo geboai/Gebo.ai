@@ -8,25 +8,47 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <div class="grid">
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="col-12 justify-content-center" style="text-align: center;">
-        <span *ngFor="let doc of listedDocuments" style="list-style: none;break-after: avoid;">
+        <span *ngFor="let doc of displayedDocuments" style="list-style: none;break-after: avoid;">
             <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>
-            <p-button  id="ChatWithDocsRemoveBtn" class="custom-blue-btn" gebo-ai-label  icon="pi pi-times-circle" [text]="true" (onClick)="doRemoveFile(doc)" *ngIf="readonly===false && interactionDisabled===false"></p-button>
+            
+            <p-button id="ChatWithDocsRemoveBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-times-circle"
+                [text]="true" (onClick)="doRemoveFile(doc)"
+                *ngIf="readonly===false && interactionDisabled===false" label=""></p-button>
         </span>
+        <p-button *ngIf="hasMoreDocuments" class="custom-blue-btn" [text]="true"
+            [label]="'... (' + (listedDocuments.length - (maxDisplayedDocuments || 0)) + ')'"
+            (onClick)="openedFullListDocumentsWindow = true" pTooltip="Show all documents"></p-button>
+        <p-button *ngIf="listedDocuments && listedDocuments.length > 0 && readonly===false && interactionDisabled===false" 
+            id="ChatWithDocsClearAllBtn" class="custom-blue-btn" gebo-ai-label icon="pi pi-trash" [text]="true"  label="Clear list" 
+            (onClick)="doClearAllFiles()" pTooltip="Clear all selected documents"></p-button>
     </div>
 </div>
-<p-dialog  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'70%'}" [closable]="true"
-    [showHeader]="true" 
+<p-dialog [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true"
+    [style]="{width:'95%',height:'70%'}" [closable]="true" [showHeader]="true"
     (visibleChange)="this.openedSearchDocumentsWindowsChange.emit(false)" [formGroup]="editingFormGroup">
     <gebo-ai-search-documents-component [knowledgeBaseCodes]="knowledgeBaseCodes" formControlName="documentsList"
         (confirmed)="acceptedValues()"
         (closeMe)="this.openedSearchDocumentsWindows=false;"></gebo-ai-search-documents-component>
+</p-dialog>
+
+<p-dialog header="Selected Documents" id="FULL_DOCS_LIST_WINDOW" gebo-ai-label
+    [(visible)]="openedFullListDocumentsWindow" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true"
+    [draggable]="false" [resizable]="false">
+    <div class="flex flex-column gap-2 mt-3">
+        <div *ngFor="let doc of listedDocuments" class="flex align-items-center justify-content-between mb-2">
+            <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>
+            <p-button id="ChatWithDocsRemoveBtnFullList" class="custom-blue-btn" gebo-ai-label icon="pi pi-times-circle"
+                [text]="true" (onClick)="doRemoveFile(doc)"
+                *ngIf="readonly===false && interactionDisabled===false"></p-button>
+        </div>
+    </div>
 </p-dialog>

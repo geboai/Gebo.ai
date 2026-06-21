@@ -1,0 +1,4291 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Defolt sistem dili",
+        "help" : "Bu Gebo.ai quraşdırılması üçün defolt sistem dili"
+      },
+      "username" : {
+        "label" : "E-poçt",
+        "help" : "Daxil olmaq üçün istifadəçi adı kimi e-poçt"
+      },
+      "passwordC" : {
+        "label" : "Şifrəni təsdiqlə",
+        "help" : "Şifrəni təsdiqlə"
+      },
+      "password" : {
+        "label" : "Şifrə",
+        "help" : "Daxil olmaq üçün şifrə (ən azı 8 simvol)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " şifrələr uyğun gəlmir "
+      },
+      "LocalAdmin" : {
+        "label" : "Yerli admin hesabınızı yaradın"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Bu hesabı gələcəkdə proqramın qurulması və idarə olunması üçün istifadə edəcəksiniz, bu məlumatlar yalnız sizin sisteminizdə saxlanılır və şəbəkə üzərindən göndərilmir"
+      },
+      "EnterBtn" : {
+        "label" : "Daxil olmaq üçün giriş səhifəsinə keçin"
+      },
+      "SetupPage" : {
+        "label" : "Gebo.ai qurulumunu tənzimləyin"
+      },
+      "CreateBtn" : {
+        "label" : "Sistem qurulumunu yaradın"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Lisenziyanı oxuyun və qəbul edin"
+      },
+      "AcceptMark" : {
+        "label" : "Şərtləri qəbul edirəm",
+        "help" : "Buraya klikləməklə lisenziyada olan şərtləri qəbul edirsiniz"
+      },
+      "3f4bb5d10e38f4cdec47a0106f05044bd3d97abdebfcf5be18e3ffd958802838" : {
+        "summary" : "Admin istifadəçisi yaradıldı !",
+        "detail" : "Admin istifadəçisi PAOLO.ZAVALLONI@GMAIL.COM uğurla yaradıldı"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "Daxil olmaq üçün e-mail istifadəçi adı kimi"
+      },
+      "password" : {
+        "label" : "Şifrə",
+        "help" : "Daxil olmaq üçün şifrə"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai daxil olun"
+      },
+      "LoginBtn" : {
+        "label" : "Daxil ol"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Verilən məlumatlarla təsdiqləmək mümkün olmadı"
+      },
+      "ForgotPasswordLink" : {
+        "label" : "Şifrəni unutmusunuz?"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Gebo.ai-ya xoş gəlmisiniz",
+        "detail" : "Daxil olmaq üçün istifadəçi adınızı və şifrənizi daxil edin"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Göstərilən məlumatlarla təsdiqləmə mümkün olmadı"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Oldu!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai-ya xoş gəlmisiniz",
+        "detail" : "Daxil olmaq üçün istifadəçi adınızı və şifrənizi daxil edin"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfiqurasiya"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Təchizatçı adı"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 təhlükəsizlik ayarları"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Quraşdırma əsas səhifəsinə qayıt"
+      },
+      "WizardUi" : {
+        "label" : "Quraşdırma bölməsini seçin"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administrator və digər hesabların qurulması",
+        "description" : "Bu gebo.ai qurğusunun düzgün idarə edilməsi üçün ən azı bir administrator hesabı tələb olunur, lazım olduğu halda digər istifadəçiləri əlavə edin"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai iş qovluğu",
+        "description" : "İş qovluğunu qurun, bu qovluq bu quraşdırmanın bütün konfiqurasiyaları və iş fayllarının saxlandığı yer olacaq. Həmçinin vaxtaşırı ehtiyat nüsxəsini almaq yaxşı fikirdir."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektor verilənlər bazası konfiqurasiyası",
+        "description" : "Gebo.ai-nin genişlənmiş nəsil xidmətləri göstərməsi üçün vektor verilənlər bazası qurulmalıdır, yerli vektor bazası, Qdrant və ya Mongo Atlas arasında seçim edə bilərsiniz"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Tək giriş, oauth2 identifikasiyası",
+        "description" : "Oauth2 tək giriş identifikasiyası və oauth2 müştəri konfiqurasiyası"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Böyük dil modellərinin qurulması",
+        "description" : "Buludda və ya lokal/şəbəkə infrastrukturunda müxtəlif llm-ləri qurun, proqramın düzgün işləməsi üçün ən azı bir çat modeli və bir embedding modeli qurulmalıdır."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Qraf rag/Bilik çıxarma qurğusu",
+        "description" : "Qraf rag və bilik çıxarma alt sistemini qurun"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Paylaşılan fayl sistemləri yollarının qurulması",
+        "description" : "Fərqli bilik bazalarında genişləndirilmiş nəsil sənəd zonası kimi istifadə olunacaq şirkət paylaşılan fayl sistemlərinin yollarını qurun"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence inteqrasiyası",
+        "description" : "Gebo.ai-nin Atlassian Confluence bulud və ya lokal quraşdırmalarına daxil olmasını qurun"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira inteqrasiyası",
+        "description" : "Gebo.ai-nin Atlassian jira bulud quraşdırmalarına daxil olmasını qurun"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint inteqrasiyası",
+        "description" : "Gebo.ai-nin Microsoft Sharepoint bulud və ya lokal quraşdırmalarına daxil olmasını qurun"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Ən azı bir bilik bazasını qurun",
+        "description" : "İstifadəçilərinizin Gebo.ai-nin genişlənmiş nəsil xidmətlərindən faydalana bilməsi üçün ən azı bir bilik bazası qurun"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Ən azı bir \"R.A.G.\" çat profilini qurun",
+        "description" : "İstifadəçiləriniz üçün konfiqurasiya etdiyiniz bilik bazalarından biri əsasında ən azı bir genişlənmiş çat profilini qurun"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai quraşdırmasının məcburi addımları tamamlandı...",
+        "detail" : "Məcburi quraşdırma addımları tamamlanıb, amma bəzi çatışmayan addımlar təşkilatınızın proqramdan tam istifadə etməsinə mane olur"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai quraşdırması TAMAM!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai quraşdırmasında bəzi məcburi addım çatışmır",
+        "detail" : "Quraşdırma prosesinin qırmızı addımlarını yoxlayın"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces inteqrasiyası",
+        "description" : "Gebo.ai-nı Google cloud Drive/Workspaces komanda məlumatlarınıza çıxış üçün qurun"
+      },
+      "googleSearchApiSetupSection" : {
+        "label" : "Google axtarış api-ni qurun",
+        "description" : "AI veb axtarışlar üçün Google axtarış api məlumatlarını qurun"
+      },
+      "deepSearchApiSetupSection" : {
+        "label" : "Deep search-u qurun",
+        "description" : "Deep search parametrlərini qurun"
+      },
+      "ragAutotuneSetupSection" : {
+        "label" : "R.a.g. avtomatik tənzimləmə",
+        "description" : "Avtomatik genişləndirilmiş yığma parametrlərinin tənzimlənməsi"
+      },
+      "Description" : {
+        "label" : "Təsvir"
+      },
+      "LastAutotunedDate" : {
+        "label" : "Son tənzimləmə yeniləməsi"
+      },
+      "Code" : {
+        "label" : "Embedding modeli/VectorStore kodu"
+      },
+      "ComputedThreashold" : {
+        "label" : "Hesablanmış hədd"
+      },
+      "Autotuned" : {
+        "label" : "Avtomatik tənzimlənmiş"
+      },
+      "SETUP-DONE_DO_MORE" : {
+        "summary" : "Gebo.ai üçün vacib qurulum addımları tamamlanıb...",
+        "detail" : "Vacib qurulum addımları tamamlanıb, lakin bəzi çatışmayan addımlar təşkilatınızın bu proqramdan tam istifadə etməsinə mane olur"
+      },
+      "SETUP-MISSING_SOME" : {
+        "summary" : "Gebo.ai qurulmasında bəzi vacib addım çatışmır",
+        "detail" : "Qurulum prosesində qırmızı rənglə işarələnmiş addımları gözdən keçirin"
+      },
+      "agentSetupSection" : {
+        "label" : "Agent xidmətlərini konfiqurasiya et",
+        "description" : "Agent xidmətlərini və onların əlçatan alətlərini konfiqurasiya et"
+      },
+      "AgentAddBtn" : {
+        "label" : "Agent əlavə et"
+      },
+      "MainPanel" : {
+        "label" : "Agentləri qur"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "EditAgentBtn" : {
+        "label" : "Agentə düzəliş et"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Şirkət Atlassian Confluence sistemlərini qurun"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistem tipi"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence sistemi"
+      },
+      "EditSystemBtn" : {
+        "label" : "Sistemi redaktə et"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira sistemi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "MainPanel" : {
+        "label" : "Şirkət Atlassian Jira sistemlərini qurun"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistem tipi"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "MainPanel" : {
+        "label" : "Şirkət Microsoft Sharepoint sistemlərini qurun"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistem tipi"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint sistemi"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Müvafiq balansa sahib olan api açarı təqdim edin. OpenAI seçilərsə, api istifadəsi üçün planınıza əlavə kredit (10-30$ kifayət edə bilər) əlavə etməlisiniz, əks halda bu tətbiqdə heç bir llm trafiki olmayacaq."
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llm təminatçılarına api açarınızla giriş qurun"
+      },
+      "provider" : {
+        "label" : "Böyük dil modeli təminatçısı",
+        "help" : "OpenAI (chatgpt), Google (Gemini), Anthropic (Claude) arasında bir təminatçı seçin"
+      },
+      "user" : {
+        "label" : "İstifadəçi",
+        "help" : "Api açarı ilə əlaqədar istifadəçini daxil edin"
+      },
+      "ConfigureBtn" : {
+        "label" : "Qur"
+      },
+      "apiKey" : {
+        "label" : "Api açarı",
+        "help" : "İstifadə olunacaq LLMS təminatçılarının api açarınız"
+      },
+      "ProviderHeader" : {
+        "label" : "Təminatçı"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Model tipi"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Standart model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms təminatçılarına girişin qurulması"
+      },
+      "ExtensiveStup" : {
+        "label" : "Genişləndirilmiş infrastruktur/təchizatçı seçimləri"
+      },
+      "MainPanelTitle" : {
+        "label" : "İstifadə olunan Böyük dil modellərini qur"
+      },
+      "EasySetup" : {
+        "label" : "Asan ilkin qurulum/konfiqurasiya düzəlişi"
+      },
+      "MainLLMSPanelTitle" : {
+        "label" : "Böyük dil modellərini qur"
+      },
+      "70d0f568b272b69ee4bfe3ab1be972cda9b1142c6f33cbf15968f40177b5db9a" : {
+        "summary" : "Əməliyyat zamanı istisna: Vektor mağazasını yaratmaq və ya embedding modelin inicializasiya xətası: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}",
+        "detail" : "Server xətası: Vektor mağazası yaradılmadı və ya embedding modelin inicializasiya xətası: 401 - {\"error\":{\"message\":\"Authentication Error, Invalid proxy server token passed. Received API Key = sk-...vUCn, Key Hash (Token) =9e95c50203491ca825fdbd048fb0d78b3fcfc02664a9d7387f1eca14fc31133a. Unable to find token in cache\",\"type\":\"token_not_found_in_db\",\"param\":\"key\",\"code\":\"401\"}}"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Qraf rag konfiqurasiyası yaradın"
+      },
+      "MainPanel" : {
+        "label" : "Qraf Rag və bilik çıxarma üçün standart konfiqurasiya qurun"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiqurasiya kodu"
+      },
+      "EditConfigBtn" : {
+        "label" : "Konfiqurasiyanı redaktə et"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Layihə"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Bilik bazası əlavə edin"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Bilik bazası"
+      },
+      "MainPanel" : {
+        "label" : "Bilik bazaları və məzmun konfiqurasiyaları"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Mənbə"
+      },
+      "PublishedHeader" : {
+        "label" : "Dərc edilib"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Sənəd sayı"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Layihə/element əlavə et",
+        "help" : "yeni layihə yaradın"
+      },
+      "Button1" : {
+        "help" : "bilik bazasını aç"
+      },
+      "Button2" : {
+        "help" : "layihə formasını aç"
+      },
+      "Button3" : {
+        "help" : "məlumat mənbəyini aç"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai iş qovluğu konfiqurasiyası"
+      },
+      "ConfigureBtn" : {
+        "label" : "Qur"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai iş qovluğu kimi qovluq seçin",
+        "help" : "Bu qurğunun konfiqurasiya və məzmunların saxlanılması üçün istifadə edəcəyi server qovluğunu seçin."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Qovluq əlavə et"
+      },
+      "AddFolderBtn" : {
+        "label" : "Qovluq əlavə et"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "MainPanel" : {
+        "label" : "Server paylaşılan fayl sistemi yolları"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Tam yol"
+      },
+      "DeleteHeader" : {
+        "label" : "Sil"
+      },
+      "path" : {
+        "label" : "Paylaşılan fayl sistemində kök qovluq əlavə edin",
+        "help" : "Sənəd arxivi kimi təşkilatınızda istifadə olunan paylaşılan fayl sisteminin kök yolu olan server qovluğunu seçin"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Fayl sistemi üçün təsvir daxil edin"
+      },
+      "RemovePathBtn" : {
+        "label" : "Yolu sil"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Qur"
+      },
+      "MainPanel" : {
+        "label" : "Vektor verilənlər bazası konfiqurasiyası"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Qdrant host adı və ya ip ünvanı"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant bağlantı ayarları"
+      },
+      "port" : {
+        "label" : "Qdrant portu",
+        "help" : "Qdrant ünsiyyət portu (standart 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api açarı",
+        "help" : "Qdrant identifikasiyası üçün api açarı"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parametri",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai qurulmasının vacib addımları tamamlandı...",
+        "detail" : "Vacib quraşdırma addımları tamamlandı, lakin bəzi çatışmayan addımlar bu proqramdan tam istifadə etməyə mane olur"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai quraşdırmasında bəzi vacib addımlar çatışmır",
+        "detail" : "Quraşdırma prosesində qırmızı qeyd olunan addımları nəzərdən keçirin"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai quraşdırması uğurla tamamlandı!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Yeni R.A.G. çat profili əlavə et"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. çat profili əlavə et"
+      },
+      "MainPanel" : {
+        "label" : "Genişləndirilmiş generasiya (R.A.G.) çat profillərinin tənzimləmələrini əldə et"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Mövcud R.A.G. çat profilləri"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. çat profilini düzəlt"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Bilik bazası kodları"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Şirkət Google Drive/Workspaces sistemlərini qurun"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Quruluş kodu"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      }
+    },
+    "GeboAIGoogleSearchWizardComponent" : {
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "GoogleSearchCredentialsBtn" : {
+        "label" : "Google axtarış api açarı"
+      },
+      "CreateCredentialsPanel" : {
+        "label" : "Google axtarış üçün məlumat yaradın"
+      },
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "customSearchEngineId" : {
+        "label" : "Axtarış mühərriki id-si",
+        "help" : "Google axtarış api məlumatları qeydiyyatında əldə olunan axtarış mühərriki id-sini daxil edin."
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiq kodu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "apiKey" : {
+        "label" : "Api açarı",
+        "help" : "Google axtarış api məlumatları qeydiyyatında əldə olunan api açarını daxil edin."
+      },
+      "MainPanel" : {
+        "label" : "Google axtarış api-ni qur"
+      },
+      "DeleteCredentialsBtn" : {
+        "label" : "Sil",
+        "help" : "Google axtarış api məlumatlarını sil"
+      },
+      "AddDeepSearchBtn" : {
+        "label" : "Deep search konfiqi",
+        "help" : "Deep search konfiqurasiyası əlavə edin"
+      },
+      "EditSystemBtn" : {
+        "label" : "Konfiqi redaktə et"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kod",
+        "help" : "OAUTH2 Doğrulama/İnteqrasiya kodunun (registrationId) təsvirini daxil edin."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "OAUTH2 Doğrulama/İnteqrasiya məlumatlarının təsvirini daxil edin."
+      },
+      "configurationType" : {
+        "label" : "Konfiqurasiya məqsədi",
+        "help" : "Bu ayarların Gebo.ai daxil olmaq üçün yoxsa Gebo.ai-nin üçüncü tərəf sistemə müştəri bağlantısı üçün istifadə olunacağını seçin."
+      },
+      "authProvider" : {
+        "label" : "Təchizatçı",
+        "help" : "OAUTH2 Doğrulama təchizatçısını daxil edin"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Təchizatçının OAUTH2 issuer URL-sini daxil edin"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "Təchizatçının OAUTH2 Authorization URL-sini daxil edin"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Təchizatçının OAUTH2 Jwk Set URL-sini daxil edin"
+      },
+      "userInfoUri" : {
+        "label" : "İstifadəçi məlumatı URL-i",
+        "help" : "Təchizatçının OAUTH2 istifadəçi məlumatı URL-sini daxil edin"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Təchizatçının OAUTH2 introspeksiya URL-sini daxil edin"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Təchizatçının OAUTH2 Token URL-sini daxil edin"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 təchizatçı URL-ləri"
+      },
+      "MainPanel" : {
+        "label" : "Yeni OAUTH2 Doğrulama/İnteqrasiya məlumatlarını əlavə edin"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Müştəri ID-si",
+        "help" : "oauth2 protokolu üçün müştəri identifikatoru (oauth2 ilə avtorizasiya olunmuş 3-cü tərəf proqram təminatının admin sahəsindən əldə edilməlidir)"
+      },
+      "secret" : {
+        "label" : "Gizli açar",
+        "help" : "oauth2 protokolu üçün müştəri gizli açarı (oauth2 ilə avtorizasiya olunmuş 3-cü tərəf proqram təminatının admin sahəsindən əldə edilməlidir)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence sistemi konfiqurasiyası yaradın"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Confluence sisteminin təsvirini daxil edin."
+      },
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "username" : {
+        "label" : "Confluence istifadəçi adı",
+        "help" : "Confluence istifadəçi adı"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versiyası",
+        "help" : "Confluence versiyası"
+      },
+      "baseUri" : {
+        "label" : "Əsas internet ünvanı",
+        "help" : "Onpremise quraşdırma üçün əsas confluence sistem ünvanının url-si və ya Confluence cloud sistemi üçün təşkilatınızın əsas url-si"
+      },
+      "password" : {
+        "label" : "Confluence şifrəsi",
+        "help" : "Confluence şifrəsi"
+      },
+      "token" : {
+        "label" : "Confluence cloud api açarı",
+        "help" : "Confluence bulud apikey-i Confluence idarəetmə bölməsində əldə edilir, burada \"API Token for your Atlassian Account\" daxil edilməlidir."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Yadda saxlayır və bu məzmunları biliyə əsas üçün LLm-lərə əlçatan edir"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "MainPanel" : {
+        "label" : "Confluence məzmunlarının paylaşılması"
+      },
+      "LogsTab" : {
+        "label" : "Loglar"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Avtomatik yaradılmış məzmunların unikal kodu."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Confluence-ə daxil edilən faylların təsvirini daxil edin."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence sistemi",
+        "help" : "Artıq qurulmuş confluence sistemi istinadı."
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Ana layihə istinadı."
+      },
+      "openZips" : {
+        "label" : "Zip fayllarını açın",
+        "help" : "Zip fayllarını açmanı və məzmun çıxarılmasını aktiv edin"
+      },
+      "tree" : {
+        "label" : "Seçilmiş boşluq və ya səhifələr/alt səhifələr",
+        "help" : "Paylaşılan confluence boşluqları və səhifə məzmunları"
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yenilənməsi yoxlamalarının cədvəli",
+        "help" : "Dəyişmiş məzmunların yenilənə bilməsi üçün yoxlama qrafikini qurun"
+      },
+      "catalogingCriteria" : {
+        "label" : "Boşluqlar, səhifə və alt səhifə təşkilatlandırma meyarları",
+        "help" : "Zəhmət olmasa, burada Confluence məzmununuza daxil edilmiş boşluq, səhifə və alt səhifə təşkilatlandırma meyarlarını izah edin və paylaşılan məlumatların necə idarə olunduğunu göstərin."
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ümumi ayarlar"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Confluence sistemi redaktəsi"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "baseUri" : {
+        "label" : "Əsas internet ünvanı",
+        "help" : "Confluence sisteminin əsas url-si"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Confluence sistemi üçün avtomatik yaradılmış unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Confluence sisteminin təsvirini daxil edin."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versiyası",
+        "help" : "Confluence versiyası"
+      },
+      "secretCode" : {
+        "label" : "İstifadə olunan identifikasiya",
+        "help" : "Confluence sisteminə giriş üçün kimliyi seçin və ya yaradın"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "yeni qrup"
+      },
+      "NewUserBtn" : {
+        "label" : "yeni istifadəçi"
+      },
+      "UsersListPanel" : {
+        "label" : "İstifadəçilər siyahısı"
+      },
+      "GroupsListPanel" : {
+        "label" : "Qruplar siyahısı"
+      },
+      "SournameHeader" : {
+        "label" : "soyad"
+      },
+      "UsernameHeader" : {
+        "label" : "istifadəçi adı"
+      },
+      "RolesHeader" : {
+        "label" : "rollar"
+      },
+      "NameHeader" : {
+        "label" : "ad"
+      },
+      "EditBtn" : {
+        "label" : "Düzəliş et"
+      },
+      "DisabledHeader" : {
+        "label" : "deaktiv"
+      },
+      "EditGroupBtn" : {
+        "label" : "Redaktə et"
+      },
+      "CodeHeader" : {
+        "label" : "kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "təsvir"
+      },
+      "UsersHeader" : {
+        "label" : "istifadəçilər"
+      },
+      "searchNameInput" : {
+        "placeholder" : "Ad axtar"
+      },
+      "searchUsernameInput" : {
+        "placeholder" : "İstifadəçi adını axtar"
+      },
+      "SearchUsersBtn" : {
+        "label" : "axtar"
+      },
+      "searchRoleDropdown" : {
+        "placeholder" : "Rolu seç"
+      },
+      "searchSournameInput" : {
+        "placeholder" : "Soyad axtar"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "UserIds" : {
+        "placeholder" : "İstifadəçiləri seçin"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "MainPanel" : {
+        "label" : "İstifadəçi qrupunu redaktə et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "İstifadəçi qrupu üçün təsviri daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "İstifadəçi qrupunun kodunu daxil edin"
+      },
+      "userIds" : {
+        "label" : "İstifadəçilərin siyahısı",
+        "help" : "Qrupa daxil olan istifadəçiləri seçin"
+      }
+    },
+    "GeboAIChangeUserPasswordComponent" : {
+      "UserPasswordChangePanel" : {
+        "label" : "İstifadəçinin parolunu dəyiş"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Dəyiş"
+      },
+      "username" : {
+        "label" : "İstifadəçi adı",
+        "help" : "Bu əməliyyatı təsdiq etmək üçün şifrənizi daxil edin"
+      },
+      "currentUserPassword" : {
+        "label" : "Sizin şifrəniz",
+        "help" : "Bu əməliyyatı təsdiq etmək üçün şifrənizi daxil edin"
+      },
+      "confirmpassword" : {
+        "label" : "İstifadəçinin şifrəsini təsdiqlə",
+        "help" : "Düzəliş edilən istifadəçinin təsdiqləmə şifrəsi"
+      },
+      "password" : {
+        "label" : "İstifadəçinin yeni şifrəsi",
+        "help" : "Düzəliş olunan istifadəçi üçün yeni şifrə"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Jira sisteminin təsvirini daxil edin."
+      },
+      "MainPanel" : {
+        "label" : "Jira sistem konfiqurasiyası yarat"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "username" : {
+        "label" : "jira istifadəçi adı",
+        "help" : "jira istifadəçi adı"
+      },
+      "token" : {
+        "label" : "jira cloud api açarı",
+        "help" : "jira arxa ofisdə əldə olunan jira CLOUD apikey, burada \"API Token for your Atlassian Account\" daxil edilməlidir."
+      },
+      "baseUri" : {
+        "label" : "Əsas internet ünvanı",
+        "help" : "jira sisteminin əsas ünvanının url-si (on-premise) və ya təşkilatınız üçün jira cloud bazası üçün ünvan"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Yadda saxlayır və bu məzmunları bilik bazasında LLm-lərə əlçatan edir"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "LogsTab" : {
+        "label" : "Jurnallar"
+      },
+      "MainPanel" : {
+        "label" : "Jira məzmununun paylaşılması"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmunun avtomatik yaradılan unikal kodu."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira sistemi",
+        "help" : "Əvvəlcədən konfiqurasiya olunmuş jira sisteminin referansı."
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Yuxarı səviyyəli layihənin referansı."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Yüklənmiş jira məzmununun təsvirini daxil edin."
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yeniləme yoxlamalarının planı",
+        "help" : "Yenilənən məzmunların çıxarılma sisteminin güncəlliyinin təmin edilməsi üçün cədvəl tənzimləyin"
+      },
+      "openZips" : {
+        "label" : "Zip faylların açılması",
+        "help" : "Zip fayllarının açılmasını və məzmunun çıxarılmasını aktiv edin"
+      },
+      "tree" : {
+        "label" : "Seçilmiş sahələr və ya səhifə/alt səhifələr",
+        "help" : "Paylaşılan jira layihə və bilet strukturunun məzmunu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Sahələrin, səhifələrin və alt-səhifələrin təşkilatı meyarları",
+        "help" : "Burada, Gebo.ai ilə paylaşılan jira məzmunlarındakı sahə, səhifə və alt-səhifələrin təşkil olunduğu kriteriyaları izah edin"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Jira sisteminin təsvirini daxil edin."
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Jira sistemi redaktə olunur"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "baseUri" : {
+        "label" : "Əsas internet ünvanı",
+        "help" : "Jira sisteminin əsas ünvanının url-si"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Jira sistemi üçün avtomatik yaradılan unikal kod."
+      },
+      "secretCode" : {
+        "label" : "İstifadə olunan şəxsiyyət",
+        "help" : "Jira sisteminə giriş üçün şəxsiyyəti seçin və ya yaradın"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "SharPpoint/OneDrive sisteminin təsvirini daxil edin."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versiyası",
+        "help" : "sharepoint versiyası"
+      },
+      "secret" : {
+        "label" : "Gizli açar",
+        "help" : "Bu tətbiq üçün microsoft \"entra\" məhsulunda qeydiyyatdan keçmiş Oauth2 müştəri gizli açarı (microsoft cloud admin konsolundan əldə oluna bilər)"
+      },
+      "clientId" : {
+        "label" : "Müştəri ID-si",
+        "help" : "Bu tətbiq üçün microsoft \"entra\" məhsulunda qeydiyyatdan keçmiş Oauth2 müştəri identifikatoru (microsoft cloud admin konsolundan əldə oluna bilər)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID-si",
+        "help" : "Təşkilatınız üçün microsoft \"entra\" məhsulunda Oauth2 tenant identifikatoru (microsoft cloud admin konsolundan əldə oluna bilər)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai üçün Microsof oauth2 tətbiq qeydiyyat məlumatları"
+      },
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive sistem konfiqurasiyasını yarat"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Saxlayır və bu məzmunları bilik bazasında LLm-lər üçün əlçatan edir"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive məzmunlarının paylaşılması"
+      },
+      "LogsTab" : {
+        "label" : "Jurnallar"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmunların avtomatik yaradılan unikal kodu."
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Ana layihə istinadı."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "SharePoint/OneDrive məlumat mənbələrinin təsvirini daxil edin."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint sistemi",
+        "help" : "Artıq konfiqurasiya olunmuş SharePoint/OneDrive sistem istinadı."
+      },
+      "openZips" : {
+        "label" : "Zip fayllarını aç",
+        "help" : "Zip fayllarının açılması və məzmun çıxarılmasını aktiv edin"
+      },
+      "tree" : {
+        "label" : "Seçilmiş Sharepoint saytları/səhifələri/altsəhifələri və ya OneDrive diskləri/qovluqları/faylları",
+        "help" : "Paylaşılan sharepoint/OneDrive məzmunları"
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yeniləmələrinin yoxlanılması cədvəli",
+        "help" : "Dəyişdirilmiş məzmunların alınmasına nəzarət edən sistemin yenilənməsi üçün cədvəl tənzimləyin"
+      },
+      "catalogingCriteria" : {
+        "label" : "Məkanların, səhifələrin və altsəhifələrin təşkili meyarları",
+        "help" : "Burada xahiş edirik, paylaşılmış sharepoint məzmunlarında məkanların, səhifələrin və altsəhifələrin necə təşkil olunduğunu izah edin"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint sistemini redaktə etmək"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Ümumi ayarlar"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "secretCode" : {
+        "label" : "İstifadə olunmuş şəxsiyyət",
+        "help" : "sharepoint sisteminə daxil olmaq üçün şəxsiyyəti seçin və ya yaradın"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Sharepoint sisteminin avtomatik yaradılan unikal kodu."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "sharepoint sisteminin təsvirini daxil edin."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versiyası",
+        "help" : "sharepoint versiyası"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Sil"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Yadda saxla"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Ləğv et"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Ümumi məlumat/tərkib ayarları"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms ayarları"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Bilik qrafiki məlumat çıxarışı mərhələsinin avtomatik yaradılmış unikal kodu"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/bilik çıxarışı konfiqurasiyası"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Bu bilik qrafiki məlumat çıxarışı mərhələsinin təsvirini daxil edin"
+      },
+      "extractionPrompt" : {
+        "label" : "Məlumat çıxarışı üçün prompt",
+        "help" : "Varlıq/hadisə/əlaqə və adların çıxarışı üçün böyük dil modelinin promptu"
+      },
+      "usedModelConfiguration" : {
+        "label" : "Məlumat çıxarışı üçün istifadə olunan LLM",
+        "help" : "Bilik çıxarışı üçün istifadə olunan böyük dil modelini göstərin, heç biri seçilməzsə, standart model istifadə olunacaq."
+      },
+      "graphRagAllSources" : {
+        "label" : "Graph rag-ı bütün məlumat mənbələrinə tətbiq et",
+        "help" : "Əgər doğru seçilərsə, bütün bilik bazaları/lahiyələr/məlumat mənbələri bilik çıxarışı üçün işlənəcək, əks halda yalnız xüsusi konfiqurasiya olunanlar işlənəcək"
+      },
+      "defaultModel" : {
+        "label" : "Standart böyük dil modeli",
+        "help" : "Bilik çıxarışı üçün standart böyük dil modeli istifadə olunacaq"
+      },
+      "processEveryDocument" : {
+        "label" : "Graph rag-ı bütün fayllara tətbiq et",
+        "help" : "Graph rag alqoritmləri bütün fayllara tətbiq olunacaq, bu sistemin analiz imkanlarının genişlənməsinə kömək edəcək, amma emal üçün tələb olunan vaxt və xərci artıracaq"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag emalı üçün fayl seçmə meyarları",
+        "help" : "Graphrag üçün məlumat çıxarışı pipeline-na göndəriləcək fayllardakı meyarları redaktə edin, ən azı bir fayl adı və meyar və/və ya fayl tipi və/və ya maksimum fayl ölçüsü bayt və/və ya son dəyişiklik yaşını günlərlə seçin"
+      },
+      "extractionFormat" : {
+        "label" : "Çıxarış formatı",
+        "help" : "30 milyondan az parametrli llms üçün CSV formatından, böyük frontier modelləri üçün JSON formatından istifadə edin",
+        "placeholder" : "30 milyondan az parametrli llms üçün CSV formatından, böyük frontier modelləri üçün JSON formatından istifadə edin"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Fayl tiplərini seçin"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Fayl adı üzrə filtrləmə meyarları"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Faylın son dəyişmə tarixi, gün əvvəl"
+      },
+      "nameFilter" : {
+        "placeholder" : "Fayl adı"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksimal fayl ölçüsü, baytla"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Ümumi məlumatlar"
+      },
+      "MainPanel" : {
+        "label" : "Bilik bazasını redaktə et"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Bilik bazasına giriş ayarları"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Bilik bazası üçün avtomatik yaradılan unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Bilik bazasının təsvirini daxil edin."
+      },
+      "embeddingModelReferences" : {
+        "label" : "İstifadə olunan embedding modelləri (sistem avtomatikini istifadə etmək üçün boş saxlayın)",
+        "help" : "Bilik bazası üçün embedding modelləri, boş saxlanılsa, standart model istifadə olunacaq."
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "IndexBtn" : {
+        "label" : "İndekslə",
+        "help" : "Məzmunları yenidən indekslə"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Layihə və ya elementi redaktə et"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Layihə üçün avtomatik yaradılan unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Layihənin təsvirini daxil edin."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "bilik bazası",
+        "help" : "bilik bazası."
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "IndexBtn" : {
+        "label" : "İndekslə",
+        "help" : "Məzmunları yenidən indekslə"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Element/lahiyə əlavə et",
+        "help" : "yeni əlavə et..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Hər kəs istifadə edir",
+        "help" : "Hər kəs istifadə edə bilər"
+      },
+      "accessibleGroups" : {
+        "label" : "Qrupların siyahısı",
+        "help" : "İcazə verilən qrupları seçin"
+      },
+      "accessibleUsers" : {
+        "label" : "İstifadəçilərin siyahısı",
+        "help" : "İcazə verilən istifadəçiləri seçin"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Panel"
+      },
+      "LLMSTab" : {
+        "label" : "Çat və embedding üçün LLMlər"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag çat profilləri/Model promptları"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Bilik bazaları və layihələr"
+      },
+      "UsersGroupTab" : {
+        "label" : "İstifadəçilər və qruplar"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modulları konfiqurasiyası"
+      },
+      "LogsTab" : {
+        "label" : "Jurnallar"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfiqurasiya et"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiqurasiya et"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Yeni prompt konfiqurasiyası"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Yeni çat profili"
+      },
+      "MainPanel" : {
+        "label" : "Axtarışla zənginləşdirilmiş çat profilləri"
+      },
+      "PromptsPanel" : {
+        "label" : "Promptlar kolleksiyası və əsas promptlar"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Bilik bazaları"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfiqurasiya et"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Yeni bili bazası"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Yeni embedding model konfiqurasiyası"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Yeni çat model konfiqurasiyası"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Model təminatçısı"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfiqurasiya et"
+      },
+      "CodeHeader2" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Təsvir"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Model təminatçısı"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfiqurasiya et"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfiqurasiya olunmuş çat modelləri"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfiqurasiya olunmuş embedding modelləri"
+      },
+      "chat" : {
+        "label" : "Yeni çat modeli",
+        "help" : "İstifadəçi ilə söhbət edə və ya avtomatlaşdırmaları yerinə yetirə bilən yeni çat modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "İstifadəçi ilə söhbət edə və ya avtomatlaşdırmaları yerinə yetirə bilən yeni çat modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "embed" : {
+        "label" : "Yeni embedding modeli",
+        "help" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "ranker" : {
+        "label" : "Yeni rerank modeli",
+        "help" : "Yeni reranker modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "Yeni reranker modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "NewRerankerModelConfigurationBtn" : {
+        "label" : "Yeni reranker modelinin konfiqurasiyası"
+      },
+      "CodeHeader3" : {
+        "label" : "Kod"
+      },
+      "DescriptionHeader3" : {
+        "label" : "Təsvir"
+      },
+      "ModelProviderHeader3" : {
+        "label" : "Model təchizatçısı"
+      },
+      "ModelHeader3" : {
+        "label" : "Model "
+      },
+      "RerankerModelsZone" : {
+        "label" : "Konfiqurasiya edilmiş rerank modelləri"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Model yoxlanılır"
+      },
+      "TestChatBtn" : {
+        "label" : "Çatı sına"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Bu model üçün istifadə olunacaq OpenAI tokenini seçin"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI çat modelinin seçimi",
+        "help" : "İşləmək üçün OpenAI çat modelini seçin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI çat modeli konfiqurasiyasının redaktəsi"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq provayder qaydasındadır",
+        "detail" : "Provayder işlək vəziyyətdədir və uğurla konfiqurasiya olunub"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Əməliyyat zamanı istisna:Error url ilə işləyərkən:https://api.openai.com/v1/models",
+        "detail" : "Server xətası: Error url ilə işləyərkən:https://api.openai.com/v1/models"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding modelinin konfiqurasiyasını redaktə et"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Bu model üçün istifadə olunacaq OpenAI tokenini seçin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Embedding model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Embedding model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding modeli seçimi",
+        "help" : "İşləmək üçün OpenAI embedding modelini seçin."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas embedding modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, embedding modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq provayder qaydasındadır",
+        "detail" : "Provayder işlək vəziyyətdədir və uğurla konfiqurasiya olunub"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "baseUrl" : {
+        "label" : "Əsas ollama server ünvanı",
+        "help" : "Ollama lokal və ya LAN serverin cavab verdiyi əsas ünvan (məsələn, http://servername:234/)."
+      },
+      "choosedModel" : {
+        "label" : "Ollama çat modeli seçimi",
+        "help" : "İşləmək üçün Ollama çat modelini seçin.",
+        "placeholder" : "Model seçin"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Bu model üçün istifadə olunacaq Ollama tokenini seçin (istəyə bağlı)"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "MainPanel" : {
+        "label" : "Ollama lokal (və ya LAN) serverində çat modeli konfiqurasiyasını redaktə et"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama server ilə əlaqə xətası",
+        "detail" : "Uzaq sistemə qoşularkən şəbəkə xətası\n məzmun modellər siyahısına daxil olarkən url ilə işləyərkən xəta baş verdi:http://localhost:11434/api/tags"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Bu model üçün istifadə olunacaq Anthropic tokenini seçin"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic çat modeli seçimi",
+        "help" : "İşləmək üçün Anthropic çat modelini seçin.",
+        "placeholder" : "Model seçin"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic çat model konfiqurasiyasını redaktə etmək"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Bu model üçün istifadə olunacaq MistralAI tokenini seçin"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI çat modeli seçimi",
+        "help" : "İşləmək üçün MistralAI çat modelini seçin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI çat modeli konfiqurasiyasının redaktəsi"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI çat modeli seçimi",
+        "help" : "İşləmək üçün Google Vertex AI çat modelini seçin."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Bu model üçün istifadə olunacaq Google Vertex AI tokenini seçin"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI çat modeli konfiqurasiyasının redaktəsi"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Bu model üçün istifadə olunacaq Deepseek tokenini seçin"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek çat modeli seçimi",
+        "help" : "İşləmək üçün Deepseek çat modelini seçin.",
+        "placeholder" : "Model seçin"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek çat modeli konfiqurasiyasının redaktəsi"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "baseUrl" : {
+        "label" : "Çat modeli API əsas server ünvanı",
+        "help" : "Çat modelinin əsas ünvanı."
+      },
+      "apiSecretCode" : {
+        "label" : "Çat modeli API tokeni",
+        "help" : "Bu model üçün istifadə olunacaq Çat modeli API tokenini seçin (istəyə bağlı)"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas çat modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, çat modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "choosedModel" : {
+        "label" : "Çat modeli seçimi",
+        "help" : "İşləmək üçün Çat modeli seçin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Əsas məlumatlar"
+      },
+      "TitleFragment" : {
+        "label" : "Çat modeli təminatçısının redaktəsi:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ətraflı ayarlar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelə giriş ayarları"
+      },
+      "forUses" : {
+        "label" : "Modelin istifadəsi",
+        "help" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq.",
+        "placeholder" : "Gebo.ai platforması bu modeli hansı istifadə üçün nəzərə alacaq."
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Əməliyyat zamanı istisna:401 AUTHORIZƏ OLUNMAYIB",
+        "detail" : "Server xətası: 401 AUTHORIZƏ OLUNMAYIB"
+      },
+      "f0aa081ae4559275a39f454aaf4ed8b0ae1bda3d0bd4c35b818b121182155b4b" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:8/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:8/v1/models"
+      },
+      "de051f7d5f03fad81ca23db2566556f1d5ee3ab881a7a5ca2e1ec93beaf3bcc7" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:800/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:800/v1/models"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq provayder OK",
+        "detail" : "Provayder aktivdir və uğurla qurulub"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:8000/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:8000/v1/models"
+      },
+      "287d29eefe52520b0b6ba3e40e29c1df8c6d0bb03d7b1544ba469b023a1c7669" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:808/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:808/v1/models"
+      },
+      "a74b5708d155855427a1f15d91bf6c493c4570edc96ca0d4d5158c2f5376f1b9" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:8089/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:8089/v1/models"
+      },
+      "aadea22aaf07b664659dd6a5bef89562331b16093d37477433ee515cc1ad2488" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://localhost:8080/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://localhost:8080/v1/models"
+      },
+      "93d2968a7c4ff13496eca636e3ae79c23bc3d89c46fcbb134059d0537b9e20c4" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://192.168.1.175:8089/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://192.168.1.175:8089/v1/models"
+      },
+      "6b4b47bed3f771558eb0ef93498f0a5e9aa3281c14e2a0f33124830a0107aa26" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://192.168.1.175:800/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://192.168.1.175:800/v1/models"
+      },
+      "b64d81428b407658f7151574b393bc2674d93fdc5c474382f8680cb7a0ae2781" : {
+        "summary" : "Əməliyyat zamanı istisna:url ilə işləyərkən xəta baş verdi:http://192.168.1.175:808/v1/models",
+        "detail" : "Server xətası: url ilə işləyərkən xəta baş verdi:http://192.168.1.175:808/v1/models"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Embedding model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Ollama lokal (və ya LAN) embedding model konfiqurasiyasının redaktəsi"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Bu model üçün istifadə olunacaq Ollama tokenini seçin"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding modeli seçimi",
+        "help" : "İşləmək üçün Ollama embedding modelini seçin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Embedding model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas embedding modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, embedding modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "baseUrl" : {
+        "label" : "Əsas ollama server ünvanı",
+        "help" : "Ollama lokal və ya LAN serverin cavab verdiyi əsas ünvan (məsələn, http://servername:234/)."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Embedding model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding modeli konfiqurasiyasının redaktəsi"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Embedding model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding modeli seçimi",
+        "help" : "İşləmək üçün MistralAI embedding modelini seçin."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas embedding modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, embedding modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Bu model üçün istifadə olunacaq MistralAI tokenini seçin"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding modeli konfiqurasiyasının redaktəsi"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Embedding model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding modeli seçimi",
+        "help" : "İşləmək üçün Google Vertex AI embedding modelini seçin."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas embedding modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, embedding modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Embedding model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Bu model üçün istifadə olunacaq Google Vertex AI tokenini seçin"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "TitleFragment" : {
+        "label" : "Embedding model təminatçısını redaktə et:"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Embedding model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Embedding model konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "choosedModel" : {
+        "label" : "Embedding modeli seçimi",
+        "help" : "İşləmək üçün Embedding modelini seçin."
+      },
+      "baseUrl" : {
+        "label" : "Embedding modeli API server ünvanı",
+        "help" : "Embedding modelinin serverinin əsas ünvanı."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas embedding modeli kimi təyin et",
+        "help" : "Əgər doğru seçilərsə, embedding modeli göstərilmədikdə bu əsas model kimi istifadə olunacaq"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding modeli API tokeni",
+        "help" : "Bu model üçün istifadə olunacaq Embedding modeli API tokenini seçin"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
+    },
+    "GenericOpenAIRankerModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "TitleFragment" : {
+        "label" : "Rankinq model təchizatçısı redaktəsi:"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Model konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Model konfiqurasiyasının avtomatik yaradılmış unikal kodu"
+      },
+      "baseUrl" : {
+        "label" : "rankinq modeli API əsas server ünvanı",
+        "help" : "Rankinq modelinin əsas ünvanı."
+      },
+      "apiSecretCode" : {
+        "label" : "rankinq modeli API tokeni",
+        "help" : "Bu model üçün istifadə olunacaq API tokenini seçin (opsional)"
+      },
+      "choosedModel" : {
+        "label" : "rankinq modeli seçim",
+        "help" : "İşləmək üçün rankinq modelini seçin."
+      },
+      "defaultModel" : {
+        "label" : "bunu əsas rankinq modeli kimi təyin et",
+        "help" : "Əgər true seçilərsə, göstərilməmiş yerdə əsas model kimi istifadə olunacaq"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      },
+      "310352eb985ae3d9606b527f6b04446043b320b7aef5e0758a51860527d39528" : {
+        "summary" : "Modellər siyahısı əldə edilərkən problem",
+        "detail" : "Bu xidmət bunu dəstəkləmir=>ai.gebo.llms.openai_compat.model.GenericOpenAIRankerModelChoice"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Çat konfiqurasiya məlumatları"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Bu çat sessiyasını sil"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Çat sessiyasının adını dəyiş"
+      },
+      "QueryControl" : {
+        "placeholder" : "Çat botuna mesaj yazın"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sənədləri axtarın və seçərək söhbət edin"
+      },
+      "UploadFileBtn" : {
+        "help" : "Söhbət və ya işləmək üçün fayl yükləyin"
+      },
+      "SubmiQuestion" : {
+        "help" : "Sualınızı göndərin"
+      },
+      "WithParams" : {
+        "label" : "parametrlərlə:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI çağırılan funksiyalar:"
+      },
+      "UploadedDocs" : {
+        "label" : "Yüklənmiş sənədlər"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Söhbət tarixi yükləndi",
+        "detail" : "Söhbət tarixi uğurla yükləndi"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Səsiniz yüklənir"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Səsli cavab alındı"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Yuxarı sürüşdür"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Aşağı sürüşdür"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Sənədlər tapıldı"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Bu söhbəti silmək istədiyinizə əminsiniz?",
+        "header" : "Söhbəti silmə əməliyyatı"
+      },
+      "PlusContextualMenu" : {
+        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
+      },
+      "[object HTMLElement]" : {
+        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
+      },
+      "ContextMenuBtn" : {
+        "help" : "Məzmun əlavə edin və ya axtarış davranışını dəyişin"
+      },
+      "DeepSearchDetailsButton" : {
+        "label" : "Mənbələr",
+        "help" : "Analiz edilmiş sənədlərin siyahısını aç"
+      },
+      "DeepSearchDetailsTitle" : {
+        "label" : "Dərin axtarış cavabı və mənbə detalları"
+      },
+      "DeepSearchResultAccordionItem" : {
+        "label" : "Dərin axtarışın nəticəsi"
+      },
+      "d79b3497727801e3d609d24fa9fe88f9e6a7c4573f55bbffcd4802e2f9d9f8b4" : {
+        "summary" : "Confluence Axtarışında səhv",
+        "detail" : "Server xətası: Confluence sisteminə girişdə problem"
+      },
+      "NEW_CHAT_LOADED" : {
+        "summary" : "Yeni çat yükləndi",
+        "detail" : "Yeni çat uğurla yükləndi"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Mənbələri seç"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdakılardan ən azı birini seçin"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Dərin axtarışı keç"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilmiş bilik bazaları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilmiş sistemlər"
+      },
+      "wordExport" : {
+        "help" : "Cavabı Word-ə ixrac et"
+      },
+      "pdfExport" : {
+        "help" : "Cavabı PDF-ə ixrac et"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: POST http://localhost:8000/v1/chat/completions üçün 400 Yalnış Sorğu"
+      },
+      "a02644ca18cc5f49d998d93851b8bdf10aaca60e897f588b87d746e956cfb790" : {
+        "summary" : "Çat sistemi xətası",
+        "detail" : "Server xətası: \"handler\" boş olduğuna görə \"ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.getConfig()\" çağırıla bilmədi"
+      },
+      "cd8d2e393a59b44a9effff11f6c260289311d00c6f2ebbc6010bd58c262f3ef3" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: POST http://localhost:8089/v1/chat/completions üçün 400 Yalnış Sorğu"
+      },
+      "a3de8875168705275d4ba90b79aa640edcafa9487ef38e65f18548fafab9da8e" : {
+        "summary" : "Dərin axtarış zamanı xəta",
+        "detail" : "Server xətası: Verilmiş obyekt ID-ləri boş olmamalıdır"
+      },
+      "b13e07eb22d97ce80051f3ebedef2b6f871e0110f37a2a61e09d26da1818303e" : {
+        "summary" : "Dərin axtarış zamanı xəta",
+        "detail" : "Server xətası: Çat cavabında id olmalıdır"
+      },
+      "cd00b8a83a4e9bb29ce190d4a77d7b0056024dabe58d68398988b73313d1dd77" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Mapper [ai.gebo.llms.deepsearch.service.impl.FullReactiveDeepsearchWorker$$Lambda/0x0000018edc0f3378] null dəyər qaytardı."
+      },
+      "bc1f44395f5a9c096be77c8947061f67562fdf9ad1a3c6ed96a50d0130d7c3e1" : {
+        "summary" : "Dərin axtarış zamanı xəta",
+        "detail" : "Server xətası: \"this.threadManager\" boş olduğuna görə \"ai.gebo.architecture.multithreading.IGeboThreadManager.getScheduler()\" çağırıla bilmədi"
+      },
+      "38e134b91989d2fca0b886d510aa618b051ffc02c6b416f5afab6fa67a883cb4" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: POST https://api.regolo.ai/v1/chat/completions üçün 503 Xidmət əlçatmazdır"
+      },
+      "ab3d30325fe5c0ce5bdf0eeca0b9a959f4c4a322d1edc319e9fa02318d1a737a" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: POST https://api.openai.com/v1/chat/completions üçün 429 Çoxlu Sorğular"
+      },
+      "2069902e32156d83d322f81dec7500f73bae38b0a256ffde9bbff6671ec96dac" : {
+        "summary" : "Çat sistemi xətası",
+        "detail" : "Server xətası: \"userContext\" boş olduğuna görə \"ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession.getUsername()\" çağırıla bilmədi"
+      },
+      "eddf78b2932a1bd23de2e9cc8b31ddadd50b1336de5d11051ee43a5e1af48250" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: POST https://api.regolo.ai/v1/chat/completions üçün 400 Yalnış Sorğu"
+      },
+      "a2dbcc0622c7dd7a8062d7b0aa05f551fa2714de89d21a56e5ccd6d5a81a3faa" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: findInString aləti üçün ToolCallback tapılmadı"
+      },
+      "7037fc90d9f1cc8cffc9b72a73f019d7d83e6c8d0bc967abe6b083cbb49f0dab" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Axtarış icra olunarkən istisna baş verdi"
+      },
+      "9fac0745eb7da80d3c68f858204f14ede161962e9d86d14e20e5415dbdd5d7fe" : {
+        "summary" : "LLM çağırışında xəta",
+        "detail" : "Server xətası: Şablonda bütün dəyişənlər əvəzlənməyib. Əskik dəyişən adları: [consolidatedChatHistory, latestInteractions]."
+      },
+      "43e9c0a0ad30cbff6686f5a93f7f88bea10368a7449f3dee3505000008c265ec" : {
+        "summary" : "LLM çağırışında xəta",
+        "detail" : "Server xətası: Şablonda bütün dəyişənlər əvəzlənməyib. Əskik dəyişən adları: [consolidatedChatHistory, latestInteractions, agentDeliverableCompleteness]."
+      },
+      "e729605c931e4cd0e08518a5952472bfd4db0f6830622aa3172e0023b0eea5da" : {
+        "summary" : "Dərin axtarış zamanı xəta",
+        "detail" : "Server xətası: Kilid üçün gözləyərkən proses yarımçıq kəsildi"
+      },
+      "100b369231cc986b751e61b9796d2a2c37342f84b55ed7bd8064a061590b41af" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001db82120698] null dəyər qaytardı."
+      },
+      "98496ab37bb812859cf83535b17f2b3f1b0ac661bc7020bcd64a625c453d6850" : {
+        "summary" : "Dərin axtarış zamanı xəta",
+        "detail" : "Server xətası: parallelism > 0 olmalıdır, amma 0 tapıldı"
+      },
+      "afe8a0565d06a8eb4aeb510986aecab9d14dd23c5deaa1fe7583c0c0b18a3e89" : {
+        "summary" : "Daxili biliy bazasında dərin axtarış mümkün deyil",
+        "detail" : "Server xətası: parallelism > 0 olmalıdır, amma 0 tapıldı"
+      },
+      "aeabda451f9a15942508295941dbae0b40da47d8182e2ce02bb38dd92c1174ec" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: parallelism > 0 olmalıdır, amma 0 tapıldı"
+      },
+      "92fcfd3ebefaf8f89a78e07841538e8150f4f31eb9d0206f309824504e95a314" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000001fd020ae2d8] null dəyər qaytardı."
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Çat cavabı yayımında xəta",
+        "detail" : "Server xətası: Bağlantı sıfırlandı"
+      },
+      "a44d099aea7a06c5cdbeac1ea3e58eb4c64086c6cfb269aa66790cc57ef82580" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x000002c8b310bb70] null dəyər qaytardı."
+      },
+      "d03bdb9ac85eeafa172589e3afac9eb1d636a35328db608737693e8888afc14b" : {
+        "summary" : "Çat boru kəmərinin yayımında istisna",
+        "detail" : "Server xətası: PURE_SEARCH_STREAMING_SERVICE adlı addım xidməti mövcud deyil"
+      },
+      "6915f60c6f9d328b18159a8974b852669d36e898c6e355e221d22ba9ee77acef" : {
+        "summary" : "Dərin axtarışda bəzi problemlər...",
+        "detail" : "Server xətası: Mapper [ai.gebo.llms.deepsearch.service.impl.InternalKnowledgeBaseRagDeepSearchService$$Lambda/0x00000229940ed638] null dəyər qaytardı."
+      },
+      "fc9a3cdb08babf7baab0c1ae33c7827ebd0bebdd7b7c9a4d7d9867e655b1c9e8" : {
+        "summary" : "Çat boru kəmərinin yayımında istisna",
+        "detail" : "Server xətası: Agentlər şəbəkəsi yaradılarkən istisna baş verdi"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "description" : {
+        "label" : "Çat təsviri",
+        "help" : "Çat sessiyasının təsvirini daxil edin."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "İstifadə olunan model",
+        "help" : "Model kodu"
+      },
+      "providerId" : {
+        "label" : "Çat modeli təminatçısı",
+        "help" : "LLms təminatçısı sürücüsü"
+      },
+      "functions" : {
+        "label" : "Çat modeli çağırıla bilən funksiyalar",
+        "help" : "Çat modeli üçün mövcud olan funksiyaların siyahısı"
+      },
+      "NameCol" : {
+        "label" : "Ad"
+      },
+      "DescriptionCol" : {
+        "label" : "Təsvir"
+      },
+      "kbases" : {
+        "label" : "Mövcud bilik bazaları",
+        "help" : "Bu RAG çatında istifadə olunan bilik bazalarının siyahısı"
+      },
+      "CloseBtn" : {
+        "help" : "Bağla"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'Söhbət üçün' siyahısına sənəd əlavə et"
+      }
+    },
+    "GeboAIExtensiblePipelineRouteDisplayComponent" : {
+      "DeepSearchName" : {
+        "label" : "Dərin axtarış işləyir"
+      },
+      "RagLLMResponse" : {
+        "label" : "Retrieve augmented generation işləyir"
+      },
+      "PureLLMResponse" : {
+        "label" : "LLM ilə soruşulur"
+      },
+      "Waiting" : {
+        "label" : "Ən yaxşı cavab planı təhlil olunur.."
+      },
+      "ToolsLLMResponse" : {
+        "label" : "Alətlər işləyir"
+      },
+      "ShallowSearchResponse" : {
+        "label" : "AI dəstəyi ilə axtarış işləyir"
+      }
+    },
+    "GeboAIChatStreamEventsDisplayComponent" : {
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilmiş fayl"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Təhlil edilmiş axtarış nəticəsi"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Sistemin axtarış nəticəsi təhlil edildi üçün"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Son hesabat hazırlanır"
+      },
+      "RUNNING" : {
+        "label" : "İşləyir "
+      },
+      "DOING_USER_INTENT_ANALISYS" : {
+        "label" : "Sorğunuzu təhlil edirəm"
+      },
+      "CHOOSED_AGENTIC_FLOW" : {
+        "label" : "Agentik axın seçildi, agent işləyir"
+      },
+      "SERVICE_LEVEL_DETECTED" : {
+        "label" : "Xidmət səviyyəsi: QA"
+      },
+      "USER_CHOOSED_AGENT" : {
+        "label" : "Seçilmiş agent icra olunur"
+      },
+      "PureSearchProcessingDocument" : {
+        "label" : "Sənəd işlənir:"
+      }
+    },
+    "ChatPipelinesMenu" : {
+      "UploadFileMenuItem" : {
+        "label" : "Fayl(lar)ı yüklə"
+      },
+      "ChatWithDocsMenuItem" : {
+        "label" : "Şirkət fayl(lar)ını axtar/söhbət et"
+      },
+      "ChatWithChoosenDocsMenuItem" : {
+        "label" : "Seçilmiş sənədlərlə çat"
+      },
+      "agenticChat" : {
+        "label" : "Agentik çat"
+      },
+      "rag" : {
+        "label" : "R.a.g. çat"
+      },
+      "deepSearch" : {
+        "label" : "Dərin axtarış/Bir neçə mənbə"
+      },
+      "SHALLOW_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dərin axtarış/Google Web axtarış"
+      },
+      "SHALLOW_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dərin axtarış/Confluence Axtarış"
+      },
+      "SHALLOW_SEARCH_RESPONSE.jira" : {
+        "label" : "Dərin axtarış/Jira Axtarış"
+      },
+      "internalKnowledgeOption" : {
+        "label" : "Dərin axtarış/Bilik bazası axtarışı"
+      },
+      "CHAT_WITH_FILES" : {
+        "label" : "Fayl(lar)la çat"
+      },
+      "DEEP_SEARCH_RESPONSE.google-search-service" : {
+        "label" : "Dərin axtarış/Google Web axtarış"
+      },
+      "DEEP_SEARCH_RESPONSE.confluence" : {
+        "label" : "Dərin axtarış/Confluence Axtarış"
+      },
+      "DEEP_SEARCH_RESPONSE.jira" : {
+        "label" : "Dərin axtarış/Jira Axtarış"
+      },
+      "PURE_SEARCH" : {
+        "label" : "Köməkçi axtarış"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Yaz",
+        "help" : "Səs yazmağa başlayın və göndərin"
+      },
+      "StopBtn" : {
+        "label" : "Yazılır",
+        "help" : "Yazılır"
+      },
+      "AbortBtn" : {
+        "label" : "Yazını dayandır",
+        "help" : "Yazını dayandır"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Yazmağı dayandır"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "məlumatları yenilə"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SelectHeader" : {
+        "label" : "Seç"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "bitmə tarixi/vaxtı"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "başlanğıc tarixi/vaxtı"
+      },
+      "ProcessingHeader" : {
+        "label" : "emal olunur"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "FinishedHeader" : {
+        "label" : "tamamlandı"
+      },
+      "WithErrorHeader" : {
+        "label" : "xətalı"
+      },
+      "LogTableComponent" : {
+        "help" : "Bu ümumi fayl sistemi sahəsinin idxal jurnalı"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Proses statistikası"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CloseBtn" : {
+        "label" : "Bağla"
+      },
+      "PublicationLogTab" : {
+        "label" : "Yayınlama jurnalı"
+      },
+      "MainPanel" : {
+        "label" : "Yayınlama jurnalı"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Tapşırığın statusu: davam edir, tamamlandı və ya xətalarla tamamlandı."
+      },
+      "publishingSystem" : {
+        "label" : "Yayınlanan məzmunun konfiqurasiyası",
+        "help" : "Yayınlanan məzmun haqqında məlumat"
+      },
+      "startDateTime" : {
+        "label" : "Başlama tarixi/vaxtı",
+        "help" : "Məzmun sinxronizasiya tapşırığının başlama tarixi və vaxtı"
+      },
+      "endDateTime" : {
+        "label" : "Bitmə tarixi/vaxtı",
+        "help" : "Məzmun sinxronizasiya tapşırığının bitmə tarixi və vaxtı"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Tam emal olunmayıb"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Tam emal olunub"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding və sənədlərin ümumi sayı"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Daha ətraflı"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Təklif yaradın"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Təklif ustası",
+        "help" : "Məqsədləriniz üçün təklif yaratmaq üçün bu vasitə ilə LLM istifadə edin"
+      },
+      "acceptPrompt" : {
+        "label" : "Təklifi qəbul et"
+      },
+      "promptWizardUI" : {
+        "label" : "Təklif şablonu yaratma ustası"
+      },
+      "cancel" : {
+        "label" : "Ləğv et"
+      },
+      "response" : {
+        "label" : "Təklif olunan şablon",
+        "help" : "Məqsədiniz üçün yaradılmış şablon mətn (dəyişdirə və ya düzəldə bilərsiniz)"
+      },
+      "modelCode" : {
+        "label" : "İstifadə olunacaq çat modeli",
+        "help" : "Təklif şablonu yaratmasını istədiyiniz çat modelini seçin"
+      },
+      "query" : {
+        "label" : "Təklif şablonu sorğusu",
+        "help" : "AI-nin istifadəçiyə dəstək olacağı məqsədi ikinci şəxsdə qeyd edin"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Modelin cavab verəcəyi temperatur, 0-dan 1-ə qədər (əmin deyilsinizsə boş buraxın)"
+      },
+      "contextLength" : {
+        "label" : "Kontekst uzunluğu (tokenlər)",
+        "help" : "AI modelinin işləyərkən nəzərə ala biləcəyi mətn miqdarı (əgər təyin olunmasa, 1047576 istifadə olunacaq)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametri, 0-dan 1-ə qədər (əmin deyilsinizsə boş buraxın)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Bu model üçün aktiv funksiyaların çağrılması",
+        "help" : "Modelin söhbət zamanı istifadə edə biləcəyi funksionallıqlar"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Modelin standart sorğusu",
+        "help" : "Söhbət modeli üçün standart sorğunu redaktə edin."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Kimliyin təsvirini daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Kimliyin avtomatik yaradılmış unikal kodu."
+      },
+      "secretType" : {
+        "label" : "Kimlik növü",
+        "help" : "Uzaq sistem üçün yaradılacaq kimlik növünü seçin"
+      },
+      "InsertBtn" : {
+        "label" : "Əlavə et"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Tokeni daxil edin."
+      },
+      "user" : {
+        "label" : "İstifadəçi",
+        "help" : "Token tərəfindən göstərilən istifadəçini daxil edin."
+      },
+      "MainPanel" : {
+        "label" : "Kimlik yaradılır"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "username" : {
+        "label" : "İstifadəçi adı",
+        "help" : "İstifadəçi adını daxil edin."
+      },
+      "password" : {
+        "label" : "Şifrə",
+        "help" : "Şifrəni daxil edin."
+      },
+      "email" : {
+        "label" : "E-mail/İstifadəçi adı",
+        "help" : "ssh açarı ilə əlaqəli e-mail və ya istifadəçi adını daxil edin."
+      },
+      "key" : {
+        "label" : "Gizli açar",
+        "help" : "Şəxsi açar faylını açın və bu mətn sahəsinə kopyalayın."
+      },
+      "passphrase" : {
+        "label" : "Açar parol frazası",
+        "help" : "Açarın parol frazasını daxil edin."
+      },
+      "pub" : {
+        "label" : "Publik açar",
+        "help" : "Publik açar faylını açın və bu mətn sahəsinə kopyalayın."
+      },
+      "jsonContent" : {
+        "label" : "Google etimadnamə faylının məzmunu",
+        "help" : "Google cloud api konsolundan endirilən Google api etimadnamə faylının məzmununu bura kopyalayın (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Təqlid ediləcək Google istifadəçisi",
+        "help" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi",
+        "placeholder" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi"
+      },
+      "OK" : {
+        "summary" : "Uğurla saxlanıldı",
+        "detail" : "Yeniləmə uğurla tamamlandı"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmunun avtomatik yaradılmış unikal kodu."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Yüklənmiş məzmunun təsvirini daxil edin."
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Əsas layihənin istinadı."
+      },
+      "upload" : {
+        "label" : "Məzmunları yüklə",
+        "help" : "Baxış düyməsini klikləyin və zip faylları və ya digər faylları seçin"
+      },
+      "openZips" : {
+        "label" : "Zip faylları aç",
+        "help" : "Zip fayllarını açma və məzmun çıxarmağı aktiv et"
+      },
+      "PublishBtn" : {
+        "label" : "Yayınla!",
+        "help" : "Saxlayır və bu məzmunların bili baza üçün əlçatan olmasını təmin edir"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "LogsTab" : {
+        "label" : "Jurnallar"
+      },
+      "MainPanel" : {
+        "label" : "Yüklənmiş məzmunun redaktəsi"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build sistemlərini konfiqurasiya et",
+        "help" : "Meta məlumatlar və əlavə artifakt informasiyası üçün yoxlanacaq build/packaging sistemlərin siyahısı (əgər proqram təminatı kodu yoxdursa boş buraxın)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Seçilmiş elementlər"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Ləğv et"
+      },
+      "EditBtn" : {
+        "help" : "Seçilənləri redaktə et"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Elementləri seçin"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Elementləri seçin"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Cədvəli redaktə et"
+      },
+      "ConfirmBtn" : {
+        "label" : "Təsdiqlə"
+      },
+      "AddBtn" : {
+        "label" : "+Əlavə et"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Yayımla!",
+        "help" : "Yadda saxlayır və bu məzmunları bili bazasında LLm-lərə əlçatan edir"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Mənbə kodunun işlənməsi"
+      },
+      "LogsTab" : {
+        "label" : "Qeydlər"
+      },
+      "MainPanel" : {
+        "label" : "Mövcud fayl sistemi məzmununu redaktə et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Yüklənmiş fayl sistemi məzmununun təsvirini daxil edin."
+      },
+      "openZips" : {
+        "label" : "Zip fayllarını aç",
+        "help" : "Zip fayllarının açılmasını və məzmunun çıxarılmasını aktiv et"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmunun avtomatik yaradılan unikal kodu."
+      },
+      "tree" : {
+        "label" : "Seçilmiş fayl və ya qovluqlar",
+        "help" : "Serverdə mövcud olan paylaşılan fayl sistemi fayl və qovluqları"
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Əsas layihə istinadı."
+      },
+      "programmedTables" : {
+        "label" : "Məzmunun yenilənməsinin yoxlanış cədvəli",
+        "help" : "Alınmış biliklərin sistemin yenilənməsi üçün dəyişən məzmunun planlaşdırılmasını tənzimləyin"
+      },
+      "catalogingCriteria" : {
+        "label" : "Qovluq təşkilat meyarları",
+        "help" : "Burada fayl sistemində paylaşdığınız sahədə qovluq təşkilatının necə aparıldığını izah edin (Gebo.ai ilə)"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Qurma sistemlərini tənzimləyin",
+        "help" : "Meta məlumat və əlavə artefakt məlumatları üçün yoxlanmaq üçün qurma/bağlama sistemlərinin siyahısı (əgər proqram kodu yoxdursa boş buraxın)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Yeni fayl paylaşım sahəsi"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Tam yol"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db və ya yml fayl tənzimləməsi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ModifyHeader" : {
+        "label" : "Dəyiş"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Seçilmiş paylaşılan fayl sistemi qovluğu",
+        "help" : "Sənəd arxivi kimi təşkilatınızda istifadə olunan paylaşılan fayl sisteminin kök yolu olan server qovluğunu seçin"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Təşkilatınızın paylaşılan fayl sistemi sahəsinin təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmunun avtomatik yaradılmış unikal kodu."
+      },
+      "InsertBtn" : {
+        "label" : "Əlavə et"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "MainPanel" : {
+        "label" : "Serverdə paylaşılan fayl qovluğunu redaktə et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Yadda saxla və bu məzmunu bilik bazasında LLm üçün əlçatan et"
+      },
+      "MainPanel" : {
+        "label" : "Git mənbəyi/sənədləşdirmə deposunu redaktə etmək"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Git depoya dair təsviri daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Git deposunun avtomatik yaradılan unikal kodu."
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Ana layihənin istinadı."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git sistemi",
+        "help" : "Artıq konfiqurasiya olunmuş git sistemi istinadı."
+      },
+      "branch" : {
+        "label" : "Filial",
+        "help" : "Çıxılacaq filial adı (adətən master, main və ya develop)"
+      },
+      "identityCode" : {
+        "label" : "İstifadə olunan şəxsiyyət",
+        "help" : "Sistemdə klonlama/checkout etmək üçün şəxsiyyəti seçin"
+      },
+      "repositoryUri" : {
+        "label" : "Depo url/ünvanı",
+        "help" : "Git uzaq deposunun tam ünvanı (adətən http:, https: və ya ssh: ilə başlayır)"
+      },
+      "publicAccess" : {
+        "label" : "ictimai",
+        "help" : "Əgər aktivdirsə, deponun giriş üçün identifikasiya tələb olunmur"
+      },
+      "openZips" : {
+        "label" : "Zip fayllarını aç",
+        "help" : "Zip fayllarının açılması və məzmununun çıxarılmasını aktiv et"
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yenilənmələrinin yoxlama cədvəli",
+        "help" : "Dəyişmiş məzmunun yenilənməsi üçün cədvəlləri konfiqurasiya et"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Yığma sistemlərini konfiqurasiya et",
+        "help" : "Meta məlumatlar və əlavə artefakt məlumatları üçün yoxlanacaq yığma/paketləmə sistemlərinin siyahısı"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Ümumi məlumatlar"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Çat modelindən istifadə et"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "seç"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Çat modeli konfiqurasiyasını seçin"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Embedding modeli konfiqurasiyasını seçin"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "seç"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG ayarları"
+      },
+      "LanguageModelTab" : {
+        "label" : "Böyük dil modeli və istifadə oluna bilən alətlərin ayarları"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Embedding modelindən istifadə et"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Təhlükəsizlik giriş ayarları"
+      },
+      "MainPanel" : {
+        "label" : "Retrieve augmented generation çat profilini redaktə et"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Çat profilinin avtomatik yaradılan unikal kodu."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Çat profilinin təsvirini daxil edin."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "İstifadəçi bilik bazalarını seçir",
+        "help" : "İstifadəçi əlçatan bilik bazalarından seçə və ya öz fayllarını yükləyə bilər."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Bilik bazaları",
+        "help" : "Sənəd axtarışı üçün istifadə olunacaq bilik bazaları."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Oxşarlıq həddi",
+        "help" : "Semantik axtarışlar üçün oxşarlıq həddi, 0.60–0.65 Aşağı filtrləmə, 0.70-0.75 Orta filtrləmə, 0.80–0.85 Dəqiq"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2-ci 'hop' oxşarlıq həddi",
+        "help" : "Semantik axtarışlar üçün oxşarlıq həddi, 0.60–0.65 Aşağı filtrləmə, 0.70-0.75 Orta filtrləmə, 0.80–0.85 Dəqiq; multi-hop rag üçün 2-ci axtarışdan istifadə olunur"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'Multi Hop' rag-i deaktiv et",
+        "help" : "'Multi hop rag' funksiyasını söndürün. Multi hop axtarışı əvvəlcə semantik axtarış edir və tapılan sənədləri kontekst kimi istifadə edərək daha geniş kontekst təqdim edir."
+      },
+      "topK" : {
+        "label" : "Nəzərdən keçirilən sənəd fraqmentləri (TopK)",
+        "help" : "Retrieve augmented generation-da semantik axtarışda tapılmış Top N sənəd fraqmentləri"
+      },
+      "enabledFunctions" : {
+        "label" : "Bu RAG çat üçün aktiv funksiyalar",
+        "help" : "İstifadəçi ilə söhbət zamanı llm modeli tərəfindən və seçilmiş bilik bazası ilə qarşılıqlı istifadə oluna bilən funksiyalar"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Retrieve augmented generation sessiyaları üçün prompt-u redaktə edin."
+      },
+      "manualThreasholdsConfiguration" : {
+        "label" : "Əl ilə və ya Avtomatik hədlərin konfiqurasiyası",
+        "help" : "Avtotune əvəzinə əl ilə məsafə həddi istifadə et"
+      },
+      "useAlsoKeywordSearch" : {
+        "label" : "Mümkün olduqda açar söz axtarışı istifadə et",
+        "help" : "Əgər bu quraşdırmada konfiqurasiya olunubsa, semantik axtarışlara əlavə açar söz axtarışlarını da et"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Prompt kateqoriyasını daxil edin və ya seçin"
+      },
+      "MainPanel" : {
+        "label" : "Promptu redaktə et"
+      },
+      "promptCategory" : {
+        "label" : "Prompt kateqoriyası",
+        "help" : "Prompt kateqoriyasını seçin və ya əlavə edin."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Söhbət üçün promptu redaktə edin, istifadəçi sualını göstərmək üçün {query}, sənədlər/tarix üçün {context} istifadə edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Prompt üçün avtomatik yaradılan unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Prompt təsvirini daxil edin."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Şifrəni dəyiş"
+      },
+      "YourUserName" : {
+        "label" : "İstifadəçi adınız"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Köhnə şifrə",
+        "help" : "Giriş üçün mövcud şifrə"
+      },
+      "newPassword" : {
+        "label" : "Yeni şifrə",
+        "help" : "yeni şifrə"
+      },
+      "username" : {
+        "label" : "E-poçt",
+        "help" : "Giriş üçün istifadəçi adı kimi e-poçt"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Şifrəni dəyişmə forması"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "ChangePwdBtn" : {
+        "label" : "şifrəni dəyiş"
+      },
+      "newPassword1" : {
+        "label" : "Yeni şifrəni təsdiqlə",
+        "help" : "Yeni şifrəni təsdiqlə"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google xüsusi axtarış API-si və ya API açarını əldə etmək (pulsuz) üçün daha ətraflı məlumat üçün bu saytı ziyarət edin: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "google axtarış api konfiqurasiyasının unikal kodu."
+      },
+      "MainPanel" : {
+        "label" : "Google xüsusi axtarış api etimadnaməsini redaktə et"
+      },
+      "secretCode" : {
+        "label" : "Google axtarış api tokeni",
+        "help" : "Google axtarış api tokenini seçin və ya daxil edin"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google axtarış mühərriki id-si",
+        "help" : "Google axtarış mühərriki id-si"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google axtarış api konfiqurasiyasının təsvirini daxil edin."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Bilik bazaları olmadan söhbət",
+        "help" : "Söhbət sessiyası üçün LLM-ləri seçin",
+        "placeholder" : "Söhbət sessiyası üçün LLM-ləri seçin"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Söhbət seçimləri bölməsini açın"
+      },
+      "CreateChatBtn" : {
+        "label" : "Yeni söhbət"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Yeni söhbət sessiyası"
+      },
+      "chatProfileCode" : {
+        "label" : "Bilik bazaları ilə söhbət",
+        "help" : "Şirkət (və sizin) sənədlər və LLM-lərlə işləmək üçün şirkət söhbət profilini seçin",
+        "placeholder" : "Şirkət (və sizin) sənədlər və LLM-lərlə işləmək üçün şirkət söhbət profilini seçin"
+      },
+      "NewChatBtn" : {
+        "label" : "Yeni söhbət"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Söhbət sessiyaları"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Yan menyunu bağla"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "İri dil modelləri ilə yeni söhbət yaradın",
+        "label" : "Söhbət"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Şirkət məzmunları ilə yeni RAG söhbəti yaradın",
+        "label" : "Bilik bazası ilə söhbət"
+      },
+      "ChatsTitle" : {
+        "label" : "Söhbətlər"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Söhbət seçimləri bölməsini aç"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Sənədlərlə söhbət et",
+        "help" : "İşləmək üçün sənədlərə baxın və ya axtarın və seçin"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Söhbət etmək üçün faylları seçin"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sənədləri axtarın və seçərək söhbət edin"
+      },
+      "FULL_DOCS_LIST_WINDOW" : {
+        "label" : "Seçilmiş sənədlər"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Təsdiqlə"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Sənədlərinizi yükləyin və ya seçin",
+        "help" : "İstifadəçi sahənizdən sənədləri seçin və ya yükləyin"
+      },
+      "fileSearchBtn" : {
+        "label" : "Axtar"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Axtar"
+      },
+      "query" : {
+        "label" : "Semantik axtarış ifadəsi",
+        "help" : "Axtarışınıza aid mənalı ifadə daxil edin"
+      },
+      "choosenBrowsing" : {
+        "label" : "Faylları bili bazalarında seçin",
+        "help" : "Şirkətə məxsus paylaşılmış bili bazalarında faylları seçin"
+      },
+      "filename" : {
+        "label" : "Axtarılan fayl adı",
+        "help" : "Axtardığınız məzmuna aid fayl adının bir hissəsini daxil edin"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Fayl adı ilə axtarış"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Şirkət fayllarına baxış"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantik axtarış"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Söhbət üçün faylları seçin"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Seçilənləri düzəlt"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "İstifadəçi fayllarını seçin"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "İstifadəçi yüklədiyi məzmunu seçin"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Bilik bazaları və istifadəçi faylları"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproyekt və ya element",
+        "help" : "subproyekt və ya element əlavə et"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+fayl yüklə",
+        "help" : "yüklənən fayllar məlumat mənbəsini əlavə et"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+fayl sistemi",
+        "help" : "paylaşılan fayl sistemi məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github və ya digər git repozitorisi məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive məlumat mənbəyi əlavə edin"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Quraşdırma"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profilim"
+      },
+      "logout" : {
+        "label" : "çıxış"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Dili dəyiş"
+      },
+      "MyProfile" : {
+        "label" : "profiliniz"
+      },
+      "MyProfileItem" : {
+        "label" : "profiliniz"
+      },
+      "chatMenuItem" : {
+        "label" : "Söhbət"
+      },
+      "setupMenuItem" : {
+        "label" : "Quraşdırma",
+        "help" : "Quraşdırma tamamlanmayıb, zəhmət olmasa bura klikləyin və idarə edin"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "profilini düzəlt"
+      },
+      "logoutMenuItem" : {
+        "label" : "çıxış et"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sənədlər siyahısı təhlil edilir"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "TOKENIZATION" : {
+        "description" : "Sənədlərin tokenizasiya prosesi"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalı zamanı səhv"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantik indeksləşdirmə (semantic rag üçün embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalı zamanı səhv"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Əlaqələr/Qurumlar/Hadisələr üzrə indeksləşdirmə (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sənədlər siyahısının analiz edilməsi"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "TOKENIZATION" : {
+        "description" : "Sənədlərin tokenizə edilməsi"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantik indeksləşdirmə (semantic rag üçün embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Obyekt/münasibət/hadisələrin indeksləşdirilməsi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "FULLTEXT_INDEXING" : {
+        "description" : "Tam mətn indeksləşməsi"
+      },
+      "FULLTEXT_INDEXING-docs-histogram" : {
+        "label-0" : "İşlənməmiş sənədlər",
+        "label-1" : "Sənədlərin işlənməsində səhv",
+        "label-2" : "İşlənmiş sənədlər"
+      },
+      "FULLTEXT_INDEXING-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "İşlənmiş sənədlər",
+        "dataset-2-label" : "Xətalı sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "FULLTEXT_INDEXING-tokens-processing" : {
+        "dataset-0-label" : "İşlənmiş tokenlər",
+        "dataset-1-label" : "Tokenlərin işlənməsində səhv"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy açarı üçün kredit linki al"
+      },
+      "ModifyBtn" : {
+        "label" : "Dəyiş",
+        "help" : "Model konfiqurasiyasına bax/dəyiş"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Təsvir"
+      },
+      "ExistingModelType" : {
+        "label" : "Model tipi"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Mövcud konfiqurasiyalar"
+      },
+      "ProviderWWW" : {
+        "label" : "Veb sayt linki"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Təminatçı məlumatları"
+      },
+      "ProviderInfos" : {
+        "label" : "Təminatçı haqqında məlumat"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api açarı/giriş məlumatları",
+        "help" : "Bu təminatçı üçün api açarını və ya giriş məlumatlarını seçin"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api açarı",
+        "help" : "Bu təminatçı ilə istifadə etmək üçün yeni api açarı daxil edin"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mövcudu və ya yenisini istifadə et",
+        "help" : "Bu təminatçı üçün mövcud və ya yeni giriş məlumatları yaradın"
+      },
+      "NewUserName" : {
+        "label" : "İstifadəçi adı",
+        "help" : "Təminatçı xidmətlərinə giriş üçün istifadə olunan ad"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Yeni embedding modeli",
+        "help" : "Yeni embedding modelinin konfiqurasiyasını yaradın"
+      },
+      "NewChatModel" : {
+        "label" : "Yeni Çat modeli",
+        "help" : "Yeni çat modelinin konfiqurasiyasını yaradın"
+      },
+      "NewModelDialog" : {
+        "label" : "Yeni model əlavə et"
+      },
+      "PiSave" : {
+        "label" : "Yadda saxla"
+      },
+      "NewModelsButton" : {
+        "label" : "Yeni modellər",
+        "help" : "Yeni modellər konfiqurasiyası yaradın"
+      },
+      "NewModelsDialog" : {
+        "label" : "Yeni modellər əlavə et"
+      },
+      "baseUrl" : {
+        "label" : "Əsas api url",
+        "help" : "Təminatçının api xidmətləri üçün əsas url"
+      },
+      "ModelTypePanel" : {
+        "label" : "Yeni modellər əlavə et"
+      },
+      "ModelsChoices" : {
+        "label" : "Modellər seçimi"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Təklif olunan modellərin seçimi"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modeli",
+        "help" : "Əvvəlcədən təyin olunmuş embedding modellərindən birini seçin"
+      },
+      "chatPresetChoice" : {
+        "label" : "Çat modeli",
+        "help" : "Əvvəlcədən təyin olunmuş çat modellərindən birini seçin"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Təkmil modellərin seçimi"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modeli",
+        "help" : "Təminatçı tərəfindən yayımlanmış embedding modellərindən birini seçin"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Çat modeli",
+        "help" : "Təminatçı tərəfindən yayımlanmış çat modellərindən birini seçin"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Bu seçim rejimini yalnız mütəxəssis isəniz və ya təminatçı saytında ehtiyaclarınıza uyğun modelləri yoxlayaraq istifadə edin. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "çatı standart model kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa çat modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Aşağıdakı modelləri tövsiyə edirik "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "embedding modelini standart kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa embedding modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "çatı standart model kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa çat modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "embedding modelini standart kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa embedding modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Bu seçim rejimini yalnız mütəxəssis isəniz və ya təminatçı saytında ehtiyaclarınıza uyğun modelləri yoxlayaraq istifadə edin. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Yaradın və aktiv edin"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Yaradın və aktiv edin"
+      },
+      "ProviderNameField" : {
+        "label" : "Təminatçı"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Təchizatçı giriş məlumatları tələb edir",
+        "help" : "Təchizatçı/server tətbiqi api açarı və ya digər giriş məlumatları ilə autentifikasiya üçün qurulub"
+      },
+      "baseUrl1" : {
+        "label" : "Əsas api url",
+        "help" : "API xidmətləri üçün təchizatçının əsas url-i"
+      },
+      "enableAllFunctions" : {
+        "label" : "bütün funksiya çağırışlarını aktiv et",
+        "help" : "Bütün mövcud alətləri və funksiya çağırışlarını aktiv edin, əgər qurulmayıbsa, sonradan llms admin panelində aktiv etmək mümkün olacaq"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Əməliyyat zamanı istisna:Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz",
+        "detail" : "Server xətası: Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz"
+      },
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq təminatçısı OK",
+        "detail" : "Təminatçı işlək vəziyyətdədir və uğurla qurulub"
+      },
+      "016dba31ab0a01fc07e7138e31106f880a6a270b0b0402924af1d252aa11b0dd" : {
+        "summary" : "Əməliyyat zamanı istisna:401 UNAUTHORIZED",
+        "detail" : "Server xətası: 401 UNAUTHORIZED"
+      },
+      "bb48c003e632680cb268eb38b5ea9c463b42d35a5f1b1f3b9527a31ef4315269" : {
+        "summary" : "Əməliyyat zamanı istisna:BasePath yoxdur",
+        "detail" : "Server xətası: BasePath yoxdur"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
+    },
+    "GeboAIEasyVendorConfigurationComponent" : {
+      "CreateAdvancedBtn" : {
+        "label" : "Yarat və aktiv et"
+      },
+      "vendorId" : {
+        "label" : "Böyük dil modeli təminatçınızı seçin",
+        "help" : "Defolt çat və embedding modelləriniz üçün ilkin təminatçını seçin"
+      },
+      "secretId" : {
+        "label" : "Provayder etimadnamələrini seçin (api açarı)",
+        "help" : "Seçilmiş llm provayderi üçün mövcud etimadnamələrdən birini seçin"
+      },
+      "InternalServiceModel" : {
+        "label" : "Daxili xidmətlər üçün çat modeli",
+        "help" : "Daxili xidmətlər üçün konfiqurasiya edilmiş çat modeli məlumatların çıxarılması, xülasə edilməsi və daxili iş axınlarının icrasına cavabdeh olacaq."
+      },
+      "ChatModel" : {
+        "label" : "Defolt çat modeli",
+        "help" : "Defolt çat modeli istifadəçilərin suallarını cavablandıracaq və xüsusi konfiqurasiya olunmamış axınlar üçün icra edəcək. Bu güclü və etibarlı, maya, performans və nəticə keyfiyyəti arasında yaxşı balans təşkil etməlidir."
+      },
+      "ProviderBuy" : {
+        "label" : "Apy açarı alışı üçün link"
+      },
+      "ProviderWWW" : {
+        "label" : "Veb sayt linki"
+      },
+      "WebSiteLink" : {
+        "label" : "Provayder veb saytı",
+        "help" : "Ümumi provayder məlumatları üçün bura klikləyin."
+      },
+      "AcquireCreditLink" : {
+        "label" : "Provayder üçün kredit alın",
+        "help" : "Api açar(lar)ınız üçün kredit almaq üçün bura klikləyin."
+      },
+      "EmbeddingModel" : {
+        "label" : "Defolt embedding modeli",
+        "help" : "Bu model məlumat və sənədlərinizin semantik indeksləşdirilməsi (embedding) və geri çağırılması üçün cavabdeh olacaq"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq təminatçı TAMAM",
+        "detail" : "Təminatçı aktivdir və uğurla qurulub"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Verilmiş giriş məlumatları ilə autentifikasiya mümkün deyil"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "TAMAM!",
+        "detail" : "Əməliyyat uğurla yerinə yetirildi"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Söhbət cavabı yayımlanarkən səhv baş verdi",
+        "detail" : "Server səhvi: class org.neo4j.driver.internal.value.StringValue, class java.lang.String tipinə çevrilə bilmir (org.neo4j.driver.internal.value.StringValue 'app' yükləyicisində, java.lang.String isə 'bootstrap' yükləyicisindədir)"
+      },
+      "OK" : {
+        "summary" : "Uğurla yadda saxlanıldı",
+        "detail" : "Yeniləmə əməliyyatı uğurla tamamlandı"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama serveri ilə əlaqədə səhv",
+        "detail" : "Uzaq sistemə daxil olaraq məzmuna çıxış zamanı şəbəkə xətası\n Modellər siyahısı üçün url ilə işləyərkən səhv baş verdi: http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Bunu silə bilərsiniz",
+        "detail" : "Hazırda baxılan məlumatı təhlükəsiz silmək mümkündür"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Bunu silə bilməzsiniz",
+        "detail" : "Bu obyekt tətbiqin başqa hissəsindən istinad olunur"
+      },
+      "dfa3cf635a4f87efe7fa57a37f24fe5c11bad360888f3c1a53056d8126cac52e" : {
+        "summary" : "Əməliyyat zamanı istisna: URL-lə işləmə zamanı xəta: http://localhost:11434/v1/models",
+        "detail" : "Server xətası: URL-lə işləmə zamanı xəta: http://localhost:11434/v1/models"
+      },
+      "e0a25a76b95d1749c4863747c62ad9b4ecbcbf53241e29428e212288db1608cc" : {
+        "summary" : "Əməliyyat zamanı istisna: apiKey təyin edilməlidir",
+        "detail" : "Server xətası: apiKey təyin edilməlidir"
+      },
+      "9c61e9cba9e0c5fa3b3066dd062d583fedbf0006b8519e18f02fa20746a3f7b2" : {
+        "summary" : "Chat cavabını axın zamanı xəta",
+        "detail" : "Server xətası: 400 Səhv Sorğu POST http://localhost:8000/v1/chat/completions ünvanından"
+      },
+      "6342ad723fb5f6a52edcf28b698a0eafe266de17bc35a70c0b9509c2f9908532" : {
+        "summary" : "Əməliyyat zamanı istisna:Error url ilə işləyərkən:http://localhost:8000/v1/models",
+        "detail" : "Server xətası: Error url ilə işləyərkən:http://localhost:8000/v1/models"
+      },
+      "2ac83f5cb71904cecd41d40c4482acfb34f153b91fe1e7f510f850e79e331640" : {
+        "summary" : "Çat axını zamanı xəta baş verdi",
+        "detail" : "Server xətası: Bağlantı sıfırlandı"
+      },
+      "452f3bc5689ec0019cfa0982cbdcdd992a1b2edbdacc4ef735847ed7f1d95a08" : {
+        "summary" : "Əməliyyat zamanı istisna:Error url ilə işləyərkən:https://api.openai.com/v1/models",
+        "detail" : "Server xətası: Error url ilə işləyərkən:https://api.openai.com/v1/models"
+      },
+      "b4f6b0f2355a9218d272e47bd4698ebd19fb922834141dcf57316c685b73c757" : {
+        "summary" : "Əməliyyat zamanı istisna:Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz",
+        "detail" : "Server xətası: Anthropic API üçün lazım olan açar konfiqurasiyası olmadan işləyə bilməz"
+      },
+      "fileExportLoaded" : {
+        "summary" : "Fayl ixrac olundu",
+        "detail" : "Baxmaq üçün brauzerin yükləmə bölməsinə keçin"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Söhbət üçün fayllar yükləyin"
+      },
+      "ChooseFile" : {
+        "help" : "Faylları seçin"
+      },
+      "UploadFile" : {
+        "help" : "Faylları yükləyin"
+      },
+      "DragDropHere" : {
+        "label" : "Yükləmək üçün faylları bura sürükləyin və buraxın"
+      },
+      "RemoveAll" : {
+        "help" : "Hamısını sil"
+      },
+      "UploadPending" : {
+        "label" : "Yükləmək üçün gözləyir"
+      },
+      "CompletedData" : {
+        "label" : "Tamamlandı"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Əgər bu bölmədə istifadə etmək istəyirsinizsə, graphrag-i quraşdırma sahəsində konfiqurasiya edin"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag ayarları"
+      },
+      "button-help" : {
+        "label" : "Graphrag üçün informasiya çıxarışı ayarlarını aparmaq üçün bura klikləyin (hal-hazırda quraşdırılmayıb)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Konfiqurasiya əlavə et"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google Drive sisteminin təsvirini daxil edin."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace bağlantısı yaradın"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "delegatedUser" : {
+        "label" : "Təqlid ediləcək Google istifadəçisi",
+        "help" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi",
+        "placeholder" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi"
+      },
+      "jsonContent" : {
+        "label" : "Google etimadnamə json məzmunu",
+        "help" : "Google Console Cloud-da workspace/komanda disklərinə çıxış hüququ ilə Google Credentials yaradın və endirilmiş json fayl məzmununu bura yapışdırın (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud-da workspace/komanda disklərinə çıxış hüququ ilə Google Credentials yaradın və endirilmiş json fayl məzmununu bura yapışdırın (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Saxlanılır və bu məzmunları bilik bazasına LLm üçün əlçatan edir"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Google drive məzmununu paylaşmaq"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "LogsTab" : {
+        "label" : "Qeydlər"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google drive-ə yüklənmiş elementlərin məzmununun təsvirini daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmun üçün avtomatik yaradılan unikal kod."
+      },
+      "tree" : {
+        "label" : "Seçilmiş fayl və ya qovluq",
+        "help" : "Paylaşılan google drive sahələri və səhifə məzmunları"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive quruluşu",
+        "help" : "Artıq qurulmuş google drive sisteminə istinad."
+      },
+      "openZips" : {
+        "label" : "Zip faylları aç",
+        "help" : "Zip faylları açmağı və məzmun çıxarılışını aktiv edin"
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Əsas layihəyə istinad."
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yeniləmələrinin yoxlama cədvəli",
+        "help" : "Yenilənmiş məzmunların alınması üçün planlaşdırmanı qurun və yenilənmə sistemini təzə saxlayın"
+      },
+      "catalogingCriteria" : {
+        "label" : "Qovluq və altqovluq təşkil kriteriyaları",
+        "help" : "Burada lütfən, Google drive məzmununun necə təşkil olunduğunu (qovluq/fayl strukturu) izah edin və bu məzmunu Gebo.ai ilə necə paylaşdığınızı qeyd edin"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ümumi ayarlar"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "MainPanel" : {
+        "label" : "Google drive inteqrasiyasını redaktə etmək"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Google drive sistemi üçün avtomatik yaradılmış unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google drive sisteminin təsvirini daxil edin."
+      },
+      "driveAccessSecret" : {
+        "label" : "İstifadə olunan şəxsiyyət",
+        "help" : "Google drive sisteminə giriş üçün şəxsiyyəti seçin və ya yaradın"
+      }
+    }
+  },
+  "GeboAIReusableChatModel" : {
+    "GeboAIChatInputShellComponent" : {
+      "standard-chat" : {
+        "label" : "Söhbət"
+      },
+      "deep-search" : {
+        "label" : "Deep search"
+      }
+    }
+  },
+  "GeboAIDeepSearchModule" : {
+    "GeboAIDeepSearchComponent" : {
+      "deepSearchUI" : {
+        "label" : "Deep Search"
+      },
+      "DeepSearchProcessingSearch" : {
+        "label" : "Əlaqədar məlumatlar axtarılır"
+      },
+      "DeepSearchingConsolidating" : {
+        "label" : "Son hesabat formalaşdırılır"
+      },
+      "DeepSearchDataSourceProcessingDocument" : {
+        "label" : "Təhlil edilmiş axtarış nəticəsi"
+      },
+      "DeepSearchDataSourceProcessing" : {
+        "label" : "Sistem üçün təhlil edilmiş axtarış nəticəsi"
+      },
+      "ChooseAtLeastMessage" : {
+        "label" : "Aşağıdakı seçimlərdən ən azı birini seçin"
+      },
+      "LaunchBtn" : {
+        "label" : "Axtarışı işə sal"
+      },
+      "SkipDeepSearch" : {
+        "label" : "Dərin axtarışı keç"
+      },
+      "KnowledgeBaseChoicesArea" : {
+        "label" : "Seçilmiş bilik bazaları"
+      },
+      "DataSourceChoicesArea" : {
+        "label" : "Seçilmiş sistemlər"
+      },
+      "SelectSourcesBtn" : {
+        "label" : "Mənbələri seç"
+      },
+      "DeepSearchProcessingFile" : {
+        "label" : "Analiz edilmiş fayl"
+      }
+    }
+  },
+  "GeboAIDeepSearchConfigAdminModule" : {
+    "DeepSearchConfig" : {
+      "InsertBtn" : {
+        "label" : "Əlavə et"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SearchSettingTab" : {
+        "label" : "Axtarış tənzimləmələri"
+      },
+      "analisysPromptCtrl" : {
+        "placeholder" : "Sənədlərin əlaqədar məlumatlarının çıxarılması üçün prompt daxil edin"
+      },
+      "consolidationPromptCtrl" : {
+        "placeholder" : "Çıxarılmış əlaqədar məlumatların birləşməsi üçün prompt daxil edin"
+      },
+      "MainPanel" : {
+        "label" : "Deep search konfiqurasiyasını redaktə etmək"
+      },
+      "LLmsSettingsTab" : {
+        "label" : "Böyük dil modeli tənzimləmələri"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Deep search konfiqurasiyasının təsvirini daxil edin"
+      },
+      "code" : {
+        "label" : "Unikal Kod",
+        "help" : "Deep search konfiqurasiyasının avtomatik yaradılan unikal kodu"
+      },
+      "searchType" : {
+        "label" : "Axtarış növü",
+        "help" : "Birdəfəlik semantik axtarış və ya çox addımlı seçin"
+      },
+      "topK" : {
+        "label" : "Geri qaytarılan mətn fraqmentlərinin sayı (TopK)"
+      },
+      "chatModelConfiguration" : {
+        "label" : "İstifadə olunan llm",
+        "help" : "Deep search üçün istifadə olunan böyük dil modelini göstər, heç biri seçilməzsə,\n                                    standart modeldən istifadə olunacaq."
+      },
+      "analisysPrompt" : {
+        "label" : "Sənədlərin analiz promptu",
+        "help" : "Sənədlər fraqmentlərindən əlaqədar məlumatların çıxarılması üçün istifadə olunacaq promptu redaktə edin."
+      },
+      "consolidationPrompt" : {
+        "label" : "Çıxarılmış məlumatların birləşməsi promptu",
+        "help" : "Geri qaytarılmış sənədlərdən çıxarılan əlaqədar məlumatların bir hesabatda birləşdirilməsi üçün istifadə olunacaq promptu redaktə edin."
+      },
+      "firstHopSimilarityThreashold" : {
+        "label" : "Axtarış oxşarlıq həddi",
+        "help" : "Birinci addım üçün semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
+      },
+      "secondHopSimilarityThreashold" : {
+        "label" : "İkinci addım oxşarlıq həddi",
+        "help" : "İkinci addım üçün semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
+      },
+      "defaultModel" : {
+        "label" : "Standart böyük dil modeli",
+        "help" : "Standart böyük dil modeli Deep search üçün istifadə olunacaq"
+      },
+      "similarityThreashold" : {
+        "label" : "Axtarış oxşarlıq həddi",
+        "help" : "Semantik oxşarlıq həddi (0.5 ilə 1.0 arasında)"
+      },
+      "SecuritySettingsTab" : {
+        "label" : "Təhlükəsizlik ayarları"
+      },
+      "accessibleToAll" : {
+        "label" : "Hamı üçün əlçatandır"
+      },
+      "datasource" : {
+        "label" : "Məlumat mənbəyi"
+      },
+      "allowedGroups" : {
+        "label" : "İcazə verilən qruplar"
+      },
+      "allowedUsers" : {
+        "label" : "İcazə verilən istifadəçilər"
+      },
+      "perDataSourceConfigured" : {
+        "label" : "Məlumat mənbəyi üzrə istifadəçi/qrup girişi",
+        "help" : "Dərin axtarış bütün xarici məlumat mənbələri və istifadəçi/qrup üçün aktiv olacaq"
+      },
+      "SIMPLEMODE" : {
+        "label" : "İstifadəçi/qrup üzrə sadə giriş"
+      },
+      "PERDATASOURCEMODE" : {
+        "label" : "Məlumat mənbəyi üzrə istifadəçi/qrup girişi"
+      }
+    }
+  },
+  "GeboAIApiKeyModule" : {
+    "GeboAIApiKeyComponent" : {
+      "HeaderFieldSet" : {
+        "label" : "Api açarı etimadnamələrini istifadə et və ya yarat"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api açarı/etimadnamələr",
+        "help" : "Bu provayder üçün api açarı və ya etimadnamələri seç"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api açarı",
+        "help" : "Bu provayder ilə istifadə olunacaq yeni bir api açarı daxil edin"
+      },
+      "PiSave" : {
+        "label" : "Yadda saxla"
+      },
+      "NewUserName" : {
+        "label" : "İstifadəçi adı",
+        "help" : "Provayder xidmətlərinə çıxış üçün istifadə olunan istifadəçi adı"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mövcud və ya yeni istifadə et",
+        "help" : "Bu provayder üçün mövcud etimadnamədən istifadə et və ya yenisini yarat"
+      },
+      "newSecretDescription" : {
+        "label" : "Etimadnamə təsviri",
+        "help" : "Api açarı etimadnaməsi təsviri"
+      },
+      "APIKEY_CREATED_OK" : {
+        "summary" : "Etimadnamələr yaradıldı",
+        "detail" : "Etimadnamələr uğurla yaradıldı"
+      },
+      "9534cfc08d6a4a7f5e6d70a2a87579e963954ab43e110487ca6dc84b15be01c6" : {
+        "summary" : "Ollama serveri ilə əlaqədə səhv",
+        "detail" : "Uzaq sistemlə əlaqədə şəbəkə xətası\n məzmun modellər siyahısı alınarkən url:nullapi/tags ilə işləyərkən xəta baş verdi"
+      }
+    }
+  },
+  "GeboAIChatModelUseModule" : {
+    "GeboAIChatModelUseComponent" : {
+      "CHAT" : {
+        "description" : "İstifadəçilərlə çat"
+      },
+      "INTERNAL_SERVICES" : {
+        "description" : "Daxili xidmətlər üçün istifadə olunan model"
+      }
+    }
+  },
+  "GeboAIAgentsAdminModule" : {
+    "GAgentConfig" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Agent istifadə etdiyi chat modeli"
+      },
+      "CancelBtn" : {
+        "label" : "İmtina et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Ümumi məlumat"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "seç"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chat modeli konfiqurasiyasını seçin"
+      },
+      "defaultChatModel-help" : {
+        "label" : " Agent vəzifəsini yerinə yetirmək üçün sistemin standart chat modelini istifadə edin və ya başqa birini seçin. "
+      },
+      "LanguageModelTab" : {
+        "label" : "Böyük dil modeli və istifadə olunan alətlər ayarları"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Təhlükəsizliyi giriş ayarları"
+      },
+      "MainPanel" : {
+        "label" : "Agent konfiqurasiyasını redaktə et"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Chat agent üçün təsvir daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Agent üçün avtomatik yaradılmış unikal kod."
+      },
+      "agentServiceId" : {
+        "label" : "Agent xidmət növü",
+        "help" : "İcra olunacaq Agent xidmət növünü seçin."
+      },
+      "defaultConfiguration" : {
+        "label" : "Agent üçün standart konfiqurasiya",
+        "help" : "Bu Agent xidmət növü üçün əsas konfiqurasiya kimi təyin et"
+      },
+      "mainLoopPromptUseCode" : {
+        "label" : "Əsas loop prompt şablonunu seçin",
+        "help" : "Agentin əsas loop promptunu seçin."
+      },
+      "maxLoopIterations" : {
+        "label" : "Agent üçün maksimum loop sayı",
+        "help" : "Agentin yerinə yetirəcəyi maksimum loop sayını göstərin (bu nəticəni daha da təkmilləşdirəcək)."
+      },
+      "subscribeAllTools" : {
+        "label" : "Bütün əlçatan alətləri aktiv et",
+        "help" : "Bu seçim aktiv olduqda agent başladıqda bütün əlçatan alətlər təyin olunacaq"
+      },
+      "enabledFunctions" : {
+        "label" : "Bu agent üçün aktiv edilən funksiyalar",
+        "help" : "Agent iş zamanı istifadə edə biləcəyi funksionallıqlar"
+      },
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Modelin cavab verəcəyi temperatur, 0-dan 1-ə qədər (əmin deyilsinizsə boş saxlayın)"
+      },
+      "thinking" : {
+        "label" : "Düşünmə səviyyəsi",
+        "help" : "Modelin edəcəyi düşünmə səviyyələrini konfiqurasiya et (bütün modellər dəstəkləmir)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametri, 0-dan 1-ə qədər (əmin deyilsinizsə boş saxlayın)"
+      }
+    }
+  },
+  "GeboAIUserWorkflowsModule" : {
+    "GeboAIUserWorkflowsStartComponent" : {
+      "NoWorkflowMessage" : {
+        "label" : "Sistemdə hazırda istifadəçi qeydiyyatı və ya bərpa iş prosesi aktiv deyil."
+      },
+      "UserWorkflowsStartPanel" : {
+        "label" : "Hesab bərpasına başla"
+      },
+      "DisabledWorkflowsPanel" : {
+        "label" : "İş prosesləri deaktiv edilib"
+      },
+      "StartWorkflowBtn" : {
+        "label" : "Hesab bərpasına başla"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "İş prosesini başlamaq üçün e-mail ünvanınızı daxil edin"
+      },
+      "GoToLogin" : {
+        "label" : "Giriş səhifəsi"
+      },
+      "invalidAccountState" : {
+        "summary" : "Xəta",
+        "detail" : "Daxil edilmiş məlumatı və onun düzgünlüyünü yoxlayın."
+      },
+      "LookEMail" : {
+        "label" : "Hesab bərpasını davam etdirmək üçün sizə e-mail göndərdik."
+      },
+      "StartedWorkflowsPanel" : {
+        "label" : "Hesab bərpası başlandı"
+      }
+    },
+    "GeboAIUserWorkflowsLandComponent" : {
+      "DisabledWorkflowsPanel" : {
+        "label" : "İş prosesləri deaktiv edilib"
+      },
+      "NoWorkflowMessage" : {
+        "label" : "Sistemdə hazırda istifadəçi qeydiyyatı və ya bərpa iş prosesi aktiv deyil."
+      },
+      "UserWorkflowsLandPanel" : {
+        "label" : "Yeni şifrə təyin et"
+      },
+      "ChangePasswordBtn" : {
+        "label" : "Şifrəni dəyiş"
+      },
+      "password" : {
+        "label" : "Yeni şifrə",
+        "help" : "Şifrə ən az 10 simvol olmalı, böyük, kiçik hərflər, rəqəmlər və xüsusi simvollar daxil etməlidir"
+      },
+      "email" : {
+        "label" : "E-mail",
+        "help" : "E-mail ünvanınızı daxil edin"
+      },
+      "confirmPassword" : {
+        "label" : "Şifrəni təsdiqlə",
+        "help" : "Yeni şifrənizi təsdiqləyin"
+      },
+      "invalidAccountState" : {
+        "summary" : "Xəta",
+        "detail" : "Şifrə dəyişdirilmədi. Zəhmət olmasa, e-mail ünvanını və ya hesabınızın mövcudluğunu yoxlayın."
+      },
+      "GoToLoginBtn" : {
+        "label" : "Giriş səhifəsinə keç"
+      },
+      "wkfSuccess" : {
+        "summary" : "Uğurlu",
+        "detail" : "Şifrə uğurla dəyişdirildi. İndi daxil ola bilərsiniz."
+      }
+    }
+  }
+}

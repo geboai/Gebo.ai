@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.google_vertex.controllers;
 
@@ -25,17 +22,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig;
 import ai.gebo.llms.google_vertex.services.GoogleVertexEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * AI generated comments
- * Controller responsible for managing Google Vertex embedding model configurations.
- * This controller is only active when the 'googleVertexEnabled' property is set to 'true'.
- * Access is restricted to users with the ADMIN role.
+ * AI generated comments Controller responsible for managing Google Vertex
+ * embedding model configurations. This controller is only active when the
+ * 'googleVertexEnabled' property is set to 'true'. Access is restricted to
+ * users with the ADMIN role.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @RestController
@@ -44,11 +43,13 @@ import ai.gebo.model.OperationStatus;
 public class GoogleVertexEmbeddingModelsConfigurationController extends
 		BaseEmbeddingModelsConfigurationController<GGoogleVertexEmbeddingModelConfig, GGoogleVertexEmbeddingModelChoice, GoogleVertexEmbeddingModelConfigurationSupportService> {
 
-	/**
-	 * Constructor that initializes the controller with the Google Vertex embedding model configuration class.
-	 */
-	public GoogleVertexEmbeddingModelsConfigurationController() {
-		super(GGoogleVertexEmbeddingModelConfig.class);
+	public GoogleVertexEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+
+			GoogleVertexEmbeddingModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GGoogleVertexEmbeddingModelConfig.class,
+				ifaceType);
+
 	}
 
 	/**
@@ -84,7 +85,8 @@ public class GoogleVertexEmbeddingModelsConfigurationController extends
 	 * @return Operation status indicating whether the deletion was successful
 	 */
 	@PostMapping(value = "deleteGoogleVertexEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> deleteGoogleVertexEmbeddingModelConfig(@RequestBody GGoogleVertexEmbeddingModelConfig config) {
+	public OperationStatus<Boolean> deleteGoogleVertexEmbeddingModelConfig(
+			@RequestBody GGoogleVertexEmbeddingModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -94,19 +96,22 @@ public class GoogleVertexEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The found Google Vertex embedding model configuration
-	 * @throws GeboPersistenceException If there is an issue retrieving the configuration
+	 * @throws GeboPersistenceException If there is an issue retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findGoogleVertexEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GGoogleVertexEmbeddingModelConfig findGoogleVertexEmbeddingModelConfigByCode(@RequestParam("code") String code)
-			throws GeboPersistenceException {
+	public GGoogleVertexEmbeddingModelConfig findGoogleVertexEmbeddingModelConfigByCode(
+			@RequestParam("code") String code) throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
 
 	/**
-	 * Endpoint to retrieve available Google Vertex embedding models based on the provided configuration.
+	 * Endpoint to retrieve available Google Vertex embedding models based on the
+	 * provided configuration.
 	 * 
 	 * @param config The configuration used to determine available models
-	 * @return Operation status containing a list of available embedding model choices
+	 * @return Operation status containing a list of available embedding model
+	 *         choices
 	 */
 	@PostMapping(value = "getGoogleVertexEmbeddingModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GGoogleVertexEmbeddingModelChoice>> getGoogleVertexEmbeddingModels(

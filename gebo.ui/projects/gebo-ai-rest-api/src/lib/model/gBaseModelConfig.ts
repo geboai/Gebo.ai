@@ -23,4 +23,5 @@ export interface GBaseModelConfig {
     apiSecretCode?: string;
     choosedModel?: GBaseModelChoice;
     baseUrl?: string;
+    contextLength?: number;
 }

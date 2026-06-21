@@ -52,6 +52,9 @@ export * from "./lib/infrastructure/login/login.module";
 export * from "./lib/infrastructure/login/login.component";
 export * from "./lib/infrastructure/user-profile/user-profile.module";
 export * from "./lib/infrastructure/user-profile/user-profile.component";
+export * from "./lib/infrastructure/user-workflows/user-workflows.module";
+export * from "./lib/infrastructure/user-workflows/user-workflows-start.component";
+export * from "./lib/infrastructure/user-workflows/user-workflows-land.component";
 
 
 export * from "./lib/directives/translable/translable.module";
@@ -103,7 +106,7 @@ export * from "./lib/controls/chat-model-use-component/chat-model-use.module";
 export * from "./lib/controls/choose-documents-panel/search-documents.component";
 export * from "./lib/controls/choose-documents-panel/documents-list-panel.component";
 export * from "./lib/controls/userspace-files-component/userspace-files.component";
-export * from "./lib/controls/deep-search-control/deep-search-details.component";
+
 export * from "./lib/controls/deep-search-control/deep-search-sources-choice.component";
 export * from "./lib/directives/translable/translable.directive";
 export * from "./lib/setup-wizard/setup-wizard-panel.component";
@@ -136,3 +139,15 @@ export * from "./lib/controls/content-viewer/document-opener-button.component";
 export * from "./lib/controls/browse-content-component/view-html-content.component";
 export * from "./lib/controls/audio-control/audio-control.component";
 export * from "./lib/controls/choose-documents-panel/choose-documents-panel.component";
+
+export * from "./lib/infrastructure/login/login.module";
+export * from "./lib/infrastructure/login/login.service";
+
+export * from "./lib/infrastructure/fast-setup/fast-setup.module";
+export * from "./lib/infrastructure/fast-setup/fast-setup.component";
+export * from "./lib/infrastructure/gebo-credentials";
+export * from "./lib/infrastructure/user-profile/user-profile.module";
+export * from "./lib/architecture/desktop/gebo-ai-desktop.component";
+export * from "./lib/architecture/desktop/application-menu-provider.service";
+export * from "./lib/architecture/gebo-ui-entity-forms-launcher.service";
+export * from "./lib/infrastructure/user-workflows/user-workflows.module";

@@ -33,6 +33,7 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.projects.GProject;
@@ -134,14 +135,15 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		List<GVectorizedContent> vectorizated = vectorizatedStream.toList();
 		assertFalse("Vectorizated list cannot be empty", vectorizated.isEmpty());
 		LOGGER.info("Vectorized infos " + mapper.writeValueAsString(vectorizated));
-		AIDocumentsSet results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
+		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+		AIDocumentsSet results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, semanticSearchMetaDataFilter,
 				openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti", results.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getTokensSize() == 0);
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
-		AIDocumentsSet results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
-				knowledgeBases, openaiDefaultEmbeddingModel, getDefaultUserInfos());
+		AIDocumentsSet results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, semanticSearchMetaDataFilter,
+				options, openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti",
 				results1.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results1.getNBytes() == 0);

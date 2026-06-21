@@ -272,6 +272,10 @@ ai.gebo.opensearch:
     port: 9200
     username: admin
     password: dothesearch1973-Advanced		
+
+ai.gebo.rag-threashold-autotune.config.enabled: true	
+ai.gebo.agents.standard.enabled: false
+ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

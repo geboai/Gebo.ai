@@ -1,16 +1,16 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -24,6 +24,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IInternalKnowledgeLLMAssistedRetrieveService;
+import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -53,7 +54,7 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 
 	@Override
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 
 		try {
@@ -63,13 +64,13 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 					runtimeData.getMinimalChatContext(), serviceModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK);
 			Flux<GeboChatMessageEnvelope> flux = documentSet.concatMap(ed -> {
-				GPromptConfig prompt = promptsDao
+				GPromptTemplateConfig prompt = promptsDao
 						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(
 							runtimeData.getRequestResources().getCurrentRequest(), ed, chatModel,
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
-					return ragChatService.streamChat(prompt.getPrompt(), req, runtimeData.getChatResponse(), chatModel);
+					return ragChatService.streamChat(prompt, Map.of(), req, runtimeData.getChatResponse(), chatModel);
 				} catch (GeboChatException | LLMConfigException e) {
 					String msg = "Nested exception in deferred stream creation";
 					throw new RuntimeException(msg, e);

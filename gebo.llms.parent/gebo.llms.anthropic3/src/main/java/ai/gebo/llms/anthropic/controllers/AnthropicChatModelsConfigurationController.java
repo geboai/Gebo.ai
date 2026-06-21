@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.anthropic.controllers;
 
@@ -25,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
 import ai.gebo.llms.anthropic.services.AnthropicChatModelConfigurationSupportService;
@@ -34,10 +33,11 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * Controller responsible for managing Anthropic chat model configurations.
- * This REST controller provides endpoints for CRUD operations on Anthropic chat model configurations.
- * It is only enabled when the property 'ai.gebo.llms.config.anthropicEnabled' is set to 'true'.
- * Access to these endpoints is restricted to users with ADMIN role.
+ * Controller responsible for managing Anthropic chat model configurations. This
+ * REST controller provides endpoints for CRUD operations on Anthropic chat
+ * model configurations. It is only enabled when the property
+ * 'ai.gebo.llms.config.anthropicEnabled' is set to 'true'. Access to these
+ * endpoints is restricted to users with ADMIN role.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 @RestController
@@ -45,13 +45,12 @@ import ai.gebo.model.OperationStatus;
 @RequestMapping("api/admin/AnthropicChatModelsConfigurationController")
 public class AnthropicChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GAnthropicChatModelConfig, GAnthropicChatModelChoice, AnthropicChatModelConfigurationSupportService> {
-	
-	/**
-	 * Constructor for AnthropicChatModelsConfigurationController.
-	 * Initializes the controller with GAnthropicChatModelConfig class.
-	 */
-	public AnthropicChatModelsConfigurationController() {
-		super(GAnthropicChatModelConfig.class);
+
+	public AnthropicChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			AnthropicChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GAnthropicChatModelConfig.class, ifaceType);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -97,7 +96,8 @@ public class AnthropicChatModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The matching Anthropic chat model configuration
-	 * @throws GeboPersistenceException If there's an error retrieving the configuration
+	 * @throws GeboPersistenceException If there's an error retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findAnthropicChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAnthropicChatModelConfig findAnthropicChatModelConfigByCode(@RequestParam("code") String code)
@@ -106,14 +106,17 @@ public class AnthropicChatModelsConfigurationController extends
 	}
 
 	/**
-	 * Endpoint to retrieve available Anthropic chat models based on a configuration.
+	 * Endpoint to retrieve available Anthropic chat models based on a
+	 * configuration.
 	 * 
 	 * @param config The configuration to use for retrieving available models
-	 * @return Operation status with a list of available Anthropic chat model choices
+	 * @return Operation status with a list of available Anthropic chat model
+	 *         choices
 	 */
 	@PostMapping(value = "getAnthropicModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GAnthropicChatModelChoice>> getAnthropicChatModels(@RequestBody GAnthropicChatModelConfig config) {
+	public OperationStatus<List<GAnthropicChatModelChoice>> getAnthropicChatModels(
+			@RequestBody GAnthropicChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
-	
+
 }

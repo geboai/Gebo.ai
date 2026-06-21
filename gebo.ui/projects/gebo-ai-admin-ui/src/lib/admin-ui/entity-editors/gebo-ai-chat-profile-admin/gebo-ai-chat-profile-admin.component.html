@@ -122,6 +122,18 @@
                 <p-tabPanel id="RagSettingsTab" gebo-ai-label header="RAG settings">
                     <div class="grid standardTabDialogueHeight">
                         <div class="col-6">
+                           
+                            <gebo-ai-field id="manualThreasholdsConfiguration" label="Manual or Autotuned threashold configuration" help="Use manual distance threashold instead of Autotune it">
+                                <p-check-box formControlName="manualThreasholdsConfiguration" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
+                           
+                            <gebo-ai-field id="useAlsoKeywordSearch" label="Use keyword search when available" help="Run keyword searches additional to semantic searches if they are configured in this installation">
+                                <p-check-box formControlName="useAlsoKeywordSearch" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-check-box>
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-6">
                             <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieve augmented generation, Top N found considered document fragments in semantic search">
                                 <p-inputNumber id="TopKInputNumber" gebo-ai-label formControlName="topK"
                                     class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
@@ -149,6 +161,7 @@
                                     maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
                             </gebo-ai-field>
                         </div>
+                        <!-- 
                         <div class="col-12">
                             <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieve augmented generation sessions." [required]="true">
                                 <textarea id="PromptTextarea" gebo-ai-label rows="6" cols="250" [required]="true" pTextarea
@@ -160,6 +173,7 @@
                                 deliveryPromptControlName="prompt"
                                 [ragWizardMode]="true"></gebo-ai-prompt-wizard-component>
                         </div>
+                        -->
                     </div>
                 </p-tabPanel>
                 <p-tabPanel id="SecurityAccessSettingsTab" gebo-ai-label header="Security access settings">

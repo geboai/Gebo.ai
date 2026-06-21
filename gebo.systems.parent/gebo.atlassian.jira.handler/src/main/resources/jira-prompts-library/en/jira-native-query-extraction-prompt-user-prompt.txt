@@ -1,0 +1,10 @@
+INPUTS:
+- Last User question:
+
+{question}
+
+-(CAT) Jira projects catalog (may be empty):
+
+{jiraProjects}
+
+

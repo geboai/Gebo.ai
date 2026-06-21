@@ -23,5 +23,6 @@ export interface GGoogleVertexEmbeddingModelConfig {
     apiSecretCode?: string;
     choosedModel?: GGoogleVertexEmbeddingModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     tokenizationThreshold?: number;
 }

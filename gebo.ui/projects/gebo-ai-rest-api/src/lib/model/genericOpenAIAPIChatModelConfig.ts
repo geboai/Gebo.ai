@@ -23,16 +23,17 @@ export interface GenericOpenAIAPIChatModelConfig {
     apiSecretCode?: string;
     choosedModel?: GenericOpenAIAPIChatModelChoice;
     baseUrl?: string;
+    contextLength?: number;
     topP?: number;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     temperature?: number;
-    contextLength?: number;
-    defaultModelPrompt?: string;
     forUses?: Array<GenericOpenAIAPIChatModelConfig.ForUsesEnum>;
     features?: Array<GenericOpenAIAPIChatModelConfig.FeaturesEnum>;
+    thinking?: GenericOpenAIAPIChatModelConfig.ThinkingEnum;
+    maxGeneratedTokens?: number;
 }
 export namespace GenericOpenAIAPIChatModelConfig {
     export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
@@ -47,5 +48,13 @@ export namespace GenericOpenAIAPIChatModelConfig {
         STRUCTUREDOUTPUT: 'STRUCTURED_OUTPUT' as FeaturesEnum,
         MULTIMEDIA: 'MULTIMEDIA' as FeaturesEnum,
         FUNCTIONCALLING: 'FUNCTION_CALLING' as FeaturesEnum
+    };
+    export type ThinkingEnum = 'NO_THINKING' | 'LOW_THINKING' | 'MEDIUM_THINKING' | 'HIGH_THINKING' | 'AUTO';
+    export const ThinkingEnum = {
+        NOTHINKING: 'NO_THINKING' as ThinkingEnum,
+        LOWTHINKING: 'LOW_THINKING' as ThinkingEnum,
+        MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
+        HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
+        AUTO: 'AUTO' as ThinkingEnum
     };
 }

@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 import { DataPage } from './dataPage';
-import { User } from './user';
+import { EditableUser } from './editableUser';
 
 export interface FindUserByQbeParam { 
-    qbe: User;
+    qbe: EditableUser;
     page: DataPage;
 }

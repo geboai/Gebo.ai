@@ -12,9 +12,12 @@ package ai.gebo.llms.huggingface.services;
 import java.util.List;
 
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
+import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -67,12 +70,20 @@ public class HuggingfaceChatModelConfigurationSupportService
 	 */
 	final IGeboSecretsAccessService secretService;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
+	final IGToolCallbackSourceRepositoryPattern toolCallbacksRepository;
 
 	/**
 	 * Inner class implementing a HuggingFace configurable chat model.
 	 */
 	class HuggingfaceConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GHuggingfaceChatModelConfig, HuggingfaceChatModel> {
+
+		public HuggingfaceConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures a HuggingFace chat model instance based on the provided
@@ -85,7 +96,7 @@ public class HuggingfaceChatModelConfigurationSupportService
 		 *                            missing
 		 */
 		@Override
-		protected HuggingfaceChatModel configureModel(GHuggingfaceChatModelConfig config, GChatModelType type)
+		protected HuggingfaceChatModel configureModel(GHuggingfaceChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
@@ -106,6 +117,12 @@ public class HuggingfaceChatModelConfigurationSupportService
 
 			HuggingfaceChatModel model = new HuggingfaceChatModel(apiKey, config.getBaseUrl());
 			return model;
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			
+			return new HuggingfaceConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 
 	};
@@ -131,7 +148,8 @@ public class HuggingfaceChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GHuggingfaceChatModelConfig> create(GHuggingfaceChatModelConfig config)
 			throws LLMConfigException {
-		HuggingfaceConfigurableChatModel model = new HuggingfaceConfigurableChatModel();
+		HuggingfaceConfigurableChatModel model = new HuggingfaceConfigurableChatModel(documentContentRenderProvider,
+				toolCallbacksRepository);
 		model.initialize(config, type);
 		return model;
 	}

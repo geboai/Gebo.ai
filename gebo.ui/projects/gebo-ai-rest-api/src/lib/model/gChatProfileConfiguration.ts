@@ -19,7 +19,6 @@ export interface GChatProfileConfiguration {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    prompt?: string;
     embeddingModelReference?: GObjectRefGBaseEmbeddingModelConfig;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
     enabledFunctions?: Array<string>;
@@ -35,4 +34,5 @@ export interface GChatProfileConfiguration {
     disableMultiHopRag?: boolean;
     otherSearchSimilarityThreshold?: number;
     manualThreasholdsConfiguration?: boolean;
+    useAlsoKeywordSearch?: boolean;
 }

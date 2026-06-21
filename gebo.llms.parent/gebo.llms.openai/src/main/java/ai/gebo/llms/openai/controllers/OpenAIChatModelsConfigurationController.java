@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.controllers;
 
@@ -25,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
 import ai.gebo.llms.openai.services.OpenAIChatModelConfigurationSupportService;
@@ -34,10 +33,10 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * Controller for managing OpenAI chat model configurations.
- * Provides REST endpoints to insert, update, delete, and query OpenAI chat model configurations.
- * This controller is only active when the 'openAIEnabled' property is set to true.
- * Access is restricted to users with ADMIN role.
+ * Controller for managing OpenAI chat model configurations. Provides REST
+ * endpoints to insert, update, delete, and query OpenAI chat model
+ * configurations. This controller is only active when the 'openAIEnabled'
+ * property is set to true. Access is restricted to users with ADMIN role.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @RestController
@@ -46,12 +45,11 @@ import ai.gebo.model.OperationStatus;
 public class OpenAIChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GOpenAIChatModelConfig, GOpenAIChatModelChoice, OpenAIChatModelConfigurationSupportService> {
 
-	/**
-	 * Constructor for OpenAIChatModelsConfigurationController.
-	 * Initializes the parent controller with GOpenAIChatModelConfig class.
-	 */
-	public OpenAIChatModelsConfigurationController() {
-		super(GOpenAIChatModelConfig.class);
+	public OpenAIChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			OpenAIChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOpenAIChatModelConfig.class, ifaceType);
+		
 	}
 
 	/**
@@ -97,22 +95,25 @@ public class OpenAIChatModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The found OpenAI chat model configuration
-	 * @throws GeboPersistenceException If there is an error retrieving the configuration
+	 * @throws GeboPersistenceException If there is an error retrieving the
+	 *                                  configuration
 	 */
 	@GetMapping(value = "findOpenAIChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GOpenAIChatModelConfig findOpenAIChatModelConfigByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
-	
+
 	/**
-	 * Retrieves a list of available OpenAI chat models based on the provided configuration.
+	 * Retrieves a list of available OpenAI chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration to use for retrieving models
 	 * @return Operation status containing the list of available model choices
 	 */
 	@PostMapping(value = "getOpenAIChatModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GOpenAIChatModelChoice>> getOpenAIChatModels(@RequestBody GOpenAIChatModelConfig config) {
+	public OperationStatus<List<GOpenAIChatModelChoice>> getOpenAIChatModels(
+			@RequestBody GOpenAIChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
 }

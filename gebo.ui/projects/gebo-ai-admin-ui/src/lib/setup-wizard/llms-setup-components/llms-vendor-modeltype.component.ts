@@ -10,7 +10,7 @@ interface IModelChoice {
     choosedModel?: string;
 };
 interface IProviderAccess {
-    requireApiKeyAniway?:boolean;
+    requireApiKeyAniway?: boolean;
     selectedSecret?: string;
     baseUrl?: string;
 }
@@ -39,20 +39,60 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
+    protected rankerModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected imagesModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected transcriptModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected ttsModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
     protected chatModelAdvancedFormGroup: FormGroup = new FormGroup({
         enableAllFunctions: new FormControl(),
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
+
     protected embeddingModelAdvancedFormGroup: FormGroup = new FormGroup({
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
-
+    protected rankerModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected imagesModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected transcriptModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
+    protected ttsModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
     protected chatPresets: LLMModelPresetChoice[] = [];
     protected embeddingPresets: LLMModelPresetChoice[] = [];
+    protected imagePresets: LLMModelPresetChoice[] = [];
+    protected rankingPresets: LLMModelPresetChoice[] = [];
+    protected transcriptPresets: LLMModelPresetChoice[] = [];;
+    protected ttsPresets: LLMModelPresetChoice[] = [];;
     protected lookedUpChatModels: GBaseModelChoice[] = [];
     protected lookedUpEmbeddingModels: GBaseModelChoice[] = [];
+    protected lookedUpRankingModels: GBaseModelChoice[] = [];
+    protected lookedUpImagesModels: GBaseModelChoice[] = [];
+    protected lookedUpTtsModels: GBaseModelChoice[] = [];
+    protected lookedUpTranscriptModels: GBaseModelChoice[] = [];
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
     protected llmsStatus!: ComponentLLMSStatus;
@@ -74,6 +114,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             return of(rv);
         }
     };
+
+
+
     constructor(
         private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService
     ) {
@@ -106,28 +149,28 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             }
         });
         this.secretFormGroup.controls["baseUrl"].statusChanges.subscribe({
-            next:(baseUrlValueStatus)=>{
-                this.handleSelectedSecretEnabled(baseUrlValueStatus,this.secretFormGroup.controls["baseUrl"].value,this.secretFormGroup.controls["requireApiKeyAniway"].value===true);
+            next: (baseUrlValueStatus) => {
+                this.handleSelectedSecretEnabled(baseUrlValueStatus, this.secretFormGroup.controls["baseUrl"].value, this.secretFormGroup.controls["requireApiKeyAniway"].value === true);
             }
         });
         this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
-            next:(requireApiKeyAniway: boolean)=>{
-                this.handleSelectedSecretEnabled(this.secretFormGroup.controls["baseUrl"].status,this.secretFormGroup.controls["baseUrl"].value,requireApiKeyAniway===true);
+            next: (requireApiKeyAniway: boolean) => {
+                this.handleSelectedSecretEnabled(this.secretFormGroup.controls["baseUrl"].status, this.secretFormGroup.controls["baseUrl"].value, requireApiKeyAniway === true);
             }
         })
-        
+
     }
     private handleSelectedSecretEnabled(baseUrlValueStatus: FormControlStatus, baseUrl: string | null, requireApiKeyAniway: boolean) {
-        let usableBaseUrl:string|undefined=undefined;
-        let usableSecretId:string|undefined;
-        let doLookupModels:boolean=false;
+        let usableBaseUrl: string | undefined = undefined;
+        let usableSecretId: string | undefined;
+        let doLookupModels: boolean = false;
         const requiresApiKey = this.vendorConfiguration?.parentModel.requiresApiKey === true || requireApiKeyAniway === true;
         let knownUrl: boolean = this.vendorConfiguration?.parentModel.requiresCustomUrl !== true;
-        let apiKeyOk:boolean=false;
+        let apiKeyOk: boolean = false;
         if (this.vendorConfiguration?.parentModel.requiresCustomUrl === true) {
-            knownUrl = baseUrlValueStatus === "VALID" && (baseUrl!==null && baseUrl.length>0);
+            knownUrl = baseUrlValueStatus === "VALID" && (baseUrl !== null && baseUrl.length > 0);
             if (knownUrl) {
-                usableBaseUrl=baseUrl?baseUrl:undefined;
+                usableBaseUrl = baseUrl ? baseUrl : undefined;
             }
         }
         const selectedSecretEnabled: boolean = requiresApiKey && knownUrl;
@@ -139,18 +182,18 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         } else {
             this.secretFormGroup.controls["selectedSecret"].disable();
         }
-       const actualParams:IProviderAccess=this.secretFormGroup.value;
-       if (requiresApiKey) {
-            usableSecretId=actualParams?.selectedSecret;
-            apiKeyOk=usableSecretId?true:false;
-       }else {
-            apiKeyOk=true;
-       }
-       doLookupModels=apiKeyOk && knownUrl;
-       if (doLookupModels===true) {
-            this.loadModels(usableSecretId,usableBaseUrl);
-       }
-        
+        const actualParams: IProviderAccess = this.secretFormGroup.value;
+        if (requiresApiKey) {
+            usableSecretId = actualParams?.selectedSecret;
+            apiKeyOk = usableSecretId ? true : false;
+        } else {
+            apiKeyOk = true;
+        }
+        doLookupModels = apiKeyOk && knownUrl;
+        if (doLookupModels === true) {
+            this.loadModels(usableSecretId, usableBaseUrl);
+        }
+
     }
 
     private assignBackendMessages(messages?: GUserMessage[]) {
@@ -204,6 +247,18 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                         if (x.type === "EMBEDDING") {
                             this.lookedUpEmbeddingModels = current.result ? current.result : [];
                         }
+                        if (x.type === "RANKING") {
+                            this.lookedUpRankingModels = current.result ? current.result : [];
+                        }
+                        if (x.type === "IMAGESGEN") {
+                            this.lookedUpImagesModels = current.result ? current.result : [];
+                        }
+                        if (x.type === "TTS") {
+                            this.lookedUpTtsModels = current.result ? current.result : [];
+                        }
+                        if (x.type === "TRANSCRIPT") {
+                            this.lookedUpTranscriptModels = current.result ? current.result : [];
+                        }
                     });
                     this.assignBackendMessages(toastMessages);
                 },
@@ -226,6 +281,12 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 this.embeddingModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
                 this.chatModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.chatModelSetup !== true);
                 this.embeddingModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
+                this.rankerModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.rankingModelSetup !== true);
+                this.transcriptModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.transcriptModelSetup !== true);
+                this.ttsModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.ttsModelSetup !== true);
+                this.rankerModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.rankingModelSetup !== true);
+                this.transcriptModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.transcriptModelSetup !== true);
+                this.ttsModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.ttsModelSetup !== true);
             },
             complete: () => {
                 this.loading = false;
@@ -265,7 +326,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 this.secretFormGroup.controls["selectedSecret"].setValidators(Validators.required);
             } else {
                 this.secretFormGroup.controls["selectedSecret"].disable();
-                
+
             }
             this.secretFormGroup.updateValueAndValidity();
             this.vendorConfiguration.libraryModel.forEach(x => {
@@ -285,6 +346,34 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                                 this.embeddingModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
                             }
                         } break;
+                        case "IMAGESGEN": {
+                            this.imagePresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.imagesModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
+                        } break;
+                        case "RANKING": {
+                            this.rankingPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.rankerModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
+                        } break;
+                        case "TRANSCRIPT": {
+                            this.transcriptPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.transcriptModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
+                        } break;
+                        case "TTS": {
+                            this.ttsPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.ttsModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
+                        } break;
                     }
             });
 
@@ -302,33 +391,33 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 
     }
-
+    private addModelData(fg: FormGroup, array: LLMCreateModelData[], type: LLMCreateModelData.TypeEnum) {
+        const model: IModelChoice = fg.value;
+        if (model.choosedModel) {
+            const value = this.buildCreateModelData(model, type);
+            if (value)
+                array.push(value);
+        }
+    }
     protected createPresetLLMS() {
         const modelDataCreationArray: Array<LLMCreateModelData> = [];
-        const chatModelChoice: IModelChoice = this.chatModelPresetsFormGroup.value;
-        const embeddingModelChoice: IModelChoice = this.embeddingModelPresetsFormGroup.value;
-        if (chatModelChoice?.choosedModel) {
-            const value = this.buildCreateModelData(chatModelChoice, "CHAT");
-            if (value) modelDataCreationArray.push(value);
-        }
-        if (embeddingModelChoice?.choosedModel) {
-            const value = this.buildCreateModelData(embeddingModelChoice, "EMBEDDING");
-            if (value) modelDataCreationArray.push(value);
-        }
+        this.addModelData(this.chatModelPresetsFormGroup, modelDataCreationArray, "CHAT");
+        this.addModelData(this.embeddingModelPresetsFormGroup, modelDataCreationArray, "EMBEDDING");
+        this.addModelData(this.rankerModelPresetsFormGroup, modelDataCreationArray, "RANKING");
+        this.addModelData(this.imagesModelPresetsFormGroup, modelDataCreationArray, "IMAGESGEN");
+        this.addModelData(this.transcriptModelPresetsFormGroup, modelDataCreationArray, "TRANSCRIPT");
+        this.addModelData(this.ttsModelPresetsFormGroup, modelDataCreationArray, "TTS");
+
         this.createLLMS(modelDataCreationArray);
     }
     protected createAdvancedLLMS() {
         const modelDataCreationArray: Array<LLMCreateModelData> = [];
-        const chatModelChoice: IModelChoice = this.chatModelAdvancedFormGroup.value;
-        const embeddingModelChoice: IModelChoice = this.embeddingModelAdvancedFormGroup.value;
-        if (chatModelChoice?.choosedModel) {
-            const value = this.buildCreateModelData(chatModelChoice, "CHAT");
-            if (value) modelDataCreationArray.push(value);
-        }
-        if (embeddingModelChoice?.choosedModel) {
-            const value = this.buildCreateModelData(embeddingModelChoice, "EMBEDDING");
-            if (value) modelDataCreationArray.push(value);
-        }
+        this.addModelData(this.chatModelAdvancedFormGroup, modelDataCreationArray, "CHAT");
+        this.addModelData(this.embeddingModelAdvancedFormGroup, modelDataCreationArray, "EMBEDDING");
+        this.addModelData(this.rankerModelAdvancedFormGroup, modelDataCreationArray, "RANKING");
+        this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN");
+        this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT");
+        this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS");
         this.createLLMS(modelDataCreationArray);
     }
     private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum): LLMCreateModelData | undefined {

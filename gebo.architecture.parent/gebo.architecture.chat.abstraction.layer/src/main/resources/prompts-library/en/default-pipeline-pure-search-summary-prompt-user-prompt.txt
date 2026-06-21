@@ -1,0 +1,14 @@
+INPUTS:
+- Actual User question:  {question}
+
+
+- Current consolidated report (may be empty or null):
+<<<
+{consolidated}
+>>>
+
+- New partial contribution:
+<<<
+{documents}
+>>>
+

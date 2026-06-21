@@ -12,7 +12,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
@@ -37,7 +37,7 @@ const standardDefaultContextLength: number = 4096;
     templateUrl: "standard-chat-model-settings.component.html",
     standalone: false,
     providers: [
-        { provide: GEBO_AI_MODULE, useValue: "GeboAIStandardChatModelModule", multi: false }, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIStandardChatModelModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }
     ]
 })
@@ -58,12 +58,16 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     // Input bounds for context length parameter
     @Input() minContextLength: number = 1024;
     @Input() maxContextLength: number = 2000000;
+    @Input() thinking: boolean = true;
+    @Input() maxGeneratedTokens: boolean = true;
 
     // The default context length for the selected model
-    public defaultContextLength?: number;
+    protected defaultContextLength?: number;
 
     // Flag indicating if the model has its own context window settings
-    public modelHaveNativeContextWindowSettings: boolean = false;
+    protected modelHaveNativeContextWindowSettings: boolean = false;
+
+    protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
 
     /**
      * Lifecycle hook that is called after data-bound properties are initialized

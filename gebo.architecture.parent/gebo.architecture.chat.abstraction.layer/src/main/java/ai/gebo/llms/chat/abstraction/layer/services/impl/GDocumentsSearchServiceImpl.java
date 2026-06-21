@@ -7,23 +7,19 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.architecture.fulltext.model.FullTextChunkSearchHit;
-import ai.gebo.architecture.fulltext.model.MetaDataFilter;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
-import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions;
 import ai.gebo.architecture.rag.support.layer.model.RagQueryOptions.CompletenessLevel;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.architecture.rag_threasholds_autotune.model.OptimizedThreashold;
@@ -34,7 +30,6 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -51,12 +46,12 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentsSearchServiceImpl.class);
 
 	@Override
-	public AIDocumentsSet search(GeboChatRequest chatRequest, int tokensBudget)
+	public AIDocumentsSet search(GeboChatRequest chatRequest, SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, int tokensBudget)
 			throws FullTextException, LLMConfigException {
 		List<String> semanticSearches = new ArrayList<String>();
 		List<String> fullTextSearches = new ArrayList<String>();
 		String userQuery = GeboChatRequest.actualQuery(chatRequest);
-		return this.search(chatRequest, semanticSearches, fullTextSearches, userQuery, tokensBudget, tokensBudget);
+		return this.search(chatRequest, semanticSearches, semanticSearchMetaDataFilter, fullTextSearches, fullTextSearchMetaDataFilter, userQuery, tokensBudget, tokensBudget);
 	}
 
 	final IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService;
@@ -71,8 +66,8 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	final GUserChatSessionRepository sessionRepo;
 
 	@Override
-	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, List<String> fullTextSearches,
-			String userQuery, int globalTopK, int tokensBudget) throws FullTextException, LLMConfigException {
+	public AIDocumentsSet search(GeboChatRequest request, List<String> semanticSearches, SemanticSearchMetaDataFilter semanticSearchMetaDataFilter,
+			List<String> fullTextSearches, FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, String userQuery, int globalTopK, int tokensBudget) throws FullTextException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin search(..)");
 		}
@@ -197,8 +192,8 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 						RagQueryOptions options = new RagQueryOptions(tokensBudget, CompletenessLevel.MAX_TOKENS);
 						options.setSimilarityThreashold(threashold);
 						options.setTopK(semanticRagTopK);
-						AIDocumentsSet data = this.semanticSearchDao.multiHopSemanticSearch(query, options,
-								knowledgeBases, em, _firstHopThreashold, _secondHopThreashold,
+						AIDocumentsSet data = this.semanticSearchDao.multiHopSemanticSearch(query, semanticSearchMetaDataFilter,
+								options, em, _firstHopThreashold, _secondHopThreashold,
 								securityService.getCurrentUser());
 						out = AIDocumentsSet.join(data, out);
 						endSearch = ((out.countFragments() >= globalTopK) || out.getTokensSize() >= tokensBudget);
@@ -213,7 +208,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 				}
 			}
 			if (fullTextSearch != null && !endSearch && !fullTextSearchedQuery.isEmpty()) {
-				MetaDataFilter metaDataFilter = new MetaDataFilter();
+				FullTextSearchMetaDataFilter metaDataFilter = new FullTextSearchMetaDataFilter();
 				metaDataFilter.setKnowledgebaseCodes(knowledgeBases);
 				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
 						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;

@@ -12,6 +12,7 @@ package ai.gebo.llms.google_vertex.services;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel.ChatModel;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.cloud.vertexai.VertexAI;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -79,12 +81,20 @@ public class GoogleVertexChatModelConfigurationSupportService
 	final VertexAIConfigurator configurator;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
+
 	/**
 	 * Inner class that handles the configuration and initialization of Google
 	 * Vertex chat models
 	 */
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, VertexAiGeminiChatModel> {
+
+		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures a VertexAiGeminiChatModel based on the provided configuration
@@ -95,8 +105,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there's an error during configuration
 		 */
 		@Override
-		protected VertexAiGeminiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected VertexAiGeminiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 
 			VertexAI vertexAI = configurator.createVertexAI(config.getApiSecretCode(), config.getBaseUrl());
 			VertexAiGeminiChatOptions options = null;
@@ -127,12 +137,20 @@ public class GoogleVertexChatModelConfigurationSupportService
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
 			}
-
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
+			
 			options = builder.build();
 			VertexAiGeminiChatModel model = new VertexAiGeminiChatModel(vertexAI, options,
-					functionsRepo.createToolCallingManager(), RetryTemplate.defaultInstance(),
-					ObservationRegistry.create());
+					toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager(),
+					RetryTemplate.defaultInstance(), ObservationRegistry.create());
 			return model;
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+
+			return new GoogleVertexConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 	};
 
@@ -156,7 +174,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GGoogleVertexChatModelConfig> create(GGoogleVertexChatModelConfig config)
 			throws LLMConfigException {
-		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel();
+		GoogleVertexConfigurableChatModel model = new GoogleVertexConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

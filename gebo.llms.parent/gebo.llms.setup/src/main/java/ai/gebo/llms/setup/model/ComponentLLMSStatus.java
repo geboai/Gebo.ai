@@ -25,4 +25,10 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
 
     // Boolean flag indicating whether the embedded model setup is complete
     public boolean embeddedModelSetup;
+    
+    public boolean rankingModelSetup;
+    
+    public boolean ttsModelSetup;
+    
+    public boolean transcriptModelSetup;
 }

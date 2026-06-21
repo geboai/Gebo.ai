@@ -16,19 +16,10 @@
  */
 package ai.gebo.llms.openai_compat.services;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.converter.BeanOutputConverter;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -38,12 +29,11 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.retry.support.RetryTemplate;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
-import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
-import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -99,6 +89,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
 	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Constructor that initializes all required dependencies
@@ -116,7 +107,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGeboSecretsAccessService secretService, IGOpenAIApiUtil openaiApiUtil,
 			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern,
+			IGDocumentContentRendererProvider documentContentRenderProvider) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -125,6 +117,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
 		this.configureHandler = configureHandler;
 		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
+		this.documentContentRenderProvider = documentContentRenderProvider;
 
 	}
 
@@ -134,6 +127,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	 */
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
+
+		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		public static final String CHATMODEL_VLLM = "chatmodel-vllm";
 
@@ -146,8 +145,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OpenAiChatModel configureModel(GenericOpenAIAPIChatModelConfig config, GChatModelType type)
-				throws LLMConfigException {
+		protected OpenAiChatModel configureModel(GenericOpenAIAPIChatModelConfig config, GChatModelType type,
+				ToolCallingManager toolsCallsManager) throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() != null && config.getApiSecretCode().trim().length() > 0) {
@@ -198,6 +197,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());
+			}
 
 			// Configure tool callbacks (functions)
 
@@ -210,11 +212,17 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 				builder = builder.toolNames(new HashSet<String>(names));
 
 			}
+
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				builder.parallelToolCalls(true);
+				builder.internalToolExecutionEnabled(true);
+			}
 			if (user != null) {
 				builder = builder.user(user);
 			}
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.create());
 			return model;
@@ -249,32 +257,35 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
-
-		@Override
-		protected ChatClientRequestSpec prepareCall(Prompt prompt, IChatRequestContext chatContext) {
-			String userQuestion = chatContext.getActualUserRequest();
-			if (type.getCode().equals(CHATMODEL_VLLM)) {
-				ChatClient client = getChatClient();
-				// Here prompt, documents and consolidated history
-				String systemMessage = ClientChatCallUtil.createPromptContextHistory(prompt, chatContext);
-
-				ChatClientRequestSpec reqObject = client.prompt(systemMessage).user(userQuestion);
-				// chat histroy in user, assistant format
-				// reqObject = reqObject.messages(List.of(systemMessage));
-				// tools call environment
-				Map<String, Object> toolContext = chatContext.getToolsContext();
-				if (toolContext != null) {
-					reqObject = reqObject.toolContext(toolContext);
-				}
-				return reqObject;
-			} else
-				return super.prepareCall(prompt, chatContext);
-		}
+		/*
+		 * @Override public ChatClientRequestSpec prepareCall(GPromptTemplateConfig
+		 * prompt, Map<String, Object> params, IChatRequestContext chatContext) { String
+		 * userQuestion = chatContext.getActualUserRequest(); if
+		 * (type.getCode().equals(CHATMODEL_VLLM)) { ChatClient client =
+		 * getChatClient(); // Here prompt, documents and consolidated history
+		 * SystemMessage systemMessage = createSystemMessage(prompt, params,
+		 * chatContext);
+		 * 
+		 * 
+		 * ChatClientRequestSpec reqObject =
+		 * client.prompt(systemMessage).user(userQuestion); // chat histroy in user,
+		 * assistant format // reqObject = reqObject.messages(List.of(systemMessage));
+		 * // tools call environment Map<String, Object> toolContext =
+		 * chatContext.getToolsContext(); if (toolContext != null) { reqObject =
+		 * reqObject.toolContext(toolContext); } return reqObject; } else return
+		 * super.prepareCall(prompt, params, chatContext); }
+		 */
 
 		@Override
 		public boolean isApplyThinkingMarkupHandling() {
 
 			return GenericOpenAIAPIChatModelConfigurationSupportService.this.type.isApplyThinkingMarkupHandling();
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+
+			return new GenericOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 	};
 
@@ -298,7 +309,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	@Override
 	public IGConfigurableChatModel<GenericOpenAIAPIChatModelConfig> create(GenericOpenAIAPIChatModelConfig config)
 			throws LLMConfigException {
-		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel();
+		GenericOpenAIConfigurableChatModel model = new GenericOpenAIConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

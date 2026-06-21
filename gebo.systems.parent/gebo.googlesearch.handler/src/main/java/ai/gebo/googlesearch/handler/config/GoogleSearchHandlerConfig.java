@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.ContextContentRequired;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
 import lombok.Data;
 
@@ -37,22 +38,22 @@ public class GoogleSearchHandlerConfig implements IGStaticPromptsProvider {
 			+ "   - a more focused query with exact phrase \"...\" and key terms\r\n"
 			+ "   - a query with site: or filetype: if clearly relevant\r\n"
 			+ "   - a variant with synonyms or related terminology\r\n"
-			+ "4. Prefer fewer but high-quality queries over many noisy ones.\r\n" + "\r\n" + "INPUT\r\n"
-			+ "The user question is:\r\n" + "\r\n" + "<<<\r\n" + "{question}\r\n" + ">>>\r\n" + "\r\n" + "CONTEXT:\r\n"
-			+ "The actual consolidated knowledge (eventually blank) is:\r\n{consolidated}\r\n" + "OUTPUT FORMAT\r\n"
+			+ "4. Prefer fewer but high-quality queries over many noisy ones.\r\n" + "\r\n" + "OUTPUT FORMAT\r\n"
 			+ "{format}\r\n" + "\r\n" + "Rules for \"google_queries\":\r\n" + "- Between 2 and 8 queries\r\n"
 			+ "- No duplicates\r\n" + "- Each item must be a single Google search string (no line breaks)\r\n"
 			+ "- Do not include any explanation or natural language text outside the JSON structure.\r\n" + "";
-	private GPromptConfig prompt = null;
+	private GPromptTemplateConfig prompt = null;
 
 	public GoogleSearchHandlerConfig() {
-		prompt = new GPromptConfig();
-		prompt.setPrompt(queryExtractionPrompt);
+		prompt = new GPromptTemplateConfig();
+		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		prompt.setPromptUse(GOOGLE_SEARCH_QUERY_EXTRACTION_PROMPT);
+		prompt.setSystemPromptTemplate(queryExtractionPrompt);
+		prompt.setUserPromptTemplate("INPUT\r\n" + "The user question is: {question}\r\n" );
 	}
 
 	@Override
-	public List<GPromptConfig> promptsList()  {
+	public List<GPromptTemplateConfig> promptsList() {
 
 		return List.of(prompt);
 	}

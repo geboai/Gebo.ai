@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.ollama.controllers;
 
@@ -25,16 +22,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseChatModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.llms.ollama.services.OllamaChatModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * REST controller that provides endpoints for managing Ollama chat model configurations.
- * This controller is only active when the 'ollamaEnabled' property is set to 'true'.
- * Access to these endpoints is restricted to users with ADMIN role.
+ * REST controller that provides endpoints for managing Ollama chat model
+ * configurations. This controller is only active when the 'ollamaEnabled'
+ * property is set to 'true'. Access to these endpoints is restricted to users
+ * with ADMIN role.
  * 
  * AI generated comments
  */
@@ -44,12 +44,12 @@ import ai.gebo.model.OperationStatus;
 @RequestMapping("api/admin/OllamaChatModelsConfigurationController")
 public class OllamaChatModelsConfigurationController extends
 		BaseChatModelsConfigurationController<GOllamaChatModelConfig, GOllamaChatModelChoice, OllamaChatModelConfigurationSupportService> {
-	
-	/**
-	 * Constructor that initializes the controller with the Ollama chat model configuration class.
-	 */
-	public OllamaChatModelsConfigurationController() {
-		super(GOllamaChatModelConfig.class);
+
+	public OllamaChatModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGChatModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			OllamaChatModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GOllamaChatModelConfig.class, ifaceType);
+		 
 	}
 
 	/**
@@ -95,7 +95,8 @@ public class OllamaChatModelsConfigurationController extends
 	 * 
 	 * @param code The code to search for
 	 * @return The matching Ollama chat model configuration
-	 * @throws GeboPersistenceException If an error occurs during the retrieval process
+	 * @throws GeboPersistenceException If an error occurs during the retrieval
+	 *                                  process
 	 */
 	@GetMapping(value = "findOllamaChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GOllamaChatModelConfig findOllamaChatModelConfigByCode(@RequestParam("code") String code)
@@ -104,14 +105,17 @@ public class OllamaChatModelsConfigurationController extends
 	}
 
 	/**
-	 * Endpoint to retrieve all available Ollama chat models based on the provided configuration.
+	 * Endpoint to retrieve all available Ollama chat models based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration used to filter available models
-	 * @return OperationStatus containing a list of available Ollama chat model choices
+	 * @return OperationStatus containing a list of available Ollama chat model
+	 *         choices
 	 */
 	@PostMapping(value = "getOllamaModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GOllamaChatModelChoice>> getOllamaChatModels(@RequestBody GOllamaChatModelConfig config) {
+	public OperationStatus<List<GOllamaChatModelChoice>> getOllamaChatModels(
+			@RequestBody GOllamaChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
-	
+
 }

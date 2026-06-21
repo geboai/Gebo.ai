@@ -9,6 +9,8 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.HashIndexed;
@@ -92,5 +94,9 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	private String translationOfDocumentCode = null;
 	@HashIndexed
 	private List<String> categoryCodes = null;
+	@HashIndexed
+	private Date publishedDate = null;
+	@HashIndexed
+	private String author = null;
 
 }

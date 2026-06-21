@@ -13,6 +13,8 @@ import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import reactor.core.publisher.Flux;
 
 public interface IStreamingOutputChatPipelineService extends IChatPipelineStepService {
+	public static final String DEFAULT_PIPELINE_SERVICE = "DEFAULT_PIPELINE_SERVICE";
+
 	@Override
 	default StepType getStepType() {
 		return StepType.OUTPUT;
@@ -21,6 +23,6 @@ public interface IStreamingOutputChatPipelineService extends IChatPipelineStepSe
 	public List<StepEnvironmentParameter> getRequiredParameters();
 
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
+			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException, IOException;
 }

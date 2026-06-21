@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.search.model.CatalogueSample;
-import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
@@ -78,7 +77,7 @@ public class DataSourcesCatalogsServiceImpl implements IDataSourcesCatalogsServi
 						}
 					}
 
-				} catch (SearchServiceException e) {
+				} catch (Throwable e) {
 					LOGGER.error("Exception catalogue extractin for: " + messagingModuleId + ":" + messagingSystemId,
 							e);
 				}

@@ -11,22 +11,25 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.ContentAccessPolicy;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.fulltext.model.FullTextSearchMetaDataFilter;
 import ai.gebo.architecture.fulltext.service.FullTextException;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -129,30 +132,38 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
 		// Retrieve default prompt
-		GPromptConfig gprompt = promptsDao.defaultChatPrompt(modelCode, false);
+		GPromptTemplateConfig gprompt = promptsDao.defaultChatPrompt(modelCode, false);
 
 		// Check if prompt is configured
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
 
-			PromptTemplate promptTemplate = null;
-			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
-			Prompt prompt = null;
-			promptTemplate = new PromptTemplate(promptTemplateText);
-
-			prompt = promptTemplate.create();
-
 			LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
+					.getSessionAvailableKnowledgeBases(request);
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
+			List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
+			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+					&& !securityService.isCurrentUserAdmin()) {
+				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
+						.getAllOwnedAclAliases();
+				fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
+				semanticSearchMetaDataFilter.setAclAliases(aclAliases);
+			}
+			fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
+			semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 
-			AIDocumentsSet retrieved = this.ragSearchService.search(request, handler.getContextLength() / 3);
+			AIDocumentsSet retrieved = this.ragSearchService.search(request, semanticSearchMetaDataFilter,
+					fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
-			chatResponse = callChatClient(handler, prompt, kbcontext, request, chatResponse, chatRequestContext,
+			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext,
 					retrieved);
 		}
 
@@ -272,12 +283,25 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 
 		this.chatSessionLifecycleService.ensureChatSessionExists(request);
-
+		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService.getSessionAvailableKnowledgeBases(request);
+		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
+		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
+		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
+		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+				&& !securityService.isCurrentUserAdmin()) {
+			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
+					.getAllOwnedAclAliases();
+			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
+			semanticSearchMetaDataFilter.setAclAliases(aclAliases);
+		}
+		fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
+		semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 		IGConfigurableChatModel handler = this.chatSessionLifecycleService.getSessionChatModel(request);
 		LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		AIDocumentsSet extractedDocuments = ragSearchService.search(request, handler.getContextLength() / 3);
+		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
+				fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
 		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 		response.setDocumentsRef(docrefs);
 		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
@@ -285,10 +309,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		String modelCode = handler != null && handler.getConfig() != null
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
-		GPromptConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
+		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
-		return this.streamChatClient(handler, new Prompt(prompt.getPrompt()), kbcontext, request, response,
-				fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
+		return this.streamChatClient(handler, prompt, Map.of(), kbcontext, request,
+				response, fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
 
 	}
 

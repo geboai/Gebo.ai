@@ -46,6 +46,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -54,29 +55,19 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping("/api/users/ContentController")
+@AllArgsConstructor
 public class ContentController {
 
 	// Logger for debugging and error messages
 	static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
-
-	@Autowired
-	private IGSecurityService securityService; // Service for handling security-related operations
-	@Autowired
-	private DocumentReferenceRepository documentRepository; // Repository for accessing document references
-	@Autowired
-	private IGPersistentObjectManager persistentObjectManager; // Manager for persistent objects
-	@Autowired
-	private IGContentManagementSystemHandlerRepositoryPattern contentsHandlersRepositoryPattern; // Repository pattern
-																									// for content
-																									// management system
-																									// handlers
-
-	/**
-	 * Default constructor.
-	 */
-	public ContentController() {
-
-	}
+	private final IGSecurityService securityService; // Service for handling security-related operations
+	private final DocumentReferenceRepository documentRepository; // Repository for accessing document references
+	private final IGPersistentObjectManager persistentObjectManager; // Manager for persistent objects
+	private final IGContentManagementSystemHandlerRepositoryPattern contentsHandlersRepositoryPattern; // Repository
+																										// pattern
+	// for content
+	// management system
+	// handlers
 
 	/**
 	 * Handles the HTTP GET request to retrieve content.
@@ -147,7 +138,7 @@ public class ContentController {
 				}
 				String fileName = document.getName(); // Get the document's name
 				sentBytes = copyOutput(stream.getInputStream(), response, encoding, stream.getContentType(), fileName,
-						document.getFileSize()); // Copy output to response
+						document.getFileSize() != null ? document.getFileSize() : 0l); // Copy output to response
 
 				// Additional code handling archived documents and absolute paths (commented
 				// out)
@@ -157,9 +148,7 @@ public class ContentController {
 				LOGGER.debug("User:" + userid + " required content:" + contentCode + " served: " + response.getStatus()
 						+ " content type: " + response.getContentType() + " bytes sent: " + sentBytes);
 			}
-		} catch (
-
-		Throwable th) {
+		} catch (Throwable th) {
 			LOGGER.error("Error serving content", th); // Log error if exception occurs
 		}
 	}
@@ -191,7 +180,8 @@ public class ContentController {
 		long _byteLength = 0l;
 
 		if (encoding == null || encoding.trim().length() == 0) {
-			response.setContentLengthLong(byteLength);
+			if (byteLength > 0l)
+				response.setContentLengthLong(byteLength);
 			_byteLength = copy(is, os); // Directly copy the input stream to output stream
 			if (_byteLength != byteLength) {
 				LOGGER.error("Sent size info whas " + byteLength + " but sent " + _byteLength);

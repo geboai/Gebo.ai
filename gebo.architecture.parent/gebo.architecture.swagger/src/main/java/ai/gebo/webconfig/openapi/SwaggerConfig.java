@@ -15,7 +15,6 @@ package ai.gebo.webconfig.openapi;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import ai.gebo.openapi.GeboOpenAITypeDecoration;
 

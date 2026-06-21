@@ -37,11 +37,11 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
     selector: "gebo-ai-anthropic-chat-model-admin-component",
     templateUrl: "gebo-ai-anthropic-chatmodel-admin.component.html",
     standalone: false, providers: [
-        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false },
         {
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAnthropicChatModelAdminComponent),
-        multi: false
-    }]
+            provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAnthropicChatModelAdminComponent),
+            multi: false
+        }]
 })
 export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GAnthropicChatModelConfig> {
     /**
@@ -72,7 +72,9 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
         defaultModelPrompt: new FormControl(),
-        forUses:new FormControl()
+        forUses: new FormControl(),
+        thinking: new FormControl(),
+        maxGeneratedTokens: new FormControl()
     });
 
     /**

@@ -13,7 +13,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { GeboUIActionRoutingService } from "./gebo-ui-action-routing.service";
 import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
 import { DialogModule } from 'primeng/dialog';
 import { GeboUIModalOpenerWrapperComponent } from "./gebo-ui-modal-wrapper.component";
@@ -22,7 +21,12 @@ import { ButtonModule } from "primeng/button";
 import { StepsModule } from 'primeng/steps';
 import { GeboUIEntityFormsLauncherComponent } from "./gebo-ui-entity-forms-launcher.component";
 import { GeboUIModalComponent } from "./gebo-ui-modal.component";
-import {GeboAINotificationsModule} from "../notifications/notifications.module"
+import { GeboAINotificationsModule } from "../notifications/notifications.module";
+import { GeboAIDesktopComponent } from "./desktop/gebo-ai-desktop.component";
+import { MegaMenuModule } from "primeng/megamenu";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { RouterModule } from "@angular/router";
+import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
 
 /**
@@ -50,10 +54,10 @@ import {GeboAINotificationsModule} from "../notifications/notifications.module"
  * - Modal display
  */
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule,GeboAINotificationsModule],
-    providers:[GeboUIActionRoutingService,GeboFormGroupsService],
-    declarations:[GeboUIModalOpenerComponent,GeboUIModalOpenerWrapperComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent],
-    exports:[GeboUIModalOpenerComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent]
+    imports:[CommonModule,ReactiveFormsModule,FormsModule,DialogModule,ButtonModule,StepsModule,GeboAINotificationsModule, MegaMenuModule, ConfirmDialogModule, RouterModule, GeboAIFieldTranslationContainerModule],
+    providers:[GeboFormGroupsService],
+    declarations:[GeboUIModalOpenerComponent,GeboUIModalOpenerWrapperComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent, GeboAIDesktopComponent],
+    exports:[GeboUIModalOpenerComponent,GeboUIEntityFormsLauncherComponent,GeboUIModalComponent, GeboAIDesktopComponent]
 
 })
 export class GeboUIArchitectureModule {}

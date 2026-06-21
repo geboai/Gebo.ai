@@ -2,6 +2,8 @@ package ai.gebo.knowledgebase.impl;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class AclAliasesDaoImpl implements IAclAliasesDao {
+public class AclAliasesDaoImpl implements IAclAliasesDao, ApplicationListener<ContextRefreshedEvent> {
 	private static final String ACL_ENTRY = "aclEntry";
 	final AclEntryRecordRepository repository;
 	final IGMongoSequenceService mongoSequenceService;
@@ -75,5 +77,17 @@ public class AclAliasesDaoImpl implements IAclAliasesDao {
 			AclGrantType grantType) {
 		List<AclEntryRecord> entries = repository.findByAclGrantedUniqueIdInAndGrant(aclGrantedUniqueId, grantType);
 		return entries != null ? entries.stream().map(x -> x.getId()).toList() : List.of();
+	}
+
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		List<GAclEntry> presets = List.of(GAclEntry.EVERYONE_READ_ACCESS, GAclEntry.EVERYONE_WRITE_ACCESS,
+				GAclEntry.EVERYONE_EXECUTE_ACCESS);
+		for (GAclEntry data : presets) {
+			if (findAlias(data) == null) {
+				addAcl(data);
+			}
+		}
+
 	}
 }

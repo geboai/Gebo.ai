@@ -12,7 +12,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GenericOpenAIAPIRankerModelConfig, GenericOpenAiRankerModelsConfigurationControllerService, GenericOpenAIRankerModelTypeConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -28,16 +28,18 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "llms-systems-component",
     templateUrl: "llms-systems.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false },{
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LlmsSystemsComponent")
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {
     chatModels: ConfigurationEntry[] = [];
     embeddingModels: ConfigurationEntry[] = [];
+    rerankerModels: GenericOpenAIAPIRankerModelConfig[] = [];
     chatModelsTypes: GChatModelType[] = [];
-    embeddingModelsTypes: GEmbeddingModelType[] = [];
 
+    embeddingModelsTypes: GEmbeddingModelType[] = [];
+    rerankerModelsTypes: GenericOpenAIRankerModelTypeConfig[] = [];
     /**
      * Overrides the parent method to reload data when the panel needs to refresh
      */
@@ -55,7 +57,8 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      */
     createChoices: FormGroup = new FormGroup({
         chat: new FormControl(),
-        embed: new FormControl()
+        embed: new FormControl(),
+        rerank:new FormControl()
     });
 
     /**
@@ -67,6 +70,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      */
     constructor(private chatModelsControllerService: ChatModelsControllerService,
         private embeddingModelsControllerService: EmbeddingModelsControllersService,
+        private genericOpenAIRerankerService: GenericOpenAiRankerModelsConfigurationControllerService,
         private geboUIActionRouter: GeboUIActionRoutingService) {
         super()
     }
@@ -75,7 +79,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * Configures a new chat model based on the user's selection
      * Creates a new model configuration and routes a NEW action request
      */
-    public configureChatModel() {
+    protected configureChatModel() {
         const formValue = this.createChoices.value;
         const choosedType = this.chatModelsTypes.find(x => x.code === formValue.chat);
         const chatModelConfig: GBaseChatModelConfig = {
@@ -102,7 +106,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * Configures a new embedding model based on the user's selection
      * Creates a new model configuration and routes a NEW action request
      */
-    public configureEmbeddingModel() {
+    protected configureEmbeddingModel() {
         const formValue = this.createChoices.value;
         const choosedType = this.embeddingModelsTypes.find(x => x.code === formValue.embed);
         const modelConfig: GBaseChatModelConfig = {
@@ -123,13 +127,36 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-
+   protected configureRerankerModel() {
+        const formValue = this.createChoices.value;
+        const rerank=formValue.rerank;
+        const found=this.rerankerModelsTypes.find(x=>x.code===rerank);
+         if (found) {
+            let config:GenericOpenAIAPIRankerModelConfig= {
+                description: found.description,
+                baseUrl:found.baseUrl,
+                modelTypeCode: found.code
+            };
+            const entityName = "GenericOpenAIAPIRankerModelConfig";
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.NEW,
+                context: {},
+                contextType: "LLMPage",
+                target: config,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
     /**
      * Opens the edit interface for a chat model configuration
      * 
      * @param model The model configuration entry to edit
      */
-    public editModel(model: ConfigurationEntry) {
+    protected editModel(model: ConfigurationEntry) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -151,7 +178,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * 
      * @param model The model configuration entry to edit
      */
-    public editEmbeddingModel(model: ConfigurationEntry) {
+    protected editEmbeddingModel(model: ConfigurationEntry) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -167,19 +194,34 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-
+    protected editRerankerModel(model:GenericOpenAIAPIRankerModelConfig) {
+        const entityName = "GenericOpenAIAPIRankerModelConfig";
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.OPEN,
+                context: {},
+                contextType: "LLMPage",
+                target: model,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+    }
     /**
      * Loads all required data from the API services using forkJoin to combine multiple requests
      * Updates the component's state with the fetched data upon completion
      */
-    private loadData(): void {
+    protected loadData(): void {
         this.loading = true;
-        forkJoin([this.chatModelsControllerService.getRuntimeConfiguredChatModels(), this.embeddingModelsControllerService.getRuntimeConfiguredEmbeddingModels(), this.chatModelsControllerService.getChatModelTypes(), this.embeddingModelsControllerService.getEmbeddingModelTypes()]).subscribe({
+        forkJoin([this.chatModelsControllerService.getRuntimeConfiguredChatModels(), this.embeddingModelsControllerService.getRuntimeConfiguredEmbeddingModels(), this.chatModelsControllerService.getChatModelTypes(), this.embeddingModelsControllerService.getEmbeddingModelTypes(), this.genericOpenAIRerankerService.getGenericOpenAIRankerModelTypes(),this.genericOpenAIRerankerService.getGenericOpenAIRankerModelConfigs()]).subscribe({
             next: (cfgs) => {
                 this.chatModels = cfgs[0];
                 this.embeddingModels = cfgs[1];
                 this.chatModelsTypes = cfgs[2];
                 this.embeddingModelsTypes = cfgs[3];
+                this.rerankerModelsTypes = cfgs[4];
+                this.rerankerModels=cfgs[5];
             },
             complete: () => {
                 this.loading = false;

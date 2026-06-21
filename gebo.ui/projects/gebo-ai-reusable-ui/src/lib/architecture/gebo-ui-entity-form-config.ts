@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { InjectionToken, Type } from "@angular/core";
 import { BaseEntityEditingComponent } from "../controls/base-entity-editing-component/base-entity-editing.component";
@@ -25,16 +25,18 @@ export interface GeboUIEntityFormConfig {
     /**
      * The name of the entity being configured
      */
-     entityName:string;
+    entityName: string;
+    /** Entity aliases */
+    entityAliases?: string[];
     /**
      * The component type that provides editing functionality for this entity.
      * Must extend BaseEntityEditingComponent for the specific entity type.
      */
-     entityUI:Type<BaseEntityEditingComponent<any>>;
+    entityUI: Type<BaseEntityEditingComponent<any>>;
 };
 
 /**
  * Injection token used to provide entity form configurations in the Angular dependency injection system.
  * This token allows services and components to inject entity form configurations.
  */
-export const GEBO_UI_ENTITY_FORM_TOKEN=new InjectionToken("GeboUIEntityFormConfig");
+export const GEBO_UI_ENTITY_FORM_TOKEN = new InjectionToken("GeboUIEntityFormConfig");

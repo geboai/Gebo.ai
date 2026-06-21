@@ -402,6 +402,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		String url = node.getUrl();
 		GVirtualFolder child = createChildItem(parent, endpoint, code, name, name, url,
 				node.getResourceReferenceMetaInfos());
+		child.setAclAliases(node.getAclAliases());
 		return child;
 	}
 
@@ -512,6 +513,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		childItem.setMessagingModuleId(getMessagingModuleId());
 		childItem.setUri(webUrl);
 		childItem.setCustomMetaInfos(customMap != null ? customMap : new HashMap<String, Object>());
+		
 		return childItem;
 
 	}

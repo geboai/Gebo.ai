@@ -1,0 +1,28 @@
+package ai.gebo.architecture.ai.model;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+public class GPromptTemplateLibraryReference {
+	@NotNull
+	private String description=null;
+	@NotNull
+	private String promptUse = null;
+	@NotNull
+	private ContextContentRequired chatHistory = null;
+	@NotNull
+	private ContextContentRequired contextDocuments = null;
+	@NotNull
+	private ContextContentRequired toolsCalling = null;
+	private String langCode = null;
+	private String modelProvider = null;
+	private String modelCode = null;
+	private Boolean agentPrompt = null;
+	private String agentId = null;
+	@NotNull
+	private String systemReference = null;
+	@NotNull
+	private String userReference = null;
+
+}

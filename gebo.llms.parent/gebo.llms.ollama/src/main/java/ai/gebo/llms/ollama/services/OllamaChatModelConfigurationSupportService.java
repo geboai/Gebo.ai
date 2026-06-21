@@ -12,6 +12,7 @@ package ai.gebo.llms.ollama.services;
 import java.util.List;
 
 import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -90,11 +92,18 @@ public class OllamaChatModelConfigurationSupportService
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
+
+		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
+				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+
+		}
 
 		/**
 		 * Configures and creates an Ollama chat model based on the provided
@@ -106,7 +115,7 @@ public class OllamaChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type)
+		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 			org.springframework.ai.ollama.api.OllamaApi.Builder apiBuilder = OllamaApi.builder();
 			apiBuilder.baseUrl(config.getBaseUrl());
@@ -128,7 +137,18 @@ public class OllamaChatModelConfigurationSupportService
 			if (config.getTemperature() != null && config.getTemperature() > 0) {
 				builder = builder.temperature(config.getTemperature());
 			}
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case NO_THINKING: {
+					builder.disableThinking();
+				}
+					break;
+				default: {
+					builder.enableThinking();
+				}
+				}
 
+			}
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
@@ -139,8 +159,14 @@ public class OllamaChatModelConfigurationSupportService
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
+			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
+				 
+				builder.internalToolExecutionEnabled(true);
+			}
+			
 			OllamaChatOptions options = builder.build();
-			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, functionsRepo.createToolCallingManager(),
+			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager(),
 					ObservationRegistry.create(), ModelManagementOptions.defaults());
 			return model;
 		}
@@ -154,14 +180,22 @@ public class OllamaChatModelConfigurationSupportService
 		public boolean isSupportsFunctionsCall() {
 			return true;
 		}
+
 		@Override
 		public boolean isApplyThinkingMarkupHandling() {
-			
+
 			return true;
 		}
+
 		@Override
 		public <T> BeanOutputConverter<T> createConverter(Class<T> type) {
 			return new ThinkTagSkippingOutputConverter<T>(type);
+		}
+
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new OllamaConfigurableChatModel(rendererFactory, toolCallbacksRepository);
 		}
 	};
 
@@ -186,7 +220,8 @@ public class OllamaChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GOllamaChatModelConfig> create(GOllamaChatModelConfig config)
 			throws LLMConfigException {
-		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel();
+		OllamaConfigurableChatModel model = new OllamaConfigurableChatModel(documentContentRenderProvider,
+				functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}

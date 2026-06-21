@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.controllers;
 
@@ -25,35 +22,28 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.OperationStatus;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  *
- * Abstract class providing CRUD operations for embedding model configurations. 
- * Supports insertion, updating, deletion, and retrieval of embedding model 
+ * Abstract class providing CRUD operations for embedding model configurations.
+ * Supports insertion, updating, deletion, and retrieval of embedding model
  * configurations and their runtime configurations.
  *
- * @param <EmbeddingModelConfigType> The type of the embedding model configuration.
- * @param <ModelChoice> The type of the model choice.
+ * @param <EmbeddingModelConfigType> The type of the embedding model
+ *                                   configuration.
+ * @param <ModelChoice>              The type of the model choice.
  */
+@AllArgsConstructor
 public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<EmbeddingModelConfigType extends GBaseEmbeddingModelConfig, ModelChoice extends GBaseEmbeddingModelChoice> {
-	Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	protected IGPersistentObjectManager persistentObjectManager;
+	protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	protected IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
-	
-	protected Class<EmbeddingModelConfigType> type;
+	protected final IGPersistentObjectManager persistentObjectManager;
 
-	/**
-	 * Constructor for initializing the controller with a specific type.
-	 * @param type The class type of the embedding model configuration.
-	 */
-	public AbstractBaseEmbeddingModelsConfigurationCRUDController(Class<EmbeddingModelConfigType> type) {
-		this.type = type;
-	}
+	protected final IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao;
+
+	protected final Class<EmbeddingModelConfigType> type;
 
 	/**
 	 * Inserts a new embedding model configuration. Handles default model setting
@@ -130,8 +120,8 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	}
 
 	/**
-	 * Handles the assignment of default model configuration. If a new default
-	 * model is set, updates other model configurations to not be default.
+	 * Handles the assignment of default model configuration. If a new default model
+	 * is set, updates other model configurations to not be default.
 	 *
 	 * @param config The configuration potentially marked as default.
 	 * @throws GeboPersistenceException If there are persistence errors.
@@ -164,7 +154,7 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 	}
 
 	/**
-	 * Abstract method to get model choices based on the given type. Must be 
+	 * Abstract method to get model choices based on the given type. Must be
 	 * implemented by subclasses.
 	 *
 	 * @param type The configuration type to get model choices for.

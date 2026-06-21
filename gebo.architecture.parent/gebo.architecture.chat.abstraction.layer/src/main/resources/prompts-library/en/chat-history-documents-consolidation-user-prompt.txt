@@ -1,0 +1,8 @@
+TASK
+Given:
+A) CHAT CONTEXT:
+- Last User question:
+ {question}
+
+B) INPUT DOCUMENTS
+{documents}

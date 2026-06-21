@@ -59,6 +59,7 @@ public class GeboRestResponseStatusExceptionResolver extends AbstractHandlerExce
 		GUserMessage message = GUserMessage
 				.errorMessage("Exception happened in backend, please report to your IT manager", ex);
 		try {
+			
 			// Convert GUserMessage into a JSON string for the response header
 			String header = mapper.writeValueAsString(message);
 			response.setHeader("geboCustomError", header);

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.mistralai.controllers;
 
@@ -25,18 +22,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.controllers.BaseEmbeddingModelsConfigurationController;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
 import ai.gebo.llms.mistralai.services.MistralEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 
 /**
- * AI generated comments
- * Controller responsible for managing MistralAI embedding model configurations.
- * This controller provides endpoints for CRUD operations on MistralAI embedding model configurations.
- * It is only activated when the MistralAI integration is enabled in the application properties.
- * Access to these endpoints is restricted to users with the ADMIN role.
+ * AI generated comments Controller responsible for managing MistralAI embedding
+ * model configurations. This controller provides endpoints for CRUD operations
+ * on MistralAI embedding model configurations. It is only activated when the
+ * MistralAI integration is enabled in the application properties. Access to
+ * these endpoints is restricted to users with the ADMIN role.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @RestController
@@ -45,11 +44,10 @@ import ai.gebo.model.OperationStatus;
 public class MistralAIEmbeddingModelsConfigurationController extends
 		BaseEmbeddingModelsConfigurationController<GMistralEmbeddingModelConfig, GMistralEmbeddingModelChoice, MistralEmbeddingModelConfigurationSupportService> {
 
-	/**
-	 * Constructor that initializes the controller with GMistralEmbeddingModelConfig class.
-	 */
-	public MistralAIEmbeddingModelsConfigurationController() {
-		super(GMistralEmbeddingModelConfig.class);
+	public MistralAIEmbeddingModelsConfigurationController(IGPersistentObjectManager persistentObjectManager,
+			IGEmbeddingModelRuntimeConfigurationDao modelRuntimeConfigurationDao,
+			MistralEmbeddingModelConfigurationSupportService ifaceType) {
+		super(persistentObjectManager, modelRuntimeConfigurationDao, GMistralEmbeddingModelConfig.class, ifaceType);
 	}
 
 	/**
@@ -85,7 +83,8 @@ public class MistralAIEmbeddingModelsConfigurationController extends
 	 * @return An OperationStatus containing a Boolean indicating success or failure
 	 */
 	@PostMapping(value = "deleteMistralAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> deleteMistralAIEmbeddingModelConfig(@RequestBody GMistralEmbeddingModelConfig config) {
+	public OperationStatus<Boolean> deleteMistralAIEmbeddingModelConfig(
+			@RequestBody GMistralEmbeddingModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -95,7 +94,8 @@ public class MistralAIEmbeddingModelsConfigurationController extends
 	 * 
 	 * @param code The code of the configuration to find
 	 * @return The matching MistralAI embedding model configuration
-	 * @throws GeboPersistenceException If the configuration cannot be found or another persistence error occurs
+	 * @throws GeboPersistenceException If the configuration cannot be found or
+	 *                                  another persistence error occurs
 	 */
 	@GetMapping(value = "findMistralAIEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GMistralEmbeddingModelConfig findMistralAIEmbeddingModelConfigByCode(@RequestParam("code") String code)
@@ -104,10 +104,12 @@ public class MistralAIEmbeddingModelsConfigurationController extends
 	}
 
 	/**
-	 * Endpoint to retrieve available MistralAI embedding models based on a configuration.
+	 * Endpoint to retrieve available MistralAI embedding models based on a
+	 * configuration.
 	 * 
 	 * @param config The configuration used to filter available embedding models
-	 * @return An OperationStatus containing a list of available MistralAI embedding model choices
+	 * @return An OperationStatus containing a list of available MistralAI embedding
+	 *         model choices
 	 */
 	@PostMapping(value = "getMistralAIEmbeddingModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GMistralEmbeddingModelChoice>> getMistralAIEmbeddingModels(

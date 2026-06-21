@@ -17,4 +17,8 @@ export interface LLMSSetupConfigurationData {
     embeddingModelExists?: boolean;
     defaultChatModelExists?: boolean;
     internalServicesChatModelExists?: boolean;
+    rankerModelExists?: boolean;
+    imagesModelExists?: boolean;
+    ttsModelExists?: boolean;
+    transcriptModelExists?: boolean;
 }

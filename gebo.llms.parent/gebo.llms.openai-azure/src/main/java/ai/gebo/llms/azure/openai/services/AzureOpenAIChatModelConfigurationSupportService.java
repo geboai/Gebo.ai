@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
 
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -82,13 +83,18 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final AzureOpenAIConfigFactory azureClientBuilderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final IGDocumentContentRendererProvider documentContentRenderProvider;
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
 	 * the creation and configuration of OpenAI chat models.
 	 */
 	class AzureOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAzureOpenAIChatModelConfig, AzureOpenAiChatModel> {
+
+		public AzureOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory, IGToolCallbackSourceRepositoryPattern toolCallbacksRepository) {
+			super(rendererFactory, toolCallbacksRepository);
+			 
+		    }
 
 		/**
 		 * Configures the OpenAI chat model based on the provided configuration.
@@ -99,7 +105,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected AzureOpenAiChatModel configureModel(GAzureOpenAIChatModelConfig config, GChatModelType type)
+		protected AzureOpenAiChatModel configureModel(GAzureOpenAIChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
 				throws LLMConfigException {
 
 			AzureOpenAIBaseConfig coords = azureClientBuilderFactory.createClientBulder(config);
@@ -125,8 +131,30 @@ public class AzureOpenAIChatModelConfigurationSupportService
 				builder = builder.toolNames(new HashSet<String>(names));
 
 			}
+			builder.internalToolExecutionEnabled(
+					config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty());
 			AzureOpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
+			if (config.getThinking() != null) {
+				switch (config.getThinking()) {
+				case LOW_THINKING: {
+					builder.reasoningEffort("low");
+				}
+					break;
+				case MEDIUM_THINKING: {
+					builder.reasoningEffort("medium");
+				}
+					break;
+				case HIGH_THINKING: {
+					builder.reasoningEffort("high");
+				}
+					break;
+				}
+			}
+			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
+				builder.maxTokens(config.getMaxGeneratedTokens());				
+			}
+			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
+					: functionsRepo.createToolCallingManager();
 
 			AzureOpenAiChatModel model = new AzureOpenAiChatModel(clientBuilder, options, toolCallingManager,
 					ObservationRegistry.NOOP);
@@ -175,6 +203,12 @@ public class AzureOpenAIChatModelConfigurationSupportService
 			return false;
 		}
 
+		@Override
+		protected IGConfigurableChatModel cloneMeWithInjection() {
+			 
+			return new AzureOpenAIConfigurableChatModel(rendererFactory, toolCallbacksRepository);
+		}
+
 	};
 
 	 
@@ -199,7 +233,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	@Override
 	public IGConfigurableChatModel<GAzureOpenAIChatModelConfig> create(GAzureOpenAIChatModelConfig config)
 			throws LLMConfigException {
-		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel();
+		AzureOpenAIConfigurableChatModel model = new AzureOpenAIConfigurableChatModel(documentContentRenderProvider, functionsRepo);
 		model.initialize(config, type);
 		return model;
 	}
