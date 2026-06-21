@@ -15,13 +15,15 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-regolo.ai
           doModelsLookup: true
           choices:
+            - code: qwen3.5-122b
+              uses: CHAT
+              defaultChoice: true
             - code: deepseek-r1-70b
               description: DeepSeek R1 70b
               uses: CHAT
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
-              defaultChoice: true
             - code: Llama-3.3-70B-Instruct
               description: Meta LLama 3.3 70b instruct
               uses: CHAT
@@ -65,11 +67,11 @@ ai.gebo.llms.vendors.setup.config:
               description: Gpt 4o
               contextWindow: 128000
               uses: CHAT
-              defaultChoice: true
             - code: gpt-4.1
               description: Gpt 4.1
               contextWindow: 1000000
               uses: CHAT
+              defaultChoice: true
             - code: gpt-5
               description: Gpt 5
               contextWindow: 400000
