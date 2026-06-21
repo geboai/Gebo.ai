@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.model.MinimalChatContextCacheItem;
 import ai.gebo.llms.chat.abstraction.layer.model.TokensContainer;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatFullSessionStateRepository;
@@ -92,6 +93,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		Optional<ShrinkedChatSessionState> s = this.shrinkedStateRepository.findById(sessionCode);
 		if (f.isPresent()) {
 			full = f.get();
+
 			if (s.isPresent()) {
 				oldVersion = s.get();
 
@@ -112,9 +114,12 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 						.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 				if (usedChatModel == null)
 					throw new LLMConfigException("No Internal services or default chat model present");
+				IChatRequestContext shrinkRequestContext = full
+						.createChatRequestResources(LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET)
+						.createChatRequestContext();
 				out.setChatHistory(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
 						this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(),
-						oldVersion != null ? oldVersion.getChatHistory() : null, null, usedChatModel));
+						oldVersion != null ? oldVersion.getChatHistory() : null, shrinkRequestContext, usedChatModel));
 				this.minimalChatContextCacheItemRepository.deleteByUserChatContextCode(out.getUserChatContextCode());
 				MinimalChatContext minimalChatContext = new MinimalChatContext();
 				minimalChatContext.setChatHistory(out.getChatHistory());

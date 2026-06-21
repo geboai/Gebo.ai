@@ -33,7 +33,7 @@ public class GeboChatConfigs {
 	// List of context window length range settings for different strategies
 	private List<ContextWindowLengthRangeSettings> ranges = new ArrayList<ContextWindowLengthRangeSettings>();
 
-	private int leaveLastInteractionsOnHistoryConsolidation = 4;
+	private int leaveLastInteractionsOnHistoryConsolidation = 8;
 	private float historicDocumentRelevancyThreashold = 0.4f;
 	
 
