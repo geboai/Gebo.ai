@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
@@ -49,6 +51,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GChatStorageAreaServiceImpl.class);
 	final IGGeboConfigService configurationService;
 	final UserUploadContentServerSideRepository uploadContentsRepository;
 	final GUserChatSessionRepository userChatContextRepository;
@@ -185,8 +188,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 			try {
 				Files.deleteIfExists(x);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Error deleting session content file " + x, e);
 			}
 		});
 		Files.deleteIfExists(path);
@@ -238,7 +240,9 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				deleteUploadedFile(userUploadContentServerSide);
 				list.add(new UserUploadedContent(userUploadContentServerSide));
 			} catch (Throwable t) {
-
+				LOGGER.error("Error deleting uploaded content "
+						+ (userUploadContentServerSide != null ? userUploadContentServerSide.getCode() : "Null object"),
+						t);
 			}
 		}
 		OperationStatus<List<UserUploadedContent>> status = OperationStatus.of(list.isEmpty() ? null : list);

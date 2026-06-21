@@ -212,6 +212,7 @@ public class DefaultPipelineStreamingPureSearchPipelineStepServiceImpl extends B
 							}
 						}
 					} catch (Throwable th) {
+						LOGGER.error("Error ranking search results, falling back to truncated entries", th);
 						List<AbstractPureSearchDocumentResultEntry> trunked = container.subList(0, globalK);
 						rankedEntries.addAll(trunked);
 					}

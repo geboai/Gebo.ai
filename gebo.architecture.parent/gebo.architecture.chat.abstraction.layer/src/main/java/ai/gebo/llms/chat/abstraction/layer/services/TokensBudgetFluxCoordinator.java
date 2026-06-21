@@ -71,6 +71,7 @@ public class TokensBudgetFluxCoordinator {
 								emitter.notifyUser(UUID.randomUUID().toString(),
 										"Analyzing " + input.size() + " documents", null, 3000l, NotificationType.INFO);
 							} catch (Throwable th) {
+								LOGGER.error("Error notifying user about documents analysis start", th);
 							}
 							T result = generative.iterateCumulation(initialValue, emitter, input);
 							if (LOGGER.isDebugEnabled()) {
@@ -80,6 +81,7 @@ public class TokensBudgetFluxCoordinator {
 								emitter.notifyUser(UUID.randomUUID().toString(),
 										"Analyzed " + input.size() + " documents!", null, 3000l, NotificationType.INFO);
 							} catch (Throwable th) {
+								LOGGER.error("Error notifying user about documents analysis completion", th);
 							}
 							if (isEndOfProcessingCondition != null && isEndOfProcessingCondition.test(result)) {
 								endOfProcessing.set(true);
@@ -111,6 +113,7 @@ public class TokensBudgetFluxCoordinator {
 									"Aggregating " + IntermediateResult.size() + " analisys", null, 3000l,
 									NotificationType.INFO);
 						} catch (Throwable th) {
+							LOGGER.error("Error notifying user about analisys aggregation start", th);
 						}
 						finalResult = finalWork.iterateCumulation(IntermediateResult, emitter);
 						try {
@@ -118,6 +121,7 @@ public class TokensBudgetFluxCoordinator {
 									"Aggregated " + IntermediateResult.size() + " analisys!", null, 3000l,
 									NotificationType.INFO);
 						} catch (Throwable th) {
+							LOGGER.error("Error notifying user about analisys aggregation completion", th);
 						}
 					}
 					if (LOGGER.isDebugEnabled()) {

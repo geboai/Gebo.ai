@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,6 +27,7 @@ import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 
 public final class RoutingPromptUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RoutingPromptUtil.class);
 	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private static String formatParameters(String inputSchema) {
@@ -68,6 +72,7 @@ public final class RoutingPromptUtil {
 			}
 			return sb.toString();
 		} catch (Exception e) {
+			LOGGER.error("Error formatting tool parameters schema, falling back to raw schema", e);
 			return "TOOL_PARAMETERS: " + inputSchema + "\n";
 		}
 	}

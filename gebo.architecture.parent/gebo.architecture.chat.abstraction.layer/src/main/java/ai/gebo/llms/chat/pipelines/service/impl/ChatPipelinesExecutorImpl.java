@@ -192,6 +192,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 				return new StreamingLastStep(runtimeData, nextStep, null);
 			});
 		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic())).onErrorResume(th -> {
+			LOGGER.error("Exception while streaming chat pipeline", th);
 			GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
 
 			return Mono.just(new StreamingLastStep(null, null, errorMessage));
@@ -225,6 +226,7 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 						+ " is not a streaming one");
 
 			} catch (Throwable th) {
+				LOGGER.error("Exception while streaming chat pipeline", th);
 				GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
 
 				return Flux.just(new GeboChatMessageEnvelope(errorMessage));

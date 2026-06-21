@@ -169,7 +169,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			this.chatAreaStorageSession.deleteSessionContents(code);
 		} catch (IOException e) {
-
+			LOGGER.error("Error deleting session contents for " + code, e);
 		}
 		this.sessionRepository.deleteById(code);
 	}

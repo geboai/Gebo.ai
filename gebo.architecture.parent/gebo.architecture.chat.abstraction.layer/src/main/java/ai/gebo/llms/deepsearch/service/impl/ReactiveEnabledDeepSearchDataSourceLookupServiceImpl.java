@@ -36,8 +36,7 @@ public class ReactiveEnabledDeepSearchDataSourceLookupServiceImpl implements IGR
 					out.add(service);
 				}
 			} catch (SearchServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error("Exception checking if deep search data source is enabled", e);
 			}
 		}
 		return out;

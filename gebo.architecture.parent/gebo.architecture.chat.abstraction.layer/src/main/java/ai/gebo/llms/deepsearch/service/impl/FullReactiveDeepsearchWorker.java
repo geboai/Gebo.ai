@@ -152,6 +152,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
 								perDataSourceK, sampleTextTokensSize, chunkSessionId);
 					} catch (Throwable e) {
+						LOGGER.error("Error running search on " + (handler != null ? handler.getHandlerId() : "Null handler"),
+								e);
 						PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
 								GUserMessage.warnMessage("Error running search", e.getMessage()));
 						return Flux.just((AbstractPureSearchDocumentResultEntry) error);
@@ -169,6 +171,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						return this.internalKnowledgeBaseDeepSearchService.streamPureSearch(minimalChatContext, emitter,
 								serviceModel, serviceModel, chunkSessionId, perDataSourceK, sampleTextTokensSize);
 					} catch (Throwable e) {
+						LOGGER.error("Error running search on internal Knowledge Base", e);
 						PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
 								GUserMessage.warnMessage("Error running search", e.getMessage()));
 						return Flux.just((AbstractPureSearchDocumentResultEntry) error);
@@ -285,7 +288,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 									return doc;
 								}).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 					} catch (Throwable e) {
-
+						LOGGER.error("Error streaming documents to analyze", e);
 						return Flux.empty();
 					}
 				});
@@ -320,6 +323,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					sinkUIEmitter.notifyUser("search-failed", "Cannot find documents to analyze", PI_PI_FILE, 3000l,
 							NotificationType.INFO);
 				} catch (Throwable th) {
+					LOGGER.error("Error notifying user about missing documents", th);
 				}
 				Map<String, Object> params = new HashMap<>(commonParams);
 				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
@@ -363,6 +367,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 								sinkUIEmitter.notifyUser(STREAMING_RESULTS, GENERATING_ANALISYS, PI_PI_FILE, 3000l,
 										NotificationType.INFO);
 							} catch (Throwable th) {
+								LOGGER.error("Error notifying user about analisys generation", th);
 							}
 							Map<String, Object> params = new HashMap<>(commonParams);
 							params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
@@ -422,6 +427,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							sinkUIEmitter.notifyUser("aggregate-multple-src", "Finalizing multiple sources analisys",
 									PI_PI_FILE, 3000l, NotificationType.INFO);
 						} catch (Throwable th) {
+							LOGGER.error("Error notifying user about multiple sources finalization", th);
 						}
 						Map<String, Object> params = new HashMap<>(commonParams);
 						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
@@ -487,6 +493,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						try {
 							this.chunkingService.disposeChunkingSession(chunkSessionId);
 						} catch (Throwable th) {
+							LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
 						}
 					});
 				});
@@ -520,7 +527,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					AIDocumentsSet aiDoc = runtimeData.getRequestResources().allDocuments();
 					return Flux.fromIterable(aiDoc.aiDocumentsList());
 				} catch (Throwable e) {
-
+					LOGGER.error("Error streaming selected documents to analyze", e);
 					return Flux.empty();
 				}
 			});
@@ -580,6 +587,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				try {
 					this.chunkingService.disposeChunkingSession(chunkSessionId);
 				} catch (Throwable th) {
+					LOGGER.error("Error disposing chunking session " + chunkSessionId, th);
 				}
 
 				try {

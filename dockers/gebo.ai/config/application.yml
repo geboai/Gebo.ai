@@ -274,6 +274,7 @@ ai.gebo.opensearch:
     password: dothesearch1973-Advanced		
 
 ai.gebo.agents.standard.enabled: true		
+ai.gebo.chatpipes.defaultPipelineStepIsChatAgent: false
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

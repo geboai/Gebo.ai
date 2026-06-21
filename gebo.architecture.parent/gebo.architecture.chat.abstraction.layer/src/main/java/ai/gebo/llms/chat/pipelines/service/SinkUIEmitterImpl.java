@@ -4,10 +4,14 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationCon
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Sinks;
 
 @AllArgsConstructor
 public class SinkUIEmitterImpl implements ISinkUIEmitter {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SinkUIEmitterImpl.class);
 
 	private final Sinks.Many<GeboChatMessageEnvelope> sink;
 
@@ -19,6 +23,7 @@ public class SinkUIEmitterImpl implements ISinkUIEmitter {
 
 	@Override
 	public void error(Throwable error) {
+		LOGGER.error("Emitting error to the chat UI sink", error);
 		sink.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST);
 
 	}

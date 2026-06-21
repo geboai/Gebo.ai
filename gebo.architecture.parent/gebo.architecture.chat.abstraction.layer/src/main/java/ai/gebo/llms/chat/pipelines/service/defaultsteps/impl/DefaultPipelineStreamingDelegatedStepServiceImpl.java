@@ -76,11 +76,12 @@ public class DefaultPipelineStreamingDelegatedStepServiceImpl implements IStream
 				try {
 					sessionLifecycleService.endRequest(request, runtimeData.getChatResponse());
 				} catch (Throwable e) {
+					LOGGER.error("Error ending request", e);
 				}
 				try {
 					sessionLifecycleService.chatRequestCompleted(request, chatModel);
 				} catch (Throwable e) {
-
+					LOGGER.error("Error completing request", e);
 				}
 
 			});

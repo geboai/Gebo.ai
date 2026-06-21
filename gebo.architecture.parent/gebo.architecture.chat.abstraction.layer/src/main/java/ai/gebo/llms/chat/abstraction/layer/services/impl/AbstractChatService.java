@@ -189,7 +189,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			return composeFlux(res, context, request, response, chatRequestContext.getToolsContext(),
 					chatHistoryConsolidation, historySizeTarget, configurableChatModel, showedDocuments);
 		} catch (Throwable th) {
-			LOGGER.error("", th);
+			LOGGER.error("Error while streaming chat respose", th);
 			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", th);
 			return Flux.just(new GeboChatMessageEnvelope(userMessage))
 					.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);

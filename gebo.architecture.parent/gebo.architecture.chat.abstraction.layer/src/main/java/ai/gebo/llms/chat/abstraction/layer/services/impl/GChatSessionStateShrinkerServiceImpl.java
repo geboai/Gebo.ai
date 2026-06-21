@@ -385,11 +385,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 	}
 
 	private CSSConsolidatedChatHistory consolidateHistory(CSSSimplifiedChatHistory value, int historySizeTarget,
-			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,IChatRequestContext context,
-			IGConfigurableChatModel usedChatModel) throws LLMConfigException {
+			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,
+			IChatRequestContext context, IGConfigurableChatModel usedChatModel) throws LLMConfigException {
 		List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
 		GPromptTemplateConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
-		
 
 		String existingSummary = oldVersion != null && oldVersion.getConsolidationText() != null
 				? oldVersion.getConsolidationText()
@@ -420,7 +419,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			}
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put(HISTORY_SIZE_TARGET, "" + historySizeTarget);
-			String consolidated = callLLMConsolidateText(usedChatModel, _prompt,context, existingSummary, params, inputs);
+			String consolidated = callLLMConsolidateText(usedChatModel, _prompt, context, existingSummary, params,
+					inputs);
 
 			newConsolidation.setConsolidationText(consolidated);
 			newConsolidation.setLastInteractionPointer(lastIndex);
@@ -451,12 +451,13 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		return out;
 	}
 
-	private MinimalChatContext doShrinking(String sessionCode, MinimalChatContext mc, int tokensBudget) throws LLMConfigException {
+	private MinimalChatContext doShrinking(String sessionCode, MinimalChatContext mc, int tokensBudget)
+			throws LLMConfigException {
 
 		IGConfigurableChatModel serviceModel = this.chatModelsConfigDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		CSSConsolidatedChatHistory consolidated = this.consolidateHistory(mc.getChatHistory().getLatestEntries(),
-				tokensBudget, 0, mc.getChatHistory(), null, serviceModel);
+				tokensBudget, 0, mc.getChatHistory(), mc.createChatRequestContext(), serviceModel);
 		MinimalChatContext newMinimized = new MinimalChatContext();
 		newMinimized.setChatHistory(consolidated);
 		MinimalChatContextCacheItem item = new MinimalChatContextCacheItem();
@@ -465,7 +466,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				.get(mc.getChatHistory().getLatestEntries().getInteractions().size() - 1).getRequestId());
 		item.setUserChatContextCode(sessionCode);
 		item.recalculateId();
-		this.minimalChatContextCacheItemRepository.save(item); 
+		this.minimalChatContextCacheItemRepository.save(item);
 		return newMinimized;
 	}
 
