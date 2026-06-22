@@ -31,8 +31,9 @@ public class GReactiveChatAgentsNetworkService
 
 	@Override
 	protected <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental) {
-
-		return null;
+		// Streaming partials are emitted to the reactive flux; the returned value is the
+		// final envelope, so the latest non-null output wins.
+		return incremental != null ? incremental : actualOutput;
 	}
 
 	@Override
