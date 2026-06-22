@@ -163,6 +163,36 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	}
 
 	/**
+	 * Backup rendering strategy for a parameter that has no dedicated
+	 * {@link IGDocumentContentRenderer}: falls back to {@link Object#toString()}.
+	 * If the actual runtime class of the parameter does not directly implement
+	 * {@code toString()} (i.e. it would expose the default {@link Object} rendering),
+	 * a warning is logged so such cases can be spotted and given a proper renderer.
+	 *
+	 * @param object the parameter to render; may be {@code null}.
+	 * @return the {@code toString()} representation, or an empty string when {@code null}.
+	 */
+	protected String genericRender(Object object) {
+		if (object == null) {
+			return "";
+		}
+		Class<?> actualClass = object.getClass();
+		if (!directlyImplementsToString(actualClass)) {
+			LOGGER.warn("The class {} does not directy implement the toString() method", actualClass.getName());
+		}
+		return object.toString();
+	}
+
+	private static boolean directlyImplementsToString(Class<?> type) {
+		try {
+			type.getDeclaredMethod("toString");
+			return true;
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Tells whether the given prompt declares the supplied {placeholder} token.
 	 * Used to gate the computation/population of template params (including the
 	 * structured-output {@value #FORMAT_TEMPLATE_PARAM} placeholder) so that
@@ -210,6 +240,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 			buffer.append(NEWLINE);
 			for (Entry<String, List<AgentProducedSessionContribution>> entry : contributions.entrySet()) {
 				buffer.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
+				buffer.append(entry.getKey());
 				buffer.append(NEWLINE);
 				for (AgentProducedSessionContribution contribution : entry.getValue()) {
 					Object data = contribution.getData();
@@ -218,10 +249,12 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 					IGDocumentContentRenderer<Object> renderer = rendererFactory.get(data);
 					String rendered = null;
 					if (renderer == null) {
-						rendered = data.toString();
+						rendered = genericRender(data);
 					} else {
 						rendered = renderer.render(data);
 					}
+					buffer.append(rendered);
+					buffer.append(NEWLINE);
 				}
 				buffer.append(END_AGENT_CONTEXT_CONTRIBUTION);
 				buffer.append(NEWLINE);
@@ -271,7 +304,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 		String outputAsString = null;
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(output);
 		if (renderer == null) {
-			outputAsString = output.toString();
+			outputAsString = genericRender(output);
 		} else {
 			outputAsString = renderer.render(output);
 		}
@@ -285,7 +318,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 		String inputAsString = null;
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(payload);
 		if (renderer == null) {
-			inputAsString = payload.toString();
+			inputAsString = genericRender(payload);
 		} else {
 			inputAsString = renderer.render(payload);
 		}
@@ -305,7 +338,7 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 		String inputAsString = null;
 		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(payload);
 		if (renderer == null) {
-			inputAsString = payload.toString();
+			inputAsString = genericRender(payload);
 		} else {
 			inputAsString = renderer.render(payload);
 		}
