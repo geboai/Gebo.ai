@@ -63,7 +63,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 		CallsResult<OutputType> iterationResult = null;
 		try {
-			iterationResult = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session,
+			iterationResult = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
 					inputRuntime, inputMessage, outputType, runAs);
 			while (iterationResult != null && iterationResult.getDeliveryOrder() != null
 					&& !iterationResult.getDeliveryOrder().isEmpty()) {
@@ -71,7 +71,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						iterationResult.getOutput());
 				for (List<AgentsExchangeMessage<?>> group : iterationResult.getDeliveryOrder().values()) {
 					CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
-							network, agentsDao, session, group, outputType, runAs);
+							agentsDao, session, group, outputType, runAs);
 					levelResult = join(levelResult, rowResult);
 				}
 				iterationResult = levelResult;
@@ -112,7 +112,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	protected <InputType, OutputType> CallsResult<OutputType> executeNetworkLoops(
-			IChatRequestContext chatRequestContext, GAgentsNetwork network, INotificationSink notificationSink,
+			IChatRequestContext chatRequestContext, INotificationSink notificationSink,
 			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session,
 			RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType,
 			ReactiveIdentityUtil runAs)
@@ -166,7 +166,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
-			INotificationSink notificationSink, GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, IGAgentsNetworkRuntimeDao agentsDao,
 			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup,
 			Class<OutputType> outputType, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
@@ -176,7 +176,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		if (executionGroup.size() == 1) {
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
-			out = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session, agentRuntime,
+			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime,
 					msg, outputType, runAs);
 		} else {
 			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
@@ -186,11 +186,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					try {
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
-								return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao,
+								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao,
 										session, agent, msg, outputType, runAs);
 							});
 						else
-							return executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao,
+							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao,
 									session, agent, msg, outputType, runAs);
 					} catch (Throwable e) {
 
