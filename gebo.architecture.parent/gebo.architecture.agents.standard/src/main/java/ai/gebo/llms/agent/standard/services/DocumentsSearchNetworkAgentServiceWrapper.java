@@ -76,6 +76,7 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
 		final List<SearchResult> results = new ArrayList<>();
+		final List<String> keywords = new ArrayList<>();
 		try {
 			// LLM-assisted query extraction using the wrapped service's queries-generation
 			// prompt, fed with the agent placeholder params.
@@ -85,6 +86,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 					chatRequestContext, params, DeepSearchDataSourceExtractedSearchQueries.class);
 			if (extracted != null && extracted.getSearchQuery() != null) {
 				for (SearchQuery query : extracted.getSearchQuery()) {
+					if (query.getRelevantKeywords() != null) {
+						keywords.addAll(query.getRelevantKeywords());
+					}
 					for (SearchableSystemMetaData system : wrappedSearchService.getSearchableSystems()) {
 						results.addAll(wrappedSearchService.search(query, system, topK));
 					}
@@ -93,7 +97,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 		} catch (LLMConfigException | IOException | SearchServiceException e) {
 			throw new AgentException("Error executing search agent " + getId(), e);
 		}
-		return maybeRank(chunkToDocuments(results), command);
+		// Prefer the LLM-generated relevant keywords; fall back to the command text.
+		final List<String> matchingKeywords = keywords.isEmpty() ? keywordsFromCommand(command) : keywords;
+		return maybeRank(chunkToDocuments(results, agentModel, command, matchingKeywords), command);
 	}
 
 }

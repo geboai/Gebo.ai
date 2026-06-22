@@ -98,7 +98,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		} catch (LLMConfigException | IOException | SearchServiceException e) {
 			throw new AgentException("Error executing native search agent " + getId(), e);
 		}
-		return maybeRank(chunkToDocuments(results), command);
+		// The native query object is provider-specific, so derive relevance keywords from
+		// the command text.
+		final List<String> keywords = keywordsFromCommand(command);
+		return maybeRank(chunkToDocuments(results, agentModel, command, keywords), command);
 	}
 
 }
