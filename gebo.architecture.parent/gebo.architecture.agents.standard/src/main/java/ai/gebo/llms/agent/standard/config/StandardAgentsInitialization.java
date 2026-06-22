@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ChatAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
+import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.DocumentsSearchNetworkAgentServiceWrapper;
 import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAgentService;
@@ -65,6 +66,7 @@ public class StandardAgentsInitialization {
 	public static final String INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER = "internalKnowledgeBaseSearch";
 	private static final String REPORTER_AGENT_DESCRIPTION = "Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer";
 	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Agent's network controller and coordinator";
+	private static final String INPUT_ADAPTER_DESCRIPTION = "Input adapter extracting the user query from the chat runtime data";
 	private static final String EVIDENCES_SEARCHER_AGENT = "EVIDENCES_SEARCHER_AGENT";
 	private static final String REPORT_WRITER_AGENT = "REPORT_WRITER_AGENT";
 	private static final String SUPERVISOR_AGENT = "SUPERVISOR_AGENT";
@@ -191,9 +193,18 @@ public class StandardAgentsInitialization {
 			}
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
+		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String and
+		// forwards it to the String-input controller.
+		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
+		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
+		inputAdapterParticipant.setAgentConfigCode(inputAdapter.getCode());
+		inputAdapterParticipant.setInputNode(true);
+		inputAdapterParticipant.setOutputNode(false);
+		inputAdapterParticipant.setCommunicationList(List.of(controller.getCode()));
+		participants.add(inputAdapterParticipant);
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controller.getCode());
-		controllerParticipant.setInputNode(true);
+		controllerParticipant.setInputNode(false);
 		controllerParticipant.setMaxConsecutiveInvocations(5);
 		controllerParticipant.setOutputNode(false);
 		controllerParticipant.setCommunicationList(coordinatedAgentCodes);
@@ -256,6 +267,21 @@ public class StandardAgentsInitialization {
 
 	GAgentConfig controllerConfig = null;
 	GAgentConfig reporterConfig = null;
+	GAgentConfig inputAdapterConfig = null;
+
+	@Bean
+	public IGDynamicAgentConfigDataSource defaultInputAdapterConfigDataSource() {
+		if (inputAdapterConfig == null) {
+			inputAdapterConfig = new GAgentConfig();
+			inputAdapterConfig.setCode(ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER);
+			inputAdapterConfig
+					.setAgentServiceId(ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER);
+			inputAdapterConfig.setDescription(INPUT_ADAPTER_DESCRIPTION);
+			inputAdapterConfig.setAccessibleToAll(true);
+			inputAdapterConfig.setUseDefaultChatModel(false);
+		}
+		return IGDynamicAgentConfigDataSource.of(inputAdapterConfig);
+	}
 
 	@Bean
 	public IGDynamicAgentConfigDataSource defaultControllerAgentConfigDataSource() {

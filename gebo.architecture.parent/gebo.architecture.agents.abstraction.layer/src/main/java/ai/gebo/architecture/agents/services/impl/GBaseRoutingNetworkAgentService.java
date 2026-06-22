@@ -112,11 +112,13 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		for (String coordAgent : toCoordinate) {
 			RuntimeAgentInfos agentData = agentsDao.findAgentByCode(coordAgent);
 			peers.add(agentData);
-			Class<?> outputType = agentData.getService().getOutputType();
-			checkTypesMap.put(coordAgent, outputType);
+			// A routed message is the peer's input (the command it consumes), so the
+			// envelope command data must be typed on the peer's input type.
+			Class<?> peerInputType = agentData.getService().getInputType();
+			checkTypesMap.put(coordAgent, peerInputType);
 			if (formatDeclared) {
 				TypeDescription.Generic generic = TypeDescription.Generic.Builder
-						.parameterizedType(TargetAgentEnvelope.class, outputType).build();
+						.parameterizedType(TargetAgentEnvelope.class, peerInputType).build();
 				Class<?> dynamicType = new ByteBuddy().subclass(generic).make().load(getClass().getClassLoader())
 						.getLoaded();
 				typesMap.put(coordAgent, dynamicType);
