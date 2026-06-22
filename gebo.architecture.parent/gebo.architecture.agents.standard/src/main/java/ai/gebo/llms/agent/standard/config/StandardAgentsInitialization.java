@@ -44,7 +44,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
-import ai.gebo.llms.agent.chat.service.impl.ChatAgentServiceImpl;
+import ai.gebo.llms.agent.chat.service.impl.ReportWriterNetworkAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
@@ -301,8 +301,8 @@ public class StandardAgentsInitialization {
 	public IGDynamicAgentConfigDataSource defaultReportWriterConfigDataSource() {
 		if (reporterConfig == null) {
 			reporterConfig = new GAgentConfig();
-			reporterConfig.setCode(ChatAgentServiceImpl.CHAT_AGENT_SERVICE);
-			reporterConfig.setAgentServiceId(ChatAgentServiceImpl.CHAT_AGENT_SERVICE);
+			reporterConfig.setCode(ReportWriterNetworkAgentServiceImpl.REPORT_WRITER_NETWORK_AGENT_SERVICE);
+			reporterConfig.setAgentServiceId(ReportWriterNetworkAgentServiceImpl.REPORT_WRITER_NETWORK_AGENT_SERVICE);
 			reporterConfig
 					.setMainLoopPromptUseCode(StandardAgentsPromptsLibraryConfig.REPORT_AND_ANSWER_WRITER_AGENT_PROMPT);
 			reporterConfig.setDescription(REPORTER_AGENT_DESCRIPTION);

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
+import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
+import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -20,7 +22,6 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
-import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -35,18 +36,17 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
-import ai.gebo.llms.agent.chat.service.IChatAgentService;
+import ai.gebo.llms.agent.chat.service.IReportWriterNetworkAgentService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 @Service
-public class ChatAgentServiceImpl extends
-		GAbstractReactiveAgentService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
-		implements IChatAgentService {
+public class ReportWriterNetworkAgentServiceImpl extends
+		GAbstractReactiveAgentService<String, GeboChatMessageEnvelope, GeboChatMessageEnvelope, GeboChatResponse>
+		implements IReportWriterNetworkAgentService {
 
 	private static final String END_AGENT_LOOP = "END_AGENT-LOOP-";
 	private static final String TOOL_CALLED = "TOOL-CALLED-";
@@ -58,12 +58,12 @@ public class ChatAgentServiceImpl extends
 	private static final String MAX_ITERATIONS_PROMPT_PARAM = "MAX_ITERATIONS";
 	public static final String CURRENT_ITERATION_PROMPT_PARAM = "CURRENT_ITERATION";
 	public static final String AGENT_SESSION_STORY_PROMPT_PARAM = "AGENT_SESSION_STORY";
-	private static final String CHAT_AGENT_SERVICE_DESC = "Chat agent service";
-	public static final String CHAT_AGENT_SERVICE = "ChatAgentService";
+	private static final String REPORT_WRITER_NETWORK_AGENT_SERVICE_DESC = "Report writer network agent service";
+	public static final String REPORT_WRITER_NETWORK_AGENT_SERVICE = "ReportWriterNetworkAgentService";
 	public static final String AGENT_CONTROL_FINISHED = "<AGENT-CONTROL-STOP/>";
 	public static final String AGENT_CONTROL_MORE_TOOLS = "<AGENT-CONTROL-MORE-TOOLS/>";
 
-	public ChatAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
+	public ReportWriterNetworkAgentServiceImpl(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGRuntimeBinder runtimeBinder, IGSecurityService securityService, IAgentRoleDao agentRoleDao,
 			IGDocumentContentRendererProvider rendererFactory) {
@@ -75,37 +75,48 @@ public class ChatAgentServiceImpl extends
 	@Override
 	public String getId() {
 
-		return CHAT_AGENT_SERVICE;
+		return REPORT_WRITER_NETWORK_AGENT_SERVICE;
 	}
 
 	@Override
 	public String getDescription() {
 
-		return CHAT_AGENT_SERVICE_DESC;
+		return REPORT_WRITER_NETWORK_AGENT_SERVICE_DESC;
 	}
 
 	@Override
 	public Flux<IGPartialOperation<GeboChatMessageEnvelope>> execute(IChatRequestContext chatRequestContext,
-			GAgentConfig agentConfig, ChatPipelineExecutionRuntimeData runtimeData, GAgentsNetwork network,
+			GAgentConfig agentConfig, String request, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink<GeboChatMessageEnvelope> notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope> privateMemory,
-			ReactiveIdentityUtil runAs) throws AgentException, LLMConfigException {
-		String loopHistory = createCycleHistoryVariable(privateMemory, runtimeData);
-		final GeboChatResponse response = runtimeData.getChatResponse();
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> privateMemory, ReactiveIdentityUtil runAs)
+			throws AgentException, LLMConfigException {
+		String loopHistory = createCycleHistoryVariable(privateMemory, request);
+		final GeboChatResponse response = new GeboChatResponse();
 		final int maxLoop = network.getMaxLoopIteration();
 		final int i = privateMemory.getInteractions().size();
-		Map<String, Object> params = new HashMap<>();
+		final ToolCallsListener callsListener = new ToolCallsListener();
+		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, null, runAs);
+		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
+				agentConfig.getMainLoopPromptUseCode(), false);
+		final GAgentRole agentRole = agentConfig.getAgentRoleCode() != null
+				? agentRoleDao.findByCode(agentConfig.getAgentRoleCode())
+				: null;
+		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
+		// Wrap the routed query as the input message so the standard agent template
+		// parametrization can build INPUT, SHARED_CONTEXT (the upstream agents' shared
+		// evidences/contributions), identity and scenario placeholders from it. The
+		// reactive execute() has no agentsDao/contributionNr, hence null/0 here.
+		final AgentsExchangeMessage<String> inputMessage = AgentsExchangeMessage.of(session,
+				contextAgentPersona.getNetworkAgentName(), request, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+		final Map<String, Object> params = createAgentTemplateParams(agentPrompt, network, agentRole,
+				contextAgentPersona, session, privateMemory, inputMessage, null, 0, tokenBudget);
 		params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopHistory);
 		params.put(CURRENT_ITERATION_PROMPT_PARAM, "" + i);
 		params.put(MAX_ITERATIONS_PROMPT_PARAM, "" + maxLoop);
 		params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 		params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-		final ToolCallsListener callsListener = new ToolCallsListener();
-		final IGConfigurableChatModel agentModel = getAgentModel(agentConfig, null, runAs);
-		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
-				agentConfig.getMainLoopPromptUseCode(), false);
-		final IChatRequestContext sampledContext = runtimeData.getRequestResources().createChatRequestContext();
+		final IChatRequestContext sampledContext = chatRequestContext;
 		return runAs.doRunAsWithReturnAndException(() -> {
 			final StringBuffer cumulatedContent = new StringBuffer();
 
@@ -137,10 +148,9 @@ public class ChatAgentServiceImpl extends
 	}
 
 	protected String createCycleHistoryVariable(
-			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope> privateMemory,
-			ChatPipelineExecutionRuntimeData runtimeData) {
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> privateMemory, String request) {
 		List<GeboChatResponse> pastResponses = new ArrayList<GeboChatResponse>();
-		for (AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope>.AgentInteraction interaction : privateMemory
+		for (AgentPrivateSessionContext<String, GeboChatMessageEnvelope>.AgentInteraction interaction : privateMemory
 				.getInteractions()) {
 			pastResponses.add((GeboChatResponse) interaction.getOutput().getContent());
 		}
@@ -191,7 +201,7 @@ public class ChatAgentServiceImpl extends
 	}
 
 	@Override
-	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(ChatPipelineExecutionRuntimeData request,
+	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(String request,
 			List<GeboChatResponse> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
 			GAgentRole agentRole, Integer index, int maxLoop, GPromptTemplateConfig agentPrompt,
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) {
