@@ -21,6 +21,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -46,17 +47,19 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 	public GBaseTaskPerformerNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
-			Class<InputType> inputType, Class<OutputType> outputType, String id, String description) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
+			Class<InputType> inputType, Class<OutputType> outputType, String id, String description,
+			IGDocumentContentRendererProvider rendererFactory) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
+				rendererFactory);
 		this.inputType = inputType;
 		this.outputType = outputType;
 		this.id = id;
 		this.description = description;
 	}
-	
+
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, GAgentsNetwork network,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
@@ -66,15 +69,18 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao);
+		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
+				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
 			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
-			BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
-			params.put(FORMAT_TEMPLATE_PARAM, converter.getFormat());
+			if (isPlaceholderDeclared(prompt, FORMAT_TEMPLATE_PARAM)) {
+				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
+				params.put(FORMAT_TEMPLATE_PARAM, converter.getFormat());
+			}
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),

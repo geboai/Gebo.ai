@@ -57,10 +57,10 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 
 	@Override
 	public List<AgentsExchangeMessage<ResponseType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
+			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, int actualContributionNr,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao)
 			throws LLMConfigException, AgentException {
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
 				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);

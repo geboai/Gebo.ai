@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -18,11 +19,12 @@ public class TextProcessingTaskPerformerAgentService extends GBaseTaskPerformerN
 
 	public TextProcessingTaskPerformerAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder) {
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
+			IGDocumentContentRendererProvider rendererFactory) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				String.class, String.class, TEXT_PROCESSING_AGENT_SERVICE,
-				GENERICAL_AGENT_THAT_RECEIVE_TEXT_MESSAGES_AND_RESPONDES_BACK_WITH_TEXT_MESSAGES);
+				GENERICAL_AGENT_THAT_RECEIVE_TEXT_MESSAGES_AND_RESPONDES_BACK_WITH_TEXT_MESSAGES, rendererFactory);
 
 	}
-	
+
 }

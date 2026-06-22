@@ -27,6 +27,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		implements IGAgentsNetworkService<InputType, OutputType> {
+	private static final String EXCEPTION_IN_AGENTS_NETWORK_EXECUTION = "Exception in agents network execution";
+	private static final String NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE = "Network input node does not support a matching type ";
+	private static final String NO_INPUT_NODE_CONFIGURED_IN_AGENTS_NETWORK = "No input node configured in agents network";
+	private static final String NO_AGENTS_CONFIGURED = "No agents configured";
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
 	private final IGeboThreadManager threadManager;
@@ -41,11 +45,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			throws AgentException, LLMConfigException {
 		final Map<String, RuntimeAgentInfos> agents = allocateAgents(network);
 		if (network.getAgents() != null || network.getAgents().isEmpty())
-			throw new AgentException("No agents configured");
+			throw new AgentException(NO_AGENTS_CONFIGURED);
 		Optional<AgentNetworkParticipant> inputNode = network.getAgents().stream().filter(x -> x.isInputNode())
 				.findFirst();
 		if (inputNode.isEmpty())
-			throw new AgentException("No input node configured in agents network");
+			throw new AgentException(NO_INPUT_NODE_CONFIGURED_IN_AGENTS_NETWORK);
 		final AgentNetworkParticipant inputNodeAgentConfig = inputNode.get();
 		final String inputNodeName = inputNodeAgentConfig.getNetworkAgentName();
 		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
@@ -53,8 +57,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agents.get(inputNodeName);
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
-			throw new AgentException(
-					"Network input node does not support a matching type " + input.getClass().getName());
+			throw new AgentException(NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE + input.getClass().getName());
 
 		CallsResult<OutputType> iterationResult = null;
 		try {
@@ -73,7 +76,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				iterationResult = levelResult;
 			}
 		} catch (LLMConfigException | AgentException | InterruptedException | ExecutionException e) {
-			throw new AgentException("Exception in agents network execution", e);
+			throw new AgentException(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 		}
 		return iterationResult != null ? iterationResult.getOutput() : null;
 	}
@@ -100,36 +103,48 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		OutputType output = null;
 		final TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
 		if (checkContinueLoop(network, agentsDao)) {
+			final int contributionNr = session.getAndIncrementContributionNr();
+			inputRuntime.setTurnOfExecution(contributionNr);
 			List<AgentsExchangeMessage<?>> messages = inputRuntime.getService().onMessage(chatRequestContext,
-					inputRuntime.getConfig(), inputMessage, network, inputRuntime.getNetworkParticipantConfig(),
-					notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao);
-			inputRuntime.setTurnOfExecution(inputRuntime.getTurnOfExecution() + 1);
+					inputRuntime.getConfig(), inputMessage, contributionNr, network,
+					inputRuntime.getNetworkParticipantConfig(), notificationSink, session,
+					inputRuntime.getAgentContext(), runAs, agentsDao);
 
-			for (AgentsExchangeMessage<?> msg : messages) {
-				addTo(msg, session);
-				addTo(msg, inputMessage, inputRuntime.getAgentContext());
-				if (inputRuntime.getNetworkParticipantConfig().isOutputNode()
-						&& msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
-					output = compose(output, (OutputType) msg.getPayload());
-				}
-				MessageSemantic msgSemantic = msg.getMessageSemantic();
-				if (msgSemantic != null) {
-					switch (msgSemantic) {
-					case EXECUTE_AND_SHARE_RESULT: {
-						if (!deliveryOrder.containsKey(msg.getExecutionOrder())) {
-							deliveryOrder.put(msg.getExecutionOrder(), new ArrayList<>());
+			if (messages == null || messages.isEmpty()) {
+				addToEmptyReturn(inputMessage, contributionNr, inputRuntime.getAgentContext());
+			} else {
+				for (AgentsExchangeMessage<?> msg : messages) {
+					addTo(msg, contributionNr, session);
+					addTo(msg, inputMessage, contributionNr, inputRuntime.getAgentContext());
+					if (inputRuntime.getNetworkParticipantConfig().isOutputNode()
+							&& msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
+						output = compose(output, (OutputType) msg.getPayload());
+					}
+					MessageSemantic msgSemantic = msg.getMessageSemantic();
+					if (msgSemantic != null) {
+						switch (msgSemantic) {
+						case EXECUTE_AND_SHARE_RESULT: {
+							if (!deliveryOrder.containsKey(msg.getExecutionOrder())) {
+								deliveryOrder.put(msg.getExecutionOrder(), new ArrayList<>());
+							}
+							deliveryOrder.get(msg.getExecutionOrder()).add(msg);
 						}
-						deliveryOrder.get(msg.getExecutionOrder()).add(msg);
-					}
-						break;
-					}
+							break;
+						}
 
+					}
 				}
 			}
 
 		}
 
 		return new CallsResult<OutputType>(deliveryOrder, output);
+
+	}
+
+	private void addToEmptyReturn(AgentsExchangeMessage<?> inputMessage, int contributionNr,
+			AgentPrivateSessionContext agentContext) {
+		agentContext.addInteraction(inputMessage, contributionNr, "");
 
 	}
 
@@ -178,14 +193,15 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		return out;
 	}
 
-	private void addTo(AgentsExchangeMessage<?> msg, AgentsExchangeMessage<?> inputMessage,
+	private void addTo(AgentsExchangeMessage<?> msg, AgentsExchangeMessage<?> inputMessage, int contributionCounter,
 			AgentPrivateSessionContext agentContext) {
-		agentContext.addInteraction(inputMessage, msg.getPayload());
+		agentContext.addInteraction(inputMessage, contributionCounter, msg.getPayload());
 	}
 
-	private void addTo(AgentsExchangeMessage<?> msg, AgentsCollaborationSessionContext session) {
+	private void addTo(AgentsExchangeMessage<?> msg, int contributionCounter,
+			AgentsCollaborationSessionContext session) {
 		if (msg.getMessageSemantic() == MessageSemantic.RESPONSE) {
-			session.addContribution(msg);
+			session.addContribution(msg, contributionCounter);
 		}
 	}
 

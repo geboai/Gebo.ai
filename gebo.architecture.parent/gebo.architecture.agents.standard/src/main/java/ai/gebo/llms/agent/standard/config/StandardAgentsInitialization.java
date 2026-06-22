@@ -30,6 +30,7 @@ import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.agents.services.IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService;
 import ai.gebo.architecture.agents.services.impl.TextProcessingTaskPerformerAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
@@ -56,7 +57,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.security.services.IGSecurityService;
 
-@ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue =  "true")
+@ConditionalOnProperty(prefix = "ai.gebo.agents.standard", name = "enabled", havingValue = "true")
 @Configuration
 public class StandardAgentsInitialization {
 	private static final String INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT = "*             Initializing standard agents network for reactive chat                 *";
@@ -82,12 +83,13 @@ public class StandardAgentsInitialization {
 	private final IGSecurityService securityService;
 	private final IAgentRoleDao agentRoleDao;
 	private final IGRankerModelRuntimeConfigurationDao rankersDao;
+	private final IGDocumentContentRendererProvider rendererFactory;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IGRankerModelRuntimeConfigurationDao rankersDao, IGPromptConfigDao promptsDao,
-			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao,
-			IGRuntimeBinder runtimeBinder) {
+			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
+			IGDocumentContentRendererProvider rendererFactory) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -96,6 +98,7 @@ public class StandardAgentsInitialization {
 		this.securityService = securityService;
 		this.agentRoleDao = agentRoleDao;
 		this.rankersDao = rankersDao;
+		this.rendererFactory = rendererFactory;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
 		LOGGER.info(START_ROW);
@@ -162,7 +165,7 @@ public class StandardAgentsInitialization {
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
 		return new InternalKnowledgeBaseSearchNetworkAgentService(chatModelsDao, toolsRepositoryPattern, promptsDao,
 				securityService, agentRoleDao, runtimeBinder, semanticSearchDao, knowledgeGraphSearchService,
-				knowledgeBaseVisibilityService, fullTextSearch);
+				knowledgeBaseVisibilityService, fullTextSearch, rendererFactory);
 
 	}
 
@@ -306,12 +309,12 @@ public class StandardAgentsInitialization {
 						if (search instanceof INativeSearchService nativeSearch) {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, rankersDao, nativeSearch);
+									runtimeBinder, rankersDao, nativeSearch, rendererFactory);
 							outServices.add(nativeWrapper);
 						} else {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, search);
+									runtimeBinder, search, rendererFactory);
 							outServices.add(wrapper);
 						}
 					} catch (SearchServiceException e) {

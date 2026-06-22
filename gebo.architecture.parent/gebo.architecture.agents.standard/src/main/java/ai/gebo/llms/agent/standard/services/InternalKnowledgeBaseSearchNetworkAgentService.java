@@ -21,6 +21,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
@@ -49,9 +50,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractDoc
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGSemanticSearchDocumentsCachedDao semanticSearchDao, IKnowledgeGraphSearchService knowledgeGraphSearchDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
-			IGFullTextSearchDocumentsCachedDao fullTextDao) {
+			IGFullTextSearchDocumentsCachedDao fullTextDao, IGDocumentContentRendererProvider rendererFactory) {
 
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
+				rendererFactory);
 		this.semanticSearchDao = semanticSearchDao;
 		this.fullTextDao = fullTextDao;
 		this.knowledgeGraphSearchDao = knowledgeGraphSearchDao;

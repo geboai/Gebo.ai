@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -19,10 +20,10 @@ public class TextProcessingRoutingNetworkAgentService extends GBaseRoutingNetwor
 	
 	public TextProcessingRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder) {
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder, IGDocumentContentRendererProvider rendererFactory) {
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				TEXT_PROCESSING_ROUTING_NETWORK_AGENT_SERVICE, ROUTING_AGENT_THAT_PROCESSES_TEXT_AS_AN_INPUT,
-				String.class, Void.class);
+				String.class, Void.class, rendererFactory);
 
 	}
 

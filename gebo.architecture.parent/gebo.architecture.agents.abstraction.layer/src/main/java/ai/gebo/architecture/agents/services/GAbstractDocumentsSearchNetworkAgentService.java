@@ -15,6 +15,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -32,8 +33,10 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 
 	public GAbstractDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
-			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
+			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
+			IGDocumentContentRendererProvider rendererFactory) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
+				rendererFactory);
 
 	}
 
@@ -51,8 +54,8 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 
 	@Override
 	public List<AgentsExchangeMessage<List<Document>>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, int actualContributionNr,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
@@ -61,8 +64,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
 		ToolCallsListener listener = new ToolCallsListener();
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener, runAs);
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao);
+		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
+				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
 		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,

@@ -25,6 +25,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGRoutingNetworkAgentService;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -52,8 +53,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	public GBaseRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder, String id,
-			String description, Class<InputType> inputType, Class<OutputType> outputType) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder);
+			String description, Class<InputType> inputType, Class<OutputType> outputType, IGDocumentContentRendererProvider rendererFactory) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder, rendererFactory);
 		this.id = id;
 		this.description = description;
 		this.inputType = inputType;
@@ -86,11 +87,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -102,8 +103,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					+ " has no agents to communicate with");
 		}
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
-		Map<String, Object> params = createAgentTemplateParams(network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao);
+		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
+		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
+				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
+		final boolean formatDeclared = isPlaceholderDeclared(prompt, FORMAT_TEMPLATE_PARAM);
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();
 		for (String coordAgent : toCoordinate) {
@@ -111,13 +114,17 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			peers.add(agentData);
 			Class<?> outputType = agentData.getService().getOutputType();
 			checkTypesMap.put(coordAgent, outputType);
-			TypeDescription.Generic generic = TypeDescription.Generic.Builder
-					.parameterizedType(TargetAgentEnvelope.class, outputType).build();
-			Class<?> dynamicType = new ByteBuddy().subclass(generic).make().load(getClass().getClassLoader())
-					.getLoaded();
-			typesMap.put(coordAgent, dynamicType);
+			if (formatDeclared) {
+				TypeDescription.Generic generic = TypeDescription.Generic.Builder
+						.parameterizedType(TargetAgentEnvelope.class, outputType).build();
+				Class<?> dynamicType = new ByteBuddy().subclass(generic).make().load(getClass().getClassLoader())
+						.getLoaded();
+				typesMap.put(coordAgent, dynamicType);
+			}
 		}
-		params.put(FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
+		if (formatDeclared) {
+			params.put(FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
+		}
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> messagesInOrder = new TreeMap<>();
