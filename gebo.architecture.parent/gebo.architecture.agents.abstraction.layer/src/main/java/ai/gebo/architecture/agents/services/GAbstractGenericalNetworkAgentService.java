@@ -2,10 +2,9 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -22,6 +21,7 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
@@ -57,6 +57,16 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	private static final String NEWLINE = "\r\n";
 	private static final String YOU_ARE_AN_AGENT_WITH_ROLE = "Your agent role is: ";
 	private static final String THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS = "The description of the network scenario is: ";
+	private static final String ACTING_AS_PERSONA = "You are acting as: ";
+	private static final String CAN_COMMUNICATE_WITH_AGENTS = "You can communicate with the following agents:";
+	private static final String CANNOT_COMMUNICATE_WITH_AGENTS = "You cannot directly communicate with other agents.";
+	private static final String ALLOWED_TO_CALL_TOOLS = "You are allowed to call tools.";
+	private static final String NOT_ALLOWED_TO_CALL_TOOLS = "You are not allowed to call tools.";
+	private static final String ALLOWED_TO_DELEGATE = "You are allowed to delegate tasks to other agents.";
+	private static final String NOT_ALLOWED_TO_DELEGATE = "You are not allowed to delegate tasks to other agents.";
+	private static final String AGENT_LIST_ITEM_PREFIX = "- ";
+	private static final String AGENT_DESCRIPTION_SEPARATOR = ": ";
+	private static final String TRUNCATED_CONTENT_SUFFIX = "...(truncated content)";
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
 	protected final IGDocumentContentRendererProvider rendererFactory;
 
@@ -204,13 +214,78 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 
 	protected String createAgentCommunicationCapabilityDescription(GAgentRole agentRole,
 			AgentNetworkParticipant contextAgentPersona, GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao) {
-		// TODO Auto-generated method stub
-		return null;
+		if (contextAgentPersona == null) {
+			return "";
+		}
+		StringBuffer buffer = new StringBuffer();
+		List<String> peers = contextAgentPersona.getCommunicationList();
+		if (peers != null && !peers.isEmpty()) {
+			buffer.append(CAN_COMMUNICATE_WITH_AGENTS);
+			buffer.append(NEWLINE);
+			for (String peerCode : peers) {
+				buffer.append(AGENT_LIST_ITEM_PREFIX);
+				buffer.append(peerCode);
+				String peerDescription = resolvePeerDescription(peerCode, agentsDao);
+				if (peerDescription != null && !peerDescription.isBlank()) {
+					buffer.append(AGENT_DESCRIPTION_SEPARATOR);
+					buffer.append(peerDescription);
+				}
+				buffer.append(NEWLINE);
+			}
+		} else {
+			buffer.append(CANNOT_COMMUNICATE_WITH_AGENTS);
+			buffer.append(NEWLINE);
+		}
+		buffer.append(contextAgentPersona.isCanCallTools() ? ALLOWED_TO_CALL_TOOLS : NOT_ALLOWED_TO_CALL_TOOLS);
+		buffer.append(NEWLINE);
+		buffer.append(contextAgentPersona.isCanCallOtherAgents() ? ALLOWED_TO_DELEGATE : NOT_ALLOWED_TO_DELEGATE);
+		buffer.append(NEWLINE);
+		return buffer.toString();
+	}
+
+	private String resolvePeerDescription(String peerCode, IGAgentsNetworkRuntimeDao agentsDao) {
+		if (agentsDao == null) {
+			return null;
+		}
+		try {
+			RuntimeAgentInfos peer = agentsDao.findAgentByCode(peerCode);
+			if (peer == null) {
+				return null;
+			}
+			if (peer.getConfig() != null && peer.getConfig().getDescription() != null) {
+				return peer.getConfig().getDescription();
+			}
+			return peer.getService() != null ? peer.getService().getDescription() : null;
+		} catch (AgentException e) {
+			LOGGER.warn("Cannot resolve peer agent '{}' while building communication capability description", peerCode,
+					e);
+			return null;
+		}
 	}
 
 	protected String createAgentIdentityDescription(GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer buffer = new StringBuffer();
+		if (contextAgentPersona != null && contextAgentPersona.getAgentContextualName() != null
+				&& !contextAgentPersona.getAgentContextualName().isBlank()) {
+			buffer.append(ACTING_AS_PERSONA);
+			buffer.append(contextAgentPersona.getAgentContextualName());
+			buffer.append(NEWLINE);
+		}
+		if (agentRole != null) {
+			if (agentRole.getCode() != null) {
+				buffer.append(YOU_ARE_AN_AGENT_WITH_ROLE);
+				buffer.append(agentRole.getCode());
+				buffer.append(NEWLINE);
+			}
+			String roleExplanation = agentRole.getLongExplanation() != null ? agentRole.getLongExplanation()
+					: agentRole.getDescription();
+			if (roleExplanation != null && !roleExplanation.isBlank()) {
+				buffer.append(DESCRIPTION_OF_YOUR_ROLE);
+				buffer.append(roleExplanation);
+				buffer.append(NEWLINE);
+			}
+		}
+		return buffer.toString();
 	}
 
 	protected String createNetworkScenaryDescription(GAgentsNetwork network) {
@@ -225,110 +300,164 @@ public abstract class GAbstractGenericalNetworkAgentService<InputType, OutputTyp
 	protected String render(AgentsCollaborationSessionContext session, Integer lastTurn, int actualContributionNr,
 			int remainingBudget) {
 		final int lastKnowledge = lastTurn == null ? 0 : lastTurn;
-		StringBuffer buffer = new StringBuffer();
 		List<AgentProducedSessionContribution> newGeneratedKnowledge = session
 				.getSampledContributionsAfter(lastKnowledge);
-		if (!newGeneratedKnowledge.isEmpty()) {
-			TreeMap<String, List<AgentProducedSessionContribution>> contributions = new TreeMap<String, List<AgentProducedSessionContribution>>();
-			for (AgentProducedSessionContribution contrib : newGeneratedKnowledge) {
-				final String agentName = contrib.getAgentName();
-				contributions.computeIfAbsent(agentName, (name) -> new ArrayList<AgentProducedSessionContribution>());
-				contributions.get(agentName).add(contrib);
-			}
-
-			buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
-			buffer.append(NEWLINE);
-			for (Entry<String, List<AgentProducedSessionContribution>> entry : contributions.entrySet()) {
-				buffer.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
-				buffer.append(entry.getKey());
-				buffer.append(NEWLINE);
-				for (AgentProducedSessionContribution contribution : entry.getValue()) {
-					Object data = contribution.getData();
-					if (data == null || data.toString().isBlank() || data.toString().isEmpty())
-						continue;
-					IGDocumentContentRenderer<Object> renderer = rendererFactory.get(data);
-					String rendered = null;
-					if (renderer == null) {
-						rendered = genericRender(data);
-					} else {
-						rendered = renderer.render(data);
-					}
-					buffer.append(rendered);
-					buffer.append(NEWLINE);
-				}
-				buffer.append(END_AGENT_CONTEXT_CONTRIBUTION);
-				buffer.append(NEWLINE);
-			}
-			buffer.append(END_SHARED_CONTEXT_DELTA);
-			buffer.append(NEWLINE);
+		if (newGeneratedKnowledge.isEmpty()) {
+			return "";
 		}
+		// Group by agent, preserving first-appearance (chronological) order.
+		LinkedHashMap<String, List<AgentProducedSessionContribution>> contributions = new LinkedHashMap<>();
+		for (AgentProducedSessionContribution contrib : newGeneratedKnowledge) {
+			contributions.computeIfAbsent(contrib.getAgentName(), name -> new ArrayList<>()).add(contrib);
+		}
+		// Render each agent group body, then share the budget proportionally across groups.
+		List<String> agentNames = new ArrayList<>(contributions.keySet());
+		List<String> bodies = new ArrayList<>(agentNames.size());
+		for (String agentName : agentNames) {
+			StringBuffer body = new StringBuffer();
+			for (AgentProducedSessionContribution contribution : contributions.get(agentName)) {
+				String rendered = renderContributionData(contribution.getData());
+				if (rendered.isBlank()) {
+					continue;
+				}
+				body.append(rendered);
+				body.append(NEWLINE);
+			}
+			bodies.add(body.toString());
+		}
+		List<String> fitted = allocateProportional(bodies, remainingBudget);
+		StringBuffer inner = new StringBuffer();
+		for (int i = 0; i < agentNames.size(); i++) {
+			String body = fitted.get(i);
+			if (body == null || body.isBlank()) {
+				continue;
+			}
+			inner.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
+			inner.append(agentNames.get(i));
+			inner.append(NEWLINE);
+			inner.append(body);
+			inner.append(END_AGENT_CONTEXT_CONTRIBUTION);
+			inner.append(NEWLINE);
+		}
+		if (inner.length() == 0) {
+			return "";
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
+		buffer.append(NEWLINE);
+		buffer.append(inner);
+		buffer.append(END_SHARED_CONTEXT_DELTA);
+		buffer.append(NEWLINE);
 		return buffer.toString();
+	}
+
+	private String renderContributionData(Object data) {
+		if (data == null) {
+			return "";
+		}
+		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(data);
+		return renderer == null ? genericRender(data) : renderer.render(data);
 	}
 
 	private final int INPUT_SAMPLE_TOKEN_SIZE = 512;
 
 	protected String render(AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
 			int actualContributionNr, int remainingBudget) {
-		StringBuffer buffer = new StringBuffer();
 		Vector<AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction> interactions = mySessionContext
 				.getInteractions();
+		if (interactions == null || interactions.isEmpty()) {
+			return "";
+		}
+		// Render the input and output of every turn, then share the budget proportionally
+		// across all rendered pieces (two pieces - input and output - per turn).
+		List<String> pieces = new ArrayList<>(interactions.size() * 2);
+		for (AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction agentInteraction : interactions) {
+			pieces.add(renderHandlingTruncate(agentInteraction.getInputMessage()));
+			pieces.add(renderOutput(agentInteraction.getOutput()));
+		}
+		List<String> fitted = allocateProportional(pieces, remainingBudget);
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(BEGIN_ACTUAL_AGENT_CALL_HISTORY);
+		buffer.append(NEWLINE);
 		int index = 1;
-		if (interactions != null && !interactions.isEmpty()) {
-			buffer.append(BEGIN_ACTUAL_AGENT_CALL_HISTORY);
+		for (int turn = 0; turn < interactions.size(); turn++) {
+			String renderedInput = fitted.get(turn * 2);
+			String renderedOutput = fitted.get(turn * 2 + 1);
+			buffer.append(BEGIN_AGENT_TURN_ITEM + index);
 			buffer.append(NEWLINE);
-			for (AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction agentInteraction : interactions) {
-				AgentsExchangeMessage<InputType> input = agentInteraction.getInputMessage();
-				String renderedInput = renderHandlingTruncate(input);
-				String renderedOutput = renderOutput(agentInteraction.getOutput());
-				buffer.append(BEGIN_AGENT_TURN_ITEM + index);
-				buffer.append(NEWLINE);
-				buffer.append(TURN_INPUT);
-				buffer.append(NEWLINE);
-				buffer.append(renderedInput);
-				buffer.append(NEWLINE);
-				buffer.append(TURN_OUTPUT);
-				buffer.append(NEWLINE);
-				buffer.append(renderedOutput);
-				buffer.append(NEWLINE);
-				buffer.append(END_AGENT_TURN_ITEM + index);
-				buffer.append(NEWLINE);
-			}
-			buffer.append(END_ACTUAL_AGENT_CALL_HISTORY);
+			buffer.append(TURN_INPUT);
+			buffer.append(NEWLINE);
+			buffer.append(renderedInput);
+			buffer.append(NEWLINE);
+			buffer.append(TURN_OUTPUT);
+			buffer.append(NEWLINE);
+			buffer.append(renderedOutput);
+			buffer.append(NEWLINE);
+			buffer.append(END_AGENT_TURN_ITEM + index);
 			buffer.append(NEWLINE);
 			index++;
 		}
+		buffer.append(END_ACTUAL_AGENT_CALL_HISTORY);
+		buffer.append(NEWLINE);
 		return buffer.toString();
 	}
 
 	protected String renderOutput(OutputType output) {
-		String outputAsString = null;
-		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(output);
-		if (renderer == null) {
-			outputAsString = genericRender(output);
-		} else {
-			outputAsString = renderer.render(output);
+		if (output == null) {
+			return "";
 		}
-		return outputAsString;
+		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(output);
+		return renderer == null ? genericRender(output) : renderer.render(output);
 	}
 
 	protected String renderHandlingTruncate(AgentsExchangeMessage<InputType> input) {
-		Object payload = input.getPayload();
-		if (payload == null)
+		return truncateToTokens(render(input), INPUT_SAMPLE_TOKEN_SIZE);
+	}
+
+	/**
+	 * Shares a token budget across the given rendered pieces proportionally to their
+	 * individual token sizes. If everything already fits, the pieces are returned
+	 * unchanged; otherwise each piece is truncated to its proportional allowance so
+	 * the whole section fits within {@code budget}. The returned list preserves order
+	 * and size, so callers can reassemble their structure around the fitted pieces.
+	 */
+	private static List<String> allocateProportional(List<String> pieces, int budget) {
+		int n = pieces.size();
+		int[] sizes = new int[n];
+		long total = 0;
+		for (int i = 0; i < n; i++) {
+			sizes[i] = pieces.get(i) == null ? 0 : ITokensCountable.stringsTokensSize(pieces.get(i));
+			total += sizes[i];
+		}
+		if (total == 0 || total <= budget) {
+			return new ArrayList<>(pieces);
+		}
+		List<String> out = new ArrayList<>(n);
+		for (int i = 0; i < n; i++) {
+			int allowance = (int) ((long) budget * sizes[i] / total);
+			out.add(truncateToTokens(pieces.get(i), allowance));
+		}
+		return out;
+	}
+
+	/**
+	 * Truncates the given text to (approximately) the supplied token allowance, keeping
+	 * the head and appending a truncation marker when content is dropped.
+	 */
+	private static String truncateToTokens(String text, int allowanceTokens) {
+		if (text == null || text.isEmpty()) {
 			return "";
-		String inputAsString = null;
-		IGDocumentContentRenderer<Object> renderer = rendererFactory.get(payload);
-		if (renderer == null) {
-			inputAsString = genericRender(payload);
-		} else {
-			inputAsString = renderer.render(payload);
 		}
-		int howManyTokens = ITokensCountable.stringsTokensSize(inputAsString);
-		if (howManyTokens > INPUT_SAMPLE_TOKEN_SIZE) {
-			int approximatedIndex = (int) (((double) INPUT_SAMPLE_TOKEN_SIZE) * 4.2);
-			int maxIndex = Math.min(approximatedIndex, inputAsString.length() - 1);
-			inputAsString = inputAsString.substring(0, maxIndex) + "...(truncated content)";
+		if (allowanceTokens <= 0) {
+			return TRUNCATED_CONTENT_SUFFIX;
 		}
-		return inputAsString;
+		int howManyTokens = ITokensCountable.stringsTokensSize(text);
+		if (howManyTokens <= allowanceTokens) {
+			return text;
+		}
+		int approximatedIndex = (int) (((double) allowanceTokens) * 4.2);
+		int maxIndex = Math.min(approximatedIndex, text.length());
+		return text.substring(0, maxIndex) + TRUNCATED_CONTENT_SUFFIX;
 	}
 
 	protected String render(AgentsExchangeMessage<InputType> input) {
