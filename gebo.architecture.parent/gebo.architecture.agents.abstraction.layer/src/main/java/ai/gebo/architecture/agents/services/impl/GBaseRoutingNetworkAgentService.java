@@ -153,7 +153,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				AgentsExchangeMessage<?> _msg = new AgentsExchangeMessage(session.getId(),
 						MessageSemantic.EXECUTE_AND_SHARE_RESULT, contextAgentPersona.getAgentContextualName(),
 						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
-				out.add(msg);
+				out.add(_msg);
 			}
 		}
 		return new ArrayList(out);
