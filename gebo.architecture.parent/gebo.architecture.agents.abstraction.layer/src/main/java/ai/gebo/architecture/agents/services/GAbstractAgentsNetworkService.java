@@ -31,6 +31,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private static final String NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE = "Network input node does not support a matching type ";
 	private static final String NO_INPUT_NODE_CONFIGURED_IN_AGENTS_NETWORK = "No input node configured in agents network";
 	private static final String NO_AGENTS_CONFIGURED = "No agents configured";
+	private static final String NO_RUNTIME_ALLOCATED_FOR_INPUT_NODE = "No runtime agent allocated for input node: ";
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
 	private final IGeboThreadManager threadManager;
@@ -43,8 +44,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	@Override
 	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input)
 			throws AgentException, LLMConfigException {
-		final Map<String, RuntimeAgentInfos> agents = allocateAgents(network);
-		if (network.getAgents() != null || network.getAgents().isEmpty())
+		if (network.getAgents() == null || network.getAgents().isEmpty())
 			throw new AgentException(NO_AGENTS_CONFIGURED);
 		Optional<AgentNetworkParticipant> inputNode = network.getAgents().stream().filter(x -> x.isInputNode())
 				.findFirst();
@@ -55,13 +55,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
-		final RuntimeAgentInfos inputRuntime = agents.get(inputNodeName);
+		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);
+		if (inputRuntime == null)
+			throw new AgentException(NO_RUNTIME_ALLOCATED_FOR_INPUT_NODE + inputNodeName);
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
 			throw new AgentException(NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE + input.getClass().getName());
 
 		CallsResult<OutputType> iterationResult = null;
 		try {
-			int cycles = 0;
 			iterationResult = executeNetworkLoops(chatRequestContext, network, notificationSink, agentsDao, session,
 					inputRuntime, inputMessage, outputType, runAs);
 			while (iterationResult != null && iterationResult.getDeliveryOrder() != null
@@ -83,8 +84,24 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	protected <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
 			CallsResult<OutputType> rowResult) {
-		// TODO Auto-generated method stub
-		return null;
+		if (levelResult == null)
+			return rowResult;
+		if (rowResult == null)
+			return levelResult;
+		TreeMap<Integer, List<AgentsExchangeMessage<?>>> mergedDeliveryOrder = new TreeMap<>();
+		mergeDeliveryOrder(mergedDeliveryOrder, levelResult.getDeliveryOrder());
+		mergeDeliveryOrder(mergedDeliveryOrder, rowResult.getDeliveryOrder());
+		OutputType composedOutput = compose(levelResult.getOutput(), rowResult.getOutput());
+		return new CallsResult<OutputType>(mergedDeliveryOrder, composedOutput);
+	}
+
+	private void mergeDeliveryOrder(TreeMap<Integer, List<AgentsExchangeMessage<?>>> target,
+			TreeMap<Integer, List<AgentsExchangeMessage<?>>> source) {
+		if (source == null)
+			return;
+		for (Map.Entry<Integer, List<AgentsExchangeMessage<?>>> entry : source.entrySet()) {
+			target.computeIfAbsent(entry.getKey(), k -> new ArrayList<>()).addAll(entry.getValue());
+		}
 	}
 
 	@AllArgsConstructor
@@ -212,14 +229,9 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			RuntimeAgentInfos agentSituation = agentsDao.findAgentByCode(agent.getNetworkAgentName());
 			loopDone = Math.max(agentSituation.getTurnOfExecution(), loopDone);
 		}
-		return network.getMaxLoopIteration() <= loopDone;
+		return loopDone < network.getMaxLoopIteration();
 	}
 
 	protected abstract <OutputType> OutputType compose(OutputType actualOutput, OutputType incremental);
-
-	private Map<String, RuntimeAgentInfos> allocateAgents(GAgentsNetwork network) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

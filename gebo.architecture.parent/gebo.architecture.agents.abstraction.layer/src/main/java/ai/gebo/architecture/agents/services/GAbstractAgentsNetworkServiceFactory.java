@@ -47,7 +47,7 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 				outputNode = new ArrayList<RuntimeAgentInfos>();
 		for (AgentNetworkParticipant agent : network.getAgents()) {
 			RuntimeAgentInfos agentInfos = this.createRuntimeAgentInfos(network, agent);
-			agentsCache.put(agent.getAgentContextualName(), agentInfos);
+			agentsCache.put(agent.getNetworkAgentName(), agentInfos);
 			if (agent.isInputNode()) {
 				inputNode.add(agentInfos);
 			}
