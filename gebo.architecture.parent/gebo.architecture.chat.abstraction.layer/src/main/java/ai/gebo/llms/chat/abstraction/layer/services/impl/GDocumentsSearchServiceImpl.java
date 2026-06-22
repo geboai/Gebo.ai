@@ -158,6 +158,48 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		if (defaultModel != null && !embeddingModels.contains(defaultModel)) {
 			embeddingModels.add(defaultModel);
 		}
+		return executeResolvedSearch(knowledgeBases, embeddingModels, aclAliases, threashold, firstHopThreashold,
+				secondHopThreashold, semanticRagTopK, manualThreasholdsConfiguration, semanticSearches,
+				semanticSearchMetaDataFilter, fullTextSearches, fullTextSearchMetaDataFilter, userQuery, globalTopK,
+				tokensBudget);
+	}
+
+	@Override
+	public AIDocumentsSet search(String request, List<String> semanticSearches,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, List<String> fullTextSearches,
+			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, String userQuery, int globalTopK, int tokensBudget)
+			throws FullTextException, LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin search(String request,..)");
+		}
+		List<Integer> aclAliases = null;
+		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
+				&& !securityService.isCurrentUserAdmin()) {
+			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
+		}
+		// No chat profile/session: scope to all knowledge bases visible to the current user.
+		List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
+		List<String> knowledgeBases = visibles != null ? visibles.stream().map(x -> x.getCode()).toList()
+				: new ArrayList<String>();
+		List<IGConfigurableEmbeddingModel> embeddingModels = new ArrayList<IGConfigurableEmbeddingModel>();
+		IGConfigurableEmbeddingModel defaultModel = embeddingModelsDao.defaultHandler();
+		if (defaultModel != null) {
+			embeddingModels.add(defaultModel);
+		}
+		double threashold = chatConfigs.getDefaultSimilarityThreshold();
+		int semanticRagTopK = chatConfigs.getDefaultTopK();
+		return executeResolvedSearch(knowledgeBases, embeddingModels, aclAliases, threashold, threashold, threashold,
+				semanticRagTopK, false, semanticSearches, semanticSearchMetaDataFilter, fullTextSearches,
+				fullTextSearchMetaDataFilter, userQuery, globalTopK, tokensBudget);
+	}
+
+	private AIDocumentsSet executeResolvedSearch(List<String> knowledgeBases,
+			List<IGConfigurableEmbeddingModel> embeddingModels, List<Integer> aclAliases, double threashold,
+			double firstHopThreashold, double secondHopThreashold, int semanticRagTopK,
+			boolean manualThreasholdsConfiguration, List<String> semanticSearches,
+			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter, List<String> fullTextSearches,
+			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, String userQuery, int globalTopK,
+			int tokensBudget) throws FullTextException, LLMConfigException {
 		AIDocumentsSet out = new AIDocumentsSet();
 		if (!knowledgeBases.isEmpty()) {
 			List<String> semanticSearchedQuery = new ArrayList<String>();
@@ -177,7 +219,6 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 					double _threashold = threashold;
 					double _firstHopThreashold = firstHopThreashold;
 					double _secondHopThreashold = secondHopThreashold;
-					boolean _multiHopEnabled = multiHopEnabled;
 					int _semanticRagTopK = Math.min(globalTopK, semanticRagTopK);
 					if (!manualThreasholdsConfiguration) {
 						OptimizedThreashold autotunedSettings = this.semanticRagThreasholdAutotuneService

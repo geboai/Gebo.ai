@@ -33,19 +33,17 @@ import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
-import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
-import ai.gebo.architecture.rag.support.layer.services.IGFullTextSearchDocumentsCachedDao;
-import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
-import ai.gebo.architecture.rag_threasholds_autotune.service.IRagThreasholdAutotuneService;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.service.INativeSearchService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.architecture.search.service.ISearchServiceRepositoryPattern;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
-import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ChatAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
@@ -82,12 +80,13 @@ public class StandardAgentsInitialization {
 	private final IGRuntimeBinder runtimeBinder;
 	private final IGSecurityService securityService;
 	private final IAgentRoleDao agentRoleDao;
-	private final IGRankerModelRuntimeConfigurationDao rankersDao;
+	private final IDocumentsChunkService chunkingService;
+	private final IGRankerService rankerService;
 	private final IGDocumentContentRendererProvider rendererFactory;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
-			IGRankerModelRuntimeConfigurationDao rankersDao, IGPromptConfigDao promptsDao,
+			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
@@ -97,7 +96,8 @@ public class StandardAgentsInitialization {
 		this.runtimeBinder = runtimeBinder;
 		this.securityService = securityService;
 		this.agentRoleDao = agentRoleDao;
-		this.rankersDao = rankersDao;
+		this.chunkingService = chunkingService;
+		this.rankerService = rankerService;
 		this.rendererFactory = rendererFactory;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
@@ -158,14 +158,11 @@ public class StandardAgentsInitialization {
 	@Bean
 	@Qualifier(INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER)
 	public IGInternalKnowledgeBaseDocumentsSearchNetworkAgentService defaultInternalKnowledgeBaseSearchAgentService(
-			IRagThreasholdAutotuneService semanticRagThreasholdAutotuneService,
-			IGSemanticSearchDocumentsCachedDao semanticSearchDao,
-			@Autowired(required = false) IGFullTextSearchDocumentsCachedDao fullTextSearch,
-			@Autowired(required = false) IKnowledgeGraphSearchService knowledgeGraphSearchService,
+			IGDocumentsSearchService documentsSearchService,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService) {
 		return new InternalKnowledgeBaseSearchNetworkAgentService(chatModelsDao, toolsRepositoryPattern, promptsDao,
-				securityService, agentRoleDao, runtimeBinder, semanticSearchDao, knowledgeGraphSearchService,
-				knowledgeBaseVisibilityService, fullTextSearch, rendererFactory);
+				securityService, agentRoleDao, runtimeBinder, rendererFactory, chunkingService, rankerService,
+				documentsSearchService, knowledgeBaseVisibilityService);
 
 	}
 
@@ -309,12 +306,12 @@ public class StandardAgentsInitialization {
 						if (search instanceof INativeSearchService nativeSearch) {
 							NativeDocumentsSearchNetworkAgentService nativeWrapper = new NativeDocumentsSearchNetworkAgentService(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, rankersDao, nativeSearch, rendererFactory);
+									runtimeBinder, rendererFactory, chunkingService, rankerService, nativeSearch);
 							outServices.add(nativeWrapper);
 						} else {
 							DocumentsSearchNetworkAgentServiceWrapper wrapper = new DocumentsSearchNetworkAgentServiceWrapper(
 									chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao,
-									runtimeBinder, search, rendererFactory);
+									runtimeBinder, rendererFactory, chunkingService, rankerService, search);
 							outServices.add(wrapper);
 						}
 					} catch (SearchServiceException e) {
