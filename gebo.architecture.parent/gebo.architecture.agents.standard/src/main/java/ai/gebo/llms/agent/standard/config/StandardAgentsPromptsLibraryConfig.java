@@ -22,7 +22,6 @@ import lombok.Data;
 public class StandardAgentsPromptsLibraryConfig {
 	public static final String COORDINATOR_AGENT_PROMPT = "controller-coordinator-agent-prompt";
 	public static final String REPORT_AND_ANSWER_WRITER_AGENT_PROMPT = "report-answer-writer-agent-prompt";
-	public static final String INTERNAL_KNOWLEDGEBASE_SEARCH_AGENT_PROMPT = "internal-knowledgebase-search-agent-prompt";
 	private List<GPromptTemplateLibraryReference> library = null;
 
 	@Bean

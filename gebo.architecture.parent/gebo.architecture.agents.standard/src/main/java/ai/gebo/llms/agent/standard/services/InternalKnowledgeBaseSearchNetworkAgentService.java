@@ -46,6 +46,12 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 
 	public static final String AGENT_THAT_SEARCHES_THE_INTERNAL_KNOWLEDGE_BASE = "Agent that searches the internal knowledge base";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SEARCHER = "internalKnowledgeBaseSearcher";
+	/**
+	 * Use-code of the standard RAG search-planner prompt this agent reuses. Exposed
+	 * so the agent network configuration can fetch and runtime-patch it without
+	 * depending on the chat pipelines' prompt library directly.
+	 */
+	public static final String SEARCH_PLANNER_PROMPT_USE_CODE = GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT;
 	private static final String SEMANTIC_QUERIES_FIELD = "semanticQueries";
 	private static final String FULL_TEXT_QUERIES_FIELD = "fullTextQueries";
 
@@ -87,9 +93,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 		final SearchAgentCommand command = msg.getPayload();
 		try {
 			// LLM planner: rewrite the command into semantic and full-text search queries.
-			final GPromptTemplateConfig plannerPrompt = promptsDao
-					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT);
-			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, plannerPrompt,
+			// `prompt` is the runtime-patched planner prompt (agent network placeholders
+			// injected at config time), so it is used directly instead of re-fetching the
+			// raw planner template.
+			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, prompt,
 					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());

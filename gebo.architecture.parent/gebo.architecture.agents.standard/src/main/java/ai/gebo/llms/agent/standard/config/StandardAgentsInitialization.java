@@ -51,6 +51,7 @@ import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService
 import ai.gebo.llms.agent.standard.services.DocumentsSearchNetworkAgentServiceWrapper;
 import ai.gebo.llms.agent.standard.services.InternalKnowledgeBaseSearchNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.NativeDocumentsSearchNetworkAgentService;
+import ai.gebo.llms.agent.standard.services.SearchAgentPromptPatcher;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -142,6 +143,11 @@ public class StandardAgentsInitialization {
 		internalKnowledgeBaseAgentConfig.setAccessibleToAll(true);
 		internalKnowledgeBaseAgentConfig
 				.setAgentServiceId(InternalKnowledgeBaseSearchNetworkAgentService.INTERNAL_KNOWLEDGE_BASE_SEARCHER);
+		// The internal-KB searcher reuses the standard RAG search-planner prompt,
+		// runtime-patched with the agent network placeholders (same pattern as the
+		// external searchers).
+		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(
+				promptsDao.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
 		internalKnowledgeBaseAgentConfig.setUseDefaultChatModel(true);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
@@ -247,8 +253,13 @@ public class StandardAgentsInitialization {
 						GAgentConfig agentConfig = new GAgentConfig();
 						agentConfig.setCode(serviceId);
 						agentConfig.setDescription(search.getProductId() + " search agent ");
-						agentConfig
-								.setCustomLoopPrompt(processSearchPrompt(search.getQueriesGenerationPromptUseCode()));
+						// Native searchers generate with their native query template; the others use
+						// their query-generation prompt. The chosen template is runtime-patched with
+						// the agent network placeholders and stored as the agent's custom loop prompt.
+						String searchPromptUseCode = search instanceof INativeSearchService nativeSearch
+								? nativeSearch.getNativePromptTemplateUseCode()
+								: search.getQueriesGenerationPromptUseCode();
+						agentConfig.setCustomLoopPrompt(processSearchPrompt(searchPromptUseCode));
 						agentConfig.setAccessibleToAll(true);
 						agentConfig.setAgentRoleCode(EVIDENCES_SEARCHER_AGENT);
 						agentConfig.setAgentServiceId(serviceId);
@@ -311,9 +322,9 @@ public class StandardAgentsInitialization {
 		return IGDynamicAgentConfigDataSource.of(reporterConfig);
 	}
 
-	private GPromptTemplateConfig processSearchPrompt(String queriesGenerationPromptUseCode) {
-		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(queriesGenerationPromptUseCode);
-		return prompt;
+	private GPromptTemplateConfig processSearchPrompt(String searchPromptUseCode) {
+		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(searchPromptUseCode);
+		return SearchAgentPromptPatcher.withAgentPlaceholders(prompt);
 	}
 
 	@Bean

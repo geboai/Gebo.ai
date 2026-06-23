@@ -81,17 +81,16 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		final int topK = retrievalTopK(command);
 		final List<SearchResult> results = new ArrayList<>();
 		try {
-			// Same query-generation prompt as the native search service, fed with the agent
-			// placeholder params merged with the per-system native template params.
-			final GPromptTemplateConfig nativePrompt = promptsDao
-					.findByPromptUse(nativeSearchWrapper.getNativePromptTemplateUseCode());
+			// The native query template (runtime-patched with the agent network placeholders
+			// at config time) is passed in as `prompt`, fed with the agent placeholder params
+			// merged with the per-system native template params.
 			final Class<NativeSearchDataStructure> queryType = nativeSearchWrapper.getNativeSearchDataStructureType();
 			for (SearchableSystemMetaData system : nativeSearchWrapper.getSearchableSystems()) {
 				List<CatalogueSample> catalogues = nativeSearchWrapper.getCataloguesListSample(system.getCode());
 				Map<String, Object> callParams = new HashMap<>(params);
 				callParams.putAll(nativeSearchWrapper.createCustomTemplateParamsMap(system,
 						catalogues != null ? catalogues : List.of()));
-				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, nativePrompt,
+				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt,
 						chatRequestContext, callParams, queryType);
 				results.addAll(nativeSearchWrapper.nativeSearch(queryObject, system, topK));
 			}

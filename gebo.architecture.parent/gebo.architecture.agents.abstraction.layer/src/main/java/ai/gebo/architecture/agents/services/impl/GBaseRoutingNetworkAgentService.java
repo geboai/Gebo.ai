@@ -134,8 +134,24 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (populated != null && !populated.isEmpty()) {
 			for (Map.Entry<String, Object> entry : populated.entrySet()) {
 				String targetAgent = entry.getKey();
-				if (entry.getValue() instanceof TargetAgentEnvelope agentEnvelope
-						&& agentEnvelope.getCommandData() != null) {
+				// structuredResponse binds the map values as raw maps (the parse target is
+				// LinkedHashMap and the per-agent envelope types live only in the JSON schema,
+				// which Jackson does not consult). Re-bind each value to the reified
+				// TargetAgentEnvelope<peerInputType> built earlier so commandData is typed and
+				// the assignability check below is meaningful.
+				Class<?> envelopeType = typesMap.get(targetAgent);
+				if (envelopeType == null || entry.getValue() == null) {
+					continue;
+				}
+				TargetAgentEnvelope<?> agentEnvelope = null;
+				try {
+					agentEnvelope = (TargetAgentEnvelope<?>) objectMapper.convertValue(entry.getValue(), envelopeType);
+				} catch (IllegalArgumentException e) {
+					LOGGER.error("For agent:" + targetAgent + " the command could not be bound to "
+							+ envelopeType.getName(), e);
+					continue;
+				}
+				if (agentEnvelope != null && agentEnvelope.getCommandData() != null) {
 					if (checkTypesMap.containsKey(targetAgent) && checkTypesMap.get(targetAgent)
 							.isAssignableFrom(agentEnvelope.getCommandData().getClass())) {
 						agentEnvelope.setAgentId(targetAgent);

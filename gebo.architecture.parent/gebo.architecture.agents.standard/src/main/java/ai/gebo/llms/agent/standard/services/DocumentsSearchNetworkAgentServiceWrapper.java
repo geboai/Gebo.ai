@@ -79,10 +79,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 		final List<String> keywords = new ArrayList<>();
 		try {
 			// LLM-assisted query extraction using the wrapped service's queries-generation
-			// prompt, fed with the agent placeholder params.
-			final GPromptTemplateConfig queriesPrompt = promptsDao
-					.findByPromptUse(wrappedSearchService.getQueriesGenerationPromptUseCode());
-			DeepSearchDataSourceExtractedSearchQueries extracted = callLLMStructuredReturn(agentModel, queriesPrompt,
+			// prompt, runtime-patched with the agent network placeholders at config time
+			// and passed in as `prompt`, fed with the agent placeholder params.
+			DeepSearchDataSourceExtractedSearchQueries extracted = callLLMStructuredReturn(agentModel, prompt,
 					chatRequestContext, params, DeepSearchDataSourceExtractedSearchQueries.class);
 			if (extracted != null && extracted.getSearchQuery() != null) {
 				for (SearchQuery query : extracted.getSearchQuery()) {
