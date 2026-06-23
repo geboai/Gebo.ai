@@ -80,63 +80,23 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType, N
 				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
 				createToolCallingManager(callBacksListener, allFunctions, runAs));
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
-		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
-				? agentConfig.getMaxLoopIterations()
-				: 4;
+
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
-		final AtomicBoolean iterationFinished = new AtomicBoolean(false);
-		final AtomicReference<List<AggregatedResponses>> aggregatedResponses = new AtomicReference(
-				new ArrayList<AggregatedResponses>());
-		Flux<IGPartialOperation<ResponseType>> out = Flux.defer(() -> {
-			return Flux.range(0, maxLoop).concatMap(index -> {
-				Flux<IGPartialOperation<ResponseType>> iterationStream = Flux.defer(() -> {
-					return runAs.doRunAsWithReturn(() -> {
-						try {
-							if (!iterationFinished.get()) {
-								if (LOGGER.isDebugEnabled()) {
-									LOGGER.debug("Begin agentic iteration " + getId() + " index=" + index);
-								}
-								List<AggregatedResponses> pastResponses = aggregatedResponses.get();
-								Flux<IGPartialOperation<ResponseType>> iteration = createResponse(request,
-										pastResponses, agentModel, agentConfig, agentRole, index, maxLoop, agentPrompt,
-										runAs, callBacksListener);
-								Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> aggregator = createAggregator(
-										aggregatedResponses);
-
-								return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic())).map(aggregator)
-										.map(x -> {
-											if (x.isLastMessage())
-												iterationFinished.set(true);
-											return x;
-										}).doOnComplete(() -> LOGGER.debug("End agentic iteration {} index={}", getId(),
-												index));
-							} else
-								return Flux.empty();
-						} catch (Throwable th) {
-							LOGGER.error("Error in agent execution", th);
-							return Flux.just(IGPartialOperation.of(null,
-									GUserMessage.errorMessage("Error in agent execution", th)));
-						}
-					});
-				});
-				return iterationStream;
-			});
-
-		});
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End execute(...)");
-		}
-		return out;
+		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(chatRequestContext, agentConfig, request,
+				network, contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole,
+				agentPrompt, runAs, callBacksListener);
+		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
+				.doOnComplete(() -> LOGGER.debug("End agentic iteration {} ", getId()));
 	}
 
-	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(RequestType request,
-			List<AggregatedResponses> pastResponses, IGConfigurableChatModel agentModel, GAgentConfig agentConfig,
-			GAgentRole agentRole, Integer index, int maxLoop, GPromptTemplateConfig agentPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener);
-
-	protected abstract Function<IGPartialOperation<ResponseType>, IGPartialOperation<ResponseType>> createAggregator(
-			AtomicReference<List<AggregatedResponses>> aggregatorList);
+	protected abstract Flux<IGPartialOperation<ResponseType>> createResponse(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink<NotificationObject> notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGConfigurableChatModel agentModel,
+			GAgentRole agentRole, GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs,
+			ToolCallsListener callBacksListener) throws LLMConfigException, AgentException;
 
 }

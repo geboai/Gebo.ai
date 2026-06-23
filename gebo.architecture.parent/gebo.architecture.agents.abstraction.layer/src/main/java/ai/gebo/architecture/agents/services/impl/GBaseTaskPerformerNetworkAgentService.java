@@ -71,7 +71,7 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 				false);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {

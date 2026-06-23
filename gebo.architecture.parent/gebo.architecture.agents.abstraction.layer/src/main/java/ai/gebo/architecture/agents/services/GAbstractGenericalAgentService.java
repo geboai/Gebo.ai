@@ -53,6 +53,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingService implements IGGenericAgentService {
@@ -294,49 +295,65 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected <InputType, OutputType> Map<String, Object> createAgentTemplateParams(GPromptTemplateConfig prompt,
 			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, AgentsExchangeMessage<InputType> msg,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, Object input,
 			IGAgentsNetworkRuntimeDao agentsDao, int actualContributionNr, int tokenBudget) {
-		Map<String, Object> params = new HashMap<>();
-		// Only the {placeholder} tokens actually declared in the prompt are populated:
-		// this avoids computing (and spending the token budget on) context the template
-		// does not reference, and guarantees a non-null value for every declared
-		// placeholder so PromptTemplate.render() never fails on a missing/null value.
+		return createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session, mySessionContext,
+				input, agentsDao, actualContributionNr, tokenBudget, false).get(0);
+	}
+
+	protected <InputType, OutputType> List<Map<String, Object>> createAgentTemplateParams(GPromptTemplateConfig prompt,
+			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, Object input,
+			IGAgentsNetworkRuntimeDao agentsDao, int actualContributionNr, int tokenBudget, boolean splitByBudget) {
+		Map<String, Object> constantParams = new HashMap<>();
+		List<Map<String, Object>> vectorized = new ArrayList<Map<String, Object>>();
 		final Map<String, Boolean> placeholders = prompt != null ? prompt.getPlaceholders() : Map.of();
 		int remainingBudget = tokenBudget;
 
 		if (placeholders.containsKey(NETWORK_SCENARY_TEMPLATE_PARAM)) {
 			String networkScenary = nullToEmpty(createNetworkScenaryDescription(network));
-			params.put(NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary);
+			constantParams.put(NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary);
 			remainingBudget -= ITokensCountable.stringsTokensSize(networkScenary);
 		}
 		if (placeholders.containsKey(AGENT_IDENTITY_TEMPLATE_PARAM)) {
 			String agentIdentity = nullToEmpty(createAgentIdentityDescription(agentRole, contextAgentPersona));
-			params.put(AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity);
+			constantParams.put(AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity);
 			remainingBudget -= ITokensCountable.stringsTokensSize(agentIdentity);
 		}
 		if (placeholders.containsKey(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM)) {
 			String comunicationCapabilities = nullToEmpty(
 					createAgentCommunicationCapabilityDescription(agentRole, contextAgentPersona, network, agentsDao));
-			params.put(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM, comunicationCapabilities);
+			constantParams.put(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM, comunicationCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(comunicationCapabilities);
 		}
 		if (placeholders.containsKey(INPUT_TEMPLATE_PARAM)) {
-			String renderedInput = nullToEmpty(render(msg));
-			params.put(INPUT_TEMPLATE_PARAM, renderedInput);
+			String renderedInput = nullToEmpty(renderContributionData(input));
+			constantParams.put(INPUT_TEMPLATE_PARAM, renderedInput);
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
 		}
-		if (placeholders.containsKey(SHARED_CONTEXT_TEMPLATE_PARAM)) {
-			String sharedContext = nullToEmpty(
-					render(session, mySessionContext.getLastContributionTurn(), actualContributionNr, remainingBudget));
-			params.put(SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
-			remainingBudget -= ITokensCountable.stringsTokensSize(sharedContext);
-		}
+
 		if (placeholders.containsKey(PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
-			params.put(PRIVATE_CONTEXT_TEMPLATE_PARAM,
+			constantParams.put(PRIVATE_CONTEXT_TEMPLATE_PARAM,
 					nullToEmpty(render(mySessionContext, actualContributionNr, remainingBudget)));
 		}
-
-		return params;
+		final int fixedBudget = remainingBudget;
+		if (placeholders.containsKey(SHARED_CONTEXT_TEMPLATE_PARAM)) {
+			RenderedRange iterationValue = null;
+			int startedContribution = mySessionContext.getLastContributionTurn() == null ? 0
+					: mySessionContext.getLastContributionTurn();
+			do {
+				Map<String, Object> params = new HashMap<String, Object>();
+				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget);
+				String sharedContext = nullToEmpty(iterationValue.getContext());
+				params.put(SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
+				startedContribution = iterationValue.getLastContribution();
+				vectorized.add(params);
+			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
+		} else {
+			vectorized.add(constantParams);
+		}
+		return vectorized;
 	}
 
 	private static String nullToEmpty(String value) {
@@ -345,8 +362,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 
 	/**
 	 * Backup rendering strategy for a parameter that has no dedicated
-	 * {@link IGDocumentContentRenderer}: falls back to {@link Object#toString()}. If
-	 * the actual runtime class of the parameter does not directly implement
+	 * {@link IGDocumentContentRenderer}: falls back to {@link Object#toString()}.
+	 * If the actual runtime class of the parameter does not directly implement
 	 * {@code toString()}, a warning is logged so such cases can be spotted.
 	 */
 	protected String genericRender(Object object) {
@@ -461,58 +478,94 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return buffer.toString();
 	}
 
-	protected String render(AgentsCollaborationSessionContext session, Integer lastTurn, int actualContributionNr,
-			int remainingBudget) {
+	@AllArgsConstructor
+	@Getter
+	protected static class RenderedRange {
+		final int startContribution;
+		final int lastContribution;
+		final String context;
+		final boolean finishedContributions;
+	}
+
+	protected RenderedRange render(AgentsCollaborationSessionContext session, Integer lastTurn,
+			int actualContributionNr, int remainingBudget, boolean split) {
 		final int lastKnowledge = lastTurn == null ? 0 : lastTurn;
 		List<AgentProducedSessionContribution> newGeneratedKnowledge = session
 				.getSampledContributionsAfter(lastKnowledge);
 		if (newGeneratedKnowledge.isEmpty()) {
-			return "";
+			return new RenderedRange(0, 0, "", true);
 		}
 		// Group by agent, preserving first-appearance (chronological) order.
-		LinkedHashMap<String, List<AgentProducedSessionContribution>> contributions = new LinkedHashMap<>();
-		for (AgentProducedSessionContribution contrib : newGeneratedKnowledge) {
-			contributions.computeIfAbsent(contrib.getAgentName(), name -> new ArrayList<>()).add(contrib);
+		List<AgentProducedSessionContribution> remainingContributions = session
+				.getSampledContributionsAfter(lastKnowledge);
+		if (split) {
+			return renderBatchedContributions(remainingContributions, remainingBudget);
+		} else {
+			return renderAllContributions(remainingContributions);
 		}
-		// Render each agent group body, then share the budget proportionally across groups.
-		List<String> agentNames = new ArrayList<>(contributions.keySet());
-		List<String> bodies = new ArrayList<>(agentNames.size());
-		for (String agentName : agentNames) {
-			StringBuffer body = new StringBuffer();
-			for (AgentProducedSessionContribution contribution : contributions.get(agentName)) {
-				String rendered = renderContributionData(contribution.getData());
-				if (rendered.isBlank()) {
-					continue;
-				}
-				body.append(rendered);
-				body.append(NEWLINE);
-			}
-			bodies.add(body.toString());
-		}
-		List<String> fitted = allocateProportional(bodies, remainingBudget);
+
+	}
+
+	protected String renderContribution(AgentProducedSessionContribution agentProducedSessionContribution) {
 		StringBuffer inner = new StringBuffer();
-		for (int i = 0; i < agentNames.size(); i++) {
-			String body = fitted.get(i);
-			if (body == null || body.isBlank()) {
-				continue;
-			}
+		String contributionAsString = renderContributionData(agentProducedSessionContribution.getData());
+		if (contributionAsString != null && !contributionAsString.isBlank() && !contributionAsString.isEmpty()) {
 			inner.append(BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT);
-			inner.append(agentNames.get(i));
+			inner.append(agentProducedSessionContribution.getAgentName());
 			inner.append(NEWLINE);
-			inner.append(body);
+			inner.append(contributionAsString);
 			inner.append(END_AGENT_CONTEXT_CONTRIBUTION);
 			inner.append(NEWLINE);
 		}
-		if (inner.length() == 0) {
-			return "";
+		return inner.toString();
+	}
+
+	protected RenderedRange renderAllContributions(List<AgentProducedSessionContribution> remainingContributions) {
+		StringBuffer inner = new StringBuffer();
+		int minContribution = Integer.MAX_VALUE;
+		int maxContribution = 0;
+		for (AgentProducedSessionContribution agentProducedSessionContribution : remainingContributions) {
+			minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
+			maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
+			inner.append(renderContribution(agentProducedSessionContribution));
 		}
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
-		buffer.append(NEWLINE);
-		buffer.append(inner);
-		buffer.append(END_SHARED_CONTEXT_DELTA);
-		buffer.append(NEWLINE);
-		return buffer.toString();
+		if (!inner.isEmpty()) {
+			buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+			buffer.append(inner.toString());
+			buffer.append(END_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+		}
+		return new RenderedRange(minContribution, maxContribution, buffer.toString(), true);
+	}
+
+	protected RenderedRange renderBatchedContributions(List<AgentProducedSessionContribution> remainingContributions,
+			int remainingBudget) {
+		StringBuffer inner = new StringBuffer();
+		int minContribution = Integer.MAX_VALUE;
+		int maxContribution = 0;
+		int insertedSlots = 0;
+		for (AgentProducedSessionContribution agentProducedSessionContribution : remainingContributions) {
+			String rendered = renderContribution(agentProducedSessionContribution);
+			remainingBudget -= ITokensCountable.stringsTokensSize(rendered);
+			if (remainingBudget >= 0) {
+				minContribution = Math.min(agentProducedSessionContribution.getContributionUniqueNr(), minContribution);
+				maxContribution = Math.max(agentProducedSessionContribution.getContributionUniqueNr(), maxContribution);
+				inner.append(rendered);
+				insertedSlots++;
+			}
+		}
+		StringBuffer buffer = new StringBuffer();
+		if (!inner.isEmpty()) {
+			buffer.append(BEGIN_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+			buffer.append(inner.toString());
+			buffer.append(END_SHARED_CONTEXT_DELTA);
+			buffer.append(NEWLINE);
+		}
+		return new RenderedRange(minContribution, maxContribution, buffer.toString(),
+				insertedSlots == remainingContributions.size());
 	}
 
 	private String renderContributionData(Object data) {
@@ -530,7 +583,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (interactions == null || interactions.isEmpty()) {
 			return "";
 		}
-		// Render the input and output of every turn, then share the budget proportionally
+		// Render the input and output of every turn, then share the budget
+		// proportionally
 		// across all rendered pieces (two pieces - input and output - per turn).
 		List<String> pieces = new ArrayList<>(interactions.size() * 2);
 		for (AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction agentInteraction : interactions) {
@@ -577,8 +631,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
-	 * Shares a token budget across the given rendered pieces proportionally to their
-	 * individual token sizes.
+	 * Shares a token budget across the given rendered pieces proportionally to
+	 * their individual token sizes.
 	 */
 	private static List<String> allocateProportional(List<String> pieces, int budget) {
 		int n = pieces.size();

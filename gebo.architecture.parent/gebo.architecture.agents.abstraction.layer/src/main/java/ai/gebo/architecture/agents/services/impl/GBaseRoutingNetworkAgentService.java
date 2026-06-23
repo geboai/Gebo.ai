@@ -105,7 +105,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		List<RuntimeAgentInfos> peers = new ArrayList<>();
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		final boolean formatDeclared = isPlaceholderDeclared(prompt, FORMAT_TEMPLATE_PARAM);
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();

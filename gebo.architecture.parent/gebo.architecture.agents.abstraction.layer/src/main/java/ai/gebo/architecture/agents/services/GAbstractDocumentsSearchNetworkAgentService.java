@@ -66,7 +66,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener, runAs);
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg, agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		List<Document> documents = retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
 		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,

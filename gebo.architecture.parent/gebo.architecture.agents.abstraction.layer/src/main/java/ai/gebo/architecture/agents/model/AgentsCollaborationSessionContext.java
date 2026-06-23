@@ -2,6 +2,7 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -13,19 +14,24 @@ public final class AgentsCollaborationSessionContext {
 	private final String id = UUID.randomUUID().toString();
 
 	private int contributionCounter = 0;
-	private final List<AgentProducedSessionContribution> contributions = new ArrayList<>();
+	private final TreeMap<Integer, List<AgentProducedSessionContribution>> contributions = new TreeMap<Integer, List<AgentProducedSessionContribution>>();
 
 	public synchronized void addContribution(AgentsExchangeMessage<?> msg, int contributionNr) {
 		AgentProducedSessionContribution contribution = new AgentProducedSessionContribution(contributionNr,
 				msg.getFromAgent(), msg.getPayload());
-		contributions.add(contribution);
+		contributions.computeIfAbsent(contributionNr, (c) -> new ArrayList<AgentProducedSessionContribution>());
+		contributions.get(contributionNr).add(contribution);
 	}
 
 	public synchronized List<AgentProducedSessionContribution> getSampledContributions() {
-		return new ArrayList<>(contributions);
+		List<AgentProducedSessionContribution> listified = new ArrayList<AgentProducedSessionContribution>();
+		for (List<AgentProducedSessionContribution> c : contributions.values()) {
+			listified.addAll(c);
+		}
+		return List.copyOf(listified);
 	}
 
-	public List<AgentProducedSessionContribution> getSampledContributionsAfter(int index) {
+	public  List<AgentProducedSessionContribution> getSampledContributionsAfter(int index) {
 		return getSampledContributions().stream().filter(x -> x.getContributionUniqueNr() >= index).toList();
 	}
 
