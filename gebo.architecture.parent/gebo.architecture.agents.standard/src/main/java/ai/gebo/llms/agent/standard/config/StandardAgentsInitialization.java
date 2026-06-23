@@ -188,12 +188,14 @@ public class StandardAgentsInitialization {
 		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
 		List<String> coordinatedAgentCodes = Stream.concat(dataSources.stream(), Stream.of(reportWriter))
 				.map(x -> x.getCode()).toList();
+		GAgentConfig internalKnowledgeBaseConfig = null;
 		if (internalKnowledgebaseAgentConfigDataSource != null) {
 			List<GAgentConfig> internalKBSearchAgentConfigs = internalKnowledgebaseAgentConfigDataSource
 					.getConfigurations();
 			if (!internalKBSearchAgentConfigs.isEmpty()) {
+				internalKnowledgeBaseConfig = internalKBSearchAgentConfigs.get(0);
 				List<String> fullSearchersList = new ArrayList<String>();
-				fullSearchersList.add(internalKBSearchAgentConfigs.get(0).getCode());
+				fullSearchersList.add(internalKnowledgeBaseConfig.getCode());
 				fullSearchersList.addAll(coordinatedAgentCodes);
 				coordinatedAgentCodes = fullSearchersList;
 			}
@@ -215,10 +217,19 @@ public class StandardAgentsInitialization {
 		controllerParticipant.setOutputNode(false);
 		controllerParticipant.setCommunicationList(coordinatedAgentCodes);
 		participants.add(controllerParticipant);
-		for (GAgentConfig searcher : dataSources) {
+		// Searcher participants: the internal knowledge base searcher (when present) plus
+		// every external search-service searcher. Each is reachable from the controller and
+		// shares its results with the report writer. The internal-KB searcher must be a
+		// participant too; otherwise the controller's communication list references an agent
+		// with no runtime allocation and routing fails.
+		List<GAgentConfig> searcherConfigs = new ArrayList<>();
+		if (internalKnowledgeBaseConfig != null) {
+			searcherConfigs.add(internalKnowledgeBaseConfig);
+		}
+		searcherConfigs.addAll(dataSources);
+		for (GAgentConfig searcher : searcherConfigs) {
 			AgentNetworkParticipant participant = new AgentNetworkParticipant();
 			participant.setAgentConfigCode(searcher.getCode());
-			participant.setCommunicationList(List.of());
 			participant.setMaxConsecutiveInvocations(5);
 			participant.setMaxInvocations(10);
 			participant.setCommunicationList(List.of(reportWriter.getCode()));
