@@ -305,7 +305,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			List<String> cleanedList = new ArrayList<>();
 			List<String> choosen = decisionMap.get(DEEP_SEARCHED_SYSTEMS);
 			for (String ds : choosen) {
-				if (validSystems.containsValue(ds)) {
+				if (validSystems.containsKey(ds)) {
 					cleanedList.add(ds);
 				}
 			}
