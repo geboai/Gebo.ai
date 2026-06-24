@@ -152,8 +152,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						return handler.streamPureSearch(minimalChatContext, emitter, chatModel, serviceModel,
 								perDataSourceK, sampleTextTokensSize, chunkSessionId);
 					} catch (Throwable e) {
-						LOGGER.error("Error running search on " + (handler != null ? handler.getHandlerId() : "Null handler"),
-								e);
+						LOGGER.error("Error running search on "
+								+ (handler != null ? handler.getHandlerId() : "Null handler"), e);
 						PureSearchDocumentResultError error = new PureSearchDocumentResultError(null, null,
 								GUserMessage.warnMessage("Error running search", e.getMessage()));
 						return Flux.just((AbstractPureSearchDocumentResultEntry) error);
@@ -622,7 +622,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		final int subanalisysThreashold = defaultDeepsearchConfig
 				.getSatisfactorySubAnalisysThreashold(request.getUserIntent());
 		final AtomicInteger satisfactorySubanalisys = new AtomicInteger(0);
-		final long tokensBudget = serviceModel.getContextLength() * 3 / 4;
+		final long tokensBudget = serviceModel.getContextLength() * 2 / 3;
 		final Map<String, Object> sharedParams = new HashMap<>(commonParams);
 		sharedParams.put(AGENT_DELIVERABLE_COMPLETENESS,
 				request.getUserIntent() != null

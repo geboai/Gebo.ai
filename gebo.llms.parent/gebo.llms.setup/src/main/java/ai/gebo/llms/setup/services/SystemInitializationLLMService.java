@@ -226,6 +226,21 @@ public class SystemInitializationLLMService {
 										chatData.setServiceHandler(serviceHandler);
 										chatData.setSetAsDefaultModel(chatModelConfig.isDefaultModel());
 										chatData.setType(ModelType.CHAT);
+										// carry over preset-defined generation/thinking defaults for the chosen model
+										final String chosenChatModel = chatModelCode;
+										chatPreset.get().getChoices().stream()
+												.filter(x -> chosenChatModel.equals(x.getCode())).findFirst()
+												.ifPresent(choice -> {
+													if (choice.getContextWindow() != null) {
+														chatData.setContextWindow(choice.getContextWindow());
+													}
+													if (choice.getMaxGeneratedTokens() != null) {
+														chatData.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
+													}
+													if (choice.getThinking() != null) {
+														chatData.setThinking(choice.getThinking());
+													}
+												});
 										newLLmsConfigs.add(chatData);
 
 									}

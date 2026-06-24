@@ -644,6 +644,18 @@ public class GeboLLMSSetupService {
 		md.setSetAsDefaultModel(defaultModel);
 		md.setType(ModelType.CHAT);
 		md.setUses(List.of(use));
+		// carry over preset-defined generation/thinking defaults for the chosen model
+		chatPreset.getChoices().stream().filter(x -> chatModel.equals(x.getCode())).findFirst().ifPresent(choice -> {
+			if (choice.getContextWindow() != null) {
+				md.setContextWindow(choice.getContextWindow());
+			}
+			if (choice.getMaxGeneratedTokens() != null) {
+				md.setMaxGeneratedTokens(choice.getMaxGeneratedTokens());
+			}
+			if (choice.getThinking() != null) {
+				md.setThinking(choice.getThinking());
+			}
+		});
 		return md;
 	}
 
@@ -749,6 +761,12 @@ public class GeboLLMSSetupService {
 					configuration.setForUses(config.getUses());
 					if (config.getContextWindow() != null) {
 						configuration.setContextLength(config.getContextWindow());
+					}
+					if (config.getMaxGeneratedTokens() != null) {
+						configuration.setMaxGeneratedTokens(config.getMaxGeneratedTokens());
+					}
+					if (config.getThinking() != null) {
+						configuration.setThinking(config.getThinking());
 					}
 					if (config.getEnableAllFunctions() != null && config.getEnableAllFunctions()) {
 						List<ToolCallback> tools = this.toolsRepo.getTools();

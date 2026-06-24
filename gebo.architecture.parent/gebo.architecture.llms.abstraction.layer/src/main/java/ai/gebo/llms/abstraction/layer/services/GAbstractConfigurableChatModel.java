@@ -284,6 +284,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		} else {
 			LOGGER.error("No config value for configurable model!!");
 		}
+		Integer generated = config.getMaxGeneratedTokens();
+		if (contextLength != null && generated != null) {
+			int contextWindow = contextLength.intValue();
+			int generatedTokens = generated.intValue();
+			int realContextWindow = contextWindow - generatedTokens;
+			if (realContextWindow > 0) {
+				contextLength = realContextWindow;
+			}
+		}
 		if (contextLength == null || contextLength.intValue() == 0)
 			contextLength = 8192;
 		return contextLength;
