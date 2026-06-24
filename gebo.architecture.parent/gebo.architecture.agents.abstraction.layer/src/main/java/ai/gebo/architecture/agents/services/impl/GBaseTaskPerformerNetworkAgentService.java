@@ -14,6 +14,7 @@ import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
@@ -77,9 +78,9 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		if (String.class.isAssignableFrom(getOutputType())) {
 			output = (OutputType) agentModel.textResponse(prompt, params, chatRequestContext);
 		} else {
-			if (isPlaceholderDeclared(prompt, FORMAT_TEMPLATE_PARAM)) {
+			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
-				params.put(FORMAT_TEMPLATE_PARAM, converter.getFormat());
+				params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, converter.getFormat());
 			}
 			output = (OutputType) agentModel.structuredResponse(prompt, params, chatRequestContext, outputType);
 		}

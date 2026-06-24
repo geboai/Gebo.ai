@@ -18,6 +18,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.model.TargetAgentEnvelope;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
@@ -53,8 +54,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	public GBaseRoutingNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder, String id,
-			String description, Class<InputType> inputType, Class<OutputType> outputType, IGDocumentContentRendererProvider rendererFactory) {
-		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder, rendererFactory);
+			String description, Class<InputType> inputType, Class<OutputType> outputType,
+			IGDocumentContentRendererProvider rendererFactory) {
+		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
+				rendererFactory);
 		this.id = id;
 		this.description = description;
 		this.inputType = inputType;
@@ -87,11 +90,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		final ToolCallsListener callsListener = new ToolCallsListener();
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -106,7 +109,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		int tokenBudget = (agentModel.getContextLength() - prompt.getTokensSize()) * 2 / 3;
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
-		final boolean formatDeclared = isPlaceholderDeclared(prompt, FORMAT_TEMPLATE_PARAM);
+		final boolean formatDeclared = isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM);
 		Map<String, Class<?>> checkTypesMap = new HashMap<>();
 		Map<String, Class<?>> typesMap = new HashMap<>();
 		for (String coordAgent : toCoordinate) {
@@ -125,7 +128,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			}
 		}
 		if (formatDeclared) {
-			params.put(FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
+			params.put(AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM, super.buildRootJsonSchema(typesMap));
 		}
 		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, chatRequestContext,
 				LinkedHashMap.class);
@@ -147,8 +150,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				try {
 					agentEnvelope = (TargetAgentEnvelope<?>) objectMapper.convertValue(entry.getValue(), envelopeType);
 				} catch (IllegalArgumentException e) {
-					LOGGER.error("For agent:" + targetAgent + " the command could not be bound to "
-							+ envelopeType.getName(), e);
+					LOGGER.error(
+							"For agent:" + targetAgent + " the command could not be bound to " + envelopeType.getName(),
+							e);
 					continue;
 				}
 				if (agentEnvelope != null && agentEnvelope.getCommandData() != null) {
