@@ -2,15 +2,14 @@ package ai.gebo.ollama.integration.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,28 +32,23 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.gebo.architecture.ai.model.GPromptConfig;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTests;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
-import ai.gebo.architecture.rag.support.layer.services.IGSemanticSearchDocumentsCachedDao;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
-import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -69,24 +63,19 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
-import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.monolithic.api.client.api.AuthControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
 import ai.gebo.monolithic.api.client.api.ChatModelsLookupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
-import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboUserChatsControllerApi;
 import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
-import ai.gebo.monolithic.api.client.model.GChatModelType;
 import ai.gebo.monolithic.api.client.model.GLookupEntryRef;
-import ai.gebo.monolithic.api.client.model.GLookupEntryRefGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.LoginRequest;
 import ai.gebo.monolithic.api.client.model.OperationStatusAuthResponse;
-import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
 import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
@@ -95,7 +84,6 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import lombok.Data;
-import reactor.core.publisher.Flux;
 
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegrationTests {
@@ -201,15 +189,15 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
-		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
 		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
-		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);		
+		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
 		// inject the false history
 		IGConfigurableChatModel chatModel = this.chatModelRuntimeDao.defaultHandler();
-		
-		GPromptConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT);
+
+		GPromptTemplateConfig prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.PROMPT_USE_STANDARD_CHAT_PROMPT);
 		for (int i = 0; i < INGESTION_FILES.length; i++) {
 			GeboChatRequest request = new GeboChatRequest();
 			request.setStreamResponse(false);
@@ -224,7 +212,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			response.setQueryResponse(interactions.get(i).getAssistant());
 			String file = INGESTION_FILES[i];
 			LOGGER.info("Ingesting and adding file:" + file);
-			LLMChatRequestResources r = this.chatLifecycleService.startRequest(request, chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			LLMChatRequestResources r = this.chatLifecycleService.startRequest(request, chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 			try (InputStream is = getClass().getResourceAsStream(file)) {
 				if (is == null)
@@ -244,7 +233,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 							LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
 					this.chatLifecycleService.endRequest(request, response);
-					
+
 					this.chatLifecycleService.chatRequestCompleted(request, chatModel);
 					this.showShrinked(data);
 				}
@@ -255,7 +244,6 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 				value = (!shrinkedState.getRelevantRetrievedDocuments().isEmpty()
 						|| !shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
 				assertTrue(value, "The latest and relevant retrieve documents structure cannot be both empty");
-				
 
 			}
 			// request.setUserUploadedContents(rv.getResult());
@@ -275,7 +263,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			interaction.getRequest().setUserChatContextCode(data.getCode());
 			interaction.setRequestNTokens(tokenEstimator.estimate(tChatInteraction.getUser()));
 
-			this.chatLifecycleService.startRequest(interaction.getRequest(), chatModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
+			this.chatLifecycleService.startRequest(interaction.getRequest(), chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 			interaction.setResponse(new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse());
 			interaction.getResponse().setQueryResponse(tChatInteraction.getAssistant());
 			interaction.getResponse().setUserChatContextCode(data.getCode());
@@ -294,14 +283,12 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			value = (!shrinkedState.getRelevantRetrievedDocuments().isEmpty()
 					|| !shrinkedState.getLatestRequestsRetrievedDocuments().getData().isEmpty());
 			assertTrue(value, "The latest and relevant retrieve documents structure cannot be both empty");
-		
+
 			Thread.currentThread().sleep(10000);
 			index++;
 
 		}
 
-		
-		
 		persistentObjectManager.update(data);
 
 		int loopIndex = 0;
@@ -352,7 +339,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse("At least a default chat model must be configured", models.isEmpty());
 		GLookupEntryRef defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
-		GeboUserChatsControllerApi userChatsAi=new GeboUserChatsControllerApi(authApiClient);
+		GeboUserChatsControllerApi userChatsAi = new GeboUserChatsControllerApi(authApiClient);
 		GUserChatInfo cleanChat = userChatsAi.createCleanChatByModelCode(defaultModel.getCode());
 		// load the created user context
 		GUserChatSession data = persistentObjectManager.findById(GUserChatSession.class, cleanChat.getCode());
