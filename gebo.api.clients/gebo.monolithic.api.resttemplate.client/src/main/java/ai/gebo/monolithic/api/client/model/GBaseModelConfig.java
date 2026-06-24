@@ -24,7 +24,7 @@ import java.util.Date;
  * GBaseModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GBaseModelConfig {
   @JsonProperty("code")
@@ -59,6 +59,9 @@ public class GBaseModelConfig {
 
   @JsonProperty("baseUrl")
   private String baseUrl = null;
+
+  @JsonProperty("contextLength")
+  private Integer contextLength = null;
 
   public GBaseModelConfig code(String code) {
     this.code = code;
@@ -258,6 +261,24 @@ public class GBaseModelConfig {
     this.baseUrl = baseUrl;
   }
 
+  public GBaseModelConfig contextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+    return this;
+  }
+
+   /**
+   * Get contextLength
+   * @return contextLength
+  **/
+  @Schema(description = "")
+  public Integer getContextLength() {
+    return contextLength;
+  }
+
+  public void setContextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -278,12 +299,13 @@ public class GBaseModelConfig {
         Objects.equals(this.defaultModel, gbaseModelConfig.defaultModel) &&
         Objects.equals(this.apiSecretCode, gbaseModelConfig.apiSecretCode) &&
         Objects.equals(this.choosedModel, gbaseModelConfig.choosedModel) &&
-        Objects.equals(this.baseUrl, gbaseModelConfig.baseUrl);
+        Objects.equals(this.baseUrl, gbaseModelConfig.baseUrl) &&
+        Objects.equals(this.contextLength, gbaseModelConfig.contextLength);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength);
   }
 
 
@@ -303,6 +325,7 @@ public class GBaseModelConfig {
     sb.append("    apiSecretCode: ").append(toIndentedString(apiSecretCode)).append("\n");
     sb.append("    choosedModel: ").append(toIndentedString(choosedModel)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("}");
     return sb.toString();
   }

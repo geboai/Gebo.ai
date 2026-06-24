@@ -17,9 +17,12 @@ Name | Type | Description | Notes
 **tokensLimit** | **Integer** |  |  [optional]
 **documentsParallelism** | **Integer** |  |  [optional]
 **manualThreasholdsConfiguration** | **Boolean** |  |  [optional]
-**chatModelConfiguration** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **defaultConfig** | **Boolean** |  |  [optional]
-**chatProfileCode** | **String** |  |  [optional]
+**accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
+**accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
+**accessibleToAll** | **Boolean** |  |  [optional]
+**dataSourcesAccesses** | [**List&lt;DeepSearchDataSourceAccess&gt;**](DeepSearchDataSourceAccess.md) |  |  [optional]
+**perDataSourceConfigured** | **Boolean** |  |  [optional]
 
 <a name="SearchTypeEnum"></a>
 ## Enum: SearchTypeEnum

@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **vectorizeOnlyExtensions** | **List&lt;String&gt;** |  |  [optional]
 **synchroStrategy** | [**SynchroStrategyEnum**](#SynchroStrategyEnum) |  |  [optional]
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **path** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md) |  |  [optional]
 
 <a name="SynchroStrategyEnum"></a>

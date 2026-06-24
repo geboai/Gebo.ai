@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentLLMSStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class ComponentLLMSStatus {
   @JsonProperty("isSetup")
@@ -33,6 +33,15 @@ public class ComponentLLMSStatus {
 
   @JsonProperty("embeddedModelSetup")
   private Boolean embeddedModelSetup = null;
+
+  @JsonProperty("rankingModelSetup")
+  private Boolean rankingModelSetup = null;
+
+  @JsonProperty("ttsModelSetup")
+  private Boolean ttsModelSetup = null;
+
+  @JsonProperty("transcriptModelSetup")
+  private Boolean transcriptModelSetup = null;
 
   public ComponentLLMSStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
@@ -88,6 +97,60 @@ public class ComponentLLMSStatus {
     this.embeddedModelSetup = embeddedModelSetup;
   }
 
+  public ComponentLLMSStatus rankingModelSetup(Boolean rankingModelSetup) {
+    this.rankingModelSetup = rankingModelSetup;
+    return this;
+  }
+
+   /**
+   * Get rankingModelSetup
+   * @return rankingModelSetup
+  **/
+  @Schema(description = "")
+  public Boolean isRankingModelSetup() {
+    return rankingModelSetup;
+  }
+
+  public void setRankingModelSetup(Boolean rankingModelSetup) {
+    this.rankingModelSetup = rankingModelSetup;
+  }
+
+  public ComponentLLMSStatus ttsModelSetup(Boolean ttsModelSetup) {
+    this.ttsModelSetup = ttsModelSetup;
+    return this;
+  }
+
+   /**
+   * Get ttsModelSetup
+   * @return ttsModelSetup
+  **/
+  @Schema(description = "")
+  public Boolean isTtsModelSetup() {
+    return ttsModelSetup;
+  }
+
+  public void setTtsModelSetup(Boolean ttsModelSetup) {
+    this.ttsModelSetup = ttsModelSetup;
+  }
+
+  public ComponentLLMSStatus transcriptModelSetup(Boolean transcriptModelSetup) {
+    this.transcriptModelSetup = transcriptModelSetup;
+    return this;
+  }
+
+   /**
+   * Get transcriptModelSetup
+   * @return transcriptModelSetup
+  **/
+  @Schema(description = "")
+  public Boolean isTranscriptModelSetup() {
+    return transcriptModelSetup;
+  }
+
+  public void setTranscriptModelSetup(Boolean transcriptModelSetup) {
+    this.transcriptModelSetup = transcriptModelSetup;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +163,15 @@ public class ComponentLLMSStatus {
     ComponentLLMSStatus componentLLMSStatus = (ComponentLLMSStatus) o;
     return Objects.equals(this.isSetup, componentLLMSStatus.isSetup) &&
         Objects.equals(this.chatModelSetup, componentLLMSStatus.chatModelSetup) &&
-        Objects.equals(this.embeddedModelSetup, componentLLMSStatus.embeddedModelSetup);
+        Objects.equals(this.embeddedModelSetup, componentLLMSStatus.embeddedModelSetup) &&
+        Objects.equals(this.rankingModelSetup, componentLLMSStatus.rankingModelSetup) &&
+        Objects.equals(this.ttsModelSetup, componentLLMSStatus.ttsModelSetup) &&
+        Objects.equals(this.transcriptModelSetup, componentLLMSStatus.transcriptModelSetup);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isSetup, chatModelSetup, embeddedModelSetup);
+    return Objects.hash(isSetup, chatModelSetup, embeddedModelSetup, rankingModelSetup, ttsModelSetup, transcriptModelSetup);
   }
 
 
@@ -117,6 +183,9 @@ public class ComponentLLMSStatus {
     sb.append("    isSetup: ").append(toIndentedString(isSetup)).append("\n");
     sb.append("    chatModelSetup: ").append(toIndentedString(chatModelSetup)).append("\n");
     sb.append("    embeddedModelSetup: ").append(toIndentedString(embeddedModelSetup)).append("\n");
+    sb.append("    rankingModelSetup: ").append(toIndentedString(rankingModelSetup)).append("\n");
+    sb.append("    ttsModelSetup: ").append(toIndentedString(ttsModelSetup)).append("\n");
+    sb.append("    transcriptModelSetup: ").append(toIndentedString(transcriptModelSetup)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -14,4 +14,5 @@ Name | Type | Description | Notes
 **apiSecretCode** | **String** |  |  [optional]
 **choosedModel** | [**GAzureOpenAIEmbeddingModelChoice**](GAzureOpenAIEmbeddingModelChoice.md) |  |  [optional]
 **baseUrl** | **String** |  |  [optional]
+**contextLength** | **Integer** |  |  [optional]
 **tokenizationThreshold** | **Integer** |  |  [optional]

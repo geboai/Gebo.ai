@@ -8,3 +8,7 @@ Name | Type | Description | Notes
 **embeddingModelExists** | **Boolean** |  |  [optional]
 **defaultChatModelExists** | **Boolean** |  |  [optional]
 **internalServicesChatModelExists** | **Boolean** |  |  [optional]
+**rankerModelExists** | **Boolean** |  |  [optional]
+**imagesModelExists** | **Boolean** |  |  [optional]
+**ttsModelExists** | **Boolean** |  |  [optional]
+**transcriptModelExists** | **Boolean** |  |  [optional]

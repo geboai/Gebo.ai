@@ -25,7 +25,7 @@ import java.util.List;
  * GJiraSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GJiraSystem {
   @JsonProperty("code")
@@ -99,6 +99,9 @@ public class GJiraSystem {
 
   }  @JsonProperty("usedCapabilities")
   private List<UsedCapabilitiesEnum> usedCapabilities = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("secretCode")
   private String secretCode = null;
@@ -345,6 +348,32 @@ public class GJiraSystem {
     this.usedCapabilities = usedCapabilities;
   }
 
+  public GJiraSystem aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GJiraSystem addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GJiraSystem secretCode(String secretCode) {
     this.secretCode = secretCode;
     return this;
@@ -386,12 +415,13 @@ public class GJiraSystem {
         Objects.equals(this.readonly, gjiraSystem.readonly) &&
         Objects.equals(this.baseUri, gjiraSystem.baseUri) &&
         Objects.equals(this.usedCapabilities, gjiraSystem.usedCapabilities) &&
+        Objects.equals(this.aclAliases, gjiraSystem.aclAliases) &&
         Objects.equals(this.secretCode, gjiraSystem.secretCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, contentManagementSystemType, readonly, baseUri, usedCapabilities, secretCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, creationDate, modificationDate, version, contentManagementSystemType, readonly, baseUri, usedCapabilities, aclAliases, secretCode);
   }
 
 
@@ -413,6 +443,7 @@ public class GJiraSystem {
     sb.append("    readonly: ").append(toIndentedString(readonly)).append("\n");
     sb.append("    baseUri: ").append(toIndentedString(baseUri)).append("\n");
     sb.append("    usedCapabilities: ").append(toIndentedString(usedCapabilities)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    secretCode: ").append(toIndentedString(secretCode)).append("\n");
     sb.append("}");
     return sb.toString();

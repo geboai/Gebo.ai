@@ -15,6 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.DocInternalRef;
+import ai.gebo.monolithic.api.client.model.SearchResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +26,7 @@ import java.util.List;
  * GResponseDocumentRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GResponseDocumentRef {
   /**
@@ -95,20 +96,26 @@ public class GResponseDocumentRef {
   @JsonProperty("name")
   private String name = null;
 
+  @JsonProperty("knowledgeBaseDocument")
+  private Boolean knowledgeBaseDocument = null;
+
+  @JsonProperty("nestedSearchResult")
+  private SearchResult nestedSearchResult = null;
+
   @JsonProperty("loadPercentage")
   private Double loadPercentage = null;
 
   @JsonProperty("references")
   private List<DocInternalRef> references = null;
 
+  @JsonProperty("ntotalContentTokens")
+  private Long ntotalContentTokens = null;
+
   @JsonProperty("nbytesRelevant")
   private Long nbytesRelevant = null;
 
   @JsonProperty("ntokensRelevant")
   private Long ntokensRelevant = null;
-
-  @JsonProperty("ntotalContentTokens")
-  private Long ntotalContentTokens = null;
 
   @JsonProperty("shortCode")
   private String shortCode = null;
@@ -329,6 +336,42 @@ public class GResponseDocumentRef {
     this.name = name;
   }
 
+  public GResponseDocumentRef knowledgeBaseDocument(Boolean knowledgeBaseDocument) {
+    this.knowledgeBaseDocument = knowledgeBaseDocument;
+    return this;
+  }
+
+   /**
+   * Get knowledgeBaseDocument
+   * @return knowledgeBaseDocument
+  **/
+  @Schema(description = "")
+  public Boolean isKnowledgeBaseDocument() {
+    return knowledgeBaseDocument;
+  }
+
+  public void setKnowledgeBaseDocument(Boolean knowledgeBaseDocument) {
+    this.knowledgeBaseDocument = knowledgeBaseDocument;
+  }
+
+  public GResponseDocumentRef nestedSearchResult(SearchResult nestedSearchResult) {
+    this.nestedSearchResult = nestedSearchResult;
+    return this;
+  }
+
+   /**
+   * Get nestedSearchResult
+   * @return nestedSearchResult
+  **/
+  @Schema(description = "")
+  public SearchResult getNestedSearchResult() {
+    return nestedSearchResult;
+  }
+
+  public void setNestedSearchResult(SearchResult nestedSearchResult) {
+    this.nestedSearchResult = nestedSearchResult;
+  }
+
   public GResponseDocumentRef loadPercentage(Double loadPercentage) {
     this.loadPercentage = loadPercentage;
     return this;
@@ -373,6 +416,24 @@ public class GResponseDocumentRef {
     this.references = references;
   }
 
+  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
+    return this;
+  }
+
+   /**
+   * Get ntotalContentTokens
+   * @return ntotalContentTokens
+  **/
+  @Schema(description = "")
+  public Long getNtotalContentTokens() {
+    return ntotalContentTokens;
+  }
+
+  public void setNtotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
+  }
+
   public GResponseDocumentRef nbytesRelevant(Long nbytesRelevant) {
     this.nbytesRelevant = nbytesRelevant;
     return this;
@@ -407,24 +468,6 @@ public class GResponseDocumentRef {
 
   public void setNtokensRelevant(Long ntokensRelevant) {
     this.ntokensRelevant = ntokensRelevant;
-  }
-
-  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
-    return this;
-  }
-
-   /**
-   * Get ntotalContentTokens
-   * @return ntotalContentTokens
-  **/
-  @Schema(description = "")
-  public Long getNtotalContentTokens() {
-    return ntotalContentTokens;
-  }
-
-  public void setNtotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
   }
 
   public GResponseDocumentRef shortCode(String shortCode) {
@@ -467,17 +510,19 @@ public class GResponseDocumentRef {
         Objects.equals(this.geboFileTypeDescription, gresponseDocumentRef.geboFileTypeDescription) &&
         Objects.equals(this.geboFileTypeId, gresponseDocumentRef.geboFileTypeId) &&
         Objects.equals(this.name, gresponseDocumentRef.name) &&
+        Objects.equals(this.knowledgeBaseDocument, gresponseDocumentRef.knowledgeBaseDocument) &&
+        Objects.equals(this.nestedSearchResult, gresponseDocumentRef.nestedSearchResult) &&
         Objects.equals(this.loadPercentage, gresponseDocumentRef.loadPercentage) &&
         Objects.equals(this.references, gresponseDocumentRef.references) &&
+        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
         Objects.equals(this.nbytesRelevant, gresponseDocumentRef.nbytesRelevant) &&
         Objects.equals(this.ntokensRelevant, gresponseDocumentRef.ntokensRelevant) &&
-        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
         Objects.equals(this.shortCode, gresponseDocumentRef.shortCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, loadPercentage, references, nbytesRelevant, ntokensRelevant, ntotalContentTokens, shortCode);
+    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, knowledgeBaseDocument, nestedSearchResult, loadPercentage, references, ntotalContentTokens, nbytesRelevant, ntokensRelevant, shortCode);
   }
 
 
@@ -498,11 +543,13 @@ public class GResponseDocumentRef {
     sb.append("    geboFileTypeDescription: ").append(toIndentedString(geboFileTypeDescription)).append("\n");
     sb.append("    geboFileTypeId: ").append(toIndentedString(geboFileTypeId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    knowledgeBaseDocument: ").append(toIndentedString(knowledgeBaseDocument)).append("\n");
+    sb.append("    nestedSearchResult: ").append(toIndentedString(nestedSearchResult)).append("\n");
     sb.append("    loadPercentage: ").append(toIndentedString(loadPercentage)).append("\n");
     sb.append("    references: ").append(toIndentedString(references)).append("\n");
+    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
     sb.append("    nbytesRelevant: ").append(toIndentedString(nbytesRelevant)).append("\n");
     sb.append("    ntokensRelevant: ").append(toIndentedString(ntokensRelevant)).append("\n");
-    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
     sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
     sb.append("}");
     return sb.toString();

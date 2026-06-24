@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **offset** | **Long** |  |  [optional]
 **sort** | [**SortObject**](SortObject.md) |  |  [optional]
-**paged** | **Boolean** |  |  [optional]
 **unpaged** | **Boolean** |  |  [optional]
+**paged** | **Boolean** |  |  [optional]
 **pageSize** | **Integer** |  |  [optional]
 **pageNumber** | **Integer** |  |  [optional]

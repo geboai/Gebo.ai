@@ -15,11 +15,13 @@ Name | Type | Description | Notes
 **geboFileTypeDescription** | **String** |  |  [optional]
 **geboFileTypeId** | **String** |  |  [optional]
 **name** | **String** |  |  [optional]
+**knowledgeBaseDocument** | **Boolean** |  |  [optional]
+**nestedSearchResult** | [**SearchResult**](SearchResult.md) |  |  [optional]
 **loadPercentage** | **Double** |  |  [optional]
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
+**ntotalContentTokens** | **Long** |  |  [optional]
 **nbytesRelevant** | **Long** |  |  [optional]
 **ntokensRelevant** | **Long** |  |  [optional]
-**ntotalContentTokens** | **Long** |  |  [optional]
 **shortCode** | **String** |  |  [optional]
 
 <a name="ReferenceTypeEnum"></a>

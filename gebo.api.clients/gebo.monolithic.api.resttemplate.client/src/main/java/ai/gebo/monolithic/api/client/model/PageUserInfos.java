@@ -27,7 +27,7 @@ import java.util.List;
  * PageUserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class PageUserInfos {
   @JsonProperty("totalElements")
@@ -51,11 +51,11 @@ public class PageUserInfos {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
@@ -197,24 +197,6 @@ public class PageUserInfos {
     this.number = number;
   }
 
-  public PageUserInfos sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
   public PageUserInfos numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -231,6 +213,24 @@ public class PageUserInfos {
 
   public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
+  }
+
+  public PageUserInfos sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
   }
 
   public PageUserInfos pageable(PageableObject pageable) {
@@ -286,15 +286,15 @@ public class PageUserInfos {
         Objects.equals(this.size, pageUserInfos.size) &&
         Objects.equals(this.content, pageUserInfos.content) &&
         Objects.equals(this.number, pageUserInfos.number) &&
-        Objects.equals(this.sort, pageUserInfos.sort) &&
         Objects.equals(this.numberOfElements, pageUserInfos.numberOfElements) &&
+        Objects.equals(this.sort, pageUserInfos.sort) &&
         Objects.equals(this.pageable, pageUserInfos.pageable) &&
         Objects.equals(this.empty, pageUserInfos.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, first, last, size, content, number, sort, numberOfElements, pageable, empty);
+    return Objects.hash(totalElements, totalPages, first, last, size, content, number, numberOfElements, sort, pageable, empty);
   }
 
 
@@ -310,8 +310,8 @@ public class PageUserInfos {
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");

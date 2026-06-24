@@ -5,9 +5,10 @@ All URIs are relative to *http://localhost:12999*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteDeepSearchConfig**](GeboDeepSearchAdminControllerApi.md#deleteDeepSearchConfig) | **DELETE** /api/admin/GeboDeepSearchAdminController/deleteDeepSearchConfig | 
-[**findDeepSearchDefaultConfigByCode**](GeboDeepSearchAdminControllerApi.md#findDeepSearchDefaultConfigByCode) | **GET** /api/admin/GeboDeepSearchAdminController/findDeepSearchDefaultConfigByCode | 
+[**getConfigurableDataSources**](GeboDeepSearchAdminControllerApi.md#getConfigurableDataSources) | **GET** /api/admin/GeboDeepSearchAdminController/getConfigurableDataSources | 
 [**getDeepSeachConfigs**](GeboDeepSearchAdminControllerApi.md#getDeepSeachConfigs) | **GET** /api/admin/GeboDeepSearchAdminController/getDeepSeachConfigs | 
 [**getDeepSearchDefaultConfig**](GeboDeepSearchAdminControllerApi.md#getDeepSearchDefaultConfig) | **GET** /api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultConfig | 
+[**getDeepSearchDefaultOrSystemConfig**](GeboDeepSearchAdminControllerApi.md#getDeepSearchDefaultOrSystemConfig) | **GET** /api/admin/GeboDeepSearchAdminController/getDeepSearchDefaultOrSystemConfig | 
 [**getDeepSearchSystemConfig**](GeboDeepSearchAdminControllerApi.md#getDeepSearchSystemConfig) | **GET** /api/admin/GeboDeepSearchAdminController/getDeepSearchSystemConfig | 
 [**insertDeepSearchConfig**](GeboDeepSearchAdminControllerApi.md#insertDeepSearchConfig) | **POST** /api/admin/GeboDeepSearchAdminController/insertDeepSearchConfig | 
 [**updateDeepSearchConfig**](GeboDeepSearchAdminControllerApi.md#updateDeepSearchConfig) | **POST** /api/admin/GeboDeepSearchAdminController/updateDeepSearchConfig | 
@@ -54,9 +55,9 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-<a name="findDeepSearchDefaultConfigByCode"></a>
-# **findDeepSearchDefaultConfigByCode**
-> DeepSearchConfig findDeepSearchDefaultConfigByCode(code)
+<a name="getConfigurableDataSources"></a>
+# **getConfigurableDataSources**
+> List&lt;GBaseObject&gt; getConfigurableDataSources()
 
 
 
@@ -68,25 +69,21 @@ No authorization required
 
 
 GeboDeepSearchAdminControllerApi apiInstance = new GeboDeepSearchAdminControllerApi();
-String code = "code_example"; // String | 
 try {
-    DeepSearchConfig result = apiInstance.findDeepSearchDefaultConfigByCode(code);
+    List<GBaseObject> result = apiInstance.getConfigurableDataSources();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#findDeepSearchDefaultConfigByCode");
+    System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getConfigurableDataSources");
     e.printStackTrace();
 }
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **code** | **String**|  |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**DeepSearchConfig**](DeepSearchConfig.md)
+[**List&lt;GBaseObject&gt;**](GBaseObject.md)
 
 ### Authorization
 
@@ -95,11 +92,11 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: */*
 
 <a name="getDeepSeachConfigs"></a>
 # **getDeepSeachConfigs**
-> List&lt;DeepSearchConfig&gt; getDeepSeachConfigs(chatProfileCode)
+> List&lt;DeepSearchConfig&gt; getDeepSeachConfigs()
 
 
 
@@ -111,9 +108,8 @@ No authorization required
 
 
 GeboDeepSearchAdminControllerApi apiInstance = new GeboDeepSearchAdminControllerApi();
-String chatProfileCode = "chatProfileCode_example"; // String | 
 try {
-    List<DeepSearchConfig> result = apiInstance.getDeepSeachConfigs(chatProfileCode);
+    List<DeepSearchConfig> result = apiInstance.getDeepSeachConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getDeepSeachConfigs");
@@ -122,10 +118,7 @@ try {
 ```
 
 ### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **chatProfileCode** | **String**|  | [optional]
+This endpoint does not need any parameter.
 
 ### Return type
 
@@ -159,6 +152,45 @@ try {
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getDeepSearchDefaultConfig");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeepSearchConfig**](DeepSearchConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getDeepSearchDefaultOrSystemConfig"></a>
+# **getDeepSearchDefaultOrSystemConfig**
+> DeepSearchConfig getDeepSearchDefaultOrSystemConfig()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboDeepSearchAdminControllerApi;
+
+
+GeboDeepSearchAdminControllerApi apiInstance = new GeboDeepSearchAdminControllerApi();
+try {
+    DeepSearchConfig result = apiInstance.getDeepSearchDefaultOrSystemConfig();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboDeepSearchAdminControllerApi#getDeepSearchDefaultOrSystemConfig");
     e.printStackTrace();
 }
 ```

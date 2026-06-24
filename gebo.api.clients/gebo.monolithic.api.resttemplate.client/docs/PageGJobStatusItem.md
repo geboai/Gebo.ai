@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;GJobStatusItem&gt;**](GJobStatusItem.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]
-**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **numberOfElements** | **Integer** |  |  [optional]
+**sort** | [**SortObject**](SortObject.md) |  |  [optional]
 **pageable** | [**PageableObject**](PageableObject.md) |  |  [optional]
 **empty** | **Boolean** |  |  [optional]

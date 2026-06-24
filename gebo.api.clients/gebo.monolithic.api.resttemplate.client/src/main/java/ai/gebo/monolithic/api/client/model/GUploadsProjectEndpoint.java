@@ -27,7 +27,7 @@ import java.util.List;
  * GUploadsProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GUploadsProjectEndpoint {
   @JsonProperty("code")
@@ -142,6 +142,9 @@ public class GUploadsProjectEndpoint {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("uploadHandshakeCode")
   private String uploadHandshakeCode = null;
@@ -479,6 +482,32 @@ public class GUploadsProjectEndpoint {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GUploadsProjectEndpoint aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GUploadsProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GUploadsProjectEndpoint uploadHandshakeCode(String uploadHandshakeCode) {
     this.uploadHandshakeCode = uploadHandshakeCode;
     return this;
@@ -550,13 +579,14 @@ public class GUploadsProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, guploadsProjectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, guploadsProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, guploadsProjectEndpoint.objectSpaceType) &&
+        Objects.equals(this.aclAliases, guploadsProjectEndpoint.aclAliases) &&
         Objects.equals(this.uploadHandshakeCode, guploadsProjectEndpoint.uploadHandshakeCode) &&
         Objects.equals(this.uploadedContents, guploadsProjectEndpoint.uploadedContents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, uploadHandshakeCode, uploadedContents);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, uploadHandshakeCode, uploadedContents);
   }
 
 
@@ -582,6 +612,7 @@ public class GUploadsProjectEndpoint {
     sb.append("    vectorizeOnlyExtensions: ").append(toIndentedString(vectorizeOnlyExtensions)).append("\n");
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    uploadHandshakeCode: ").append(toIndentedString(uploadHandshakeCode)).append("\n");
     sb.append("    uploadedContents: ").append(toIndentedString(uploadedContents)).append("\n");
     sb.append("}");

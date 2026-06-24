@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**changeUserPassword**](UsersAdminControllerApi.md#changeUserPassword) | **POST** /api/admin/UsersAdminController/changeUserPassword | 
 [**deleteGroup**](UsersAdminControllerApi.md#deleteGroup) | **POST** /api/admin/UsersAdminController/deleteGroup | 
 [**deleteUser**](UsersAdminControllerApi.md#deleteUser) | **POST** /api/admin/UsersAdminController/deleteUser | 
 [**findGroupByCode**](UsersAdminControllerApi.md#findGroupByCode) | **GET** /api/admin/UsersAdminController/findGroupByCode | 
@@ -16,6 +17,49 @@ Method | HTTP request | Description
 [**insertUser**](UsersAdminControllerApi.md#insertUser) | **POST** /api/admin/UsersAdminController/insertUser | 
 [**updateGroup**](UsersAdminControllerApi.md#updateGroup) | **POST** /api/admin/UsersAdminController/updateGroup | 
 [**updateUser**](UsersAdminControllerApi.md#updateUser) | **POST** /api/admin/UsersAdminController/updateUser | 
+
+<a name="changeUserPassword"></a>
+# **changeUserPassword**
+> GUserMessage changeUserPassword(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.UsersAdminControllerApi;
+
+
+UsersAdminControllerApi apiInstance = new UsersAdminControllerApi();
+ChangeUsernamePasswordData body = new ChangeUsernamePasswordData(); // ChangeUsernamePasswordData | 
+try {
+    GUserMessage result = apiInstance.changeUserPassword(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UsersAdminControllerApi#changeUserPassword");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**ChangeUsernamePasswordData**](ChangeUsernamePasswordData.md)|  |
+
+### Return type
+
+[**GUserMessage**](GUserMessage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="deleteGroup"></a>
 # **deleteGroup**

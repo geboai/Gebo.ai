@@ -24,7 +24,7 @@ import java.util.Date;
  * GGoogleVertexEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GGoogleVertexEmbeddingModelConfig {
   @JsonProperty("code")
@@ -59,6 +59,9 @@ public class GGoogleVertexEmbeddingModelConfig {
 
   @JsonProperty("baseUrl")
   private String baseUrl = null;
+
+  @JsonProperty("contextLength")
+  private Integer contextLength = null;
 
   @JsonProperty("tokenizationThreshold")
   private Integer tokenizationThreshold = null;
@@ -261,6 +264,24 @@ public class GGoogleVertexEmbeddingModelConfig {
     this.baseUrl = baseUrl;
   }
 
+  public GGoogleVertexEmbeddingModelConfig contextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+    return this;
+  }
+
+   /**
+   * Get contextLength
+   * @return contextLength
+  **/
+  @Schema(description = "")
+  public Integer getContextLength() {
+    return contextLength;
+  }
+
+  public void setContextLength(Integer contextLength) {
+    this.contextLength = contextLength;
+  }
+
   public GGoogleVertexEmbeddingModelConfig tokenizationThreshold(Integer tokenizationThreshold) {
     this.tokenizationThreshold = tokenizationThreshold;
     return this;
@@ -300,12 +321,13 @@ public class GGoogleVertexEmbeddingModelConfig {
         Objects.equals(this.apiSecretCode, ggoogleVertexEmbeddingModelConfig.apiSecretCode) &&
         Objects.equals(this.choosedModel, ggoogleVertexEmbeddingModelConfig.choosedModel) &&
         Objects.equals(this.baseUrl, ggoogleVertexEmbeddingModelConfig.baseUrl) &&
+        Objects.equals(this.contextLength, ggoogleVertexEmbeddingModelConfig.contextLength) &&
         Objects.equals(this.tokenizationThreshold, ggoogleVertexEmbeddingModelConfig.tokenizationThreshold);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, tokenizationThreshold);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, tokenizationThreshold);
   }
 
 
@@ -325,6 +347,7 @@ public class GGoogleVertexEmbeddingModelConfig {
     sb.append("    apiSecretCode: ").append(toIndentedString(apiSecretCode)).append("\n");
     sb.append("    choosedModel: ").append(toIndentedString(choosedModel)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");
+    sb.append("    contextLength: ").append(toIndentedString(contextLength)).append("\n");
     sb.append("    tokenizationThreshold: ").append(toIndentedString(tokenizationThreshold)).append("\n");
     sb.append("}");
     return sb.toString();

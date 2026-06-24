@@ -18,6 +18,8 @@ Name | Type | Description | Notes
 **username** | **String** |  |  [optional]
 **parentKnowledgebaseCode** | **String** |  |  [optional]
 **objectSpaceType** | [**ObjectSpaceTypeEnum**](#ObjectSpaceTypeEnum) |  |  [optional]
+**acl** | [**List&lt;GAclEntry&gt;**](GAclEntry.md) |  |  [optional]
+**aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 
 <a name="ObjectSpaceTypeEnum"></a>
 ## Enum: ObjectSpaceTypeEnum

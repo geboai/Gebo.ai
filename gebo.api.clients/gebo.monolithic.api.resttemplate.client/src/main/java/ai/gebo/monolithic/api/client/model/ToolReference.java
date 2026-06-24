@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ToolReference
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class ToolReference {
   @JsonProperty("name")
@@ -33,6 +33,9 @@ public class ToolReference {
 
   @JsonProperty("userUIfunctionDescription")
   private String userUIfunctionDescription = null;
+
+  @JsonProperty("inputSchema")
+  private String inputSchema = null;
 
   public ToolReference name(String name) {
     this.name = name;
@@ -88,6 +91,24 @@ public class ToolReference {
     this.userUIfunctionDescription = userUIfunctionDescription;
   }
 
+  public ToolReference inputSchema(String inputSchema) {
+    this.inputSchema = inputSchema;
+    return this;
+  }
+
+   /**
+   * Get inputSchema
+   * @return inputSchema
+  **/
+  @Schema(description = "")
+  public String getInputSchema() {
+    return inputSchema;
+  }
+
+  public void setInputSchema(String inputSchema) {
+    this.inputSchema = inputSchema;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +121,13 @@ public class ToolReference {
     ToolReference toolReference = (ToolReference) o;
     return Objects.equals(this.name, toolReference.name) &&
         Objects.equals(this.description, toolReference.description) &&
-        Objects.equals(this.userUIfunctionDescription, toolReference.userUIfunctionDescription);
+        Objects.equals(this.userUIfunctionDescription, toolReference.userUIfunctionDescription) &&
+        Objects.equals(this.inputSchema, toolReference.inputSchema);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, userUIfunctionDescription);
+    return Objects.hash(name, description, userUIfunctionDescription, inputSchema);
   }
 
 
@@ -117,6 +139,7 @@ public class ToolReference {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    userUIfunctionDescription: ").append(toIndentedString(userUIfunctionDescription)).append("\n");
+    sb.append("    inputSchema: ").append(toIndentedString(inputSchema)).append("\n");
     sb.append("}");
     return sb.toString();
   }

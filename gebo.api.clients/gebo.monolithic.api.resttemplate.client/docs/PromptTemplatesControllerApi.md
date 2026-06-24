@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 <a name="getDefaultPrompt"></a>
 # **getDefaultPrompt**
-> GPromptConfig getDefaultPrompt(ragPrompt)
+> GPromptTemplateConfig getDefaultPrompt(ragPrompt)
 
 
 
@@ -24,7 +24,7 @@ Method | HTTP request | Description
 PromptTemplatesControllerApi apiInstance = new PromptTemplatesControllerApi();
 Boolean ragPrompt = true; // Boolean | 
 try {
-    GPromptConfig result = apiInstance.getDefaultPrompt(ragPrompt);
+    GPromptTemplateConfig result = apiInstance.getDefaultPrompt(ragPrompt);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling PromptTemplatesControllerApi#getDefaultPrompt");
@@ -40,7 +40,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 
@@ -53,7 +53,7 @@ No authorization required
 
 <a name="getDefaultPromptForChatModel"></a>
 # **getDefaultPromptForChatModel**
-> GPromptConfig getDefaultPromptForChatModel(body)
+> GPromptTemplateConfig getDefaultPromptForChatModel(body)
 
 
 
@@ -67,7 +67,7 @@ No authorization required
 PromptTemplatesControllerApi apiInstance = new PromptTemplatesControllerApi();
 DefaultPromptForChatModelParam body = new DefaultPromptForChatModelParam(); // DefaultPromptForChatModelParam | 
 try {
-    GPromptConfig result = apiInstance.getDefaultPromptForChatModel(body);
+    GPromptTemplateConfig result = apiInstance.getDefaultPromptForChatModel(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling PromptTemplatesControllerApi#getDefaultPromptForChatModel");
@@ -83,7 +83,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 
@@ -96,7 +96,7 @@ No authorization required
 
 <a name="getDefaultPromptForChatModelReference"></a>
 # **getDefaultPromptForChatModelReference**
-> GPromptConfig getDefaultPromptForChatModelReference(body)
+> GPromptTemplateConfig getDefaultPromptForChatModelReference(body)
 
 
 
@@ -110,7 +110,7 @@ No authorization required
 PromptTemplatesControllerApi apiInstance = new PromptTemplatesControllerApi();
 DefaultPromptForChatModelReferenceParam body = new DefaultPromptForChatModelReferenceParam(); // DefaultPromptForChatModelReferenceParam | 
 try {
-    GPromptConfig result = apiInstance.getDefaultPromptForChatModelReference(body);
+    GPromptTemplateConfig result = apiInstance.getDefaultPromptForChatModelReference(body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling PromptTemplatesControllerApi#getDefaultPromptForChatModelReference");
@@ -126,7 +126,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GPromptConfig**](GPromptConfig.md)
+[**GPromptTemplateConfig**](GPromptTemplateConfig.md)
 
 ### Authorization
 

@@ -14,3 +14,7 @@ Name | Value
 ---- | -----
 CHAT | &quot;CHAT&quot;
 EMBEDDING | &quot;EMBEDDING&quot;
+RANKING | &quot;RANKING&quot;
+IMAGESGEN | &quot;IMAGESGEN&quot;
+TTS | &quot;TTS&quot;
+TRANSCRIPT | &quot;TRANSCRIPT&quot;

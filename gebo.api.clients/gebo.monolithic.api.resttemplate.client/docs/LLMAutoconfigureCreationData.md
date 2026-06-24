@@ -10,3 +10,7 @@ Name | Type | Description | Notes
 **defaultChatModel** | **String** |  |  [optional]
 **internalServicesModel** | **String** |  |  [optional]
 **embeddingModel** | **String** |  |  [optional]
+**rankerModel** | **String** |  |  [optional]
+**transcriptModel** | **String** |  |  [optional]
+**ttsModel** | **String** |  |  [optional]
+**imagesModel** | **String** |  |  [optional]

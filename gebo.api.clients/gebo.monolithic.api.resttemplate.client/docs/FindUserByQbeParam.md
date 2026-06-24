@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**qbe** | [**User**](User.md) |  | 
+**qbe** | [**EditableUser**](EditableUser.md) |  | 
 **page** | [**DataPage**](DataPage.md) |  | 

@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.GUserMessage;
-import ai.gebo.monolithic.api.client.model.PromptTemplateResponse;
+import ai.gebo.monolithic.api.client.model.GenericOpenAIAPIRankerModelConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,25 +23,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * OperationStatusPromptTemplateResponse
+ * OperationStatusGenericOpenAIAPIRankerModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
-public class OperationStatusPromptTemplateResponse {
+public class OperationStatusGenericOpenAIAPIRankerModelConfig {
   @JsonProperty("result")
-  private PromptTemplateResponse result = null;
+  private GenericOpenAIAPIRankerModelConfig result = null;
 
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
 
-  public OperationStatusPromptTemplateResponse result(PromptTemplateResponse result) {
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
+
+  public OperationStatusGenericOpenAIAPIRankerModelConfig result(GenericOpenAIAPIRankerModelConfig result) {
     this.result = result;
     return this;
   }
@@ -51,20 +51,20 @@ public class OperationStatusPromptTemplateResponse {
    * @return result
   **/
   @Schema(description = "")
-  public PromptTemplateResponse getResult() {
+  public GenericOpenAIAPIRankerModelConfig getResult() {
     return result;
   }
 
-  public void setResult(PromptTemplateResponse result) {
+  public void setResult(GenericOpenAIAPIRankerModelConfig result) {
     this.result = result;
   }
 
-  public OperationStatusPromptTemplateResponse messages(List<GUserMessage> messages) {
+  public OperationStatusGenericOpenAIAPIRankerModelConfig messages(List<GUserMessage> messages) {
     this.messages = messages;
     return this;
   }
 
-  public OperationStatusPromptTemplateResponse addMessagesItem(GUserMessage messagesItem) {
+  public OperationStatusGenericOpenAIAPIRankerModelConfig addMessagesItem(GUserMessage messagesItem) {
     if (this.messages == null) {
       this.messages = new ArrayList<>();
     }
@@ -85,25 +85,7 @@ public class OperationStatusPromptTemplateResponse {
     this.messages = messages;
   }
 
-  public OperationStatusPromptTemplateResponse hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
-  public OperationStatusPromptTemplateResponse hasWarnMessages(Boolean hasWarnMessages) {
+  public OperationStatusGenericOpenAIAPIRankerModelConfig hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
   }
@@ -121,6 +103,24 @@ public class OperationStatusPromptTemplateResponse {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusGenericOpenAIAPIRankerModelConfig hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -130,28 +130,28 @@ public class OperationStatusPromptTemplateResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OperationStatusPromptTemplateResponse operationStatusPromptTemplateResponse = (OperationStatusPromptTemplateResponse) o;
-    return Objects.equals(this.result, operationStatusPromptTemplateResponse.result) &&
-        Objects.equals(this.messages, operationStatusPromptTemplateResponse.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusPromptTemplateResponse.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusPromptTemplateResponse.hasWarnMessages);
+    OperationStatusGenericOpenAIAPIRankerModelConfig operationStatusGenericOpenAIAPIRankerModelConfig = (OperationStatusGenericOpenAIAPIRankerModelConfig) o;
+    return Objects.equals(this.result, operationStatusGenericOpenAIAPIRankerModelConfig.result) &&
+        Objects.equals(this.messages, operationStatusGenericOpenAIAPIRankerModelConfig.messages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class OperationStatusPromptTemplateResponse {\n");
+    sb.append("class OperationStatusGenericOpenAIAPIRankerModelConfig {\n");
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

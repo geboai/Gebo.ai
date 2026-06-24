@@ -24,7 +24,7 @@ import java.util.List;
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -32,7 +32,11 @@ public class LLMCreateModelData {
    */
   public enum TypeEnum {
     CHAT("CHAT"),
-    EMBEDDING("EMBEDDING");
+    EMBEDDING("EMBEDDING"),
+    RANKING("RANKING"),
+    IMAGESGEN("IMAGESGEN"),
+    TTS("TTS"),
+    TRANSCRIPT("TRANSCRIPT");
 
     private String value;
 

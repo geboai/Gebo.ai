@@ -2,7 +2,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
-import ai.gebo.monolithic.api.client.model.GPromptConfig;
+import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import ai.gebo.monolithic.api.client.model.PromptFilter;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -50,7 +50,7 @@ public class GeboAdminPromptsControllerApi {
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public void deletePromptConfig(GPromptConfig body) throws RestClientException {
+    public void deletePromptConfig(GPromptTemplateConfig body) throws RestClientException {
         deletePromptConfigWithHttpInfo(body);
     }
 
@@ -62,7 +62,7 @@ public class GeboAdminPromptsControllerApi {
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> deletePromptConfigWithHttpInfo(GPromptConfig body) throws RestClientException {
+    public ResponseEntity<Void> deletePromptConfigWithHttpInfo(GPromptTemplateConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -91,10 +91,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig findPromptConfigByCode(String code) throws RestClientException {
+    public GPromptTemplateConfig findPromptConfigByCode(String code) throws RestClientException {
         return findPromptConfigByCodeWithHttpInfo(code).getBody();
     }
 
@@ -103,10 +103,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param code  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> findPromptConfigByCodeWithHttpInfo(String code) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> findPromptConfigByCodeWithHttpInfo(String code) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'code' is set
         if (code == null) {
@@ -128,7 +128,7 @@ public class GeboAdminPromptsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -174,10 +174,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig getPromptConfigByFilter(PromptFilter body) throws RestClientException {
+    public GPromptTemplateConfig getPromptConfigByFilter(PromptFilter body) throws RestClientException {
         return getPromptConfigByFilterWithHttpInfo(body).getBody();
     }
 
@@ -186,10 +186,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> getPromptConfigByFilterWithHttpInfo(PromptFilter body) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> getPromptConfigByFilterWithHttpInfo(PromptFilter body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -212,7 +212,7 @@ public class GeboAdminPromptsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -220,10 +220,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig insertPromptConfig(GPromptConfig body) throws RestClientException {
+    public GPromptTemplateConfig insertPromptConfig(GPromptTemplateConfig body) throws RestClientException {
         return insertPromptConfigWithHttpInfo(body).getBody();
     }
 
@@ -232,10 +232,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> insertPromptConfigWithHttpInfo(GPromptConfig body) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> insertPromptConfigWithHttpInfo(GPromptTemplateConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -258,7 +258,7 @@ public class GeboAdminPromptsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -266,10 +266,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return GPromptConfig
+     * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GPromptConfig updatePromptConfig(GPromptConfig body) throws RestClientException {
+    public GPromptTemplateConfig updatePromptConfig(GPromptTemplateConfig body) throws RestClientException {
         return updatePromptConfigWithHttpInfo(body).getBody();
     }
 
@@ -278,10 +278,10 @@ public class GeboAdminPromptsControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param body  (required)
-     * @return ResponseEntity&lt;GPromptConfig&gt;
+     * @return ResponseEntity&lt;GPromptTemplateConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GPromptConfig> updatePromptConfigWithHttpInfo(GPromptConfig body) throws RestClientException {
+    public ResponseEntity<GPromptTemplateConfig> updatePromptConfigWithHttpInfo(GPromptTemplateConfig body) throws RestClientException {
         Object postBody = body;
         // verify the required parameter 'body' is set
         if (body == null) {
@@ -304,7 +304,7 @@ public class GeboAdminPromptsControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<GPromptConfig> returnType = new ParameterizedTypeReference<GPromptConfig>() {};
+        ParameterizedTypeReference<GPromptTemplateConfig> returnType = new ParameterizedTypeReference<GPromptTemplateConfig>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

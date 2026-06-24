@@ -28,7 +28,7 @@ import java.util.List;
  * GJiraProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class GJiraProjectEndpoint {
   @JsonProperty("code")
@@ -143,6 +143,9 @@ public class GJiraProjectEndpoint {
 
   }  @JsonProperty("objectSpaceType")
   private ObjectSpaceTypeEnum objectSpaceType = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
 
   @JsonProperty("paths")
   private List<VFilesystemReference> paths = null;
@@ -480,6 +483,32 @@ public class GJiraProjectEndpoint {
     this.objectSpaceType = objectSpaceType;
   }
 
+  public GJiraProjectEndpoint aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GJiraProjectEndpoint addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GJiraProjectEndpoint paths(List<VFilesystemReference> paths) {
     this.paths = paths;
     return this;
@@ -551,13 +580,14 @@ public class GJiraProjectEndpoint {
         Objects.equals(this.vectorizeOnlyExtensions, gjiraProjectEndpoint.vectorizeOnlyExtensions) &&
         Objects.equals(this.synchroStrategy, gjiraProjectEndpoint.synchroStrategy) &&
         Objects.equals(this.objectSpaceType, gjiraProjectEndpoint.objectSpaceType) &&
+        Objects.equals(this.aclAliases, gjiraProjectEndpoint.aclAliases) &&
         Objects.equals(this.paths, gjiraProjectEndpoint.paths) &&
         Objects.equals(this.jiraSystemCode, gjiraProjectEndpoint.jiraSystemCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, paths, jiraSystemCode);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, paths, jiraSystemCode);
   }
 
 
@@ -583,6 +613,7 @@ public class GJiraProjectEndpoint {
     sb.append("    vectorizeOnlyExtensions: ").append(toIndentedString(vectorizeOnlyExtensions)).append("\n");
     sb.append("    synchroStrategy: ").append(toIndentedString(synchroStrategy)).append("\n");
     sb.append("    objectSpaceType: ").append(toIndentedString(objectSpaceType)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    paths: ").append(toIndentedString(paths)).append("\n");
     sb.append("    jiraSystemCode: ").append(toIndentedString(jiraSystemCode)).append("\n");
     sb.append("}");

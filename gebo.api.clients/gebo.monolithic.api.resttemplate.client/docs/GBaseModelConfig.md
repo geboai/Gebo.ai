@@ -14,3 +14,4 @@ Name | Type | Description | Notes
 **apiSecretCode** | **String** |  |  [optional]
 **choosedModel** | [**GBaseModelChoice**](GBaseModelChoice.md) |  |  [optional]
 **baseUrl** | **String** |  |  [optional]
+**contextLength** | **Integer** |  |  [optional]

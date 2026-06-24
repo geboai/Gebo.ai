@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **userCreated** | **String** |  |  [optional]
 **dateModified** | [**Date**](Date.md) |  |  [optional]
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
-**prompt** | **String** |  |  [optional]
 **embeddingModelReference** | [**GObjectRefGBaseEmbeddingModelConfig**](GObjectRefGBaseEmbeddingModelConfig.md) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
@@ -25,3 +24,4 @@ Name | Type | Description | Notes
 **disableMultiHopRag** | **Boolean** |  |  [optional]
 **otherSearchSimilarityThreshold** | **Double** |  |  [optional]
 **manualThreasholdsConfiguration** | **Boolean** |  |  [optional]
+**useAlsoKeywordSearch** | **Boolean** |  |  [optional]

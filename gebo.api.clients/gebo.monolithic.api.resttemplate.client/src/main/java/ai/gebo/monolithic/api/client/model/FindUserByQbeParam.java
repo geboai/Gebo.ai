@@ -15,7 +15,7 @@ package ai.gebo.monolithic.api.client.model;
 import java.util.Objects;
 import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.DataPage;
-import ai.gebo.monolithic.api.client.model.User;
+import ai.gebo.monolithic.api.client.model.EditableUser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -24,16 +24,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * FindUserByQbeParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-03-11T08:32:27.363263100+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
 
 public class FindUserByQbeParam {
   @JsonProperty("qbe")
-  private User qbe = null;
+  private EditableUser qbe = null;
 
   @JsonProperty("page")
   private DataPage page = null;
 
-  public FindUserByQbeParam qbe(User qbe) {
+  public FindUserByQbeParam qbe(EditableUser qbe) {
     this.qbe = qbe;
     return this;
   }
@@ -43,11 +43,11 @@ public class FindUserByQbeParam {
    * @return qbe
   **/
   @Schema(required = true, description = "")
-  public User getQbe() {
+  public EditableUser getQbe() {
     return qbe;
   }
 
-  public void setQbe(User qbe) {
+  public void setQbe(EditableUser qbe) {
     this.qbe = qbe;
   }
 
