@@ -15,14 +15,13 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
-import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
-import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractReactiveAgentService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -105,15 +104,14 @@ public class ReportWriterReactiveAgentServiceImpl extends
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
 		final GeboChatResponse response = new GeboChatResponse();
 		final int tokenBudget = (agentModel.getContextLength() - agentPrompt.getTokensSize()) * 2 / 3;
-		// Wrap the routed query as the input message so the standard agent template
-		// parametrization can build INPUT, SHARED_CONTEXT (the upstream agents' shared
-		// evidences/contributions), identity and scenario placeholders. agentsDao is
-		// not
+		// The routed query (the coordinator's writing command) is the agent input that
+		// feeds the {INPUT} placeholder; pass the raw payload as the other agents do,
+		// so
+		// it is rendered by the standard String renderer. SHARED_CONTEXT, identity and
+		// scenario placeholders are built from the network/session. agentsDao is not
 		// available at this layer, hence null (peer descriptions are then omitted).
-		final AgentsExchangeMessage<String> inputMessage = AgentsExchangeMessage.of(session,
-				contextAgentPersona.getNetworkAgentName(), request, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final List<Map<String, Object>> params = createAgentTemplateParams(agentPrompt, network, agentRole,
-				contextAgentPersona, session, mySessionContext, inputMessage, null, 0, tokenBudget, true);
+				contextAgentPersona, session, mySessionContext, request, null, 0, tokenBudget, true);
 		Flux<String> textStream = null;
 		if (params.size() == 1) {
 			textStream = callLLMReactive(agentModel, agentPrompt, chatRequestContext, params.get(0));
@@ -143,7 +141,7 @@ public class ReportWriterReactiveAgentServiceImpl extends
 			GPromptTemplateConfig agentPrompt, IChatRequestContext chatRequestContext, List<Map<String, Object>> params,
 			ReactiveIdentityUtil runAs, INotificationSink<GeboChatMessageEnvelope> notificationSink) {
 		final Map<String, Object> cleanedParams = params.get(0);
-		cleanedParams.put(SHARED_CONTEXT_TEMPLATE_PARAM, "");
+		cleanedParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, "");
 		cleanedParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 		Flux<Map<String, Object>> inputFlux = Flux.fromIterable(params);
 		GenerativeFunction<Map<String, Object>, String> intermediateProcess = (initialValue, ignoredEmitter,
@@ -155,14 +153,15 @@ public class ReportWriterReactiveAgentServiceImpl extends
 		LastWork<String, String> finalWork = (consolidations, ignoredEmitter) -> runAs
 				.doRunAsWithReturnAndException(() -> {
 					Map<String, Object> finalParams = new HashMap<>(cleanedParams);
-					finalParams.put(SHARED_CONTEXT_TEMPLATE_PARAM, String.join("\r\n", consolidations));
+					finalParams.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
+							String.join("\r\n", consolidations));
 					finalParams.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
 					return callLLMReactive(agentModel, agentPrompt, chatRequestContext, finalParams);
 				});
 
 		Predicate<Map<String, Object>> isValidDocument = (document) -> document != null
-				&& document.containsKey(SHARED_CONTEXT_TEMPLATE_PARAM)
-				&& document.get(SHARED_CONTEXT_TEMPLATE_PARAM).toString().trim().length() > 0;
+				&& document.containsKey(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)
+				&& document.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM).toString().trim().length() > 0;
 
 		Predicate<String> isOutOfBand = (value) -> value == null || value.equals(LLM_PROCESSING_ERROR);
 		Predicate<String> noEndCondition = (value) -> false;

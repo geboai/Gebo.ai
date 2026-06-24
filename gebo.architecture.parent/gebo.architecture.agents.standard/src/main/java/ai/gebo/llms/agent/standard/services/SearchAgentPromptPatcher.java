@@ -1,29 +1,31 @@
 package ai.gebo.llms.agent.standard.services;
 
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.GAbstractGenericalAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 
 /**
  * Runtime patcher that adapts a standard (non-agentic) assisted-search prompt
- * template so it can be used as the {@code customLoopPrompt} of a network search
- * agent.
+ * template so it can be used as the {@code customLoopPrompt} of a network
+ * search agent.
  * <p>
  * Search agents reuse the query-generation prompt of their underlying assisted
  * search method (the same prompt used by the standard chat pipelines). That
- * prompt knows nothing about the agent network, so it is cloned in memory and the
- * agent placeholder blocks ({@code {AGENT_IDENTITY}}, {@code {NETWORK_SCENARY}},
- * {@code {AGENT_COMUNICATION_CAPABILITY}}, {@code {PRIVATE_CONTEXT}},
- * {@code {INPUT}}) are appended to its user template. Because
- * {@link GPromptTemplateConfig#getPlaceholders()} is derived from the template text,
- * the appended tokens become first-class placeholders that
- * {@code createAgentTemplateParams} will populate at runtime.
+ * prompt knows nothing about the agent network, so it is cloned in memory and
+ * the agent placeholder blocks ({@code {AGENT_IDENTITY}},
+ * {@code {NETWORK_SCENARY}}, {@code {AGENT_COMUNICATION_CAPABILITY}},
+ * {@code {PRIVATE_CONTEXT}}, {@code {INPUT}}) are appended to its user
+ * template. Because {@link GPromptTemplateConfig#getPlaceholders()} is derived
+ * from the template text, the appended tokens become first-class placeholders
+ * that {@code createAgentTemplateParams} will populate at runtime.
  * <p>
- * The network-wide {@code {SHARED_CONTEXT}} is deliberately <b>not</b> injected:
- * search agents are command-driven executors, the coordinator already distils the
- * relevant state into the {@code {INPUT}} command, and rendering the whole shared
- * blackboard would be redundant and would compete with the searcher's own retrieval
- * token budget. The agent's own {@code {PRIVATE_CONTEXT}} is kept so it can avoid
- * repeating its previous searches across loop iterations.
+ * The network-wide {@code {SHARED_CONTEXT}} is deliberately <b>not</b>
+ * injected: search agents are command-driven executors, the coordinator already
+ * distils the relevant state into the {@code {INPUT}} command, and rendering
+ * the whole shared blackboard would be redundant and would compete with the
+ * searcher's own retrieval token budget. The agent's own
+ * {@code {PRIVATE_CONTEXT}} is kept so it can avoid repeating its previous
+ * searches across loop iterations.
  * <p>
  * The original template content (including any {@code {format}} or
  * {@code {question}} placeholders) is preserved: the agent section is only
@@ -54,14 +56,13 @@ public final class SearchAgentPromptPatcher {
 		buffer.append(
 				"You are operating as a search agent inside a multi-agent network. Use the following network context to focus your search. The current search command/input is the highest-priority instruction and overrides the generic question above.")
 				.append(NEWLINE).append(NEWLINE);
-		appendBlock(buffer, "Current agent identity", GAbstractGenericalAgentService.AGENT_IDENTITY_TEMPLATE_PARAM);
-		appendBlock(buffer, "Network scenario", GAbstractGenericalAgentService.NETWORK_SCENARY_TEMPLATE_PARAM);
+		appendBlock(buffer, "Current agent identity", AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM);
+		appendBlock(buffer, "Network scenario", AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM);
 		appendBlock(buffer, "Communication capabilities",
-				GAbstractGenericalAgentService.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM);
-		appendBlock(buffer, "Current agent private memory",
-				GAbstractGenericalAgentService.PRIVATE_CONTEXT_TEMPLATE_PARAM);
+				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM);
+		appendBlock(buffer, "Current agent private memory", AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM);
 		appendBlock(buffer, "Current search command/input (highest priority)",
-				GAbstractGenericalAgentService.INPUT_TEMPLATE_PARAM);
+				AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM);
 		patched.setUserPromptTemplate(buffer.toString());
 		return patched;
 	}

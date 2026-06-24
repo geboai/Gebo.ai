@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
-
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -232,14 +232,6 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String BEGIN_SHARED_CONTEXT_DELTA = "BEGIN SHARED CONTEXT DELTA";
 	private static final String END_AGENT_CONTEXT_CONTRIBUTION = "END AGENT CONTEXT CONTRIBUTION";
 	private static final String BEGIN_CONTEXT_CONTRIBUTION_FROM_AGENT = "BEGIN CONTEXT CONTRIBUTION FROM AGENT:";
-	public static final String AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM = "AGENT_COMUNICATION_CAPABILITY";
-	public static final String AGENT_IDENTITY_TEMPLATE_PARAM = "AGENT_IDENTITY";
-	public static final String INPUT_TEMPLATE_PARAM = "INPUT";
-	public static final String NETWORK_SCENARY_TEMPLATE_PARAM = "NETWORK_SCENARY";
-	public static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
-	public static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
-	public static final String FORMAT_TEMPLATE_PARAM = "format";
-
 	private static final String DESCRIPTION_OF_YOUR_ROLE = "Description of your role: ";
 	private static final String NEWLINE = "\r\n";
 	private static final String YOU_ARE_AN_AGENT_WITH_ROLE = "Your agent role is: ";
@@ -311,42 +303,46 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		final Map<String, Boolean> placeholders = prompt != null ? prompt.getPlaceholders() : Map.of();
 		int remainingBudget = tokenBudget;
 
-		if (placeholders.containsKey(NETWORK_SCENARY_TEMPLATE_PARAM)) {
+		if (placeholders.containsKey(AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM)) {
 			String networkScenary = nullToEmpty(createNetworkScenaryDescription(network));
-			constantParams.put(NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary);
+			constantParams.put(AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM, networkScenary);
 			remainingBudget -= ITokensCountable.stringsTokensSize(networkScenary);
 		}
-		if (placeholders.containsKey(AGENT_IDENTITY_TEMPLATE_PARAM)) {
+		if (placeholders.containsKey(AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM)) {
 			String agentIdentity = nullToEmpty(createAgentIdentityDescription(agentRole, contextAgentPersona));
-			constantParams.put(AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity);
+			constantParams.put(AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM, agentIdentity);
 			remainingBudget -= ITokensCountable.stringsTokensSize(agentIdentity);
 		}
-		if (placeholders.containsKey(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM)) {
+		if (placeholders.containsKey(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM)) {
 			String comunicationCapabilities = nullToEmpty(
 					createAgentCommunicationCapabilityDescription(agentRole, contextAgentPersona, network, agentsDao));
-			constantParams.put(AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM, comunicationCapabilities);
+			constantParams.put(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
+					comunicationCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(comunicationCapabilities);
 		}
-		if (placeholders.containsKey(INPUT_TEMPLATE_PARAM)) {
+		if (placeholders.containsKey(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM)) {
 			String renderedInput = nullToEmpty(renderContributionData(input));
-			constantParams.put(INPUT_TEMPLATE_PARAM, renderedInput);
+			constantParams.put(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput);
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
 		}
 
-		if (placeholders.containsKey(PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
-			constantParams.put(PRIVATE_CONTEXT_TEMPLATE_PARAM,
+		if (placeholders.containsKey(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
+			constantParams.put(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
 					nullToEmpty(render(mySessionContext, actualContributionNr, remainingBudget)));
 		}
 		final int fixedBudget = remainingBudget;
-		if (placeholders.containsKey(SHARED_CONTEXT_TEMPLATE_PARAM)) {
+		if (placeholders.containsKey(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
 			RenderedRange iterationValue = null;
 			int startedContribution = mySessionContext.getLastContributionTurn() == null ? 0
 					: mySessionContext.getLastContributionTurn();
 			do {
-				Map<String, Object> params = new HashMap<String, Object>();
+				// Each shared-context window must still carry the constant agent placeholders
+				// (identity, scenario, communication, input, private context); otherwise the
+				// system/user templates that declare them render with missing variables.
+				Map<String, Object> params = new HashMap<String, Object>(constantParams);
 				iterationValue = render(session, startedContribution, actualContributionNr, fixedBudget, splitByBudget);
 				String sharedContext = nullToEmpty(iterationValue.getContext());
-				params.put(SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
+				params.put(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, sharedContext);
 				startedContribution = iterationValue.getLastContribution();
 				vectorized.add(params);
 			} while (iterationValue != null && (splitByBudget && !iterationValue.isFinishedContributions()));
