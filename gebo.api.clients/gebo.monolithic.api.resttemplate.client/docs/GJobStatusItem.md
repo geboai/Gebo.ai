@@ -5,15 +5,15 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **description** | **String** |  |  [optional]
 **error** | **Boolean** |  |  [optional]
-**startDateTime** | [**Date**](Date.md) |  |  [optional]
-**code** | **String** |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
-**workflowType** | **String** |  |  [optional]
-**workflowId** | **String** |  |  [optional]
-**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
+**code** | **String** |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **finished** | **Boolean** |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
-**endDateTime** | [**Date**](Date.md) |  |  [optional]
+**projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
+**startDateTime** | [**Date**](Date.md) |  |  [optional]
+**workflowType** | **String** |  |  [optional]
+**workflowId** | **String** |  |  [optional]
 
 <a name="JobTypeEnum"></a>
 ## Enum: JobTypeEnum

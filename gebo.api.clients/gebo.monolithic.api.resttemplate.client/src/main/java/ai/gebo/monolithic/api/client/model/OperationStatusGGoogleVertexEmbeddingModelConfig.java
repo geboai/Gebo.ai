@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGGoogleVertexEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class OperationStatusGGoogleVertexEmbeddingModelConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGGoogleVertexEmbeddingModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGGoogleVertexEmbeddingModelConfig result(GGoogleVertexEmbeddingModelConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGGoogleVertexEmbeddingModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGGoogleVertexEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGGoogleVertexEmbeddingModelConfig hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGGoogleVertexEmbeddingModelConfig {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGGoogleVertexEmbeddingModelConfig hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGGoogleVertexEmbeddingModelConfig {
     OperationStatusGGoogleVertexEmbeddingModelConfig operationStatusGGoogleVertexEmbeddingModelConfig = (OperationStatusGGoogleVertexEmbeddingModelConfig) o;
     return Objects.equals(this.result, operationStatusGGoogleVertexEmbeddingModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGGoogleVertexEmbeddingModelConfig.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGGoogleVertexEmbeddingModelConfig.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGGoogleVertexEmbeddingModelConfig.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGGoogleVertexEmbeddingModelConfig.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGGoogleVertexEmbeddingModelConfig.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGGoogleVertexEmbeddingModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

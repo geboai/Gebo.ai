@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGDeepseekChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class OperationStatusGDeepseekChatModelConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGDeepseekChatModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGDeepseekChatModelConfig result(GDeepseekChatModelConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGDeepseekChatModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGDeepseekChatModelConfig hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGDeepseekChatModelConfig hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGDeepseekChatModelConfig {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGDeepseekChatModelConfig hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGDeepseekChatModelConfig {
     OperationStatusGDeepseekChatModelConfig operationStatusGDeepseekChatModelConfig = (OperationStatusGDeepseekChatModelConfig) o;
     return Objects.equals(this.result, operationStatusGDeepseekChatModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGDeepseekChatModelConfig.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGDeepseekChatModelConfig.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGDeepseekChatModelConfig.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGDeepseekChatModelConfig.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGDeepseekChatModelConfig.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGDeepseekChatModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

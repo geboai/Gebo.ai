@@ -103,6 +103,21 @@ public class GeboChatPipelinesControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void stopChatPipelineTest() {
+        String userChatContextCode = null;
+        api.stopChatPipeline(userChatContextCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void streamChatPipelineTest() {
         PipelineRequestBody body = null;
         String pipelineCode = null;

@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGConfluenceSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class OperationStatusGConfluenceSystem {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGConfluenceSystem {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGConfluenceSystem result(GConfluenceSystem result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGConfluenceSystem {
     this.messages = messages;
   }
 
-  public OperationStatusGConfluenceSystem hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGConfluenceSystem hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGConfluenceSystem {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGConfluenceSystem hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGConfluenceSystem {
     OperationStatusGConfluenceSystem operationStatusGConfluenceSystem = (OperationStatusGConfluenceSystem) o;
     return Objects.equals(this.result, operationStatusGConfluenceSystem.result) &&
         Objects.equals(this.messages, operationStatusGConfluenceSystem.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGConfluenceSystem.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGConfluenceSystem.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGConfluenceSystem.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGConfluenceSystem.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGConfluenceSystem {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

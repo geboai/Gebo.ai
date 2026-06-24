@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGOllamaEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class OperationStatusListGOllamaEmbeddingModelChoice {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusListGOllamaEmbeddingModelChoice result(List<GOllamaEmbeddingModelChoice> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
     this.messages = messages;
   }
 
-  public OperationStatusListGOllamaEmbeddingModelChoice hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusListGOllamaEmbeddingModelChoice hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusListGOllamaEmbeddingModelChoice hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
     OperationStatusListGOllamaEmbeddingModelChoice operationStatusListGOllamaEmbeddingModelChoice = (OperationStatusListGOllamaEmbeddingModelChoice) o;
     return Objects.equals(this.result, operationStatusListGOllamaEmbeddingModelChoice.result) &&
         Objects.equals(this.messages, operationStatusListGOllamaEmbeddingModelChoice.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGOllamaEmbeddingModelChoice.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGOllamaEmbeddingModelChoice.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusListGOllamaEmbeddingModelChoice.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusListGOllamaEmbeddingModelChoice.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGOllamaEmbeddingModelChoice {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

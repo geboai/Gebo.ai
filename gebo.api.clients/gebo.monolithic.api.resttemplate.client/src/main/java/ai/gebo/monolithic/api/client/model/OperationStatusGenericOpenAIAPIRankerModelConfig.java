@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGenericOpenAIAPIRankerModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class OperationStatusGenericOpenAIAPIRankerModelConfig {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusGenericOpenAIAPIRankerModelConfig {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusGenericOpenAIAPIRankerModelConfig result(GenericOpenAIAPIRankerModelConfig result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusGenericOpenAIAPIRankerModelConfig {
     this.messages = messages;
   }
 
-  public OperationStatusGenericOpenAIAPIRankerModelConfig hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusGenericOpenAIAPIRankerModelConfig hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusGenericOpenAIAPIRankerModelConfig {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusGenericOpenAIAPIRankerModelConfig hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusGenericOpenAIAPIRankerModelConfig {
     OperationStatusGenericOpenAIAPIRankerModelConfig operationStatusGenericOpenAIAPIRankerModelConfig = (OperationStatusGenericOpenAIAPIRankerModelConfig) o;
     return Objects.equals(this.result, operationStatusGenericOpenAIAPIRankerModelConfig.result) &&
         Objects.equals(this.messages, operationStatusGenericOpenAIAPIRankerModelConfig.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusGenericOpenAIAPIRankerModelConfig.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusGenericOpenAIAPIRankerModelConfig {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

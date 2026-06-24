@@ -50,7 +50,7 @@ import ai.gebo.monolithic.api.client.invoker.auth.HttpBasicAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.ApiKeyAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T08:23:30.262253500+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-06-24T15:05:10.065410800+02:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {

@@ -12,9 +12,11 @@
 
 package ai.gebo.monolithic.api.client.api;
 
+import ai.gebo.monolithic.api.client.model.ChangeUsernamePasswordData;
 import ai.gebo.monolithic.api.client.model.EditableUser;
 import ai.gebo.monolithic.api.client.model.FindUserByQbeParam;
 import ai.gebo.monolithic.api.client.model.FindUsersGroupParam;
+import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.InsertUserParam;
 import ai.gebo.monolithic.api.client.model.PageUserInfos;
 import ai.gebo.monolithic.api.client.model.PageUsersGroup;
@@ -36,6 +38,21 @@ public class UsersAdminControllerApiTest {
 
     private final UsersAdminControllerApi api = new UsersAdminControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void changeUserPasswordTest() {
+        ChangeUsernamePasswordData body = null;
+        GUserMessage response = api.changeUserPassword(body);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
