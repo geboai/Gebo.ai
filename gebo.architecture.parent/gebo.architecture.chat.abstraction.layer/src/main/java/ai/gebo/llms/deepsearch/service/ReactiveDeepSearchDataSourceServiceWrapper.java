@@ -101,6 +101,14 @@ public class ReactiveDeepSearchDataSourceServiceWrapper<CustomSearchResultExtrac
 
 	@Override
 	public boolean isEnabled(DeepSearchConfig deepSearchConfig) throws SearchServiceException {
+		// When no admin has persisted a deep search configuration, the effective config is the built-in
+		// DeepSearchDefaultConfig fallback (DeepSearchConfigProviderImpl.get()). In that unconfigured state
+		// regular users are limited to the internal knowledge base, so external data sources (handled by this
+		// wrapper) are disabled for them. Admins keep full access so they can run and configure sources.
+		boolean adminConfigured = !(deepSearchConfig instanceof DeepSearchDefaultConfig);
+		if (!adminConfigured && !securityService.isCurrentUserAdmin()) {
+			return false;
+		}
 		boolean userCanAccess = securityService.isCanAccess(deepSearchConfig, true);
 		if (userCanAccess) {
 			List<DeepSearchDataSourceAccess> accesses = deepSearchConfig.getDataSourcesAccesses();
