@@ -88,6 +88,13 @@ public class DataSourcesCatalogsServiceImpl implements IDataSourcesCatalogsServi
 	}
 
 	@Override
+	public List<CatalogueSample> findCachedCatalogues(String messagingModuleId, String messagingSystemId,
+			String systemConfigurationCode) {
+		return findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(messagingModuleId,
+				messagingSystemId, systemConfigurationCode);
+	}
+
+	@Override
 	public List<CatalogueSample> findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
 			String messagingModuleId, String messagingSystemId, String code) {
 		List<DeepSearchDataSourceSampledCatalogs> data = deepSearchDataSourceSampletCatalogsRepo

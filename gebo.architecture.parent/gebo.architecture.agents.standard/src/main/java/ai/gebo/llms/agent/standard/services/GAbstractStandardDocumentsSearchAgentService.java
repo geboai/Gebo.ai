@@ -26,9 +26,9 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchResult;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.ISearchCataloguesCacheService;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
-import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
@@ -174,7 +174,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 * those systems exposes. The catalog information reuses the same
 	 * {@link CatalogueSample} data that searchers already sample and that the
 	 * deep-search router renders for its data sources: it is read from the cached
-	 * {@link IDataSourcesCatalogsService} (keyed by messaging module/system and the
+	 * {@link ISearchCataloguesCacheService} (keyed by messaging module/system and the
 	 * searchable system configuration code) so no live/remote sampling is triggered
 	 * while building the network description. Failures are swallowed (the descriptor
 	 * is best-effort).
@@ -183,7 +183,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		if (capabilities == null || searchService == null) {
 			return;
 		}
-		final IDataSourcesCatalogsService catalogsService = resolveCatalogsService();
+		final ISearchCataloguesCacheService catalogsService = resolveCatalogsService();
 		try {
 			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
 			if (systems != null) {
@@ -201,15 +201,14 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		}
 	}
 
-	private void appendSampledCatalogues(AgentCapabilities capabilities, IDataSourcesCatalogsService catalogsService,
+	private void appendSampledCatalogues(AgentCapabilities capabilities, ISearchCataloguesCacheService catalogsService,
 			ISearchService<?> searchService, SearchableSystemMetaData system) {
 		if (catalogsService == null) {
 			return;
 		}
 		try {
-			List<CatalogueSample> catalogues = catalogsService
-					.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
-							searchService.getMessagingModuleId(), searchService.getMessagingSystemId(), system.getCode());
+			List<CatalogueSample> catalogues = catalogsService.findCachedCatalogues(
+					searchService.getMessagingModuleId(), searchService.getMessagingSystemId(), system.getCode());
 			if (catalogues != null) {
 				for (CatalogueSample catalogue : catalogues) {
 					if (catalogue != null) {
@@ -223,11 +222,11 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		}
 	}
 
-	private IDataSourcesCatalogsService resolveCatalogsService() {
+	private ISearchCataloguesCacheService resolveCatalogsService() {
 		try {
-			return runtimeBinder.getImplementationOf(IDataSourcesCatalogsService.class);
+			return runtimeBinder.getImplementationOf(ISearchCataloguesCacheService.class);
 		} catch (Throwable th) {
-			LOGGER.debug("Data sources catalogs service not available; agent catalogs will list systems only", th);
+			LOGGER.debug("Search catalogues cache service not available; agent catalogs will list systems only", th);
 			return null;
 		}
 	}
