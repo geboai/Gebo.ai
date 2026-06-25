@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -38,6 +39,14 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		super(chatModelsDao, toolsRepositoryPattern, promptsDao, securityService, agentRoleDao, runtimeBinder,
 				rendererFactory);
 
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability(
+				"Search for and retrieve the document fragments most relevant to a given search command, optionally re-ranking them by relevance");
+		return capabilities;
 	}
 
 	@Override

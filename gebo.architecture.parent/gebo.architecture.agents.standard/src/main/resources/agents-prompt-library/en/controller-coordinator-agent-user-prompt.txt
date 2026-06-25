@@ -2,6 +2,10 @@
 
 {NETWORK_SCENARY}
 
+The network is composed of the following agents, each exposing the capabilities, catalogs/collections, systems/resources and tools listed below:
+
+{NETWORK_AGENTS_CAPABILITIES}
+
 ## (NCAP) Current agent communication capabilities
 
 You can send messages only to the following agents, according to the current communication capability rules:

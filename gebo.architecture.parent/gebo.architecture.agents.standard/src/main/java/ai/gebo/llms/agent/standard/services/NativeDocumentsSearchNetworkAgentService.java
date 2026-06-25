@@ -8,9 +8,11 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
+import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -67,6 +69,15 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 	public String getDescription() {
 
 		return NATIVE_SEARCH_AGENT_FOR + nativeSearchWrapper.getProductId();
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability("Generate provider-native queries and search the '"
+				+ nativeSearchWrapper.getProductId() + "' system, returning the most relevant retrieved documents");
+		appendSearchableSystems(capabilities, nativeSearchWrapper);
+		return capabilities;
 	}
 
 	@Override

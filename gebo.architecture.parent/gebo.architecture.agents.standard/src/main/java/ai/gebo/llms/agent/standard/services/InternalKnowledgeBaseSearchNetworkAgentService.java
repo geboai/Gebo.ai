@@ -8,9 +8,12 @@ import org.springframework.ai.document.Document;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
+import ai.gebo.architecture.agents.model.AgentCapabilities;
+import ai.gebo.architecture.agents.model.AgentCapabilityResource;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
+import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -80,6 +83,26 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 	public String getDescription() {
 
 		return AGENT_THAT_SEARCHES_THE_INTERNAL_KNOWLEDGE_BASE;
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability(
+				"Plan semantic and full-text queries and search the internal knowledge base, returning the most relevant document chunks (optionally re-ranked)");
+		try {
+			List<GKnowledgeBase> visibles = knowledgeBaseVisibilityService.allVisibleKnowledgebases();
+			if (visibles != null) {
+				for (GKnowledgeBase kb : visibles) {
+					if (kb != null) {
+						capabilities.addCatalog(AgentCapabilityResource.of(kb.getCode(), kb.getDescription(), null));
+					}
+				}
+			}
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot enumerate visible knowledge bases for internal-KB agent capabilities", th);
+		}
+		return capabilities;
 	}
 
 	@Override

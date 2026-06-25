@@ -2,6 +2,7 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.List;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -42,6 +43,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	public List<GAgentConfig> getAccessibleConfigurations() {
 
 		return service.getAccessibleConfigurations();
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+
+		return service.getAgentCapabilities(agentConfig);
 	}
 
 	@Override

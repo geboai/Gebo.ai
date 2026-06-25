@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
+import ai.gebo.architecture.agents.model.AgentCapabilityResource;
 import ai.gebo.architecture.agents.model.SearchAgentCommand;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAbstractDocumentsSearchNetworkAgentService;
@@ -21,8 +23,12 @@ import ai.gebo.architecture.documents.cache.model.IDocumentChunkWithRef;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.architecture.search.model.CatalogueSample;
 import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.chat.pipelines.service.IDataSourcesCatalogsService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
@@ -160,6 +166,70 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			params.setChunkingPolicy(ChunkingPolicy.SPLIT_CHUNKS);
 		}
 		return params;
+	}
+
+	/**
+	 * Exports, on the capabilities descriptor, the systems this search agent can
+	 * reach (as accessible resources) together with the catalogs/sections each of
+	 * those systems exposes. The catalog information reuses the same
+	 * {@link CatalogueSample} data that searchers already sample and that the
+	 * deep-search router renders for its data sources: it is read from the cached
+	 * {@link IDataSourcesCatalogsService} (keyed by messaging module/system and the
+	 * searchable system configuration code) so no live/remote sampling is triggered
+	 * while building the network description. Failures are swallowed (the descriptor
+	 * is best-effort).
+	 */
+	protected void appendSearchableSystems(AgentCapabilities capabilities, ISearchService<?> searchService) {
+		if (capabilities == null || searchService == null) {
+			return;
+		}
+		final IDataSourcesCatalogsService catalogsService = resolveCatalogsService();
+		try {
+			List<SearchableSystemMetaData> systems = searchService.getSearchableSystems();
+			if (systems != null) {
+				for (SearchableSystemMetaData system : systems) {
+					if (system == null) {
+						continue;
+					}
+					capabilities.addResource(
+							AgentCapabilityResource.of(system.getCode(), system.getDescription(), null));
+					appendSampledCatalogues(capabilities, catalogsService, searchService, system);
+				}
+			}
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot enumerate searchable systems for agent capabilities of {}", getId(), th);
+		}
+	}
+
+	private void appendSampledCatalogues(AgentCapabilities capabilities, IDataSourcesCatalogsService catalogsService,
+			ISearchService<?> searchService, SearchableSystemMetaData system) {
+		if (catalogsService == null) {
+			return;
+		}
+		try {
+			List<CatalogueSample> catalogues = catalogsService
+					.findCataloguesListByMessagingModuleIdAndMessagingSystemIdAndSystemConfigurationCode(
+							searchService.getMessagingModuleId(), searchService.getMessagingSystemId(), system.getCode());
+			if (catalogues != null) {
+				for (CatalogueSample catalogue : catalogues) {
+					if (catalogue != null) {
+						capabilities.addCatalog(AgentCapabilityResource.of(catalogue.getCode(), catalogue.getCode(),
+								catalogue.getDescription()));
+					}
+				}
+			}
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot read sampled catalogues for system {} of agent {}", system.getCode(), getId(), th);
+		}
+	}
+
+	private IDataSourcesCatalogsService resolveCatalogsService() {
+		try {
+			return runtimeBinder.getImplementationOf(IDataSourcesCatalogsService.class);
+		} catch (Throwable th) {
+			LOGGER.debug("Data sources catalogs service not available; agent catalogs will list systems only", th);
+			return null;
+		}
 	}
 
 	/**

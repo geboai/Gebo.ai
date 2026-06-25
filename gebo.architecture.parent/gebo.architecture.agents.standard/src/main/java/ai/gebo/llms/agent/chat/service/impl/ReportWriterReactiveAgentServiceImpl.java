@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
@@ -92,6 +93,14 @@ public class ReportWriterReactiveAgentServiceImpl extends
 	public String getDescription() {
 
 		return REPORT_WRITER_NETWORK_AGENT_SERVICE_DESC;
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability(
+				"Read the user question and the evidence gathered by the other agents and write the final, user-facing answer/report");
+		return capabilities;
 	}
 
 	@Override

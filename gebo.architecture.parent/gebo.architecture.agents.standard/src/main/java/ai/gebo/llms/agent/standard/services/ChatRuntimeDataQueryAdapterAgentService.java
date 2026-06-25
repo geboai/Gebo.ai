@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -62,6 +63,14 @@ public class ChatRuntimeDataQueryAdapterAgentService
 	@Override
 	public String getDescription() {
 		return DESCRIPTION;
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability(
+				"Extract the user query from the chat runtime data and forward it to the controller (input node, no LLM call)");
+		return capabilities;
 	}
 
 	@Override

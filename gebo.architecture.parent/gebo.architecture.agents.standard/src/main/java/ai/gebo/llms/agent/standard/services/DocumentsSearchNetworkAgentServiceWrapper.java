@@ -7,9 +7,11 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
+import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -63,6 +65,15 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractStandard
 	public String getDescription() {
 
 		return wrappedSearchService.getProductId() + SEARCH_AGENT_DESCRIPTION;
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability("Generate optimised queries and search the '" + wrappedSearchService.getProductId()
+				+ "' external system, returning the most relevant retrieved documents");
+		appendSearchableSystems(capabilities, wrappedSearchService);
+		return capabilities;
 	}
 
 	@Override

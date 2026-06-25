@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -74,6 +75,16 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 	public String getDescription() {
 
 		return description;
+	}
+
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);
+		capabilities.addCapability(
+				"Analyse the user request together with the current shared context and decide which of the reachable agents must act");
+		capabilities.addCapability(
+				"Send each selected agent a tailored command and keep iterating until the gathered contributions are sufficient to produce the answer");
+		return capabilities;
 	}
 
 	@Override

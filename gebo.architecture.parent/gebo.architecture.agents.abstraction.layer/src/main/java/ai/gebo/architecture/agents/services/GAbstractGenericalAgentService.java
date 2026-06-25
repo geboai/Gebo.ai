@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.architecture.agents.model.AgentCapabilities;
+import ai.gebo.architecture.agents.model.AgentCapabilityResource;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
@@ -71,6 +73,51 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		IAgentConfigDao configsDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		List<GAgentConfig> configs = configsDao.findByAgentServiceId(getId());
 		return securityService.filterCanDoAction(configs, true, AclGrantType.EXECUTE);
+	}
+
+	/**
+	 * Base capabilities descriptor shared by every concrete agent: the agent
+	 * description as the summary plus the tools the configuration enables (the
+	 * explicitly enabled functions, or every registered tool when the configuration
+	 * subscribes to all of them). Concrete agents call {@code super} and enrich the
+	 * returned descriptor with their specific capabilities and catalogs.
+	 */
+	@Override
+	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
+		AgentCapabilities capabilities = new AgentCapabilities(getDescription());
+		appendConfiguredTools(capabilities, agentConfig);
+		return capabilities;
+	}
+
+	/**
+	 * Adds the tools/functions reachable with the given configuration to the
+	 * capabilities descriptor. Mirrors the tool selection performed in
+	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, ReactiveIdentityUtil)}:
+	 * when {@code subscribeAllTools} is set every registered tool is advertised
+	 * (with its description), otherwise only the explicitly enabled functions are.
+	 */
+	protected void appendConfiguredTools(AgentCapabilities capabilities, GAgentConfig agentConfig) {
+		if (agentConfig == null) {
+			return;
+		}
+		if (Boolean.TRUE.equals(agentConfig.getSubscribeAllTools())) {
+			List<ToolCallback> toolsList = toolsRepositoryPattern.getTools();
+			if (toolsList != null) {
+				for (ToolCallback tool : toolsList) {
+					if (tool == null || tool.getToolDefinition() == null) {
+						continue;
+					}
+					capabilities.addTool(AgentCapabilityResource.of(tool.getToolDefinition().name(),
+							tool.getToolDefinition().name(), tool.getToolDefinition().description()));
+				}
+			}
+		} else if (agentConfig.getEnabledFunctions() != null) {
+			for (String functionName : agentConfig.getEnabledFunctions()) {
+				if (functionName != null && !functionName.isBlank()) {
+					capabilities.addTool(AgentCapabilityResource.of(functionName, functionName, null));
+				}
+			}
+		}
 	}
 
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
@@ -245,6 +292,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String NOT_ALLOWED_TO_DELEGATE = "You are not allowed to delegate tasks to other agents.";
 	private static final String AGENT_LIST_ITEM_PREFIX = "- ";
 	private static final String AGENT_DESCRIPTION_SEPARATOR = ": ";
+	private static final String CAPABILITY_INDENT = "    ";
+	private static final String CAPABILITIES_BLOCK_BEGIN = "AGENT_CAPABILITIES_BEGIN";
+	private static final String CAPABILITIES_BLOCK_END = "AGENT_CAPABILITIES_END";
+	private static final String CAPABILITIES_SUMMARY_PREFIX = "summary: ";
+	private static final String CAPABILITIES_LABEL = "what this agent can do:";
+	private static final String CATALOGS_LABEL = "catalogs/collections it can search:";
+	private static final String RESOURCES_LABEL = "systems and resources it can access:";
+	private static final String TOOLS_LABEL = "tools it can call:";
 	private static final String TRUNCATED_CONTENT_SUFFIX = "...(truncated content)";
 	private static final int INPUT_SAMPLE_TOKEN_SIZE = 512;
 	protected static final ObjectMapper objectMapper = new ObjectMapper();
@@ -319,6 +374,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			constantParams.put(AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
 					comunicationCapabilities);
 			remainingBudget -= ITokensCountable.stringsTokensSize(comunicationCapabilities);
+		}
+		if (placeholders.containsKey(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM)) {
+			String networkAgentsCapabilities = nullToEmpty(createNetworkAgentsCapabilitiesDescription(network, agentsDao));
+			constantParams.put(AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
+					networkAgentsCapabilities);
+			remainingBudget -= ITokensCountable.stringsTokensSize(networkAgentsCapabilities);
 		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM)) {
 			String renderedInput = nullToEmpty(renderContributionData(input));
@@ -400,14 +461,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			buffer.append(CAN_COMMUNICATE_WITH_AGENTS);
 			buffer.append(NEWLINE);
 			for (String peerCode : peers) {
+				RuntimeAgentInfos peer = resolvePeer(peerCode, agentsDao);
 				buffer.append(AGENT_LIST_ITEM_PREFIX);
 				buffer.append(peerCode);
-				String peerDescription = resolvePeerDescription(peerCode, agentsDao);
+				String peerDescription = resolvePeerDescription(peer);
 				if (peerDescription != null && !peerDescription.isBlank()) {
 					buffer.append(AGENT_DESCRIPTION_SEPARATOR);
 					buffer.append(peerDescription);
 				}
 				buffer.append(NEWLINE);
+				// The peer's exported capabilities/catalogs/resources/tools are rendered
+				// (indented) under each reachable agent so the coordinator can reason about
+				// what every peer can actually do. The summary is omitted because it would
+				// duplicate the peer description rendered on the line above.
+				String peerCapabilities = resolvePeerCapabilities(peer);
+				if (!peerCapabilities.isEmpty()) {
+					buffer.append(peerCapabilities);
+				}
 			}
 		} else {
 			buffer.append(CANNOT_COMMUNICATE_WITH_AGENTS);
@@ -420,23 +490,112 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return buffer.toString();
 	}
 
-	private String resolvePeerDescription(String peerCode, IGAgentsNetworkRuntimeDao agentsDao) {
+	private RuntimeAgentInfos resolvePeer(String peerCode, IGAgentsNetworkRuntimeDao agentsDao) {
 		if (agentsDao == null) {
 			return null;
 		}
 		try {
-			RuntimeAgentInfos peer = agentsDao.findAgentByCode(peerCode);
-			if (peer == null) {
-				return null;
-			}
-			if (peer.getConfig() != null && peer.getConfig().getDescription() != null) {
-				return peer.getConfig().getDescription();
-			}
-			return peer.getService() != null ? peer.getService().getDescription() : null;
+			return agentsDao.findAgentByCode(peerCode);
 		} catch (AgentException e) {
 			LOGGER.warn("Cannot resolve peer agent '{}' while building communication capability description", peerCode,
 					e);
 			return null;
+		}
+	}
+
+	private String resolvePeerDescription(RuntimeAgentInfos peer) {
+		if (peer == null) {
+			return null;
+		}
+		if (peer.getConfig() != null && peer.getConfig().getDescription() != null) {
+			return peer.getConfig().getDescription();
+		}
+		return peer.getService() != null ? peer.getService().getDescription() : null;
+	}
+
+	private String resolvePeerCapabilities(RuntimeAgentInfos peer) {
+		if (peer == null || peer.getService() == null) {
+			return "";
+		}
+		try {
+			AgentCapabilities capabilities = peer.getService().getAgentCapabilities(peer.getConfig());
+			return renderAgentCapabilities(capabilities, false);
+		} catch (Throwable th) {
+			LOGGER.warn("Cannot resolve capabilities for peer agent '{}' while building communication description",
+					peer.getConfig() != null ? peer.getConfig().getCode() : peer.getService().getId(), th);
+			return "";
+		}
+	}
+
+	/**
+	 * Renders an {@link AgentCapabilities} descriptor into the indented text shared
+	 * in the network-of-agents description.
+	 *
+	 * @param includeSummary whether to render the {@code summary} line (omitted when
+	 *                       the summary is already shown elsewhere, e.g. as the peer
+	 *                       description)
+	 */
+	protected String renderAgentCapabilities(AgentCapabilities capabilities, boolean includeSummary) {
+		if (capabilities == null || capabilities.isEmpty()) {
+			return "";
+		}
+		// The body is rendered first so a capabilities block that ends up carrying no
+		// renderable content (e.g. only a suppressed summary) is dropped entirely
+		// instead of emitting an empty BEGIN/END envelope.
+		StringBuffer body = new StringBuffer();
+		if (includeSummary && capabilities.getSummary() != null && !capabilities.getSummary().isBlank()) {
+			appendCapabilityLine(body, 1, CAPABILITIES_SUMMARY_PREFIX + capabilities.getSummary());
+		}
+		if (!capabilities.getCapabilities().isEmpty()) {
+			appendCapabilityLine(body, 1, CAPABILITIES_LABEL);
+			for (String capability : capabilities.getCapabilities()) {
+				appendCapabilityBullet(body, 2, capability, null);
+			}
+		}
+		appendCapabilityResourceList(body, capabilities.getCatalogs(), CATALOGS_LABEL);
+		appendCapabilityResourceList(body, capabilities.getResources(), RESOURCES_LABEL);
+		appendCapabilityResourceList(body, capabilities.getTools(), TOOLS_LABEL);
+		if (body.length() == 0) {
+			return "";
+		}
+		StringBuffer buffer = new StringBuffer();
+		appendCapabilityLine(buffer, 1, CAPABILITIES_BLOCK_BEGIN);
+		buffer.append(body);
+		appendCapabilityLine(buffer, 1, CAPABILITIES_BLOCK_END);
+		return buffer.toString();
+	}
+
+	private void appendCapabilityLine(StringBuffer buffer, int depth, String text) {
+		buffer.append(CAPABILITY_INDENT.repeat(Math.max(1, depth)));
+		buffer.append(text);
+		buffer.append(NEWLINE);
+	}
+
+	private void appendCapabilityBullet(StringBuffer buffer, int depth, String name, String description) {
+		StringBuilder line = new StringBuilder();
+		line.append(AGENT_LIST_ITEM_PREFIX);
+		if (name != null) {
+			line.append(name);
+		}
+		if (description != null && !description.isBlank()) {
+			line.append(AGENT_DESCRIPTION_SEPARATOR);
+			line.append(description);
+		}
+		appendCapabilityLine(buffer, depth, line.toString());
+	}
+
+	private void appendCapabilityResourceList(StringBuffer buffer, List<AgentCapabilityResource> resources,
+			String label) {
+		if (resources == null || resources.isEmpty()) {
+			return;
+		}
+		appendCapabilityLine(buffer, 1, label);
+		for (AgentCapabilityResource resource : resources) {
+			if (resource == null) {
+				continue;
+			}
+			String name = resource.getName() != null ? resource.getName() : resource.getCode();
+			appendCapabilityBullet(buffer, 2, name, resource.getDescription());
 		}
 	}
 
@@ -470,6 +629,45 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		if (network.getScenarioDescription() != null) {
 			buffer.append(THE_DESCRIPTION_OF_THE_NETWORK_SCENARIO_IS + network.getScenarioDescription());
 			buffer.append(NEWLINE);
+		}
+		return buffer.toString();
+	}
+
+	/**
+	 * Builds a network-wide roster of every participating agent's exported
+	 * capabilities, catalogs, resources and tools, regardless of which agents the
+	 * current agent can reach. Each participant is resolved through the runtime DAO
+	 * (so its concrete service and configuration drive the exported capabilities)
+	 * and rendered with the same indented capability block used for reachable peers.
+	 * Returns an empty string when the roster cannot be resolved (e.g. no runtime DAO
+	 * available), keeping the descriptor best-effort.
+	 */
+	protected String createNetworkAgentsCapabilitiesDescription(GAgentsNetwork network,
+			IGAgentsNetworkRuntimeDao agentsDao) {
+		if (network == null || network.getAgents() == null || agentsDao == null) {
+			return "";
+		}
+		StringBuffer buffer = new StringBuffer();
+		for (AgentNetworkParticipant participant : network.getAgents()) {
+			if (participant == null || participant.getAgentConfigCode() == null) {
+				continue;
+			}
+			RuntimeAgentInfos agent = resolvePeer(participant.getAgentConfigCode(), agentsDao);
+			if (agent == null || agent.getService() == null) {
+				continue;
+			}
+			buffer.append(AGENT_LIST_ITEM_PREFIX);
+			buffer.append(participant.getAgentConfigCode());
+			String description = resolvePeerDescription(agent);
+			if (description != null && !description.isBlank()) {
+				buffer.append(AGENT_DESCRIPTION_SEPARATOR);
+				buffer.append(description);
+			}
+			buffer.append(NEWLINE);
+			String capabilities = resolvePeerCapabilities(agent);
+			if (!capabilities.isEmpty()) {
+				buffer.append(capabilities);
+			}
 		}
 		return buffer.toString();
 	}
